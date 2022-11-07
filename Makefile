@@ -1,8 +1,8 @@
-PROJECT_NAME := xyz Package
+PROJECT_NAME := huaweicloud Package
 
 SHELL            := /bin/bash
-PACK             := xyz
-ORG              := pulumi
+PACK             := huaweicloud
+ORG              := huaweicloud
 PROJECT          := github.com/${ORG}/pulumi-${PACK}
 NODE_MODULE_NAME := @pulumi/${PACK}
 TF_NAME          := ${PACK}
@@ -29,13 +29,13 @@ prepare::
 	mv "provider/cmd/pulumi-resource-x${EMPTY_TO_AVOID_SED}yz" provider/cmd/pulumi-resource-${NAME}
 
 	if [[ "${OS}" != "Darwin" ]]; then \
-		sed -i 's,github.com/pulumi/pulumi-xyz,${REPOSITORY},g' provider/go.mod; \
+		sed -i 's,github.com/pulumi/pulumi-huaweicloud,${REPOSITORY},g' provider/go.mod; \
 		find ./ ! -path './.git/*' -type f -exec sed -i 's/[x]yz/${NAME}/g' {} \; &> /dev/null; \
 	fi
 
 	# In MacOS the -i parameter needs an empty string to execute in place.
 	if [[ "${OS}" == "Darwin" ]]; then \
-		sed -i '' 's,github.com/pulumi/pulumi-xyz,${REPOSITORY},g' provider/go.mod; \
+		sed -i '' 's,github.com/pulumi/pulumi-huaweicloud,${REPOSITORY},g' provider/go.mod; \
 		find ./ ! -path './.git/*' -type f -exec sed -i '' 's/[x]yz/${NAME}/g' {} \; &> /dev/null; \
 	fi
 
@@ -73,18 +73,19 @@ build_python:: install_plugins tfgen # build the python sdk
 	cd sdk/python/ && \
         cp ../../README.md . && \
         python3 setup.py clean --all 2>/dev/null && \
-        rm -rf ./bin/ ../python.bin/ && cp -R . ../python.bin && mv ../python.bin ./bin && \
+        rm -rf ./bin/ ../python.bin/ && cp -R . ../python.bin && cp -R ../python.bin ./bin && rm -rf ../python.bin &&\
         sed -i.bak -e 's/^VERSION = .*/VERSION = "$(PYPI_VERSION)"/g' -e 's/^PLUGIN_VERSION = .*/PLUGIN_VERSION = "$(VERSION)"/g' ./bin/setup.py && \
         rm ./bin/setup.py.bak && \
         cd ./bin && python3 setup.py build sdist
 
-build_dotnet:: DOTNET_VERSION := $(shell pulumictl get version --language dotnet)
-build_dotnet:: install_plugins tfgen # build the dotnet sdk
-	pulumictl get version --language dotnet
-	$(WORKING_DIR)/bin/$(TFGEN) dotnet --overlays provider/overlays/dotnet --out sdk/dotnet/
-	cd sdk/dotnet/ && \
-		echo "${DOTNET_VERSION}" >version.txt && \
-        dotnet build /p:Version=${DOTNET_VERSION}
+build_dotnet::
+# build_dotnet:: DOTNET_VERSION := $(shell pulumictl get version --language dotnet)
+# build_dotnet:: install_plugins tfgen # build the dotnet sdk
+# 	# pulumictl get version --language dotnet
+# 	$(WORKING_DIR)/bin/$(TFGEN) dotnet --overlays provider/overlays/dotnet --out sdk/dotnet/
+# 	cd sdk/dotnet/ && \
+# 		echo "${DOTNET_VERSION}" >version.txt && \
+#         dotnet build /p:Version=${DOTNET_VERSION}
 
 build_go:: install_plugins tfgen # build the go sdk
 	$(WORKING_DIR)/bin/$(TFGEN) go --overlays provider/overlays/go --out sdk/go/
@@ -109,8 +110,9 @@ install_plugins::
 	pulumi plugin install resource random 4.3.1
 
 install_dotnet_sdk::
-	mkdir -p $(WORKING_DIR)/nuget
-	find . -name '*.nupkg' -print -exec cp -p {} ${WORKING_DIR}/nuget \;
+# install_dotnet_sdk::
+# 	mkdir -p $(WORKING_DIR)/nuget
+# 	find . -name '*.nupkg' -print -exec cp -p {} ${WORKING_DIR}/nuget \;
 
 install_python_sdk::
 
