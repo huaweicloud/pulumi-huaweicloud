@@ -93,4 +93,4 @@ The following configuration points are available for the `foo` provider:
 
 ## Reference
 
-For detailed reference documentation, please visit [the Pulumi registry](https://www.pulumi.com/registry/packages/foo/api-docs/).
+For detailed reference documentation, please visit [the Huaweicloud Pulumi Provider](https://huaweicloud-pulumi-provider.readthedocs.io/en/latest/).
