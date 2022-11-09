@@ -104,7 +104,7 @@ jobs:
           token: ${{ env.NPM_TOKEN }}
           package: ${{github.workspace}}/sdk/nodejs/bin/package.json
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         goversion:
           - 1.19.x
