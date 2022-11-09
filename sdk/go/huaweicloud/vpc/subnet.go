@@ -91,6 +91,7 @@ func NewSubnet(ctx *pulumi.Context,
 	if args.VpcId == nil {
 		return nil, errors.New("invalid value for required argument 'VpcId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Subnet
 	err := ctx.RegisterResource("huaweicloud:Vpc/subnet:Subnet", name, args, &resource, opts...)
 	if err != nil {

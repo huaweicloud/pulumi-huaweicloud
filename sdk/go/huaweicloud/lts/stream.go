@@ -86,6 +86,7 @@ func NewStream(ctx *pulumi.Context,
 	if args.StreamName == nil {
 		return nil, errors.New("invalid value for required argument 'StreamName'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Stream
 	err := ctx.RegisterResource("huaweicloud:Lts/stream:Stream", name, args, &resource, opts...)
 	if err != nil {

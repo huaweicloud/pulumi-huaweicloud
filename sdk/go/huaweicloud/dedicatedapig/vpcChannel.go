@@ -143,6 +143,7 @@ func NewVpcChannel(ctx *pulumi.Context,
 	if args.Port == nil {
 		return nil, errors.New("invalid value for required argument 'Port'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource VpcChannel
 	err := ctx.RegisterResource("huaweicloud:DedicatedApig/vpcChannel:VpcChannel", name, args, &resource, opts...)
 	if err != nil {

@@ -99,6 +99,7 @@ func NewKafkaPermissions(ctx *pulumi.Context,
 	if args.TopicName == nil {
 		return nil, errors.New("invalid value for required argument 'TopicName'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource KafkaPermissions
 	err := ctx.RegisterResource("huaweicloud:Dms/kafkaPermissions:KafkaPermissions", name, args, &resource, opts...)
 	if err != nil {

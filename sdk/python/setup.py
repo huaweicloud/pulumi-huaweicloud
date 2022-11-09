@@ -15,7 +15,7 @@ class InstallPluginCommand(install):
     def run(self):
         install.run(self)
         try:
-            check_call(['pulumi', 'plugin', 'install', 'resource', 'huaweicloud', PLUGIN_VERSION])
+            check_call(['pulumi', 'plugin', 'install', 'resource', 'huaweicloud', PLUGIN_VERSION, '--server', 'https://github.com/huaweicloud/pulumi-huaweicloud/releases/download/v${VERSION}'])
         except OSError as error:
             if error.errno == errno.ENOENT:
                 print(f"""
@@ -39,14 +39,14 @@ def readme():
 
 setup(name='pulumi_huaweicloud',
       version=VERSION,
-      description="A Pulumi package for creating and managing huaweicloud cloud resources.",
+      description="A Pulumi package for creating and managing Huaweicloud cloud resources.",
       long_description=readme(),
       long_description_content_type='text/markdown',
       cmdclass={
           'install': InstallPluginCommand,
       },
       keywords='pulumi huaweicloud category/cloud',
-      url='https://www.pulumi.com',
+      url='https://huaweicloud-pulumi-provider.readthedocs.io',
       project_urls={
           'Repository': 'https://github.com/huaweicloud/pulumi-huaweicloud'
       },

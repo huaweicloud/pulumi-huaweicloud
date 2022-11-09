@@ -164,6 +164,7 @@ func NewCertificate(ctx *pulumi.Context,
 	if args.Certificate == nil {
 		return nil, errors.New("invalid value for required argument 'Certificate'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Certificate
 	err := ctx.RegisterResource("huaweicloud:Elb/certificate:Certificate", name, args, &resource, opts...)
 	if err != nil {

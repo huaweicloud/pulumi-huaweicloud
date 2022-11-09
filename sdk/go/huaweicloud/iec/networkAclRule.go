@@ -98,6 +98,7 @@ func NewNetworkAclRule(ctx *pulumi.Context,
 	if args.NetworkAclId == nil {
 		return nil, errors.New("invalid value for required argument 'NetworkAclId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource NetworkAclRule
 	err := ctx.RegisterResource("huaweicloud:Iec/networkAclRule:NetworkAclRule", name, args, &resource, opts...)
 	if err != nil {

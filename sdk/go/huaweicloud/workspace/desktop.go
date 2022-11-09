@@ -135,6 +135,7 @@ func NewDesktop(ctx *pulumi.Context,
 	if args.VpcId == nil {
 		return nil, errors.New("invalid value for required argument 'VpcId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Desktop
 	err := ctx.RegisterResource("huaweicloud:Workspace/desktop:Desktop", name, args, &resource, opts...)
 	if err != nil {

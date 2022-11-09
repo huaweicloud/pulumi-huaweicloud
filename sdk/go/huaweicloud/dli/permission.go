@@ -141,6 +141,7 @@ func NewPermission(ctx *pulumi.Context,
 	if args.UserName == nil {
 		return nil, errors.New("invalid value for required argument 'UserName'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Permission
 	err := ctx.RegisterResource("huaweicloud:Dli/permission:Permission", name, args, &resource, opts...)
 	if err != nil {

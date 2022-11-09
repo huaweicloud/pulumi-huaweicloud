@@ -42,6 +42,7 @@ import (
 //
 // ```
 func GetVpcSubnets(ctx *pulumi.Context, args *GetVpcSubnetsArgs, opts ...pulumi.InvokeOption) (*GetVpcSubnetsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetVpcSubnetsResult
 	err := ctx.Invoke("huaweicloud:Iec/getVpcSubnets:getVpcSubnets", args, &rv, opts...)
 	if err != nil {

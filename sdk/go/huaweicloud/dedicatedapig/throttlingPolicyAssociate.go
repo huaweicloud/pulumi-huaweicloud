@@ -91,6 +91,7 @@ func NewThrottlingPolicyAssociate(ctx *pulumi.Context,
 	if args.PublishIds == nil {
 		return nil, errors.New("invalid value for required argument 'PublishIds'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource ThrottlingPolicyAssociate
 	err := ctx.RegisterResource("huaweicloud:DedicatedApig/throttlingPolicyAssociate:ThrottlingPolicyAssociate", name, args, &resource, opts...)
 	if err != nil {

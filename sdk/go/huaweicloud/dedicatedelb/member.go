@@ -94,6 +94,7 @@ func NewMember(ctx *pulumi.Context,
 	if args.SubnetId == nil {
 		return nil, errors.New("invalid value for required argument 'SubnetId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Member
 	err := ctx.RegisterResource("huaweicloud:DedicatedElb/member:Member", name, args, &resource, opts...)
 	if err != nil {

@@ -119,6 +119,7 @@ func NewKey(ctx *pulumi.Context,
 	if args.KeyAlias == nil {
 		return nil, errors.New("invalid value for required argument 'KeyAlias'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Key
 	err := ctx.RegisterResource("huaweicloud:Dew/key:Key", name, args, &resource, opts...)
 	if err != nil {

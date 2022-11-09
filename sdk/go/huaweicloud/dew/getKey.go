@@ -44,6 +44,7 @@ import (
 //
 // ```
 func LookupKey(ctx *pulumi.Context, args *LookupKeyArgs, opts ...pulumi.InvokeOption) (*LookupKeyResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv LookupKeyResult
 	err := ctx.Invoke("huaweicloud:Dew/getKey:getKey", args, &rv, opts...)
 	if err != nil {

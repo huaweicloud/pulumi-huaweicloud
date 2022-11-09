@@ -88,6 +88,7 @@ func NewVpc(ctx *pulumi.Context,
 	if args.Cidr == nil {
 		return nil, errors.New("invalid value for required argument 'Cidr'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Vpc
 	err := ctx.RegisterResource("huaweicloud:Iec/vpc:Vpc", name, args, &resource, opts...)
 	if err != nil {

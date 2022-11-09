@@ -42,6 +42,7 @@ import (
 //
 // ```
 func GetDataset_versions(ctx *pulumi.Context, args *GetDataset_versionsArgs, opts ...pulumi.InvokeOption) (*GetDataset_versionsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetDataset_versionsResult
 	err := ctx.Invoke("huaweicloud:ModelArts/getDataset_versions:getDataset_versions", args, &rv, opts...)
 	if err != nil {

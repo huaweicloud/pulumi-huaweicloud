@@ -39,6 +39,7 @@ import (
 //
 // ```
 func LookupSecgroup(ctx *pulumi.Context, args *LookupSecgroupArgs, opts ...pulumi.InvokeOption) (*LookupSecgroupResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv LookupSecgroupResult
 	err := ctx.Invoke("huaweicloud:Vpc/getSecgroup:getSecgroup", args, &rv, opts...)
 	if err != nil {

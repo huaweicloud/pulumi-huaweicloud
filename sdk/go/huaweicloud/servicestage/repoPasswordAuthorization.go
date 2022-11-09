@@ -63,6 +63,7 @@ func NewRepoPasswordAuthorization(ctx *pulumi.Context,
 	if args.UserName == nil {
 		return nil, errors.New("invalid value for required argument 'UserName'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource RepoPasswordAuthorization
 	err := ctx.RegisterResource("huaweicloud:ServiceStage/repoPasswordAuthorization:RepoPasswordAuthorization", name, args, &resource, opts...)
 	if err != nil {

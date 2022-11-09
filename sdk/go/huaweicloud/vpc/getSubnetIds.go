@@ -14,6 +14,7 @@ import (
 //
 // This resource can be useful for getting back a list of subnet ids for a vpc.
 func GetSubnetIds(ctx *pulumi.Context, args *GetSubnetIdsArgs, opts ...pulumi.InvokeOption) (*GetSubnetIdsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetSubnetIdsResult
 	err := ctx.Invoke("huaweicloud:Vpc/getSubnetIds:getSubnetIds", args, &rv, opts...)
 	if err != nil {

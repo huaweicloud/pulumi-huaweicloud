@@ -42,6 +42,7 @@ import (
 //
 // ```
 func GetTurbos(ctx *pulumi.Context, args *GetTurbosArgs, opts ...pulumi.InvokeOption) (*GetTurbosResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetTurbosResult
 	err := ctx.Invoke("huaweicloud:Sfs/getTurbos:getTurbos", args, &rv, opts...)
 	if err != nil {

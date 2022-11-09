@@ -96,6 +96,7 @@ func NewAdminAssignment(ctx *pulumi.Context,
 	if args.Account == nil {
 		return nil, errors.New("invalid value for required argument 'Account'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource AdminAssignment
 	err := ctx.RegisterResource("huaweicloud:Meeting/adminAssignment:AdminAssignment", name, args, &resource, opts...)
 	if err != nil {

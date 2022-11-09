@@ -32,6 +32,7 @@ func NewInstanceGroupAssociate(ctx *pulumi.Context,
 	if args.LoadBalancers == nil {
 		return nil, errors.New("invalid value for required argument 'LoadBalancers'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource InstanceGroupAssociate
 	err := ctx.RegisterResource("huaweicloud:Waf/instanceGroupAssociate:InstanceGroupAssociate", name, args, &resource, opts...)
 	if err != nil {

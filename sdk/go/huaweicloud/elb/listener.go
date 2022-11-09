@@ -113,6 +113,7 @@ func NewListener(ctx *pulumi.Context,
 	if args.ProtocolPort == nil {
 		return nil, errors.New("invalid value for required argument 'ProtocolPort'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Listener
 	err := ctx.RegisterResource("huaweicloud:Elb/listener:Listener", name, args, &resource, opts...)
 	if err != nil {

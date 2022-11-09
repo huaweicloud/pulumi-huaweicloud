@@ -197,6 +197,7 @@ func NewNodePool(ctx *pulumi.Context,
 	if args.RootVolume == nil {
 		return nil, errors.New("invalid value for required argument 'RootVolume'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource NodePool
 	err := ctx.RegisterResource("huaweicloud:Cce/nodePool:NodePool", name, args, &resource, opts...)
 	if err != nil {

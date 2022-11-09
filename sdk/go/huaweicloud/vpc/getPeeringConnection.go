@@ -61,6 +61,7 @@ import (
 //
 // ```
 func LookupPeeringConnection(ctx *pulumi.Context, args *LookupPeeringConnectionArgs, opts ...pulumi.InvokeOption) (*LookupPeeringConnectionResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv LookupPeeringConnectionResult
 	err := ctx.Invoke("huaweicloud:Vpc/getPeeringConnection:getPeeringConnection", args, &rv, opts...)
 	if err != nil {

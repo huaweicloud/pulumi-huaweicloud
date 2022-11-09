@@ -162,6 +162,7 @@ func NewBucketPolicy(ctx *pulumi.Context,
 	if args.Policy == nil {
 		return nil, errors.New("invalid value for required argument 'Policy'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource BucketPolicy
 	err := ctx.RegisterResource("huaweicloud:Obs/bucketPolicy:BucketPolicy", name, args, &resource, opts...)
 	if err != nil {

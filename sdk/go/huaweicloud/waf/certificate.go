@@ -118,6 +118,7 @@ func NewCertificate(ctx *pulumi.Context,
 	if args.PrivateKey == nil {
 		return nil, errors.New("invalid value for required argument 'PrivateKey'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Certificate
 	err := ctx.RegisterResource("huaweicloud:Waf/certificate:Certificate", name, args, &resource, opts...)
 	if err != nil {

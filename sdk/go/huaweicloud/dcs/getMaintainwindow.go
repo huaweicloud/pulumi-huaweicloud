@@ -39,6 +39,7 @@ import (
 //
 // ```
 func GetMaintainwindow(ctx *pulumi.Context, args *GetMaintainwindowArgs, opts ...pulumi.InvokeOption) (*GetMaintainwindowResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetMaintainwindowResult
 	err := ctx.Invoke("huaweicloud:Dcs/getMaintainwindow:getMaintainwindow", args, &rv, opts...)
 	if err != nil {

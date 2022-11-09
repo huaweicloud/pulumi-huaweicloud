@@ -115,6 +115,7 @@ func NewSubscription(ctx *pulumi.Context,
 	if args.TopicUrn == nil {
 		return nil, errors.New("invalid value for required argument 'TopicUrn'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Subscription
 	err := ctx.RegisterResource("huaweicloud:Smn/subscription:Subscription", name, args, &resource, opts...)
 	if err != nil {

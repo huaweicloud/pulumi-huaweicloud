@@ -151,6 +151,7 @@ func NewSparkJob(ctx *pulumi.Context,
 	if args.QueueName == nil {
 		return nil, errors.New("invalid value for required argument 'QueueName'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource SparkJob
 	err := ctx.RegisterResource("huaweicloud:Dli/sparkJob:SparkJob", name, args, &resource, opts...)
 	if err != nil {

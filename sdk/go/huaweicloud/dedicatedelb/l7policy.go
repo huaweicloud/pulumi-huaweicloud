@@ -84,6 +84,7 @@ func NewL7policy(ctx *pulumi.Context,
 	if args.RedirectPoolId == nil {
 		return nil, errors.New("invalid value for required argument 'RedirectPoolId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource L7policy
 	err := ctx.RegisterResource("huaweicloud:DedicatedElb/l7policy:L7policy", name, args, &resource, opts...)
 	if err != nil {

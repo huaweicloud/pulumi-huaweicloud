@@ -43,6 +43,7 @@ import (
 //
 // ```
 func GetBandwidths(ctx *pulumi.Context, args *GetBandwidthsArgs, opts ...pulumi.InvokeOption) (*GetBandwidthsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetBandwidthsResult
 	err := ctx.Invoke("huaweicloud:Iec/getBandwidths:getBandwidths", args, &rv, opts...)
 	if err != nil {

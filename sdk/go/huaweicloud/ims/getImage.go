@@ -69,6 +69,7 @@ import (
 //
 // ```
 func LookupImage(ctx *pulumi.Context, args *LookupImageArgs, opts ...pulumi.InvokeOption) (*LookupImageResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv LookupImageResult
 	err := ctx.Invoke("huaweicloud:Ims/getImage:getImage", args, &rv, opts...)
 	if err != nil {

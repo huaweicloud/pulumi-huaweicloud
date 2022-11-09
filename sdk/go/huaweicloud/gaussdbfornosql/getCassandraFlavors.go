@@ -37,6 +37,7 @@ import (
 //
 // ```
 func GetCassandraFlavors(ctx *pulumi.Context, args *GetCassandraFlavorsArgs, opts ...pulumi.InvokeOption) (*GetCassandraFlavorsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetCassandraFlavorsResult
 	err := ctx.Invoke("huaweicloud:GaussDBforNoSQL/getCassandraFlavors:getCassandraFlavors", args, &rv, opts...)
 	if err != nil {

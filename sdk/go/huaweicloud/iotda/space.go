@@ -71,6 +71,7 @@ func NewSpace(ctx *pulumi.Context,
 		args = &SpaceArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Space
 	err := ctx.RegisterResource("huaweicloud:IoTDA/space:Space", name, args, &resource, opts...)
 	if err != nil {

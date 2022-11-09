@@ -193,6 +193,7 @@ func NewVolume(ctx *pulumi.Context,
 	if args.VolumeType == nil {
 		return nil, errors.New("invalid value for required argument 'VolumeType'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Volume
 	err := ctx.RegisterResource("huaweicloud:Evs/volume:Volume", name, args, &resource, opts...)
 	if err != nil {

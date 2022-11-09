@@ -240,6 +240,7 @@ func NewCluster(ctx *pulumi.Context,
 	if args.EngineVersion == nil {
 		return nil, errors.New("invalid value for required argument 'EngineVersion'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Cluster
 	err := ctx.RegisterResource("huaweicloud:Css/cluster:Cluster", name, args, &resource, opts...)
 	if err != nil {

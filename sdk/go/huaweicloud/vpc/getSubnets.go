@@ -40,6 +40,7 @@ import (
 // * `ipv6Gateway` - Indicates the IPv6 subnet gateway.
 // * `tags` - Indicates the key/value pairs which associated with the subnet.
 func GetSubnets(ctx *pulumi.Context, args *GetSubnetsArgs, opts ...pulumi.InvokeOption) (*GetSubnetsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetSubnetsResult
 	err := ctx.Invoke("huaweicloud:Vpc/getSubnets:getSubnets", args, &rv, opts...)
 	if err != nil {

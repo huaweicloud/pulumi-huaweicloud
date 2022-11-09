@@ -62,6 +62,7 @@ func NewTags(ctx *pulumi.Context,
 	if args.Tags == nil {
 		return nil, errors.New("invalid value for required argument 'Tags'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Tags
 	err := ctx.RegisterResource("huaweicloud:Tms/tags:Tags", name, args, &resource, opts...)
 	if err != nil {

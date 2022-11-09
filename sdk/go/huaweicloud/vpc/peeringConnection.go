@@ -68,6 +68,7 @@ func NewPeeringConnection(ctx *pulumi.Context,
 	if args.VpcId == nil {
 		return nil, errors.New("invalid value for required argument 'VpcId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource PeeringConnection
 	err := ctx.RegisterResource("huaweicloud:Vpc/peeringConnection:PeeringConnection", name, args, &resource, opts...)
 	if err != nil {

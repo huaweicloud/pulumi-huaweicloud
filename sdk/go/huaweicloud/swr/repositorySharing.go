@@ -105,6 +105,7 @@ func NewRepositorySharing(ctx *pulumi.Context,
 	if args.SharingAccount == nil {
 		return nil, errors.New("invalid value for required argument 'SharingAccount'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource RepositorySharing
 	err := ctx.RegisterResource("huaweicloud:Swr/repositorySharing:RepositorySharing", name, args, &resource, opts...)
 	if err != nil {

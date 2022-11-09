@@ -237,6 +237,7 @@ func NewLoadbalancer(ctx *pulumi.Context,
 	if args.AvailabilityZones == nil {
 		return nil, errors.New("invalid value for required argument 'AvailabilityZones'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Loadbalancer
 	err := ctx.RegisterResource("huaweicloud:DedicatedElb/loadbalancer:Loadbalancer", name, args, &resource, opts...)
 	if err != nil {

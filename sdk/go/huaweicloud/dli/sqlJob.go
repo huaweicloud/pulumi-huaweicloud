@@ -118,6 +118,7 @@ func NewSqlJob(ctx *pulumi.Context,
 	if args.Sql == nil {
 		return nil, errors.New("invalid value for required argument 'Sql'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource SqlJob
 	err := ctx.RegisterResource("huaweicloud:Dli/sqlJob:SqlJob", name, args, &resource, opts...)
 	if err != nil {

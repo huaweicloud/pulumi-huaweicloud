@@ -64,6 +64,7 @@ func NewAmqp(ctx *pulumi.Context,
 		args = &AmqpArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Amqp
 	err := ctx.RegisterResource("huaweicloud:IoTDA/amqp:Amqp", name, args, &resource, opts...)
 	if err != nil {

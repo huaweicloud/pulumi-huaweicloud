@@ -156,6 +156,7 @@ func NewAlarmRule(ctx *pulumi.Context,
 	if args.Unit == nil {
 		return nil, errors.New("invalid value for required argument 'Unit'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource AlarmRule
 	err := ctx.RegisterResource("huaweicloud:Aom/alarmRule:AlarmRule", name, args, &resource, opts...)
 	if err != nil {

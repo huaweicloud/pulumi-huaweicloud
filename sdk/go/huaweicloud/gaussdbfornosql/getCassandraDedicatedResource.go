@@ -39,6 +39,7 @@ import (
 //
 // ```
 func GetCassandraDedicatedResource(ctx *pulumi.Context, args *GetCassandraDedicatedResourceArgs, opts ...pulumi.InvokeOption) (*GetCassandraDedicatedResourceResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetCassandraDedicatedResourceResult
 	err := ctx.Invoke("huaweicloud:GaussDBforNoSQL/getCassandraDedicatedResource:getCassandraDedicatedResource", args, &rv, opts...)
 	if err != nil {

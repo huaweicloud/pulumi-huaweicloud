@@ -145,6 +145,7 @@ func NewRouteTable(ctx *pulumi.Context,
 	if args.VpcId == nil {
 		return nil, errors.New("invalid value for required argument 'VpcId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource RouteTable
 	err := ctx.RegisterResource("huaweicloud:Vpc/routeTable:RouteTable", name, args, &resource, opts...)
 	if err != nil {

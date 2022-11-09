@@ -42,6 +42,7 @@ import (
 //
 // ```
 func GetSourceServers(ctx *pulumi.Context, args *GetSourceServersArgs, opts ...pulumi.InvokeOption) (*GetSourceServersResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetSourceServersResult
 	err := ctx.Invoke("huaweicloud:Sms/getSourceServers:getSourceServers", args, &rv, opts...)
 	if err != nil {

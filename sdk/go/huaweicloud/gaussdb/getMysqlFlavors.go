@@ -37,6 +37,7 @@ import (
 //
 // ```
 func GetMysqlFlavors(ctx *pulumi.Context, args *GetMysqlFlavorsArgs, opts ...pulumi.InvokeOption) (*GetMysqlFlavorsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetMysqlFlavorsResult
 	err := ctx.Invoke("huaweicloud:GaussDB/getMysqlFlavors:getMysqlFlavors", args, &rv, opts...)
 	if err != nil {

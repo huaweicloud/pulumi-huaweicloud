@@ -86,6 +86,7 @@ func NewGroupMembership(ctx *pulumi.Context,
 	if args.Users == nil {
 		return nil, errors.New("invalid value for required argument 'Users'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource GroupMembership
 	err := ctx.RegisterResource("huaweicloud:Iam/groupMembership:GroupMembership", name, args, &resource, opts...)
 	if err != nil {

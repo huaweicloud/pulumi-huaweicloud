@@ -39,6 +39,7 @@ import (
 //
 // ```
 func GetEngineVersions(ctx *pulumi.Context, args *GetEngineVersionsArgs, opts ...pulumi.InvokeOption) (*GetEngineVersionsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetEngineVersionsResult
 	err := ctx.Invoke("huaweicloud:Rds/getEngineVersions:getEngineVersions", args, &rv, opts...)
 	if err != nil {

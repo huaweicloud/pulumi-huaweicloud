@@ -97,6 +97,7 @@ func NewOrganizationPermissions(ctx *pulumi.Context,
 	if args.Users == nil {
 		return nil, errors.New("invalid value for required argument 'Users'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource OrganizationPermissions
 	err := ctx.RegisterResource("huaweicloud:Swr/organizationPermissions:OrganizationPermissions", name, args, &resource, opts...)
 	if err != nil {

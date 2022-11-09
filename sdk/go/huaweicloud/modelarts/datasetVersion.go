@@ -128,6 +128,7 @@ func NewDatasetVersion(ctx *pulumi.Context,
 	if args.DatasetId == nil {
 		return nil, errors.New("invalid value for required argument 'DatasetId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource DatasetVersion
 	err := ctx.RegisterResource("huaweicloud:ModelArts/datasetVersion:DatasetVersion", name, args, &resource, opts...)
 	if err != nil {

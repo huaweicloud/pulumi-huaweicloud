@@ -71,6 +71,7 @@ func NewSecurityGroup(ctx *pulumi.Context,
 		args = &SecurityGroupArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource SecurityGroup
 	err := ctx.RegisterResource("huaweicloud:Iec/securityGroup:SecurityGroup", name, args, &resource, opts...)
 	if err != nil {

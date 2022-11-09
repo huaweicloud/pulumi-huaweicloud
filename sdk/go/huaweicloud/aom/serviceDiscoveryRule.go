@@ -158,6 +158,7 @@ func NewServiceDiscoveryRule(ctx *pulumi.Context,
 	if args.ServiceType == nil {
 		return nil, errors.New("invalid value for required argument 'ServiceType'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource ServiceDiscoveryRule
 	err := ctx.RegisterResource("huaweicloud:Aom/serviceDiscoveryRule:ServiceDiscoveryRule", name, args, &resource, opts...)
 	if err != nil {

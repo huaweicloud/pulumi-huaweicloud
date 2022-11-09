@@ -41,6 +41,7 @@ import (
 //
 // ```
 func GetCustomRole(ctx *pulumi.Context, args *GetCustomRoleArgs, opts ...pulumi.InvokeOption) (*GetCustomRoleResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetCustomRoleResult
 	err := ctx.Invoke("huaweicloud:Iam/getCustomRole:getCustomRole", args, &rv, opts...)
 	if err != nil {

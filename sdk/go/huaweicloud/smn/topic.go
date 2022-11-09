@@ -83,6 +83,7 @@ func NewTopic(ctx *pulumi.Context,
 		args = &TopicArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Topic
 	err := ctx.RegisterResource("huaweicloud:Smn/topic:Topic", name, args, &resource, opts...)
 	if err != nil {

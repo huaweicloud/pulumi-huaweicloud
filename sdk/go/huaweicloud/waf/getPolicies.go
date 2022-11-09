@@ -42,6 +42,7 @@ import (
 //
 // ```
 func GetPolicies(ctx *pulumi.Context, args *GetPoliciesArgs, opts ...pulumi.InvokeOption) (*GetPoliciesResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetPoliciesResult
 	err := ctx.Invoke("huaweicloud:Waf/getPolicies:getPolicies", args, &rv, opts...)
 	if err != nil {

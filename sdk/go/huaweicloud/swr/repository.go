@@ -93,6 +93,7 @@ func NewRepository(ctx *pulumi.Context,
 	if args.Organization == nil {
 		return nil, errors.New("invalid value for required argument 'Organization'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Repository
 	err := ctx.RegisterResource("huaweicloud:Swr/repository:Repository", name, args, &resource, opts...)
 	if err != nil {

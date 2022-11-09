@@ -39,6 +39,7 @@ import (
 //
 // ```
 func LookupRedisInstance(ctx *pulumi.Context, args *LookupRedisInstanceArgs, opts ...pulumi.InvokeOption) (*LookupRedisInstanceResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv LookupRedisInstanceResult
 	err := ctx.Invoke("huaweicloud:GaussDBforNoSQL/getRedisInstance:getRedisInstance", args, &rv, opts...)
 	if err != nil {

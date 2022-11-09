@@ -132,6 +132,7 @@ func NewWatermarkTemplate(ctx *pulumi.Context,
 	if args.ImageType == nil {
 		return nil, errors.New("invalid value for required argument 'ImageType'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource WatermarkTemplate
 	err := ctx.RegisterResource("huaweicloud:Vod/watermarkTemplate:WatermarkTemplate", name, args, &resource, opts...)
 	if err != nil {

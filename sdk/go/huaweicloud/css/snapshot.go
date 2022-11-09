@@ -87,6 +87,7 @@ func NewSnapshot(ctx *pulumi.Context,
 	if args.ClusterId == nil {
 		return nil, errors.New("invalid value for required argument 'ClusterId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Snapshot
 	err := ctx.RegisterResource("huaweicloud:Css/snapshot:Snapshot", name, args, &resource, opts...)
 	if err != nil {

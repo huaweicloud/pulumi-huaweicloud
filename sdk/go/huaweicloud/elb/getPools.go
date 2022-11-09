@@ -42,6 +42,7 @@ import (
 //
 // ```
 func GetPools(ctx *pulumi.Context, args *GetPoolsArgs, opts ...pulumi.InvokeOption) (*GetPoolsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetPoolsResult
 	err := ctx.Invoke("huaweicloud:Elb/getPools:getPools", args, &rv, opts...)
 	if err != nil {

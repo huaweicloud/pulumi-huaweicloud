@@ -42,6 +42,7 @@ import (
 //
 // ```
 func LookupInstance(ctx *pulumi.Context, args *LookupInstanceArgs, opts ...pulumi.InvokeOption) (*LookupInstanceResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv LookupInstanceResult
 	err := ctx.Invoke("huaweicloud:Ecs/getInstance:getInstance", args, &rv, opts...)
 	if err != nil {

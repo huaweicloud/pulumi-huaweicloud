@@ -72,6 +72,7 @@ import (
 // VPC | huaweicloud_vpc<br>huaweicloud_networking_secgroup | huaweicloud_vpc_subnet<br>huaweicloud_vpc_route<br>huaweicloud_networking_secgroup_rule
 // <!-- markdownlint-enable MD033 -->
 func LookupProject(ctx *pulumi.Context, args *LookupProjectArgs, opts ...pulumi.InvokeOption) (*LookupProjectResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv LookupProjectResult
 	err := ctx.Invoke("huaweicloud:Eps/getProject:getProject", args, &rv, opts...)
 	if err != nil {

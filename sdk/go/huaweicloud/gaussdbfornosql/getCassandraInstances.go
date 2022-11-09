@@ -39,6 +39,7 @@ import (
 //
 // ```
 func GetCassandraInstances(ctx *pulumi.Context, args *GetCassandraInstancesArgs, opts ...pulumi.InvokeOption) (*GetCassandraInstancesResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetCassandraInstancesResult
 	err := ctx.Invoke("huaweicloud:GaussDBforNoSQL/getCassandraInstances:getCassandraInstances", args, &rv, opts...)
 	if err != nil {

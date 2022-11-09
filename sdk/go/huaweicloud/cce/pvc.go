@@ -219,6 +219,7 @@ func NewPvc(ctx *pulumi.Context,
 	if args.StorageClassName == nil {
 		return nil, errors.New("invalid value for required argument 'StorageClassName'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Pvc
 	err := ctx.RegisterResource("huaweicloud:Cce/pvc:Pvc", name, args, &resource, opts...)
 	if err != nil {

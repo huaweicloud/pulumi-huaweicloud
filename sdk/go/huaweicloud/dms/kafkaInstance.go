@@ -264,6 +264,7 @@ func NewKafkaInstance(ctx *pulumi.Context,
 	if args.VpcId == nil {
 		return nil, errors.New("invalid value for required argument 'VpcId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource KafkaInstance
 	err := ctx.RegisterResource("huaweicloud:Dms/kafkaInstance:KafkaInstance", name, args, &resource, opts...)
 	if err != nil {

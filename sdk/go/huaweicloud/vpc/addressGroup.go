@@ -81,6 +81,7 @@ func NewAddressGroup(ctx *pulumi.Context,
 	if args.Addresses == nil {
 		return nil, errors.New("invalid value for required argument 'Addresses'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource AddressGroup
 	err := ctx.RegisterResource("huaweicloud:Vpc/addressGroup:AddressGroup", name, args, &resource, opts...)
 	if err != nil {

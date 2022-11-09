@@ -11,6 +11,7 @@ import (
 )
 
 func GetIds(ctx *pulumi.Context, args *GetIdsArgs, opts ...pulumi.InvokeOption) (*GetIdsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetIdsResult
 	err := ctx.Invoke("huaweicloud:Vpc/getIds:getIds", args, &rv, opts...)
 	if err != nil {

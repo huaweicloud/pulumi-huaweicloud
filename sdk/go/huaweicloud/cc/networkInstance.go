@@ -90,6 +90,7 @@ func NewNetworkInstance(ctx *pulumi.Context,
 	if args.Type == nil {
 		return nil, errors.New("invalid value for required argument 'Type'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource NetworkInstance
 	err := ctx.RegisterResource("huaweicloud:Cc/networkInstance:NetworkInstance", name, args, &resource, opts...)
 	if err != nil {

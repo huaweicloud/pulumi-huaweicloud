@@ -87,6 +87,7 @@ func NewParametergroup(ctx *pulumi.Context,
 	if args.Datastore == nil {
 		return nil, errors.New("invalid value for required argument 'Datastore'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Parametergroup
 	err := ctx.RegisterResource("huaweicloud:Rds/parametergroup:Parametergroup", name, args, &resource, opts...)
 	if err != nil {

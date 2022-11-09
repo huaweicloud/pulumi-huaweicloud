@@ -113,6 +113,7 @@ func NewImage(ctx *pulumi.Context,
 		args = &ImageArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Image
 	err := ctx.RegisterResource("huaweicloud:Ims/image:Image", name, args, &resource, opts...)
 	if err != nil {

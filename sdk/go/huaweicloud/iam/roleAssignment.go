@@ -120,6 +120,7 @@ func NewRoleAssignment(ctx *pulumi.Context,
 	if args.RoleId == nil {
 		return nil, errors.New("invalid value for required argument 'RoleId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource RoleAssignment
 	err := ctx.RegisterResource("huaweicloud:Iam/roleAssignment:RoleAssignment", name, args, &resource, opts...)
 	if err != nil {

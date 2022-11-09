@@ -39,6 +39,7 @@ import (
 //
 // ```
 func GetReferenceTables(ctx *pulumi.Context, args *GetReferenceTablesArgs, opts ...pulumi.InvokeOption) (*GetReferenceTablesResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetReferenceTablesResult
 	err := ctx.Invoke("huaweicloud:Waf/getReferenceTables:getReferenceTables", args, &rv, opts...)
 	if err != nil {

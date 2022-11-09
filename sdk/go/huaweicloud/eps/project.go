@@ -85,6 +85,7 @@ func NewProject(ctx *pulumi.Context,
 		args = &ProjectArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Project
 	err := ctx.RegisterResource("huaweicloud:Eps/project:Project", name, args, &resource, opts...)
 	if err != nil {

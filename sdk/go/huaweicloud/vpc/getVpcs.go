@@ -12,6 +12,7 @@ import (
 
 // Use this data source to get a list of VPC.
 func GetVpcs(ctx *pulumi.Context, args *GetVpcsArgs, opts ...pulumi.InvokeOption) (*GetVpcsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetVpcsResult
 	err := ctx.Invoke("huaweicloud:Vpc/getVpcs:getVpcs", args, &rv, opts...)
 	if err != nil {

@@ -73,6 +73,7 @@ func NewIpgroup(ctx *pulumi.Context,
 	if args.IpLists == nil {
 		return nil, errors.New("invalid value for required argument 'IpLists'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Ipgroup
 	err := ctx.RegisterResource("huaweicloud:DedicatedElb/ipgroup:Ipgroup", name, args, &resource, opts...)
 	if err != nil {

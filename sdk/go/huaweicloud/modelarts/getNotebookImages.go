@@ -40,6 +40,7 @@ import (
 //
 // ```
 func GetNotebookImages(ctx *pulumi.Context, args *GetNotebookImagesArgs, opts ...pulumi.InvokeOption) (*GetNotebookImagesResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetNotebookImagesResult
 	err := ctx.Invoke("huaweicloud:ModelArts/getNotebookImages:getNotebookImages", args, &rv, opts...)
 	if err != nil {

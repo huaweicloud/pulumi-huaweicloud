@@ -106,6 +106,7 @@ func NewAcl(ctx *pulumi.Context,
 		args = &AclArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Acl
 	err := ctx.RegisterResource("huaweicloud:NetworkAcl/acl:Acl", name, args, &resource, opts...)
 	if err != nil {

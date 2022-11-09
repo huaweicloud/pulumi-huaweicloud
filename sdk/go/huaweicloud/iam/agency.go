@@ -96,6 +96,7 @@ func NewAgency(ctx *pulumi.Context,
 		args = &AgencyArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Agency
 	err := ctx.RegisterResource("huaweicloud:Iam/agency:Agency", name, args, &resource, opts...)
 	if err != nil {

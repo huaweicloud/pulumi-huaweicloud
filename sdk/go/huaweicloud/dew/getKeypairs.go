@@ -42,6 +42,7 @@ import (
 //
 // ```
 func GetKeypairs(ctx *pulumi.Context, args *GetKeypairsArgs, opts ...pulumi.InvokeOption) (*GetKeypairsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetKeypairsResult
 	err := ctx.Invoke("huaweicloud:Dew/getKeypairs:getKeypairs", args, &rv, opts...)
 	if err != nil {

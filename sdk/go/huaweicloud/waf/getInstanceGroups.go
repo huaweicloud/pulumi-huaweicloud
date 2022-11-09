@@ -39,6 +39,7 @@ import (
 //
 // ```
 func GetInstanceGroups(ctx *pulumi.Context, args *GetInstanceGroupsArgs, opts ...pulumi.InvokeOption) (*GetInstanceGroupsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetInstanceGroupsResult
 	err := ctx.Invoke("huaweicloud:Waf/getInstanceGroups:getInstanceGroups", args, &rv, opts...)
 	if err != nil {

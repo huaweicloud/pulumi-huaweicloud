@@ -93,6 +93,7 @@ func NewDomain(ctx *pulumi.Context,
 	if args.Type == nil {
 		return nil, errors.New("invalid value for required argument 'Type'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Domain
 	err := ctx.RegisterResource("huaweicloud:Live/domain:Domain", name, args, &resource, opts...)
 	if err != nil {

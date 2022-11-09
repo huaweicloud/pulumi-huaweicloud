@@ -91,6 +91,7 @@ func NewKafkaTopic(ctx *pulumi.Context,
 	if args.Partitions == nil {
 		return nil, errors.New("invalid value for required argument 'Partitions'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource KafkaTopic
 	err := ctx.RegisterResource("huaweicloud:Dms/kafkaTopic:KafkaTopic", name, args, &resource, opts...)
 	if err != nil {

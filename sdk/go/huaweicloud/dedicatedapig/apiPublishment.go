@@ -135,6 +135,7 @@ func NewApiPublishment(ctx *pulumi.Context,
 	if args.InstanceId == nil {
 		return nil, errors.New("invalid value for required argument 'InstanceId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource ApiPublishment
 	err := ctx.RegisterResource("huaweicloud:DedicatedApig/apiPublishment:ApiPublishment", name, args, &resource, opts...)
 	if err != nil {

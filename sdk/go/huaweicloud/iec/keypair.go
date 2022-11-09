@@ -67,6 +67,7 @@ func NewKeypair(ctx *pulumi.Context,
 		args = &KeypairArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Keypair
 	err := ctx.RegisterResource("huaweicloud:Iec/keypair:Keypair", name, args, &resource, opts...)
 	if err != nil {

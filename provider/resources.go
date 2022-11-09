@@ -133,18 +133,18 @@ func Provider() tfbridge.ProviderInfo {
 		//
 		// You may host a logo on a domain you control or add an SVG logo for your package
 		// in your repository and use the raw content URL for that file as your logo URL.
-		LogoURL: "",
+		LogoURL: "https://console-static.huaweicloud.com/static/authui/20210202115135/public/custom/images/logo-en.svg",
 		// PluginDownloadURL is an optional URL used to download the Provider
 		// for use in Pulumi programs
 		// e.g https://github.com/org/pulumi-provider-name/releases/
-		PluginDownloadURL: "",
-		Description:       "A Pulumi package for creating and managing huaweicloud cloud resources.",
+		PluginDownloadURL: "https://github.com/huaweicloud/pulumi-huaweicloud/releases/download/v${VERSION}",
+		Description:       "A Pulumi package for creating and managing Huaweicloud cloud resources.",
 		// category/cloud tag helps with categorizing the package in the Pulumi Registry.
 		// For all available categories, see `Keywords` in
 		// https://www.pulumi.com/docs/guides/pulumi-packages/schema/#package.
 		Keywords:   []string{"pulumi", "huaweicloud", "category/cloud"},
 		License:    "Apache-2.0",
-		Homepage:   "https://www.pulumi.com",
+		Homepage:   "https://huaweicloud-pulumi-provider.readthedocs.io",
 		Repository: "https://github.com/huaweicloud/pulumi-huaweicloud",
 		// The GitHub Org for the provider - defaults to `terraform-providers`. Note that this
 		// should match the TF provider module's require directive, not any replace directives.

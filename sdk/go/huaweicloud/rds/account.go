@@ -84,6 +84,7 @@ func NewAccount(ctx *pulumi.Context,
 	if args.Password == nil {
 		return nil, errors.New("invalid value for required argument 'Password'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Account
 	err := ctx.RegisterResource("huaweicloud:Rds/account:Account", name, args, &resource, opts...)
 	if err != nil {

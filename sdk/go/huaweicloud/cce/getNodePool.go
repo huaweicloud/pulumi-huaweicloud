@@ -44,6 +44,7 @@ import (
 //
 // ```
 func LookupNodePool(ctx *pulumi.Context, args *LookupNodePoolArgs, opts ...pulumi.InvokeOption) (*LookupNodePoolResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv LookupNodePoolResult
 	err := ctx.Invoke("huaweicloud:Cce/getNodePool:getNodePool", args, &rv, opts...)
 	if err != nil {

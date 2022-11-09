@@ -62,6 +62,7 @@ func NewRepoTokenAuthorization(ctx *pulumi.Context,
 	if args.Type == nil {
 		return nil, errors.New("invalid value for required argument 'Type'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource RepoTokenAuthorization
 	err := ctx.RegisterResource("huaweicloud:ServiceStage/repoTokenAuthorization:RepoTokenAuthorization", name, args, &resource, opts...)
 	if err != nil {

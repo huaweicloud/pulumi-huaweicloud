@@ -41,6 +41,7 @@ import (
 //
 // ```
 func GetNosqlFlavors(ctx *pulumi.Context, args *GetNosqlFlavorsArgs, opts ...pulumi.InvokeOption) (*GetNosqlFlavorsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetNosqlFlavorsResult
 	err := ctx.Invoke("huaweicloud:GaussDBforNoSQL/getNosqlFlavors:getNosqlFlavors", args, &rv, opts...)
 	if err != nil {

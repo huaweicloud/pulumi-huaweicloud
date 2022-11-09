@@ -42,6 +42,7 @@ import (
 //
 // ```
 func LookupVpc(ctx *pulumi.Context, args *LookupVpcArgs, opts ...pulumi.InvokeOption) (*LookupVpcResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv LookupVpcResult
 	err := ctx.Invoke("huaweicloud:Iec/getVpc:getVpc", args, &rv, opts...)
 	if err != nil {

@@ -101,6 +101,7 @@ func NewAclRule(ctx *pulumi.Context,
 	if args.Protocol == nil {
 		return nil, errors.New("invalid value for required argument 'Protocol'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource AclRule
 	err := ctx.RegisterResource("huaweicloud:NetworkAcl/aclRule:AclRule", name, args, &resource, opts...)
 	if err != nil {

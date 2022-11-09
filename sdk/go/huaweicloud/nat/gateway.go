@@ -98,6 +98,7 @@ func NewGateway(ctx *pulumi.Context,
 	if args.Spec == nil {
 		return nil, errors.New("invalid value for required argument 'Spec'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Gateway
 	err := ctx.RegisterResource("huaweicloud:Nat/gateway:Gateway", name, args, &resource, opts...)
 	if err != nil {

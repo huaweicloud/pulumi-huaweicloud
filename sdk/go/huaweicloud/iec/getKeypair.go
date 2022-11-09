@@ -39,6 +39,7 @@ import (
 //
 // ```
 func LookupKeypair(ctx *pulumi.Context, args *LookupKeypairArgs, opts ...pulumi.InvokeOption) (*LookupKeypairResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv LookupKeypairResult
 	err := ctx.Invoke("huaweicloud:Iec/getKeypair:getKeypair", args, &rv, opts...)
 	if err != nil {

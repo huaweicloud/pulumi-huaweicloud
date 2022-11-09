@@ -39,6 +39,7 @@ import (
 //
 // ```
 func GetMysqlDedicatedResource(ctx *pulumi.Context, args *GetMysqlDedicatedResourceArgs, opts ...pulumi.InvokeOption) (*GetMysqlDedicatedResourceResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetMysqlDedicatedResourceResult
 	err := ctx.Invoke("huaweicloud:GaussDB/getMysqlDedicatedResource:getMysqlDedicatedResource", args, &rv, opts...)
 	if err != nil {

@@ -103,6 +103,7 @@ func NewDataTracker(ctx *pulumi.Context,
 	if args.DataBucket == nil {
 		return nil, errors.New("invalid value for required argument 'DataBucket'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource DataTracker
 	err := ctx.RegisterResource("huaweicloud:Cts/dataTracker:DataTracker", name, args, &resource, opts...)
 	if err != nil {

@@ -158,6 +158,7 @@ func NewMicroserviceEngine(ctx *pulumi.Context,
 	if args.NetworkId == nil {
 		return nil, errors.New("invalid value for required argument 'NetworkId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource MicroserviceEngine
 	err := ctx.RegisterResource("huaweicloud:Cse/microserviceEngine:MicroserviceEngine", name, args, &resource, opts...)
 	if err != nil {

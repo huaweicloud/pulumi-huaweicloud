@@ -87,6 +87,7 @@ func NewProject(ctx *pulumi.Context,
 	if args.Type == nil {
 		return nil, errors.New("invalid value for required argument 'Type'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Project
 	err := ctx.RegisterResource("huaweicloud:ProjectMan/project:Project", name, args, &resource, opts...)
 	if err != nil {

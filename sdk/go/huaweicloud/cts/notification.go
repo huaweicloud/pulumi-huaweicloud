@@ -133,6 +133,7 @@ func NewNotification(ctx *pulumi.Context,
 	if args.OperationType == nil {
 		return nil, errors.New("invalid value for required argument 'OperationType'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Notification
 	err := ctx.RegisterResource("huaweicloud:Cts/notification:Notification", name, args, &resource, opts...)
 	if err != nil {

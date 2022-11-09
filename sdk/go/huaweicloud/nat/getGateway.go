@@ -39,6 +39,7 @@ import (
 //
 // ```
 func LookupGateway(ctx *pulumi.Context, args *LookupGatewayArgs, opts ...pulumi.InvokeOption) (*LookupGatewayResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv LookupGatewayResult
 	err := ctx.Invoke("huaweicloud:Nat/getGateway:getGateway", args, &rv, opts...)
 	if err != nil {

@@ -200,6 +200,7 @@ func NewPolicy(ctx *pulumi.Context,
 	if args.ScalingPolicyType == nil {
 		return nil, errors.New("invalid value for required argument 'ScalingPolicyType'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Policy
 	err := ctx.RegisterResource("huaweicloud:As/policy:Policy", name, args, &resource, opts...)
 	if err != nil {

@@ -43,6 +43,7 @@ import (
 //
 // ```
 func GetClusters(ctx *pulumi.Context, args *GetClustersArgs, opts ...pulumi.InvokeOption) (*GetClustersResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetClustersResult
 	err := ctx.Invoke("huaweicloud:Cce/getClusters:getClusters", args, &rv, opts...)
 	if err != nil {
