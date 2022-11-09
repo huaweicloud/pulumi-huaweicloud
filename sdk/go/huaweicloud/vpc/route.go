@@ -152,6 +152,7 @@ func NewRoute(ctx *pulumi.Context,
 	if args.VpcId == nil {
 		return nil, errors.New("invalid value for required argument 'VpcId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Route
 	err := ctx.RegisterResource("huaweicloud:Vpc/route:Route", name, args, &resource, opts...)
 	if err != nil {

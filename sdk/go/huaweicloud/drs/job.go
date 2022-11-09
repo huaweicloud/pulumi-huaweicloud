@@ -155,6 +155,7 @@ func NewJob(ctx *pulumi.Context,
 	if args.Type == nil {
 		return nil, errors.New("invalid value for required argument 'Type'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Job
 	err := ctx.RegisterResource("huaweicloud:Drs/job:Job", name, args, &resource, opts...)
 	if err != nil {

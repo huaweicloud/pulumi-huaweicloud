@@ -86,6 +86,7 @@ func NewWhitelist(ctx *pulumi.Context,
 	if args.ListenerId == nil {
 		return nil, errors.New("invalid value for required argument 'ListenerId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Whitelist
 	err := ctx.RegisterResource("huaweicloud:Elb/whitelist:Whitelist", name, args, &resource, opts...)
 	if err != nil {

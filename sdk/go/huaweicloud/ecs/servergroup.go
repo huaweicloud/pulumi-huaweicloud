@@ -84,6 +84,7 @@ func NewServergroup(ctx *pulumi.Context,
 		args = &ServergroupArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Servergroup
 	err := ctx.RegisterResource("huaweicloud:Ecs/servergroup:Servergroup", name, args, &resource, opts...)
 	if err != nil {

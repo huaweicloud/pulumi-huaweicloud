@@ -87,6 +87,7 @@ func NewPolicy(ctx *pulumi.Context,
 		args = &PolicyArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Policy
 	err := ctx.RegisterResource("huaweicloud:Waf/policy:Policy", name, args, &resource, opts...)
 	if err != nil {

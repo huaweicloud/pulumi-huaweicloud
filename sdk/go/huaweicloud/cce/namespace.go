@@ -93,6 +93,7 @@ func NewNamespace(ctx *pulumi.Context,
 	if args.ClusterId == nil {
 		return nil, errors.New("invalid value for required argument 'ClusterId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Namespace
 	err := ctx.RegisterResource("huaweicloud:Cce/namespace:Namespace", name, args, &resource, opts...)
 	if err != nil {

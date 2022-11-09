@@ -75,6 +75,7 @@ func NewForwardRule(ctx *pulumi.Context,
 	if args.SourcePort == nil {
 		return nil, errors.New("invalid value for required argument 'SourcePort'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource ForwardRule
 	err := ctx.RegisterResource("huaweicloud:AdvancedAntiDDos/forwardRule:ForwardRule", name, args, &resource, opts...)
 	if err != nil {

@@ -39,6 +39,7 @@ import (
 //
 // ```
 func LookupMysqlInstance(ctx *pulumi.Context, args *LookupMysqlInstanceArgs, opts ...pulumi.InvokeOption) (*LookupMysqlInstanceResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv LookupMysqlInstanceResult
 	err := ctx.Invoke("huaweicloud:GaussDB/getMysqlInstance:getMysqlInstance", args, &rv, opts...)
 	if err != nil {

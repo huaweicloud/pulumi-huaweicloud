@@ -621,6 +621,7 @@ func NewCluster(ctx *pulumi.Context,
 	if args.VpcId == nil {
 		return nil, errors.New("invalid value for required argument 'VpcId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Cluster
 	err := ctx.RegisterResource("huaweicloud:Mrs/cluster:cluster", name, args, &resource, opts...)
 	if err != nil {

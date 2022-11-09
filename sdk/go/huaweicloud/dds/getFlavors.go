@@ -40,6 +40,7 @@ import (
 //
 // ```
 func GetFlavors(ctx *pulumi.Context, args *GetFlavorsArgs, opts ...pulumi.InvokeOption) (*GetFlavorsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetFlavorsResult
 	err := ctx.Invoke("huaweicloud:Dds/getFlavors:getFlavors", args, &rv, opts...)
 	if err != nil {

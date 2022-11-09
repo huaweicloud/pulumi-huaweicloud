@@ -37,6 +37,7 @@ import (
 //
 // ```
 func LookupRole(ctx *pulumi.Context, args *LookupRoleArgs, opts ...pulumi.InvokeOption) (*LookupRoleResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv LookupRoleResult
 	err := ctx.Invoke("huaweicloud:Iam/getRole:getRole", args, &rv, opts...)
 	if err != nil {

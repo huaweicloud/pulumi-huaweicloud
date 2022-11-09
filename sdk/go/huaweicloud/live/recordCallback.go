@@ -100,6 +100,7 @@ func NewRecordCallback(ctx *pulumi.Context,
 	if args.Url == nil {
 		return nil, errors.New("invalid value for required argument 'Url'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource RecordCallback
 	err := ctx.RegisterResource("huaweicloud:Live/recordCallback:RecordCallback", name, args, &resource, opts...)
 	if err != nil {

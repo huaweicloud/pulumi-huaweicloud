@@ -86,6 +86,7 @@ func NewBasic(ctx *pulumi.Context,
 	if args.TrafficThreshold == nil {
 		return nil, errors.New("invalid value for required argument 'TrafficThreshold'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Basic
 	err := ctx.RegisterResource("huaweicloud:AntiDDos/basic:Basic", name, args, &resource, opts...)
 	if err != nil {

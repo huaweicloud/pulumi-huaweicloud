@@ -261,6 +261,7 @@ func NewConference(ctx *pulumi.Context,
 	if args.Topic == nil {
 		return nil, errors.New("invalid value for required argument 'Topic'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Conference
 	err := ctx.RegisterResource("huaweicloud:Meeting/conference:Conference", name, args, &resource, opts...)
 	if err != nil {

@@ -116,6 +116,7 @@ func NewDnatRule(ctx *pulumi.Context,
 	if args.Protocol == nil {
 		return nil, errors.New("invalid value for required argument 'Protocol'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource DnatRule
 	err := ctx.RegisterResource("huaweicloud:Nat/dnatRule:DnatRule", name, args, &resource, opts...)
 	if err != nil {

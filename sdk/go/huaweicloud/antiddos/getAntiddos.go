@@ -44,6 +44,7 @@ import (
 //
 // ```
 func GetAntiddos(ctx *pulumi.Context, args *GetAntiddosArgs, opts ...pulumi.InvokeOption) (*GetAntiddosResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetAntiddosResult
 	err := ctx.Invoke("huaweicloud:AntiDDos/getAntiddos:getAntiddos", args, &rv, opts...)
 	if err != nil {

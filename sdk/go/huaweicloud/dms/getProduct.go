@@ -74,6 +74,7 @@ import (
 //
 // ```
 func GetProduct(ctx *pulumi.Context, args *GetProductArgs, opts ...pulumi.InvokeOption) (*GetProductResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetProductResult
 	err := ctx.Invoke("huaweicloud:Dms/getProduct:getProduct", args, &rv, opts...)
 	if err != nil {

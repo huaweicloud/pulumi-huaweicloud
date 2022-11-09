@@ -101,6 +101,7 @@ func NewAccessRule(ctx *pulumi.Context,
 	if args.SfsId == nil {
 		return nil, errors.New("invalid value for required argument 'SfsId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource AccessRule
 	err := ctx.RegisterResource("huaweicloud:Sfs/accessRule:AccessRule", name, args, &resource, opts...)
 	if err != nil {

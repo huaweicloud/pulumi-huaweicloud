@@ -64,6 +64,7 @@ func NewDependency(ctx *pulumi.Context,
 	if args.Runtime == nil {
 		return nil, errors.New("invalid value for required argument 'Runtime'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Dependency
 	err := ctx.RegisterResource("huaweicloud:FunctionGraph/dependency:Dependency", name, args, &resource, opts...)
 	if err != nil {

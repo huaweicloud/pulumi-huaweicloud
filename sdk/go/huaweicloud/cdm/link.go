@@ -126,6 +126,7 @@ func NewLink(ctx *pulumi.Context,
 	if args.Connector == nil {
 		return nil, errors.New("invalid value for required argument 'Connector'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Link
 	err := ctx.RegisterResource("huaweicloud:Cdm/link:Link", name, args, &resource, opts...)
 	if err != nil {

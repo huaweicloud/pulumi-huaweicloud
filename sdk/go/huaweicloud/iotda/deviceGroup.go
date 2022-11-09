@@ -102,6 +102,7 @@ func NewDeviceGroup(ctx *pulumi.Context,
 	if args.SpaceId == nil {
 		return nil, errors.New("invalid value for required argument 'SpaceId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource DeviceGroup
 	err := ctx.RegisterResource("huaweicloud:IoTDA/deviceGroup:DeviceGroup", name, args, &resource, opts...)
 	if err != nil {

@@ -42,6 +42,7 @@ import (
 //
 // ```
 func GetNetwork_acl(ctx *pulumi.Context, args *GetNetwork_aclArgs, opts ...pulumi.InvokeOption) (*GetNetwork_aclResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetNetwork_aclResult
 	err := ctx.Invoke("huaweicloud:Iec/getNetwork_acl:getNetwork_acl", args, &rv, opts...)
 	if err != nil {

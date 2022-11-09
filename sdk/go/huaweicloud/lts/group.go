@@ -76,6 +76,7 @@ func NewGroup(ctx *pulumi.Context,
 	if args.TtlInDays == nil {
 		return nil, errors.New("invalid value for required argument 'TtlInDays'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Group
 	err := ctx.RegisterResource("huaweicloud:Lts/group:Group", name, args, &resource, opts...)
 	if err != nil {

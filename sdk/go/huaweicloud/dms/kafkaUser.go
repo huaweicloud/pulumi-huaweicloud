@@ -82,6 +82,7 @@ func NewKafkaUser(ctx *pulumi.Context,
 	if args.Password == nil {
 		return nil, errors.New("invalid value for required argument 'Password'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource KafkaUser
 	err := ctx.RegisterResource("huaweicloud:Dms/kafkaUser:KafkaUser", name, args, &resource, opts...)
 	if err != nil {

@@ -42,6 +42,7 @@ import (
 //
 // ```
 func GetListeners(ctx *pulumi.Context, args *GetListenersArgs, opts ...pulumi.InvokeOption) (*GetListenersResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetListenersResult
 	err := ctx.Invoke("huaweicloud:Elb/getListeners:getListeners", args, &rv, opts...)
 	if err != nil {

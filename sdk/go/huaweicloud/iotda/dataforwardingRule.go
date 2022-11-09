@@ -143,6 +143,7 @@ func NewDataforwardingRule(ctx *pulumi.Context,
 	if args.Trigger == nil {
 		return nil, errors.New("invalid value for required argument 'Trigger'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource DataforwardingRule
 	err := ctx.RegisterResource("huaweicloud:IoTDA/dataforwardingRule:DataforwardingRule", name, args, &resource, opts...)
 	if err != nil {

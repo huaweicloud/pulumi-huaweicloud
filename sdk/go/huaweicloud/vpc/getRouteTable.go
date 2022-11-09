@@ -49,6 +49,7 @@ import (
 //
 // ```
 func LookupRouteTable(ctx *pulumi.Context, args *LookupRouteTableArgs, opts ...pulumi.InvokeOption) (*LookupRouteTableResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv LookupRouteTableResult
 	err := ctx.Invoke("huaweicloud:Vpc/getRouteTable:getRouteTable", args, &rv, opts...)
 	if err != nil {

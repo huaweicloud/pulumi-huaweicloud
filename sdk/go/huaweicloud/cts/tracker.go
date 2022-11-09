@@ -89,6 +89,7 @@ func NewTracker(ctx *pulumi.Context,
 		args = &TrackerArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Tracker
 	err := ctx.RegisterResource("huaweicloud:Cts/tracker:Tracker", name, args, &resource, opts...)
 	if err != nil {

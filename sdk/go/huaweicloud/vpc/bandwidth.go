@@ -87,6 +87,7 @@ func NewBandwidth(ctx *pulumi.Context,
 	if args.Size == nil {
 		return nil, errors.New("invalid value for required argument 'Size'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Bandwidth
 	err := ctx.RegisterResource("huaweicloud:Vpc/bandwidth:Bandwidth", name, args, &resource, opts...)
 	if err != nil {

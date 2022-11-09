@@ -97,6 +97,7 @@ func NewRuleDataMasking(ctx *pulumi.Context,
 	if args.Subfield == nil {
 		return nil, errors.New("invalid value for required argument 'Subfield'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource RuleDataMasking
 	err := ctx.RegisterResource("huaweicloud:Waf/ruleDataMasking:RuleDataMasking", name, args, &resource, opts...)
 	if err != nil {

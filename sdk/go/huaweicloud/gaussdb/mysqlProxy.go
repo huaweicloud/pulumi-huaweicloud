@@ -90,6 +90,7 @@ func NewMysqlProxy(ctx *pulumi.Context,
 	if args.NodeNum == nil {
 		return nil, errors.New("invalid value for required argument 'NodeNum'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource MysqlProxy
 	err := ctx.RegisterResource("huaweicloud:GaussDB/mysqlProxy:MysqlProxy", name, args, &resource, opts...)
 	if err != nil {

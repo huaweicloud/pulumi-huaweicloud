@@ -46,6 +46,7 @@ import (
 //
 // ```
 func GetAddonTemplate(ctx *pulumi.Context, args *GetAddonTemplateArgs, opts ...pulumi.InvokeOption) (*GetAddonTemplateResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetAddonTemplateResult
 	err := ctx.Invoke("huaweicloud:Cce/getAddonTemplate:getAddonTemplate", args, &rv, opts...)
 	if err != nil {

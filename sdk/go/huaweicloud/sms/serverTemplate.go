@@ -144,6 +144,7 @@ func NewServerTemplate(ctx *pulumi.Context,
 	if args.AvailabilityZone == nil {
 		return nil, errors.New("invalid value for required argument 'AvailabilityZone'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource ServerTemplate
 	err := ctx.RegisterResource("huaweicloud:Sms/serverTemplate:ServerTemplate", name, args, &resource, opts...)
 	if err != nil {

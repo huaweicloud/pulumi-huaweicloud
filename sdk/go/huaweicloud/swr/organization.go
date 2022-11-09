@@ -69,6 +69,7 @@ func NewOrganization(ctx *pulumi.Context,
 		args = &OrganizationArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Organization
 	err := ctx.RegisterResource("huaweicloud:Swr/organization:Organization", name, args, &resource, opts...)
 	if err != nil {

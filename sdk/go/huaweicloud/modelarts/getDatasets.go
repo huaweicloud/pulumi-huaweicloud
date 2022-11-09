@@ -40,6 +40,7 @@ import (
 //
 // ```
 func GetDatasets(ctx *pulumi.Context, args *GetDatasetsArgs, opts ...pulumi.InvokeOption) (*GetDatasetsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetDatasetsResult
 	err := ctx.Invoke("huaweicloud:ModelArts/getDatasets:getDatasets", args, &rv, opts...)
 	if err != nil {

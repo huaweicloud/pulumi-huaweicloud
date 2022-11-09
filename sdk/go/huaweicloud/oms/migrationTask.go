@@ -157,6 +157,7 @@ func NewMigrationTask(ctx *pulumi.Context,
 	if args.Type == nil {
 		return nil, errors.New("invalid value for required argument 'Type'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource MigrationTask
 	err := ctx.RegisterResource("huaweicloud:Oms/migrationTask:MigrationTask", name, args, &resource, opts...)
 	if err != nil {

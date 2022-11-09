@@ -124,6 +124,7 @@ func NewZone(ctx *pulumi.Context,
 		args = &ZoneArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Zone
 	err := ctx.RegisterResource("huaweicloud:Dns/zone:Zone", name, args, &resource, opts...)
 	if err != nil {

@@ -154,6 +154,7 @@ func NewEip(ctx *pulumi.Context,
 	if args.Publicip == nil {
 		return nil, errors.New("invalid value for required argument 'Publicip'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Eip
 	err := ctx.RegisterResource("huaweicloud:Vpc/eip:Eip", name, args, &resource, opts...)
 	if err != nil {

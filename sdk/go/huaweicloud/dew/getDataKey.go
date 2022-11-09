@@ -45,6 +45,7 @@ import (
 //
 // ```
 func GetDataKey(ctx *pulumi.Context, args *GetDataKeyArgs, opts ...pulumi.InvokeOption) (*GetDataKeyResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetDataKeyResult
 	err := ctx.Invoke("huaweicloud:Dew/getDataKey:getDataKey", args, &rv, opts...)
 	if err != nil {

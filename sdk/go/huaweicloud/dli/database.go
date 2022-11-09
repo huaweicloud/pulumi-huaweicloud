@@ -77,6 +77,7 @@ func NewDatabase(ctx *pulumi.Context,
 		args = &DatabaseArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Database
 	err := ctx.RegisterResource("huaweicloud:Dli/database:Database", name, args, &resource, opts...)
 	if err != nil {

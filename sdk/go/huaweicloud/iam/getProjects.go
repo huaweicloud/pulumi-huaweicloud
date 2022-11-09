@@ -68,6 +68,7 @@ import (
 //
 // ```
 func GetProjects(ctx *pulumi.Context, args *GetProjectsArgs, opts ...pulumi.InvokeOption) (*GetProjectsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetProjectsResult
 	err := ctx.Invoke("huaweicloud:Iam/getProjects:getProjects", args, &rv, opts...)
 	if err != nil {

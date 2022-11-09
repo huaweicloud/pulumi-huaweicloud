@@ -186,6 +186,7 @@ func NewProduct(ctx *pulumi.Context,
 	if args.Services == nil {
 		return nil, errors.New("invalid value for required argument 'Services'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Product
 	err := ctx.RegisterResource("huaweicloud:IoTDA/product:Product", name, args, &resource, opts...)
 	if err != nil {

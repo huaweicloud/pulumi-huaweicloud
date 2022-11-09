@@ -114,6 +114,7 @@ func NewNetwork(ctx *pulumi.Context,
 	if args.SecurityGroupId == nil {
 		return nil, errors.New("invalid value for required argument 'SecurityGroupId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Network
 	err := ctx.RegisterResource("huaweicloud:Cci/network:Network", name, args, &resource, opts...)
 	if err != nil {

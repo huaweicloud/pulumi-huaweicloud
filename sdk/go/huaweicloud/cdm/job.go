@@ -96,6 +96,7 @@ func NewJob(ctx *pulumi.Context,
 	if args.SourceLinkName == nil {
 		return nil, errors.New("invalid value for required argument 'SourceLinkName'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Job
 	err := ctx.RegisterResource("huaweicloud:Cdm/job:Job", name, args, &resource, opts...)
 	if err != nil {

@@ -151,6 +151,7 @@ func NewProvider(ctx *pulumi.Context,
 	if args.Protocol == nil {
 		return nil, errors.New("invalid value for required argument 'Protocol'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Provider
 	err := ctx.RegisterResource("huaweicloud:Iam/provider:Provider", name, args, &resource, opts...)
 	if err != nil {

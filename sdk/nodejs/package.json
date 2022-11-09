@@ -1,13 +1,13 @@
 {
     "name": "@pulumi/huaweicloud",
     "version": "${VERSION}",
-    "description": "A Pulumi package for creating and managing huaweicloud cloud resources.",
+    "description": "A Pulumi package for creating and managing Huaweicloud cloud resources.",
     "keywords": [
         "pulumi",
         "huaweicloud",
         "category/cloud"
     ],
-    "homepage": "https://www.pulumi.com",
+    "homepage": "https://huaweicloud-pulumi-provider.readthedocs.io",
     "repository": "https://github.com/huaweicloud/pulumi-huaweicloud",
     "license": "Apache-2.0",
     "scripts": {
@@ -24,6 +24,7 @@
     },
     "pulumi": {
         "resource": true,
-        "name": "huaweicloud"
+        "name": "huaweicloud",
+        "server": "https://github.com/huaweicloud/pulumi-huaweicloud/releases/download/v${VERSION}"
     }
 }

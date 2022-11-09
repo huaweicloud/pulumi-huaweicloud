@@ -120,6 +120,7 @@ func NewSecret(ctx *pulumi.Context,
 	if args.SecretText == nil {
 		return nil, errors.New("invalid value for required argument 'SecretText'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Secret
 	err := ctx.RegisterResource("huaweicloud:Dew/secret:Secret", name, args, &resource, opts...)
 	if err != nil {

@@ -104,6 +104,7 @@ func NewPtrrecord(ctx *pulumi.Context,
 	if args.FloatingipId == nil {
 		return nil, errors.New("invalid value for required argument 'FloatingipId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Ptrrecord
 	err := ctx.RegisterResource("huaweicloud:Dns/ptrrecord:Ptrrecord", name, args, &resource, opts...)
 	if err != nil {

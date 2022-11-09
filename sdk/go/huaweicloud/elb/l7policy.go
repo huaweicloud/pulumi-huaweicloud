@@ -127,6 +127,7 @@ func NewL7policy(ctx *pulumi.Context,
 	if args.ListenerId == nil {
 		return nil, errors.New("invalid value for required argument 'ListenerId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource L7policy
 	err := ctx.RegisterResource("huaweicloud:Elb/l7policy:L7policy", name, args, &resource, opts...)
 	if err != nil {

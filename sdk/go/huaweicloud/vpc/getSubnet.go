@@ -62,6 +62,7 @@ import (
 //
 // * `ipv6Gateway` - The IPv6 subnet gateway.
 func LookupSubnet(ctx *pulumi.Context, args *LookupSubnetArgs, opts ...pulumi.InvokeOption) (*LookupSubnetResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv LookupSubnetResult
 	err := ctx.Invoke("huaweicloud:Vpc/getSubnet:getSubnet", args, &rv, opts...)
 	if err != nil {

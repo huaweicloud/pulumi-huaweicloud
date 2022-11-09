@@ -128,6 +128,7 @@ func NewL7rule(ctx *pulumi.Context,
 	if args.Value == nil {
 		return nil, errors.New("invalid value for required argument 'Value'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource L7rule
 	err := ctx.RegisterResource("huaweicloud:Elb/l7rule:L7rule", name, args, &resource, opts...)
 	if err != nil {

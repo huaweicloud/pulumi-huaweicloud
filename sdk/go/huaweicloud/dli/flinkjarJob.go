@@ -164,6 +164,7 @@ func NewFlinkjarJob(ctx *pulumi.Context,
 		args = &FlinkjarJobArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource FlinkjarJob
 	err := ctx.RegisterResource("huaweicloud:Dli/flinkjarJob:FlinkjarJob", name, args, &resource, opts...)
 	if err != nil {

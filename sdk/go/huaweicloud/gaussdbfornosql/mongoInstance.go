@@ -210,6 +210,7 @@ func NewMongoInstance(ctx *pulumi.Context,
 	if args.VpcId == nil {
 		return nil, errors.New("invalid value for required argument 'VpcId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource MongoInstance
 	err := ctx.RegisterResource("huaweicloud:GaussDBforNoSQL/mongoInstance:MongoInstance", name, args, &resource, opts...)
 	if err != nil {

@@ -44,6 +44,7 @@ import (
 //
 // ```
 func GetEnvironments(ctx *pulumi.Context, args *GetEnvironmentsArgs, opts ...pulumi.InvokeOption) (*GetEnvironmentsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetEnvironmentsResult
 	err := ctx.Invoke("huaweicloud:DedicatedApig/getEnvironments:getEnvironments", args, &rv, opts...)
 	if err != nil {

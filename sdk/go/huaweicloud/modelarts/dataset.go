@@ -148,6 +148,7 @@ func NewDataset(ctx *pulumi.Context,
 	if args.Type == nil {
 		return nil, errors.New("invalid value for required argument 'Type'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Dataset
 	err := ctx.RegisterResource("huaweicloud:ModelArts/dataset:Dataset", name, args, &resource, opts...)
 	if err != nil {

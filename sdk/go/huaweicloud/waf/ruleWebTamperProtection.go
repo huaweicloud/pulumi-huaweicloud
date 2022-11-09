@@ -88,6 +88,7 @@ func NewRuleWebTamperProtection(ctx *pulumi.Context,
 	if args.PolicyId == nil {
 		return nil, errors.New("invalid value for required argument 'PolicyId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource RuleWebTamperProtection
 	err := ctx.RegisterResource("huaweicloud:Waf/ruleWebTamperProtection:RuleWebTamperProtection", name, args, &resource, opts...)
 	if err != nil {

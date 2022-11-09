@@ -96,6 +96,7 @@ func NewVipAssociate(ctx *pulumi.Context,
 	if args.VipId == nil {
 		return nil, errors.New("invalid value for required argument 'VipId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource VipAssociate
 	err := ctx.RegisterResource("huaweicloud:Vpc/vipAssociate:VipAssociate", name, args, &resource, opts...)
 	if err != nil {

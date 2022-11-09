@@ -95,6 +95,7 @@ func NewSecurityGroupRule(ctx *pulumi.Context,
 	if args.SecurityGroupId == nil {
 		return nil, errors.New("invalid value for required argument 'SecurityGroupId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource SecurityGroupRule
 	err := ctx.RegisterResource("huaweicloud:Iec/securityGroupRule:SecurityGroupRule", name, args, &resource, opts...)
 	if err != nil {

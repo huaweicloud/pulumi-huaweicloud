@@ -97,6 +97,7 @@ func NewPackage(ctx *pulumi.Context,
 	if args.Type == nil {
 		return nil, errors.New("invalid value for required argument 'Type'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Package
 	err := ctx.RegisterResource("huaweicloud:Dli/package:Package", name, args, &resource, opts...)
 	if err != nil {

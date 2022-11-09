@@ -232,6 +232,7 @@ func NewInterfaceAttach(ctx *pulumi.Context,
 	if args.InstanceId == nil {
 		return nil, errors.New("invalid value for required argument 'InstanceId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource InterfaceAttach
 	err := ctx.RegisterResource("huaweicloud:Ecs/interfaceAttach:InterfaceAttach", name, args, &resource, opts...)
 	if err != nil {

@@ -104,6 +104,7 @@ func NewMonitor(ctx *pulumi.Context,
 	if args.Timeout == nil {
 		return nil, errors.New("invalid value for required argument 'Timeout'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Monitor
 	err := ctx.RegisterResource("huaweicloud:DedicatedElb/monitor:Monitor", name, args, &resource, opts...)
 	if err != nil {

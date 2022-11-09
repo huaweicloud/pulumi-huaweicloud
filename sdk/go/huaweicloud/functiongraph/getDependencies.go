@@ -92,6 +92,7 @@ import (
 //
 // ```
 func GetDependencies(ctx *pulumi.Context, args *GetDependenciesArgs, opts ...pulumi.InvokeOption) (*GetDependenciesResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetDependenciesResult
 	err := ctx.Invoke("huaweicloud:FunctionGraph/getDependencies:getDependencies", args, &rv, opts...)
 	if err != nil {

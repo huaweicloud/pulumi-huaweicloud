@@ -152,6 +152,7 @@ func NewService(ctx *pulumi.Context,
 	if args.VpcId == nil {
 		return nil, errors.New("invalid value for required argument 'VpcId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Service
 	err := ctx.RegisterResource("huaweicloud:Workspace/service:Service", name, args, &resource, opts...)
 	if err != nil {

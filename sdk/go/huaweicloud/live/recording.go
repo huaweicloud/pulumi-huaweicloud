@@ -120,6 +120,7 @@ func NewRecording(ctx *pulumi.Context,
 	if args.StreamName == nil {
 		return nil, errors.New("invalid value for required argument 'StreamName'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Recording
 	err := ctx.RegisterResource("huaweicloud:Live/recording:Recording", name, args, &resource, opts...)
 	if err != nil {

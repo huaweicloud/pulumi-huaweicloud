@@ -109,6 +109,7 @@ func NewDeviceCertificate(ctx *pulumi.Context,
 	if args.Content == nil {
 		return nil, errors.New("invalid value for required argument 'Content'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource DeviceCertificate
 	err := ctx.RegisterResource("huaweicloud:IoTDA/deviceCertificate:DeviceCertificate", name, args, &resource, opts...)
 	if err != nil {

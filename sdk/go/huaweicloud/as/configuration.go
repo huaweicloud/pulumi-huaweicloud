@@ -228,6 +228,7 @@ func NewConfiguration(ctx *pulumi.Context,
 	if args.ScalingConfigurationName == nil {
 		return nil, errors.New("invalid value for required argument 'ScalingConfigurationName'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Configuration
 	err := ctx.RegisterResource("huaweicloud:As/configuration:Configuration", name, args, &resource, opts...)
 	if err != nil {

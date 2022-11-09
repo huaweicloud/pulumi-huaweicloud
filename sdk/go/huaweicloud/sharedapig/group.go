@@ -60,6 +60,7 @@ func NewGroup(ctx *pulumi.Context,
 		args = &GroupArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Group
 	err := ctx.RegisterResource("huaweicloud:SharedApig/group:Group", name, args, &resource, opts...)
 	if err != nil {

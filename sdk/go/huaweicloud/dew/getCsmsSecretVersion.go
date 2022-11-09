@@ -39,6 +39,7 @@ import (
 //
 // ```
 func GetCsmsSecretVersion(ctx *pulumi.Context, args *GetCsmsSecretVersionArgs, opts ...pulumi.InvokeOption) (*GetCsmsSecretVersionResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetCsmsSecretVersionResult
 	err := ctx.Invoke("huaweicloud:Dew/getCsmsSecretVersion:getCsmsSecretVersion", args, &rv, opts...)
 	if err != nil {

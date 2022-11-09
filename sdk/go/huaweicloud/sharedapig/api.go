@@ -158,6 +158,7 @@ func NewApi(ctx *pulumi.Context,
 	if args.RequestUri == nil {
 		return nil, errors.New("invalid value for required argument 'RequestUri'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Api
 	err := ctx.RegisterResource("huaweicloud:SharedApig/api:Api", name, args, &resource, opts...)
 	if err != nil {

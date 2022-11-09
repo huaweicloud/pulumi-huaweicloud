@@ -94,6 +94,7 @@ func NewAddon(ctx *pulumi.Context,
 	if args.Version == nil {
 		return nil, errors.New("invalid value for required argument 'Version'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Addon
 	err := ctx.RegisterResource("huaweicloud:Cce/addon:Addon", name, args, &resource, opts...)
 	if err != nil {

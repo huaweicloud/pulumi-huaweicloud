@@ -39,6 +39,7 @@ import (
 //
 // ```
 func GetOpengaussInstances(ctx *pulumi.Context, args *GetOpengaussInstancesArgs, opts ...pulumi.InvokeOption) (*GetOpengaussInstancesResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetOpengaussInstancesResult
 	err := ctx.Invoke("huaweicloud:GaussDBforOpenGauss/getOpengaussInstances:getOpengaussInstances", args, &rv, opts...)
 	if err != nil {

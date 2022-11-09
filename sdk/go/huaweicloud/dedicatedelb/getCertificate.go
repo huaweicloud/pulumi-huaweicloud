@@ -42,6 +42,7 @@ import (
 //
 // ```
 func LookupCertificate(ctx *pulumi.Context, args *LookupCertificateArgs, opts ...pulumi.InvokeOption) (*LookupCertificateResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv LookupCertificateResult
 	err := ctx.Invoke("huaweicloud:DedicatedElb/getCertificate:getCertificate", args, &rv, opts...)
 	if err != nil {

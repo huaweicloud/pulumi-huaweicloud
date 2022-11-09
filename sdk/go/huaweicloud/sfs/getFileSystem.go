@@ -42,6 +42,7 @@ import (
 //
 // ```
 func LookupFileSystem(ctx *pulumi.Context, args *LookupFileSystemArgs, opts ...pulumi.InvokeOption) (*LookupFileSystemResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv LookupFileSystemResult
 	err := ctx.Invoke("huaweicloud:Sfs/getFileSystem:getFileSystem", args, &rv, opts...)
 	if err != nil {

@@ -109,6 +109,7 @@ func NewUser(ctx *pulumi.Context,
 		args = &UserArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource User
 	err := ctx.RegisterResource("huaweicloud:Iam/user:User", name, args, &resource, opts...)
 	if err != nil {

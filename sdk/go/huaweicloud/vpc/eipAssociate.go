@@ -139,6 +139,7 @@ func NewEipAssociate(ctx *pulumi.Context,
 	if args.PublicIp == nil {
 		return nil, errors.New("invalid value for required argument 'PublicIp'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource EipAssociate
 	err := ctx.RegisterResource("huaweicloud:Vpc/eipAssociate:EipAssociate", name, args, &resource, opts...)
 	if err != nil {

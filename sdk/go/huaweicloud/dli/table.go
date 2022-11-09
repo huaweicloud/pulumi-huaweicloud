@@ -138,6 +138,7 @@ func NewTable(ctx *pulumi.Context,
 	if args.DatabaseName == nil {
 		return nil, errors.New("invalid value for required argument 'DatabaseName'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Table
 	err := ctx.RegisterResource("huaweicloud:Dli/table:Table", name, args, &resource, opts...)
 	if err != nil {

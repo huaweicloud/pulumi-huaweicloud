@@ -161,6 +161,7 @@ func NewReadReplicaInstance(ctx *pulumi.Context,
 	if args.Volume == nil {
 		return nil, errors.New("invalid value for required argument 'Volume'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource ReadReplicaInstance
 	err := ctx.RegisterResource("huaweicloud:Rds/readReplicaInstance:ReadReplicaInstance", name, args, &resource, opts...)
 	if err != nil {

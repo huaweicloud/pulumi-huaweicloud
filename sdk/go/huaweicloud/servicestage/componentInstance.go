@@ -262,6 +262,7 @@ func NewComponentInstance(ctx *pulumi.Context,
 	if args.Version == nil {
 		return nil, errors.New("invalid value for required argument 'Version'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource ComponentInstance
 	err := ctx.RegisterResource("huaweicloud:ServiceStage/componentInstance:ComponentInstance", name, args, &resource, opts...)
 	if err != nil {

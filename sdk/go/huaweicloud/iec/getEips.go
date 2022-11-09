@@ -43,6 +43,7 @@ import (
 //
 // ```
 func GetEips(ctx *pulumi.Context, args *GetEipsArgs, opts ...pulumi.InvokeOption) (*GetEipsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetEipsResult
 	err := ctx.Invoke("huaweicloud:Iec/getEips:getEips", args, &rv, opts...)
 	if err != nil {

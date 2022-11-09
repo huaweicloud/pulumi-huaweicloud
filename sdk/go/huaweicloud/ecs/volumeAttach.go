@@ -109,6 +109,7 @@ func NewVolumeAttach(ctx *pulumi.Context,
 	if args.VolumeId == nil {
 		return nil, errors.New("invalid value for required argument 'VolumeId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource VolumeAttach
 	err := ctx.RegisterResource("huaweicloud:Ecs/volumeAttach:VolumeAttach", name, args, &resource, opts...)
 	if err != nil {

@@ -93,6 +93,7 @@ func NewApplication(ctx *pulumi.Context,
 		args = &ApplicationArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Application
 	err := ctx.RegisterResource("huaweicloud:ServiceStage/application:Application", name, args, &resource, opts...)
 	if err != nil {

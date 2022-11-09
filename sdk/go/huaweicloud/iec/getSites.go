@@ -38,6 +38,7 @@ import (
 //
 // ```
 func GetSites(ctx *pulumi.Context, args *GetSitesArgs, opts ...pulumi.InvokeOption) (*GetSitesResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetSitesResult
 	err := ctx.Invoke("huaweicloud:Iec/getSites:getSites", args, &rv, opts...)
 	if err != nil {

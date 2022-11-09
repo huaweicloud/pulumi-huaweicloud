@@ -134,6 +134,7 @@ func NewDedicatedInstance(ctx *pulumi.Context,
 	if args.VpcId == nil {
 		return nil, errors.New("invalid value for required argument 'VpcId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource DedicatedInstance
 	err := ctx.RegisterResource("huaweicloud:Waf/dedicatedInstance:DedicatedInstance", name, args, &resource, opts...)
 	if err != nil {

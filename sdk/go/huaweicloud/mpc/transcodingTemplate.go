@@ -114,6 +114,7 @@ func NewTranscodingTemplate(ctx *pulumi.Context,
 	if args.OutputFormat == nil {
 		return nil, errors.New("invalid value for required argument 'OutputFormat'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource TranscodingTemplate
 	err := ctx.RegisterResource("huaweicloud:Mpc/transcodingTemplate:TranscodingTemplate", name, args, &resource, opts...)
 	if err != nil {

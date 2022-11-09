@@ -42,6 +42,7 @@ import (
 //
 // ```
 func GetDedicatedInstances(ctx *pulumi.Context, args *GetDedicatedInstancesArgs, opts ...pulumi.InvokeOption) (*GetDedicatedInstancesResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetDedicatedInstancesResult
 	err := ctx.Invoke("huaweicloud:Waf/getDedicatedInstances:getDedicatedInstances", args, &rv, opts...)
 	if err != nil {

@@ -192,6 +192,7 @@ func NewMediaAsset(ctx *pulumi.Context,
 	if args.MediaType == nil {
 		return nil, errors.New("invalid value for required argument 'MediaType'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource MediaAsset
 	err := ctx.RegisterResource("huaweicloud:Vod/mediaAsset:MediaAsset", name, args, &resource, opts...)
 	if err != nil {

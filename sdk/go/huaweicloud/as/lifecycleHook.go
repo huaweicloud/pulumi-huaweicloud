@@ -107,6 +107,7 @@ func NewLifecycleHook(ctx *pulumi.Context,
 	if args.Type == nil {
 		return nil, errors.New("invalid value for required argument 'Type'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource LifecycleHook
 	err := ctx.RegisterResource("huaweicloud:As/lifecycleHook:LifecycleHook", name, args, &resource, opts...)
 	if err != nil {

@@ -129,6 +129,7 @@ func NewLoadbalancer(ctx *pulumi.Context,
 	if args.VipSubnetId == nil {
 		return nil, errors.New("invalid value for required argument 'VipSubnetId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Loadbalancer
 	err := ctx.RegisterResource("huaweicloud:Elb/loadbalancer:Loadbalancer", name, args, &resource, opts...)
 	if err != nil {

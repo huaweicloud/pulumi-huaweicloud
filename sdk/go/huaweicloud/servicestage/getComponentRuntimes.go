@@ -37,6 +37,7 @@ import (
 //
 // ```
 func GetComponentRuntimes(ctx *pulumi.Context, args *GetComponentRuntimesArgs, opts ...pulumi.InvokeOption) (*GetComponentRuntimesResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetComponentRuntimesResult
 	err := ctx.Invoke("huaweicloud:ServiceStage/getComponentRuntimes:getComponentRuntimes", args, &rv, opts...)
 	if err != nil {

@@ -108,6 +108,7 @@ func NewRecordset(ctx *pulumi.Context,
 	if args.ZoneId == nil {
 		return nil, errors.New("invalid value for required argument 'ZoneId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Recordset
 	err := ctx.RegisterResource("huaweicloud:Dns/recordset:Recordset", name, args, &resource, opts...)
 	if err != nil {

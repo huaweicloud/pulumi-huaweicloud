@@ -127,6 +127,7 @@ func NewDatabaseUser(ctx *pulumi.Context,
 	if args.Roles == nil {
 		return nil, errors.New("invalid value for required argument 'Roles'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource DatabaseUser
 	err := ctx.RegisterResource("huaweicloud:Dds/databaseUser:DatabaseUser", name, args, &resource, opts...)
 	if err != nil {

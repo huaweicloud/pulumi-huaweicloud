@@ -43,6 +43,7 @@ func NewPort(ctx *pulumi.Context,
 	if args.NetworkId == nil {
 		return nil, errors.New("invalid value for required argument 'NetworkId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Port
 	err := ctx.RegisterResource("huaweicloud:Vpc/port:Port", name, args, &resource, opts...)
 	if err != nil {

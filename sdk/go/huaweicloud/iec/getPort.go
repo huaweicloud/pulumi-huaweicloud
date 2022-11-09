@@ -43,6 +43,7 @@ import (
 //
 // ```
 func GetPort(ctx *pulumi.Context, args *GetPortArgs, opts ...pulumi.InvokeOption) (*GetPortResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetPortResult
 	err := ctx.Invoke("huaweicloud:Iec/getPort:getPort", args, &rv, opts...)
 	if err != nil {

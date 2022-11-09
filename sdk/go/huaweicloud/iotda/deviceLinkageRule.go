@@ -158,6 +158,7 @@ func NewDeviceLinkageRule(ctx *pulumi.Context,
 	if args.Triggers == nil {
 		return nil, errors.New("invalid value for required argument 'Triggers'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource DeviceLinkageRule
 	err := ctx.RegisterResource("huaweicloud:IoTDA/deviceLinkageRule:DeviceLinkageRule", name, args, &resource, opts...)
 	if err != nil {

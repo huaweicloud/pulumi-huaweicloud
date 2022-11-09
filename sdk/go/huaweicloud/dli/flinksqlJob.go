@@ -146,6 +146,7 @@ func NewFlinksqlJob(ctx *pulumi.Context,
 		args = &FlinksqlJobArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource FlinksqlJob
 	err := ctx.RegisterResource("huaweicloud:Dli/flinksqlJob:FlinksqlJob", name, args, &resource, opts...)
 	if err != nil {

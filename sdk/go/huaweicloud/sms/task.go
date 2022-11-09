@@ -142,6 +142,7 @@ func NewTask(ctx *pulumi.Context,
 	if args.Type == nil {
 		return nil, errors.New("invalid value for required argument 'Type'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Task
 	err := ctx.RegisterResource("huaweicloud:Sms/task:Task", name, args, &resource, opts...)
 	if err != nil {

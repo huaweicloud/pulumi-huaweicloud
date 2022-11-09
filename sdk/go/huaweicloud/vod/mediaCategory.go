@@ -82,6 +82,7 @@ func NewMediaCategory(ctx *pulumi.Context,
 		args = &MediaCategoryArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource MediaCategory
 	err := ctx.RegisterResource("huaweicloud:Vod/mediaCategory:MediaCategory", name, args, &resource, opts...)
 	if err != nil {

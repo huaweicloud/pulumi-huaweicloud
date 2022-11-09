@@ -42,6 +42,7 @@ import (
 //
 // ```
 func GetVolumes(ctx *pulumi.Context, args *GetVolumesArgs, opts ...pulumi.InvokeOption) (*GetVolumesResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetVolumesResult
 	err := ctx.Invoke("huaweicloud:Evs/getVolumes:getVolumes", args, &rv, opts...)
 	if err != nil {

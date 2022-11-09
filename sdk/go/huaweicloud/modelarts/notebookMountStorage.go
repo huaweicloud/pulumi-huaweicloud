@@ -96,6 +96,7 @@ func NewNotebookMountStorage(ctx *pulumi.Context,
 	if args.StoragePath == nil {
 		return nil, errors.New("invalid value for required argument 'StoragePath'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource NotebookMountStorage
 	err := ctx.RegisterResource("huaweicloud:ModelArts/notebookMountStorage:NotebookMountStorage", name, args, &resource, opts...)
 	if err != nil {

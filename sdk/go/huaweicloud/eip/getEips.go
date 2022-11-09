@@ -12,6 +12,7 @@ import (
 
 // Use this data source to get a list of EIPs.
 func GetEips(ctx *pulumi.Context, args *GetEipsArgs, opts ...pulumi.InvokeOption) (*GetEipsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetEipsResult
 	err := ctx.Invoke("huaweicloud:Eip/getEips:getEips", args, &rv, opts...)
 	if err != nil {

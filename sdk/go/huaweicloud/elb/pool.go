@@ -103,6 +103,7 @@ func NewPool(ctx *pulumi.Context,
 	if args.Protocol == nil {
 		return nil, errors.New("invalid value for required argument 'Protocol'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Pool
 	err := ctx.RegisterResource("huaweicloud:Elb/pool:Pool", name, args, &resource, opts...)
 	if err != nil {

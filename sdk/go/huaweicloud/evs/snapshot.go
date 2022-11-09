@@ -93,6 +93,7 @@ func NewSnapshot(ctx *pulumi.Context,
 	if args.VolumeId == nil {
 		return nil, errors.New("invalid value for required argument 'VolumeId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Snapshot
 	err := ctx.RegisterResource("huaweicloud:Evs/snapshot:Snapshot", name, args, &resource, opts...)
 	if err != nil {

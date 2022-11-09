@@ -125,6 +125,7 @@ func NewSnatRule(ctx *pulumi.Context,
 	if args.NatGatewayId == nil {
 		return nil, errors.New("invalid value for required argument 'NatGatewayId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource SnatRule
 	err := ctx.RegisterResource("huaweicloud:Nat/snatRule:SnatRule", name, args, &resource, opts...)
 	if err != nil {

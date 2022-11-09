@@ -46,6 +46,7 @@ import (
 //
 // ```
 func GetDomainStatistics(ctx *pulumi.Context, args *GetDomainStatisticsArgs, opts ...pulumi.InvokeOption) (*GetDomainStatisticsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetDomainStatisticsResult
 	err := ctx.Invoke("huaweicloud:Cdn/getDomainStatistics:getDomainStatistics", args, &rv, opts...)
 	if err != nil {

@@ -38,6 +38,7 @@ import (
 //
 // ```
 func LookupBucketObject(ctx *pulumi.Context, args *LookupBucketObjectArgs, opts ...pulumi.InvokeOption) (*LookupBucketObjectResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv LookupBucketObjectResult
 	err := ctx.Invoke("huaweicloud:Obs/getBucketObject:getBucketObject", args, &rv, opts...)
 	if err != nil {

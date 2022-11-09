@@ -135,6 +135,7 @@ func NewNodeAttach(ctx *pulumi.Context,
 	if args.ServerId == nil {
 		return nil, errors.New("invalid value for required argument 'ServerId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource NodeAttach
 	err := ctx.RegisterResource("huaweicloud:Cce/nodeAttach:NodeAttach", name, args, &resource, opts...)
 	if err != nil {

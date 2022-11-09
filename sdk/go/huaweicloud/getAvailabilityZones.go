@@ -39,6 +39,7 @@ import (
 //
 // ```
 func GetAvailabilityZones(ctx *pulumi.Context, args *GetAvailabilityZonesArgs, opts ...pulumi.InvokeOption) (*GetAvailabilityZonesResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetAvailabilityZonesResult
 	err := ctx.Invoke("huaweicloud:index/getAvailabilityZones:getAvailabilityZones", args, &rv, opts...)
 	if err != nil {

@@ -75,6 +75,7 @@ func NewPolicy(ctx *pulumi.Context,
 	if args.Type == nil {
 		return nil, errors.New("invalid value for required argument 'Type'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Policy
 	err := ctx.RegisterResource("huaweicloud:Cbr/policy:Policy", name, args, &resource, opts...)
 	if err != nil {

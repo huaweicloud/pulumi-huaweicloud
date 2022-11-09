@@ -40,6 +40,7 @@ import (
 //
 // ```
 func GetVaults(ctx *pulumi.Context, args *GetVaultsArgs, opts ...pulumi.InvokeOption) (*GetVaultsResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetVaultsResult
 	err := ctx.Invoke("huaweicloud:Cbr/getVaults:getVaults", args, &rv, opts...)
 	if err != nil {

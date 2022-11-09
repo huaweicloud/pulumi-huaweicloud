@@ -203,6 +203,7 @@ func NewPvc(ctx *pulumi.Context,
 	if args.VolumeId == nil {
 		return nil, errors.New("invalid value for required argument 'VolumeId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Pvc
 	err := ctx.RegisterResource("huaweicloud:Cci/pvc:Pvc", name, args, &resource, opts...)
 	if err != nil {

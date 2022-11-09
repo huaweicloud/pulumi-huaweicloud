@@ -43,6 +43,7 @@ import (
 //
 // ```
 func GetPublicServices(ctx *pulumi.Context, args *GetPublicServicesArgs, opts ...pulumi.InvokeOption) (*GetPublicServicesResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetPublicServicesResult
 	err := ctx.Invoke("huaweicloud:Vpcep/getPublicServices:getPublicServices", args, &rv, opts...)
 	if err != nil {

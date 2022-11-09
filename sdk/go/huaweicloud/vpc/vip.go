@@ -61,6 +61,7 @@ func NewVip(ctx *pulumi.Context,
 	if args.NetworkId == nil {
 		return nil, errors.New("invalid value for required argument 'NetworkId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Vip
 	err := ctx.RegisterResource("huaweicloud:Vpc/vip:Vip", name, args, &resource, opts...)
 	if err != nil {

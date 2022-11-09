@@ -97,6 +97,7 @@ func NewDatabase_privilege(ctx *pulumi.Context,
 	if args.Users == nil {
 		return nil, errors.New("invalid value for required argument 'Users'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Database_privilege
 	err := ctx.RegisterResource("huaweicloud:Rds/database_privilege:Database_privilege", name, args, &resource, opts...)
 	if err != nil {

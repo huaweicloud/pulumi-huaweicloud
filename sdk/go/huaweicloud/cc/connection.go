@@ -89,6 +89,7 @@ func NewConnection(ctx *pulumi.Context,
 		args = &ConnectionArgs{}
 	}
 
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Connection
 	err := ctx.RegisterResource("huaweicloud:Cc/connection:Connection", name, args, &resource, opts...)
 	if err != nil {

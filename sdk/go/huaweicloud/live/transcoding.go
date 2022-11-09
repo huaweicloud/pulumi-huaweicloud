@@ -112,6 +112,7 @@ func NewTranscoding(ctx *pulumi.Context,
 	if args.VideoEncoding == nil {
 		return nil, errors.New("invalid value for required argument 'VideoEncoding'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Transcoding
 	err := ctx.RegisterResource("huaweicloud:Live/transcoding:Transcoding", name, args, &resource, opts...)
 	if err != nil {

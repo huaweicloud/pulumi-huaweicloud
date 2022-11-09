@@ -198,6 +198,7 @@ func NewRedisInstance(ctx *pulumi.Context,
 	if args.VpcId == nil {
 		return nil, errors.New("invalid value for required argument 'VpcId'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource RedisInstance
 	err := ctx.RegisterResource("huaweicloud:GaussDBforNoSQL/redisInstance:RedisInstance", name, args, &resource, opts...)
 	if err != nil {

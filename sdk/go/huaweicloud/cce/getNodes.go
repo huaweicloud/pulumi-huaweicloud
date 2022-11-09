@@ -44,6 +44,7 @@ import (
 //
 // ```
 func GetNodes(ctx *pulumi.Context, args *GetNodesArgs, opts ...pulumi.InvokeOption) (*GetNodesResult, error) {
+	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetNodesResult
 	err := ctx.Invoke("huaweicloud:Cce/getNodes:getNodes", args, &rv, opts...)
 	if err != nil {

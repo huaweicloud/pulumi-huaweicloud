@@ -149,6 +149,7 @@ func NewQueue(ctx *pulumi.Context,
 	if args.CuCount == nil {
 		return nil, errors.New("invalid value for required argument 'CuCount'")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource Queue
 	err := ctx.RegisterResource("huaweicloud:Dli/queue:Queue", name, args, &resource, opts...)
 	if err != nil {
