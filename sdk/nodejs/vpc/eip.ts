@@ -31,7 +31,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const bandwidth1 = new huaweicloud.vpc.Bandwidth("bandwidth1", {size: 5});
  * const eip1 = new huaweicloud.vpc.Eip("eip1", {

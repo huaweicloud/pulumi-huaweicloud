@@ -12,7 +12,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const snat1 = new huaweicloud.nat.SnatRule("snat1", {
  *     natGatewayId: _var.natgw_id,
@@ -24,7 +24,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const snat2 = new huaweicloud.nat.SnatRule("snat2", {
  *     natGatewayId: _var.natgw_id,

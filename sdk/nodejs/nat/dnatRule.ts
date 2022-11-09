@@ -12,7 +12,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const dnat2 = new huaweicloud.nat.DnatRule("dnat2", {
  *     natGatewayId: _var.natgw_id,

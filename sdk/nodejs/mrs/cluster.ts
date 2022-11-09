@@ -14,6 +14,7 @@ import * as utilities from "../utilities";
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const testAvailabilityZones = huaweicloud.getAvailabilityZones({});
  * const config = new pulumi.Config();
@@ -72,6 +73,7 @@ import * as utilities from "../utilities";
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const testAvailabilityZones = huaweicloud.getAvailabilityZones({});
  * const config = new pulumi.Config();
@@ -117,6 +119,7 @@ import * as utilities from "../utilities";
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const testAvailabilityZones = huaweicloud.getAvailabilityZones({});
  * const config = new pulumi.Config();
@@ -195,6 +198,7 @@ import * as utilities from "../utilities";
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const testAvailabilityZones = huaweicloud.getAvailabilityZones({});
  * const config = new pulumi.Config();
@@ -272,6 +276,7 @@ import * as utilities from "../utilities";
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const testAvailabilityZones = huaweicloud.getAvailabilityZones({});
  * const config = new pulumi.Config();

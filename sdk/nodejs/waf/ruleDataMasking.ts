@@ -14,7 +14,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const policy1 = new huaweicloud.waf.Policy("policy1", {});
  * const rule1 = new huaweicloud.waf.RuleDataMasking("rule1", {

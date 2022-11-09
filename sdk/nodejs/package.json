@@ -1,5 +1,5 @@
 {
-    "name": "@pulumi/huaweicloud",
+    "name": "@huaweicloudos/pulumi",
     "version": "${VERSION}",
     "description": "A Pulumi package for creating and managing Huaweicloud cloud resources.",
     "keywords": [
@@ -25,6 +25,6 @@
     "pulumi": {
         "resource": true,
         "name": "huaweicloud",
-        "server": "https://github.com/huaweicloud/pulumi-huaweicloud/releases/download/v${VERSION}"
+        "server": "https://github.com/huaweicloud/pulumi-huaweicloud/releases/download/${VERSION}"
     }
 }

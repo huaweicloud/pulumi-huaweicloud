@@ -12,7 +12,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const monitorTcp = new huaweicloud.elb.Monitor("monitorTcp", {
  *     poolId: _var.pool_id,
@@ -26,7 +26,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const monitorUdp = new huaweicloud.elb.Monitor("monitorUdp", {
  *     poolId: _var.pool_id,
@@ -40,7 +40,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const monitorHttp = new huaweicloud.elb.Monitor("monitorHttp", {
  *     poolId: _var.pool_id,

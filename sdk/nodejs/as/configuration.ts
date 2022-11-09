@@ -14,7 +14,7 @@ import * as utilities from "../utilities";
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as fs from "fs";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const myAsConfig = new huaweicloud.as.Configuration("myAsConfig", {
  *     scalingConfigurationName: "my_as_config",
@@ -36,7 +36,7 @@ import * as utilities from "../utilities";
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as fs from "fs";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const myAsConfig = new huaweicloud.as.Configuration("myAsConfig", {
  *     scalingConfigurationName: "my_as_config",
@@ -66,7 +66,7 @@ import * as utilities from "../utilities";
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as fs from "fs";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const myAsConfig = new huaweicloud.as.Configuration("myAsConfig", {
  *     scalingConfigurationName: "my_as_config",
@@ -90,7 +90,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const myAsConfig = new huaweicloud.as.Configuration("myAsConfig", {
  *     scalingConfigurationName: "my_as_config",

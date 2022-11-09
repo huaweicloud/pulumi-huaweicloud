@@ -15,7 +15,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const certificate1 = new huaweicloud.waf.Certificate("certificate1", {
  *     certificate: `-----BEGIN CERTIFICATE-----

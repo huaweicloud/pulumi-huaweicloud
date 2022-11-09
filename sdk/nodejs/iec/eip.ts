@@ -12,6 +12,7 @@ import * as utilities from "../utilities";
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const iecSites = huaweicloud.Iec.getSites({});
  * const eipTest = new huaweicloud.iec.Eip("eipTest", {siteId: iecSites.then(iecSites => iecSites.sites?[0]?.id)});

@@ -11,7 +11,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const topic1 = new huaweicloud.smn.Topic("topic1", {displayName: "The display name of topic_1"});
  * const subscription1 = new huaweicloud.smn.Subscription("subscription1", {

@@ -12,7 +12,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const tfApigwGroup = new huaweicloud.sharedapig.Group("tfApigwGroup", {description: "your descpiption"});
  * const tfApigwApi = new huaweicloud.sharedapig.Api("tfApigwApi", {
