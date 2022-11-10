@@ -12,7 +12,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const testProject = new huaweicloud.cpts.Project("testProject", {});
  * const testTask = new huaweicloud.cpts.Task("testTask", {projectId: testProject.id});

@@ -12,7 +12,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const bucket = new huaweicloud.obs.Bucket("bucket", {bucket: "my-test-bucket"});
  * const policy = new huaweicloud.obs.BucketPolicy("policy", {
@@ -35,7 +35,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const bucket = new huaweicloud.obs.Bucket("bucket", {bucket: "my-test-bucket"});
  * const s3Policy = new huaweicloud.obs.BucketPolicy("s3Policy", {

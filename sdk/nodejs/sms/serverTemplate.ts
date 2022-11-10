@@ -13,6 +13,7 @@ import * as utilities from "../utilities";
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const demoAvailabilityZones = huaweicloud.getAvailabilityZones({});
  * const demoServerTemplate = new huaweicloud.sms.ServerTemplate("demoServerTemplate", {availabilityZone: demoAvailabilityZones.then(demoAvailabilityZones => demoAvailabilityZones.names?[0])});
@@ -22,6 +23,7 @@ import * as utilities from "../utilities";
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const config = new pulumi.Config();
  * const vpcId = config.requireObject("vpcId");

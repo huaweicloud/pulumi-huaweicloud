@@ -20,7 +20,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const test = new huaweicloud.dew.Key("test", {keyAlias: "kms_test"});
  * const test_keypair = new huaweicloud.dew.Keypair("test-keypair", {

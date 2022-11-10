@@ -13,7 +13,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const instance1 = new huaweicloud.gaussdbfornosql.MongoInstance("instance1", {
  *     password: _var.password,
@@ -33,7 +33,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const instance1 = new huaweicloud.gaussdbfornosql.MongoInstance("instance1", {
  *     password: _var.password,

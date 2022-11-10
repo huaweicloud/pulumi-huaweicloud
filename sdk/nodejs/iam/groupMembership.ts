@@ -13,7 +13,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const group1 = new huaweicloud.iam.Group("group1", {description: "This is a test group"});
  * const user1 = new huaweicloud.iam.User("user1", {

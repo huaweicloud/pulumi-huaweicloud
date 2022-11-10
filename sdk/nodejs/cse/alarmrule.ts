@@ -13,7 +13,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const alarmRule = new huaweicloud.cse.Alarmrule("alarmRule", {
  *     alarmName: "alarm_rule",
@@ -43,7 +43,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const alarmRule = new huaweicloud.cse.Alarmrule("alarmRule", {
  *     alarmName: "alarm_rule",

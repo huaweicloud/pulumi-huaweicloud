@@ -86,7 +86,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const loadbalancer1 = new huaweicloud.elb.Loadbalancer("loadbalancer1", {vipSubnetId: "d9415786-5f1a-428b-b35f-2f1523e146d2"});
  * const listener1 = new huaweicloud.elb.Listener("listener1", {

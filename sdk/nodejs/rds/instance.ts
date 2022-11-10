@@ -13,7 +13,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const secgroup = new huaweicloud.vpc.Secgroup("secgroup", {description: "terraform security group acceptance test"});
  * const instance = new huaweicloud.rds.Instance("instance", {
@@ -41,7 +41,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const secgroup = new huaweicloud.vpc.Secgroup("secgroup", {description: "terraform security group acceptance test"});
  * const instance = new huaweicloud.rds.Instance("instance", {
@@ -73,7 +73,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const key = new huaweicloud.dew.Key("key", {
  *     keyAlias: "key_1",

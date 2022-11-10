@@ -137,7 +137,7 @@ func Provider() tfbridge.ProviderInfo {
 		// PluginDownloadURL is an optional URL used to download the Provider
 		// for use in Pulumi programs
 		// e.g https://github.com/org/pulumi-provider-name/releases/
-		PluginDownloadURL: "https://github.com/huaweicloud/pulumi-huaweicloud/releases/download/v${VERSION}",
+		PluginDownloadURL: "https://github.com/huaweicloud/pulumi-huaweicloud/releases/download/${VERSION}",
 		Description:       "A Pulumi package for creating and managing Huaweicloud cloud resources.",
 		// category/cloud tag helps with categorizing the package in the Pulumi Registry.
 		// For all available categories, see `Keywords` in
@@ -620,6 +620,7 @@ func Provider() tfbridge.ProviderInfo {
 			"huaweicloud_dws_flavors":             {Tok: tfbridge.MakeDataSource(mainPkg, dwsMod, "getFlaovrs")},
 		},
 		JavaScript: &tfbridge.JavaScriptInfo{
+			PackageName: "@huaweicloudos/pulumi",
 			// List any npm dependencies and their versions
 			Dependencies: map[string]string{
 				"@pulumi/pulumi": "^3.0.0",

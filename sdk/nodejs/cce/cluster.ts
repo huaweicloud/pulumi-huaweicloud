@@ -12,7 +12,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const myvpc = new huaweicloud.vpc.Vpc("myvpc", {cidr: "192.168.0.0/16"});
  * const mysubnet = new huaweicloud.vpc.Subnet("mysubnet", {
@@ -34,7 +34,7 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const myvpc = new huaweicloud.vpc.Vpc("myvpc", {cidr: "192.168.0.0/16"});
  * const mysubnet = new huaweicloud.vpc.Subnet("mysubnet", {

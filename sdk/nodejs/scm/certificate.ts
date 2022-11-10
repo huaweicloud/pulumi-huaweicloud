@@ -16,7 +16,7 @@ import * as utilities from "../utilities";
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as fs from "fs";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const certificate1 = new huaweicloud.scm.Certificate("certificate1", {
  *     certificate: fs.readFileSync("/usr/local/data/certificate/cert_xxx/xxx_ca.crt"),
@@ -56,7 +56,7 @@ import * as utilities from "../utilities";
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as fs from "fs";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * // Load the certificate contents from the local files.
  * const certificate3 = new huaweicloud.scm.Certificate("certificate3", {
