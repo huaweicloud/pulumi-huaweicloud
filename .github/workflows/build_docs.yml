@@ -1,0 +1,61 @@
+name: release
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  build_and_deploy_docs:
+    name: build and deploy docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '16.x'
+
+      - uses: actions/setup-go@v2
+        with:
+          go-version: 1.19.x
+
+      - uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.96.0'
+          extended: true
+
+      - name: checkout pulumi docs
+        uses: actions/checkout@v3
+        with:
+          repository: pulumi/docs
+          path: docs
+
+      - name: install Go-based tools
+        run: |
+          go install github.com/cbroglie/mustache@latest
+          go install github.com/gobuffalo/packr@latest
+          go install github.com/pkg/errors@latest
+          go install github.com/russross/blackfriday/v2@latest
+
+      - name: checkout pulumi huaweicloud
+        uses: actions/checkout@v3
+        with:
+          path: pulumi-huaweicloud
+
+      - name: config the files
+        run: pulumi-huaweicloud/scripts/config_files.sh
+
+      - name: build docs
+        run: |
+          cd docs
+          make ensure
+          make build
+          cd ..
+
+      - name: export docs
+        run: pulumi-huaweicloud/scripts/export_docs.sh
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_dir: ./dist
+          force_orphan: true
