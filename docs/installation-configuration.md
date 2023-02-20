@@ -57,9 +57,11 @@ export HW_SECRET_KEY=YYYYYYYYYYYYYY
 
 + 2. Set them using configuration, if you prefer that they be stored alongside your Pulumi stack for easy multi-user access:
 
+```bash
 pulumi config set huaweicloud:access_key XXXXXXXXXXXXXX --secret
 pulumi config set huaweicloud:secret_key YYYYYYYYYYYYYY --secret
-Copy
+```
+
 Remember to pass --secret when setting huaweicloud:access_key and huaweicloud:secret_key so that they are properly encrypted.
 The complete list of configuration parameters is in the
 [HuaweiCloud provider](https://github.com/huaweicloud/pulumi-huaweicloud/blob/main/README.md).
