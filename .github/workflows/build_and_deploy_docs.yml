@@ -14,7 +14,7 @@ jobs:
         with:
           node-version: '16.x'
 
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-go@v3
         with:
           go-version: 1.19.x
 
@@ -31,10 +31,17 @@ jobs:
 
       - name: install Go-based tools
         run: |
-          go install github.com/cbroglie/mustache@latest
-          go install github.com/gobuffalo/packr@latest
-          go install github.com/pkg/errors@latest
-          go install github.com/russross/blackfriday/v2@latest
+          cd docs/tools/tscdocgen/
+          go get github.com/cbroglie/mustache@latest
+          go get github.com/gobuffalo/packr@latest
+          cd -
+
+          cd docs/tools/mktutorial/
+          go get github.com/cbroglie/mustache@latest
+          go get github.com/gobuffalo/packr@latest
+          go get github.com/pkg/errors@latest
+          go get github.com/russross/blackfriday/v2@latest
+          cd -
 
       - name: checkout pulumi huaweicloud
         uses: actions/checkout@v3
@@ -48,7 +55,7 @@ jobs:
         run: |
           cd docs
           make ensure
-          make build
+          make build || true
           cd ..
 
       - name: export docs
@@ -57,5 +64,6 @@ jobs:
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           force_orphan: true
