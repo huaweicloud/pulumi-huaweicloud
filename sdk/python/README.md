@@ -109,4 +109,4 @@ The `assume_role` block supports:
 
 ## Reference
 
-For detailed reference documentation, please visit [the Huaweicloud Pulumi Provider](https://huaweicloud-pulumi-provider.readthedocs.io/en/latest/).
+For detailed reference documentation, please visit [the Huaweicloud Pulumi Provider](https://huaweicloud.github.io/pulumi-huaweicloud/).
