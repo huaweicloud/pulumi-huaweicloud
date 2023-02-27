@@ -41,7 +41,7 @@ go get github.com/huaweicloud/pulumi-huaweicloud/sdk/go/...
 
 ## Configuration
 
-The following configuration points are available for the `foo` provider:
+The following configuration points are available for the `huaweicloud` provider:
 
 - `huaweicloud:region` - (Optional) This is the Huawei Cloud region. It must be provided when using `static credentials`
   authentication, but it can also be sourced from the `HW_REGION_NAME` environment variables.
@@ -52,8 +52,8 @@ The following configuration points are available for the `foo` provider:
 - `huaweicloud:secret_key` - (Optional) The secret key of the HuaweiCloud to use. If omitted, the `HW_SECRET_KEY` environment
   variable is used.
 
-- `huaweicloud:shared_config_file` - (Optional) The path to the shared config file. If omitted, the `HW_SHARED_CONFIG_FILE` environment
-  variable is used.
+- `huaweicloud:shared_config_file` - (Optional) The path to the shared config file. If omitted, the `HW_SHARED_CONFIG_FILE`
+  environment variable is used.
 
 - `huaweicloud:profile` - (Optional) The profile name as set in the shared config file. If omitted, the `HW_PROFILE` environment
   variable is used. Defaults to the `current` profile in the shared config file.
@@ -80,8 +80,8 @@ The following configuration points are available for the `foo` provider:
 - `huaweicloud:insecure` - (Optional) Trust self-signed SSL certificates. If omitted, the
   `HW_INSECURE` environment variable is used.
 
-- `huaweicloud:max_retries` - (Optional) This is the maximum number of times an API call is retried, in the case where requests are
-  being throttled or experiencing transient failures. The delay between the subsequent API calls increases
+- `huaweicloud:max_retries` - (Optional) This is the maximum number of times an API call is retried, in the case where
+  requests are being throttled or experiencing transient failures. The delay between the subsequent API calls increases
   exponentially. The default value is `5`. If omitted, the `HW_MAX_RETRIES` environment variable is used.
 
 - `huaweicloud:enterprise_project_id` - (Optional) Default Enterprise Project ID for supported resources.
@@ -90,6 +90,22 @@ The following configuration points are available for the `foo` provider:
 - `huaweicloud:endpoints` - (Optional) Configuration block in key/value pairs for customizing service endpoints. The following
   endpoints support to be customized: autoscaling, ecs, ims, vpc, nat, evs, obs, sfs, cce, rds, dds, iam. An example
   provider configuration:
+
+  ```hcl
+  provider "huaweicloud" {
+    ...
+    endpoints = {
+      ecs = "https://ecs-customizing-endpoint.com"
+    }
+  }
+  ```
+
+The `assume_role` block supports:
+
+- `agency_name` - (Required) The name of the agency for assume role.
+  If omitted, the `HW_ASSUME_ROLE_AGENCY_NAME` environment variable is used.
+- `domain_name` - (Required) The name of the agency domain for assume role.
+  If omitted, the `HW_ASSUME_ROLE_DOMAIN_NAME` environment variable is used.
 
 ## Reference
 
