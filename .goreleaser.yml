@@ -23,7 +23,7 @@ builds:
 changelog:
   skip: true
 release:
-  disable: false
-  prerelease: auto
+  # Visit your project's GitHub Releases page to publish this release.
+  draft: true
 snapshot:
   name_template: '{{ .Tag }}-SNAPSHOT'
