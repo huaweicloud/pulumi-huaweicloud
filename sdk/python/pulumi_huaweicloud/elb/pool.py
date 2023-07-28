@@ -34,7 +34,6 @@ class PoolArgs:
                + When the protocol used by the listener is UDP, the protocol of the backend pool must be UDP.
                + When the protocol used by the listener is TCP, the protocol of the backend pool must be TCP.
                + When the protocol used by the listener is HTTP or TERMINATED_HTTPS, the protocol of the backend pool must be HTTP.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the pool. A valid value is true (UP) or false (DOWN).
         :param pulumi.Input[str] description: Human-readable description for the pool.
         :param pulumi.Input[str] listener_id: The Listener on which the members of the pool will be associated with.
                Changing this creates a new pool. Note:  At least one of LoadbalancerID or ListenerID must be provided.
@@ -99,9 +98,6 @@ class PoolArgs:
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> Optional[pulumi.Input[bool]]:
-        """
-        The administrative state of the pool. A valid value is true (UP) or false (DOWN).
-        """
         return pulumi.get(self, "admin_state_up")
 
     @admin_state_up.setter
@@ -209,7 +205,6 @@ class _PoolState:
                  tenant_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Pool resources.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the pool. A valid value is true (UP) or false (DOWN).
         :param pulumi.Input[str] description: Human-readable description for the pool.
         :param pulumi.Input[str] lb_method: The load balancing algorithm to distribute traffic to the pool's members. Must be one
                of ROUND_ROBIN, LEAST_CONNECTIONS, or SOURCE_IP.
@@ -254,9 +249,6 @@ class _PoolState:
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> Optional[pulumi.Input[bool]]:
-        """
-        The administrative state of the pool. A valid value is true (UP) or false (DOWN).
-        """
         return pulumi.get(self, "admin_state_up")
 
     @admin_state_up.setter
@@ -422,7 +414,6 @@ class Pool(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the pool. A valid value is true (UP) or false (DOWN).
         :param pulumi.Input[str] description: Human-readable description for the pool.
         :param pulumi.Input[str] lb_method: The load balancing algorithm to distribute traffic to the pool's members. Must be one
                of ROUND_ROBIN, LEAST_CONNECTIONS, or SOURCE_IP.
@@ -551,7 +542,6 @@ class Pool(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the pool. A valid value is true (UP) or false (DOWN).
         :param pulumi.Input[str] description: Human-readable description for the pool.
         :param pulumi.Input[str] lb_method: The load balancing algorithm to distribute traffic to the pool's members. Must be one
                of ROUND_ROBIN, LEAST_CONNECTIONS, or SOURCE_IP.
@@ -588,9 +578,6 @@ class Pool(pulumi.CustomResource):
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> pulumi.Output[Optional[bool]]:
-        """
-        The administrative state of the pool. A valid value is true (UP) or false (DOWN).
-        """
         return pulumi.get(self, "admin_state_up")
 
     @property

@@ -111,6 +111,7 @@ class _VpcState:
                letters, digits, underscores (_), hyphens (-), and periods (.) are allowed.
         :param pulumi.Input[str] region: The region in which to create the IEC VPC. If omitted, the provider-level
                region will be used. Changing this creates a new resource.
+        :param pulumi.Input[int] subnet_num: Indicates the number of subnets.
         """
         if cidr is not None:
             pulumi.set(__self__, "cidr", cidr)
@@ -179,6 +180,9 @@ class _VpcState:
     @property
     @pulumi.getter(name="subnetNum")
     def subnet_num(self) -> Optional[pulumi.Input[int]]:
+        """
+        Indicates the number of subnets.
+        """
         return pulumi.get(self, "subnet_num")
 
     @subnet_num.setter
@@ -332,6 +336,7 @@ class Vpc(pulumi.CustomResource):
                letters, digits, underscores (_), hyphens (-), and periods (.) are allowed.
         :param pulumi.Input[str] region: The region in which to create the IEC VPC. If omitted, the provider-level
                region will be used. Changing this creates a new resource.
+        :param pulumi.Input[int] subnet_num: Indicates the number of subnets.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -384,5 +389,8 @@ class Vpc(pulumi.CustomResource):
     @property
     @pulumi.getter(name="subnetNum")
     def subnet_num(self) -> pulumi.Output[int]:
+        """
+        Indicates the number of subnets.
+        """
         return pulumi.get(self, "subnet_num")
 

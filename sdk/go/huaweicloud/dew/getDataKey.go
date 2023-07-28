@@ -56,8 +56,6 @@ func GetDataKey(ctx *pulumi.Context, args *GetDataKeyArgs, opts ...pulumi.Invoke
 
 // A collection of arguments for invoking getDataKey.
 type GetDataKeyArgs struct {
-	// The ciphertext of a DEK is expressed in hexadecimal format, and two characters indicate one byte.
-	CipherText *string `pulumi:"cipherText"`
 	// Number of bits in the length of a DEK (data encryption keys). The maximum number
 	// is 512. Changing this gets the new data encryption key.
 	DatakeyLength string `pulumi:"datakeyLength"`
@@ -68,8 +66,6 @@ type GetDataKeyArgs struct {
 	// The globally unique identifier for the key. Changing this gets the new data encryption
 	// key.
 	KeyId string `pulumi:"keyId"`
-	// The plaintext of a DEK is expressed in hexadecimal format, and two characters indicate one byte.
-	PlainText *string `pulumi:"plainText"`
 	// The region in which to obtain the keys. If omitted, the provider-level region will be
 	// used.
 	Region *string `pulumi:"region"`
@@ -104,8 +100,6 @@ func GetDataKeyOutput(ctx *pulumi.Context, args GetDataKeyOutputArgs, opts ...pu
 
 // A collection of arguments for invoking getDataKey.
 type GetDataKeyOutputArgs struct {
-	// The ciphertext of a DEK is expressed in hexadecimal format, and two characters indicate one byte.
-	CipherText pulumi.StringPtrInput `pulumi:"cipherText"`
 	// Number of bits in the length of a DEK (data encryption keys). The maximum number
 	// is 512. Changing this gets the new data encryption key.
 	DatakeyLength pulumi.StringInput `pulumi:"datakeyLength"`
@@ -116,8 +110,6 @@ type GetDataKeyOutputArgs struct {
 	// The globally unique identifier for the key. Changing this gets the new data encryption
 	// key.
 	KeyId pulumi.StringInput `pulumi:"keyId"`
-	// The plaintext of a DEK is expressed in hexadecimal format, and two characters indicate one byte.
-	PlainText pulumi.StringPtrInput `pulumi:"plainText"`
 	// The region in which to obtain the keys. If omitted, the provider-level region will be
 	// used.
 	Region pulumi.StringPtrInput `pulumi:"region"`

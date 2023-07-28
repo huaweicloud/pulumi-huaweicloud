@@ -9,6 +9,7 @@ import * as utilities from "../utilities";
  * Add a node pool to a container cluster.
  *
  * ## Example Usage
+ * ### Basic Usage
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -41,6 +42,45 @@ import * as utilities from "../utilities";
  *     }],
  * });
  * ```
+ * ## Node pool with storage configuration
+ * ### PrePaid node pool
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const clusterId = config.requireObject("clusterId");
+ * const keyPair = config.requireObject("keyPair");
+ * const availabilityZone = config.requireObject("availabilityZone");
+ * const nodePool = new huaweicloud.cce.NodePool("nodePool", {
+ *     clusterId: clusterId,
+ *     os: "EulerOS 2.5",
+ *     initialNodeCount: 2,
+ *     flavorId: "s3.large.4",
+ *     availabilityZone: availabilityZone,
+ *     keyPair: _var.keypair,
+ *     scallEnable: true,
+ *     minNodeCount: 1,
+ *     maxNodeCount: 10,
+ *     scaleDownCooldownTime: 100,
+ *     priority: 1,
+ *     type: "vm",
+ *     chargingMode: "prePaid",
+ *     periodUnit: "month",
+ *     period: 1,
+ *     rootVolume: {
+ *         size: 40,
+ *         volumetype: "SAS",
+ *     },
+ *     dataVolumes: [{
+ *         size: 100,
+ *         volumetype: "SAS",
+ *     }],
+ * });
+ * ```
+ *
+ *   > You need to remove all nodes in the node pool on the console, before deleting a prepaid node pool.
  *
  * ## Import
  *
@@ -50,7 +90,7 @@ import * as utilities from "../utilities";
  *  $ pulumi import huaweicloud:Cce/nodePool:NodePool my_node_pool 5c20fdad-7288-11eb-b817-0255ac10158b/e9287dff-7288-11eb-b817-0255ac10158b
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `subnet_id`, `preinstall`, `posteinstall`, `taints` and `initial_node_count`. It is generally recommended running `terraform plan` after importing a node pool. You can then decide if changes should be applied to the node pool, or the resource definition should be updated to align with the node pool. Also you can ignore changes as below. resource "huaweicloud_cce_node_pool" "my_node_pool" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `subnet_id`, `preinstall`, `posteinstall`, `taints`, `initial_node_count` and `pod_security_groups`. It is generally recommended running `terraform plan` after importing a node pool. You can then decide if changes should be applied to the node pool, or the resource definition should be updated to align with the node pool. Also you can ignore changes as below. resource "huaweicloud_cce_node_pool" "my_node_pool" {
  *
  *  ...
  *
@@ -93,6 +133,11 @@ export class NodePool extends pulumi.CustomResource {
     }
 
     /**
+     * Specifies whether auto renew is enabled. Valid values are "true" and "false".
+     * Changing this parameter will create a new resource.
+     */
+    public readonly autoRenew!: pulumi.Output<string | undefined>;
+    /**
      * Specifies the name of the available partition (AZ). Default value
      * is random to create nodes in a random AZ in the node pool. Changing this parameter will create a new resource.
      */
@@ -101,6 +146,11 @@ export class NodePool extends pulumi.CustomResource {
      * Billing mode of a node.
      */
     public /*out*/ readonly billingMode!: pulumi.Output<number>;
+    /**
+     * Specifies the charging mode of the CCE node pool. Valid values are
+     * *prePaid* and *postPaid*, defaults to *postPaid*. Changing this parameter will create a new resource.
+     */
+    public readonly chargingMode!: pulumi.Output<string>;
     /**
      * Specifies the cluster ID.
      * Changing this parameter will create a new resource.
@@ -115,6 +165,11 @@ export class NodePool extends pulumi.CustomResource {
      * The structure is described below. Changing this parameter will create a new resource.
      */
     public readonly dataVolumes!: pulumi.Output<outputs.Cce.NodePoolDataVolume[]>;
+    /**
+     * Specifies the ECS group ID. If specified, the node will be created under
+     * the cloud server group. Changing this parameter will create a new resource.
+     */
+    public readonly ecsGroupId!: pulumi.Output<string | undefined>;
     /**
      * Specifies the extended parameter.
      * Changing this parameter will create a new resource.
@@ -158,7 +213,8 @@ export class NodePool extends pulumi.CustomResource {
      */
     public readonly minNodeCount!: pulumi.Output<number | undefined>;
     /**
-     * Specifies the node pool name.
+     * Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+     * and **user** are supported. Changing this parameter will create a new resource.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -172,6 +228,23 @@ export class NodePool extends pulumi.CustomResource {
      * Changing this parameter will create a new resource.
      */
     public readonly password!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the charging period of the CCE node pool. If `periodUnit` is set to
+     * *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This parameter
+     * is mandatory if `chargingMode` is set to *prePaid*. Changing this parameter will create a new resource.
+     */
+    public readonly period!: pulumi.Output<number | undefined>;
+    /**
+     * Specifies the charging period unit of the CCE node pool.
+     * Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly periodUnit!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the list of security group IDs for the pod.
+     * Only supported in CCE Turbo clusters of v1.19 and above. Changing this parameter will create a new resource.
+     */
+    public readonly podSecurityGroups!: pulumi.Output<string[] | undefined>;
     /**
      * Specifies the script to be executed after installation.
      * The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
@@ -197,6 +270,10 @@ export class NodePool extends pulumi.CustomResource {
      * The structure is described below. Changing this parameter will create a new resource.
      */
     public readonly rootVolume!: pulumi.Output<outputs.Cce.NodePoolRootVolume>;
+    /**
+     * Specifies the runtime of the CCE node pool. Valid values are *docker* and
+     * *containerd*. Changing this creates a new resource.
+     */
     public readonly runtime!: pulumi.Output<string>;
     /**
      * Specifies the time interval between two scaling operations, in minutes.
@@ -208,9 +285,22 @@ export class NodePool extends pulumi.CustomResource {
      */
     public readonly scallEnable!: pulumi.Output<boolean | undefined>;
     /**
+     * Specifies the list of custom security group IDs for the node pool.
+     * If specified, the nodes will be put in these security groups. When specifying a security group, do not modify
+     * the rules of the port on which CCE running depends. For details, see
+     * [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+     */
+    public readonly securityGroups!: pulumi.Output<string[]>;
+    /**
      * Node status information.
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
+    /**
+     * Specifies the disk initialization management parameter.
+     * If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
+     * This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+     */
+    public readonly storage!: pulumi.Output<outputs.Cce.NodePoolStorage>;
     /**
      * Specifies the ID of the subnet to which the NIC belongs.
      * Changing this parameter will create a new resource.
@@ -226,7 +316,8 @@ export class NodePool extends pulumi.CustomResource {
      */
     public readonly taints!: pulumi.Output<outputs.Cce.NodePoolTaint[] | undefined>;
     /**
-     * Specifies the node pool type. Possible values are: **vm** and **ElasticBMS**.
+     * Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
+     * The default value is **evs**. Changing this parameter will create a new resource.
      */
     public readonly type!: pulumi.Output<string>;
 
@@ -243,11 +334,14 @@ export class NodePool extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as NodePoolState | undefined;
+            resourceInputs["autoRenew"] = state ? state.autoRenew : undefined;
             resourceInputs["availabilityZone"] = state ? state.availabilityZone : undefined;
             resourceInputs["billingMode"] = state ? state.billingMode : undefined;
+            resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
             resourceInputs["clusterId"] = state ? state.clusterId : undefined;
             resourceInputs["currentNodeCount"] = state ? state.currentNodeCount : undefined;
             resourceInputs["dataVolumes"] = state ? state.dataVolumes : undefined;
+            resourceInputs["ecsGroupId"] = state ? state.ecsGroupId : undefined;
             resourceInputs["extendParam"] = state ? state.extendParam : undefined;
             resourceInputs["flavorId"] = state ? state.flavorId : undefined;
             resourceInputs["initialNodeCount"] = state ? state.initialNodeCount : undefined;
@@ -259,6 +353,9 @@ export class NodePool extends pulumi.CustomResource {
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["os"] = state ? state.os : undefined;
             resourceInputs["password"] = state ? state.password : undefined;
+            resourceInputs["period"] = state ? state.period : undefined;
+            resourceInputs["periodUnit"] = state ? state.periodUnit : undefined;
+            resourceInputs["podSecurityGroups"] = state ? state.podSecurityGroups : undefined;
             resourceInputs["postinstall"] = state ? state.postinstall : undefined;
             resourceInputs["preinstall"] = state ? state.preinstall : undefined;
             resourceInputs["priority"] = state ? state.priority : undefined;
@@ -267,7 +364,9 @@ export class NodePool extends pulumi.CustomResource {
             resourceInputs["runtime"] = state ? state.runtime : undefined;
             resourceInputs["scaleDownCooldownTime"] = state ? state.scaleDownCooldownTime : undefined;
             resourceInputs["scallEnable"] = state ? state.scallEnable : undefined;
+            resourceInputs["securityGroups"] = state ? state.securityGroups : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
+            resourceInputs["storage"] = state ? state.storage : undefined;
             resourceInputs["subnetId"] = state ? state.subnetId : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["taints"] = state ? state.taints : undefined;
@@ -289,9 +388,12 @@ export class NodePool extends pulumi.CustomResource {
             if ((!args || args.rootVolume === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'rootVolume'");
             }
+            resourceInputs["autoRenew"] = args ? args.autoRenew : undefined;
             resourceInputs["availabilityZone"] = args ? args.availabilityZone : undefined;
+            resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
             resourceInputs["clusterId"] = args ? args.clusterId : undefined;
             resourceInputs["dataVolumes"] = args ? args.dataVolumes : undefined;
+            resourceInputs["ecsGroupId"] = args ? args.ecsGroupId : undefined;
             resourceInputs["extendParam"] = args ? args.extendParam : undefined;
             resourceInputs["flavorId"] = args ? args.flavorId : undefined;
             resourceInputs["initialNodeCount"] = args ? args.initialNodeCount : undefined;
@@ -303,6 +405,9 @@ export class NodePool extends pulumi.CustomResource {
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["os"] = args ? args.os : undefined;
             resourceInputs["password"] = args ? args.password : undefined;
+            resourceInputs["period"] = args ? args.period : undefined;
+            resourceInputs["periodUnit"] = args ? args.periodUnit : undefined;
+            resourceInputs["podSecurityGroups"] = args ? args.podSecurityGroups : undefined;
             resourceInputs["postinstall"] = args ? args.postinstall : undefined;
             resourceInputs["preinstall"] = args ? args.preinstall : undefined;
             resourceInputs["priority"] = args ? args.priority : undefined;
@@ -311,6 +416,8 @@ export class NodePool extends pulumi.CustomResource {
             resourceInputs["runtime"] = args ? args.runtime : undefined;
             resourceInputs["scaleDownCooldownTime"] = args ? args.scaleDownCooldownTime : undefined;
             resourceInputs["scallEnable"] = args ? args.scallEnable : undefined;
+            resourceInputs["securityGroups"] = args ? args.securityGroups : undefined;
+            resourceInputs["storage"] = args ? args.storage : undefined;
             resourceInputs["subnetId"] = args ? args.subnetId : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["taints"] = args ? args.taints : undefined;
@@ -329,6 +436,11 @@ export class NodePool extends pulumi.CustomResource {
  */
 export interface NodePoolState {
     /**
+     * Specifies whether auto renew is enabled. Valid values are "true" and "false".
+     * Changing this parameter will create a new resource.
+     */
+    autoRenew?: pulumi.Input<string>;
+    /**
      * Specifies the name of the available partition (AZ). Default value
      * is random to create nodes in a random AZ in the node pool. Changing this parameter will create a new resource.
      */
@@ -337,6 +449,11 @@ export interface NodePoolState {
      * Billing mode of a node.
      */
     billingMode?: pulumi.Input<number>;
+    /**
+     * Specifies the charging mode of the CCE node pool. Valid values are
+     * *prePaid* and *postPaid*, defaults to *postPaid*. Changing this parameter will create a new resource.
+     */
+    chargingMode?: pulumi.Input<string>;
     /**
      * Specifies the cluster ID.
      * Changing this parameter will create a new resource.
@@ -351,6 +468,11 @@ export interface NodePoolState {
      * The structure is described below. Changing this parameter will create a new resource.
      */
     dataVolumes?: pulumi.Input<pulumi.Input<inputs.Cce.NodePoolDataVolume>[]>;
+    /**
+     * Specifies the ECS group ID. If specified, the node will be created under
+     * the cloud server group. Changing this parameter will create a new resource.
+     */
+    ecsGroupId?: pulumi.Input<string>;
     /**
      * Specifies the extended parameter.
      * Changing this parameter will create a new resource.
@@ -394,7 +516,8 @@ export interface NodePoolState {
      */
     minNodeCount?: pulumi.Input<number>;
     /**
-     * Specifies the node pool name.
+     * Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+     * and **user** are supported. Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;
     /**
@@ -408,6 +531,23 @@ export interface NodePoolState {
      * Changing this parameter will create a new resource.
      */
     password?: pulumi.Input<string>;
+    /**
+     * Specifies the charging period of the CCE node pool. If `periodUnit` is set to
+     * *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This parameter
+     * is mandatory if `chargingMode` is set to *prePaid*. Changing this parameter will create a new resource.
+     */
+    period?: pulumi.Input<number>;
+    /**
+     * Specifies the charging period unit of the CCE node pool.
+     * Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+     * Changing this parameter will create a new resource.
+     */
+    periodUnit?: pulumi.Input<string>;
+    /**
+     * Specifies the list of security group IDs for the pod.
+     * Only supported in CCE Turbo clusters of v1.19 and above. Changing this parameter will create a new resource.
+     */
+    podSecurityGroups?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the script to be executed after installation.
      * The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
@@ -433,6 +573,10 @@ export interface NodePoolState {
      * The structure is described below. Changing this parameter will create a new resource.
      */
     rootVolume?: pulumi.Input<inputs.Cce.NodePoolRootVolume>;
+    /**
+     * Specifies the runtime of the CCE node pool. Valid values are *docker* and
+     * *containerd*. Changing this creates a new resource.
+     */
     runtime?: pulumi.Input<string>;
     /**
      * Specifies the time interval between two scaling operations, in minutes.
@@ -444,9 +588,22 @@ export interface NodePoolState {
      */
     scallEnable?: pulumi.Input<boolean>;
     /**
+     * Specifies the list of custom security group IDs for the node pool.
+     * If specified, the nodes will be put in these security groups. When specifying a security group, do not modify
+     * the rules of the port on which CCE running depends. For details, see
+     * [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+     */
+    securityGroups?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
      * Node status information.
      */
     status?: pulumi.Input<string>;
+    /**
+     * Specifies the disk initialization management parameter.
+     * If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
+     * This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+     */
+    storage?: pulumi.Input<inputs.Cce.NodePoolStorage>;
     /**
      * Specifies the ID of the subnet to which the NIC belongs.
      * Changing this parameter will create a new resource.
@@ -462,7 +619,8 @@ export interface NodePoolState {
      */
     taints?: pulumi.Input<pulumi.Input<inputs.Cce.NodePoolTaint>[]>;
     /**
-     * Specifies the node pool type. Possible values are: **vm** and **ElasticBMS**.
+     * Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
+     * The default value is **evs**. Changing this parameter will create a new resource.
      */
     type?: pulumi.Input<string>;
 }
@@ -472,10 +630,20 @@ export interface NodePoolState {
  */
 export interface NodePoolArgs {
     /**
+     * Specifies whether auto renew is enabled. Valid values are "true" and "false".
+     * Changing this parameter will create a new resource.
+     */
+    autoRenew?: pulumi.Input<string>;
+    /**
      * Specifies the name of the available partition (AZ). Default value
      * is random to create nodes in a random AZ in the node pool. Changing this parameter will create a new resource.
      */
     availabilityZone?: pulumi.Input<string>;
+    /**
+     * Specifies the charging mode of the CCE node pool. Valid values are
+     * *prePaid* and *postPaid*, defaults to *postPaid*. Changing this parameter will create a new resource.
+     */
+    chargingMode?: pulumi.Input<string>;
     /**
      * Specifies the cluster ID.
      * Changing this parameter will create a new resource.
@@ -486,6 +654,11 @@ export interface NodePoolArgs {
      * The structure is described below. Changing this parameter will create a new resource.
      */
     dataVolumes: pulumi.Input<pulumi.Input<inputs.Cce.NodePoolDataVolume>[]>;
+    /**
+     * Specifies the ECS group ID. If specified, the node will be created under
+     * the cloud server group. Changing this parameter will create a new resource.
+     */
+    ecsGroupId?: pulumi.Input<string>;
     /**
      * Specifies the extended parameter.
      * Changing this parameter will create a new resource.
@@ -529,7 +702,8 @@ export interface NodePoolArgs {
      */
     minNodeCount?: pulumi.Input<number>;
     /**
-     * Specifies the node pool name.
+     * Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+     * and **user** are supported. Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;
     /**
@@ -543,6 +717,23 @@ export interface NodePoolArgs {
      * Changing this parameter will create a new resource.
      */
     password?: pulumi.Input<string>;
+    /**
+     * Specifies the charging period of the CCE node pool. If `periodUnit` is set to
+     * *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This parameter
+     * is mandatory if `chargingMode` is set to *prePaid*. Changing this parameter will create a new resource.
+     */
+    period?: pulumi.Input<number>;
+    /**
+     * Specifies the charging period unit of the CCE node pool.
+     * Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+     * Changing this parameter will create a new resource.
+     */
+    periodUnit?: pulumi.Input<string>;
+    /**
+     * Specifies the list of security group IDs for the pod.
+     * Only supported in CCE Turbo clusters of v1.19 and above. Changing this parameter will create a new resource.
+     */
+    podSecurityGroups?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the script to be executed after installation.
      * The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
@@ -568,6 +759,10 @@ export interface NodePoolArgs {
      * The structure is described below. Changing this parameter will create a new resource.
      */
     rootVolume: pulumi.Input<inputs.Cce.NodePoolRootVolume>;
+    /**
+     * Specifies the runtime of the CCE node pool. Valid values are *docker* and
+     * *containerd*. Changing this creates a new resource.
+     */
     runtime?: pulumi.Input<string>;
     /**
      * Specifies the time interval between two scaling operations, in minutes.
@@ -578,6 +773,19 @@ export interface NodePoolArgs {
      * If Autoscaler is enabled, install the autoscaler add-on to use the auto scaling feature.
      */
     scallEnable?: pulumi.Input<boolean>;
+    /**
+     * Specifies the list of custom security group IDs for the node pool.
+     * If specified, the nodes will be put in these security groups. When specifying a security group, do not modify
+     * the rules of the port on which CCE running depends. For details, see
+     * [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+     */
+    securityGroups?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * Specifies the disk initialization management parameter.
+     * If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
+     * This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+     */
+    storage?: pulumi.Input<inputs.Cce.NodePoolStorage>;
     /**
      * Specifies the ID of the subnet to which the NIC belongs.
      * Changing this parameter will create a new resource.
@@ -593,7 +801,8 @@ export interface NodePoolArgs {
      */
     taints?: pulumi.Input<pulumi.Input<inputs.Cce.NodePoolTaint>[]>;
     /**
-     * Specifies the node pool type. Possible values are: **vm** and **ElasticBMS**.
+     * Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
+     * The default value is **evs**. Changing this parameter will create a new resource.
      */
     type?: pulumi.Input<string>;
 }

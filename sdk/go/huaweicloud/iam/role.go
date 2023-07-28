@@ -85,7 +85,7 @@ type Role struct {
 	// Name of the custom policy.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Document of the custom policy in JSON format. For more details, please refer to the
-	// [offical document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+	// [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
 	Policy pulumi.StringOutput `pulumi:"policy"`
 	// The number of references.
 	References pulumi.IntOutput `pulumi:"references"`
@@ -137,7 +137,7 @@ type roleState struct {
 	// Name of the custom policy.
 	Name *string `pulumi:"name"`
 	// Document of the custom policy in JSON format. For more details, please refer to the
-	// [offical document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+	// [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
 	Policy *string `pulumi:"policy"`
 	// The number of references.
 	References *int `pulumi:"references"`
@@ -151,7 +151,7 @@ type RoleState struct {
 	// Name of the custom policy.
 	Name pulumi.StringPtrInput
 	// Document of the custom policy in JSON format. For more details, please refer to the
-	// [offical document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+	// [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
 	Policy pulumi.StringPtrInput
 	// The number of references.
 	References pulumi.IntPtrInput
@@ -169,7 +169,7 @@ type roleArgs struct {
 	// Name of the custom policy.
 	Name *string `pulumi:"name"`
 	// Document of the custom policy in JSON format. For more details, please refer to the
-	// [offical document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+	// [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
 	Policy string `pulumi:"policy"`
 	// Display mode. Valid options are *AX*: Account level and *XA*: Project level.
 	Type string `pulumi:"type"`
@@ -182,7 +182,7 @@ type RoleArgs struct {
 	// Name of the custom policy.
 	Name pulumi.StringPtrInput
 	// Document of the custom policy in JSON format. For more details, please refer to the
-	// [offical document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+	// [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
 	Policy pulumi.StringInput
 	// Display mode. Valid options are *AX*: Account level and *XA*: Project level.
 	Type pulumi.StringInput
@@ -286,7 +286,7 @@ func (o RoleOutput) Name() pulumi.StringOutput {
 }
 
 // Document of the custom policy in JSON format. For more details, please refer to the
-// [offical document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+// [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
 func (o RoleOutput) Policy() pulumi.StringOutput {
 	return o.ApplyT(func(v *Role) pulumi.StringOutput { return v.Policy }).(pulumi.StringOutput)
 }

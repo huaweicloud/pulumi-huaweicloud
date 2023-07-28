@@ -80,7 +80,8 @@ type GetAddonTemplateResult struct {
 	// The detail configuration of the add-on template.
 	Spec string `pulumi:"spec"`
 	// Whether the add-on template is a stable version.
-	Stable          bool                             `pulumi:"stable"`
+	Stable bool `pulumi:"stable"`
+	// The cluster information.
 	SupportVersions []GetAddonTemplateSupportVersion `pulumi:"supportVersions"`
 	Version         string                           `pulumi:"version"`
 }
@@ -162,6 +163,7 @@ func (o GetAddonTemplateResultOutput) Stable() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetAddonTemplateResult) bool { return v.Stable }).(pulumi.BoolOutput)
 }
 
+// The cluster information.
 func (o GetAddonTemplateResultOutput) SupportVersions() GetAddonTemplateSupportVersionArrayOutput {
 	return o.ApplyT(func(v GetAddonTemplateResult) []GetAddonTemplateSupportVersion { return v.SupportVersions }).(GetAddonTemplateSupportVersionArrayOutput)
 }

@@ -118,12 +118,14 @@ export class Certificate extends pulumi.CustomResource {
     public /*out*/ readonly authentifications!: pulumi.Output<outputs.Scm.CertificateAuthentification[]>;
     /**
      * The public encrypted key of the Certificate, PEM format.
+     * Changing this parameter will create a new resource.
      */
     public readonly certificate!: pulumi.Output<string>;
     /**
      * The chain of the certificate.
      * It can be extracted from the *server.crt* file in the Nginx directory,
      * usually after the second paragraph is the certificate chain.
+     * Changing this parameter will create a new resource.
      */
     public readonly certificateChain!: pulumi.Output<string>;
     /**
@@ -137,6 +139,7 @@ export class Certificate extends pulumi.CustomResource {
     /**
      * Human-readable name for the Certificate.
      * Does not have to be unique. The value contains a maximum of 63 characters.
+     * Changing this parameter will create a new resource.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -149,6 +152,7 @@ export class Certificate extends pulumi.CustomResource {
     public /*out*/ readonly notBefore!: pulumi.Output<string>;
     /**
      * The private encrypted key of the Certificate, PEM format.
+     * Changing this parameter will create a new resource.
      */
     public readonly privateKey!: pulumi.Output<string>;
     /**
@@ -237,12 +241,14 @@ export interface CertificateState {
     authentifications?: pulumi.Input<pulumi.Input<inputs.Scm.CertificateAuthentification>[]>;
     /**
      * The public encrypted key of the Certificate, PEM format.
+     * Changing this parameter will create a new resource.
      */
     certificate?: pulumi.Input<string>;
     /**
      * The chain of the certificate.
      * It can be extracted from the *server.crt* file in the Nginx directory,
      * usually after the second paragraph is the certificate chain.
+     * Changing this parameter will create a new resource.
      */
     certificateChain?: pulumi.Input<string>;
     /**
@@ -256,6 +262,7 @@ export interface CertificateState {
     /**
      * Human-readable name for the Certificate.
      * Does not have to be unique. The value contains a maximum of 63 characters.
+     * Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;
     /**
@@ -268,6 +275,7 @@ export interface CertificateState {
     notBefore?: pulumi.Input<string>;
     /**
      * The private encrypted key of the Certificate, PEM format.
+     * Changing this parameter will create a new resource.
      */
     privateKey?: pulumi.Input<string>;
     /**
@@ -296,21 +304,25 @@ export interface CertificateState {
 export interface CertificateArgs {
     /**
      * The public encrypted key of the Certificate, PEM format.
+     * Changing this parameter will create a new resource.
      */
     certificate: pulumi.Input<string>;
     /**
      * The chain of the certificate.
      * It can be extracted from the *server.crt* file in the Nginx directory,
      * usually after the second paragraph is the certificate chain.
+     * Changing this parameter will create a new resource.
      */
     certificateChain: pulumi.Input<string>;
     /**
      * Human-readable name for the Certificate.
      * Does not have to be unique. The value contains a maximum of 63 characters.
+     * Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;
     /**
      * The private encrypted key of the Certificate, PEM format.
+     * Changing this parameter will create a new resource.
      */
     privateKey: pulumi.Input<string>;
     /**

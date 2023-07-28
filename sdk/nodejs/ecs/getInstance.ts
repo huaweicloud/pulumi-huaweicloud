@@ -32,9 +32,9 @@ export function getInstance(args?: GetInstanceArgs, opts?: pulumi.InvokeOptions)
         "enterpriseProjectId": args.enterpriseProjectId,
         "fixedIpV4": args.fixedIpV4,
         "flavorId": args.flavorId,
+        "instanceId": args.instanceId,
         "name": args.name,
         "region": args.region,
-        "schedulerHints": args.schedulerHints,
     }, opts);
 }
 
@@ -55,19 +55,18 @@ export interface GetInstanceArgs {
      */
     flavorId?: string;
     /**
+     * Specifies the ECS ID.
+     */
+    instanceId?: string;
+    /**
      * Specifies the ECS name, which can be queried with a regular expression.
      */
     name?: string;
     /**
-     * The region in which to obtain the instance. If omitted, the provider-level region will
-     * be used.
+     * The region in which to obtain the instance.
+     * If omitted, the provider-level region will be used.
      */
     region?: string;
-    /**
-     * The scheduler with hints on how the instance should be launched. The available hints are described
-     * below.
-     */
-    schedulerHints?: inputs.Ecs.GetInstanceSchedulerHint[];
 }
 
 /**
@@ -100,14 +99,15 @@ export interface GetInstanceResult {
      * The image name of the instance.
      */
     readonly imageName: string;
+    readonly instanceId?: string;
     /**
      * The key pair that is used to authenticate the instance.
      */
     readonly keyPair: string;
     readonly name: string;
     /**
-     * An array of one or more networks to attach to the instance. The network object structure is documented
-     * below.
+     * An array of one or more networks to attach to the instance.
+     * The network object structure is documented below.
      */
     readonly networks: outputs.Ecs.GetInstanceNetwork[];
     /**
@@ -116,14 +116,17 @@ export interface GetInstanceResult {
     readonly publicIp: string;
     readonly region: string;
     /**
-     * The scheduler with hints on how the instance should be launched. The available hints are described
-     * below.
+     * The scheduler with hints on how the instance should be launched.
+     * The scheduler hints structure is documented below.
      */
     readonly schedulerHints: outputs.Ecs.GetInstanceSchedulerHint[];
     /**
      * An array of one or more security group IDs to associate with the instance.
      */
     readonly securityGroupIds: string[];
+    /**
+     * An array of one or more security groups to associate with the instance.
+     */
     readonly securityGroups: string[];
     /**
      * The status of the instance.
@@ -142,8 +145,8 @@ export interface GetInstanceResult {
      */
     readonly userData: string;
     /**
-     * An array of one or more disks to attach to the instance. The volumeAttached object structure is
-     * documented below.
+     * An array of one or more disks to attach to the instance.
+     * The volume attached object structure is documented below.
      */
     readonly volumeAttacheds: outputs.Ecs.GetInstanceVolumeAttached[];
 }
@@ -169,17 +172,16 @@ export interface GetInstanceOutputArgs {
      */
     flavorId?: pulumi.Input<string>;
     /**
+     * Specifies the ECS ID.
+     */
+    instanceId?: pulumi.Input<string>;
+    /**
      * Specifies the ECS name, which can be queried with a regular expression.
      */
     name?: pulumi.Input<string>;
     /**
-     * The region in which to obtain the instance. If omitted, the provider-level region will
-     * be used.
+     * The region in which to obtain the instance.
+     * If omitted, the provider-level region will be used.
      */
     region?: pulumi.Input<string>;
-    /**
-     * The scheduler with hints on how the instance should be launched. The available hints are described
-     * below.
-     */
-    schedulerHints?: pulumi.Input<pulumi.Input<inputs.Ecs.GetInstanceSchedulerHintArgs>[]>;
 }

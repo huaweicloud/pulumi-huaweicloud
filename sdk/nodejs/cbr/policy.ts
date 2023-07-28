@@ -17,6 +17,20 @@ import * as utilities from "../utilities";
  * ```sh
  *  $ pulumi import huaweicloud:Cbr/policy:Policy test 4d2c2939-774f-42ef-ab15-e5b126b11ace
  * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attribute is`enable_acceleration`. It is generally recommended running `terraform plan` after importing a policy. You can then decide if changes should be applied to the policy, or the resource definition should be updated to align with the policy. Also you can ignore changes as below. resource "huaweicloud_cbr_policy" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [
+ *
+ *  enable_acceleration,
+ *
+ *  ]
+ *
+ *  } }
  */
 export class Policy extends pulumi.CustomResource {
     /**
@@ -47,7 +61,7 @@ export class Policy extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies the scheduling rule for the CBR policy backup execution.
+     * Specifies the scheduling rule for the policy backup execution.
      * The object structure is documented below.
      */
     public readonly backupCycle!: pulumi.Output<outputs.Cbr.PolicyBackupCycle>;
@@ -67,7 +81,13 @@ export class Policy extends pulumi.CustomResource {
      */
     public readonly destinationRegion!: pulumi.Output<string | undefined>;
     /**
-     * Specifies whether to enable the CBR policy. Default to **true**.
+     * Specifies whether to enable the acceleration function to shorten
+     * the replication time for cross-region.
+     * Changing this will create a new policy.
+     */
+    public readonly enableAcceleration!: pulumi.Output<boolean | undefined>;
+    /**
+     * Specifies whether to enable the policy. Default to **true**.
      */
     public readonly enabled!: pulumi.Output<boolean | undefined>;
     /**
@@ -76,12 +96,13 @@ export class Policy extends pulumi.CustomResource {
      */
     public readonly longTermRetention!: pulumi.Output<outputs.Cbr.PolicyLongTermRetention | undefined>;
     /**
-     * Specifies a unique name of the CBR policy. This parameter can contain a maximum of 64
-     * characters, which may consist of chinese charactors, letters, digits, underscores(_) and hyphens (-).
+     * Specifies the policy name.  
+     * This parameter can contain a maximum of 64
+     * characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Specifies the region in which to create the CBR policy. If omitted, the
+     * Specifies the region where the policy is located. If omitted, the
      * provider-level region will be used. Changing this will create a new policy.
      */
     public readonly region!: pulumi.Output<string>;
@@ -91,12 +112,12 @@ export class Policy extends pulumi.CustomResource {
      */
     public readonly timePeriod!: pulumi.Output<number | undefined>;
     /**
-     * Specifies the UTC time zone, e.g.: `UTC+08:00`.
-     * Only avaiable if `longTermRetention` is set.
+     * Specifies the UTC time zone, e.g. `UTC+08:00`.
+     * Only available if `longTermRetention` is set.
      */
     public readonly timeZone!: pulumi.Output<string>;
     /**
-     * Specifies the protection type of the CBR policy.
+     * Specifies the protection type of the policy.
      * Valid values are **backup** and **replication**.
      * Changing this will create a new policy.
      */
@@ -119,6 +140,7 @@ export class Policy extends pulumi.CustomResource {
             resourceInputs["backupQuantity"] = state ? state.backupQuantity : undefined;
             resourceInputs["destinationProjectId"] = state ? state.destinationProjectId : undefined;
             resourceInputs["destinationRegion"] = state ? state.destinationRegion : undefined;
+            resourceInputs["enableAcceleration"] = state ? state.enableAcceleration : undefined;
             resourceInputs["enabled"] = state ? state.enabled : undefined;
             resourceInputs["longTermRetention"] = state ? state.longTermRetention : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
@@ -138,6 +160,7 @@ export class Policy extends pulumi.CustomResource {
             resourceInputs["backupQuantity"] = args ? args.backupQuantity : undefined;
             resourceInputs["destinationProjectId"] = args ? args.destinationProjectId : undefined;
             resourceInputs["destinationRegion"] = args ? args.destinationRegion : undefined;
+            resourceInputs["enableAcceleration"] = args ? args.enableAcceleration : undefined;
             resourceInputs["enabled"] = args ? args.enabled : undefined;
             resourceInputs["longTermRetention"] = args ? args.longTermRetention : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
@@ -156,7 +179,7 @@ export class Policy extends pulumi.CustomResource {
  */
 export interface PolicyState {
     /**
-     * Specifies the scheduling rule for the CBR policy backup execution.
+     * Specifies the scheduling rule for the policy backup execution.
      * The object structure is documented below.
      */
     backupCycle?: pulumi.Input<inputs.Cbr.PolicyBackupCycle>;
@@ -176,7 +199,13 @@ export interface PolicyState {
      */
     destinationRegion?: pulumi.Input<string>;
     /**
-     * Specifies whether to enable the CBR policy. Default to **true**.
+     * Specifies whether to enable the acceleration function to shorten
+     * the replication time for cross-region.
+     * Changing this will create a new policy.
+     */
+    enableAcceleration?: pulumi.Input<boolean>;
+    /**
+     * Specifies whether to enable the policy. Default to **true**.
      */
     enabled?: pulumi.Input<boolean>;
     /**
@@ -185,12 +214,13 @@ export interface PolicyState {
      */
     longTermRetention?: pulumi.Input<inputs.Cbr.PolicyLongTermRetention>;
     /**
-     * Specifies a unique name of the CBR policy. This parameter can contain a maximum of 64
-     * characters, which may consist of chinese charactors, letters, digits, underscores(_) and hyphens (-).
+     * Specifies the policy name.  
+     * This parameter can contain a maximum of 64
+     * characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to create the CBR policy. If omitted, the
+     * Specifies the region where the policy is located. If omitted, the
      * provider-level region will be used. Changing this will create a new policy.
      */
     region?: pulumi.Input<string>;
@@ -200,12 +230,12 @@ export interface PolicyState {
      */
     timePeriod?: pulumi.Input<number>;
     /**
-     * Specifies the UTC time zone, e.g.: `UTC+08:00`.
-     * Only avaiable if `longTermRetention` is set.
+     * Specifies the UTC time zone, e.g. `UTC+08:00`.
+     * Only available if `longTermRetention` is set.
      */
     timeZone?: pulumi.Input<string>;
     /**
-     * Specifies the protection type of the CBR policy.
+     * Specifies the protection type of the policy.
      * Valid values are **backup** and **replication**.
      * Changing this will create a new policy.
      */
@@ -217,7 +247,7 @@ export interface PolicyState {
  */
 export interface PolicyArgs {
     /**
-     * Specifies the scheduling rule for the CBR policy backup execution.
+     * Specifies the scheduling rule for the policy backup execution.
      * The object structure is documented below.
      */
     backupCycle: pulumi.Input<inputs.Cbr.PolicyBackupCycle>;
@@ -237,7 +267,13 @@ export interface PolicyArgs {
      */
     destinationRegion?: pulumi.Input<string>;
     /**
-     * Specifies whether to enable the CBR policy. Default to **true**.
+     * Specifies whether to enable the acceleration function to shorten
+     * the replication time for cross-region.
+     * Changing this will create a new policy.
+     */
+    enableAcceleration?: pulumi.Input<boolean>;
+    /**
+     * Specifies whether to enable the policy. Default to **true**.
      */
     enabled?: pulumi.Input<boolean>;
     /**
@@ -246,12 +282,13 @@ export interface PolicyArgs {
      */
     longTermRetention?: pulumi.Input<inputs.Cbr.PolicyLongTermRetention>;
     /**
-     * Specifies a unique name of the CBR policy. This parameter can contain a maximum of 64
-     * characters, which may consist of chinese charactors, letters, digits, underscores(_) and hyphens (-).
+     * Specifies the policy name.  
+     * This parameter can contain a maximum of 64
+     * characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to create the CBR policy. If omitted, the
+     * Specifies the region where the policy is located. If omitted, the
      * provider-level region will be used. Changing this will create a new policy.
      */
     region?: pulumi.Input<string>;
@@ -261,12 +298,12 @@ export interface PolicyArgs {
      */
     timePeriod?: pulumi.Input<number>;
     /**
-     * Specifies the UTC time zone, e.g.: `UTC+08:00`.
-     * Only avaiable if `longTermRetention` is set.
+     * Specifies the UTC time zone, e.g. `UTC+08:00`.
+     * Only available if `longTermRetention` is set.
      */
     timeZone?: pulumi.Input<string>;
     /**
-     * Specifies the protection type of the CBR policy.
+     * Specifies the protection type of the policy.
      * Valid values are **backup** and **replication**.
      * Changing this will create a new policy.
      */

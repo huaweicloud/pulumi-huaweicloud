@@ -86,10 +86,19 @@ export class ReadReplicaInstance extends pulumi.CustomResource {
     }
 
     /**
+     * Specifies whether auto renew is enabled. Valid values are "true" and "false".
+     */
+    public readonly autoRenew!: pulumi.Output<string | undefined>;
+    /**
      * Specifies the AZ name. Changing this parameter will create a new
      * resource.
      */
     public readonly availabilityZone!: pulumi.Output<string>;
+    /**
+     * Specifies the charging mode of the read replica instance. Valid values
+     * are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+     */
+    public readonly chargingMode!: pulumi.Output<string>;
     /**
      * Indicates the database information. Structure is documented below.
      */
@@ -110,6 +119,18 @@ export class ReadReplicaInstance extends pulumi.CustomResource {
      * create a new resource.
      */
     public readonly name!: pulumi.Output<string>;
+    /**
+     * Specifies the charging period of the read replica instance. If `periodUnit` is
+     * set to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
+     * parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+     */
+    public readonly period!: pulumi.Output<number | undefined>;
+    /**
+     * Specifies the charging period unit of the read replica instance. Valid
+     * values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this
+     * creates a new resource.
+     */
+    public readonly periodUnit!: pulumi.Output<string | undefined>;
     /**
      * Specifies the DB instance ID, which is used to create a read
      * replica. Changing this parameter will create a new resource.
@@ -180,11 +201,15 @@ export class ReadReplicaInstance extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as ReadReplicaInstanceState | undefined;
+            resourceInputs["autoRenew"] = state ? state.autoRenew : undefined;
             resourceInputs["availabilityZone"] = state ? state.availabilityZone : undefined;
+            resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
             resourceInputs["dbs"] = state ? state.dbs : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["flavor"] = state ? state.flavor : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
+            resourceInputs["period"] = state ? state.period : undefined;
+            resourceInputs["periodUnit"] = state ? state.periodUnit : undefined;
             resourceInputs["primaryInstanceId"] = state ? state.primaryInstanceId : undefined;
             resourceInputs["privateIps"] = state ? state.privateIps : undefined;
             resourceInputs["publicIps"] = state ? state.publicIps : undefined;
@@ -210,10 +235,14 @@ export class ReadReplicaInstance extends pulumi.CustomResource {
             if ((!args || args.volume === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'volume'");
             }
+            resourceInputs["autoRenew"] = args ? args.autoRenew : undefined;
             resourceInputs["availabilityZone"] = args ? args.availabilityZone : undefined;
+            resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["flavor"] = args ? args.flavor : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
+            resourceInputs["period"] = args ? args.period : undefined;
+            resourceInputs["periodUnit"] = args ? args.periodUnit : undefined;
             resourceInputs["primaryInstanceId"] = args ? args.primaryInstanceId : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
@@ -237,10 +266,19 @@ export class ReadReplicaInstance extends pulumi.CustomResource {
  */
 export interface ReadReplicaInstanceState {
     /**
+     * Specifies whether auto renew is enabled. Valid values are "true" and "false".
+     */
+    autoRenew?: pulumi.Input<string>;
+    /**
      * Specifies the AZ name. Changing this parameter will create a new
      * resource.
      */
     availabilityZone?: pulumi.Input<string>;
+    /**
+     * Specifies the charging mode of the read replica instance. Valid values
+     * are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+     */
+    chargingMode?: pulumi.Input<string>;
     /**
      * Indicates the database information. Structure is documented below.
      */
@@ -261,6 +299,18 @@ export interface ReadReplicaInstanceState {
      * create a new resource.
      */
     name?: pulumi.Input<string>;
+    /**
+     * Specifies the charging period of the read replica instance. If `periodUnit` is
+     * set to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
+     * parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+     */
+    period?: pulumi.Input<number>;
+    /**
+     * Specifies the charging period unit of the read replica instance. Valid
+     * values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this
+     * creates a new resource.
+     */
+    periodUnit?: pulumi.Input<string>;
     /**
      * Specifies the DB instance ID, which is used to create a read
      * replica. Changing this parameter will create a new resource.
@@ -324,10 +374,19 @@ export interface ReadReplicaInstanceState {
  */
 export interface ReadReplicaInstanceArgs {
     /**
+     * Specifies whether auto renew is enabled. Valid values are "true" and "false".
+     */
+    autoRenew?: pulumi.Input<string>;
+    /**
      * Specifies the AZ name. Changing this parameter will create a new
      * resource.
      */
     availabilityZone: pulumi.Input<string>;
+    /**
+     * Specifies the charging mode of the read replica instance. Valid values
+     * are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+     */
+    chargingMode?: pulumi.Input<string>;
     /**
      * The enterprise project id of the read replica instance.
      * Changing this parameter will create a new resource.
@@ -344,6 +403,18 @@ export interface ReadReplicaInstanceArgs {
      * create a new resource.
      */
     name?: pulumi.Input<string>;
+    /**
+     * Specifies the charging period of the read replica instance. If `periodUnit` is
+     * set to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
+     * parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+     */
+    period?: pulumi.Input<number>;
+    /**
+     * Specifies the charging period unit of the read replica instance. Valid
+     * values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this
+     * creates a new resource.
+     */
+    periodUnit?: pulumi.Input<string>;
     /**
      * Specifies the DB instance ID, which is used to create a read
      * replica. Changing this parameter will create a new resource.

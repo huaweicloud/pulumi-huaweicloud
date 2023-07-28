@@ -33,6 +33,7 @@ class InstanceBackupPolicyArgs:
         :param pulumi.Input[str] period_type: Interval at which backup is performed. Default value is `weekly`.
                Currently, only weekly backup is supported.
         :param pulumi.Input[int] save_days: Retention time. Unit: day, the value ranges from 1 to 7.
+               This parameter is required if the backup_type is **auto**.
         """
         pulumi.set(__self__, "backup_ats", backup_ats)
         pulumi.set(__self__, "begin_at", begin_at)
@@ -101,6 +102,7 @@ class InstanceBackupPolicyArgs:
     def save_days(self) -> Optional[pulumi.Input[int]]:
         """
         Retention time. Unit: day, the value ranges from 1 to 7.
+        This parameter is required if the backup_type is **auto**.
         """
         return pulumi.get(self, "save_days")
 

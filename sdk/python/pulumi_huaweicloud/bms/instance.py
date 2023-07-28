@@ -64,7 +64,7 @@ class InstanceArgs:
         :param pulumi.Input[str] agency_name: Specifies the IAM agency name which is created on IAM to provide
                temporary credentials for BMS to access cloud services. Changing this creates a new instance.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "
-               false", defaults to *false*. Changing this creates a new instance.
+               false", defaults to *false*.
         :param pulumi.Input[str] bandwidth_charge_mode: Bandwidth billing type. Available options are:
                + `traffic`: billing mode is traffic.
                + `bandwidth`: billing mode is bandwidth.
@@ -281,7 +281,7 @@ class InstanceArgs:
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies whether auto renew is enabled. Valid values are "true" and "
-        false", defaults to *false*. Changing this creates a new instance.
+        false", defaults to *false*.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -597,7 +597,7 @@ class _InstanceState:
         :param pulumi.Input[str] agency_name: Specifies the IAM agency name which is created on IAM to provide
                temporary credentials for BMS to access cloud services. Changing this creates a new instance.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "
-               false", defaults to *false*. Changing this creates a new instance.
+               false", defaults to *false*.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone in which to create the instance.
                Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?BMS)
                for the values. Changing this creates a new instance.
@@ -643,8 +643,6 @@ class _InstanceState:
                month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new
                instance.
         :param pulumi.Input[str] public_ip: The EIP address that is associted to the instance.
-               * `nics/mac_address` - The MAC address of the nic.
-               * `nics/port_id` - The port ID corresponding to the IP address.
         :param pulumi.Input[str] region: Specifies the region in which to create the instance. If omitted, the
                provider-level region will be used. Changing this creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_groups: Specifies an array of one or more security group IDs to associate with
@@ -774,7 +772,7 @@ class _InstanceState:
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies whether auto renew is enabled. Valid values are "true" and "
-        false", defaults to *false*. Changing this creates a new instance.
+        false", defaults to *false*.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -1051,8 +1049,6 @@ class _InstanceState:
     def public_ip(self) -> Optional[pulumi.Input[str]]:
         """
         The EIP address that is associted to the instance.
-        * `nics/mac_address` - The MAC address of the nic.
-        * `nics/port_id` - The port ID corresponding to the IP address.
         """
         return pulumi.get(self, "public_ip")
 
@@ -1291,7 +1287,7 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[str] agency_name: Specifies the IAM agency name which is created on IAM to provide
                temporary credentials for BMS to access cloud services. Changing this creates a new instance.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "
-               false", defaults to *false*. Changing this creates a new instance.
+               false", defaults to *false*.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone in which to create the instance.
                Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?BMS)
                for the values. Changing this creates a new instance.
@@ -1571,7 +1567,7 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[str] agency_name: Specifies the IAM agency name which is created on IAM to provide
                temporary credentials for BMS to access cloud services. Changing this creates a new instance.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "
-               false", defaults to *false*. Changing this creates a new instance.
+               false", defaults to *false*.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone in which to create the instance.
                Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?BMS)
                for the values. Changing this creates a new instance.
@@ -1617,8 +1613,6 @@ class Instance(pulumi.CustomResource):
                month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new
                instance.
         :param pulumi.Input[str] public_ip: The EIP address that is associted to the instance.
-               * `nics/mac_address` - The MAC address of the nic.
-               * `nics/port_id` - The port ID corresponding to the IP address.
         :param pulumi.Input[str] region: Specifies the region in which to create the instance. If omitted, the
                provider-level region will be used. Changing this creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_groups: Specifies an array of one or more security group IDs to associate with
@@ -1711,7 +1705,7 @@ class Instance(pulumi.CustomResource):
     def auto_renew(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies whether auto renew is enabled. Valid values are "true" and "
-        false", defaults to *false*. Changing this creates a new instance.
+        false", defaults to *false*.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -1904,8 +1898,6 @@ class Instance(pulumi.CustomResource):
     def public_ip(self) -> pulumi.Output[str]:
         """
         The EIP address that is associted to the instance.
-        * `nics/mac_address` - The MAC address of the nic.
-        * `nics/port_id` - The port ID corresponding to the IP address.
         """
         return pulumi.get(self, "public_ip")
 

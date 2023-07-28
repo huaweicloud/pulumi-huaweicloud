@@ -15,6 +15,7 @@ __all__ = [
     'InstanceBackupStrategy',
     'InstanceDb',
     'InstanceNode',
+    'InstanceParameter',
     'InstanceVolume',
     'ParametergroupConfigurationParameter',
     'ParametergroupDatastore',
@@ -34,12 +35,6 @@ class Database_privilegeUser(dict):
     def __init__(__self__, *,
                  name: str,
                  readonly: Optional[bool] = None):
-        """
-        :param str name: Specifies the username of the database account. Changing this creates a new resource.
-        :param bool readonly: Specifies the read-only permission. The value can be:
-               + **true**: indicates the read-only permission.
-               + **false**: indicates the read and write permission.
-        """
         pulumi.set(__self__, "name", name)
         if readonly is not None:
             pulumi.set(__self__, "readonly", readonly)
@@ -47,19 +42,11 @@ class Database_privilegeUser(dict):
     @property
     @pulumi.getter
     def name(self) -> str:
-        """
-        Specifies the username of the database account. Changing this creates a new resource.
-        """
         return pulumi.get(self, "name")
 
     @property
     @pulumi.getter
     def readonly(self) -> Optional[bool]:
-        """
-        Specifies the read-only permission. The value can be:
-        + **true**: indicates the read-only permission.
-        + **false**: indicates the read and write permission.
-        """
         return pulumi.get(self, "readonly")
 
 
@@ -86,19 +73,25 @@ class InstanceBackupStrategy(dict):
 
     def __init__(__self__, *,
                  start_time: str,
-                 keep_days: Optional[int] = None):
+                 keep_days: Optional[int] = None,
+                 period: Optional[str] = None):
         """
         :param str start_time: Specifies the backup time window. Automated backups will be triggered during the
                backup time window. It must be a valid value in the **hh:mm-HH:MM**
                format. The current time is in the UTC format. The HH value must be 1 greater than the hh value. The values of mm and
                MM must be the same and must be set to any of the following: 00, 15, 30, or 45. Example value: 08:15-09:15 23:00-00:
                00.
-        :param int keep_days: Specifies the retention days for specific backup files. The value range is from 0 to
-               732. If this parameter is not specified or set to 0, the automated backup policy is disabled.
+        :param int keep_days: Specifies the retention days for specific backup files. The value range is from 0 to 732.
+        :param str period: Specifies the backup cycle. Automatic backups will be performed on the specified days of
+               the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+               number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+               Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
         """
         pulumi.set(__self__, "start_time", start_time)
         if keep_days is not None:
             pulumi.set(__self__, "keep_days", keep_days)
+        if period is not None:
+            pulumi.set(__self__, "period", period)
 
     @property
     @pulumi.getter(name="startTime")
@@ -116,10 +109,20 @@ class InstanceBackupStrategy(dict):
     @pulumi.getter(name="keepDays")
     def keep_days(self) -> Optional[int]:
         """
-        Specifies the retention days for specific backup files. The value range is from 0 to
-        732. If this parameter is not specified or set to 0, the automated backup policy is disabled.
+        Specifies the retention days for specific backup files. The value range is from 0 to 732.
         """
         return pulumi.get(self, "keep_days")
+
+    @property
+    @pulumi.getter
+    def period(self) -> Optional[str]:
+        """
+        Specifies the backup cycle. Automatic backups will be performed on the specified days of
+        the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+        number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+        Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
+        """
+        return pulumi.get(self, "period")
 
 
 @pulumi.output_type
@@ -151,7 +154,7 @@ class InstanceDb(dict):
         :param str password: Specifies the database password. The value cannot be empty and should
                contain 8 to 32 characters, including uppercase and lowercase letters, digits, and the following special
                characters: ~!@#%^*-_=+? You are advised to enter a strong password to improve security, preventing security risks
-               such as brute force cracking. Changing this parameter will create a new resource.
+               such as brute force cracking.
         :param str type: Specifies the volume type. Its value can be any of the following and is
                case-sensitive:
                + *ULTRAHIGH*: SSD storage.
@@ -184,7 +187,7 @@ class InstanceDb(dict):
         Specifies the database password. The value cannot be empty and should
         contain 8 to 32 characters, including uppercase and lowercase letters, digits, and the following special
         characters: ~!@#%^*-_=+? You are advised to enter a strong password to improve security, preventing security risks
-        such as brute force cracking. Changing this parameter will create a new resource.
+        such as brute force cracking.
         """
         return pulumi.get(self, "password")
 
@@ -260,9 +263,8 @@ class InstanceNode(dict):
         :param str availability_zone: Specifies the list of AZ name. Changing this parameter will create a
                new resource.
         :param str id: Indicates the node ID.
-        :param str name: Specifies the DB instance name. The DB instance name of the same type must be unique for
-               the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can
-               contain only letters, digits, hyphens (-), and underscores (_).
+        :param str name: Specifies the parameter name. Some of them needs the instance to be restarted
+               to take effect.
         :param str role: Indicates the node type. The value can be master or slave, indicating the primary node or standby node
                respectively.
         :param str status: Indicates the node status.
@@ -299,9 +301,8 @@ class InstanceNode(dict):
     @pulumi.getter
     def name(self) -> Optional[str]:
         """
-        Specifies the DB instance name. The DB instance name of the same type must be unique for
-        the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can
-        contain only letters, digits, hyphens (-), and underscores (_).
+        Specifies the parameter name. Some of them needs the instance to be restarted
+        to take effect.
         """
         return pulumi.get(self, "name")
 
@@ -324,12 +325,47 @@ class InstanceNode(dict):
 
 
 @pulumi.output_type
+class InstanceParameter(dict):
+    def __init__(__self__, *,
+                 name: str,
+                 value: str):
+        """
+        :param str name: Specifies the parameter name. Some of them needs the instance to be restarted
+               to take effect.
+        :param str value: Specifies the parameter value.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the parameter name. Some of them needs the instance to be restarted
+        to take effect.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def value(self) -> str:
+        """
+        Specifies the parameter value.
+        """
+        return pulumi.get(self, "value")
+
+
+@pulumi.output_type
 class InstanceVolume(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
         if key == "diskEncryptionId":
             suggest = "disk_encryption_id"
+        elif key == "limitSize":
+            suggest = "limit_size"
+        elif key == "triggerThreshold":
+            suggest = "trigger_threshold"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in InstanceVolume. Access the value via the '{suggest}' property getter instead.")
@@ -345,7 +381,9 @@ class InstanceVolume(dict):
     def __init__(__self__, *,
                  size: int,
                  type: str,
-                 disk_encryption_id: Optional[str] = None):
+                 disk_encryption_id: Optional[str] = None,
+                 limit_size: Optional[int] = None,
+                 trigger_threshold: Optional[int] = None):
         """
         :param int size: Specifies the volume size. Its value range is from 40 GB to 4000 GB. The value must be a
                multiple of 10 and greater than the original size.
@@ -356,13 +394,24 @@ class InstanceVolume(dict):
                + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
                instances.
                + *ESSD*: extreme SSD storage.
-        :param str disk_encryption_id: Specifies the key ID for disk encryption. Changing this parameter will create a new
-               resource.
+        :param str disk_encryption_id: Specifies the key ID for disk encryption.
+               Changing this parameter will create a new resource.
+        :param int limit_size: Specifies the upper limit of automatic expansion of storage, in GB.
+        :param int trigger_threshold: Specifies the threshold to trigger automatic expansion.  
+               If the available storage drops to this threshold or `10` GB, the automatic expansion is triggered.
+               The valid values are as follows:
+               + **10**
+               + **15**
+               + **20**
         """
         pulumi.set(__self__, "size", size)
         pulumi.set(__self__, "type", type)
         if disk_encryption_id is not None:
             pulumi.set(__self__, "disk_encryption_id", disk_encryption_id)
+        if limit_size is not None:
+            pulumi.set(__self__, "limit_size", limit_size)
+        if trigger_threshold is not None:
+            pulumi.set(__self__, "trigger_threshold", trigger_threshold)
 
     @property
     @pulumi.getter
@@ -391,10 +440,31 @@ class InstanceVolume(dict):
     @pulumi.getter(name="diskEncryptionId")
     def disk_encryption_id(self) -> Optional[str]:
         """
-        Specifies the key ID for disk encryption. Changing this parameter will create a new
-        resource.
+        Specifies the key ID for disk encryption.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "disk_encryption_id")
+
+    @property
+    @pulumi.getter(name="limitSize")
+    def limit_size(self) -> Optional[int]:
+        """
+        Specifies the upper limit of automatic expansion of storage, in GB.
+        """
+        return pulumi.get(self, "limit_size")
+
+    @property
+    @pulumi.getter(name="triggerThreshold")
+    def trigger_threshold(self) -> Optional[int]:
+        """
+        Specifies the threshold to trigger automatic expansion.  
+        If the available storage drops to this threshold or `10` GB, the automatic expansion is triggered.
+        The valid values are as follows:
+        + **10**
+        + **15**
+        + **20**
+        """
+        return pulumi.get(self, "trigger_threshold")
 
 
 @pulumi.output_type

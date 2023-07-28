@@ -14,7 +14,7 @@ type AclIpCidr struct {
 	// Specifies the IPv4 CIDR block, for example, **192.168.0.0/24**.
 	Cidr string `pulumi:"cidr"`
 	// Specifies a description about an IP address range. This parameter can contain a
-	// maximum of 255 characters and the following charactors are not allowed:**@#%^&*<>\\**.
+	// maximum of 255 characters and the following characters are not allowed:**@#%^&*<>\\**.
 	Description *string `pulumi:"description"`
 }
 
@@ -33,7 +33,7 @@ type AclIpCidrArgs struct {
 	// Specifies the IPv4 CIDR block, for example, **192.168.0.0/24**.
 	Cidr pulumi.StringInput `pulumi:"cidr"`
 	// Specifies a description about an IP address range. This parameter can contain a
-	// maximum of 255 characters and the following charactors are not allowed:**@#%^&*<>\\**.
+	// maximum of 255 characters and the following characters are not allowed:**@#%^&*<>\\**.
 	Description pulumi.StringPtrInput `pulumi:"description"`
 }
 
@@ -94,7 +94,7 @@ func (o AclIpCidrOutput) Cidr() pulumi.StringOutput {
 }
 
 // Specifies a description about an IP address range. This parameter can contain a
-// maximum of 255 characters and the following charactors are not allowed:**@#%^&*<>\\**.
+// maximum of 255 characters and the following characters are not allowed:**@#%^&*<>\\**.
 func (o AclIpCidrOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v AclIpCidr) *string { return v.Description }).(pulumi.StringPtrOutput)
 }
@@ -121,7 +121,7 @@ func (o AclIpCidrArrayOutput) Index(i pulumi.IntInput) AclIpCidrOutput {
 
 type AclIpRange struct {
 	// Specifies a description about an IP address range. This parameter can contain a
-	// maximum of 255 characters and the following charactors are not allowed:**@#%^&*<>\\**.
+	// maximum of 255 characters and the following characters are not allowed:**@#%^&*<>\\**.
 	Description *string `pulumi:"description"`
 	// Specifies the Ip address range, for example, **0.0.0.0-255.255.255.0**.
 	Range string `pulumi:"range"`
@@ -140,7 +140,7 @@ type AclIpRangeInput interface {
 
 type AclIpRangeArgs struct {
 	// Specifies a description about an IP address range. This parameter can contain a
-	// maximum of 255 characters and the following charactors are not allowed:**@#%^&*<>\\**.
+	// maximum of 255 characters and the following characters are not allowed:**@#%^&*<>\\**.
 	Description pulumi.StringPtrInput `pulumi:"description"`
 	// Specifies the Ip address range, for example, **0.0.0.0-255.255.255.0**.
 	Range pulumi.StringInput `pulumi:"range"`
@@ -198,7 +198,7 @@ func (o AclIpRangeOutput) ToAclIpRangeOutputWithContext(ctx context.Context) Acl
 }
 
 // Specifies a description about an IP address range. This parameter can contain a
-// maximum of 255 characters and the following charactors are not allowed:**@#%^&*<>\\**.
+// maximum of 255 characters and the following characters are not allowed:**@#%^&*<>\\**.
 func (o AclIpRangeOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v AclIpRange) *string { return v.Description }).(pulumi.StringPtrOutput)
 }

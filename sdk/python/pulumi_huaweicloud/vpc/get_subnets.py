@@ -156,6 +156,20 @@ def get_subnets(availability_zone: Optional[str] = None,
     """
     Use this data source to get a list of VPC subnet.
 
+    ## Example Usage
+
+    An example filter by name and tag
+
+    ```python
+    import pulumi
+    import pulumi_huaweicloud as huaweicloud
+
+    subnet = huaweicloud.Vpc.get_subnets(name=var["subnet_name"],
+        tags={
+            "foo": "bar",
+        })
+    pulumi.export("subnetVpcIds", [__item.vpc_id for __item in [subnet.subnets]])
+    ```
     ## **Attributes Reference**
 
     The following attributes are exported:
@@ -245,6 +259,20 @@ def get_subnets_output(availability_zone: Optional[pulumi.Input[Optional[str]]] 
     """
     Use this data source to get a list of VPC subnet.
 
+    ## Example Usage
+
+    An example filter by name and tag
+
+    ```python
+    import pulumi
+    import pulumi_huaweicloud as huaweicloud
+
+    subnet = huaweicloud.Vpc.get_subnets(name=var["subnet_name"],
+        tags={
+            "foo": "bar",
+        })
+    pulumi.export("subnetVpcIds", [__item.vpc_id for __item in [subnet.subnets]])
+    ```
     ## **Attributes Reference**
 
     The following attributes are exported:

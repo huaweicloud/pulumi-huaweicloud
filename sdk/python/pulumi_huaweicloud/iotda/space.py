@@ -19,7 +19,7 @@ class SpaceArgs:
         """
         The set of arguments for constructing a Space resource.
         :param pulumi.Input[str] name: Specifies the space name. The name contains a maximum of 64 characters.
-               Only letters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+               Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the IoTDA resource space resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
@@ -34,7 +34,7 @@ class SpaceArgs:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the space name. The name contains a maximum of 64 characters.
-        Only letters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+        Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
@@ -68,7 +68,7 @@ class _SpaceState:
         :param pulumi.Input[bool] is_default: Whether it is the default resource space. The IoT platform automatically creates and assigns
                a default resource space (undeletable) to your account.
         :param pulumi.Input[str] name: Specifies the space name. The name contains a maximum of 64 characters.
-               Only letters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+               Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the IoTDA resource space resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
@@ -98,7 +98,7 @@ class _SpaceState:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the space name. The name contains a maximum of 64 characters.
-        Only letters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+        Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
@@ -156,7 +156,7 @@ class Space(pulumi.CustomResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] name: Specifies the space name. The name contains a maximum of 64 characters.
-               Only letters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+               Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the IoTDA resource space resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
@@ -243,7 +243,7 @@ class Space(pulumi.CustomResource):
         :param pulumi.Input[bool] is_default: Whether it is the default resource space. The IoT platform automatically creates and assigns
                a default resource space (undeletable) to your account.
         :param pulumi.Input[str] name: Specifies the space name. The name contains a maximum of 64 characters.
-               Only letters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+               Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the IoTDA resource space resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
@@ -271,7 +271,7 @@ class Space(pulumi.CustomResource):
     def name(self) -> pulumi.Output[str]:
         """
         Specifies the space name. The name contains a maximum of 64 characters.
-        Only letters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+        Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")

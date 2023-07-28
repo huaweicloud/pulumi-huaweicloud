@@ -31,15 +31,11 @@ import (
 //			cfg := config.New(ctx, "")
 //			instanceId := cfg.RequireObject("instanceId")
 //			policyId := cfg.RequireObject("policyId")
-//			apiPublishId1 := cfg.RequireObject("apiPublishId1")
-//			apiPublishId2 := cfg.RequireObject("apiPublishId2")
+//			apiPublishIds := cfg.Require("apiPublishIds")
 //			_, err := DedicatedApig.NewThrottlingPolicyAssociate(ctx, "test", &DedicatedApig.ThrottlingPolicyAssociateArgs{
 //				InstanceId: pulumi.Any(instanceId),
 //				PolicyId:   pulumi.Any(policyId),
-//				PublishIds: pulumi.StringArray{
-//					pulumi.Any(apiPublishId1),
-//					pulumi.Any(apiPublishId2),
-//				},
+//				PublishIds: apiPublishIds,
 //			})
 //			if err != nil {
 //				return err
@@ -56,21 +52,23 @@ import (
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:DedicatedApig/throttlingPolicyAssociate:ThrottlingPolicyAssociate test &ltinstance id&gt/&ltpolicy_id&gt
+//	$ pulumi import huaweicloud:DedicatedApig/throttlingPolicyAssociate:ThrottlingPolicyAssociate test <instance_id>/<policy_id>
 //
 // ```
 type ThrottlingPolicyAssociate struct {
 	pulumi.CustomResourceState
 
-	// Specifies the ID of the APIG dedicated instance to which the APIs and the
-	// throttling policy belongs. Changing this will create a new resource.
+	// Specifies the ID of the dedicated instance to which the APIs and the
+	// throttling policy belongs.
+	// Changing this will create a new resource.
 	InstanceId pulumi.StringOutput `pulumi:"instanceId"`
-	// Specifies the ID of the API group to which the API response belongs to.
+	// Specifies the ID of the throttling policy.\
 	// Changing this will create a new resource.
 	PolicyId pulumi.StringOutput `pulumi:"policyId"`
-	// Specifies the publish ID corresponding to the API bound by the throttling policy.
+	// Specifies the publish IDs corresponding to the APIs bound by the throttling policy.
 	PublishIds pulumi.StringArrayOutput `pulumi:"publishIds"`
-	// Specifies the region where the API instance and throttling policy are located.
+	// Specifies the region where the dedicated instance and the throttling policy
+	// are located.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
 }
@@ -114,29 +112,33 @@ func GetThrottlingPolicyAssociate(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering ThrottlingPolicyAssociate resources.
 type throttlingPolicyAssociateState struct {
-	// Specifies the ID of the APIG dedicated instance to which the APIs and the
-	// throttling policy belongs. Changing this will create a new resource.
+	// Specifies the ID of the dedicated instance to which the APIs and the
+	// throttling policy belongs.
+	// Changing this will create a new resource.
 	InstanceId *string `pulumi:"instanceId"`
-	// Specifies the ID of the API group to which the API response belongs to.
+	// Specifies the ID of the throttling policy.\
 	// Changing this will create a new resource.
 	PolicyId *string `pulumi:"policyId"`
-	// Specifies the publish ID corresponding to the API bound by the throttling policy.
+	// Specifies the publish IDs corresponding to the APIs bound by the throttling policy.
 	PublishIds []string `pulumi:"publishIds"`
-	// Specifies the region where the API instance and throttling policy are located.
+	// Specifies the region where the dedicated instance and the throttling policy
+	// are located.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
 }
 
 type ThrottlingPolicyAssociateState struct {
-	// Specifies the ID of the APIG dedicated instance to which the APIs and the
-	// throttling policy belongs. Changing this will create a new resource.
+	// Specifies the ID of the dedicated instance to which the APIs and the
+	// throttling policy belongs.
+	// Changing this will create a new resource.
 	InstanceId pulumi.StringPtrInput
-	// Specifies the ID of the API group to which the API response belongs to.
+	// Specifies the ID of the throttling policy.\
 	// Changing this will create a new resource.
 	PolicyId pulumi.StringPtrInput
-	// Specifies the publish ID corresponding to the API bound by the throttling policy.
+	// Specifies the publish IDs corresponding to the APIs bound by the throttling policy.
 	PublishIds pulumi.StringArrayInput
-	// Specifies the region where the API instance and throttling policy are located.
+	// Specifies the region where the dedicated instance and the throttling policy
+	// are located.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
 }
@@ -146,30 +148,34 @@ func (ThrottlingPolicyAssociateState) ElementType() reflect.Type {
 }
 
 type throttlingPolicyAssociateArgs struct {
-	// Specifies the ID of the APIG dedicated instance to which the APIs and the
-	// throttling policy belongs. Changing this will create a new resource.
+	// Specifies the ID of the dedicated instance to which the APIs and the
+	// throttling policy belongs.
+	// Changing this will create a new resource.
 	InstanceId string `pulumi:"instanceId"`
-	// Specifies the ID of the API group to which the API response belongs to.
+	// Specifies the ID of the throttling policy.\
 	// Changing this will create a new resource.
 	PolicyId string `pulumi:"policyId"`
-	// Specifies the publish ID corresponding to the API bound by the throttling policy.
+	// Specifies the publish IDs corresponding to the APIs bound by the throttling policy.
 	PublishIds []string `pulumi:"publishIds"`
-	// Specifies the region where the API instance and throttling policy are located.
+	// Specifies the region where the dedicated instance and the throttling policy
+	// are located.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
 }
 
 // The set of arguments for constructing a ThrottlingPolicyAssociate resource.
 type ThrottlingPolicyAssociateArgs struct {
-	// Specifies the ID of the APIG dedicated instance to which the APIs and the
-	// throttling policy belongs. Changing this will create a new resource.
+	// Specifies the ID of the dedicated instance to which the APIs and the
+	// throttling policy belongs.
+	// Changing this will create a new resource.
 	InstanceId pulumi.StringInput
-	// Specifies the ID of the API group to which the API response belongs to.
+	// Specifies the ID of the throttling policy.\
 	// Changing this will create a new resource.
 	PolicyId pulumi.StringInput
-	// Specifies the publish ID corresponding to the API bound by the throttling policy.
+	// Specifies the publish IDs corresponding to the APIs bound by the throttling policy.
 	PublishIds pulumi.StringArrayInput
-	// Specifies the region where the API instance and throttling policy are located.
+	// Specifies the region where the dedicated instance and the throttling policy
+	// are located.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
 }
@@ -261,24 +267,26 @@ func (o ThrottlingPolicyAssociateOutput) ToThrottlingPolicyAssociateOutputWithCo
 	return o
 }
 
-// Specifies the ID of the APIG dedicated instance to which the APIs and the
-// throttling policy belongs. Changing this will create a new resource.
+// Specifies the ID of the dedicated instance to which the APIs and the
+// throttling policy belongs.
+// Changing this will create a new resource.
 func (o ThrottlingPolicyAssociateOutput) InstanceId() pulumi.StringOutput {
 	return o.ApplyT(func(v *ThrottlingPolicyAssociate) pulumi.StringOutput { return v.InstanceId }).(pulumi.StringOutput)
 }
 
-// Specifies the ID of the API group to which the API response belongs to.
+// Specifies the ID of the throttling policy.\
 // Changing this will create a new resource.
 func (o ThrottlingPolicyAssociateOutput) PolicyId() pulumi.StringOutput {
 	return o.ApplyT(func(v *ThrottlingPolicyAssociate) pulumi.StringOutput { return v.PolicyId }).(pulumi.StringOutput)
 }
 
-// Specifies the publish ID corresponding to the API bound by the throttling policy.
+// Specifies the publish IDs corresponding to the APIs bound by the throttling policy.
 func (o ThrottlingPolicyAssociateOutput) PublishIds() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *ThrottlingPolicyAssociate) pulumi.StringArrayOutput { return v.PublishIds }).(pulumi.StringArrayOutput)
 }
 
-// Specifies the region where the API instance and throttling policy are located.
+// Specifies the region where the dedicated instance and the throttling policy
+// are located.
 // If omitted, the provider-level region will be used. Changing this will create a new resource.
 func (o ThrottlingPolicyAssociateOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *ThrottlingPolicyAssociate) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)

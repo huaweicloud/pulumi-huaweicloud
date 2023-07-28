@@ -170,10 +170,8 @@ class ClusterClientNodeConfig(dict):
                to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
                to 10240 GB. Changing this parameter will create a new resource.
         :param int instance_number: Specifies the number of cluster instances.
-               + When it is `ess_node_config`, The value range is 1 to 200.
                + When it is `master_node_config`, The value range is 3 to 10.
                + When it is `client_node_config`, The value range is 1 to 32.
-               + When it is `cold_node_config`, The value range is 1 to 32.
         :param 'ClusterClientNodeConfigVolumeArgs' volume: Specifies the information about the volume.
                The volume structure is documented below.
         """
@@ -197,10 +195,8 @@ class ClusterClientNodeConfig(dict):
     def instance_number(self) -> int:
         """
         Specifies the number of cluster instances.
-        + When it is `ess_node_config`, The value range is 1 to 200.
         + When it is `master_node_config`, The value range is 3 to 10.
         + When it is `client_node_config`, The value range is 1 to 32.
-        + When it is `cold_node_config`, The value range is 1 to 32.
         """
         return pulumi.get(self, "instance_number")
 
@@ -238,9 +234,11 @@ class ClusterClientNodeConfigVolume(dict):
                  volume_type: str):
         """
         :param int size: Specifies the volume size in GB, which must be a multiple of 10.
-        :param str volume_type: Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-               HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-               parameter will create a new resource.
+               Changing this parameter will create a new resource.
+        :param str volume_type: Specifies the volume type. Value options are as follows:
+               + **COMMON**: Common I/O. The SATA disk is used.
+               + **HIGH**: High I/O. The SAS disk is used.
+               + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
         """
         pulumi.set(__self__, "size", size)
         pulumi.set(__self__, "volume_type", volume_type)
@@ -250,6 +248,7 @@ class ClusterClientNodeConfigVolume(dict):
     def size(self) -> int:
         """
         Specifies the volume size in GB, which must be a multiple of 10.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "size")
 
@@ -257,9 +256,10 @@ class ClusterClientNodeConfigVolume(dict):
     @pulumi.getter(name="volumeType")
     def volume_type(self) -> str:
         """
-        Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-        HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-        parameter will create a new resource.
+        Specifies the volume type. Value options are as follows:
+        + **COMMON**: Common I/O. The SATA disk is used.
+        + **HIGH**: High I/O. The SAS disk is used.
+        + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
         """
         return pulumi.get(self, "volume_type")
 
@@ -286,23 +286,22 @@ class ClusterColdNodeConfig(dict):
     def __init__(__self__, *,
                  flavor: str,
                  instance_number: int,
-                 volume: 'outputs.ClusterColdNodeConfigVolume'):
+                 volume: Optional['outputs.ClusterColdNodeConfigVolume'] = None):
         """
         :param str flavor: Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
                40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
                to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
                to 10240 GB. Changing this parameter will create a new resource.
         :param int instance_number: Specifies the number of cluster instances.
-               + When it is `ess_node_config`, The value range is 1 to 200.
                + When it is `master_node_config`, The value range is 3 to 10.
                + When it is `client_node_config`, The value range is 1 to 32.
-               + When it is `cold_node_config`, The value range is 1 to 32.
         :param 'ClusterColdNodeConfigVolumeArgs' volume: Specifies the information about the volume.
                The volume structure is documented below.
         """
         pulumi.set(__self__, "flavor", flavor)
         pulumi.set(__self__, "instance_number", instance_number)
-        pulumi.set(__self__, "volume", volume)
+        if volume is not None:
+            pulumi.set(__self__, "volume", volume)
 
     @property
     @pulumi.getter
@@ -320,16 +319,14 @@ class ClusterColdNodeConfig(dict):
     def instance_number(self) -> int:
         """
         Specifies the number of cluster instances.
-        + When it is `ess_node_config`, The value range is 1 to 200.
         + When it is `master_node_config`, The value range is 3 to 10.
         + When it is `client_node_config`, The value range is 1 to 32.
-        + When it is `cold_node_config`, The value range is 1 to 32.
         """
         return pulumi.get(self, "instance_number")
 
     @property
     @pulumi.getter
-    def volume(self) -> 'outputs.ClusterColdNodeConfigVolume':
+    def volume(self) -> Optional['outputs.ClusterColdNodeConfigVolume']:
         """
         Specifies the information about the volume.
         The volume structure is documented below.
@@ -361,9 +358,11 @@ class ClusterColdNodeConfigVolume(dict):
                  volume_type: str):
         """
         :param int size: Specifies the volume size in GB, which must be a multiple of 10.
-        :param str volume_type: Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-               HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-               parameter will create a new resource.
+               Changing this parameter will create a new resource.
+        :param str volume_type: Specifies the volume type. Value options are as follows:
+               + **COMMON**: Common I/O. The SATA disk is used.
+               + **HIGH**: High I/O. The SAS disk is used.
+               + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
         """
         pulumi.set(__self__, "size", size)
         pulumi.set(__self__, "volume_type", volume_type)
@@ -373,6 +372,7 @@ class ClusterColdNodeConfigVolume(dict):
     def size(self) -> int:
         """
         Specifies the volume size in GB, which must be a multiple of 10.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "size")
 
@@ -380,9 +380,10 @@ class ClusterColdNodeConfigVolume(dict):
     @pulumi.getter(name="volumeType")
     def volume_type(self) -> str:
         """
-        Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-        HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-        parameter will create a new resource.
+        Specifies the volume type. Value options are as follows:
+        + **COMMON**: Common I/O. The SATA disk is used.
+        + **HIGH**: High I/O. The SAS disk is used.
+        + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
         """
         return pulumi.get(self, "volume_type")
 
@@ -409,23 +410,22 @@ class ClusterEssNodeConfig(dict):
     def __init__(__self__, *,
                  flavor: str,
                  instance_number: int,
-                 volume: 'outputs.ClusterEssNodeConfigVolume'):
+                 volume: Optional['outputs.ClusterEssNodeConfigVolume'] = None):
         """
         :param str flavor: Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
                40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
                to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
                to 10240 GB. Changing this parameter will create a new resource.
         :param int instance_number: Specifies the number of cluster instances.
-               + When it is `ess_node_config`, The value range is 1 to 200.
                + When it is `master_node_config`, The value range is 3 to 10.
                + When it is `client_node_config`, The value range is 1 to 32.
-               + When it is `cold_node_config`, The value range is 1 to 32.
         :param 'ClusterEssNodeConfigVolumeArgs' volume: Specifies the information about the volume.
                The volume structure is documented below.
         """
         pulumi.set(__self__, "flavor", flavor)
         pulumi.set(__self__, "instance_number", instance_number)
-        pulumi.set(__self__, "volume", volume)
+        if volume is not None:
+            pulumi.set(__self__, "volume", volume)
 
     @property
     @pulumi.getter
@@ -443,16 +443,14 @@ class ClusterEssNodeConfig(dict):
     def instance_number(self) -> int:
         """
         Specifies the number of cluster instances.
-        + When it is `ess_node_config`, The value range is 1 to 200.
         + When it is `master_node_config`, The value range is 3 to 10.
         + When it is `client_node_config`, The value range is 1 to 32.
-        + When it is `cold_node_config`, The value range is 1 to 32.
         """
         return pulumi.get(self, "instance_number")
 
     @property
     @pulumi.getter
-    def volume(self) -> 'outputs.ClusterEssNodeConfigVolume':
+    def volume(self) -> Optional['outputs.ClusterEssNodeConfigVolume']:
         """
         Specifies the information about the volume.
         The volume structure is documented below.
@@ -484,9 +482,11 @@ class ClusterEssNodeConfigVolume(dict):
                  volume_type: str):
         """
         :param int size: Specifies the volume size in GB, which must be a multiple of 10.
-        :param str volume_type: Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-               HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-               parameter will create a new resource.
+               Changing this parameter will create a new resource.
+        :param str volume_type: Specifies the volume type. Value options are as follows:
+               + **COMMON**: Common I/O. The SATA disk is used.
+               + **HIGH**: High I/O. The SAS disk is used.
+               + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
         """
         pulumi.set(__self__, "size", size)
         pulumi.set(__self__, "volume_type", volume_type)
@@ -496,6 +496,7 @@ class ClusterEssNodeConfigVolume(dict):
     def size(self) -> int:
         """
         Specifies the volume size in GB, which must be a multiple of 10.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "size")
 
@@ -503,9 +504,10 @@ class ClusterEssNodeConfigVolume(dict):
     @pulumi.getter(name="volumeType")
     def volume_type(self) -> str:
         """
-        Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-        HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-        parameter will create a new resource.
+        Specifies the volume type. Value options are as follows:
+        + **COMMON**: Common I/O. The SATA disk is used.
+        + **HIGH**: High I/O. The SAS disk is used.
+        + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
         """
         return pulumi.get(self, "volume_type")
 
@@ -539,8 +541,7 @@ class ClusterKibanaPublicAccess(dict):
         """
         :param int bandwidth: Specifies the public network bandwidth.
         :param bool whitelist_enabled: Specifies whether to enable the public network access control.
-        :param str whitelist: Specifies the whitelist of access control.
-               Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+        :param str whitelist: Specifies the whitelist of access control. The whitelisted account id must be unique.
         """
         pulumi.set(__self__, "bandwidth", bandwidth)
         pulumi.set(__self__, "whitelist_enabled", whitelist_enabled)
@@ -574,8 +575,7 @@ class ClusterKibanaPublicAccess(dict):
     @pulumi.getter
     def whitelist(self) -> Optional[str]:
         """
-        Specifies the whitelist of access control.
-        Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+        Specifies the whitelist of access control. The whitelisted account id must be unique.
         """
         return pulumi.get(self, "whitelist")
 
@@ -609,10 +609,8 @@ class ClusterMasterNodeConfig(dict):
                to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
                to 10240 GB. Changing this parameter will create a new resource.
         :param int instance_number: Specifies the number of cluster instances.
-               + When it is `ess_node_config`, The value range is 1 to 200.
                + When it is `master_node_config`, The value range is 3 to 10.
                + When it is `client_node_config`, The value range is 1 to 32.
-               + When it is `cold_node_config`, The value range is 1 to 32.
         :param 'ClusterMasterNodeConfigVolumeArgs' volume: Specifies the information about the volume.
                The volume structure is documented below.
         """
@@ -636,10 +634,8 @@ class ClusterMasterNodeConfig(dict):
     def instance_number(self) -> int:
         """
         Specifies the number of cluster instances.
-        + When it is `ess_node_config`, The value range is 1 to 200.
         + When it is `master_node_config`, The value range is 3 to 10.
         + When it is `client_node_config`, The value range is 1 to 32.
-        + When it is `cold_node_config`, The value range is 1 to 32.
         """
         return pulumi.get(self, "instance_number")
 
@@ -677,9 +673,11 @@ class ClusterMasterNodeConfigVolume(dict):
                  volume_type: str):
         """
         :param int size: Specifies the volume size in GB, which must be a multiple of 10.
-        :param str volume_type: Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-               HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-               parameter will create a new resource.
+               Changing this parameter will create a new resource.
+        :param str volume_type: Specifies the volume type. Value options are as follows:
+               + **COMMON**: Common I/O. The SATA disk is used.
+               + **HIGH**: High I/O. The SAS disk is used.
+               + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
         """
         pulumi.set(__self__, "size", size)
         pulumi.set(__self__, "volume_type", volume_type)
@@ -689,6 +687,7 @@ class ClusterMasterNodeConfigVolume(dict):
     def size(self) -> int:
         """
         Specifies the volume size in GB, which must be a multiple of 10.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "size")
 
@@ -696,9 +695,10 @@ class ClusterMasterNodeConfigVolume(dict):
     @pulumi.getter(name="volumeType")
     def volume_type(self) -> str:
         """
-        Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-        HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-        parameter will create a new resource.
+        Specifies the volume type. Value options are as follows:
+        + **COMMON**: Common I/O. The SATA disk is used.
+        + **HIGH**: High I/O. The SAS disk is used.
+        + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
         """
         return pulumi.get(self, "volume_type")
 
@@ -742,10 +742,8 @@ class ClusterNode(dict):
         :param str name: Specifies the cluster name. It contains 4 to 32 characters.
                Only letters, digits, hyphens (-), and underscores (_) are allowed. The value must start with a letter.
                Changing this parameter will create a new resource.
-        :param str status: The cluster status
-               + `100`: The operation, such as instance creation, is in progress.
-               + `200`: The cluster is available.
-               + `303`: The cluster is unavailable.
+        :param str spec_code: Instance specification code.
+        :param str status: Instance status.
         :param str type: Node type. The options are as follows:
         """
         if availability_zone is not None:
@@ -795,16 +793,16 @@ class ClusterNode(dict):
     @property
     @pulumi.getter(name="specCode")
     def spec_code(self) -> Optional[str]:
+        """
+        Instance specification code.
+        """
         return pulumi.get(self, "spec_code")
 
     @property
     @pulumi.getter
     def status(self) -> Optional[str]:
         """
-        The cluster status
-        + `100`: The operation, such as instance creation, is in progress.
-        + `200`: The cluster is available.
-        + `303`: The cluster is unavailable.
+        Instance status.
         """
         return pulumi.get(self, "status")
 
@@ -988,9 +986,11 @@ class ClusterNodeConfigVolume(dict):
                  volume_type: str):
         """
         :param int size: Specifies the volume size in GB, which must be a multiple of 10.
-        :param str volume_type: Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-               HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-               parameter will create a new resource.
+               Changing this parameter will create a new resource.
+        :param str volume_type: Specifies the volume type. Value options are as follows:
+               + **COMMON**: Common I/O. The SATA disk is used.
+               + **HIGH**: High I/O. The SAS disk is used.
+               + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
         """
         pulumi.set(__self__, "size", size)
         pulumi.set(__self__, "volume_type", volume_type)
@@ -1000,6 +1000,7 @@ class ClusterNodeConfigVolume(dict):
     def size(self) -> int:
         """
         Specifies the volume size in GB, which must be a multiple of 10.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "size")
 
@@ -1007,9 +1008,10 @@ class ClusterNodeConfigVolume(dict):
     @pulumi.getter(name="volumeType")
     def volume_type(self) -> str:
         """
-        Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-        HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-        parameter will create a new resource.
+        Specifies the volume type. Value options are as follows:
+        + **COMMON**: Common I/O. The SATA disk is used.
+        + **HIGH**: High I/O. The SAS disk is used.
+        + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
         """
         return pulumi.get(self, "volume_type")
 
@@ -1043,8 +1045,7 @@ class ClusterPublicAccess(dict):
         """
         :param int bandwidth: Specifies the public network bandwidth.
         :param bool whitelist_enabled: Specifies whether to enable the public network access control.
-        :param str whitelist: Specifies the whitelist of access control.
-               Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+        :param str whitelist: Specifies the whitelist of access control. The whitelisted account id must be unique.
         """
         pulumi.set(__self__, "bandwidth", bandwidth)
         pulumi.set(__self__, "whitelist_enabled", whitelist_enabled)
@@ -1078,8 +1079,7 @@ class ClusterPublicAccess(dict):
     @pulumi.getter
     def whitelist(self) -> Optional[str]:
         """
-        Specifies the whitelist of access control.
-        Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+        Specifies the whitelist of access control. The whitelisted account id must be unique.
         """
         return pulumi.get(self, "whitelist")
 
@@ -1108,8 +1108,7 @@ class ClusterVpcepEndpoint(dict):
                  whitelists: Optional[Sequence[str]] = None):
         """
         :param bool endpoint_with_dns_name: Specifies whether to enable the private domain name.
-        :param Sequence[str] whitelists: Specifies the whitelist of access control.
-               Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+        :param Sequence[str] whitelists: Specifies the whitelist of access control. The whitelisted account id must be unique.
         """
         pulumi.set(__self__, "endpoint_with_dns_name", endpoint_with_dns_name)
         if whitelists is not None:
@@ -1127,8 +1126,7 @@ class ClusterVpcepEndpoint(dict):
     @pulumi.getter
     def whitelists(self) -> Optional[Sequence[str]]:
         """
-        Specifies the whitelist of access control.
-        Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+        Specifies the whitelist of access control. The whitelisted account id must be unique.
         """
         return pulumi.get(self, "whitelists")
 

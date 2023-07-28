@@ -152,7 +152,7 @@ def get_gateway(description: Optional[str] = None,
                 vpc_id: Optional[str] = None,
                 opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetGatewayResult:
     """
-    Use this data source to get the information of an available HuaweiCloud NAT gateway.
+    Use this data source to get an available public NAT gateway within HuaweiCloud.
 
     ## Example Usage
 
@@ -160,7 +160,9 @@ def get_gateway(description: Optional[str] = None,
     import pulumi
     import pulumi_huaweicloud as huaweicloud
 
-    natgateway = huaweicloud.Nat.get_gateway(name="tf_test_natgateway")
+    config = pulumi.Config()
+    gateway_name = config.require_object("gatewayName")
+    test = huaweicloud.Nat.get_gateway(name=gateway_name)
     ```
 
 
@@ -169,19 +171,19 @@ def get_gateway(description: Optional[str] = None,
            and (>) are not allowed.
     :param str enterprise_project_id: Specifies the enterprise project ID of the NAT gateway.
     :param str id: Specifies the ID of the NAT gateway.
-    :param str name: Specifies the NAT gateway name. The name can contain only digits, letters, underscores (_)
-           , and hyphens(-).
+    :param str name: Specifies the public NAT gateway name.  
+           The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
     :param str region: Specifies the region in which to create the NAT gateway resource. If omitted, the
            provider-level region will be used.
-    :param str spec: The NAT gateway type. The value can be:
-           + `1`: small type, which supports up to 10,000 SNAT connections.
-           + `2`: medium type, which supports up to 50,000 SNAT connections.
-           + `3`: large type, which supports up to 200,000 SNAT connections.
-           + `4`: extra-large type, which supports up to 1,000,000 SNAT connections.
+    :param str spec: The public NAT gateway type. The valid values are as follows:
+           + **1**: Small type, which supports up to `10,000` SNAT connections.
+           + **2**: Medium type, which supports up to `50,000` SNAT connections.
+           + **3**: Large type, which supports up to `200,000` SNAT connections.
+           + **4**: Extra-large type, which supports up to `1,000,000` SNAT connections.
     :param str status: Specifies the status of the NAT gateway.
     :param str subnet_id: Specifies the subnet ID of the downstream interface (the next hop of the DVR) of the
-           NAT gateway.
-    :param str vpc_id: Specifies the ID of the VPC this NAT gateway belongs to.
+           public NAT gateway.
+    :param str vpc_id: Specifies the ID of the VPC this public NAT gateway belongs to.
     """
     __args__ = dict()
     __args__['description'] = description
@@ -226,7 +228,7 @@ def get_gateway_output(description: Optional[pulumi.Input[Optional[str]]] = None
                        vpc_id: Optional[pulumi.Input[Optional[str]]] = None,
                        opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetGatewayResult]:
     """
-    Use this data source to get the information of an available HuaweiCloud NAT gateway.
+    Use this data source to get an available public NAT gateway within HuaweiCloud.
 
     ## Example Usage
 
@@ -234,7 +236,9 @@ def get_gateway_output(description: Optional[pulumi.Input[Optional[str]]] = None
     import pulumi
     import pulumi_huaweicloud as huaweicloud
 
-    natgateway = huaweicloud.Nat.get_gateway(name="tf_test_natgateway")
+    config = pulumi.Config()
+    gateway_name = config.require_object("gatewayName")
+    test = huaweicloud.Nat.get_gateway(name=gateway_name)
     ```
 
 
@@ -243,18 +247,18 @@ def get_gateway_output(description: Optional[pulumi.Input[Optional[str]]] = None
            and (>) are not allowed.
     :param str enterprise_project_id: Specifies the enterprise project ID of the NAT gateway.
     :param str id: Specifies the ID of the NAT gateway.
-    :param str name: Specifies the NAT gateway name. The name can contain only digits, letters, underscores (_)
-           , and hyphens(-).
+    :param str name: Specifies the public NAT gateway name.  
+           The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
     :param str region: Specifies the region in which to create the NAT gateway resource. If omitted, the
            provider-level region will be used.
-    :param str spec: The NAT gateway type. The value can be:
-           + `1`: small type, which supports up to 10,000 SNAT connections.
-           + `2`: medium type, which supports up to 50,000 SNAT connections.
-           + `3`: large type, which supports up to 200,000 SNAT connections.
-           + `4`: extra-large type, which supports up to 1,000,000 SNAT connections.
+    :param str spec: The public NAT gateway type. The valid values are as follows:
+           + **1**: Small type, which supports up to `10,000` SNAT connections.
+           + **2**: Medium type, which supports up to `50,000` SNAT connections.
+           + **3**: Large type, which supports up to `200,000` SNAT connections.
+           + **4**: Extra-large type, which supports up to `1,000,000` SNAT connections.
     :param str status: Specifies the status of the NAT gateway.
     :param str subnet_id: Specifies the subnet ID of the downstream interface (the next hop of the DVR) of the
-           NAT gateway.
-    :param str vpc_id: Specifies the ID of the VPC this NAT gateway belongs to.
+           public NAT gateway.
+    :param str vpc_id: Specifies the ID of the VPC this public NAT gateway belongs to.
     """
     ...

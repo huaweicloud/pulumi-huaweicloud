@@ -19,21 +19,34 @@ class DedicatedDomainArgs:
                  domain: pulumi.Input[str],
                  servers: pulumi.Input[Sequence[pulumi.Input['DedicatedDomainServerArgs']]],
                  certificate_id: Optional[pulumi.Input[str]] = None,
+                 cipher: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  keep_policy: Optional[pulumi.Input[bool]] = None,
+                 pci3ds: Optional[pulumi.Input[bool]] = None,
+                 pci_dss: Optional[pulumi.Input[bool]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  protect_status: Optional[pulumi.Input[int]] = None,
                  proxy: Optional[pulumi.Input[bool]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
+                 region: Optional[pulumi.Input[str]] = None,
+                 tls: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a DedicatedDomain resource.
-        :param pulumi.Input[str] domain: Specifies the domain name to be protected. For example, www.example.com or
-               *.example.com. Changing this creates a new domain.
+        :param pulumi.Input[str] domain: Specifies the protected domain name or IP address (port allowed). For example,
+               `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
         :param pulumi.Input[Sequence[pulumi.Input['DedicatedDomainServerArgs']]] servers: The server configuration list of the domain. A maximum of 80 can be configured.
                The object structure is documented below.
         :param pulumi.Input[str] certificate_id: Specifies the certificate ID. This parameter is mandatory when `client_protocol`
                is set to HTTPS.
+        :param pulumi.Input[str] cipher: Specifies the cipher suite of domain. The options include `cipher_1`, `cipher_2`,
+               `cipher_3`, `cipher_4`, `cipher_default`.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF dedicated domain.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[bool] keep_policy: Specifies whether to retain the policy when deleting a domain name.
                Defaults to `true`.
+        :param pulumi.Input[bool] pci3ds: Specifies the status of the PCI 3DS compliance certification check. The options
+               include `true` and `false`. This parameter must be used together with tls and cipher.
+        :param pulumi.Input[bool] pci_dss: Specifies the status of the PCI DSS compliance certification check. The options
+               include `true` and `false`. This parameter must be used together with tls and cipher.
         :param pulumi.Input[str] policy_id: Specifies the policy ID associated with the domain. If not specified, a new policy
                will be created automatically.
         :param pulumi.Input[int] protect_status: The protection status of domain, `0`: suspended, `1`: enabled.
@@ -41,13 +54,23 @@ class DedicatedDomainArgs:
         :param pulumi.Input[bool] proxy: Specifies whether a proxy is configured. Default value is `false`.
         :param pulumi.Input[str] region: The region in which to create the dedicated mode domain resource. If omitted,
                the provider-level region will be used. Changing this setting will push a new domain.
+        :param pulumi.Input[str] tls: Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
+               `TLS v1.2`.
         """
         pulumi.set(__self__, "domain", domain)
         pulumi.set(__self__, "servers", servers)
         if certificate_id is not None:
             pulumi.set(__self__, "certificate_id", certificate_id)
+        if cipher is not None:
+            pulumi.set(__self__, "cipher", cipher)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if keep_policy is not None:
             pulumi.set(__self__, "keep_policy", keep_policy)
+        if pci3ds is not None:
+            pulumi.set(__self__, "pci3ds", pci3ds)
+        if pci_dss is not None:
+            pulumi.set(__self__, "pci_dss", pci_dss)
         if policy_id is not None:
             pulumi.set(__self__, "policy_id", policy_id)
         if protect_status is not None:
@@ -56,13 +79,15 @@ class DedicatedDomainArgs:
             pulumi.set(__self__, "proxy", proxy)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if tls is not None:
+            pulumi.set(__self__, "tls", tls)
 
     @property
     @pulumi.getter
     def domain(self) -> pulumi.Input[str]:
         """
-        Specifies the domain name to be protected. For example, www.example.com or
-        *.example.com. Changing this creates a new domain.
+        Specifies the protected domain name or IP address (port allowed). For example,
+        `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
         """
         return pulumi.get(self, "domain")
 
@@ -97,6 +122,32 @@ class DedicatedDomainArgs:
         pulumi.set(self, "certificate_id", value)
 
     @property
+    @pulumi.getter
+    def cipher(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the cipher suite of domain. The options include `cipher_1`, `cipher_2`,
+        `cipher_3`, `cipher_4`, `cipher_default`.
+        """
+        return pulumi.get(self, "cipher")
+
+    @cipher.setter
+    def cipher(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "cipher", value)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID of WAF dedicated domain.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
     @pulumi.getter(name="keepPolicy")
     def keep_policy(self) -> Optional[pulumi.Input[bool]]:
         """
@@ -108,6 +159,32 @@ class DedicatedDomainArgs:
     @keep_policy.setter
     def keep_policy(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "keep_policy", value)
+
+    @property
+    @pulumi.getter
+    def pci3ds(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies the status of the PCI 3DS compliance certification check. The options
+        include `true` and `false`. This parameter must be used together with tls and cipher.
+        """
+        return pulumi.get(self, "pci3ds")
+
+    @pci3ds.setter
+    def pci3ds(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "pci3ds", value)
+
+    @property
+    @pulumi.getter(name="pciDss")
+    def pci_dss(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies the status of the PCI DSS compliance certification check. The options
+        include `true` and `false`. This parameter must be used together with tls and cipher.
+        """
+        return pulumi.get(self, "pci_dss")
+
+    @pci_dss.setter
+    def pci_dss(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "pci_dss", value)
 
     @property
     @pulumi.getter(name="policyId")
@@ -160,6 +237,19 @@ class DedicatedDomainArgs:
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
 
+    @property
+    @pulumi.getter
+    def tls(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
+        `TLS v1.2`.
+        """
+        return pulumi.get(self, "tls")
+
+    @tls.setter
+    def tls(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "tls", value)
+
 
 @pulumi.input_type
 class _DedicatedDomainState:
@@ -171,7 +261,10 @@ class _DedicatedDomainState:
                  cipher: Optional[pulumi.Input[str]] = None,
                  compliance_certification: Optional[pulumi.Input[Mapping[str, pulumi.Input[bool]]]] = None,
                  domain: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  keep_policy: Optional[pulumi.Input[bool]] = None,
+                 pci3ds: Optional[pulumi.Input[bool]] = None,
+                 pci_dss: Optional[pulumi.Input[bool]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  protect_status: Optional[pulumi.Input[int]] = None,
                  protocol: Optional[pulumi.Input[str]] = None,
@@ -187,11 +280,19 @@ class _DedicatedDomainState:
         :param pulumi.Input[str] certificate_id: Specifies the certificate ID. This parameter is mandatory when `client_protocol`
                is set to HTTPS.
         :param pulumi.Input[str] certificate_name: The name of the certificate used by the domain name.
+        :param pulumi.Input[str] cipher: Specifies the cipher suite of domain. The options include `cipher_1`, `cipher_2`,
+               `cipher_3`, `cipher_4`, `cipher_default`.
         :param pulumi.Input[Mapping[str, pulumi.Input[bool]]] compliance_certification: The compliance certifications of the domain, values are:
-        :param pulumi.Input[str] domain: Specifies the domain name to be protected. For example, www.example.com or
-               *.example.com. Changing this creates a new domain.
+        :param pulumi.Input[str] domain: Specifies the protected domain name or IP address (port allowed). For example,
+               `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF dedicated domain.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[bool] keep_policy: Specifies whether to retain the policy when deleting a domain name.
                Defaults to `true`.
+        :param pulumi.Input[bool] pci3ds: Specifies the status of the PCI 3DS compliance certification check. The options
+               include `true` and `false`. This parameter must be used together with tls and cipher.
+        :param pulumi.Input[bool] pci_dss: Specifies the status of the PCI DSS compliance certification check. The options
+               include `true` and `false`. This parameter must be used together with tls and cipher.
         :param pulumi.Input[str] policy_id: Specifies the policy ID associated with the domain. If not specified, a new policy
                will be created automatically.
         :param pulumi.Input[int] protect_status: The protection status of domain, `0`: suspended, `1`: enabled.
@@ -202,7 +303,8 @@ class _DedicatedDomainState:
                the provider-level region will be used. Changing this setting will push a new domain.
         :param pulumi.Input[Sequence[pulumi.Input['DedicatedDomainServerArgs']]] servers: The server configuration list of the domain. A maximum of 80 can be configured.
                The object structure is documented below.
-        :param pulumi.Input[str] tls: The TLS configuration of domain.
+        :param pulumi.Input[str] tls: Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
+               `TLS v1.2`.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] traffic_identifier: The traffic identifier of domain. Valid values are:
         """
         if access_status is not None:
@@ -219,8 +321,14 @@ class _DedicatedDomainState:
             pulumi.set(__self__, "compliance_certification", compliance_certification)
         if domain is not None:
             pulumi.set(__self__, "domain", domain)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if keep_policy is not None:
             pulumi.set(__self__, "keep_policy", keep_policy)
+        if pci3ds is not None:
+            pulumi.set(__self__, "pci3ds", pci3ds)
+        if pci_dss is not None:
+            pulumi.set(__self__, "pci_dss", pci_dss)
         if policy_id is not None:
             pulumi.set(__self__, "policy_id", policy_id)
         if protect_status is not None:
@@ -290,6 +398,10 @@ class _DedicatedDomainState:
     @property
     @pulumi.getter
     def cipher(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the cipher suite of domain. The options include `cipher_1`, `cipher_2`,
+        `cipher_3`, `cipher_4`, `cipher_default`.
+        """
         return pulumi.get(self, "cipher")
 
     @cipher.setter
@@ -312,14 +424,27 @@ class _DedicatedDomainState:
     @pulumi.getter
     def domain(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the domain name to be protected. For example, www.example.com or
-        *.example.com. Changing this creates a new domain.
+        Specifies the protected domain name or IP address (port allowed). For example,
+        `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
         """
         return pulumi.get(self, "domain")
 
     @domain.setter
     def domain(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "domain", value)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID of WAF dedicated domain.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
 
     @property
     @pulumi.getter(name="keepPolicy")
@@ -333,6 +458,32 @@ class _DedicatedDomainState:
     @keep_policy.setter
     def keep_policy(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "keep_policy", value)
+
+    @property
+    @pulumi.getter
+    def pci3ds(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies the status of the PCI 3DS compliance certification check. The options
+        include `true` and `false`. This parameter must be used together with tls and cipher.
+        """
+        return pulumi.get(self, "pci3ds")
+
+    @pci3ds.setter
+    def pci3ds(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "pci3ds", value)
+
+    @property
+    @pulumi.getter(name="pciDss")
+    def pci_dss(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies the status of the PCI DSS compliance certification check. The options
+        include `true` and `false`. This parameter must be used together with tls and cipher.
+        """
+        return pulumi.get(self, "pci_dss")
+
+    @pci_dss.setter
+    def pci_dss(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "pci_dss", value)
 
     @property
     @pulumi.getter(name="policyId")
@@ -414,7 +565,8 @@ class _DedicatedDomainState:
     @pulumi.getter
     def tls(self) -> Optional[pulumi.Input[str]]:
         """
-        The TLS configuration of domain.
+        Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
+        `TLS v1.2`.
         """
         return pulumi.get(self, "tls")
 
@@ -441,13 +593,18 @@ class DedicatedDomain(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  certificate_id: Optional[pulumi.Input[str]] = None,
+                 cipher: Optional[pulumi.Input[str]] = None,
                  domain: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  keep_policy: Optional[pulumi.Input[bool]] = None,
+                 pci3ds: Optional[pulumi.Input[bool]] = None,
+                 pci_dss: Optional[pulumi.Input[bool]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  protect_status: Optional[pulumi.Input[int]] = None,
                  proxy: Optional[pulumi.Input[bool]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  servers: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DedicatedDomainServerArgs']]]]] = None,
+                 tls: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
         Manages a dedicated mode domain resource within HuaweiCloud.
@@ -464,10 +621,11 @@ class DedicatedDomain(pulumi.CustomResource):
         config = pulumi.Config()
         certificated_id = config.require_object("certificatedId")
         vpc_id = config.require_object("vpcId")
-        dedicated_engine_id = config.require_object("dedicatedEngineId")
+        enterprise_project_id = config.require_object("enterpriseProjectId")
         domain1 = huaweicloud.waf.DedicatedDomain("domain1",
             domain="www.example.com",
-            certificate_id=huaweicloud_waf_certificate["certificate_1"]["id"],
+            certificate_id=certificated_id,
+            enterprise_project_id=enterprise_project_id,
             servers=[huaweicloud.waf.DedicatedDomainServerArgs(
                 client_protocol="HTTPS",
                 server_protocol="HTTP",
@@ -480,20 +638,34 @@ class DedicatedDomain(pulumi.CustomResource):
 
         ## Import
 
-        Dedicated mode domain can be imported using the `id`, e.g.
+        There are two ways to import WAF dedicated domain state. * Using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Waf/dedicatedDomain:DedicatedDomain domain_1 69e9a86becb4424298cc6bdeacbf69d5
+         $ pulumi import huaweicloud:Waf/dedicatedDomain:DedicatedDomain test <id>
+        ```
+
+         * Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Waf/dedicatedDomain:DedicatedDomain test <id>/<enterprise_project_id>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] certificate_id: Specifies the certificate ID. This parameter is mandatory when `client_protocol`
                is set to HTTPS.
-        :param pulumi.Input[str] domain: Specifies the domain name to be protected. For example, www.example.com or
-               *.example.com. Changing this creates a new domain.
+        :param pulumi.Input[str] cipher: Specifies the cipher suite of domain. The options include `cipher_1`, `cipher_2`,
+               `cipher_3`, `cipher_4`, `cipher_default`.
+        :param pulumi.Input[str] domain: Specifies the protected domain name or IP address (port allowed). For example,
+               `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF dedicated domain.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[bool] keep_policy: Specifies whether to retain the policy when deleting a domain name.
                Defaults to `true`.
+        :param pulumi.Input[bool] pci3ds: Specifies the status of the PCI 3DS compliance certification check. The options
+               include `true` and `false`. This parameter must be used together with tls and cipher.
+        :param pulumi.Input[bool] pci_dss: Specifies the status of the PCI DSS compliance certification check. The options
+               include `true` and `false`. This parameter must be used together with tls and cipher.
         :param pulumi.Input[str] policy_id: Specifies the policy ID associated with the domain. If not specified, a new policy
                will be created automatically.
         :param pulumi.Input[int] protect_status: The protection status of domain, `0`: suspended, `1`: enabled.
@@ -503,6 +675,8 @@ class DedicatedDomain(pulumi.CustomResource):
                the provider-level region will be used. Changing this setting will push a new domain.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DedicatedDomainServerArgs']]]] servers: The server configuration list of the domain. A maximum of 80 can be configured.
                The object structure is documented below.
+        :param pulumi.Input[str] tls: Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
+               `TLS v1.2`.
         """
         ...
     @overload
@@ -525,10 +699,11 @@ class DedicatedDomain(pulumi.CustomResource):
         config = pulumi.Config()
         certificated_id = config.require_object("certificatedId")
         vpc_id = config.require_object("vpcId")
-        dedicated_engine_id = config.require_object("dedicatedEngineId")
+        enterprise_project_id = config.require_object("enterpriseProjectId")
         domain1 = huaweicloud.waf.DedicatedDomain("domain1",
             domain="www.example.com",
-            certificate_id=huaweicloud_waf_certificate["certificate_1"]["id"],
+            certificate_id=certificated_id,
+            enterprise_project_id=enterprise_project_id,
             servers=[huaweicloud.waf.DedicatedDomainServerArgs(
                 client_protocol="HTTPS",
                 server_protocol="HTTP",
@@ -541,10 +716,16 @@ class DedicatedDomain(pulumi.CustomResource):
 
         ## Import
 
-        Dedicated mode domain can be imported using the `id`, e.g.
+        There are two ways to import WAF dedicated domain state. * Using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Waf/dedicatedDomain:DedicatedDomain domain_1 69e9a86becb4424298cc6bdeacbf69d5
+         $ pulumi import huaweicloud:Waf/dedicatedDomain:DedicatedDomain test <id>
+        ```
+
+         * Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Waf/dedicatedDomain:DedicatedDomain test <id>/<enterprise_project_id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -563,13 +744,18 @@ class DedicatedDomain(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  certificate_id: Optional[pulumi.Input[str]] = None,
+                 cipher: Optional[pulumi.Input[str]] = None,
                  domain: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  keep_policy: Optional[pulumi.Input[bool]] = None,
+                 pci3ds: Optional[pulumi.Input[bool]] = None,
+                 pci_dss: Optional[pulumi.Input[bool]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  protect_status: Optional[pulumi.Input[int]] = None,
                  proxy: Optional[pulumi.Input[bool]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  servers: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DedicatedDomainServerArgs']]]]] = None,
+                 tls: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -580,10 +766,14 @@ class DedicatedDomain(pulumi.CustomResource):
             __props__ = DedicatedDomainArgs.__new__(DedicatedDomainArgs)
 
             __props__.__dict__["certificate_id"] = certificate_id
+            __props__.__dict__["cipher"] = cipher
             if domain is None and not opts.urn:
                 raise TypeError("Missing required property 'domain'")
             __props__.__dict__["domain"] = domain
+            __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["keep_policy"] = keep_policy
+            __props__.__dict__["pci3ds"] = pci3ds
+            __props__.__dict__["pci_dss"] = pci_dss
             __props__.__dict__["policy_id"] = policy_id
             __props__.__dict__["protect_status"] = protect_status
             __props__.__dict__["proxy"] = proxy
@@ -591,13 +781,12 @@ class DedicatedDomain(pulumi.CustomResource):
             if servers is None and not opts.urn:
                 raise TypeError("Missing required property 'servers'")
             __props__.__dict__["servers"] = servers
+            __props__.__dict__["tls"] = tls
             __props__.__dict__["access_status"] = None
             __props__.__dict__["alarm_page"] = None
             __props__.__dict__["certificate_name"] = None
-            __props__.__dict__["cipher"] = None
             __props__.__dict__["compliance_certification"] = None
             __props__.__dict__["protocol"] = None
-            __props__.__dict__["tls"] = None
             __props__.__dict__["traffic_identifier"] = None
         super(DedicatedDomain, __self__).__init__(
             'huaweicloud:Waf/dedicatedDomain:DedicatedDomain',
@@ -616,7 +805,10 @@ class DedicatedDomain(pulumi.CustomResource):
             cipher: Optional[pulumi.Input[str]] = None,
             compliance_certification: Optional[pulumi.Input[Mapping[str, pulumi.Input[bool]]]] = None,
             domain: Optional[pulumi.Input[str]] = None,
+            enterprise_project_id: Optional[pulumi.Input[str]] = None,
             keep_policy: Optional[pulumi.Input[bool]] = None,
+            pci3ds: Optional[pulumi.Input[bool]] = None,
+            pci_dss: Optional[pulumi.Input[bool]] = None,
             policy_id: Optional[pulumi.Input[str]] = None,
             protect_status: Optional[pulumi.Input[int]] = None,
             protocol: Optional[pulumi.Input[str]] = None,
@@ -637,11 +829,19 @@ class DedicatedDomain(pulumi.CustomResource):
         :param pulumi.Input[str] certificate_id: Specifies the certificate ID. This parameter is mandatory when `client_protocol`
                is set to HTTPS.
         :param pulumi.Input[str] certificate_name: The name of the certificate used by the domain name.
+        :param pulumi.Input[str] cipher: Specifies the cipher suite of domain. The options include `cipher_1`, `cipher_2`,
+               `cipher_3`, `cipher_4`, `cipher_default`.
         :param pulumi.Input[Mapping[str, pulumi.Input[bool]]] compliance_certification: The compliance certifications of the domain, values are:
-        :param pulumi.Input[str] domain: Specifies the domain name to be protected. For example, www.example.com or
-               *.example.com. Changing this creates a new domain.
+        :param pulumi.Input[str] domain: Specifies the protected domain name or IP address (port allowed). For example,
+               `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF dedicated domain.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[bool] keep_policy: Specifies whether to retain the policy when deleting a domain name.
                Defaults to `true`.
+        :param pulumi.Input[bool] pci3ds: Specifies the status of the PCI 3DS compliance certification check. The options
+               include `true` and `false`. This parameter must be used together with tls and cipher.
+        :param pulumi.Input[bool] pci_dss: Specifies the status of the PCI DSS compliance certification check. The options
+               include `true` and `false`. This parameter must be used together with tls and cipher.
         :param pulumi.Input[str] policy_id: Specifies the policy ID associated with the domain. If not specified, a new policy
                will be created automatically.
         :param pulumi.Input[int] protect_status: The protection status of domain, `0`: suspended, `1`: enabled.
@@ -652,7 +852,8 @@ class DedicatedDomain(pulumi.CustomResource):
                the provider-level region will be used. Changing this setting will push a new domain.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DedicatedDomainServerArgs']]]] servers: The server configuration list of the domain. A maximum of 80 can be configured.
                The object structure is documented below.
-        :param pulumi.Input[str] tls: The TLS configuration of domain.
+        :param pulumi.Input[str] tls: Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
+               `TLS v1.2`.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] traffic_identifier: The traffic identifier of domain. Valid values are:
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -666,7 +867,10 @@ class DedicatedDomain(pulumi.CustomResource):
         __props__.__dict__["cipher"] = cipher
         __props__.__dict__["compliance_certification"] = compliance_certification
         __props__.__dict__["domain"] = domain
+        __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["keep_policy"] = keep_policy
+        __props__.__dict__["pci3ds"] = pci3ds
+        __props__.__dict__["pci_dss"] = pci_dss
         __props__.__dict__["policy_id"] = policy_id
         __props__.__dict__["protect_status"] = protect_status
         __props__.__dict__["protocol"] = protocol
@@ -713,6 +917,10 @@ class DedicatedDomain(pulumi.CustomResource):
     @property
     @pulumi.getter
     def cipher(self) -> pulumi.Output[str]:
+        """
+        Specifies the cipher suite of domain. The options include `cipher_1`, `cipher_2`,
+        `cipher_3`, `cipher_4`, `cipher_default`.
+        """
         return pulumi.get(self, "cipher")
 
     @property
@@ -727,10 +935,19 @@ class DedicatedDomain(pulumi.CustomResource):
     @pulumi.getter
     def domain(self) -> pulumi.Output[str]:
         """
-        Specifies the domain name to be protected. For example, www.example.com or
-        *.example.com. Changing this creates a new domain.
+        Specifies the protected domain name or IP address (port allowed). For example,
+        `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
         """
         return pulumi.get(self, "domain")
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the enterprise project ID of WAF dedicated domain.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
 
     @property
     @pulumi.getter(name="keepPolicy")
@@ -740,6 +957,24 @@ class DedicatedDomain(pulumi.CustomResource):
         Defaults to `true`.
         """
         return pulumi.get(self, "keep_policy")
+
+    @property
+    @pulumi.getter
+    def pci3ds(self) -> pulumi.Output[bool]:
+        """
+        Specifies the status of the PCI 3DS compliance certification check. The options
+        include `true` and `false`. This parameter must be used together with tls and cipher.
+        """
+        return pulumi.get(self, "pci3ds")
+
+    @property
+    @pulumi.getter(name="pciDss")
+    def pci_dss(self) -> pulumi.Output[bool]:
+        """
+        Specifies the status of the PCI DSS compliance certification check. The options
+        include `true` and `false`. This parameter must be used together with tls and cipher.
+        """
+        return pulumi.get(self, "pci_dss")
 
     @property
     @pulumi.getter(name="policyId")
@@ -797,7 +1032,8 @@ class DedicatedDomain(pulumi.CustomResource):
     @pulumi.getter
     def tls(self) -> pulumi.Output[str]:
         """
-        The TLS configuration of domain.
+        Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
+        `TLS v1.2`.
         """
         return pulumi.get(self, "tls")
 

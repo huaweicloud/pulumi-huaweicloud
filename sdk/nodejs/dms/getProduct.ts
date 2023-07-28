@@ -5,7 +5,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Use this data source to get the ID of an available HuaweiCloud dms product.
+ * Use this data source to get the ID of an available HuaweiCloud DMS product.
  *
  * ## Example Usage
  * ### Filter DMS kafka product list by I/O specification
@@ -54,7 +54,6 @@ export function getProduct(args: GetProductArgs, opts?: pulumi.InvokeOptions): P
         "region": args.region,
         "storage": args.storage,
         "storageSpecCode": args.storageSpecCode,
-        "storageSpecCodes": args.storageSpecCodes,
         "version": args.version,
         "vmSpecification": args.vmSpecification,
     }, opts);
@@ -109,7 +108,6 @@ export interface GetProductArgs {
      * The valid values are **dms.physical.storage.high** and **dms.physical.storage.ultra**.
      */
     storageSpecCode?: string;
-    storageSpecCodes?: string[];
     /**
      * Indicates the version of a message engine.
      */
@@ -141,6 +139,9 @@ export interface GetProductResult {
     readonly region: string;
     readonly storage: string;
     readonly storageSpecCode: string;
+    /**
+     * The available I/O specifications.
+     */
     readonly storageSpecCodes: string[];
     readonly version: string;
     readonly vmSpecification: string;
@@ -199,7 +200,6 @@ export interface GetProductOutputArgs {
      * The valid values are **dms.physical.storage.high** and **dms.physical.storage.ultra**.
      */
     storageSpecCode?: pulumi.Input<string>;
-    storageSpecCodes?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Indicates the version of a message engine.
      */

@@ -18,30 +18,29 @@ class AddonArgs:
     def __init__(__self__, *,
                  cluster_id: pulumi.Input[str],
                  template_name: pulumi.Input[str],
-                 version: pulumi.Input[str],
                  region: Optional[pulumi.Input[str]] = None,
-                 values: Optional[pulumi.Input['AddonValuesArgs']] = None):
+                 values: Optional[pulumi.Input['AddonValuesArgs']] = None,
+                 version: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Addon resource.
         :param pulumi.Input[str] cluster_id: Specifies the cluster ID.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] template_name: Specifies the name of the add-on template.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] version: Specifies the version of the add-on.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the CCE add-on resource.
                If omitted, the provider-level region will be used. Changing this creates a new CCE add-on resource.
         :param pulumi.Input['AddonValuesArgs'] values: Specifies the add-on template installation parameters.
                These parameters vary depending on the add-on. Structure is documented below.
-               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] version: Specifies the version of the add-on.
         """
         pulumi.set(__self__, "cluster_id", cluster_id)
         pulumi.set(__self__, "template_name", template_name)
-        pulumi.set(__self__, "version", version)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if values is not None:
             pulumi.set(__self__, "values", values)
+        if version is not None:
+            pulumi.set(__self__, "version", version)
 
     @property
     @pulumi.getter(name="clusterId")
@@ -71,19 +70,6 @@ class AddonArgs:
 
     @property
     @pulumi.getter
-    def version(self) -> pulumi.Input[str]:
-        """
-        Specifies the version of the add-on.
-        Changing this parameter will create a new resource.
-        """
-        return pulumi.get(self, "version")
-
-    @version.setter
-    def version(self, value: pulumi.Input[str]):
-        pulumi.set(self, "version", value)
-
-    @property
-    @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the region in which to create the CCE add-on resource.
@@ -101,13 +87,24 @@ class AddonArgs:
         """
         Specifies the add-on template installation parameters.
         These parameters vary depending on the add-on. Structure is documented below.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "values")
 
     @values.setter
     def values(self, value: Optional[pulumi.Input['AddonValuesArgs']]):
         pulumi.set(self, "values", value)
+
+    @property
+    @pulumi.getter
+    def version(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the version of the add-on.
+        """
+        return pulumi.get(self, "version")
+
+    @version.setter
+    def version(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "version", value)
 
 
 @pulumi.input_type
@@ -132,9 +129,7 @@ class _AddonState:
                Changing this parameter will create a new resource.
         :param pulumi.Input['AddonValuesArgs'] values: Specifies the add-on template installation parameters.
                These parameters vary depending on the add-on. Structure is documented below.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] version: Specifies the version of the add-on.
-               Changing this parameter will create a new resource.
         """
         if cluster_id is not None:
             pulumi.set(__self__, "cluster_id", cluster_id)
@@ -220,7 +215,6 @@ class _AddonState:
         """
         Specifies the add-on template installation parameters.
         These parameters vary depending on the add-on. Structure is documented below.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "values")
 
@@ -233,7 +227,6 @@ class _AddonState:
     def version(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the version of the add-on.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "version")
 
@@ -288,9 +281,7 @@ class Addon(pulumi.CustomResource):
                Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['AddonValuesArgs']] values: Specifies the add-on template installation parameters.
                These parameters vary depending on the add-on. Structure is documented below.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] version: Specifies the version of the add-on.
-               Changing this parameter will create a new resource.
         """
         ...
     @overload
@@ -360,8 +351,6 @@ class Addon(pulumi.CustomResource):
                 raise TypeError("Missing required property 'template_name'")
             __props__.__dict__["template_name"] = template_name
             __props__.__dict__["values"] = values
-            if version is None and not opts.urn:
-                raise TypeError("Missing required property 'version'")
             __props__.__dict__["version"] = version
             __props__.__dict__["description"] = None
             __props__.__dict__["status"] = None
@@ -399,9 +388,7 @@ class Addon(pulumi.CustomResource):
                Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['AddonValuesArgs']] values: Specifies the add-on template installation parameters.
                These parameters vary depending on the add-on. Structure is documented below.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] version: Specifies the version of the add-on.
-               Changing this parameter will create a new resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -465,7 +452,6 @@ class Addon(pulumi.CustomResource):
         """
         Specifies the add-on template installation parameters.
         These parameters vary depending on the add-on. Structure is documented below.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "values")
 
@@ -474,7 +460,6 @@ class Addon(pulumi.CustomResource):
     def version(self) -> pulumi.Output[str]:
         """
         Specifies the version of the add-on.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "version")
 

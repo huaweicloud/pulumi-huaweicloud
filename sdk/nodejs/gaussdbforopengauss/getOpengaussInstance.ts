@@ -117,7 +117,15 @@ export interface GetOpengaussInstanceResult {
      * Indicates the list of private IP address of the nodes.
      */
     readonly privateIps: string[];
+    /**
+     * Indicates the public IP address of the DB instance.
+     */
+    readonly publicIps: string[];
     readonly region: string;
+    /**
+     * Indicates the replica num.
+     */
+    readonly replicaNum: number;
     /**
      * Indicates the security group ID.
      */

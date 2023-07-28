@@ -29,6 +29,7 @@ export function getDedicatedInstances(args?: GetDedicatedInstancesArgs, opts?: p
 
     opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
     return pulumi.runtime.invoke("huaweicloud:Waf/getDedicatedInstances:getDedicatedInstances", {
+        "enterpriseProjectId": args.enterpriseProjectId,
         "id": args.id,
         "name": args.name,
         "region": args.region,
@@ -39,6 +40,10 @@ export function getDedicatedInstances(args?: GetDedicatedInstancesArgs, opts?: p
  * A collection of arguments for invoking getDedicatedInstances.
  */
 export interface GetDedicatedInstancesArgs {
+    /**
+     * The enterprise project ID of WAF dedicated instance.
+     */
+    enterpriseProjectId?: string;
     /**
      * The id of WAF dedicated instance.
      */
@@ -58,10 +63,14 @@ export interface GetDedicatedInstancesArgs {
  * A collection of values returned by getDedicatedInstances.
  */
 export interface GetDedicatedInstancesResult {
+    readonly enterpriseProjectId?: string;
     /**
-     * The id of WAF dedicated instance.
+     * The ID of WAF dedicated instance.
      */
     readonly id: string;
+    /**
+     * An array of available WAF dedicated instances.
+     */
     readonly instances: outputs.Waf.GetDedicatedInstancesInstance[];
     /**
      * The name of WAF dedicated instance.
@@ -78,6 +87,10 @@ export function getDedicatedInstancesOutput(args?: GetDedicatedInstancesOutputAr
  * A collection of arguments for invoking getDedicatedInstances.
  */
 export interface GetDedicatedInstancesOutputArgs {
+    /**
+     * The enterprise project ID of WAF dedicated instance.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * The id of WAF dedicated instance.
      */

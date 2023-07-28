@@ -23,19 +23,21 @@ class GroupArgs:
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Group resource.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API group
-               belongs to. Changing this will create a new API group resource.
-        :param pulumi.Input[str] description: Specifies the description about the API group. The description contain a maximum of
-               255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or Unicode
-               format.
-        :param pulumi.Input[Sequence[pulumi.Input['GroupEnvironmentArgs']]] environments: Specifies an array of one or more APIG environments of the associated APIG group. The
-               object structure is documented below.
-        :param pulumi.Input[str] name: Specifies the variable name, which can contains of 3 to 32 characters, starting with a
-               letter. Only letters, digits, hyphens (-), and underscores (_) are allowed. In the definition of an API, `name` (
-               case-sensitive) indicates a variable, such as #Name#. It is replaced by the actual value when the API is published in
-               an environment. The variable names are not allowed to be repeated for an API group.
-        :param pulumi.Input[str] region: Specifies the region in which to create the API group resource. If omitted,
-               the provider-level region will be used. Changing this will create a new API group resource.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the group belongs.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] description: Specifies the group description.  
+               The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+               Chinese characters must be in **UTF-8** or **Unicode** format.
+        :param pulumi.Input[Sequence[pulumi.Input['GroupEnvironmentArgs']]] environments: Specifies an array of one or more environments of the associated group.  
+               The object structure is documented below.
+        :param pulumi.Input[str] name: Specifies the variable name.  
+               The valid length is limited from `3` to `32` characters.
+               Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
+               In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
+               It is replaced by the actual value when the API is published in an environment.
+               The variable names are not allowed to be repeated for an API group.
+        :param pulumi.Input[str] region: Specifies the region where the APIG (API) group is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         pulumi.set(__self__, "instance_id", instance_id)
         if description is not None:
@@ -51,8 +53,8 @@ class GroupArgs:
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Input[str]:
         """
-        Specifies an ID of the APIG dedicated instance to which the API group
-        belongs to. Changing this will create a new API group resource.
+        Specifies the ID of the dedicated instance to which the group belongs.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -64,9 +66,9 @@ class GroupArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description about the API group. The description contain a maximum of
-        255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or Unicode
-        format.
+        Specifies the group description.  
+        The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+        Chinese characters must be in **UTF-8** or **Unicode** format.
         """
         return pulumi.get(self, "description")
 
@@ -78,8 +80,8 @@ class GroupArgs:
     @pulumi.getter
     def environments(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['GroupEnvironmentArgs']]]]:
         """
-        Specifies an array of one or more APIG environments of the associated APIG group. The
-        object structure is documented below.
+        Specifies an array of one or more environments of the associated group.  
+        The object structure is documented below.
         """
         return pulumi.get(self, "environments")
 
@@ -91,10 +93,12 @@ class GroupArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the variable name, which can contains of 3 to 32 characters, starting with a
-        letter. Only letters, digits, hyphens (-), and underscores (_) are allowed. In the definition of an API, `name` (
-        case-sensitive) indicates a variable, such as #Name#. It is replaced by the actual value when the API is published in
-        an environment. The variable names are not allowed to be repeated for an API group.
+        Specifies the variable name.  
+        The valid length is limited from `3` to `32` characters.
+        Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
+        In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
+        It is replaced by the actual value when the API is published in an environment.
+        The variable names are not allowed to be repeated for an API group.
         """
         return pulumi.get(self, "name")
 
@@ -106,8 +110,8 @@ class GroupArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create the API group resource. If omitted,
-        the provider-level region will be used. Changing this will create a new API group resource.
+        Specifies the region where the APIG (API) group is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -124,26 +128,29 @@ class _GroupState:
                  instance_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
-                 registraion_time: Optional[pulumi.Input[str]] = None,
-                 update_time: Optional[pulumi.Input[str]] = None):
+                 registration_time: Optional[pulumi.Input[str]] = None,
+                 update_time: Optional[pulumi.Input[str]] = None,
+                 updated_at: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Group resources.
-        :param pulumi.Input[str] description: Specifies the description about the API group. The description contain a maximum of
-               255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or Unicode
-               format.
-        :param pulumi.Input[Sequence[pulumi.Input['GroupEnvironmentArgs']]] environments: Specifies an array of one or more APIG environments of the associated APIG group. The
-               object structure is documented below.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API group
-               belongs to. Changing this will create a new API group resource.
-        :param pulumi.Input[str] name: Specifies the variable name, which can contains of 3 to 32 characters, starting with a
-               letter. Only letters, digits, hyphens (-), and underscores (_) are allowed. In the definition of an API, `name` (
-               case-sensitive) indicates a variable, such as #Name#. It is replaced by the actual value when the API is published in
-               an environment. The variable names are not allowed to be repeated for an API group.
-        :param pulumi.Input[str] region: Specifies the region in which to create the API group resource. If omitted,
-               the provider-level region will be used. Changing this will create a new API group resource.
-        :param pulumi.Input[str] registraion_time: Registration time, in RFC-3339 format.
-        :param pulumi.Input[str] update_time: Time when the API group was last modified, in RFC-3339 format.
-               * `environment/variable/variable_id` - ID of the environment variable.
+        :param pulumi.Input[str] description: Specifies the group description.  
+               The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+               Chinese characters must be in **UTF-8** or **Unicode** format.
+        :param pulumi.Input[Sequence[pulumi.Input['GroupEnvironmentArgs']]] environments: Specifies an array of one or more environments of the associated group.  
+               The object structure is documented below.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the group belongs.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the variable name.  
+               The valid length is limited from `3` to `32` characters.
+               Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
+               In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
+               It is replaced by the actual value when the API is published in an environment.
+               The variable names are not allowed to be repeated for an API group.
+        :param pulumi.Input[str] region: Specifies the region where the APIG (API) group is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[str] registration_time: The registration time, in RFC-3339 format.
+        :param pulumi.Input[str] update_time: schema: Deprecated; The latest update time of the group.
+        :param pulumi.Input[str] updated_at: The time when the API group was last modified, in RFC-3339 format.
         """
         if description is not None:
             pulumi.set(__self__, "description", description)
@@ -155,18 +162,23 @@ class _GroupState:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
-        if registraion_time is not None:
-            pulumi.set(__self__, "registraion_time", registraion_time)
+        if registration_time is not None:
+            pulumi.set(__self__, "registration_time", registration_time)
+        if update_time is not None:
+            warnings.warn("""Use 'updated_at' instead""", DeprecationWarning)
+            pulumi.log.warn("""update_time is deprecated: Use 'updated_at' instead""")
         if update_time is not None:
             pulumi.set(__self__, "update_time", update_time)
+        if updated_at is not None:
+            pulumi.set(__self__, "updated_at", updated_at)
 
     @property
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description about the API group. The description contain a maximum of
-        255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or Unicode
-        format.
+        Specifies the group description.  
+        The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+        Chinese characters must be in **UTF-8** or **Unicode** format.
         """
         return pulumi.get(self, "description")
 
@@ -178,8 +190,8 @@ class _GroupState:
     @pulumi.getter
     def environments(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['GroupEnvironmentArgs']]]]:
         """
-        Specifies an array of one or more APIG environments of the associated APIG group. The
-        object structure is documented below.
+        Specifies an array of one or more environments of the associated group.  
+        The object structure is documented below.
         """
         return pulumi.get(self, "environments")
 
@@ -191,8 +203,8 @@ class _GroupState:
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies an ID of the APIG dedicated instance to which the API group
-        belongs to. Changing this will create a new API group resource.
+        Specifies the ID of the dedicated instance to which the group belongs.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -204,10 +216,12 @@ class _GroupState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the variable name, which can contains of 3 to 32 characters, starting with a
-        letter. Only letters, digits, hyphens (-), and underscores (_) are allowed. In the definition of an API, `name` (
-        case-sensitive) indicates a variable, such as #Name#. It is replaced by the actual value when the API is published in
-        an environment. The variable names are not allowed to be repeated for an API group.
+        Specifies the variable name.  
+        The valid length is limited from `3` to `32` characters.
+        Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
+        In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
+        It is replaced by the actual value when the API is published in an environment.
+        The variable names are not allowed to be repeated for an API group.
         """
         return pulumi.get(self, "name")
 
@@ -219,8 +233,8 @@ class _GroupState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create the API group resource. If omitted,
-        the provider-level region will be used. Changing this will create a new API group resource.
+        Specifies the region where the APIG (API) group is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -229,29 +243,40 @@ class _GroupState:
         pulumi.set(self, "region", value)
 
     @property
-    @pulumi.getter(name="registraionTime")
-    def registraion_time(self) -> Optional[pulumi.Input[str]]:
+    @pulumi.getter(name="registrationTime")
+    def registration_time(self) -> Optional[pulumi.Input[str]]:
         """
-        Registration time, in RFC-3339 format.
+        The registration time, in RFC-3339 format.
         """
-        return pulumi.get(self, "registraion_time")
+        return pulumi.get(self, "registration_time")
 
-    @registraion_time.setter
-    def registraion_time(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "registraion_time", value)
+    @registration_time.setter
+    def registration_time(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "registration_time", value)
 
     @property
     @pulumi.getter(name="updateTime")
     def update_time(self) -> Optional[pulumi.Input[str]]:
         """
-        Time when the API group was last modified, in RFC-3339 format.
-        * `environment/variable/variable_id` - ID of the environment variable.
+        schema: Deprecated; The latest update time of the group.
         """
         return pulumi.get(self, "update_time")
 
     @update_time.setter
     def update_time(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "update_time", value)
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The time when the API group was last modified, in RFC-3339 format.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @updated_at.setter
+    def updated_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "updated_at", value)
 
 
 class Group(pulumi.CustomResource):
@@ -293,27 +318,29 @@ class Group(pulumi.CustomResource):
 
         ## Import
 
-        API groups of the APIG can be imported using their `id` and the ID of the APIG instance to which the group belongs, separated by a slash, e.g.
+        API groups can be imported using their `id` and the ID of the related dedicated instance, separated by a slash, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/group:Group test <instance id>/<id>
+         $ pulumi import huaweicloud:DedicatedApig/group:Group test <instance_id>/<id>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] description: Specifies the description about the API group. The description contain a maximum of
-               255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or Unicode
-               format.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupEnvironmentArgs']]]] environments: Specifies an array of one or more APIG environments of the associated APIG group. The
-               object structure is documented below.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API group
-               belongs to. Changing this will create a new API group resource.
-        :param pulumi.Input[str] name: Specifies the variable name, which can contains of 3 to 32 characters, starting with a
-               letter. Only letters, digits, hyphens (-), and underscores (_) are allowed. In the definition of an API, `name` (
-               case-sensitive) indicates a variable, such as #Name#. It is replaced by the actual value when the API is published in
-               an environment. The variable names are not allowed to be repeated for an API group.
-        :param pulumi.Input[str] region: Specifies the region in which to create the API group resource. If omitted,
-               the provider-level region will be used. Changing this will create a new API group resource.
+        :param pulumi.Input[str] description: Specifies the group description.  
+               The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+               Chinese characters must be in **UTF-8** or **Unicode** format.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupEnvironmentArgs']]]] environments: Specifies an array of one or more environments of the associated group.  
+               The object structure is documented below.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the group belongs.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the variable name.  
+               The valid length is limited from `3` to `32` characters.
+               Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
+               In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
+               It is replaced by the actual value when the API is published in an environment.
+               The variable names are not allowed to be repeated for an API group.
+        :param pulumi.Input[str] region: Specifies the region where the APIG (API) group is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         ...
     @overload
@@ -349,10 +376,10 @@ class Group(pulumi.CustomResource):
 
         ## Import
 
-        API groups of the APIG can be imported using their `id` and the ID of the APIG instance to which the group belongs, separated by a slash, e.g.
+        API groups can be imported using their `id` and the ID of the related dedicated instance, separated by a slash, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/group:Group test <instance id>/<id>
+         $ pulumi import huaweicloud:DedicatedApig/group:Group test <instance_id>/<id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -391,8 +418,9 @@ class Group(pulumi.CustomResource):
             __props__.__dict__["instance_id"] = instance_id
             __props__.__dict__["name"] = name
             __props__.__dict__["region"] = region
-            __props__.__dict__["registraion_time"] = None
+            __props__.__dict__["registration_time"] = None
             __props__.__dict__["update_time"] = None
+            __props__.__dict__["updated_at"] = None
         super(Group, __self__).__init__(
             'huaweicloud:DedicatedApig/group:Group',
             resource_name,
@@ -408,8 +436,9 @@ class Group(pulumi.CustomResource):
             instance_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
-            registraion_time: Optional[pulumi.Input[str]] = None,
-            update_time: Optional[pulumi.Input[str]] = None) -> 'Group':
+            registration_time: Optional[pulumi.Input[str]] = None,
+            update_time: Optional[pulumi.Input[str]] = None,
+            updated_at: Optional[pulumi.Input[str]] = None) -> 'Group':
         """
         Get an existing Group resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -417,22 +446,24 @@ class Group(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] description: Specifies the description about the API group. The description contain a maximum of
-               255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or Unicode
-               format.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupEnvironmentArgs']]]] environments: Specifies an array of one or more APIG environments of the associated APIG group. The
-               object structure is documented below.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API group
-               belongs to. Changing this will create a new API group resource.
-        :param pulumi.Input[str] name: Specifies the variable name, which can contains of 3 to 32 characters, starting with a
-               letter. Only letters, digits, hyphens (-), and underscores (_) are allowed. In the definition of an API, `name` (
-               case-sensitive) indicates a variable, such as #Name#. It is replaced by the actual value when the API is published in
-               an environment. The variable names are not allowed to be repeated for an API group.
-        :param pulumi.Input[str] region: Specifies the region in which to create the API group resource. If omitted,
-               the provider-level region will be used. Changing this will create a new API group resource.
-        :param pulumi.Input[str] registraion_time: Registration time, in RFC-3339 format.
-        :param pulumi.Input[str] update_time: Time when the API group was last modified, in RFC-3339 format.
-               * `environment/variable/variable_id` - ID of the environment variable.
+        :param pulumi.Input[str] description: Specifies the group description.  
+               The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+               Chinese characters must be in **UTF-8** or **Unicode** format.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupEnvironmentArgs']]]] environments: Specifies an array of one or more environments of the associated group.  
+               The object structure is documented below.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the group belongs.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the variable name.  
+               The valid length is limited from `3` to `32` characters.
+               Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
+               In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
+               It is replaced by the actual value when the API is published in an environment.
+               The variable names are not allowed to be repeated for an API group.
+        :param pulumi.Input[str] region: Specifies the region where the APIG (API) group is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[str] registration_time: The registration time, in RFC-3339 format.
+        :param pulumi.Input[str] update_time: schema: Deprecated; The latest update time of the group.
+        :param pulumi.Input[str] updated_at: The time when the API group was last modified, in RFC-3339 format.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -443,17 +474,18 @@ class Group(pulumi.CustomResource):
         __props__.__dict__["instance_id"] = instance_id
         __props__.__dict__["name"] = name
         __props__.__dict__["region"] = region
-        __props__.__dict__["registraion_time"] = registraion_time
+        __props__.__dict__["registration_time"] = registration_time
         __props__.__dict__["update_time"] = update_time
+        __props__.__dict__["updated_at"] = updated_at
         return Group(resource_name, opts=opts, __props__=__props__)
 
     @property
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the description about the API group. The description contain a maximum of
-        255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or Unicode
-        format.
+        Specifies the group description.  
+        The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+        Chinese characters must be in **UTF-8** or **Unicode** format.
         """
         return pulumi.get(self, "description")
 
@@ -461,8 +493,8 @@ class Group(pulumi.CustomResource):
     @pulumi.getter
     def environments(self) -> pulumi.Output[Optional[Sequence['outputs.GroupEnvironment']]]:
         """
-        Specifies an array of one or more APIG environments of the associated APIG group. The
-        object structure is documented below.
+        Specifies an array of one or more environments of the associated group.  
+        The object structure is documented below.
         """
         return pulumi.get(self, "environments")
 
@@ -470,8 +502,8 @@ class Group(pulumi.CustomResource):
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Output[str]:
         """
-        Specifies an ID of the APIG dedicated instance to which the API group
-        belongs to. Changing this will create a new API group resource.
+        Specifies the ID of the dedicated instance to which the group belongs.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -479,10 +511,12 @@ class Group(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the variable name, which can contains of 3 to 32 characters, starting with a
-        letter. Only letters, digits, hyphens (-), and underscores (_) are allowed. In the definition of an API, `name` (
-        case-sensitive) indicates a variable, such as #Name#. It is replaced by the actual value when the API is published in
-        an environment. The variable names are not allowed to be repeated for an API group.
+        Specifies the variable name.  
+        The valid length is limited from `3` to `32` characters.
+        Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
+        In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
+        It is replaced by the actual value when the API is published in an environment.
+        The variable names are not allowed to be repeated for an API group.
         """
         return pulumi.get(self, "name")
 
@@ -490,25 +524,32 @@ class Group(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        Specifies the region in which to create the API group resource. If omitted,
-        the provider-level region will be used. Changing this will create a new API group resource.
+        Specifies the region where the APIG (API) group is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
     @property
-    @pulumi.getter(name="registraionTime")
-    def registraion_time(self) -> pulumi.Output[str]:
+    @pulumi.getter(name="registrationTime")
+    def registration_time(self) -> pulumi.Output[str]:
         """
-        Registration time, in RFC-3339 format.
+        The registration time, in RFC-3339 format.
         """
-        return pulumi.get(self, "registraion_time")
+        return pulumi.get(self, "registration_time")
 
     @property
     @pulumi.getter(name="updateTime")
     def update_time(self) -> pulumi.Output[str]:
         """
-        Time when the API group was last modified, in RFC-3339 format.
-        * `environment/variable/variable_id` - ID of the environment variable.
+        schema: Deprecated; The latest update time of the group.
         """
         return pulumi.get(self, "update_time")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> pulumi.Output[str]:
+        """
+        The time when the API group was last modified, in RFC-3339 format.
+        """
+        return pulumi.get(self, "updated_at")
 

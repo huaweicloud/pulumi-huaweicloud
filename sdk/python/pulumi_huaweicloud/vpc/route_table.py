@@ -24,17 +24,17 @@ class RouteTableArgs:
                  subnets: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a RouteTable resource.
-        :param pulumi.Input[str] vpc_id: - Specifies the VPC ID for which a route table is to be added.
+        :param pulumi.Input[str] vpc_id: Specifies the VPC ID for which a route table is to be added.
                Changing this creates a new resource.
-        :param pulumi.Input[str] description: - Specifies the supplementary information about the route.
+        :param pulumi.Input[str] description: Specifies the supplementary information about the route.
                The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
-        :param pulumi.Input[str] name: - Specifies the route table name. The value is a string of no more than
+        :param pulumi.Input[str] name: Specifies the route table name. The value is a string of no more than
                64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
         :param pulumi.Input[str] region: The region in which to create the vpc route table.
                If omitted, the provider-level region will be used. Changing this creates a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input['RouteTableRouteArgs']]] routes: - Specifies the route object list. The route object
+        :param pulumi.Input[Sequence[pulumi.Input['RouteTableRouteArgs']]] routes: Specifies the route object list. The route object
                is documented below.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] subnets: - Specifies an array of one or more subnets associating with the route table.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] subnets: Specifies an array of one or more subnets associating with the route table.
         """
         pulumi.set(__self__, "vpc_id", vpc_id)
         if description is not None:
@@ -52,7 +52,7 @@ class RouteTableArgs:
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Input[str]:
         """
-        - Specifies the VPC ID for which a route table is to be added.
+        Specifies the VPC ID for which a route table is to be added.
         Changing this creates a new resource.
         """
         return pulumi.get(self, "vpc_id")
@@ -65,7 +65,7 @@ class RouteTableArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the supplementary information about the route.
+        Specifies the supplementary information about the route.
         The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
         """
         return pulumi.get(self, "description")
@@ -78,7 +78,7 @@ class RouteTableArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the route table name. The value is a string of no more than
+        Specifies the route table name. The value is a string of no more than
         64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
         """
         return pulumi.get(self, "name")
@@ -104,7 +104,7 @@ class RouteTableArgs:
     @pulumi.getter
     def routes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['RouteTableRouteArgs']]]]:
         """
-        - Specifies the route object list. The route object
+        Specifies the route object list. The route object
         is documented below.
         """
         return pulumi.get(self, "routes")
@@ -117,7 +117,7 @@ class RouteTableArgs:
     @pulumi.getter
     def subnets(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        - Specifies an array of one or more subnets associating with the route table.
+        Specifies an array of one or more subnets associating with the route table.
         """
         return pulumi.get(self, "subnets")
 
@@ -137,16 +137,16 @@ class _RouteTableState:
                  vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering RouteTable resources.
-        :param pulumi.Input[str] description: - Specifies the supplementary information about the route.
+        :param pulumi.Input[str] description: Specifies the supplementary information about the route.
                The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
-        :param pulumi.Input[str] name: - Specifies the route table name. The value is a string of no more than
+        :param pulumi.Input[str] name: Specifies the route table name. The value is a string of no more than
                64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
         :param pulumi.Input[str] region: The region in which to create the vpc route table.
                If omitted, the provider-level region will be used. Changing this creates a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input['RouteTableRouteArgs']]] routes: - Specifies the route object list. The route object
+        :param pulumi.Input[Sequence[pulumi.Input['RouteTableRouteArgs']]] routes: Specifies the route object list. The route object
                is documented below.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] subnets: - Specifies an array of one or more subnets associating with the route table.
-        :param pulumi.Input[str] vpc_id: - Specifies the VPC ID for which a route table is to be added.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] subnets: Specifies an array of one or more subnets associating with the route table.
+        :param pulumi.Input[str] vpc_id: Specifies the VPC ID for which a route table is to be added.
                Changing this creates a new resource.
         """
         if description is not None:
@@ -166,7 +166,7 @@ class _RouteTableState:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the supplementary information about the route.
+        Specifies the supplementary information about the route.
         The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
         """
         return pulumi.get(self, "description")
@@ -179,7 +179,7 @@ class _RouteTableState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the route table name. The value is a string of no more than
+        Specifies the route table name. The value is a string of no more than
         64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
         """
         return pulumi.get(self, "name")
@@ -205,7 +205,7 @@ class _RouteTableState:
     @pulumi.getter
     def routes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['RouteTableRouteArgs']]]]:
         """
-        - Specifies the route object list. The route object
+        Specifies the route object list. The route object
         is documented below.
         """
         return pulumi.get(self, "routes")
@@ -218,7 +218,7 @@ class _RouteTableState:
     @pulumi.getter
     def subnets(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        - Specifies an array of one or more subnets associating with the route table.
+        Specifies an array of one or more subnets associating with the route table.
         """
         return pulumi.get(self, "subnets")
 
@@ -230,7 +230,7 @@ class _RouteTableState:
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the VPC ID for which a route table is to be added.
+        Specifies the VPC ID for which a route table is to be added.
         Changing this creates a new resource.
         """
         return pulumi.get(self, "vpc_id")
@@ -313,16 +313,16 @@ class RouteTable(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] description: - Specifies the supplementary information about the route.
+        :param pulumi.Input[str] description: Specifies the supplementary information about the route.
                The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
-        :param pulumi.Input[str] name: - Specifies the route table name. The value is a string of no more than
+        :param pulumi.Input[str] name: Specifies the route table name. The value is a string of no more than
                64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
         :param pulumi.Input[str] region: The region in which to create the vpc route table.
                If omitted, the provider-level region will be used. Changing this creates a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['RouteTableRouteArgs']]]] routes: - Specifies the route object list. The route object
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['RouteTableRouteArgs']]]] routes: Specifies the route object list. The route object
                is documented below.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] subnets: - Specifies an array of one or more subnets associating with the route table.
-        :param pulumi.Input[str] vpc_id: - Specifies the VPC ID for which a route table is to be added.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] subnets: Specifies an array of one or more subnets associating with the route table.
+        :param pulumi.Input[str] vpc_id: Specifies the VPC ID for which a route table is to be added.
                Changing this creates a new resource.
         """
         ...
@@ -451,16 +451,16 @@ class RouteTable(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] description: - Specifies the supplementary information about the route.
+        :param pulumi.Input[str] description: Specifies the supplementary information about the route.
                The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
-        :param pulumi.Input[str] name: - Specifies the route table name. The value is a string of no more than
+        :param pulumi.Input[str] name: Specifies the route table name. The value is a string of no more than
                64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
         :param pulumi.Input[str] region: The region in which to create the vpc route table.
                If omitted, the provider-level region will be used. Changing this creates a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['RouteTableRouteArgs']]]] routes: - Specifies the route object list. The route object
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['RouteTableRouteArgs']]]] routes: Specifies the route object list. The route object
                is documented below.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] subnets: - Specifies an array of one or more subnets associating with the route table.
-        :param pulumi.Input[str] vpc_id: - Specifies the VPC ID for which a route table is to be added.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] subnets: Specifies an array of one or more subnets associating with the route table.
+        :param pulumi.Input[str] vpc_id: Specifies the VPC ID for which a route table is to be added.
                Changing this creates a new resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -479,7 +479,7 @@ class RouteTable(pulumi.CustomResource):
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
-        - Specifies the supplementary information about the route.
+        Specifies the supplementary information about the route.
         The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
         """
         return pulumi.get(self, "description")
@@ -488,7 +488,7 @@ class RouteTable(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        - Specifies the route table name. The value is a string of no more than
+        Specifies the route table name. The value is a string of no more than
         64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
         """
         return pulumi.get(self, "name")
@@ -506,7 +506,7 @@ class RouteTable(pulumi.CustomResource):
     @pulumi.getter
     def routes(self) -> pulumi.Output[Sequence['outputs.RouteTableRoute']]:
         """
-        - Specifies the route object list. The route object
+        Specifies the route object list. The route object
         is documented below.
         """
         return pulumi.get(self, "routes")
@@ -515,7 +515,7 @@ class RouteTable(pulumi.CustomResource):
     @pulumi.getter
     def subnets(self) -> pulumi.Output[Optional[Sequence[str]]]:
         """
-        - Specifies an array of one or more subnets associating with the route table.
+        Specifies an array of one or more subnets associating with the route table.
         """
         return pulumi.get(self, "subnets")
 
@@ -523,7 +523,7 @@ class RouteTable(pulumi.CustomResource):
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Output[str]:
         """
-        - Specifies the VPC ID for which a route table is to be added.
+        Specifies the VPC ID for which a route table is to be added.
         Changing this creates a new resource.
         """
         return pulumi.get(self, "vpc_id")

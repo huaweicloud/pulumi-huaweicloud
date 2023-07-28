@@ -199,7 +199,9 @@ func (o InstanceBlockInfoPtrOutput) TransactionQuantity() pulumi.IntPtrOutput {
 
 type InstanceChannel struct {
 	// Specifies the name of the channel. Changing this creates a new instance.
-	Name     string   `pulumi:"name"`
+	Name string `pulumi:"name"`
+	// Specifies the name of the peer organization. Changing this creates a new
+	// instance.
 	OrgNames []string `pulumi:"orgNames"`
 }
 
@@ -216,7 +218,9 @@ type InstanceChannelInput interface {
 
 type InstanceChannelArgs struct {
 	// Specifies the name of the channel. Changing this creates a new instance.
-	Name     pulumi.StringInput      `pulumi:"name"`
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the name of the peer organization. Changing this creates a new
+	// instance.
 	OrgNames pulumi.StringArrayInput `pulumi:"orgNames"`
 }
 
@@ -276,6 +280,8 @@ func (o InstanceChannelOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v InstanceChannel) string { return v.Name }).(pulumi.StringOutput)
 }
 
+// Specifies the name of the peer organization. Changing this creates a new
+// instance.
 func (o InstanceChannelOutput) OrgNames() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v InstanceChannel) []string { return v.OrgNames }).(pulumi.StringArrayOutput)
 }
@@ -303,7 +309,7 @@ func (o InstanceChannelArrayOutput) Index(i pulumi.IntInput) InstanceChannelOutp
 type InstanceCouchdb struct {
 	// Specifies the password of the couch datebase. The password consists of 8 to
 	// 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-	// charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+	// characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
 	Password string `pulumi:"password"`
 	// Specifies the user name of the couch datebase. Changing this creates a new
 	// instance.
@@ -324,7 +330,7 @@ type InstanceCouchdbInput interface {
 type InstanceCouchdbArgs struct {
 	// Specifies the password of the couch datebase. The password consists of 8 to
 	// 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-	// charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+	// characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
 	Password pulumi.StringInput `pulumi:"password"`
 	// Specifies the user name of the couch datebase. Changing this creates a new
 	// instance.
@@ -410,7 +416,7 @@ func (o InstanceCouchdbOutput) ToInstanceCouchdbPtrOutputWithContext(ctx context
 
 // Specifies the password of the couch datebase. The password consists of 8 to
 // 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-// charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+// characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
 func (o InstanceCouchdbOutput) Password() pulumi.StringOutput {
 	return o.ApplyT(func(v InstanceCouchdb) string { return v.Password }).(pulumi.StringOutput)
 }
@@ -447,7 +453,7 @@ func (o InstanceCouchdbPtrOutput) Elem() InstanceCouchdbOutput {
 
 // Specifies the password of the couch datebase. The password consists of 8 to
 // 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-// charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+// characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
 func (o InstanceCouchdbPtrOutput) Password() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *InstanceCouchdb) *string {
 		if v == nil {
@@ -850,8 +856,8 @@ func (o InstancePeerOrgArrayOutput) Index(i pulumi.IntInput) InstancePeerOrgOutp
 }
 
 type InstancePeerOrgAddress struct {
-	DomainPort string `pulumi:"domainPort"`
-	IpPort     string `pulumi:"ipPort"`
+	DomainPort *string `pulumi:"domainPort"`
+	IpPort     *string `pulumi:"ipPort"`
 }
 
 // InstancePeerOrgAddressInput is an input type that accepts InstancePeerOrgAddressArgs and InstancePeerOrgAddressOutput values.
@@ -866,8 +872,8 @@ type InstancePeerOrgAddressInput interface {
 }
 
 type InstancePeerOrgAddressArgs struct {
-	DomainPort pulumi.StringInput `pulumi:"domainPort"`
-	IpPort     pulumi.StringInput `pulumi:"ipPort"`
+	DomainPort pulumi.StringPtrInput `pulumi:"domainPort"`
+	IpPort     pulumi.StringPtrInput `pulumi:"ipPort"`
 }
 
 func (InstancePeerOrgAddressArgs) ElementType() reflect.Type {
@@ -921,12 +927,12 @@ func (o InstancePeerOrgAddressOutput) ToInstancePeerOrgAddressOutputWithContext(
 	return o
 }
 
-func (o InstancePeerOrgAddressOutput) DomainPort() pulumi.StringOutput {
-	return o.ApplyT(func(v InstancePeerOrgAddress) string { return v.DomainPort }).(pulumi.StringOutput)
+func (o InstancePeerOrgAddressOutput) DomainPort() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v InstancePeerOrgAddress) *string { return v.DomainPort }).(pulumi.StringPtrOutput)
 }
 
-func (o InstancePeerOrgAddressOutput) IpPort() pulumi.StringOutput {
-	return o.ApplyT(func(v InstancePeerOrgAddress) string { return v.IpPort }).(pulumi.StringOutput)
+func (o InstancePeerOrgAddressOutput) IpPort() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v InstancePeerOrgAddress) *string { return v.IpPort }).(pulumi.StringPtrOutput)
 }
 
 type InstancePeerOrgAddressArrayOutput struct{ *pulumi.OutputState }

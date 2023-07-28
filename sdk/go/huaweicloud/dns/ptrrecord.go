@@ -74,23 +74,24 @@ type Ptrrecord struct {
 
 	// The address of the FloatingIP/EIP.
 	Address pulumi.StringOutput `pulumi:"address"`
-	// Description of the PTR record.
+	// Specifies the description of the PTR record.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// The enterprise project id of the PTR record. Changing this
 	// creates a new PTR record.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
-	// The ID of the FloatingIP/EIP.
+	// Specifies the ID of the FloatingIP/EIP.
+	// Changing this creates a new PTR record.
 	FloatingipId pulumi.StringOutput `pulumi:"floatingipId"`
-	// Domain name of the PTR record. A domain name is case insensitive. Uppercase letters will
-	// also be converted into lowercase letters.
+	// Specifies the domain name of the PTR record. A domain name is case-insensitive.
+	// Uppercase letters will also be converted into lowercase letters.
 	Name pulumi.StringOutput `pulumi:"name"`
-	// The region in which to create the PTR record. If omitted, the `region`
-	// argument of the provider will be used. Changing this creates a new PTR record.
+	// Specifies the region in which to create the PTR record. If omitted,
+	// the `region` argument of the provider will be used. Changing this creates a new PTR record.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Tags key/value pairs to associate with the PTR record.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
-	// The time to live (TTL) of the record set (in seconds). The value range is 300–2147483647. The
-	// default value is 300.
+	// Specifies the time to live (TTL) of the record set (in seconds).
+	// The value range is 300–2147483647. The default value is 300.
 	Ttl pulumi.IntPtrOutput `pulumi:"ttl"`
 }
 
@@ -129,46 +130,48 @@ func GetPtrrecord(ctx *pulumi.Context,
 type ptrrecordState struct {
 	// The address of the FloatingIP/EIP.
 	Address *string `pulumi:"address"`
-	// Description of the PTR record.
+	// Specifies the description of the PTR record.
 	Description *string `pulumi:"description"`
 	// The enterprise project id of the PTR record. Changing this
 	// creates a new PTR record.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// The ID of the FloatingIP/EIP.
+	// Specifies the ID of the FloatingIP/EIP.
+	// Changing this creates a new PTR record.
 	FloatingipId *string `pulumi:"floatingipId"`
-	// Domain name of the PTR record. A domain name is case insensitive. Uppercase letters will
-	// also be converted into lowercase letters.
+	// Specifies the domain name of the PTR record. A domain name is case-insensitive.
+	// Uppercase letters will also be converted into lowercase letters.
 	Name *string `pulumi:"name"`
-	// The region in which to create the PTR record. If omitted, the `region`
-	// argument of the provider will be used. Changing this creates a new PTR record.
+	// Specifies the region in which to create the PTR record. If omitted,
+	// the `region` argument of the provider will be used. Changing this creates a new PTR record.
 	Region *string `pulumi:"region"`
 	// Tags key/value pairs to associate with the PTR record.
 	Tags map[string]string `pulumi:"tags"`
-	// The time to live (TTL) of the record set (in seconds). The value range is 300–2147483647. The
-	// default value is 300.
+	// Specifies the time to live (TTL) of the record set (in seconds).
+	// The value range is 300–2147483647. The default value is 300.
 	Ttl *int `pulumi:"ttl"`
 }
 
 type PtrrecordState struct {
 	// The address of the FloatingIP/EIP.
 	Address pulumi.StringPtrInput
-	// Description of the PTR record.
+	// Specifies the description of the PTR record.
 	Description pulumi.StringPtrInput
 	// The enterprise project id of the PTR record. Changing this
 	// creates a new PTR record.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// The ID of the FloatingIP/EIP.
+	// Specifies the ID of the FloatingIP/EIP.
+	// Changing this creates a new PTR record.
 	FloatingipId pulumi.StringPtrInput
-	// Domain name of the PTR record. A domain name is case insensitive. Uppercase letters will
-	// also be converted into lowercase letters.
+	// Specifies the domain name of the PTR record. A domain name is case-insensitive.
+	// Uppercase letters will also be converted into lowercase letters.
 	Name pulumi.StringPtrInput
-	// The region in which to create the PTR record. If omitted, the `region`
-	// argument of the provider will be used. Changing this creates a new PTR record.
+	// Specifies the region in which to create the PTR record. If omitted,
+	// the `region` argument of the provider will be used. Changing this creates a new PTR record.
 	Region pulumi.StringPtrInput
 	// Tags key/value pairs to associate with the PTR record.
 	Tags pulumi.StringMapInput
-	// The time to live (TTL) of the record set (in seconds). The value range is 300–2147483647. The
-	// default value is 300.
+	// Specifies the time to live (TTL) of the record set (in seconds).
+	// The value range is 300–2147483647. The default value is 300.
 	Ttl pulumi.IntPtrInput
 }
 
@@ -177,45 +180,47 @@ func (PtrrecordState) ElementType() reflect.Type {
 }
 
 type ptrrecordArgs struct {
-	// Description of the PTR record.
+	// Specifies the description of the PTR record.
 	Description *string `pulumi:"description"`
 	// The enterprise project id of the PTR record. Changing this
 	// creates a new PTR record.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// The ID of the FloatingIP/EIP.
+	// Specifies the ID of the FloatingIP/EIP.
+	// Changing this creates a new PTR record.
 	FloatingipId string `pulumi:"floatingipId"`
-	// Domain name of the PTR record. A domain name is case insensitive. Uppercase letters will
-	// also be converted into lowercase letters.
+	// Specifies the domain name of the PTR record. A domain name is case-insensitive.
+	// Uppercase letters will also be converted into lowercase letters.
 	Name *string `pulumi:"name"`
-	// The region in which to create the PTR record. If omitted, the `region`
-	// argument of the provider will be used. Changing this creates a new PTR record.
+	// Specifies the region in which to create the PTR record. If omitted,
+	// the `region` argument of the provider will be used. Changing this creates a new PTR record.
 	Region *string `pulumi:"region"`
 	// Tags key/value pairs to associate with the PTR record.
 	Tags map[string]string `pulumi:"tags"`
-	// The time to live (TTL) of the record set (in seconds). The value range is 300–2147483647. The
-	// default value is 300.
+	// Specifies the time to live (TTL) of the record set (in seconds).
+	// The value range is 300–2147483647. The default value is 300.
 	Ttl *int `pulumi:"ttl"`
 }
 
 // The set of arguments for constructing a Ptrrecord resource.
 type PtrrecordArgs struct {
-	// Description of the PTR record.
+	// Specifies the description of the PTR record.
 	Description pulumi.StringPtrInput
 	// The enterprise project id of the PTR record. Changing this
 	// creates a new PTR record.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// The ID of the FloatingIP/EIP.
+	// Specifies the ID of the FloatingIP/EIP.
+	// Changing this creates a new PTR record.
 	FloatingipId pulumi.StringInput
-	// Domain name of the PTR record. A domain name is case insensitive. Uppercase letters will
-	// also be converted into lowercase letters.
+	// Specifies the domain name of the PTR record. A domain name is case-insensitive.
+	// Uppercase letters will also be converted into lowercase letters.
 	Name pulumi.StringPtrInput
-	// The region in which to create the PTR record. If omitted, the `region`
-	// argument of the provider will be used. Changing this creates a new PTR record.
+	// Specifies the region in which to create the PTR record. If omitted,
+	// the `region` argument of the provider will be used. Changing this creates a new PTR record.
 	Region pulumi.StringPtrInput
 	// Tags key/value pairs to associate with the PTR record.
 	Tags pulumi.StringMapInput
-	// The time to live (TTL) of the record set (in seconds). The value range is 300–2147483647. The
-	// default value is 300.
+	// Specifies the time to live (TTL) of the record set (in seconds).
+	// The value range is 300–2147483647. The default value is 300.
 	Ttl pulumi.IntPtrInput
 }
 
@@ -311,7 +316,7 @@ func (o PtrrecordOutput) Address() pulumi.StringOutput {
 	return o.ApplyT(func(v *Ptrrecord) pulumi.StringOutput { return v.Address }).(pulumi.StringOutput)
 }
 
-// Description of the PTR record.
+// Specifies the description of the PTR record.
 func (o PtrrecordOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Ptrrecord) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
@@ -322,19 +327,20 @@ func (o PtrrecordOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Ptrrecord) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
 
-// The ID of the FloatingIP/EIP.
+// Specifies the ID of the FloatingIP/EIP.
+// Changing this creates a new PTR record.
 func (o PtrrecordOutput) FloatingipId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Ptrrecord) pulumi.StringOutput { return v.FloatingipId }).(pulumi.StringOutput)
 }
 
-// Domain name of the PTR record. A domain name is case insensitive. Uppercase letters will
-// also be converted into lowercase letters.
+// Specifies the domain name of the PTR record. A domain name is case-insensitive.
+// Uppercase letters will also be converted into lowercase letters.
 func (o PtrrecordOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Ptrrecord) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// The region in which to create the PTR record. If omitted, the `region`
-// argument of the provider will be used. Changing this creates a new PTR record.
+// Specifies the region in which to create the PTR record. If omitted,
+// the `region` argument of the provider will be used. Changing this creates a new PTR record.
 func (o PtrrecordOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Ptrrecord) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
@@ -344,8 +350,8 @@ func (o PtrrecordOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Ptrrecord) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }
 
-// The time to live (TTL) of the record set (in seconds). The value range is 300–2147483647. The
-// default value is 300.
+// Specifies the time to live (TTL) of the record set (in seconds).
+// The value range is 300–2147483647. The default value is 300.
 func (o PtrrecordOutput) Ttl() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *Ptrrecord) pulumi.IntPtrOutput { return v.Ttl }).(pulumi.IntPtrOutput)
 }

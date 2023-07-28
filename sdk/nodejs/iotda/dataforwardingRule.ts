@@ -109,7 +109,7 @@ export class DataforwardingRule extends pulumi.CustomResource {
     public readonly enabled!: pulumi.Output<boolean | undefined>;
     /**
      * Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
-     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
      * allowed: `?'#().,&%@!`.
      */
     public readonly name!: pulumi.Output<string>;
@@ -210,7 +210,7 @@ export interface DataforwardingRuleState {
     enabled?: pulumi.Input<boolean>;
     /**
      * Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
-     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
      * allowed: `?'#().,&%@!`.
      */
     name?: pulumi.Input<string>;
@@ -270,7 +270,7 @@ export interface DataforwardingRuleArgs {
     enabled?: pulumi.Input<boolean>;
     /**
      * Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
-     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
      * allowed: `?'#().,&%@!`.
      */
     name?: pulumi.Input<string>;

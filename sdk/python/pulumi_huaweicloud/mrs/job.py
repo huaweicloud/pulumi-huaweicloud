@@ -27,6 +27,16 @@ class JobArgs:
         The set of arguments for constructing a Job resource.
         :param pulumi.Input[str] cluster_id: Specifies an ID of the MapReduce cluster to which the job belongs to.
                Changing this will create a new MapReduce job resource.
+        :param pulumi.Input[str] type: Specifies the job type.
+               <a name="mapreduce_job_type"></a>
+               The valid values are as follows:
+               + [Flink](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0527.html)
+               + [HiveSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+               + [HiveScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+               + [MapReduce](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0052.html)
+               + [SparkSubmit](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0524.html)
+               + [SparkSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+               + [SparkScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
         :param pulumi.Input[str] name: Specifies the name of the MapReduce job. The name can contain 1 to 64
                characters, which may consist of letters, digits, underscores (_) and hyphens (-). Changing this will create a new
                MapReduce job resource.
@@ -86,6 +96,18 @@ class JobArgs:
     @property
     @pulumi.getter
     def type(self) -> pulumi.Input[str]:
+        """
+        Specifies the job type.
+        <a name="mapreduce_job_type"></a>
+        The valid values are as follows:
+        + [Flink](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0527.html)
+        + [HiveSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+        + [HiveScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+        + [MapReduce](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0052.html)
+        + [SparkSubmit](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0524.html)
+        + [SparkSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+        + [SparkScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+        """
         return pulumi.get(self, "type")
 
     @type.setter
@@ -244,6 +266,16 @@ class _JobState:
         :param pulumi.Input[str] start_time: The creation time of the MapReduce job.
         :param pulumi.Input[str] status: Status of the MapReduce job.
         :param pulumi.Input[str] submit_time: The submission time of the MapReduce job.
+        :param pulumi.Input[str] type: Specifies the job type.
+               <a name="mapreduce_job_type"></a>
+               The valid values are as follows:
+               + [Flink](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0527.html)
+               + [HiveSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+               + [HiveScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+               + [MapReduce](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0052.html)
+               + [SparkSubmit](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0524.html)
+               + [SparkSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+               + [SparkScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
         """
         if cluster_id is not None:
             pulumi.set(__self__, "cluster_id", cluster_id)
@@ -438,6 +470,18 @@ class _JobState:
     @property
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the job type.
+        <a name="mapreduce_job_type"></a>
+        The valid values are as follows:
+        + [Flink](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0527.html)
+        + [HiveSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+        + [HiveScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+        + [MapReduce](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0052.html)
+        + [SparkSubmit](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0524.html)
+        + [SparkSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+        + [SparkScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+        """
         return pulumi.get(self, "type")
 
     @type.setter
@@ -487,7 +531,7 @@ class Job(pulumi.CustomResource):
 
         ## Import
 
-        MapReduce jobs can be imported using their `id` and the IDs of the MapReduce cluster to which the job belongs, separated by a slash, e.g.
+        MapReduce jobs can be imported using their `id` and the IDs of the MapReduce cluster to which the job belongs, separated by a slash, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Mrs/job:Job test <cluster_id>/<id>
@@ -522,6 +566,16 @@ class Job(pulumi.CustomResource):
                Changing this will create a new MapReduce job resource.
         :param pulumi.Input[str] sql: Specifies the SQL command or file path. Only required if `type` is **HiveSql**
                or **SparkSql**. Changing this will create a new MapReduce job resource.
+        :param pulumi.Input[str] type: Specifies the job type.
+               <a name="mapreduce_job_type"></a>
+               The valid values are as follows:
+               + [Flink](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0527.html)
+               + [HiveSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+               + [HiveScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+               + [MapReduce](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0052.html)
+               + [SparkSubmit](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0524.html)
+               + [SparkSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+               + [SparkScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
         """
         ...
     @overload
@@ -556,7 +610,7 @@ class Job(pulumi.CustomResource):
 
         ## Import
 
-        MapReduce jobs can be imported using their `id` and the IDs of the MapReduce cluster to which the job belongs, separated by a slash, e.g.
+        MapReduce jobs can be imported using their `id` and the IDs of the MapReduce cluster to which the job belongs, separated by a slash, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Mrs/job:Job test <cluster_id>/<id>
@@ -673,6 +727,16 @@ class Job(pulumi.CustomResource):
         :param pulumi.Input[str] start_time: The creation time of the MapReduce job.
         :param pulumi.Input[str] status: Status of the MapReduce job.
         :param pulumi.Input[str] submit_time: The submission time of the MapReduce job.
+        :param pulumi.Input[str] type: Specifies the job type.
+               <a name="mapreduce_job_type"></a>
+               The valid values are as follows:
+               + [Flink](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0527.html)
+               + [HiveSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+               + [HiveScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+               + [MapReduce](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0052.html)
+               + [SparkSubmit](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0524.html)
+               + [SparkSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+               + [SparkScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -811,5 +875,17 @@ class Job(pulumi.CustomResource):
     @property
     @pulumi.getter
     def type(self) -> pulumi.Output[str]:
+        """
+        Specifies the job type.
+        <a name="mapreduce_job_type"></a>
+        The valid values are as follows:
+        + [Flink](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0527.html)
+        + [HiveSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+        + [HiveScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+        + [MapReduce](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0052.html)
+        + [SparkSubmit](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0524.html)
+        + [SparkSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+        + [SparkScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+        """
         return pulumi.get(self, "type")
 

@@ -17,6 +17,7 @@ class LoadbalancerArgs:
                  availability_zones: pulumi.Input[Sequence[pulumi.Input[str]]],
                  auto_pay: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
+                 autoscaling_enabled: Optional[pulumi.Input[bool]] = None,
                  bandwidth_charge_mode: Optional[pulumi.Input[str]] = None,
                  bandwidth_size: Optional[pulumi.Input[int]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
@@ -31,6 +32,7 @@ class LoadbalancerArgs:
                  ipv6_network_id: Optional[pulumi.Input[str]] = None,
                  l4_flavor_id: Optional[pulumi.Input[str]] = None,
                  l7_flavor_id: Optional[pulumi.Input[str]] = None,
+                 min_l7_flavor_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
@@ -42,8 +44,9 @@ class LoadbalancerArgs:
         The set of arguments for constructing a Loadbalancer resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the list of AZ names. Changing this parameter will create a
                new resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are **true** and
-               **false**. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are **true** and **false**.
+        :param pulumi.Input[bool] autoscaling_enabled: Specifies whether autoscaling is enabled. Valid values are **true** and
+               **false**.
         :param pulumi.Input[str] bandwidth_charge_mode: Bandwidth billing type. Changing this parameter will create a
                new resource.
         :param pulumi.Input[int] bandwidth_size: Bandwidth size. Changing this parameter will create a new resource.
@@ -58,11 +61,14 @@ class LoadbalancerArgs:
         :param pulumi.Input[str] iptype: Elastic IP type. Changing this parameter will create a new resource.
         :param pulumi.Input[str] ipv4_address: The ipv4 address of the load balancer.
         :param pulumi.Input[str] ipv4_eip_id: The ID of the EIP. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] ipv4_subnet_id: The subnet on which to allocate the loadbalancer's ipv4 address.
+        :param pulumi.Input[str] ipv4_subnet_id: The **IPv4 subnet ID** of the subnet on which to allocate the loadbalancer's
+               ipv4 address.
         :param pulumi.Input[str] ipv6_bandwidth_id: The ipv6 bandwidth id. Only support shared bandwidth.
-        :param pulumi.Input[str] ipv6_network_id: The network on which to allocate the loadbalancer's ipv6 address.
+        :param pulumi.Input[str] ipv6_network_id: The **ID** of the subnet on which to allocate the loadbalancer's ipv6 address.
         :param pulumi.Input[str] l4_flavor_id: The L4 flavor id of the load balancer.
         :param pulumi.Input[str] l7_flavor_id: The L7 flavor id of the load balancer.
+        :param pulumi.Input[str] min_l7_flavor_id: Specifies the ID of the minimum Layer-7 flavor for elastic scaling.
+               This parameter cannot be left blank if there are HTTP or HTTPS listeners.
         :param pulumi.Input[str] name: Human-readable name for the loadbalancer.
         :param pulumi.Input[int] period: Specifies the charging period of the ELB loadbalancer.
                If `period_unit` is set to **month**, the value ranges from 1 to 9.
@@ -81,9 +87,14 @@ class LoadbalancerArgs:
         """
         pulumi.set(__self__, "availability_zones", availability_zones)
         if auto_pay is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
+        if auto_pay is not None:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
             pulumi.set(__self__, "auto_renew", auto_renew)
+        if autoscaling_enabled is not None:
+            pulumi.set(__self__, "autoscaling_enabled", autoscaling_enabled)
         if bandwidth_charge_mode is not None:
             pulumi.set(__self__, "bandwidth_charge_mode", bandwidth_charge_mode)
         if bandwidth_size is not None:
@@ -112,6 +123,8 @@ class LoadbalancerArgs:
             pulumi.set(__self__, "l4_flavor_id", l4_flavor_id)
         if l7_flavor_id is not None:
             pulumi.set(__self__, "l7_flavor_id", l7_flavor_id)
+        if min_l7_flavor_id is not None:
+            pulumi.set(__self__, "min_l7_flavor_id", min_l7_flavor_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if period is not None:
@@ -153,14 +166,26 @@ class LoadbalancerArgs:
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies whether auto renew is enabled. Valid values are **true** and
-        **false**. Changing this parameter will create a new resource.
+        Specifies whether auto renew is enabled. Valid values are **true** and **false**.
         """
         return pulumi.get(self, "auto_renew")
 
     @auto_renew.setter
     def auto_renew(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "auto_renew", value)
+
+    @property
+    @pulumi.getter(name="autoscalingEnabled")
+    def autoscaling_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether autoscaling is enabled. Valid values are **true** and
+        **false**.
+        """
+        return pulumi.get(self, "autoscaling_enabled")
+
+    @autoscaling_enabled.setter
+    def autoscaling_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "autoscaling_enabled", value)
 
     @property
     @pulumi.getter(name="bandwidthChargeMode")
@@ -279,7 +304,8 @@ class LoadbalancerArgs:
     @pulumi.getter(name="ipv4SubnetId")
     def ipv4_subnet_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The subnet on which to allocate the loadbalancer's ipv4 address.
+        The **IPv4 subnet ID** of the subnet on which to allocate the loadbalancer's
+        ipv4 address.
         """
         return pulumi.get(self, "ipv4_subnet_id")
 
@@ -303,7 +329,7 @@ class LoadbalancerArgs:
     @pulumi.getter(name="ipv6NetworkId")
     def ipv6_network_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The network on which to allocate the loadbalancer's ipv6 address.
+        The **ID** of the subnet on which to allocate the loadbalancer's ipv6 address.
         """
         return pulumi.get(self, "ipv6_network_id")
 
@@ -334,6 +360,19 @@ class LoadbalancerArgs:
     @l7_flavor_id.setter
     def l7_flavor_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "l7_flavor_id", value)
+
+    @property
+    @pulumi.getter(name="minL7FlavorId")
+    def min_l7_flavor_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the minimum Layer-7 flavor for elastic scaling.
+        This parameter cannot be left blank if there are HTTP or HTTPS listeners.
+        """
+        return pulumi.get(self, "min_l7_flavor_id")
+
+    @min_l7_flavor_id.setter
+    def min_l7_flavor_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "min_l7_flavor_id", value)
 
     @property
     @pulumi.getter
@@ -433,6 +472,7 @@ class _LoadbalancerState:
     def __init__(__self__, *,
                  auto_pay: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
+                 autoscaling_enabled: Optional[pulumi.Input[bool]] = None,
                  availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  bandwidth_charge_mode: Optional[pulumi.Input[str]] = None,
                  bandwidth_size: Optional[pulumi.Input[int]] = None,
@@ -452,6 +492,7 @@ class _LoadbalancerState:
                  ipv6_network_id: Optional[pulumi.Input[str]] = None,
                  l4_flavor_id: Optional[pulumi.Input[str]] = None,
                  l7_flavor_id: Optional[pulumi.Input[str]] = None,
+                 min_l7_flavor_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
@@ -461,8 +502,9 @@ class _LoadbalancerState:
                  vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Loadbalancer resources.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are **true** and
-               **false**. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are **true** and **false**.
+        :param pulumi.Input[bool] autoscaling_enabled: Specifies whether autoscaling is enabled. Valid values are **true** and
+               **false**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the list of AZ names. Changing this parameter will create a
                new resource.
         :param pulumi.Input[str] bandwidth_charge_mode: Bandwidth billing type. Changing this parameter will create a
@@ -480,14 +522,17 @@ class _LoadbalancerState:
         :param pulumi.Input[str] ipv4_address: The ipv4 address of the load balancer.
         :param pulumi.Input[str] ipv4_eip: The ipv4 eip address of the Load Balancer.
         :param pulumi.Input[str] ipv4_eip_id: The ID of the EIP. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] ipv4_subnet_id: The subnet on which to allocate the loadbalancer's ipv4 address.
+        :param pulumi.Input[str] ipv4_subnet_id: The **IPv4 subnet ID** of the subnet on which to allocate the loadbalancer's
+               ipv4 address.
         :param pulumi.Input[str] ipv6_address: The ipv6 address of the Load Balancer.
         :param pulumi.Input[str] ipv6_bandwidth_id: The ipv6 bandwidth id. Only support shared bandwidth.
         :param pulumi.Input[str] ipv6_eip: The ipv6 eip address of the Load Balancer.
         :param pulumi.Input[str] ipv6_eip_id: The ipv6 eip id of the Load Balancer.
-        :param pulumi.Input[str] ipv6_network_id: The network on which to allocate the loadbalancer's ipv6 address.
+        :param pulumi.Input[str] ipv6_network_id: The **ID** of the subnet on which to allocate the loadbalancer's ipv6 address.
         :param pulumi.Input[str] l4_flavor_id: The L4 flavor id of the load balancer.
         :param pulumi.Input[str] l7_flavor_id: The L7 flavor id of the load balancer.
+        :param pulumi.Input[str] min_l7_flavor_id: Specifies the ID of the minimum Layer-7 flavor for elastic scaling.
+               This parameter cannot be left blank if there are HTTP or HTTPS listeners.
         :param pulumi.Input[str] name: Human-readable name for the loadbalancer.
         :param pulumi.Input[int] period: Specifies the charging period of the ELB loadbalancer.
                If `period_unit` is set to **month**, the value ranges from 1 to 9.
@@ -505,9 +550,14 @@ class _LoadbalancerState:
                loadbalancer.
         """
         if auto_pay is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
+        if auto_pay is not None:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
             pulumi.set(__self__, "auto_renew", auto_renew)
+        if autoscaling_enabled is not None:
+            pulumi.set(__self__, "autoscaling_enabled", autoscaling_enabled)
         if availability_zones is not None:
             pulumi.set(__self__, "availability_zones", availability_zones)
         if bandwidth_charge_mode is not None:
@@ -546,6 +596,8 @@ class _LoadbalancerState:
             pulumi.set(__self__, "l4_flavor_id", l4_flavor_id)
         if l7_flavor_id is not None:
             pulumi.set(__self__, "l7_flavor_id", l7_flavor_id)
+        if min_l7_flavor_id is not None:
+            pulumi.set(__self__, "min_l7_flavor_id", min_l7_flavor_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if period is not None:
@@ -574,14 +626,26 @@ class _LoadbalancerState:
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies whether auto renew is enabled. Valid values are **true** and
-        **false**. Changing this parameter will create a new resource.
+        Specifies whether auto renew is enabled. Valid values are **true** and **false**.
         """
         return pulumi.get(self, "auto_renew")
 
     @auto_renew.setter
     def auto_renew(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "auto_renew", value)
+
+    @property
+    @pulumi.getter(name="autoscalingEnabled")
+    def autoscaling_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether autoscaling is enabled. Valid values are **true** and
+        **false**.
+        """
+        return pulumi.get(self, "autoscaling_enabled")
+
+    @autoscaling_enabled.setter
+    def autoscaling_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "autoscaling_enabled", value)
 
     @property
     @pulumi.getter(name="availabilityZones")
@@ -725,7 +789,8 @@ class _LoadbalancerState:
     @pulumi.getter(name="ipv4SubnetId")
     def ipv4_subnet_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The subnet on which to allocate the loadbalancer's ipv4 address.
+        The **IPv4 subnet ID** of the subnet on which to allocate the loadbalancer's
+        ipv4 address.
         """
         return pulumi.get(self, "ipv4_subnet_id")
 
@@ -785,7 +850,7 @@ class _LoadbalancerState:
     @pulumi.getter(name="ipv6NetworkId")
     def ipv6_network_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The network on which to allocate the loadbalancer's ipv6 address.
+        The **ID** of the subnet on which to allocate the loadbalancer's ipv6 address.
         """
         return pulumi.get(self, "ipv6_network_id")
 
@@ -816,6 +881,19 @@ class _LoadbalancerState:
     @l7_flavor_id.setter
     def l7_flavor_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "l7_flavor_id", value)
+
+    @property
+    @pulumi.getter(name="minL7FlavorId")
+    def min_l7_flavor_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the minimum Layer-7 flavor for elastic scaling.
+        This parameter cannot be left blank if there are HTTP or HTTPS listeners.
+        """
+        return pulumi.get(self, "min_l7_flavor_id")
+
+    @min_l7_flavor_id.setter
+    def min_l7_flavor_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "min_l7_flavor_id", value)
 
     @property
     @pulumi.getter
@@ -917,6 +995,7 @@ class Loadbalancer(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  auto_pay: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
+                 autoscaling_enabled: Optional[pulumi.Input[bool]] = None,
                  availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  bandwidth_charge_mode: Optional[pulumi.Input[str]] = None,
                  bandwidth_size: Optional[pulumi.Input[int]] = None,
@@ -932,6 +1011,7 @@ class Loadbalancer(pulumi.CustomResource):
                  ipv6_network_id: Optional[pulumi.Input[str]] = None,
                  l4_flavor_id: Optional[pulumi.Input[str]] = None,
                  l7_flavor_id: Optional[pulumi.Input[str]] = None,
+                 min_l7_flavor_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
@@ -958,7 +1038,7 @@ class Loadbalancer(pulumi.CustomResource):
             cross_vpc_backend=True,
             description="basic example",
             enterprise_project_id="{{ eps_id }}",
-            ipv4_subnet_id="{{ subnet_id }}",
+            ipv4_subnet_id="{{ ipv4_subnet_id }}",
             l4_flavor_id="{{ l4_flavor_id }}",
             l7_flavor_id="{{ l7_flavor_id }}",
             vpc_id="{{ vpc_id }}")
@@ -978,7 +1058,7 @@ class Loadbalancer(pulumi.CustomResource):
             description="basic example",
             enterprise_project_id="{{ eps_id }}",
             ipv4_eip_id="{{ eip_id }}",
-            ipv4_subnet_id="{{ subnet_id }}",
+            ipv4_subnet_id="{{ ipv4_subnet_id }}",
             ipv6_bandwidth_id="{{ ipv6_bandwidth_id }}",
             ipv6_network_id="{{ ipv6_network_id }}",
             l4_flavor_id="{{ l4_flavor_id }}",
@@ -1002,7 +1082,7 @@ class Loadbalancer(pulumi.CustomResource):
             description="basic example",
             enterprise_project_id="{{ eps_id }}",
             iptype="5_bgp",
-            ipv4_subnet_id="{{ subnet_id }}",
+            ipv4_subnet_id="{{ ipv4_subnet_id }}",
             ipv6_bandwidth_id="{{ ipv6_bandwidth_id }}",
             ipv6_network_id="{{ ipv6_network_id }}",
             l4_flavor_id="{{ l4_flavor_id }}",
@@ -1035,8 +1115,9 @@ class Loadbalancer(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are **true** and
-               **false**. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are **true** and **false**.
+        :param pulumi.Input[bool] autoscaling_enabled: Specifies whether autoscaling is enabled. Valid values are **true** and
+               **false**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the list of AZ names. Changing this parameter will create a
                new resource.
         :param pulumi.Input[str] bandwidth_charge_mode: Bandwidth billing type. Changing this parameter will create a
@@ -1053,11 +1134,14 @@ class Loadbalancer(pulumi.CustomResource):
         :param pulumi.Input[str] iptype: Elastic IP type. Changing this parameter will create a new resource.
         :param pulumi.Input[str] ipv4_address: The ipv4 address of the load balancer.
         :param pulumi.Input[str] ipv4_eip_id: The ID of the EIP. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] ipv4_subnet_id: The subnet on which to allocate the loadbalancer's ipv4 address.
+        :param pulumi.Input[str] ipv4_subnet_id: The **IPv4 subnet ID** of the subnet on which to allocate the loadbalancer's
+               ipv4 address.
         :param pulumi.Input[str] ipv6_bandwidth_id: The ipv6 bandwidth id. Only support shared bandwidth.
-        :param pulumi.Input[str] ipv6_network_id: The network on which to allocate the loadbalancer's ipv6 address.
+        :param pulumi.Input[str] ipv6_network_id: The **ID** of the subnet on which to allocate the loadbalancer's ipv6 address.
         :param pulumi.Input[str] l4_flavor_id: The L4 flavor id of the load balancer.
         :param pulumi.Input[str] l7_flavor_id: The L7 flavor id of the load balancer.
+        :param pulumi.Input[str] min_l7_flavor_id: Specifies the ID of the minimum Layer-7 flavor for elastic scaling.
+               This parameter cannot be left blank if there are HTTP or HTTPS listeners.
         :param pulumi.Input[str] name: Human-readable name for the loadbalancer.
         :param pulumi.Input[int] period: Specifies the charging period of the ELB loadbalancer.
                If `period_unit` is set to **month**, the value ranges from 1 to 9.
@@ -1098,7 +1182,7 @@ class Loadbalancer(pulumi.CustomResource):
             cross_vpc_backend=True,
             description="basic example",
             enterprise_project_id="{{ eps_id }}",
-            ipv4_subnet_id="{{ subnet_id }}",
+            ipv4_subnet_id="{{ ipv4_subnet_id }}",
             l4_flavor_id="{{ l4_flavor_id }}",
             l7_flavor_id="{{ l7_flavor_id }}",
             vpc_id="{{ vpc_id }}")
@@ -1118,7 +1202,7 @@ class Loadbalancer(pulumi.CustomResource):
             description="basic example",
             enterprise_project_id="{{ eps_id }}",
             ipv4_eip_id="{{ eip_id }}",
-            ipv4_subnet_id="{{ subnet_id }}",
+            ipv4_subnet_id="{{ ipv4_subnet_id }}",
             ipv6_bandwidth_id="{{ ipv6_bandwidth_id }}",
             ipv6_network_id="{{ ipv6_network_id }}",
             l4_flavor_id="{{ l4_flavor_id }}",
@@ -1142,7 +1226,7 @@ class Loadbalancer(pulumi.CustomResource):
             description="basic example",
             enterprise_project_id="{{ eps_id }}",
             iptype="5_bgp",
-            ipv4_subnet_id="{{ subnet_id }}",
+            ipv4_subnet_id="{{ ipv4_subnet_id }}",
             ipv6_bandwidth_id="{{ ipv6_bandwidth_id }}",
             ipv6_network_id="{{ ipv6_network_id }}",
             l4_flavor_id="{{ l4_flavor_id }}",
@@ -1190,6 +1274,7 @@ class Loadbalancer(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  auto_pay: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
+                 autoscaling_enabled: Optional[pulumi.Input[bool]] = None,
                  availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  bandwidth_charge_mode: Optional[pulumi.Input[str]] = None,
                  bandwidth_size: Optional[pulumi.Input[int]] = None,
@@ -1205,6 +1290,7 @@ class Loadbalancer(pulumi.CustomResource):
                  ipv6_network_id: Optional[pulumi.Input[str]] = None,
                  l4_flavor_id: Optional[pulumi.Input[str]] = None,
                  l7_flavor_id: Optional[pulumi.Input[str]] = None,
+                 min_l7_flavor_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
@@ -1221,8 +1307,12 @@ class Loadbalancer(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = LoadbalancerArgs.__new__(LoadbalancerArgs)
 
+            if auto_pay is not None and not opts.urn:
+                warnings.warn("""Deprecated""", DeprecationWarning)
+                pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
             __props__.__dict__["auto_pay"] = auto_pay
             __props__.__dict__["auto_renew"] = auto_renew
+            __props__.__dict__["autoscaling_enabled"] = autoscaling_enabled
             if availability_zones is None and not opts.urn:
                 raise TypeError("Missing required property 'availability_zones'")
             __props__.__dict__["availability_zones"] = availability_zones
@@ -1240,6 +1330,7 @@ class Loadbalancer(pulumi.CustomResource):
             __props__.__dict__["ipv6_network_id"] = ipv6_network_id
             __props__.__dict__["l4_flavor_id"] = l4_flavor_id
             __props__.__dict__["l7_flavor_id"] = l7_flavor_id
+            __props__.__dict__["min_l7_flavor_id"] = min_l7_flavor_id
             __props__.__dict__["name"] = name
             __props__.__dict__["period"] = period
             __props__.__dict__["period_unit"] = period_unit
@@ -1263,6 +1354,7 @@ class Loadbalancer(pulumi.CustomResource):
             opts: Optional[pulumi.ResourceOptions] = None,
             auto_pay: Optional[pulumi.Input[str]] = None,
             auto_renew: Optional[pulumi.Input[str]] = None,
+            autoscaling_enabled: Optional[pulumi.Input[bool]] = None,
             availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             bandwidth_charge_mode: Optional[pulumi.Input[str]] = None,
             bandwidth_size: Optional[pulumi.Input[int]] = None,
@@ -1282,6 +1374,7 @@ class Loadbalancer(pulumi.CustomResource):
             ipv6_network_id: Optional[pulumi.Input[str]] = None,
             l4_flavor_id: Optional[pulumi.Input[str]] = None,
             l7_flavor_id: Optional[pulumi.Input[str]] = None,
+            min_l7_flavor_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             period: Optional[pulumi.Input[int]] = None,
             period_unit: Optional[pulumi.Input[str]] = None,
@@ -1296,8 +1389,9 @@ class Loadbalancer(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are **true** and
-               **false**. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are **true** and **false**.
+        :param pulumi.Input[bool] autoscaling_enabled: Specifies whether autoscaling is enabled. Valid values are **true** and
+               **false**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the list of AZ names. Changing this parameter will create a
                new resource.
         :param pulumi.Input[str] bandwidth_charge_mode: Bandwidth billing type. Changing this parameter will create a
@@ -1315,14 +1409,17 @@ class Loadbalancer(pulumi.CustomResource):
         :param pulumi.Input[str] ipv4_address: The ipv4 address of the load balancer.
         :param pulumi.Input[str] ipv4_eip: The ipv4 eip address of the Load Balancer.
         :param pulumi.Input[str] ipv4_eip_id: The ID of the EIP. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] ipv4_subnet_id: The subnet on which to allocate the loadbalancer's ipv4 address.
+        :param pulumi.Input[str] ipv4_subnet_id: The **IPv4 subnet ID** of the subnet on which to allocate the loadbalancer's
+               ipv4 address.
         :param pulumi.Input[str] ipv6_address: The ipv6 address of the Load Balancer.
         :param pulumi.Input[str] ipv6_bandwidth_id: The ipv6 bandwidth id. Only support shared bandwidth.
         :param pulumi.Input[str] ipv6_eip: The ipv6 eip address of the Load Balancer.
         :param pulumi.Input[str] ipv6_eip_id: The ipv6 eip id of the Load Balancer.
-        :param pulumi.Input[str] ipv6_network_id: The network on which to allocate the loadbalancer's ipv6 address.
+        :param pulumi.Input[str] ipv6_network_id: The **ID** of the subnet on which to allocate the loadbalancer's ipv6 address.
         :param pulumi.Input[str] l4_flavor_id: The L4 flavor id of the load balancer.
         :param pulumi.Input[str] l7_flavor_id: The L7 flavor id of the load balancer.
+        :param pulumi.Input[str] min_l7_flavor_id: Specifies the ID of the minimum Layer-7 flavor for elastic scaling.
+               This parameter cannot be left blank if there are HTTP or HTTPS listeners.
         :param pulumi.Input[str] name: Human-readable name for the loadbalancer.
         :param pulumi.Input[int] period: Specifies the charging period of the ELB loadbalancer.
                If `period_unit` is set to **month**, the value ranges from 1 to 9.
@@ -1345,6 +1442,7 @@ class Loadbalancer(pulumi.CustomResource):
 
         __props__.__dict__["auto_pay"] = auto_pay
         __props__.__dict__["auto_renew"] = auto_renew
+        __props__.__dict__["autoscaling_enabled"] = autoscaling_enabled
         __props__.__dict__["availability_zones"] = availability_zones
         __props__.__dict__["bandwidth_charge_mode"] = bandwidth_charge_mode
         __props__.__dict__["bandwidth_size"] = bandwidth_size
@@ -1364,6 +1462,7 @@ class Loadbalancer(pulumi.CustomResource):
         __props__.__dict__["ipv6_network_id"] = ipv6_network_id
         __props__.__dict__["l4_flavor_id"] = l4_flavor_id
         __props__.__dict__["l7_flavor_id"] = l7_flavor_id
+        __props__.__dict__["min_l7_flavor_id"] = min_l7_flavor_id
         __props__.__dict__["name"] = name
         __props__.__dict__["period"] = period
         __props__.__dict__["period_unit"] = period_unit
@@ -1382,10 +1481,18 @@ class Loadbalancer(pulumi.CustomResource):
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies whether auto renew is enabled. Valid values are **true** and
-        **false**. Changing this parameter will create a new resource.
+        Specifies whether auto renew is enabled. Valid values are **true** and **false**.
         """
         return pulumi.get(self, "auto_renew")
+
+    @property
+    @pulumi.getter(name="autoscalingEnabled")
+    def autoscaling_enabled(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether autoscaling is enabled. Valid values are **true** and
+        **false**.
+        """
+        return pulumi.get(self, "autoscaling_enabled")
 
     @property
     @pulumi.getter(name="availabilityZones")
@@ -1485,7 +1592,8 @@ class Loadbalancer(pulumi.CustomResource):
     @pulumi.getter(name="ipv4SubnetId")
     def ipv4_subnet_id(self) -> pulumi.Output[Optional[str]]:
         """
-        The subnet on which to allocate the loadbalancer's ipv4 address.
+        The **IPv4 subnet ID** of the subnet on which to allocate the loadbalancer's
+        ipv4 address.
         """
         return pulumi.get(self, "ipv4_subnet_id")
 
@@ -1525,7 +1633,7 @@ class Loadbalancer(pulumi.CustomResource):
     @pulumi.getter(name="ipv6NetworkId")
     def ipv6_network_id(self) -> pulumi.Output[Optional[str]]:
         """
-        The network on which to allocate the loadbalancer's ipv6 address.
+        The **ID** of the subnet on which to allocate the loadbalancer's ipv6 address.
         """
         return pulumi.get(self, "ipv6_network_id")
 
@@ -1544,6 +1652,15 @@ class Loadbalancer(pulumi.CustomResource):
         The L7 flavor id of the load balancer.
         """
         return pulumi.get(self, "l7_flavor_id")
+
+    @property
+    @pulumi.getter(name="minL7FlavorId")
+    def min_l7_flavor_id(self) -> pulumi.Output[str]:
+        """
+        Specifies the ID of the minimum Layer-7 flavor for elastic scaling.
+        This parameter cannot be left blank if there are HTTP or HTTPS listeners.
+        """
+        return pulumi.get(self, "min_l7_flavor_id")
 
     @property
     @pulumi.getter

@@ -40,6 +40,10 @@ import (
 //				SubnetId:         pulumi.Any(subnetId),
 //				SecurityGroupId:  pulumi.Any(secgroupId),
 //				AvailabilityZone: pulumi.Any(testAz),
+//				Tags: pulumi.StringMap{
+//					"foo": pulumi.String("bar"),
+//					"key": pulumi.String("value"),
+//				},
 //			})
 //			if err != nil {
 //				return err
@@ -59,17 +63,43 @@ import (
 //	$ pulumi import huaweicloud:Sfs/turbo:Turbo huaweicloud_sfs_turbo 1e3d5306-24c9-4316-9185-70e9787d71ab
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to payment attributes missing from the API response. The missing attributes include`charging_mode`, `period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing an instance. You can ignore changes as below. hcl resource "huaweicloud_sfs_turbo" "test" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [
+//
+//	charging_mode, period_unit, period, auto_renew,
+//
+//	]
+//
+//	} }
 type Turbo struct {
 	pulumi.CustomResourceState
 
+	// Specifies whether auto renew is enabled.\
+	// The valid values are **true** and **false**.
+	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
 	// Specifies the availability zone where the file system is located.
 	// Changing this will create a new resource.
 	AvailabilityZone pulumi.StringOutput `pulumi:"availabilityZone"`
 	// The available capacity of the SFS Turbo file system in the unit of GB.
 	AvailableCapacity pulumi.StringOutput `pulumi:"availableCapacity"`
+	// Specifies the charging mode of the SFS Turbo.
+	// Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	// Changing this parameter will create a new cluster resource.
+	ChargingMode pulumi.StringOutput `pulumi:"chargingMode"`
 	// Specifies the ID of a KMS key to encrypt the file system. Changing this
 	// will create a new resource.
 	CryptKeyId pulumi.StringPtrOutput `pulumi:"cryptKeyId"`
+	// Specifies the VM flavor used for creating a dedicated file system.
+	DedicatedFlavor pulumi.StringPtrOutput `pulumi:"dedicatedFlavor"`
+	// Specifies the ID of the dedicated distributed storage used
+	// when creating a dedicated file system.
+	DedicatedStorageId pulumi.StringPtrOutput `pulumi:"dedicatedStorageId"`
 	// Specifies whether the file system is enhanced or not. Changing this will
 	// create a new resource.
 	Enhanced pulumi.BoolOutput `pulumi:"enhanced"`
@@ -81,6 +111,16 @@ type Turbo struct {
 	// Specifies the name of an SFS Turbo file system. The value contains 4 to 64
 	// characters and must start with a letter. Changing this will create a new resource.
 	Name pulumi.StringOutput `pulumi:"name"`
+	// Specifies the charging period of the SFS Turbo.
+	// If `periodUnit` is set to **month**, the value ranges from `1` to `11`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new cluster resource.
+	Period pulumi.IntPtrOutput `pulumi:"period"`
+	// Specifies the charging period unit of the SFS Turbo.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new cluster resource.
+	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
 	// The region in which to create the SFS Turbo resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new SFS Turbo resource.
 	Region pulumi.StringOutput `pulumi:"region"`
@@ -101,6 +141,8 @@ type Turbo struct {
 	// Specifies the network ID of the subnet. Changing this will create a new
 	// resource.
 	SubnetId pulumi.StringOutput `pulumi:"subnetId"`
+	// Specifies the key/value pairs to associate with the SFS Turbo.
+	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// The version ID of the SFS Turbo file system.
 	Version pulumi.StringOutput `pulumi:"version"`
 	// Specifies the VPC ID. Changing this will create a new resource.
@@ -152,14 +194,26 @@ func GetTurbo(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Turbo resources.
 type turboState struct {
+	// Specifies whether auto renew is enabled.\
+	// The valid values are **true** and **false**.
+	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the availability zone where the file system is located.
 	// Changing this will create a new resource.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// The available capacity of the SFS Turbo file system in the unit of GB.
 	AvailableCapacity *string `pulumi:"availableCapacity"`
+	// Specifies the charging mode of the SFS Turbo.
+	// Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	// Changing this parameter will create a new cluster resource.
+	ChargingMode *string `pulumi:"chargingMode"`
 	// Specifies the ID of a KMS key to encrypt the file system. Changing this
 	// will create a new resource.
 	CryptKeyId *string `pulumi:"cryptKeyId"`
+	// Specifies the VM flavor used for creating a dedicated file system.
+	DedicatedFlavor *string `pulumi:"dedicatedFlavor"`
+	// Specifies the ID of the dedicated distributed storage used
+	// when creating a dedicated file system.
+	DedicatedStorageId *string `pulumi:"dedicatedStorageId"`
 	// Specifies whether the file system is enhanced or not. Changing this will
 	// create a new resource.
 	Enhanced *bool `pulumi:"enhanced"`
@@ -171,6 +225,16 @@ type turboState struct {
 	// Specifies the name of an SFS Turbo file system. The value contains 4 to 64
 	// characters and must start with a letter. Changing this will create a new resource.
 	Name *string `pulumi:"name"`
+	// Specifies the charging period of the SFS Turbo.
+	// If `periodUnit` is set to **month**, the value ranges from `1` to `11`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new cluster resource.
+	Period *int `pulumi:"period"`
+	// Specifies the charging period unit of the SFS Turbo.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new cluster resource.
+	PeriodUnit *string `pulumi:"periodUnit"`
 	// The region in which to create the SFS Turbo resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new SFS Turbo resource.
 	Region *string `pulumi:"region"`
@@ -191,6 +255,8 @@ type turboState struct {
 	// Specifies the network ID of the subnet. Changing this will create a new
 	// resource.
 	SubnetId *string `pulumi:"subnetId"`
+	// Specifies the key/value pairs to associate with the SFS Turbo.
+	Tags map[string]string `pulumi:"tags"`
 	// The version ID of the SFS Turbo file system.
 	Version *string `pulumi:"version"`
 	// Specifies the VPC ID. Changing this will create a new resource.
@@ -198,14 +264,26 @@ type turboState struct {
 }
 
 type TurboState struct {
+	// Specifies whether auto renew is enabled.\
+	// The valid values are **true** and **false**.
+	AutoRenew pulumi.StringPtrInput
 	// Specifies the availability zone where the file system is located.
 	// Changing this will create a new resource.
 	AvailabilityZone pulumi.StringPtrInput
 	// The available capacity of the SFS Turbo file system in the unit of GB.
 	AvailableCapacity pulumi.StringPtrInput
+	// Specifies the charging mode of the SFS Turbo.
+	// Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	// Changing this parameter will create a new cluster resource.
+	ChargingMode pulumi.StringPtrInput
 	// Specifies the ID of a KMS key to encrypt the file system. Changing this
 	// will create a new resource.
 	CryptKeyId pulumi.StringPtrInput
+	// Specifies the VM flavor used for creating a dedicated file system.
+	DedicatedFlavor pulumi.StringPtrInput
+	// Specifies the ID of the dedicated distributed storage used
+	// when creating a dedicated file system.
+	DedicatedStorageId pulumi.StringPtrInput
 	// Specifies whether the file system is enhanced or not. Changing this will
 	// create a new resource.
 	Enhanced pulumi.BoolPtrInput
@@ -217,6 +295,16 @@ type TurboState struct {
 	// Specifies the name of an SFS Turbo file system. The value contains 4 to 64
 	// characters and must start with a letter. Changing this will create a new resource.
 	Name pulumi.StringPtrInput
+	// Specifies the charging period of the SFS Turbo.
+	// If `periodUnit` is set to **month**, the value ranges from `1` to `11`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new cluster resource.
+	Period pulumi.IntPtrInput
+	// Specifies the charging period unit of the SFS Turbo.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new cluster resource.
+	PeriodUnit pulumi.StringPtrInput
 	// The region in which to create the SFS Turbo resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new SFS Turbo resource.
 	Region pulumi.StringPtrInput
@@ -237,6 +325,8 @@ type TurboState struct {
 	// Specifies the network ID of the subnet. Changing this will create a new
 	// resource.
 	SubnetId pulumi.StringPtrInput
+	// Specifies the key/value pairs to associate with the SFS Turbo.
+	Tags pulumi.StringMapInput
 	// The version ID of the SFS Turbo file system.
 	Version pulumi.StringPtrInput
 	// Specifies the VPC ID. Changing this will create a new resource.
@@ -248,12 +338,24 @@ func (TurboState) ElementType() reflect.Type {
 }
 
 type turboArgs struct {
+	// Specifies whether auto renew is enabled.\
+	// The valid values are **true** and **false**.
+	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the availability zone where the file system is located.
 	// Changing this will create a new resource.
 	AvailabilityZone string `pulumi:"availabilityZone"`
+	// Specifies the charging mode of the SFS Turbo.
+	// Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	// Changing this parameter will create a new cluster resource.
+	ChargingMode *string `pulumi:"chargingMode"`
 	// Specifies the ID of a KMS key to encrypt the file system. Changing this
 	// will create a new resource.
 	CryptKeyId *string `pulumi:"cryptKeyId"`
+	// Specifies the VM flavor used for creating a dedicated file system.
+	DedicatedFlavor *string `pulumi:"dedicatedFlavor"`
+	// Specifies the ID of the dedicated distributed storage used
+	// when creating a dedicated file system.
+	DedicatedStorageId *string `pulumi:"dedicatedStorageId"`
 	// Specifies whether the file system is enhanced or not. Changing this will
 	// create a new resource.
 	Enhanced *bool `pulumi:"enhanced"`
@@ -263,6 +365,16 @@ type turboArgs struct {
 	// Specifies the name of an SFS Turbo file system. The value contains 4 to 64
 	// characters and must start with a letter. Changing this will create a new resource.
 	Name *string `pulumi:"name"`
+	// Specifies the charging period of the SFS Turbo.
+	// If `periodUnit` is set to **month**, the value ranges from `1` to `11`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new cluster resource.
+	Period *int `pulumi:"period"`
+	// Specifies the charging period unit of the SFS Turbo.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new cluster resource.
+	PeriodUnit *string `pulumi:"periodUnit"`
 	// The region in which to create the SFS Turbo resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new SFS Turbo resource.
 	Region *string `pulumi:"region"`
@@ -281,18 +393,32 @@ type turboArgs struct {
 	// Specifies the network ID of the subnet. Changing this will create a new
 	// resource.
 	SubnetId string `pulumi:"subnetId"`
+	// Specifies the key/value pairs to associate with the SFS Turbo.
+	Tags map[string]string `pulumi:"tags"`
 	// Specifies the VPC ID. Changing this will create a new resource.
 	VpcId string `pulumi:"vpcId"`
 }
 
 // The set of arguments for constructing a Turbo resource.
 type TurboArgs struct {
+	// Specifies whether auto renew is enabled.\
+	// The valid values are **true** and **false**.
+	AutoRenew pulumi.StringPtrInput
 	// Specifies the availability zone where the file system is located.
 	// Changing this will create a new resource.
 	AvailabilityZone pulumi.StringInput
+	// Specifies the charging mode of the SFS Turbo.
+	// Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	// Changing this parameter will create a new cluster resource.
+	ChargingMode pulumi.StringPtrInput
 	// Specifies the ID of a KMS key to encrypt the file system. Changing this
 	// will create a new resource.
 	CryptKeyId pulumi.StringPtrInput
+	// Specifies the VM flavor used for creating a dedicated file system.
+	DedicatedFlavor pulumi.StringPtrInput
+	// Specifies the ID of the dedicated distributed storage used
+	// when creating a dedicated file system.
+	DedicatedStorageId pulumi.StringPtrInput
 	// Specifies whether the file system is enhanced or not. Changing this will
 	// create a new resource.
 	Enhanced pulumi.BoolPtrInput
@@ -302,6 +428,16 @@ type TurboArgs struct {
 	// Specifies the name of an SFS Turbo file system. The value contains 4 to 64
 	// characters and must start with a letter. Changing this will create a new resource.
 	Name pulumi.StringPtrInput
+	// Specifies the charging period of the SFS Turbo.
+	// If `periodUnit` is set to **month**, the value ranges from `1` to `11`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new cluster resource.
+	Period pulumi.IntPtrInput
+	// Specifies the charging period unit of the SFS Turbo.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new cluster resource.
+	PeriodUnit pulumi.StringPtrInput
 	// The region in which to create the SFS Turbo resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new SFS Turbo resource.
 	Region pulumi.StringPtrInput
@@ -320,6 +456,8 @@ type TurboArgs struct {
 	// Specifies the network ID of the subnet. Changing this will create a new
 	// resource.
 	SubnetId pulumi.StringInput
+	// Specifies the key/value pairs to associate with the SFS Turbo.
+	Tags pulumi.StringMapInput
 	// Specifies the VPC ID. Changing this will create a new resource.
 	VpcId pulumi.StringInput
 }
@@ -411,6 +549,12 @@ func (o TurboOutput) ToTurboOutputWithContext(ctx context.Context) TurboOutput {
 	return o
 }
 
+// Specifies whether auto renew is enabled.\
+// The valid values are **true** and **false**.
+func (o TurboOutput) AutoRenew() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Turbo) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the availability zone where the file system is located.
 // Changing this will create a new resource.
 func (o TurboOutput) AvailabilityZone() pulumi.StringOutput {
@@ -422,10 +566,28 @@ func (o TurboOutput) AvailableCapacity() pulumi.StringOutput {
 	return o.ApplyT(func(v *Turbo) pulumi.StringOutput { return v.AvailableCapacity }).(pulumi.StringOutput)
 }
 
+// Specifies the charging mode of the SFS Turbo.
+// Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+// Changing this parameter will create a new cluster resource.
+func (o TurboOutput) ChargingMode() pulumi.StringOutput {
+	return o.ApplyT(func(v *Turbo) pulumi.StringOutput { return v.ChargingMode }).(pulumi.StringOutput)
+}
+
 // Specifies the ID of a KMS key to encrypt the file system. Changing this
 // will create a new resource.
 func (o TurboOutput) CryptKeyId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Turbo) pulumi.StringPtrOutput { return v.CryptKeyId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the VM flavor used for creating a dedicated file system.
+func (o TurboOutput) DedicatedFlavor() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Turbo) pulumi.StringPtrOutput { return v.DedicatedFlavor }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the ID of the dedicated distributed storage used
+// when creating a dedicated file system.
+func (o TurboOutput) DedicatedStorageId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Turbo) pulumi.StringPtrOutput { return v.DedicatedStorageId }).(pulumi.StringPtrOutput)
 }
 
 // Specifies whether the file system is enhanced or not. Changing this will
@@ -449,6 +611,22 @@ func (o TurboOutput) ExportLocation() pulumi.StringOutput {
 // characters and must start with a letter. Changing this will create a new resource.
 func (o TurboOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Turbo) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the charging period of the SFS Turbo.
+// If `periodUnit` is set to **month**, the value ranges from `1` to `11`.
+// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+// Changing this parameter will create a new cluster resource.
+func (o TurboOutput) Period() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *Turbo) pulumi.IntPtrOutput { return v.Period }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the charging period unit of the SFS Turbo.
+// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+// Changing this parameter will create a new cluster resource.
+func (o TurboOutput) PeriodUnit() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Turbo) pulumi.StringPtrOutput { return v.PeriodUnit }).(pulumi.StringPtrOutput)
 }
 
 // The region in which to create the SFS Turbo resource. If omitted, the
@@ -490,6 +668,11 @@ func (o TurboOutput) Status() pulumi.StringOutput {
 // resource.
 func (o TurboOutput) SubnetId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Turbo) pulumi.StringOutput { return v.SubnetId }).(pulumi.StringOutput)
+}
+
+// Specifies the key/value pairs to associate with the SFS Turbo.
+func (o TurboOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *Turbo) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }
 
 // The version ID of the SFS Turbo file system.

@@ -6,7 +6,7 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Use this data source to get available Huaweicloud cdm flavors.
+ * Use this data source to get available HuaweiCloud CDM flavors.
  *
  * ## Example Usage
  *
@@ -34,7 +34,8 @@ export function getFlavors(args?: GetFlavorsArgs, opts?: pulumi.InvokeOptions): 
  */
 export interface GetFlavorsArgs {
     /**
-     * The region in which to obtain the CDM flavors. If omitted, the provider-level region will be used.
+     * The region in which to obtain the CDM flavors.
+     * If omitted, the provider-level region will be used.
      */
     region?: string;
 }
@@ -51,12 +52,9 @@ export interface GetFlavorsResult {
      * The provider-assigned unique ID for this managed resource.
      */
     readonly id: string;
-    /**
-     * The region in which to obtain the CDM flavors. If omitted, the provider-level region will be used.
-     */
     readonly region: string;
     /**
-     * The version of the flavor.
+     * The version of the CDM cluster.
      */
     readonly version: string;
 }
@@ -70,7 +68,8 @@ export function getFlavorsOutput(args?: GetFlavorsOutputArgs, opts?: pulumi.Invo
  */
 export interface GetFlavorsOutputArgs {
     /**
-     * The region in which to obtain the CDM flavors. If omitted, the provider-level region will be used.
+     * The region in which to obtain the CDM flavors.
+     * If omitted, the provider-level region will be used.
      */
     region?: pulumi.Input<string>;
 }

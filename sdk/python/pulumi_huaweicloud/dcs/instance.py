@@ -30,6 +30,7 @@ class InstanceArgs:
                  backup_type: Optional[pulumi.Input[str]] = None,
                  begin_at: Optional[pulumi.Input[str]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 deleted_nodes: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  engine_version: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -47,18 +48,20 @@ class InstanceArgs:
                  product_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  rename_commands: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 reserved_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  save_days: Optional[pulumi.Input[int]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 template_id: Optional[pulumi.Input[str]] = None,
                  whitelist_enable: Optional[pulumi.Input[bool]] = None,
                  whitelists: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceWhitelistArgs']]]] = None):
         """
         The set of arguments for constructing a Instance resource.
         :param pulumi.Input[float] capacity: Specifies the cache capacity. Unit: GB.
-               + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`, `0.5`, `1`, `2`,
-               `4`, `8`, `16`, `32` and `64`.
-               Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-               `1024`.
+               + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
+               `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
+               Cluster instance specifications support `4`,`8`,`16`, `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`,
+               `384`, `512`, `768` and `1024`.
                + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
                Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
                + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -74,7 +77,6 @@ class InstanceArgs:
                hyphens (-). Changing this creates a new instance.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
                Valid values are `true` and `false`, defaults to `false`.
-               Changing this creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: The code of the AZ where the cache node resides.
                Master/Standby, Proxy Cluster, and Redis Cluster DCS instances support cross-AZ deployment.
                You can specify an AZ for the standby node. When specifying AZs for nodes, use commas (,) to separate AZs.
@@ -94,10 +96,13 @@ class InstanceArgs:
                + `postPaid`: indicates the pay-per-use billing mode.
                Default value is `postPaid`.
                Changing this creates a new instance.
+        :param pulumi.Input[str] deleted_nodes: Specifies the ID of the replica to delete. This parameter is mandatory when
+               you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
+               at a time.
         :param pulumi.Input[str] description: Specifies the description of an instance.
                It is a string that contains a maximum of 1024 characters.
         :param pulumi.Input[str] engine_version: Specifies the version of a cache engine.
-               It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, or 5.0.
+               It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
                Changing this creates a new instance.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the dcs instance.
                Changing this creates a new instance.
@@ -130,13 +135,11 @@ class InstanceArgs:
                The name must be 4 to 64 characters and start with a letter.
                Only chinese, letters (case-insensitive), digits, underscores (_) ,and hyphens (-) are allowed.
         :param pulumi.Input[str] password: Specifies the password of a DCS instance.
-               Changing this creates a new instance.
                The password of a DCS instance must meet the following complexity requirements:
                + Must be a string of 8 to 32 bits in length.
                + Must contain three combinations of the following four characters: Lower case letters, uppercase letter, digital,
                Special characters include (`~!@#$^&*()-_=+\\\\|{}:,<.>/?).
                + The new password cannot be the same as the old password.
-               Redis instance defaults to 6379. Memcached instance does not use this argument.
         :param pulumi.Input[int] period: Specifies the charging period of the instance.
                If `period_unit` is set to *month*, the value ranges from 1 to 9.
                If `period_unit` is set to *year*, the value ranges from 1 to 3.
@@ -148,6 +151,7 @@ class InstanceArgs:
                Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
                Changing this creates a new instance.
         :param pulumi.Input[int] port: Port customization, which is supported only by Redis 4.0 and Redis 5.0 instances.
+               Redis instance defaults to 6379. Memcached instance does not use this argument.
         :param pulumi.Input[str] private_ip: The IP address of the DCS instance,
                which can only be the currently available IP address the selected subnet.
                You can specify an available IP for the Redis instance (except for the Redis Cluster type).
@@ -157,11 +161,16 @@ class InstanceArgs:
                If omitted, the provider-level region will be used. Changing this creates a new DCS instance resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] rename_commands: Critical command renaming, which is supported only by Redis 4.0 and
                Redis 5.0 instances but not by Redis 3.0 instance.
-               The valid commands that can be renamed are: *command*, *keys*, *flushdb*, *flushall* and *hgetall*.
+               The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] reserved_ips: Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
+               parameter is not set, the system randomly deletes unnecessary shards.
         :param pulumi.Input[int] save_days: Retention time. Unit: day, the value ranges from 1 to 7.
+               This parameter is required if the backup_type is **auto**.
         :param pulumi.Input[str] security_group_id: The ID of the security group which the instance belongs to.
                This parameter is mandatory for Memcached and Redis 3.0 version.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the dcs instance.
+        :param pulumi.Input[str] template_id: The Parameter Template ID.
+               Changing this creates a new instance resource.
         :param pulumi.Input[bool] whitelist_enable: Enable or disable the IP address whitelists. Defaults to true.
                If the whitelist is disabled, all IP addresses connected to the VPC can access the instance.
         :param pulumi.Input[Sequence[pulumi.Input['InstanceWhitelistArgs']]] whitelists: Specifies the IP addresses which can access the instance.
@@ -173,6 +182,9 @@ class InstanceArgs:
         pulumi.set(__self__, "vpc_id", vpc_id)
         if access_user is not None:
             pulumi.set(__self__, "access_user", access_user)
+        if auto_pay is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
         if auto_pay is not None:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
@@ -203,6 +215,8 @@ class InstanceArgs:
             pulumi.set(__self__, "begin_at", begin_at)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
+        if deleted_nodes is not None:
+            pulumi.set(__self__, "deleted_nodes", deleted_nodes)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if engine_version is not None:
@@ -246,6 +260,8 @@ class InstanceArgs:
             pulumi.set(__self__, "region", region)
         if rename_commands is not None:
             pulumi.set(__self__, "rename_commands", rename_commands)
+        if reserved_ips is not None:
+            pulumi.set(__self__, "reserved_ips", reserved_ips)
         if save_days is not None:
             warnings.warn("""Deprecated, please use `backup_policy` instead""", DeprecationWarning)
             pulumi.log.warn("""save_days is deprecated: Deprecated, please use `backup_policy` instead""")
@@ -255,6 +271,8 @@ class InstanceArgs:
             pulumi.set(__self__, "security_group_id", security_group_id)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
+        if template_id is not None:
+            pulumi.set(__self__, "template_id", template_id)
         if whitelist_enable is not None:
             pulumi.set(__self__, "whitelist_enable", whitelist_enable)
         if whitelists is not None:
@@ -265,10 +283,10 @@ class InstanceArgs:
     def capacity(self) -> pulumi.Input[float]:
         """
         Specifies the cache capacity. Unit: GB.
-        + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`, `0.5`, `1`, `2`,
-        `4`, `8`, `16`, `32` and `64`.
-        Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-        `1024`.
+        + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
+        `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
+        Cluster instance specifications support `4`,`8`,`16`, `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`,
+        `384`, `512`, `768` and `1024`.
         + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
         Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
         + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -348,7 +366,6 @@ class InstanceArgs:
         """
         Specifies whether auto renew is enabled.
         Valid values are `true` and `false`, defaults to `false`.
-        Changing this creates a new instance.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -451,6 +468,20 @@ class InstanceArgs:
         pulumi.set(self, "charging_mode", value)
 
     @property
+    @pulumi.getter(name="deletedNodes")
+    def deleted_nodes(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the replica to delete. This parameter is mandatory when
+        you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
+        at a time.
+        """
+        return pulumi.get(self, "deleted_nodes")
+
+    @deleted_nodes.setter
+    def deleted_nodes(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "deleted_nodes", value)
+
+    @property
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
@@ -468,7 +499,7 @@ class InstanceArgs:
     def engine_version(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the version of a cache engine.
-        It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, or 5.0.
+        It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
         Changing this creates a new instance.
         """
         return pulumi.get(self, "engine_version")
@@ -576,13 +607,11 @@ class InstanceArgs:
     def password(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the password of a DCS instance.
-        Changing this creates a new instance.
         The password of a DCS instance must meet the following complexity requirements:
         + Must be a string of 8 to 32 bits in length.
         + Must contain three combinations of the following four characters: Lower case letters, uppercase letter, digital,
         Special characters include (`~!@#$^&*()-_=+\\\\|{}:,<.>/?).
         + The new password cannot be the same as the old password.
-        Redis instance defaults to 6379. Memcached instance does not use this argument.
         """
         return pulumi.get(self, "password")
 
@@ -638,6 +667,7 @@ class InstanceArgs:
     def port(self) -> Optional[pulumi.Input[int]]:
         """
         Port customization, which is supported only by Redis 4.0 and Redis 5.0 instances.
+        Redis instance defaults to 6379. Memcached instance does not use this argument.
         """
         return pulumi.get(self, "port")
 
@@ -689,7 +719,7 @@ class InstanceArgs:
         """
         Critical command renaming, which is supported only by Redis 4.0 and
         Redis 5.0 instances but not by Redis 3.0 instance.
-        The valid commands that can be renamed are: *command*, *keys*, *flushdb*, *flushall* and *hgetall*.
+        The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
         """
         return pulumi.get(self, "rename_commands")
 
@@ -698,10 +728,24 @@ class InstanceArgs:
         pulumi.set(self, "rename_commands", value)
 
     @property
+    @pulumi.getter(name="reservedIps")
+    def reserved_ips(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
+        parameter is not set, the system randomly deletes unnecessary shards.
+        """
+        return pulumi.get(self, "reserved_ips")
+
+    @reserved_ips.setter
+    def reserved_ips(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "reserved_ips", value)
+
+    @property
     @pulumi.getter(name="saveDays")
     def save_days(self) -> Optional[pulumi.Input[int]]:
         """
         Retention time. Unit: day, the value ranges from 1 to 7.
+        This parameter is required if the backup_type is **auto**.
         """
         return pulumi.get(self, "save_days")
 
@@ -733,6 +777,19 @@ class InstanceArgs:
     @tags.setter
     def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
+
+    @property
+    @pulumi.getter(name="templateId")
+    def template_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The Parameter Template ID.
+        Changing this creates a new instance resource.
+        """
+        return pulumi.get(self, "template_id")
+
+    @template_id.setter
+    def template_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "template_id", value)
 
     @property
     @pulumi.getter(name="whitelistEnable")
@@ -775,6 +832,7 @@ class _InstanceState:
                  begin_at: Optional[pulumi.Input[str]] = None,
                  capacity: Optional[pulumi.Input[float]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 deleted_nodes: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  domain_name: Optional[pulumi.Input[str]] = None,
                  engine: Optional[pulumi.Input[str]] = None,
@@ -798,6 +856,7 @@ class _InstanceState:
                  product_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  rename_commands: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 reserved_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  save_days: Optional[pulumi.Input[int]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
                  security_group_name: Optional[pulumi.Input[str]] = None,
@@ -805,6 +864,7 @@ class _InstanceState:
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  subnet_name: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 template_id: Optional[pulumi.Input[str]] = None,
                  used_memory: Optional[pulumi.Input[int]] = None,
                  user_id: Optional[pulumi.Input[str]] = None,
                  user_name: Optional[pulumi.Input[str]] = None,
@@ -820,7 +880,6 @@ class _InstanceState:
                hyphens (-). Changing this creates a new instance.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
                Valid values are `true` and `false`, defaults to `false`.
-               Changing this creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: The code of the AZ where the cache node resides.
                Master/Standby, Proxy Cluster, and Redis Cluster DCS instances support cross-AZ deployment.
                You can specify an AZ for the standby node. When specifying AZs for nodes, use commas (,) to separate AZs.
@@ -835,10 +894,10 @@ class _InstanceState:
         :param pulumi.Input[str] begin_at: Time at which backup starts.
                Format: `hh24:00-hh24:00`, "00:00-01:00" indicates that backup starts at 00:00:00.
         :param pulumi.Input[float] capacity: Specifies the cache capacity. Unit: GB.
-               + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`, `0.5`, `1`, `2`,
-               `4`, `8`, `16`, `32` and `64`.
-               Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-               `1024`.
+               + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
+               `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
+               Cluster instance specifications support `4`,`8`,`16`, `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`,
+               `384`, `512`, `768` and `1024`.
                + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
                Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
                + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -848,13 +907,16 @@ class _InstanceState:
                + `postPaid`: indicates the pay-per-use billing mode.
                Default value is `postPaid`.
                Changing this creates a new instance.
+        :param pulumi.Input[str] deleted_nodes: Specifies the ID of the replica to delete. This parameter is mandatory when
+               you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
+               at a time.
         :param pulumi.Input[str] description: Specifies the description of an instance.
                It is a string that contains a maximum of 1024 characters.
         :param pulumi.Input[str] domain_name: Domain name of the instance. Usually, we use domain name and port to connect to the DCS instances.
         :param pulumi.Input[str] engine: Specifies a cache engine. Options: *Redis* and *Memcached*.
                Changing this creates a new instance.
         :param pulumi.Input[str] engine_version: Specifies the version of a cache engine.
-               It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, or 5.0.
+               It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
                Changing this creates a new instance.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the dcs instance.
                Changing this creates a new instance.
@@ -889,13 +951,11 @@ class _InstanceState:
                Only chinese, letters (case-insensitive), digits, underscores (_) ,and hyphens (-) are allowed.
         :param pulumi.Input[str] order_id: The ID of the order that created the instance.
         :param pulumi.Input[str] password: Specifies the password of a DCS instance.
-               Changing this creates a new instance.
                The password of a DCS instance must meet the following complexity requirements:
                + Must be a string of 8 to 32 bits in length.
                + Must contain three combinations of the following four characters: Lower case letters, uppercase letter, digital,
                Special characters include (`~!@#$^&*()-_=+\\\\|{}:,<.>/?).
                + The new password cannot be the same as the old password.
-               Redis instance defaults to 6379. Memcached instance does not use this argument.
         :param pulumi.Input[int] period: Specifies the charging period of the instance.
                If `period_unit` is set to *month*, the value ranges from 1 to 9.
                If `period_unit` is set to *year*, the value ranges from 1 to 3.
@@ -907,6 +967,7 @@ class _InstanceState:
                Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
                Changing this creates a new instance.
         :param pulumi.Input[int] port: Port customization, which is supported only by Redis 4.0 and Redis 5.0 instances.
+               Redis instance defaults to 6379. Memcached instance does not use this argument.
         :param pulumi.Input[str] private_ip: The IP address of the DCS instance,
                which can only be the currently available IP address the selected subnet.
                You can specify an available IP for the Redis instance (except for the Redis Cluster type).
@@ -916,8 +977,11 @@ class _InstanceState:
                If omitted, the provider-level region will be used. Changing this creates a new DCS instance resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] rename_commands: Critical command renaming, which is supported only by Redis 4.0 and
                Redis 5.0 instances but not by Redis 3.0 instance.
-               The valid commands that can be renamed are: *command*, *keys*, *flushdb*, *flushall* and *hgetall*.
+               The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] reserved_ips: Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
+               parameter is not set, the system randomly deletes unnecessary shards.
         :param pulumi.Input[int] save_days: Retention time. Unit: day, the value ranges from 1 to 7.
+               This parameter is required if the backup_type is **auto**.
         :param pulumi.Input[str] security_group_id: The ID of the security group which the instance belongs to.
                This parameter is mandatory for Memcached and Redis 3.0 version.
         :param pulumi.Input[str] security_group_name: The name of security group which the instance belongs to.
@@ -935,6 +999,8 @@ class _InstanceState:
                Changing this creates a new instance resource.
         :param pulumi.Input[str] subnet_name: The name of subnet which the instance belongs to.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the dcs instance.
+        :param pulumi.Input[str] template_id: The Parameter Template ID.
+               Changing this creates a new instance resource.
         :param pulumi.Input[int] used_memory: Size of the used memory. Unit: MB.
         :param pulumi.Input[str] vpc_id: The ID of VPC which the instance belongs to.
                Changing this creates a new instance resource.
@@ -946,6 +1012,9 @@ class _InstanceState:
         """
         if access_user is not None:
             pulumi.set(__self__, "access_user", access_user)
+        if auto_pay is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
         if auto_pay is not None:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
@@ -978,6 +1047,8 @@ class _InstanceState:
             pulumi.set(__self__, "capacity", capacity)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
+        if deleted_nodes is not None:
+            pulumi.set(__self__, "deleted_nodes", deleted_nodes)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if domain_name is not None:
@@ -1039,6 +1110,8 @@ class _InstanceState:
             pulumi.set(__self__, "region", region)
         if rename_commands is not None:
             pulumi.set(__self__, "rename_commands", rename_commands)
+        if reserved_ips is not None:
+            pulumi.set(__self__, "reserved_ips", reserved_ips)
         if save_days is not None:
             warnings.warn("""Deprecated, please use `backup_policy` instead""", DeprecationWarning)
             pulumi.log.warn("""save_days is deprecated: Deprecated, please use `backup_policy` instead""")
@@ -1056,6 +1129,8 @@ class _InstanceState:
             pulumi.set(__self__, "subnet_name", subnet_name)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
+        if template_id is not None:
+            pulumi.set(__self__, "template_id", template_id)
         if used_memory is not None:
             pulumi.set(__self__, "used_memory", used_memory)
         if user_id is not None:
@@ -1107,7 +1182,6 @@ class _InstanceState:
         """
         Specifies whether auto renew is enabled.
         Valid values are `true` and `false`, defaults to `false`.
-        Changing this creates a new instance.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -1197,10 +1271,10 @@ class _InstanceState:
     def capacity(self) -> Optional[pulumi.Input[float]]:
         """
         Specifies the cache capacity. Unit: GB.
-        + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`, `0.5`, `1`, `2`,
-        `4`, `8`, `16`, `32` and `64`.
-        Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-        `1024`.
+        + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
+        `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
+        Cluster instance specifications support `4`,`8`,`16`, `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`,
+        `384`, `512`, `768` and `1024`.
         + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
         Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
         + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -1227,6 +1301,20 @@ class _InstanceState:
     @charging_mode.setter
     def charging_mode(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "charging_mode", value)
+
+    @property
+    @pulumi.getter(name="deletedNodes")
+    def deleted_nodes(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the replica to delete. This parameter is mandatory when
+        you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
+        at a time.
+        """
+        return pulumi.get(self, "deleted_nodes")
+
+    @deleted_nodes.setter
+    def deleted_nodes(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "deleted_nodes", value)
 
     @property
     @pulumi.getter
@@ -1271,7 +1359,7 @@ class _InstanceState:
     def engine_version(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the version of a cache engine.
-        It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, or 5.0.
+        It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
         Changing this creates a new instance.
         """
         return pulumi.get(self, "engine_version")
@@ -1421,13 +1509,11 @@ class _InstanceState:
     def password(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the password of a DCS instance.
-        Changing this creates a new instance.
         The password of a DCS instance must meet the following complexity requirements:
         + Must be a string of 8 to 32 bits in length.
         + Must contain three combinations of the following four characters: Lower case letters, uppercase letter, digital,
         Special characters include (`~!@#$^&*()-_=+\\\\|{}:,<.>/?).
         + The new password cannot be the same as the old password.
-        Redis instance defaults to 6379. Memcached instance does not use this argument.
         """
         return pulumi.get(self, "password")
 
@@ -1483,6 +1569,7 @@ class _InstanceState:
     def port(self) -> Optional[pulumi.Input[int]]:
         """
         Port customization, which is supported only by Redis 4.0 and Redis 5.0 instances.
+        Redis instance defaults to 6379. Memcached instance does not use this argument.
         """
         return pulumi.get(self, "port")
 
@@ -1534,7 +1621,7 @@ class _InstanceState:
         """
         Critical command renaming, which is supported only by Redis 4.0 and
         Redis 5.0 instances but not by Redis 3.0 instance.
-        The valid commands that can be renamed are: *command*, *keys*, *flushdb*, *flushall* and *hgetall*.
+        The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
         """
         return pulumi.get(self, "rename_commands")
 
@@ -1543,10 +1630,24 @@ class _InstanceState:
         pulumi.set(self, "rename_commands", value)
 
     @property
+    @pulumi.getter(name="reservedIps")
+    def reserved_ips(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
+        parameter is not set, the system randomly deletes unnecessary shards.
+        """
+        return pulumi.get(self, "reserved_ips")
+
+    @reserved_ips.setter
+    def reserved_ips(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "reserved_ips", value)
+
+    @property
     @pulumi.getter(name="saveDays")
     def save_days(self) -> Optional[pulumi.Input[int]]:
         """
         Retention time. Unit: day, the value ranges from 1 to 7.
+        This parameter is required if the backup_type is **auto**.
         """
         return pulumi.get(self, "save_days")
 
@@ -1636,6 +1737,19 @@ class _InstanceState:
     @tags.setter
     def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
+
+    @property
+    @pulumi.getter(name="templateId")
+    def template_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The Parameter Template ID.
+        Changing this creates a new instance resource.
+        """
+        return pulumi.get(self, "template_id")
+
+    @template_id.setter
+    def template_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "template_id", value)
 
     @property
     @pulumi.getter(name="usedMemory")
@@ -1735,6 +1849,7 @@ class Instance(pulumi.CustomResource):
                  begin_at: Optional[pulumi.Input[str]] = None,
                  capacity: Optional[pulumi.Input[float]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 deleted_nodes: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  engine: Optional[pulumi.Input[str]] = None,
                  engine_version: Optional[pulumi.Input[str]] = None,
@@ -1753,10 +1868,12 @@ class Instance(pulumi.CustomResource):
                  product_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  rename_commands: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 reserved_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  save_days: Optional[pulumi.Input[int]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 template_id: Optional[pulumi.Input[str]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  whitelist_enable: Optional[pulumi.Input[bool]] = None,
                  whitelists: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceWhitelistArgs']]]]] = None,
@@ -1765,7 +1882,7 @@ class Instance(pulumi.CustomResource):
         Manages a DCS instance within HuaweiCloud.
 
         !> **WARNING:** DCS for Memcached is about to become unavailable and is no longer sold in some regions.
-        You can use DCS for Redis 4.0 or 5.0 instead. It is not possible to create Memcached instances through this resource.
+        You can use DCS for Redis 4.0, 5.0 or 6.0 instead. It is not possible to create Memcached instances through this resource.
         You can use this resource to manage Memcached instances that exist in HuaweiCloud.
 
         ## Example Usage
@@ -1846,7 +1963,7 @@ class Instance(pulumi.CustomResource):
 
         ## Import
 
-        DCS instance can be imported using the `id`, e.g.
+        DCS instance can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Dcs/instance:Instance instance_1 80e373f9-872e-4046-aae9-ccd9ddc55511
@@ -1874,7 +1991,6 @@ class Instance(pulumi.CustomResource):
                hyphens (-). Changing this creates a new instance.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
                Valid values are `true` and `false`, defaults to `false`.
-               Changing this creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: The code of the AZ where the cache node resides.
                Master/Standby, Proxy Cluster, and Redis Cluster DCS instances support cross-AZ deployment.
                You can specify an AZ for the standby node. When specifying AZs for nodes, use commas (,) to separate AZs.
@@ -1889,10 +2005,10 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[str] begin_at: Time at which backup starts.
                Format: `hh24:00-hh24:00`, "00:00-01:00" indicates that backup starts at 00:00:00.
         :param pulumi.Input[float] capacity: Specifies the cache capacity. Unit: GB.
-               + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`, `0.5`, `1`, `2`,
-               `4`, `8`, `16`, `32` and `64`.
-               Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-               `1024`.
+               + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
+               `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
+               Cluster instance specifications support `4`,`8`,`16`, `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`,
+               `384`, `512`, `768` and `1024`.
                + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
                Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
                + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -1902,12 +2018,15 @@ class Instance(pulumi.CustomResource):
                + `postPaid`: indicates the pay-per-use billing mode.
                Default value is `postPaid`.
                Changing this creates a new instance.
+        :param pulumi.Input[str] deleted_nodes: Specifies the ID of the replica to delete. This parameter is mandatory when
+               you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
+               at a time.
         :param pulumi.Input[str] description: Specifies the description of an instance.
                It is a string that contains a maximum of 1024 characters.
         :param pulumi.Input[str] engine: Specifies a cache engine. Options: *Redis* and *Memcached*.
                Changing this creates a new instance.
         :param pulumi.Input[str] engine_version: Specifies the version of a cache engine.
-               It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, or 5.0.
+               It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
                Changing this creates a new instance.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the dcs instance.
                Changing this creates a new instance.
@@ -1940,13 +2059,11 @@ class Instance(pulumi.CustomResource):
                The name must be 4 to 64 characters and start with a letter.
                Only chinese, letters (case-insensitive), digits, underscores (_) ,and hyphens (-) are allowed.
         :param pulumi.Input[str] password: Specifies the password of a DCS instance.
-               Changing this creates a new instance.
                The password of a DCS instance must meet the following complexity requirements:
                + Must be a string of 8 to 32 bits in length.
                + Must contain three combinations of the following four characters: Lower case letters, uppercase letter, digital,
                Special characters include (`~!@#$^&*()-_=+\\\\|{}:,<.>/?).
                + The new password cannot be the same as the old password.
-               Redis instance defaults to 6379. Memcached instance does not use this argument.
         :param pulumi.Input[int] period: Specifies the charging period of the instance.
                If `period_unit` is set to *month*, the value ranges from 1 to 9.
                If `period_unit` is set to *year*, the value ranges from 1 to 3.
@@ -1958,6 +2075,7 @@ class Instance(pulumi.CustomResource):
                Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
                Changing this creates a new instance.
         :param pulumi.Input[int] port: Port customization, which is supported only by Redis 4.0 and Redis 5.0 instances.
+               Redis instance defaults to 6379. Memcached instance does not use this argument.
         :param pulumi.Input[str] private_ip: The IP address of the DCS instance,
                which can only be the currently available IP address the selected subnet.
                You can specify an available IP for the Redis instance (except for the Redis Cluster type).
@@ -1967,13 +2085,18 @@ class Instance(pulumi.CustomResource):
                If omitted, the provider-level region will be used. Changing this creates a new DCS instance resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] rename_commands: Critical command renaming, which is supported only by Redis 4.0 and
                Redis 5.0 instances but not by Redis 3.0 instance.
-               The valid commands that can be renamed are: *command*, *keys*, *flushdb*, *flushall* and *hgetall*.
+               The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] reserved_ips: Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
+               parameter is not set, the system randomly deletes unnecessary shards.
         :param pulumi.Input[int] save_days: Retention time. Unit: day, the value ranges from 1 to 7.
+               This parameter is required if the backup_type is **auto**.
         :param pulumi.Input[str] security_group_id: The ID of the security group which the instance belongs to.
                This parameter is mandatory for Memcached and Redis 3.0 version.
         :param pulumi.Input[str] subnet_id: The ID of subnet which the instance belongs to.
                Changing this creates a new instance resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the dcs instance.
+        :param pulumi.Input[str] template_id: The Parameter Template ID.
+               Changing this creates a new instance resource.
         :param pulumi.Input[str] vpc_id: The ID of VPC which the instance belongs to.
                Changing this creates a new instance resource.
         :param pulumi.Input[bool] whitelist_enable: Enable or disable the IP address whitelists. Defaults to true.
@@ -1991,7 +2114,7 @@ class Instance(pulumi.CustomResource):
         Manages a DCS instance within HuaweiCloud.
 
         !> **WARNING:** DCS for Memcached is about to become unavailable and is no longer sold in some regions.
-        You can use DCS for Redis 4.0 or 5.0 instead. It is not possible to create Memcached instances through this resource.
+        You can use DCS for Redis 4.0, 5.0 or 6.0 instead. It is not possible to create Memcached instances through this resource.
         You can use this resource to manage Memcached instances that exist in HuaweiCloud.
 
         ## Example Usage
@@ -2072,7 +2195,7 @@ class Instance(pulumi.CustomResource):
 
         ## Import
 
-        DCS instance can be imported using the `id`, e.g.
+        DCS instance can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Dcs/instance:Instance instance_1 80e373f9-872e-4046-aae9-ccd9ddc55511
@@ -2118,6 +2241,7 @@ class Instance(pulumi.CustomResource):
                  begin_at: Optional[pulumi.Input[str]] = None,
                  capacity: Optional[pulumi.Input[float]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 deleted_nodes: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  engine: Optional[pulumi.Input[str]] = None,
                  engine_version: Optional[pulumi.Input[str]] = None,
@@ -2136,10 +2260,12 @@ class Instance(pulumi.CustomResource):
                  product_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  rename_commands: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 reserved_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  save_days: Optional[pulumi.Input[int]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 template_id: Optional[pulumi.Input[str]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  whitelist_enable: Optional[pulumi.Input[bool]] = None,
                  whitelists: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceWhitelistArgs']]]]] = None,
@@ -2153,6 +2279,9 @@ class Instance(pulumi.CustomResource):
             __props__ = InstanceArgs.__new__(InstanceArgs)
 
             __props__.__dict__["access_user"] = access_user
+            if auto_pay is not None and not opts.urn:
+                warnings.warn("""Deprecated""", DeprecationWarning)
+                pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
             __props__.__dict__["auto_pay"] = auto_pay
             __props__.__dict__["auto_renew"] = auto_renew
             __props__.__dict__["availability_zones"] = availability_zones
@@ -2177,6 +2306,7 @@ class Instance(pulumi.CustomResource):
                 raise TypeError("Missing required property 'capacity'")
             __props__.__dict__["capacity"] = capacity
             __props__.__dict__["charging_mode"] = charging_mode
+            __props__.__dict__["deleted_nodes"] = deleted_nodes
             __props__.__dict__["description"] = description
             if engine is None and not opts.urn:
                 raise TypeError("Missing required property 'engine'")
@@ -2206,6 +2336,7 @@ class Instance(pulumi.CustomResource):
             __props__.__dict__["product_id"] = product_id
             __props__.__dict__["region"] = region
             __props__.__dict__["rename_commands"] = rename_commands
+            __props__.__dict__["reserved_ips"] = reserved_ips
             if save_days is not None and not opts.urn:
                 warnings.warn("""Deprecated, please use `backup_policy` instead""", DeprecationWarning)
                 pulumi.log.warn("""save_days is deprecated: Deprecated, please use `backup_policy` instead""")
@@ -2215,6 +2346,7 @@ class Instance(pulumi.CustomResource):
                 raise TypeError("Missing required property 'subnet_id'")
             __props__.__dict__["subnet_id"] = subnet_id
             __props__.__dict__["tags"] = tags
+            __props__.__dict__["template_id"] = template_id
             if vpc_id is None and not opts.urn:
                 raise TypeError("Missing required property 'vpc_id'")
             __props__.__dict__["vpc_id"] = vpc_id
@@ -2253,6 +2385,7 @@ class Instance(pulumi.CustomResource):
             begin_at: Optional[pulumi.Input[str]] = None,
             capacity: Optional[pulumi.Input[float]] = None,
             charging_mode: Optional[pulumi.Input[str]] = None,
+            deleted_nodes: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
             domain_name: Optional[pulumi.Input[str]] = None,
             engine: Optional[pulumi.Input[str]] = None,
@@ -2276,6 +2409,7 @@ class Instance(pulumi.CustomResource):
             product_id: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             rename_commands: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+            reserved_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             save_days: Optional[pulumi.Input[int]] = None,
             security_group_id: Optional[pulumi.Input[str]] = None,
             security_group_name: Optional[pulumi.Input[str]] = None,
@@ -2283,6 +2417,7 @@ class Instance(pulumi.CustomResource):
             subnet_id: Optional[pulumi.Input[str]] = None,
             subnet_name: Optional[pulumi.Input[str]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+            template_id: Optional[pulumi.Input[str]] = None,
             used_memory: Optional[pulumi.Input[int]] = None,
             user_id: Optional[pulumi.Input[str]] = None,
             user_name: Optional[pulumi.Input[str]] = None,
@@ -2303,7 +2438,6 @@ class Instance(pulumi.CustomResource):
                hyphens (-). Changing this creates a new instance.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
                Valid values are `true` and `false`, defaults to `false`.
-               Changing this creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: The code of the AZ where the cache node resides.
                Master/Standby, Proxy Cluster, and Redis Cluster DCS instances support cross-AZ deployment.
                You can specify an AZ for the standby node. When specifying AZs for nodes, use commas (,) to separate AZs.
@@ -2318,10 +2452,10 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[str] begin_at: Time at which backup starts.
                Format: `hh24:00-hh24:00`, "00:00-01:00" indicates that backup starts at 00:00:00.
         :param pulumi.Input[float] capacity: Specifies the cache capacity. Unit: GB.
-               + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`, `0.5`, `1`, `2`,
-               `4`, `8`, `16`, `32` and `64`.
-               Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-               `1024`.
+               + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
+               `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
+               Cluster instance specifications support `4`,`8`,`16`, `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`,
+               `384`, `512`, `768` and `1024`.
                + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
                Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
                + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -2331,13 +2465,16 @@ class Instance(pulumi.CustomResource):
                + `postPaid`: indicates the pay-per-use billing mode.
                Default value is `postPaid`.
                Changing this creates a new instance.
+        :param pulumi.Input[str] deleted_nodes: Specifies the ID of the replica to delete. This parameter is mandatory when
+               you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
+               at a time.
         :param pulumi.Input[str] description: Specifies the description of an instance.
                It is a string that contains a maximum of 1024 characters.
         :param pulumi.Input[str] domain_name: Domain name of the instance. Usually, we use domain name and port to connect to the DCS instances.
         :param pulumi.Input[str] engine: Specifies a cache engine. Options: *Redis* and *Memcached*.
                Changing this creates a new instance.
         :param pulumi.Input[str] engine_version: Specifies the version of a cache engine.
-               It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, or 5.0.
+               It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
                Changing this creates a new instance.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the dcs instance.
                Changing this creates a new instance.
@@ -2372,13 +2509,11 @@ class Instance(pulumi.CustomResource):
                Only chinese, letters (case-insensitive), digits, underscores (_) ,and hyphens (-) are allowed.
         :param pulumi.Input[str] order_id: The ID of the order that created the instance.
         :param pulumi.Input[str] password: Specifies the password of a DCS instance.
-               Changing this creates a new instance.
                The password of a DCS instance must meet the following complexity requirements:
                + Must be a string of 8 to 32 bits in length.
                + Must contain three combinations of the following four characters: Lower case letters, uppercase letter, digital,
                Special characters include (`~!@#$^&*()-_=+\\\\|{}:,<.>/?).
                + The new password cannot be the same as the old password.
-               Redis instance defaults to 6379. Memcached instance does not use this argument.
         :param pulumi.Input[int] period: Specifies the charging period of the instance.
                If `period_unit` is set to *month*, the value ranges from 1 to 9.
                If `period_unit` is set to *year*, the value ranges from 1 to 3.
@@ -2390,6 +2525,7 @@ class Instance(pulumi.CustomResource):
                Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
                Changing this creates a new instance.
         :param pulumi.Input[int] port: Port customization, which is supported only by Redis 4.0 and Redis 5.0 instances.
+               Redis instance defaults to 6379. Memcached instance does not use this argument.
         :param pulumi.Input[str] private_ip: The IP address of the DCS instance,
                which can only be the currently available IP address the selected subnet.
                You can specify an available IP for the Redis instance (except for the Redis Cluster type).
@@ -2399,8 +2535,11 @@ class Instance(pulumi.CustomResource):
                If omitted, the provider-level region will be used. Changing this creates a new DCS instance resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] rename_commands: Critical command renaming, which is supported only by Redis 4.0 and
                Redis 5.0 instances but not by Redis 3.0 instance.
-               The valid commands that can be renamed are: *command*, *keys*, *flushdb*, *flushall* and *hgetall*.
+               The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] reserved_ips: Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
+               parameter is not set, the system randomly deletes unnecessary shards.
         :param pulumi.Input[int] save_days: Retention time. Unit: day, the value ranges from 1 to 7.
+               This parameter is required if the backup_type is **auto**.
         :param pulumi.Input[str] security_group_id: The ID of the security group which the instance belongs to.
                This parameter is mandatory for Memcached and Redis 3.0 version.
         :param pulumi.Input[str] security_group_name: The name of security group which the instance belongs to.
@@ -2418,6 +2557,8 @@ class Instance(pulumi.CustomResource):
                Changing this creates a new instance resource.
         :param pulumi.Input[str] subnet_name: The name of subnet which the instance belongs to.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the dcs instance.
+        :param pulumi.Input[str] template_id: The Parameter Template ID.
+               Changing this creates a new instance resource.
         :param pulumi.Input[int] used_memory: Size of the used memory. Unit: MB.
         :param pulumi.Input[str] vpc_id: The ID of VPC which the instance belongs to.
                Changing this creates a new instance resource.
@@ -2442,6 +2583,7 @@ class Instance(pulumi.CustomResource):
         __props__.__dict__["begin_at"] = begin_at
         __props__.__dict__["capacity"] = capacity
         __props__.__dict__["charging_mode"] = charging_mode
+        __props__.__dict__["deleted_nodes"] = deleted_nodes
         __props__.__dict__["description"] = description
         __props__.__dict__["domain_name"] = domain_name
         __props__.__dict__["engine"] = engine
@@ -2465,6 +2607,7 @@ class Instance(pulumi.CustomResource):
         __props__.__dict__["product_id"] = product_id
         __props__.__dict__["region"] = region
         __props__.__dict__["rename_commands"] = rename_commands
+        __props__.__dict__["reserved_ips"] = reserved_ips
         __props__.__dict__["save_days"] = save_days
         __props__.__dict__["security_group_id"] = security_group_id
         __props__.__dict__["security_group_name"] = security_group_name
@@ -2472,6 +2615,7 @@ class Instance(pulumi.CustomResource):
         __props__.__dict__["subnet_id"] = subnet_id
         __props__.__dict__["subnet_name"] = subnet_name
         __props__.__dict__["tags"] = tags
+        __props__.__dict__["template_id"] = template_id
         __props__.__dict__["used_memory"] = used_memory
         __props__.__dict__["user_id"] = user_id
         __props__.__dict__["user_name"] = user_name
@@ -2503,7 +2647,6 @@ class Instance(pulumi.CustomResource):
         """
         Specifies whether auto renew is enabled.
         Valid values are `true` and `false`, defaults to `false`.
-        Changing this creates a new instance.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -2565,10 +2708,10 @@ class Instance(pulumi.CustomResource):
     def capacity(self) -> pulumi.Output[float]:
         """
         Specifies the cache capacity. Unit: GB.
-        + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`, `0.5`, `1`, `2`,
-        `4`, `8`, `16`, `32` and `64`.
-        Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-        `1024`.
+        + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
+        `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
+        Cluster instance specifications support `4`,`8`,`16`, `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`,
+        `384`, `512`, `768` and `1024`.
         + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
         Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
         + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -2587,6 +2730,16 @@ class Instance(pulumi.CustomResource):
         Changing this creates a new instance.
         """
         return pulumi.get(self, "charging_mode")
+
+    @property
+    @pulumi.getter(name="deletedNodes")
+    def deleted_nodes(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the ID of the replica to delete. This parameter is mandatory when
+        you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
+        at a time.
+        """
+        return pulumi.get(self, "deleted_nodes")
 
     @property
     @pulumi.getter
@@ -2619,7 +2772,7 @@ class Instance(pulumi.CustomResource):
     def engine_version(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the version of a cache engine.
-        It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, or 5.0.
+        It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
         Changing this creates a new instance.
         """
         return pulumi.get(self, "engine_version")
@@ -2725,13 +2878,11 @@ class Instance(pulumi.CustomResource):
     def password(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the password of a DCS instance.
-        Changing this creates a new instance.
         The password of a DCS instance must meet the following complexity requirements:
         + Must be a string of 8 to 32 bits in length.
         + Must contain three combinations of the following four characters: Lower case letters, uppercase letter, digital,
         Special characters include (`~!@#$^&*()-_=+\\\\|{}:,<.>/?).
         + The new password cannot be the same as the old password.
-        Redis instance defaults to 6379. Memcached instance does not use this argument.
         """
         return pulumi.get(self, "password")
 
@@ -2771,6 +2922,7 @@ class Instance(pulumi.CustomResource):
     def port(self) -> pulumi.Output[int]:
         """
         Port customization, which is supported only by Redis 4.0 and Redis 5.0 instances.
+        Redis instance defaults to 6379. Memcached instance does not use this argument.
         """
         return pulumi.get(self, "port")
 
@@ -2806,15 +2958,25 @@ class Instance(pulumi.CustomResource):
         """
         Critical command renaming, which is supported only by Redis 4.0 and
         Redis 5.0 instances but not by Redis 3.0 instance.
-        The valid commands that can be renamed are: *command*, *keys*, *flushdb*, *flushall* and *hgetall*.
+        The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
         """
         return pulumi.get(self, "rename_commands")
+
+    @property
+    @pulumi.getter(name="reservedIps")
+    def reserved_ips(self) -> pulumi.Output[Optional[Sequence[str]]]:
+        """
+        Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
+        parameter is not set, the system randomly deletes unnecessary shards.
+        """
+        return pulumi.get(self, "reserved_ips")
 
     @property
     @pulumi.getter(name="saveDays")
     def save_days(self) -> pulumi.Output[Optional[int]]:
         """
         Retention time. Unit: day, the value ranges from 1 to 7.
+        This parameter is required if the backup_type is **auto**.
         """
         return pulumi.get(self, "save_days")
 
@@ -2876,6 +3038,15 @@ class Instance(pulumi.CustomResource):
         The key/value pairs to associate with the dcs instance.
         """
         return pulumi.get(self, "tags")
+
+    @property
+    @pulumi.getter(name="templateId")
+    def template_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        The Parameter Template ID.
+        Changing this creates a new instance resource.
+        """
+        return pulumi.get(self, "template_id")
 
     @property
     @pulumi.getter(name="usedMemory")

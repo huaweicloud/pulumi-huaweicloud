@@ -59,7 +59,7 @@ class GetSecgroupsResult:
     @pulumi.getter
     def id(self) -> str:
         """
-        The provider-assigned unique ID for this managed resource.
+        The security group ID.
         """
         return pulumi.get(self, "id")
 
@@ -73,7 +73,7 @@ class GetSecgroupsResult:
 
     @property
     @pulumi.getter
-    def region(self) -> Optional[str]:
+    def region(self) -> str:
         return pulumi.get(self, "region")
 
     @property
@@ -101,6 +101,7 @@ class AwaitableGetSecgroupsResult(GetSecgroupsResult):
 
 def get_secgroups(description: Optional[str] = None,
                   enterprise_project_id: Optional[str] = None,
+                  id: Optional[str] = None,
                   name: Optional[str] = None,
                   region: Optional[str] = None,
                   opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetSecgroupsResult:
@@ -123,6 +124,7 @@ def get_secgroups(description: Optional[str] = None,
     :param str description: Specifies the description of the security group. The security groups can be
            filtered by keywords in the description.
     :param str enterprise_project_id: Specifies the enterprise project ID of the security group.
+    :param str id: Specifies the id of the desired security group.
     :param str name: Specifies the name of the security group.
     :param str region: Specifies the region in which to obtain the security group list.
            If omitted, the provider-level region will be used.
@@ -130,6 +132,7 @@ def get_secgroups(description: Optional[str] = None,
     __args__ = dict()
     __args__['description'] = description
     __args__['enterpriseProjectId'] = enterprise_project_id
+    __args__['id'] = id
     __args__['name'] = name
     __args__['region'] = region
     opts = pulumi.InvokeOptions.merge(_utilities.get_invoke_opts_defaults(), opts)
@@ -147,6 +150,7 @@ def get_secgroups(description: Optional[str] = None,
 @_utilities.lift_output_func(get_secgroups)
 def get_secgroups_output(description: Optional[pulumi.Input[Optional[str]]] = None,
                          enterprise_project_id: Optional[pulumi.Input[Optional[str]]] = None,
+                         id: Optional[pulumi.Input[Optional[str]]] = None,
                          name: Optional[pulumi.Input[Optional[str]]] = None,
                          region: Optional[pulumi.Input[Optional[str]]] = None,
                          opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetSecgroupsResult]:
@@ -169,6 +173,7 @@ def get_secgroups_output(description: Optional[pulumi.Input[Optional[str]]] = No
     :param str description: Specifies the description of the security group. The security groups can be
            filtered by keywords in the description.
     :param str enterprise_project_id: Specifies the enterprise project ID of the security group.
+    :param str id: Specifies the id of the desired security group.
     :param str name: Specifies the name of the security group.
     :param str region: Specifies the region in which to obtain the security group list.
            If omitted, the provider-level region will be used.

@@ -27,6 +27,7 @@ class ClusterArgs:
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  ess_node_config: Optional[pulumi.Input['ClusterEssNodeConfigArgs']] = None,
                  expect_node_num: Optional[pulumi.Input[int]] = None,
+                 https_enabled: Optional[pulumi.Input[bool]] = None,
                  kibana_public_access: Optional[pulumi.Input['ClusterKibanaPublicAccessArgs']] = None,
                  master_node_config: Optional[pulumi.Input['ClusterMasterNodeConfigArgs']] = None,
                  name: Optional[pulumi.Input[str]] = None,
@@ -49,7 +50,6 @@ class ClusterArgs:
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
                Valid values are `true` and `false`, defaults to `false`.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone name.
                Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
                than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
@@ -70,6 +70,9 @@ class ClusterArgs:
                indicates the default enterprise project. Changing this parameter will create a new resource.
         :param pulumi.Input['ClusterEssNodeConfigArgs'] ess_node_config: Specifies the config of data node.
                The ess_node_config structure is documented below.
+        :param pulumi.Input[bool] https_enabled: Specifies whether to enable HTTPS. Defaults to `false`.
+               When `https_enabled` is set to `true`, the `security_mode` needs to be set to `true`.
+               Changing this parameter will create a new resource.
         :param pulumi.Input['ClusterKibanaPublicAccessArgs'] kibana_public_access: Specifies Kibana public network access information.
                This parameter is valid only when security_mode is set to true.
                The kibana_public_access structure is documented below.
@@ -130,6 +133,8 @@ class ClusterArgs:
             pulumi.log.warn("""expect_node_num is deprecated: please use ess_node_config.instance_number instead""")
         if expect_node_num is not None:
             pulumi.set(__self__, "expect_node_num", expect_node_num)
+        if https_enabled is not None:
+            pulumi.set(__self__, "https_enabled", https_enabled)
         if kibana_public_access is not None:
             pulumi.set(__self__, "kibana_public_access", kibana_public_access)
         if master_node_config is not None:
@@ -184,7 +189,6 @@ class ClusterArgs:
         """
         Specifies whether auto renew is enabled.
         Valid values are `true` and `false`, defaults to `false`.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -308,6 +312,20 @@ class ClusterArgs:
     @expect_node_num.setter
     def expect_node_num(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "expect_node_num", value)
+
+    @property
+    @pulumi.getter(name="httpsEnabled")
+    def https_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable HTTPS. Defaults to `false`.
+        When `https_enabled` is set to `true`, the `security_mode` needs to be set to `true`.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "https_enabled")
+
+    @https_enabled.setter
+    def https_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "https_enabled", value)
 
     @property
     @pulumi.getter(name="kibanaPublicAccess")
@@ -524,6 +542,7 @@ class _ClusterState:
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  ess_node_config: Optional[pulumi.Input['ClusterEssNodeConfigArgs']] = None,
                  expect_node_num: Optional[pulumi.Input[int]] = None,
+                 https_enabled: Optional[pulumi.Input[bool]] = None,
                  kibana_public_access: Optional[pulumi.Input['ClusterKibanaPublicAccessArgs']] = None,
                  master_node_config: Optional[pulumi.Input['ClusterMasterNodeConfigArgs']] = None,
                  name: Optional[pulumi.Input[str]] = None,
@@ -547,7 +566,6 @@ class _ClusterState:
         Input properties used for looking up and filtering Cluster resources.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
                Valid values are `true` and `false`, defaults to `false`.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone name.
                Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
                than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
@@ -574,6 +592,9 @@ class _ClusterState:
                indicates the default enterprise project. Changing this parameter will create a new resource.
         :param pulumi.Input['ClusterEssNodeConfigArgs'] ess_node_config: Specifies the config of data node.
                The ess_node_config structure is documented below.
+        :param pulumi.Input[bool] https_enabled: Specifies whether to enable HTTPS. Defaults to `false`.
+               When `https_enabled` is set to `true`, the `security_mode` needs to be set to `true`.
+               Changing this parameter will create a new resource.
         :param pulumi.Input['ClusterKibanaPublicAccessArgs'] kibana_public_access: Specifies Kibana public network access information.
                This parameter is valid only when security_mode is set to true.
                The kibana_public_access structure is documented below.
@@ -605,10 +626,7 @@ class _ClusterState:
         :param pulumi.Input[bool] security_mode: Specifies whether to enable communication encryption and security
                authentication. Available values include *true* and *false*. security_mode is disabled by default.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] status: The cluster status
-               + `100`: The operation, such as instance creation, is in progress.
-               + `200`: The cluster is available.
-               + `303`: The cluster is unavailable.
+        :param pulumi.Input[str] status: Instance status.
         :param pulumi.Input[str] subnet_id: Specifies the Subnet ID. Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the cluster.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
@@ -646,6 +664,8 @@ class _ClusterState:
             pulumi.log.warn("""expect_node_num is deprecated: please use ess_node_config.instance_number instead""")
         if expect_node_num is not None:
             pulumi.set(__self__, "expect_node_num", expect_node_num)
+        if https_enabled is not None:
+            pulumi.set(__self__, "https_enabled", https_enabled)
         if kibana_public_access is not None:
             pulumi.set(__self__, "kibana_public_access", kibana_public_access)
         if master_node_config is not None:
@@ -694,7 +714,6 @@ class _ClusterState:
         """
         Specifies whether auto renew is enabled.
         Valid values are `true` and `false`, defaults to `false`.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -857,6 +876,20 @@ class _ClusterState:
     @expect_node_num.setter
     def expect_node_num(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "expect_node_num", value)
+
+    @property
+    @pulumi.getter(name="httpsEnabled")
+    def https_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable HTTPS. Defaults to `false`.
+        When `https_enabled` is set to `true`, the `security_mode` needs to be set to `true`.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "https_enabled")
+
+    @https_enabled.setter
+    def https_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "https_enabled", value)
 
     @property
     @pulumi.getter(name="kibanaPublicAccess")
@@ -1023,10 +1056,7 @@ class _ClusterState:
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
         """
-        The cluster status
-        + `100`: The operation, such as instance creation, is in progress.
-        + `200`: The cluster is available.
-        + `303`: The cluster is unavailable.
+        Instance status.
         """
         return pulumi.get(self, "status")
 
@@ -1124,6 +1154,7 @@ class Cluster(pulumi.CustomResource):
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  ess_node_config: Optional[pulumi.Input[pulumi.InputType['ClusterEssNodeConfigArgs']]] = None,
                  expect_node_num: Optional[pulumi.Input[int]] = None,
+                 https_enabled: Optional[pulumi.Input[bool]] = None,
                  kibana_public_access: Optional[pulumi.Input[pulumi.InputType['ClusterKibanaPublicAccessArgs']]] = None,
                  master_node_config: Optional[pulumi.Input[pulumi.InputType['ClusterMasterNodeConfigArgs']]] = None,
                  name: Optional[pulumi.Input[str]] = None,
@@ -1204,6 +1235,32 @@ class Cluster(pulumi.CustomResource):
             subnet_id=subnet_id,
             security_group_id=secgroup_id)
         ```
+        ### create a cluster with ess-data node and cold node use local disk
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        availability_zone = config.require_object("availabilityZone")
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        secgroup_id = config.require_object("secgroupId")
+        cluster = huaweicloud.css.Cluster("cluster",
+            engine_version="7.10.2",
+            ess_node_config=huaweicloud.css.ClusterEssNodeConfigArgs(
+                flavor="ess.spec-ds.xlarge.8",
+                instance_number=1,
+            ),
+            cold_node_config=huaweicloud.css.ClusterColdNodeConfigArgs(
+                flavor="ess.spec-ds.2xlarge.8",
+                instance_number=2,
+            ),
+            availability_zone=availability_zone,
+            vpc_id=vpc_id,
+            subnet_id=subnet_id,
+            security_group_id=secgroup_id)
+        ```
 
         ## Import
 
@@ -1217,7 +1274,6 @@ class Cluster(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
                Valid values are `true` and `false`, defaults to `false`.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone name.
                Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
                than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
@@ -1241,6 +1297,9 @@ class Cluster(pulumi.CustomResource):
                indicates the default enterprise project. Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['ClusterEssNodeConfigArgs']] ess_node_config: Specifies the config of data node.
                The ess_node_config structure is documented below.
+        :param pulumi.Input[bool] https_enabled: Specifies whether to enable HTTPS. Defaults to `false`.
+               When `https_enabled` is set to `true`, the `security_mode` needs to be set to `true`.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['ClusterKibanaPublicAccessArgs']] kibana_public_access: Specifies Kibana public network access information.
                This parameter is valid only when security_mode is set to true.
                The kibana_public_access structure is documented below.
@@ -1347,6 +1406,32 @@ class Cluster(pulumi.CustomResource):
             subnet_id=subnet_id,
             security_group_id=secgroup_id)
         ```
+        ### create a cluster with ess-data node and cold node use local disk
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        availability_zone = config.require_object("availabilityZone")
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        secgroup_id = config.require_object("secgroupId")
+        cluster = huaweicloud.css.Cluster("cluster",
+            engine_version="7.10.2",
+            ess_node_config=huaweicloud.css.ClusterEssNodeConfigArgs(
+                flavor="ess.spec-ds.xlarge.8",
+                instance_number=1,
+            ),
+            cold_node_config=huaweicloud.css.ClusterColdNodeConfigArgs(
+                flavor="ess.spec-ds.2xlarge.8",
+                instance_number=2,
+            ),
+            availability_zone=availability_zone,
+            vpc_id=vpc_id,
+            subnet_id=subnet_id,
+            security_group_id=secgroup_id)
+        ```
 
         ## Import
 
@@ -1382,6 +1467,7 @@ class Cluster(pulumi.CustomResource):
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  ess_node_config: Optional[pulumi.Input[pulumi.InputType['ClusterEssNodeConfigArgs']]] = None,
                  expect_node_num: Optional[pulumi.Input[int]] = None,
+                 https_enabled: Optional[pulumi.Input[bool]] = None,
                  kibana_public_access: Optional[pulumi.Input[pulumi.InputType['ClusterKibanaPublicAccessArgs']]] = None,
                  master_node_config: Optional[pulumi.Input[pulumi.InputType['ClusterMasterNodeConfigArgs']]] = None,
                  name: Optional[pulumi.Input[str]] = None,
@@ -1422,6 +1508,7 @@ class Cluster(pulumi.CustomResource):
                 warnings.warn("""please use ess_node_config.instance_number instead""", DeprecationWarning)
                 pulumi.log.warn("""expect_node_num is deprecated: please use ess_node_config.instance_number instead""")
             __props__.__dict__["expect_node_num"] = expect_node_num
+            __props__.__dict__["https_enabled"] = https_enabled
             __props__.__dict__["kibana_public_access"] = kibana_public_access
             __props__.__dict__["master_node_config"] = master_node_config
             __props__.__dict__["name"] = name
@@ -1469,6 +1556,7 @@ class Cluster(pulumi.CustomResource):
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             ess_node_config: Optional[pulumi.Input[pulumi.InputType['ClusterEssNodeConfigArgs']]] = None,
             expect_node_num: Optional[pulumi.Input[int]] = None,
+            https_enabled: Optional[pulumi.Input[bool]] = None,
             kibana_public_access: Optional[pulumi.Input[pulumi.InputType['ClusterKibanaPublicAccessArgs']]] = None,
             master_node_config: Optional[pulumi.Input[pulumi.InputType['ClusterMasterNodeConfigArgs']]] = None,
             name: Optional[pulumi.Input[str]] = None,
@@ -1497,7 +1585,6 @@ class Cluster(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
                Valid values are `true` and `false`, defaults to `false`.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone name.
                Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
                than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
@@ -1524,6 +1611,9 @@ class Cluster(pulumi.CustomResource):
                indicates the default enterprise project. Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['ClusterEssNodeConfigArgs']] ess_node_config: Specifies the config of data node.
                The ess_node_config structure is documented below.
+        :param pulumi.Input[bool] https_enabled: Specifies whether to enable HTTPS. Defaults to `false`.
+               When `https_enabled` is set to `true`, the `security_mode` needs to be set to `true`.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['ClusterKibanaPublicAccessArgs']] kibana_public_access: Specifies Kibana public network access information.
                This parameter is valid only when security_mode is set to true.
                The kibana_public_access structure is documented below.
@@ -1555,10 +1645,7 @@ class Cluster(pulumi.CustomResource):
         :param pulumi.Input[bool] security_mode: Specifies whether to enable communication encryption and security
                authentication. Available values include *true* and *false*. security_mode is disabled by default.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] status: The cluster status
-               + `100`: The operation, such as instance creation, is in progress.
-               + `200`: The cluster is available.
-               + `303`: The cluster is unavailable.
+        :param pulumi.Input[str] status: Instance status.
         :param pulumi.Input[str] subnet_id: Specifies the Subnet ID. Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the cluster.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
@@ -1584,6 +1671,7 @@ class Cluster(pulumi.CustomResource):
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["ess_node_config"] = ess_node_config
         __props__.__dict__["expect_node_num"] = expect_node_num
+        __props__.__dict__["https_enabled"] = https_enabled
         __props__.__dict__["kibana_public_access"] = kibana_public_access
         __props__.__dict__["master_node_config"] = master_node_config
         __props__.__dict__["name"] = name
@@ -1611,7 +1699,6 @@ class Cluster(pulumi.CustomResource):
         """
         Specifies whether auto renew is enabled.
         Valid values are `true` and `false`, defaults to `false`.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -1722,6 +1809,16 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter(name="expectNodeNum")
     def expect_node_num(self) -> pulumi.Output[int]:
         return pulumi.get(self, "expect_node_num")
+
+    @property
+    @pulumi.getter(name="httpsEnabled")
+    def https_enabled(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to enable HTTPS. Defaults to `false`.
+        When `https_enabled` is set to `true`, the `security_mode` needs to be set to `true`.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "https_enabled")
 
     @property
     @pulumi.getter(name="kibanaPublicAccess")
@@ -1840,10 +1937,7 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter
     def status(self) -> pulumi.Output[str]:
         """
-        The cluster status
-        + `100`: The operation, such as instance creation, is in progress.
-        + `200`: The cluster is available.
-        + `303`: The cluster is unavailable.
+        Instance status.
         """
         return pulumi.get(self, "status")
 

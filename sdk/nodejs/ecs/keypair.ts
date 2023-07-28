@@ -5,8 +5,6 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Manages a keypair resource within HuaweiCloud.
- *
  * ## Example Usage
  * ### Create a new keypair and export private key to current folder
  *

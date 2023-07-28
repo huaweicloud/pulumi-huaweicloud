@@ -28,6 +28,7 @@ class InstanceArgs:
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  backup_strategy: Optional[pulumi.Input['InstanceBackupStrategyArgs']] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 configurations: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceConfigurationArgs']]]] = None,
                  disk_encryption_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
@@ -45,13 +46,13 @@ class InstanceArgs:
                this creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input['InstanceFlavorArgs']]] flavors: Specifies the flavors information. The structure is described below. Changing
                this creates a new instance.
-        :param pulumi.Input[str] mode: Specifies the mode of the database instance. Changing this creates a new
-               instance.
+        :param pulumi.Input[str] mode: Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
+               **Single** are supported. Changing this creates a new instance.
         :param pulumi.Input[str] password: Specifies the Administrator password of the database instance.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID of the DDS instance.
         :param pulumi.Input[str] subnet_id: Specifies the subnet Network ID. Changing this creates a new instance.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this creates a new instance.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled.
                Valid values are `true` and `false`, defaults to `false`.
                Changing this creates a new instance.
         :param pulumi.Input['InstanceBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy. The structure is described below.
@@ -59,6 +60,8 @@ class InstanceArgs:
                The valid values are as follows:
                + `prePaid`: indicates the yearly/monthly billing mode.
                + `postPaid`: indicates the pay-per-use billing mode.
+        :param pulumi.Input[Sequence[pulumi.Input['InstanceConfigurationArgs']]] configurations: Specifies the configuration information.
+               The structure is described below. Changing this creates a new instance.
         :param pulumi.Input[str] disk_encryption_id: Specifies the disk encryption ID of the instance. Changing this
                creates a new instance.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the dds instance.
@@ -73,8 +76,8 @@ class InstanceArgs:
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
                Changing this creates a new instance.
-        :param pulumi.Input[int] port: Specifies the database access port. The valid values are range from `2,100` to `9,500` and
-               `27,017`, `27,018`, `27,019`. Defaults to `8,635`.
+        :param pulumi.Input[int] port: Specifies the database access port. The valid values are range from `2100` to `9500` and
+               `27017`, `27018`, `27019`. Defaults to `8635`.
         :param pulumi.Input[str] region: Specifies the region of the DDS instance. Changing this creates a new
                instance.
         :param pulumi.Input[bool] ssl: Specifies whether to enable or disable SSL. Defaults to true.
@@ -89,6 +92,9 @@ class InstanceArgs:
         pulumi.set(__self__, "subnet_id", subnet_id)
         pulumi.set(__self__, "vpc_id", vpc_id)
         if auto_pay is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
+        if auto_pay is not None:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
             pulumi.set(__self__, "auto_renew", auto_renew)
@@ -96,6 +102,8 @@ class InstanceArgs:
             pulumi.set(__self__, "backup_strategy", backup_strategy)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
+        if configurations is not None:
+            pulumi.set(__self__, "configurations", configurations)
         if disk_encryption_id is not None:
             pulumi.set(__self__, "disk_encryption_id", disk_encryption_id)
         if enterprise_project_id is not None:
@@ -158,8 +166,8 @@ class InstanceArgs:
     @pulumi.getter
     def mode(self) -> pulumi.Input[str]:
         """
-        Specifies the mode of the database instance. Changing this creates a new
-        instance.
+        Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
+        **Single** are supported. Changing this creates a new instance.
         """
         return pulumi.get(self, "mode")
 
@@ -228,7 +236,7 @@ class InstanceArgs:
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies whether auto renew is enabled.
+        Specifies whether auto-renew is enabled.
         Valid values are `true` and `false`, defaults to `false`.
         Changing this creates a new instance.
         """
@@ -264,6 +272,19 @@ class InstanceArgs:
     @charging_mode.setter
     def charging_mode(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "charging_mode", value)
+
+    @property
+    @pulumi.getter
+    def configurations(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['InstanceConfigurationArgs']]]]:
+        """
+        Specifies the configuration information.
+        The structure is described below. Changing this creates a new instance.
+        """
+        return pulumi.get(self, "configurations")
+
+    @configurations.setter
+    def configurations(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceConfigurationArgs']]]]):
+        pulumi.set(self, "configurations", value)
 
     @property
     @pulumi.getter(name="diskEncryptionId")
@@ -338,8 +359,8 @@ class InstanceArgs:
     @pulumi.getter
     def port(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the database access port. The valid values are range from `2,100` to `9,500` and
-        `27,017`, `27,018`, `27,019`. Defaults to `8,635`.
+        Specifies the database access port. The valid values are range from `2100` to `9500` and
+        `27017`, `27018`, `27019`. Defaults to `8635`.
         """
         return pulumi.get(self, "port")
 
@@ -393,6 +414,7 @@ class _InstanceState:
                  availability_zone: Optional[pulumi.Input[str]] = None,
                  backup_strategy: Optional[pulumi.Input['InstanceBackupStrategyArgs']] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 configurations: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceConfigurationArgs']]]] = None,
                  datastore: Optional[pulumi.Input['InstanceDatastoreArgs']] = None,
                  db_username: Optional[pulumi.Input[str]] = None,
                  disk_encryption_id: Optional[pulumi.Input[str]] = None,
@@ -414,7 +436,7 @@ class _InstanceState:
                  vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Instance resources.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled.
                Valid values are `true` and `false`, defaults to `false`.
                Changing this creates a new instance.
         :param pulumi.Input[str] availability_zone: Specifies the ID of the availability zone. Changing this creates a
@@ -424,6 +446,8 @@ class _InstanceState:
                The valid values are as follows:
                + `prePaid`: indicates the yearly/monthly billing mode.
                + `postPaid`: indicates the pay-per-use billing mode.
+        :param pulumi.Input[Sequence[pulumi.Input['InstanceConfigurationArgs']]] configurations: Specifies the configuration information.
+               The structure is described below. Changing this creates a new instance.
         :param pulumi.Input['InstanceDatastoreArgs'] datastore: Specifies database information. The structure is described below. Changing
                this creates a new instance.
         :param pulumi.Input[str] db_username: Indicates the DB Administator name.
@@ -433,8 +457,8 @@ class _InstanceState:
                Changing this creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input['InstanceFlavorArgs']]] flavors: Specifies the flavors information. The structure is described below. Changing
                this creates a new instance.
-        :param pulumi.Input[str] mode: Specifies the mode of the database instance. Changing this creates a new
-               instance.
+        :param pulumi.Input[str] mode: Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
+               **Single** are supported. Changing this creates a new instance.
         :param pulumi.Input[str] name: Specifies the DB instance name. The DB instance name of the same type is unique in the
                same tenant.
         :param pulumi.Input[Sequence[pulumi.Input['InstanceNodeArgs']]] nodes: Indicates the instance nodes information. Structure is documented below.
@@ -447,8 +471,8 @@ class _InstanceState:
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
                Changing this creates a new instance.
-        :param pulumi.Input[int] port: Specifies the database access port. The valid values are range from `2,100` to `9,500` and
-               `27,017`, `27,018`, `27,019`. Defaults to `8,635`.
+        :param pulumi.Input[int] port: Specifies the database access port. The valid values are range from `2100` to `9500` and
+               `27017`, `27018`, `27019`. Defaults to `8635`.
         :param pulumi.Input[str] region: Specifies the region of the DDS instance. Changing this creates a new
                instance.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID of the DDS instance.
@@ -459,6 +483,9 @@ class _InstanceState:
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this creates a new instance.
         """
         if auto_pay is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
+        if auto_pay is not None:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
             pulumi.set(__self__, "auto_renew", auto_renew)
@@ -468,6 +495,8 @@ class _InstanceState:
             pulumi.set(__self__, "backup_strategy", backup_strategy)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
+        if configurations is not None:
+            pulumi.set(__self__, "configurations", configurations)
         if datastore is not None:
             pulumi.set(__self__, "datastore", datastore)
         if db_username is not None:
@@ -520,7 +549,7 @@ class _InstanceState:
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies whether auto renew is enabled.
+        Specifies whether auto-renew is enabled.
         Valid values are `true` and `false`, defaults to `false`.
         Changing this creates a new instance.
         """
@@ -569,6 +598,19 @@ class _InstanceState:
     @charging_mode.setter
     def charging_mode(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "charging_mode", value)
+
+    @property
+    @pulumi.getter
+    def configurations(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['InstanceConfigurationArgs']]]]:
+        """
+        Specifies the configuration information.
+        The structure is described below. Changing this creates a new instance.
+        """
+        return pulumi.get(self, "configurations")
+
+    @configurations.setter
+    def configurations(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceConfigurationArgs']]]]):
+        pulumi.set(self, "configurations", value)
 
     @property
     @pulumi.getter
@@ -638,8 +680,8 @@ class _InstanceState:
     @pulumi.getter
     def mode(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the mode of the database instance. Changing this creates a new
-        instance.
+        Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
+        **Single** are supported. Changing this creates a new instance.
         """
         return pulumi.get(self, "mode")
 
@@ -718,8 +760,8 @@ class _InstanceState:
     @pulumi.getter
     def port(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the database access port. The valid values are range from `2,100` to `9,500` and
-        `27,017`, `27,018`, `27,019`. Defaults to `8,635`.
+        Specifies the database access port. The valid values are range from `2100` to `9500` and
+        `27017`, `27018`, `27019`. Defaults to `8635`.
         """
         return pulumi.get(self, "port")
 
@@ -823,6 +865,7 @@ class Instance(pulumi.CustomResource):
                  availability_zone: Optional[pulumi.Input[str]] = None,
                  backup_strategy: Optional[pulumi.Input[pulumi.InputType['InstanceBackupStrategyArgs']]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 configurations: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceConfigurationArgs']]]]] = None,
                  datastore: Optional[pulumi.Input[pulumi.InputType['InstanceDatastoreArgs']]] = None,
                  disk_encryption_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -888,7 +931,7 @@ class Instance(pulumi.CustomResource):
             subnet_id="{{ subnet_network_id }}}",
             vpc_id="{{ vpc_id }}")
         ```
-        ### Creating A Replica Set
+        ### Creating A Replica Set Community Edition
 
         ```python
         import pulumi
@@ -914,6 +957,32 @@ class Instance(pulumi.CustomResource):
             subnet_id="{{ subnet_network_id }}}",
             vpc_id="{{ vpc_id }}")
         ```
+        ### Creating A Single Community Edition
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        instance = huaweicloud.dds.Instance("instance",
+            availability_zone="{{ availability_zone }}",
+            datastore=huaweicloud.dds.InstanceDatastoreArgs(
+                storage_engine="wiredTiger",
+                type="DDS-Community",
+                version="3.4",
+            ),
+            flavors=[huaweicloud.dds.InstanceFlavorArgs(
+                num=1,
+                size=30,
+                spec_code="dds.mongodb.s6.large.2.single",
+                storage="ULTRAHIGH",
+                type="single",
+            )],
+            mode="Single",
+            password="Test@123",
+            security_group_id="{{ security_group_id }}",
+            subnet_id="{{ subnet_network_id }}}",
+            vpc_id="{{ vpc_id }}")
+        ```
 
         ## Import
 
@@ -923,7 +992,7 @@ class Instance(pulumi.CustomResource):
          $ pulumi import huaweicloud:Dds/instance:Instance instance 9c6d6ff2cba3434293fd479571517e16in02
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `availability_zone`, `flavor`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dds_instance" "instance" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `availability_zone`, `flavor`, configuration. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dds_instance" "instance" {
 
          ...
 
@@ -931,7 +1000,7 @@ class Instance(pulumi.CustomResource):
 
          ignore_changes = [
 
-         password, availability_zone, flavor,
+         password, availability_zone, flavor, configuration,
 
          ]
 
@@ -939,7 +1008,7 @@ class Instance(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled.
                Valid values are `true` and `false`, defaults to `false`.
                Changing this creates a new instance.
         :param pulumi.Input[str] availability_zone: Specifies the ID of the availability zone. Changing this creates a
@@ -949,6 +1018,8 @@ class Instance(pulumi.CustomResource):
                The valid values are as follows:
                + `prePaid`: indicates the yearly/monthly billing mode.
                + `postPaid`: indicates the pay-per-use billing mode.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceConfigurationArgs']]]] configurations: Specifies the configuration information.
+               The structure is described below. Changing this creates a new instance.
         :param pulumi.Input[pulumi.InputType['InstanceDatastoreArgs']] datastore: Specifies database information. The structure is described below. Changing
                this creates a new instance.
         :param pulumi.Input[str] disk_encryption_id: Specifies the disk encryption ID of the instance. Changing this
@@ -957,8 +1028,8 @@ class Instance(pulumi.CustomResource):
                Changing this creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceFlavorArgs']]]] flavors: Specifies the flavors information. The structure is described below. Changing
                this creates a new instance.
-        :param pulumi.Input[str] mode: Specifies the mode of the database instance. Changing this creates a new
-               instance.
+        :param pulumi.Input[str] mode: Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
+               **Single** are supported. Changing this creates a new instance.
         :param pulumi.Input[str] name: Specifies the DB instance name. The DB instance name of the same type is unique in the
                same tenant.
         :param pulumi.Input[str] password: Specifies the Administrator password of the database instance.
@@ -970,8 +1041,8 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
                Changing this creates a new instance.
-        :param pulumi.Input[int] port: Specifies the database access port. The valid values are range from `2,100` to `9,500` and
-               `27,017`, `27,018`, `27,019`. Defaults to `8,635`.
+        :param pulumi.Input[int] port: Specifies the database access port. The valid values are range from `2100` to `9500` and
+               `27017`, `27018`, `27019`. Defaults to `8635`.
         :param pulumi.Input[str] region: Specifies the region of the DDS instance. Changing this creates a new
                instance.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID of the DDS instance.
@@ -1034,7 +1105,7 @@ class Instance(pulumi.CustomResource):
             subnet_id="{{ subnet_network_id }}}",
             vpc_id="{{ vpc_id }}")
         ```
-        ### Creating A Replica Set
+        ### Creating A Replica Set Community Edition
 
         ```python
         import pulumi
@@ -1060,6 +1131,32 @@ class Instance(pulumi.CustomResource):
             subnet_id="{{ subnet_network_id }}}",
             vpc_id="{{ vpc_id }}")
         ```
+        ### Creating A Single Community Edition
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        instance = huaweicloud.dds.Instance("instance",
+            availability_zone="{{ availability_zone }}",
+            datastore=huaweicloud.dds.InstanceDatastoreArgs(
+                storage_engine="wiredTiger",
+                type="DDS-Community",
+                version="3.4",
+            ),
+            flavors=[huaweicloud.dds.InstanceFlavorArgs(
+                num=1,
+                size=30,
+                spec_code="dds.mongodb.s6.large.2.single",
+                storage="ULTRAHIGH",
+                type="single",
+            )],
+            mode="Single",
+            password="Test@123",
+            security_group_id="{{ security_group_id }}",
+            subnet_id="{{ subnet_network_id }}}",
+            vpc_id="{{ vpc_id }}")
+        ```
 
         ## Import
 
@@ -1069,7 +1166,7 @@ class Instance(pulumi.CustomResource):
          $ pulumi import huaweicloud:Dds/instance:Instance instance 9c6d6ff2cba3434293fd479571517e16in02
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `availability_zone`, `flavor`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dds_instance" "instance" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `availability_zone`, `flavor`, configuration. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dds_instance" "instance" {
 
          ...
 
@@ -1077,7 +1174,7 @@ class Instance(pulumi.CustomResource):
 
          ignore_changes = [
 
-         password, availability_zone, flavor,
+         password, availability_zone, flavor, configuration,
 
          ]
 
@@ -1103,6 +1200,7 @@ class Instance(pulumi.CustomResource):
                  availability_zone: Optional[pulumi.Input[str]] = None,
                  backup_strategy: Optional[pulumi.Input[pulumi.InputType['InstanceBackupStrategyArgs']]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 configurations: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceConfigurationArgs']]]]] = None,
                  datastore: Optional[pulumi.Input[pulumi.InputType['InstanceDatastoreArgs']]] = None,
                  disk_encryption_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -1128,6 +1226,9 @@ class Instance(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = InstanceArgs.__new__(InstanceArgs)
 
+            if auto_pay is not None and not opts.urn:
+                warnings.warn("""Deprecated""", DeprecationWarning)
+                pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
             __props__.__dict__["auto_pay"] = auto_pay
             __props__.__dict__["auto_renew"] = auto_renew
             if availability_zone is None and not opts.urn:
@@ -1135,6 +1236,7 @@ class Instance(pulumi.CustomResource):
             __props__.__dict__["availability_zone"] = availability_zone
             __props__.__dict__["backup_strategy"] = backup_strategy
             __props__.__dict__["charging_mode"] = charging_mode
+            __props__.__dict__["configurations"] = configurations
             if datastore is None and not opts.urn:
                 raise TypeError("Missing required property 'datastore'")
             __props__.__dict__["datastore"] = datastore
@@ -1183,6 +1285,7 @@ class Instance(pulumi.CustomResource):
             availability_zone: Optional[pulumi.Input[str]] = None,
             backup_strategy: Optional[pulumi.Input[pulumi.InputType['InstanceBackupStrategyArgs']]] = None,
             charging_mode: Optional[pulumi.Input[str]] = None,
+            configurations: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceConfigurationArgs']]]]] = None,
             datastore: Optional[pulumi.Input[pulumi.InputType['InstanceDatastoreArgs']]] = None,
             db_username: Optional[pulumi.Input[str]] = None,
             disk_encryption_id: Optional[pulumi.Input[str]] = None,
@@ -1209,7 +1312,7 @@ class Instance(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled.
                Valid values are `true` and `false`, defaults to `false`.
                Changing this creates a new instance.
         :param pulumi.Input[str] availability_zone: Specifies the ID of the availability zone. Changing this creates a
@@ -1219,6 +1322,8 @@ class Instance(pulumi.CustomResource):
                The valid values are as follows:
                + `prePaid`: indicates the yearly/monthly billing mode.
                + `postPaid`: indicates the pay-per-use billing mode.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceConfigurationArgs']]]] configurations: Specifies the configuration information.
+               The structure is described below. Changing this creates a new instance.
         :param pulumi.Input[pulumi.InputType['InstanceDatastoreArgs']] datastore: Specifies database information. The structure is described below. Changing
                this creates a new instance.
         :param pulumi.Input[str] db_username: Indicates the DB Administator name.
@@ -1228,8 +1333,8 @@ class Instance(pulumi.CustomResource):
                Changing this creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceFlavorArgs']]]] flavors: Specifies the flavors information. The structure is described below. Changing
                this creates a new instance.
-        :param pulumi.Input[str] mode: Specifies the mode of the database instance. Changing this creates a new
-               instance.
+        :param pulumi.Input[str] mode: Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
+               **Single** are supported. Changing this creates a new instance.
         :param pulumi.Input[str] name: Specifies the DB instance name. The DB instance name of the same type is unique in the
                same tenant.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceNodeArgs']]]] nodes: Indicates the instance nodes information. Structure is documented below.
@@ -1242,8 +1347,8 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
                Changing this creates a new instance.
-        :param pulumi.Input[int] port: Specifies the database access port. The valid values are range from `2,100` to `9,500` and
-               `27,017`, `27,018`, `27,019`. Defaults to `8,635`.
+        :param pulumi.Input[int] port: Specifies the database access port. The valid values are range from `2100` to `9500` and
+               `27017`, `27018`, `27019`. Defaults to `8635`.
         :param pulumi.Input[str] region: Specifies the region of the DDS instance. Changing this creates a new
                instance.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID of the DDS instance.
@@ -1262,6 +1367,7 @@ class Instance(pulumi.CustomResource):
         __props__.__dict__["availability_zone"] = availability_zone
         __props__.__dict__["backup_strategy"] = backup_strategy
         __props__.__dict__["charging_mode"] = charging_mode
+        __props__.__dict__["configurations"] = configurations
         __props__.__dict__["datastore"] = datastore
         __props__.__dict__["db_username"] = db_username
         __props__.__dict__["disk_encryption_id"] = disk_encryption_id
@@ -1292,7 +1398,7 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies whether auto renew is enabled.
+        Specifies whether auto-renew is enabled.
         Valid values are `true` and `false`, defaults to `false`.
         Changing this creates a new instance.
         """
@@ -1325,6 +1431,15 @@ class Instance(pulumi.CustomResource):
         + `postPaid`: indicates the pay-per-use billing mode.
         """
         return pulumi.get(self, "charging_mode")
+
+    @property
+    @pulumi.getter
+    def configurations(self) -> pulumi.Output[Optional[Sequence['outputs.InstanceConfiguration']]]:
+        """
+        Specifies the configuration information.
+        The structure is described below. Changing this creates a new instance.
+        """
+        return pulumi.get(self, "configurations")
 
     @property
     @pulumi.getter
@@ -1374,8 +1489,8 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter
     def mode(self) -> pulumi.Output[str]:
         """
-        Specifies the mode of the database instance. Changing this creates a new
-        instance.
+        Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
+        **Single** are supported. Changing this creates a new instance.
         """
         return pulumi.get(self, "mode")
 
@@ -1430,8 +1545,8 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter
     def port(self) -> pulumi.Output[int]:
         """
-        Specifies the database access port. The valid values are range from `2,100` to `9,500` and
-        `27,017`, `27,018`, `27,019`. Defaults to `8,635`.
+        Specifies the database access port. The valid values are range from `2100` to `9500` and
+        `27017`, `27018`, `27019`. Defaults to `8635`.
         """
         return pulumi.get(self, "port")
 

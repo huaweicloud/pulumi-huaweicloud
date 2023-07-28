@@ -4,28 +4,6 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
-/**
- * Manages a Project resource within HuaweiCloud.
- *
- * ## Example Usage
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
- *
- * const test = new huaweicloud.ProjectMan.Project("test", {
- *     type: "scrum",
- * });
- * ```
- *
- * ## Import
- *
- * The project can be imported using the `id`, e.g.
- *
- * ```sh
- *  $ pulumi import huaweicloud:ProjectMan/project:Project test 0ce123456a00f2591fabc00385ff1234
- * ```
- */
 export class Project extends pulumi.CustomResource {
     /**
      * Get an existing Project resource's state with the given name, ID, and optional extra
@@ -63,13 +41,11 @@ export class Project extends pulumi.CustomResource {
      */
     public readonly description!: pulumi.Output<string>;
     /**
-     * The enterprise project ID of the project.  
-     * Value 0 indicates the default enterprise project.
+     * The enterprise project ID of the project.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
-     * The project name.  
-     * The name can contain 1 to 128 characters.
+     * The project name.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -80,10 +56,6 @@ export class Project extends pulumi.CustomResource {
      * The number id of project.
      */
     public /*out*/ readonly projectNumId!: pulumi.Output<number>;
-    /**
-     * Specifies the region in which to create the resource.
-     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-     */
     public readonly region!: pulumi.Output<string>;
     /**
      * The source of project.
@@ -94,8 +66,7 @@ export class Project extends pulumi.CustomResource {
      */
     public readonly templateId!: pulumi.Output<number>;
     /**
-     * The type of project.  
-     * The valid values are **scrum**, **xboard**, **basic**, **phoenix**.
+     * The type of project.
      */
     public readonly type!: pulumi.Output<string>;
 
@@ -156,13 +127,11 @@ export interface ProjectState {
      */
     description?: pulumi.Input<string>;
     /**
-     * The enterprise project ID of the project.  
-     * Value 0 indicates the default enterprise project.
+     * The enterprise project ID of the project.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * The project name.  
-     * The name can contain 1 to 128 characters.
+     * The project name.
      */
     name?: pulumi.Input<string>;
     /**
@@ -173,10 +142,6 @@ export interface ProjectState {
      * The number id of project.
      */
     projectNumId?: pulumi.Input<number>;
-    /**
-     * Specifies the region in which to create the resource.
-     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-     */
     region?: pulumi.Input<string>;
     /**
      * The source of project.
@@ -187,8 +152,7 @@ export interface ProjectState {
      */
     templateId?: pulumi.Input<number>;
     /**
-     * The type of project.  
-     * The valid values are **scrum**, **xboard**, **basic**, **phoenix**.
+     * The type of project.
      */
     type?: pulumi.Input<string>;
 }
@@ -202,19 +166,13 @@ export interface ProjectArgs {
      */
     description?: pulumi.Input<string>;
     /**
-     * The enterprise project ID of the project.  
-     * Value 0 indicates the default enterprise project.
+     * The enterprise project ID of the project.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * The project name.  
-     * The name can contain 1 to 128 characters.
+     * The project name.
      */
     name?: pulumi.Input<string>;
-    /**
-     * Specifies the region in which to create the resource.
-     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-     */
     region?: pulumi.Input<string>;
     /**
      * The source of project.
@@ -225,8 +183,7 @@ export interface ProjectArgs {
      */
     templateId?: pulumi.Input<number>;
     /**
-     * The type of project.  
-     * The valid values are **scrum**, **xboard**, **basic**, **phoenix**.
+     * The type of project.
      */
     type: pulumi.Input<string>;
 }

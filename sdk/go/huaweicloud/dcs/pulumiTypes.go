@@ -25,6 +25,7 @@ type InstanceBackupPolicy struct {
 	// Currently, only weekly backup is supported.
 	PeriodType *string `pulumi:"periodType"`
 	// Retention time. Unit: day, the value ranges from 1 to 7.
+	// This parameter is required if the backupType is **auto**.
 	SaveDays *int `pulumi:"saveDays"`
 }
 
@@ -54,6 +55,7 @@ type InstanceBackupPolicyArgs struct {
 	// Currently, only weekly backup is supported.
 	PeriodType pulumi.StringPtrInput `pulumi:"periodType"`
 	// Retention time. Unit: day, the value ranges from 1 to 7.
+	// This parameter is required if the backupType is **auto**.
 	SaveDays pulumi.IntPtrInput `pulumi:"saveDays"`
 }
 
@@ -160,6 +162,7 @@ func (o InstanceBackupPolicyOutput) PeriodType() pulumi.StringPtrOutput {
 }
 
 // Retention time. Unit: day, the value ranges from 1 to 7.
+// This parameter is required if the backupType is **auto**.
 func (o InstanceBackupPolicyOutput) SaveDays() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v InstanceBackupPolicy) *int { return v.SaveDays }).(pulumi.IntPtrOutput)
 }
@@ -234,6 +237,7 @@ func (o InstanceBackupPolicyPtrOutput) PeriodType() pulumi.StringPtrOutput {
 }
 
 // Retention time. Unit: day, the value ranges from 1 to 7.
+// This parameter is required if the backupType is **auto**.
 func (o InstanceBackupPolicyPtrOutput) SaveDays() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *InstanceBackupPolicy) *int {
 		if v == nil {
@@ -358,10 +362,10 @@ type GetFlavorsFlavor struct {
 	// The mode of a cache engine. The valid values are as follows:
 	CacheMode string `pulumi:"cacheMode"`
 	// The total memory of the cache, in GB.
-	// + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values:
+	// + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values:
 	//   `0.125`, `0.25`, `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
-	//   Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-	//   `1024`.
+	//   Cluster instance specifications support `4`,`8`,`16`,`24`, `32`, `48`, `64`, `96`, `128`, `192`,
+	//   `256`, `384`, `512`, `768` and `1024`.
 	// + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
 	//   Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
 	// + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -399,10 +403,10 @@ type GetFlavorsFlavorArgs struct {
 	// The mode of a cache engine. The valid values are as follows:
 	CacheMode pulumi.StringInput `pulumi:"cacheMode"`
 	// The total memory of the cache, in GB.
-	// + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values:
+	// + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values:
 	//   `0.125`, `0.25`, `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
-	//   Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-	//   `1024`.
+	//   Cluster instance specifications support `4`,`8`,`16`,`24`, `32`, `48`, `64`, `96`, `128`, `192`,
+	//   `256`, `384`, `512`, `768` and `1024`.
 	// + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
 	//   Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
 	// + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -485,10 +489,10 @@ func (o GetFlavorsFlavorOutput) CacheMode() pulumi.StringOutput {
 }
 
 // The total memory of the cache, in GB.
-//   - **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values:
+//   - **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values:
 //     `0.125`, `0.25`, `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
-//     Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-//     `1024`.
+//     Cluster instance specifications support `4`,`8`,`16`,`24`, `32`, `48`, `64`, `96`, `128`, `192`,
+//     `256`, `384`, `512`, `768` and `1024`.
 //   - **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
 //     Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
 //   - **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.

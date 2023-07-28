@@ -14,9 +14,9 @@ import * as utilities from "../utilities";
  * import * as huaweicloud from "@pulumi/huaweicloud";
  *
  * const config = new pulumi.Config();
- * const subentId = config.requireObject("subentId");
+ * const subnetId = config.requireObject("subnetId");
  * const port1 = huaweicloud.Iec.getPort({
- *     subnetId: subentId,
+ *     subnetId: subnetId,
  *     fixedIp: "192.168.1.123",
  * });
  * ```

@@ -8,7 +8,6 @@ import * as utilities from "../utilities";
  * Manages an AS Lifecycle Hook resource within HuaweiCloud.
  *
  * ## Example Usage
- * ### Basic Lifecycle Hook
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -19,8 +18,8 @@ import * as utilities from "../utilities";
  * const asGroupId = config.requireObject("asGroupId");
  * const smnTopicUrn = config.requireObject("smnTopicUrn");
  * const test = new huaweicloud.as.LifecycleHook("test", {
- *     type: "ADD",
  *     scalingGroupId: asGroupId,
+ *     type: "ADD",
  *     defaultResult: "ABANDON",
  *     notificationTopicUrn: smnTopicUrn,
  *     notificationMessage: "This is a test message",
@@ -32,7 +31,7 @@ import * as utilities from "../utilities";
  * Lifecycle hooks can be imported using the AS group ID and hook ID separated by a slash, e.g.
  *
  * ```sh
- *  $ pulumi import huaweicloud:As/lifecycleHook:LifecycleHook test <AS group ID>/<Lifecycle hook ID>
+ *  $ pulumi import huaweicloud:As/lifecycleHook:LifecycleHook test &ltAS group ID&gt/&ltLifecycle hook ID&gt
  * ```
  */
 export class LifecycleHook extends pulumi.CustomResource {
@@ -73,8 +72,9 @@ export class LifecycleHook extends pulumi.CustomResource {
      */
     public readonly defaultResult!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the lifecycle hook name. This parameter can contain a maximum of 32 characters,
-     * which may consist of letters, digits, underscores (_) and hyphens (-).
+     * Specifies the lifecycle hook name. This parameter can contain a maximum of
+     * 32 characters, which may consist of letters, digits, underscores (_) and hyphens (-).
+     * Changing this creates a new AS lifecycle hook.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -91,13 +91,13 @@ export class LifecycleHook extends pulumi.CustomResource {
      */
     public readonly notificationTopicUrn!: pulumi.Output<string>;
     /**
-     * The region in which to create the AS lifecycle hook. If omitted, the `region`
-     * argument of the provider is used. Changing this creates a new AS lifecycle hook.
+     * Specifies the region in which to create the AS lifecycle hook.
+     * If omitted, the provider-level region will be used. Changing this creates a new AS lifecycle hook.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Specifies the ID of the AS group in UUID format. Changing this
-     * creates a new AS lifecycle hook.
+     * Specifies the ID of the AS group in UUID format.
+     * Changing this creates a new AS lifecycle hook.
      */
     public readonly scalingGroupId!: pulumi.Output<string>;
     /**
@@ -176,8 +176,9 @@ export interface LifecycleHookState {
      */
     defaultResult?: pulumi.Input<string>;
     /**
-     * Specifies the lifecycle hook name. This parameter can contain a maximum of 32 characters,
-     * which may consist of letters, digits, underscores (_) and hyphens (-).
+     * Specifies the lifecycle hook name. This parameter can contain a maximum of
+     * 32 characters, which may consist of letters, digits, underscores (_) and hyphens (-).
+     * Changing this creates a new AS lifecycle hook.
      */
     name?: pulumi.Input<string>;
     /**
@@ -194,13 +195,13 @@ export interface LifecycleHookState {
      */
     notificationTopicUrn?: pulumi.Input<string>;
     /**
-     * The region in which to create the AS lifecycle hook. If omitted, the `region`
-     * argument of the provider is used. Changing this creates a new AS lifecycle hook.
+     * Specifies the region in which to create the AS lifecycle hook.
+     * If omitted, the provider-level region will be used. Changing this creates a new AS lifecycle hook.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the ID of the AS group in UUID format. Changing this
-     * creates a new AS lifecycle hook.
+     * Specifies the ID of the AS group in UUID format.
+     * Changing this creates a new AS lifecycle hook.
      */
     scalingGroupId?: pulumi.Input<string>;
     /**
@@ -226,8 +227,9 @@ export interface LifecycleHookArgs {
      */
     defaultResult?: pulumi.Input<string>;
     /**
-     * Specifies the lifecycle hook name. This parameter can contain a maximum of 32 characters,
-     * which may consist of letters, digits, underscores (_) and hyphens (-).
+     * Specifies the lifecycle hook name. This parameter can contain a maximum of
+     * 32 characters, which may consist of letters, digits, underscores (_) and hyphens (-).
+     * Changing this creates a new AS lifecycle hook.
      */
     name?: pulumi.Input<string>;
     /**
@@ -240,13 +242,13 @@ export interface LifecycleHookArgs {
      */
     notificationTopicUrn: pulumi.Input<string>;
     /**
-     * The region in which to create the AS lifecycle hook. If omitted, the `region`
-     * argument of the provider is used. Changing this creates a new AS lifecycle hook.
+     * Specifies the region in which to create the AS lifecycle hook.
+     * If omitted, the provider-level region will be used. Changing this creates a new AS lifecycle hook.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the ID of the AS group in UUID format. Changing this
-     * creates a new AS lifecycle hook.
+     * Specifies the ID of the AS group in UUID format.
+     * Changing this creates a new AS lifecycle hook.
      */
     scalingGroupId: pulumi.Input<string>;
     /**

@@ -56,7 +56,7 @@ type Space struct {
 	// a default resource space (undeletable) to your account.
 	IsDefault pulumi.BoolOutput `pulumi:"isDefault"`
 	// Specifies the space name. The name contains a maximum of 64 characters.
-	// Only letters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+	// Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the region in which to create the IoTDA resource space resource.
@@ -98,7 +98,7 @@ type spaceState struct {
 	// a default resource space (undeletable) to your account.
 	IsDefault *bool `pulumi:"isDefault"`
 	// Specifies the space name. The name contains a maximum of 64 characters.
-	// Only letters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+	// Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
 	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the region in which to create the IoTDA resource space resource.
@@ -111,7 +111,7 @@ type SpaceState struct {
 	// a default resource space (undeletable) to your account.
 	IsDefault pulumi.BoolPtrInput
 	// Specifies the space name. The name contains a maximum of 64 characters.
-	// Only letters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+	// Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
 	// Specifies the region in which to create the IoTDA resource space resource.
@@ -125,7 +125,7 @@ func (SpaceState) ElementType() reflect.Type {
 
 type spaceArgs struct {
 	// Specifies the space name. The name contains a maximum of 64 characters.
-	// Only letters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+	// Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
 	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the region in which to create the IoTDA resource space resource.
@@ -136,7 +136,7 @@ type spaceArgs struct {
 // The set of arguments for constructing a Space resource.
 type SpaceArgs struct {
 	// Specifies the space name. The name contains a maximum of 64 characters.
-	// Only letters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+	// Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
 	// Specifies the region in which to create the IoTDA resource space resource.
@@ -238,7 +238,7 @@ func (o SpaceOutput) IsDefault() pulumi.BoolOutput {
 }
 
 // Specifies the space name. The name contains a maximum of 64 characters.
-// Only letters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+// Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
 // Changing this parameter will create a new resource.
 func (o SpaceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Space) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)

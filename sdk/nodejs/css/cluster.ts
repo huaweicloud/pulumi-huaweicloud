@@ -71,6 +71,33 @@ import * as utilities from "../utilities";
  *     securityGroupId: secgroupId,
  * });
  * ```
+ * ### create a cluster with ess-data node and cold node use local disk
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const availabilityZone = config.requireObject("availabilityZone");
+ * const vpcId = config.requireObject("vpcId");
+ * const subnetId = config.requireObject("subnetId");
+ * const secgroupId = config.requireObject("secgroupId");
+ * const cluster = new huaweicloud.css.Cluster("cluster", {
+ *     engineVersion: "7.10.2",
+ *     essNodeConfig: {
+ *         flavor: "ess.spec-ds.xlarge.8",
+ *         instanceNumber: 1,
+ *     },
+ *     coldNodeConfig: {
+ *         flavor: "ess.spec-ds.2xlarge.8",
+ *         instanceNumber: 2,
+ *     },
+ *     availabilityZone: availabilityZone,
+ *     vpcId: vpcId,
+ *     subnetId: subnetId,
+ *     securityGroupId: secgroupId,
+ * });
+ * ```
  *
  * ## Import
  *
@@ -111,7 +138,6 @@ export class Cluster extends pulumi.CustomResource {
     /**
      * Specifies whether auto renew is enabled.
      * Valid values are `true` and `false`, defaults to `false`.
-     * Changing this parameter will create a new resource.
      */
     public readonly autoRenew!: pulumi.Output<string | undefined>;
     /**
@@ -177,6 +203,12 @@ export class Cluster extends pulumi.CustomResource {
      * @deprecated please use ess_node_config.instance_number instead
      */
     public readonly expectNodeNum!: pulumi.Output<number>;
+    /**
+     * Specifies whether to enable HTTPS. Defaults to `false`.
+     * When `httpsEnabled` is set to `true`, the `securityMode` needs to be set to `true`.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly httpsEnabled!: pulumi.Output<boolean>;
     /**
      * Specifies Kibana public network access information.
      * This parameter is valid only when securityMode is set to true.
@@ -246,10 +278,7 @@ export class Cluster extends pulumi.CustomResource {
      */
     public readonly securityMode!: pulumi.Output<boolean | undefined>;
     /**
-     * The cluster status
-     * + `100`: The operation, such as instance creation, is in progress.
-     * + `200`: The cluster is available.
-     * + `303`: The cluster is unavailable.
+     * Instance status.
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
@@ -304,6 +333,7 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["essNodeConfig"] = state ? state.essNodeConfig : undefined;
             resourceInputs["expectNodeNum"] = state ? state.expectNodeNum : undefined;
+            resourceInputs["httpsEnabled"] = state ? state.httpsEnabled : undefined;
             resourceInputs["kibanaPublicAccess"] = state ? state.kibanaPublicAccess : undefined;
             resourceInputs["masterNodeConfig"] = state ? state.masterNodeConfig : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
@@ -339,6 +369,7 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["essNodeConfig"] = args ? args.essNodeConfig : undefined;
             resourceInputs["expectNodeNum"] = args ? args.expectNodeNum : undefined;
+            resourceInputs["httpsEnabled"] = args ? args.httpsEnabled : undefined;
             resourceInputs["kibanaPublicAccess"] = args ? args.kibanaPublicAccess : undefined;
             resourceInputs["masterNodeConfig"] = args ? args.masterNodeConfig : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
@@ -373,7 +404,6 @@ export interface ClusterState {
     /**
      * Specifies whether auto renew is enabled.
      * Valid values are `true` and `false`, defaults to `false`.
-     * Changing this parameter will create a new resource.
      */
     autoRenew?: pulumi.Input<string>;
     /**
@@ -439,6 +469,12 @@ export interface ClusterState {
      * @deprecated please use ess_node_config.instance_number instead
      */
     expectNodeNum?: pulumi.Input<number>;
+    /**
+     * Specifies whether to enable HTTPS. Defaults to `false`.
+     * When `httpsEnabled` is set to `true`, the `securityMode` needs to be set to `true`.
+     * Changing this parameter will create a new resource.
+     */
+    httpsEnabled?: pulumi.Input<boolean>;
     /**
      * Specifies Kibana public network access information.
      * This parameter is valid only when securityMode is set to true.
@@ -508,10 +544,7 @@ export interface ClusterState {
      */
     securityMode?: pulumi.Input<boolean>;
     /**
-     * The cluster status
-     * + `100`: The operation, such as instance creation, is in progress.
-     * + `200`: The cluster is available.
-     * + `303`: The cluster is unavailable.
+     * Instance status.
      */
     status?: pulumi.Input<string>;
     /**
@@ -548,7 +581,6 @@ export interface ClusterArgs {
     /**
      * Specifies whether auto renew is enabled.
      * Valid values are `true` and `false`, defaults to `false`.
-     * Changing this parameter will create a new resource.
      */
     autoRenew?: pulumi.Input<string>;
     /**
@@ -605,6 +637,12 @@ export interface ClusterArgs {
      * @deprecated please use ess_node_config.instance_number instead
      */
     expectNodeNum?: pulumi.Input<number>;
+    /**
+     * Specifies whether to enable HTTPS. Defaults to `false`.
+     * When `httpsEnabled` is set to `true`, the `securityMode` needs to be set to `true`.
+     * Changing this parameter will create a new resource.
+     */
+    httpsEnabled?: pulumi.Input<boolean>;
     /**
      * Specifies Kibana public network access information.
      * This parameter is valid only when securityMode is set to true.

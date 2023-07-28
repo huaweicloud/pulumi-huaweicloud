@@ -33,7 +33,6 @@ import * as utilities from "../utilities";
  *         level: 15,
  *         maxConsecutiveBframes: 7,
  *         maxIframesInterval: 5,
- *         maxReferenceFrames: 4,
  *         outputPolicy: "transcode",
  *         profile: 4,
  *         quality: 1,

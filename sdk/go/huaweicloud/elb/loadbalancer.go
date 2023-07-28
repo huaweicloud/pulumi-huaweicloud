@@ -23,16 +23,19 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Elb"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			ipv4SubnetId := cfg.RequireObject("ipv4SubnetId")
 //			_, err := Elb.NewLoadbalancer(ctx, "lb1", &Elb.LoadbalancerArgs{
+//				VipSubnetId: pulumi.Any(ipv4SubnetId),
 //				Tags: pulumi.StringMap{
 //					"key": pulumi.String("value"),
 //				},
-//				VipSubnetId: pulumi.String("d9415786-5f1a-428b-b35f-2f1523e146d2"),
 //			})
 //			if err != nil {
 //				return err
@@ -52,13 +55,16 @@ import (
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Elb"
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Vpc"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			ipv4SubnetId := cfg.RequireObject("ipv4SubnetId")
 //			lb1, err := Elb.NewLoadbalancer(ctx, "lb1", &Elb.LoadbalancerArgs{
-//				VipSubnetId: pulumi.String("d9415786-5f1a-428b-b35f-2f1523e146d2"),
+//				VipSubnetId: pulumi.Any(ipv4_subnet_id),
 //			})
 //			if err != nil {
 //				return err
@@ -88,21 +94,24 @@ import (
 type Loadbalancer struct {
 	pulumi.CustomResourceState
 
-	// The administrative state of the loadbalancer. A valid value is true (UP) or
-	// false (DOWN).
 	AdminStateUp pulumi.BoolPtrOutput `pulumi:"adminStateUp"`
 	// Human-readable description for the loadbalancer.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// The enterprise project id of the loadbalancer. Changing this
 	// creates a new loadbalancer.
-	EnterpriseProjectId  pulumi.StringOutput    `pulumi:"enterpriseProjectId"`
-	Flavor               pulumi.StringPtrOutput `pulumi:"flavor"`
-	LoadbalancerProvider pulumi.StringOutput    `pulumi:"loadbalancerProvider"`
+	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
+	// schema: Deprecated
+	Flavor pulumi.StringPtrOutput `pulumi:"flavor"`
+	// schema: Deprecated
+	LoadbalancerProvider pulumi.StringOutput `pulumi:"loadbalancerProvider"`
 	// Human-readable name for the loadbalancer. Does not have to be unique.
 	Name pulumi.StringOutput `pulumi:"name"`
+	// The EIP address that is associated to the Load Balancer instance.
+	PublicIp pulumi.StringOutput `pulumi:"publicIp"`
 	// The region in which to create the loadbalancer resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new loadbalancer.
-	Region           pulumi.StringOutput      `pulumi:"region"`
+	Region pulumi.StringOutput `pulumi:"region"`
+	// schema: Deprecated
 	SecurityGroupIds pulumi.StringArrayOutput `pulumi:"securityGroupIds"`
 	// The key/value pairs to associate with the loadbalancer.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
@@ -113,9 +122,8 @@ type Loadbalancer struct {
 	VipAddress pulumi.StringOutput `pulumi:"vipAddress"`
 	// The Port ID of the Load Balancer IP.
 	VipPortId pulumi.StringOutput `pulumi:"vipPortId"`
-	// The network on which to allocate the loadbalancer's address. A tenant
-	// can only create Loadbalancers on networks authorized by policy (e.g. networks that belong to them or networks that are
-	// shared). Changing this creates a new loadbalancer.
+	// The **IPv4 subnet ID** of the subnet where the load balancer works.
+	// Changing this creates a new loadbalancer.
 	VipSubnetId pulumi.StringOutput `pulumi:"vipSubnetId"`
 }
 
@@ -152,21 +160,24 @@ func GetLoadbalancer(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Loadbalancer resources.
 type loadbalancerState struct {
-	// The administrative state of the loadbalancer. A valid value is true (UP) or
-	// false (DOWN).
 	AdminStateUp *bool `pulumi:"adminStateUp"`
 	// Human-readable description for the loadbalancer.
 	Description *string `pulumi:"description"`
 	// The enterprise project id of the loadbalancer. Changing this
 	// creates a new loadbalancer.
-	EnterpriseProjectId  *string `pulumi:"enterpriseProjectId"`
-	Flavor               *string `pulumi:"flavor"`
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// schema: Deprecated
+	Flavor *string `pulumi:"flavor"`
+	// schema: Deprecated
 	LoadbalancerProvider *string `pulumi:"loadbalancerProvider"`
 	// Human-readable name for the loadbalancer. Does not have to be unique.
 	Name *string `pulumi:"name"`
+	// The EIP address that is associated to the Load Balancer instance.
+	PublicIp *string `pulumi:"publicIp"`
 	// The region in which to create the loadbalancer resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new loadbalancer.
-	Region           *string  `pulumi:"region"`
+	Region *string `pulumi:"region"`
+	// schema: Deprecated
 	SecurityGroupIds []string `pulumi:"securityGroupIds"`
 	// The key/value pairs to associate with the loadbalancer.
 	Tags map[string]string `pulumi:"tags"`
@@ -177,28 +188,30 @@ type loadbalancerState struct {
 	VipAddress *string `pulumi:"vipAddress"`
 	// The Port ID of the Load Balancer IP.
 	VipPortId *string `pulumi:"vipPortId"`
-	// The network on which to allocate the loadbalancer's address. A tenant
-	// can only create Loadbalancers on networks authorized by policy (e.g. networks that belong to them or networks that are
-	// shared). Changing this creates a new loadbalancer.
+	// The **IPv4 subnet ID** of the subnet where the load balancer works.
+	// Changing this creates a new loadbalancer.
 	VipSubnetId *string `pulumi:"vipSubnetId"`
 }
 
 type LoadbalancerState struct {
-	// The administrative state of the loadbalancer. A valid value is true (UP) or
-	// false (DOWN).
 	AdminStateUp pulumi.BoolPtrInput
 	// Human-readable description for the loadbalancer.
 	Description pulumi.StringPtrInput
 	// The enterprise project id of the loadbalancer. Changing this
 	// creates a new loadbalancer.
-	EnterpriseProjectId  pulumi.StringPtrInput
-	Flavor               pulumi.StringPtrInput
+	EnterpriseProjectId pulumi.StringPtrInput
+	// schema: Deprecated
+	Flavor pulumi.StringPtrInput
+	// schema: Deprecated
 	LoadbalancerProvider pulumi.StringPtrInput
 	// Human-readable name for the loadbalancer. Does not have to be unique.
 	Name pulumi.StringPtrInput
+	// The EIP address that is associated to the Load Balancer instance.
+	PublicIp pulumi.StringPtrInput
 	// The region in which to create the loadbalancer resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new loadbalancer.
-	Region           pulumi.StringPtrInput
+	Region pulumi.StringPtrInput
+	// schema: Deprecated
 	SecurityGroupIds pulumi.StringArrayInput
 	// The key/value pairs to associate with the loadbalancer.
 	Tags pulumi.StringMapInput
@@ -209,9 +222,8 @@ type LoadbalancerState struct {
 	VipAddress pulumi.StringPtrInput
 	// The Port ID of the Load Balancer IP.
 	VipPortId pulumi.StringPtrInput
-	// The network on which to allocate the loadbalancer's address. A tenant
-	// can only create Loadbalancers on networks authorized by policy (e.g. networks that belong to them or networks that are
-	// shared). Changing this creates a new loadbalancer.
+	// The **IPv4 subnet ID** of the subnet where the load balancer works.
+	// Changing this creates a new loadbalancer.
 	VipSubnetId pulumi.StringPtrInput
 }
 
@@ -220,21 +232,22 @@ func (LoadbalancerState) ElementType() reflect.Type {
 }
 
 type loadbalancerArgs struct {
-	// The administrative state of the loadbalancer. A valid value is true (UP) or
-	// false (DOWN).
 	AdminStateUp *bool `pulumi:"adminStateUp"`
 	// Human-readable description for the loadbalancer.
 	Description *string `pulumi:"description"`
 	// The enterprise project id of the loadbalancer. Changing this
 	// creates a new loadbalancer.
-	EnterpriseProjectId  *string `pulumi:"enterpriseProjectId"`
-	Flavor               *string `pulumi:"flavor"`
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// schema: Deprecated
+	Flavor *string `pulumi:"flavor"`
+	// schema: Deprecated
 	LoadbalancerProvider *string `pulumi:"loadbalancerProvider"`
 	// Human-readable name for the loadbalancer. Does not have to be unique.
 	Name *string `pulumi:"name"`
 	// The region in which to create the loadbalancer resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new loadbalancer.
-	Region           *string  `pulumi:"region"`
+	Region *string `pulumi:"region"`
+	// schema: Deprecated
 	SecurityGroupIds []string `pulumi:"securityGroupIds"`
 	// The key/value pairs to associate with the loadbalancer.
 	Tags map[string]string `pulumi:"tags"`
@@ -243,29 +256,29 @@ type loadbalancerArgs struct {
 	// The ip address of the load balancer. Changing this creates a new
 	// loadbalancer.
 	VipAddress *string `pulumi:"vipAddress"`
-	// The network on which to allocate the loadbalancer's address. A tenant
-	// can only create Loadbalancers on networks authorized by policy (e.g. networks that belong to them or networks that are
-	// shared). Changing this creates a new loadbalancer.
+	// The **IPv4 subnet ID** of the subnet where the load balancer works.
+	// Changing this creates a new loadbalancer.
 	VipSubnetId string `pulumi:"vipSubnetId"`
 }
 
 // The set of arguments for constructing a Loadbalancer resource.
 type LoadbalancerArgs struct {
-	// The administrative state of the loadbalancer. A valid value is true (UP) or
-	// false (DOWN).
 	AdminStateUp pulumi.BoolPtrInput
 	// Human-readable description for the loadbalancer.
 	Description pulumi.StringPtrInput
 	// The enterprise project id of the loadbalancer. Changing this
 	// creates a new loadbalancer.
-	EnterpriseProjectId  pulumi.StringPtrInput
-	Flavor               pulumi.StringPtrInput
+	EnterpriseProjectId pulumi.StringPtrInput
+	// schema: Deprecated
+	Flavor pulumi.StringPtrInput
+	// schema: Deprecated
 	LoadbalancerProvider pulumi.StringPtrInput
 	// Human-readable name for the loadbalancer. Does not have to be unique.
 	Name pulumi.StringPtrInput
 	// The region in which to create the loadbalancer resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new loadbalancer.
-	Region           pulumi.StringPtrInput
+	Region pulumi.StringPtrInput
+	// schema: Deprecated
 	SecurityGroupIds pulumi.StringArrayInput
 	// The key/value pairs to associate with the loadbalancer.
 	Tags pulumi.StringMapInput
@@ -274,9 +287,8 @@ type LoadbalancerArgs struct {
 	// The ip address of the load balancer. Changing this creates a new
 	// loadbalancer.
 	VipAddress pulumi.StringPtrInput
-	// The network on which to allocate the loadbalancer's address. A tenant
-	// can only create Loadbalancers on networks authorized by policy (e.g. networks that belong to them or networks that are
-	// shared). Changing this creates a new loadbalancer.
+	// The **IPv4 subnet ID** of the subnet where the load balancer works.
+	// Changing this creates a new loadbalancer.
 	VipSubnetId pulumi.StringInput
 }
 
@@ -367,8 +379,6 @@ func (o LoadbalancerOutput) ToLoadbalancerOutputWithContext(ctx context.Context)
 	return o
 }
 
-// The administrative state of the loadbalancer. A valid value is true (UP) or
-// false (DOWN).
 func (o LoadbalancerOutput) AdminStateUp() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.BoolPtrOutput { return v.AdminStateUp }).(pulumi.BoolPtrOutput)
 }
@@ -384,10 +394,12 @@ func (o LoadbalancerOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
 
+// schema: Deprecated
 func (o LoadbalancerOutput) Flavor() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringPtrOutput { return v.Flavor }).(pulumi.StringPtrOutput)
 }
 
+// schema: Deprecated
 func (o LoadbalancerOutput) LoadbalancerProvider() pulumi.StringOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.LoadbalancerProvider }).(pulumi.StringOutput)
 }
@@ -397,12 +409,18 @@ func (o LoadbalancerOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
+// The EIP address that is associated to the Load Balancer instance.
+func (o LoadbalancerOutput) PublicIp() pulumi.StringOutput {
+	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.PublicIp }).(pulumi.StringOutput)
+}
+
 // The region in which to create the loadbalancer resource. If omitted, the
 // provider-level region will be used. Changing this creates a new loadbalancer.
 func (o LoadbalancerOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
+// schema: Deprecated
 func (o LoadbalancerOutput) SecurityGroupIds() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringArrayOutput { return v.SecurityGroupIds }).(pulumi.StringArrayOutput)
 }
@@ -428,9 +446,8 @@ func (o LoadbalancerOutput) VipPortId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.VipPortId }).(pulumi.StringOutput)
 }
 
-// The network on which to allocate the loadbalancer's address. A tenant
-// can only create Loadbalancers on networks authorized by policy (e.g. networks that belong to them or networks that are
-// shared). Changing this creates a new loadbalancer.
+// The **IPv4 subnet ID** of the subnet where the load balancer works.
+// Changing this creates a new loadbalancer.
 func (o LoadbalancerOutput) VipSubnetId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.VipSubnetId }).(pulumi.StringOutput)
 }

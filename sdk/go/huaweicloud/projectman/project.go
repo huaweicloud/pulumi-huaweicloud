@@ -11,43 +11,6 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages a Project resource within HuaweiCloud.
-//
-// ## Example Usage
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/ProjectMan"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := ProjectMan.NewProject(ctx, "test", &ProjectMan.ProjectArgs{
-//				Type: pulumi.String("scrum"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
-//
-// ## Import
-//
-// The project can be imported using the `id`, e.g.
-//
-// ```sh
-//
-//	$ pulumi import huaweicloud:ProjectMan/project:Project test 0ce123456a00f2591fabc00385ff1234
-//
-// ```
 type Project struct {
 	pulumi.CustomResourceState
 
@@ -55,25 +18,20 @@ type Project struct {
 	Archive pulumi.IntOutput `pulumi:"archive"`
 	// The description about the project.
 	Description pulumi.StringOutput `pulumi:"description"`
-	// The enterprise project ID of the project.\
-	// Value 0 indicates the default enterprise project.
+	// The enterprise project ID of the project.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
-	// The project name.\
-	// The name can contain 1 to 128 characters.
+	// The project name.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// The project code.
 	ProjectCode pulumi.StringOutput `pulumi:"projectCode"`
 	// The number id of project.
-	ProjectNumId pulumi.IntOutput `pulumi:"projectNumId"`
-	// Specifies the region in which to create the resource.
-	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-	Region pulumi.StringOutput `pulumi:"region"`
+	ProjectNumId pulumi.IntOutput    `pulumi:"projectNumId"`
+	Region       pulumi.StringOutput `pulumi:"region"`
 	// The source of project.
 	Source pulumi.StringOutput `pulumi:"source"`
 	// The template id which used to create project.
 	TemplateId pulumi.IntOutput `pulumi:"templateId"`
-	// The type of project.\
-	// The valid values are **scrum**, **xboard**, **basic**, **phoenix**.
+	// The type of project.
 	Type pulumi.StringOutput `pulumi:"type"`
 }
 
@@ -114,25 +72,20 @@ type projectState struct {
 	Archive *int `pulumi:"archive"`
 	// The description about the project.
 	Description *string `pulumi:"description"`
-	// The enterprise project ID of the project.\
-	// Value 0 indicates the default enterprise project.
+	// The enterprise project ID of the project.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// The project name.\
-	// The name can contain 1 to 128 characters.
+	// The project name.
 	Name *string `pulumi:"name"`
 	// The project code.
 	ProjectCode *string `pulumi:"projectCode"`
 	// The number id of project.
-	ProjectNumId *int `pulumi:"projectNumId"`
-	// Specifies the region in which to create the resource.
-	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-	Region *string `pulumi:"region"`
+	ProjectNumId *int    `pulumi:"projectNumId"`
+	Region       *string `pulumi:"region"`
 	// The source of project.
 	Source *string `pulumi:"source"`
 	// The template id which used to create project.
 	TemplateId *int `pulumi:"templateId"`
-	// The type of project.\
-	// The valid values are **scrum**, **xboard**, **basic**, **phoenix**.
+	// The type of project.
 	Type *string `pulumi:"type"`
 }
 
@@ -141,25 +94,20 @@ type ProjectState struct {
 	Archive pulumi.IntPtrInput
 	// The description about the project.
 	Description pulumi.StringPtrInput
-	// The enterprise project ID of the project.\
-	// Value 0 indicates the default enterprise project.
+	// The enterprise project ID of the project.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// The project name.\
-	// The name can contain 1 to 128 characters.
+	// The project name.
 	Name pulumi.StringPtrInput
 	// The project code.
 	ProjectCode pulumi.StringPtrInput
 	// The number id of project.
 	ProjectNumId pulumi.IntPtrInput
-	// Specifies the region in which to create the resource.
-	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-	Region pulumi.StringPtrInput
+	Region       pulumi.StringPtrInput
 	// The source of project.
 	Source pulumi.StringPtrInput
 	// The template id which used to create project.
 	TemplateId pulumi.IntPtrInput
-	// The type of project.\
-	// The valid values are **scrum**, **xboard**, **basic**, **phoenix**.
+	// The type of project.
 	Type pulumi.StringPtrInput
 }
 
@@ -170,21 +118,16 @@ func (ProjectState) ElementType() reflect.Type {
 type projectArgs struct {
 	// The description about the project.
 	Description *string `pulumi:"description"`
-	// The enterprise project ID of the project.\
-	// Value 0 indicates the default enterprise project.
+	// The enterprise project ID of the project.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// The project name.\
-	// The name can contain 1 to 128 characters.
-	Name *string `pulumi:"name"`
-	// Specifies the region in which to create the resource.
-	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+	// The project name.
+	Name   *string `pulumi:"name"`
 	Region *string `pulumi:"region"`
 	// The source of project.
 	Source *string `pulumi:"source"`
 	// The template id which used to create project.
 	TemplateId *int `pulumi:"templateId"`
-	// The type of project.\
-	// The valid values are **scrum**, **xboard**, **basic**, **phoenix**.
+	// The type of project.
 	Type string `pulumi:"type"`
 }
 
@@ -192,21 +135,16 @@ type projectArgs struct {
 type ProjectArgs struct {
 	// The description about the project.
 	Description pulumi.StringPtrInput
-	// The enterprise project ID of the project.\
-	// Value 0 indicates the default enterprise project.
+	// The enterprise project ID of the project.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// The project name.\
-	// The name can contain 1 to 128 characters.
-	Name pulumi.StringPtrInput
-	// Specifies the region in which to create the resource.
-	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+	// The project name.
+	Name   pulumi.StringPtrInput
 	Region pulumi.StringPtrInput
 	// The source of project.
 	Source pulumi.StringPtrInput
 	// The template id which used to create project.
 	TemplateId pulumi.IntPtrInput
-	// The type of project.\
-	// The valid values are **scrum**, **xboard**, **basic**, **phoenix**.
+	// The type of project.
 	Type pulumi.StringInput
 }
 
@@ -307,14 +245,12 @@ func (o ProjectOutput) Description() pulumi.StringOutput {
 	return o.ApplyT(func(v *Project) pulumi.StringOutput { return v.Description }).(pulumi.StringOutput)
 }
 
-// The enterprise project ID of the project.\
-// Value 0 indicates the default enterprise project.
+// The enterprise project ID of the project.
 func (o ProjectOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Project) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
 
-// The project name.\
-// The name can contain 1 to 128 characters.
+// The project name.
 func (o ProjectOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Project) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
@@ -329,8 +265,6 @@ func (o ProjectOutput) ProjectNumId() pulumi.IntOutput {
 	return o.ApplyT(func(v *Project) pulumi.IntOutput { return v.ProjectNumId }).(pulumi.IntOutput)
 }
 
-// Specifies the region in which to create the resource.
-// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 func (o ProjectOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Project) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
@@ -345,8 +279,7 @@ func (o ProjectOutput) TemplateId() pulumi.IntOutput {
 	return o.ApplyT(func(v *Project) pulumi.IntOutput { return v.TemplateId }).(pulumi.IntOutput)
 }
 
-// The type of project.\
-// The valid values are **scrum**, **xboard**, **basic**, **phoenix**.
+// The type of project.
 func (o ProjectOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v *Project) pulumi.StringOutput { return v.Type }).(pulumi.StringOutput)
 }

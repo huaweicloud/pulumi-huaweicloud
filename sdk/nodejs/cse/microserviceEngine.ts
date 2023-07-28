@@ -28,7 +28,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Engines can be imported using their `id`, e.g.
+ * Engines can be imported using their `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Cse/microserviceEngine:MicroserviceEngine test eddc5d42-f9d5-4f8e-984b-d6f3e088561c
@@ -48,7 +48,11 @@ import * as utilities from "../utilities";
  *
  *  ]
  *
- *  } }
+ *  } } For the engine created with the `enterprise_project_id`, its enterprise project ID needs to be specified additionally when importing, the format is `<id>/<enterprise_project_id>`, e.g. bash
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:Cse/microserviceEngine:MicroserviceEngine test eddc5d42-f9d5-4f8e-984b-d6f3e088561c/ef101e1a-990c-42cd-bb99-a4474e41e461
+ * ```
  */
 export class MicroserviceEngine extends pulumi.CustomResource {
     /**
@@ -113,7 +117,7 @@ export class MicroserviceEngine extends pulumi.CustomResource {
     public /*out*/ readonly configCenterAddresses!: pulumi.Output<outputs.Cse.MicroserviceEngineConfigCenterAddress[]>;
     /**
      * Specifies the description of the dedicated microservice engine.
-     * The description can contian a maximum of `255` characters.
+     * The description can contain a maximum of `255` characters.
      * Changing this will create a new engine.
      */
     public readonly description!: pulumi.Output<string | undefined>;
@@ -122,6 +126,11 @@ export class MicroserviceEngine extends pulumi.CustomResource {
      * Changing this will create a new engine.
      */
     public readonly eipId!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the enterprise project ID to which the dedicated
+     * microservice engine belongs.
+     * Changing this will create a new engine.
+     */
     public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
     /**
      * Specifies the additional parameters for the dedicated microservice engine.
@@ -273,7 +282,7 @@ export interface MicroserviceEngineState {
     configCenterAddresses?: pulumi.Input<pulumi.Input<inputs.Cse.MicroserviceEngineConfigCenterAddress>[]>;
     /**
      * Specifies the description of the dedicated microservice engine.
-     * The description can contian a maximum of `255` characters.
+     * The description can contain a maximum of `255` characters.
      * Changing this will create a new engine.
      */
     description?: pulumi.Input<string>;
@@ -282,6 +291,11 @@ export interface MicroserviceEngineState {
      * Changing this will create a new engine.
      */
     eipId?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID to which the dedicated
+     * microservice engine belongs.
+     * Changing this will create a new engine.
+     */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Specifies the additional parameters for the dedicated microservice engine.
@@ -364,7 +378,7 @@ export interface MicroserviceEngineArgs {
     availabilityZones: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the description of the dedicated microservice engine.
-     * The description can contian a maximum of `255` characters.
+     * The description can contain a maximum of `255` characters.
      * Changing this will create a new engine.
      */
     description?: pulumi.Input<string>;
@@ -373,6 +387,11 @@ export interface MicroserviceEngineArgs {
      * Changing this will create a new engine.
      */
     eipId?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID to which the dedicated
+     * microservice engine belongs.
+     * Changing this will create a new engine.
+     */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Specifies the additional parameters for the dedicated microservice engine.

@@ -10,9 +10,10 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages an SMN Topic resource within HuaweiCloud.
+// Manages an SMN topic resource within HuaweiCloud.
 //
 // ## Example Usage
+// ### Basic Usage
 //
 // ```go
 // package main
@@ -28,6 +29,34 @@ import (
 //		pulumi.Run(func(ctx *pulumi.Context) error {
 //			_, err := Smn.NewTopic(ctx, "topic1", &Smn.TopicArgs{
 //				DisplayName: pulumi.String("The display name of topic_1"),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
+// ### Topic with policies
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Smn"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			_, err := Smn.NewTopic(ctx, "topic1", &Smn.TopicArgs{
+//				DisplayName:            pulumi.String("The display name of topic_1"),
+//				Introduction:           pulumi.String("created by terraform"),
+//				ServicesPublishAllowed: pulumi.String("obs,vod,cce"),
+//				UsersPublishAllowed:    pulumi.String("urn:csp:iam::0970d7b7d400f2470fbec00316a03560:root,urn:csp:iam::0970d7b7d400f2470fbec00316a03561:root"),
 //			})
 //			if err != nil {
 //				return err
@@ -58,22 +87,34 @@ type Topic struct {
 	// Specifies the enterprise project id of the SMN Topic, Value 0
 	// indicates the default enterprise project. Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
+	// Specifies the introduction of the topic,
+	// this will be contained in the subscription invitation.
+	Introduction pulumi.StringPtrOutput `pulumi:"introduction"`
 	// Specifies the name of the topic to be created. The name can contains of 1 to 255
 	// characters and must start with a letter or digit, and can only contain letters, digits, underscores (_), and hyphens (-).
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringOutput `pulumi:"name"`
-	// Message pushing policy. 0 indicates that the message sending fails and the message is cached in the
-	// queue. 1 indicates that the failed message is discarded.
+	// Message pushing policy.
+	// + **0**: indicates that the message sending fails and the message is cached in the queue.
+	// + **1**: indicates that the failed message is discarded.
 	PushPolicy pulumi.IntOutput `pulumi:"pushPolicy"`
 	// The region in which to create the SMN topic resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
+	// Specifies the services that can publish messages to this topic
+	// separated by comma(,). If left empty, that means no service allowed.
+	ServicesPublishAllowed pulumi.StringPtrOutput `pulumi:"servicesPublishAllowed"`
 	// Specifies the tags of the SMN topic, key/value pair format.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// Resource identifier of a topic, which is unique.
 	TopicUrn pulumi.StringOutput `pulumi:"topicUrn"`
 	// Time when the topic was updated.
 	UpdateTime pulumi.StringOutput `pulumi:"updateTime"`
+	// Specifies the users who can publish messages to this topic.
+	// The value can be **\*** which indicates all users or user account URNs separated by comma(,). The format of
+	// user account URN is **urn:csp:iam::domainId:root**. **domainId** indicates the account ID of another user.
+	// If left empty, that means only the topic creator can publish messages.
+	UsersPublishAllowed pulumi.StringPtrOutput `pulumi:"usersPublishAllowed"`
 }
 
 // NewTopic registers a new resource with the given unique name, arguments, and options.
@@ -114,22 +155,34 @@ type topicState struct {
 	// Specifies the enterprise project id of the SMN Topic, Value 0
 	// indicates the default enterprise project. Changing this parameter will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies the introduction of the topic,
+	// this will be contained in the subscription invitation.
+	Introduction *string `pulumi:"introduction"`
 	// Specifies the name of the topic to be created. The name can contains of 1 to 255
 	// characters and must start with a letter or digit, and can only contain letters, digits, underscores (_), and hyphens (-).
 	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
-	// Message pushing policy. 0 indicates that the message sending fails and the message is cached in the
-	// queue. 1 indicates that the failed message is discarded.
+	// Message pushing policy.
+	// + **0**: indicates that the message sending fails and the message is cached in the queue.
+	// + **1**: indicates that the failed message is discarded.
 	PushPolicy *int `pulumi:"pushPolicy"`
 	// The region in which to create the SMN topic resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
+	// Specifies the services that can publish messages to this topic
+	// separated by comma(,). If left empty, that means no service allowed.
+	ServicesPublishAllowed *string `pulumi:"servicesPublishAllowed"`
 	// Specifies the tags of the SMN topic, key/value pair format.
 	Tags map[string]string `pulumi:"tags"`
 	// Resource identifier of a topic, which is unique.
 	TopicUrn *string `pulumi:"topicUrn"`
 	// Time when the topic was updated.
 	UpdateTime *string `pulumi:"updateTime"`
+	// Specifies the users who can publish messages to this topic.
+	// The value can be **\*** which indicates all users or user account URNs separated by comma(,). The format of
+	// user account URN is **urn:csp:iam::domainId:root**. **domainId** indicates the account ID of another user.
+	// If left empty, that means only the topic creator can publish messages.
+	UsersPublishAllowed *string `pulumi:"usersPublishAllowed"`
 }
 
 type TopicState struct {
@@ -141,22 +194,34 @@ type TopicState struct {
 	// Specifies the enterprise project id of the SMN Topic, Value 0
 	// indicates the default enterprise project. Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
+	// Specifies the introduction of the topic,
+	// this will be contained in the subscription invitation.
+	Introduction pulumi.StringPtrInput
 	// Specifies the name of the topic to be created. The name can contains of 1 to 255
 	// characters and must start with a letter or digit, and can only contain letters, digits, underscores (_), and hyphens (-).
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
-	// Message pushing policy. 0 indicates that the message sending fails and the message is cached in the
-	// queue. 1 indicates that the failed message is discarded.
+	// Message pushing policy.
+	// + **0**: indicates that the message sending fails and the message is cached in the queue.
+	// + **1**: indicates that the failed message is discarded.
 	PushPolicy pulumi.IntPtrInput
 	// The region in which to create the SMN topic resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
+	// Specifies the services that can publish messages to this topic
+	// separated by comma(,). If left empty, that means no service allowed.
+	ServicesPublishAllowed pulumi.StringPtrInput
 	// Specifies the tags of the SMN topic, key/value pair format.
 	Tags pulumi.StringMapInput
 	// Resource identifier of a topic, which is unique.
 	TopicUrn pulumi.StringPtrInput
 	// Time when the topic was updated.
 	UpdateTime pulumi.StringPtrInput
+	// Specifies the users who can publish messages to this topic.
+	// The value can be **\*** which indicates all users or user account URNs separated by comma(,). The format of
+	// user account URN is **urn:csp:iam::domainId:root**. **domainId** indicates the account ID of another user.
+	// If left empty, that means only the topic creator can publish messages.
+	UsersPublishAllowed pulumi.StringPtrInput
 }
 
 func (TopicState) ElementType() reflect.Type {
@@ -170,6 +235,9 @@ type topicArgs struct {
 	// Specifies the enterprise project id of the SMN Topic, Value 0
 	// indicates the default enterprise project. Changing this parameter will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies the introduction of the topic,
+	// this will be contained in the subscription invitation.
+	Introduction *string `pulumi:"introduction"`
 	// Specifies the name of the topic to be created. The name can contains of 1 to 255
 	// characters and must start with a letter or digit, and can only contain letters, digits, underscores (_), and hyphens (-).
 	// Changing this parameter will create a new resource.
@@ -177,8 +245,16 @@ type topicArgs struct {
 	// The region in which to create the SMN topic resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
+	// Specifies the services that can publish messages to this topic
+	// separated by comma(,). If left empty, that means no service allowed.
+	ServicesPublishAllowed *string `pulumi:"servicesPublishAllowed"`
 	// Specifies the tags of the SMN topic, key/value pair format.
 	Tags map[string]string `pulumi:"tags"`
+	// Specifies the users who can publish messages to this topic.
+	// The value can be **\*** which indicates all users or user account URNs separated by comma(,). The format of
+	// user account URN is **urn:csp:iam::domainId:root**. **domainId** indicates the account ID of another user.
+	// If left empty, that means only the topic creator can publish messages.
+	UsersPublishAllowed *string `pulumi:"usersPublishAllowed"`
 }
 
 // The set of arguments for constructing a Topic resource.
@@ -189,6 +265,9 @@ type TopicArgs struct {
 	// Specifies the enterprise project id of the SMN Topic, Value 0
 	// indicates the default enterprise project. Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
+	// Specifies the introduction of the topic,
+	// this will be contained in the subscription invitation.
+	Introduction pulumi.StringPtrInput
 	// Specifies the name of the topic to be created. The name can contains of 1 to 255
 	// characters and must start with a letter or digit, and can only contain letters, digits, underscores (_), and hyphens (-).
 	// Changing this parameter will create a new resource.
@@ -196,8 +275,16 @@ type TopicArgs struct {
 	// The region in which to create the SMN topic resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
+	// Specifies the services that can publish messages to this topic
+	// separated by comma(,). If left empty, that means no service allowed.
+	ServicesPublishAllowed pulumi.StringPtrInput
 	// Specifies the tags of the SMN topic, key/value pair format.
 	Tags pulumi.StringMapInput
+	// Specifies the users who can publish messages to this topic.
+	// The value can be **\*** which indicates all users or user account URNs separated by comma(,). The format of
+	// user account URN is **urn:csp:iam::domainId:root**. **domainId** indicates the account ID of another user.
+	// If left empty, that means only the topic creator can publish messages.
+	UsersPublishAllowed pulumi.StringPtrInput
 }
 
 func (TopicArgs) ElementType() reflect.Type {
@@ -304,6 +391,12 @@ func (o TopicOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Topic) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
 
+// Specifies the introduction of the topic,
+// this will be contained in the subscription invitation.
+func (o TopicOutput) Introduction() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Topic) pulumi.StringPtrOutput { return v.Introduction }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the name of the topic to be created. The name can contains of 1 to 255
 // characters and must start with a letter or digit, and can only contain letters, digits, underscores (_), and hyphens (-).
 // Changing this parameter will create a new resource.
@@ -311,8 +404,9 @@ func (o TopicOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Topic) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Message pushing policy. 0 indicates that the message sending fails and the message is cached in the
-// queue. 1 indicates that the failed message is discarded.
+// Message pushing policy.
+// + **0**: indicates that the message sending fails and the message is cached in the queue.
+// + **1**: indicates that the failed message is discarded.
 func (o TopicOutput) PushPolicy() pulumi.IntOutput {
 	return o.ApplyT(func(v *Topic) pulumi.IntOutput { return v.PushPolicy }).(pulumi.IntOutput)
 }
@@ -321,6 +415,12 @@ func (o TopicOutput) PushPolicy() pulumi.IntOutput {
 // provider-level region will be used. Changing this parameter will create a new resource.
 func (o TopicOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Topic) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
+}
+
+// Specifies the services that can publish messages to this topic
+// separated by comma(,). If left empty, that means no service allowed.
+func (o TopicOutput) ServicesPublishAllowed() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Topic) pulumi.StringPtrOutput { return v.ServicesPublishAllowed }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the tags of the SMN topic, key/value pair format.
@@ -336,6 +436,14 @@ func (o TopicOutput) TopicUrn() pulumi.StringOutput {
 // Time when the topic was updated.
 func (o TopicOutput) UpdateTime() pulumi.StringOutput {
 	return o.ApplyT(func(v *Topic) pulumi.StringOutput { return v.UpdateTime }).(pulumi.StringOutput)
+}
+
+// Specifies the users who can publish messages to this topic.
+// The value can be **\*** which indicates all users or user account URNs separated by comma(,). The format of
+// user account URN is **urn:csp:iam::domainId:root**. **domainId** indicates the account ID of another user.
+// If left empty, that means only the topic creator can publish messages.
+func (o TopicOutput) UsersPublishAllowed() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Topic) pulumi.StringPtrOutput { return v.UsersPublishAllowed }).(pulumi.StringPtrOutput)
 }
 
 type TopicArrayOutput struct{ *pulumi.OutputState }

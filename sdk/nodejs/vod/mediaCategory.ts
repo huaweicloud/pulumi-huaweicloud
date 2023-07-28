@@ -68,7 +68,7 @@ export class MediaCategory extends pulumi.CustomResource {
 
     /**
      * The json string of subcategory information. It supports up to 3 levels of categories,
-     * and each catagory supports up to 128 subcategories.
+     * and each category supports up to 128 subcategories.
      */
     public /*out*/ readonly children!: pulumi.Output<string>;
     /**
@@ -121,7 +121,7 @@ export class MediaCategory extends pulumi.CustomResource {
 export interface MediaCategoryState {
     /**
      * The json string of subcategory information. It supports up to 3 levels of categories,
-     * and each catagory supports up to 128 subcategories.
+     * and each category supports up to 128 subcategories.
      */
     children?: pulumi.Input<string>;
     /**

@@ -4,31 +4,6 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
-/**
- * Manages RDS Mysql account resource within HuaweiCloud.
- *
- * ## Example Usage
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as pulumi from "@huaweicloudos/pulumi";
- *
- * const config = new pulumi.Config();
- * const instanceId = config.requireObject("instanceId");
- * const test = new huaweicloud.rds.Account("test", {
- *     instanceId: instanceId,
- *     password: "Test@12345678",
- * });
- * ```
- *
- * ## Import
- *
- * RDS account can be imported using the `instance id` and `account name`, e.g.
- *
- * ```sh
- *  $ pulumi import huaweicloud:Rds/account:Account user_1 instance_id/account_name
- * ```
- */
 export class Account extends pulumi.CustomResource {
     /**
      * Get an existing Account resource's state with the given name, ID, and optional extra
@@ -57,27 +32,9 @@ export class Account extends pulumi.CustomResource {
         return obj['__pulumiType'] === Account.__pulumiType;
     }
 
-    /**
-     * Specifies the rds instance id. Changing this will create a new resource.
-     */
     public readonly instanceId!: pulumi.Output<string>;
-    /**
-     * Specifies the username of the db account. Only lowercase letters, digits,
-     * hyphens (-), and userscores (_) are allowed. Changing this will create a new resource.
-     * + If the database version is MySQL 5.6, the username consists of 1 to 16 characters.
-     * + If the database version is MySQL 5.7 or 8.0, the username consists of 1 to 32 characters.
-     */
     public readonly name!: pulumi.Output<string>;
-    /**
-     * Specifies the password of the db account. The parameter must be 8 to 32 characters
-     * long and contain only letters(case-sensitive), digits, and special characters(~!@#$%^*-_=+?,()&). The value must be
-     * different from name or name spelled backwards.
-     */
     public readonly password!: pulumi.Output<string>;
-    /**
-     * The region in which to create the rds account resource. If omitted, the
-     * provider-level region will be used. Changing this creates a new resource.
-     */
     public readonly region!: pulumi.Output<string>;
 
     /**
@@ -119,27 +76,9 @@ export class Account extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Account resources.
  */
 export interface AccountState {
-    /**
-     * Specifies the rds instance id. Changing this will create a new resource.
-     */
     instanceId?: pulumi.Input<string>;
-    /**
-     * Specifies the username of the db account. Only lowercase letters, digits,
-     * hyphens (-), and userscores (_) are allowed. Changing this will create a new resource.
-     * + If the database version is MySQL 5.6, the username consists of 1 to 16 characters.
-     * + If the database version is MySQL 5.7 or 8.0, the username consists of 1 to 32 characters.
-     */
     name?: pulumi.Input<string>;
-    /**
-     * Specifies the password of the db account. The parameter must be 8 to 32 characters
-     * long and contain only letters(case-sensitive), digits, and special characters(~!@#$%^*-_=+?,()&). The value must be
-     * different from name or name spelled backwards.
-     */
     password?: pulumi.Input<string>;
-    /**
-     * The region in which to create the rds account resource. If omitted, the
-     * provider-level region will be used. Changing this creates a new resource.
-     */
     region?: pulumi.Input<string>;
 }
 
@@ -147,26 +86,8 @@ export interface AccountState {
  * The set of arguments for constructing a Account resource.
  */
 export interface AccountArgs {
-    /**
-     * Specifies the rds instance id. Changing this will create a new resource.
-     */
     instanceId: pulumi.Input<string>;
-    /**
-     * Specifies the username of the db account. Only lowercase letters, digits,
-     * hyphens (-), and userscores (_) are allowed. Changing this will create a new resource.
-     * + If the database version is MySQL 5.6, the username consists of 1 to 16 characters.
-     * + If the database version is MySQL 5.7 or 8.0, the username consists of 1 to 32 characters.
-     */
     name?: pulumi.Input<string>;
-    /**
-     * Specifies the password of the db account. The parameter must be 8 to 32 characters
-     * long and contain only letters(case-sensitive), digits, and special characters(~!@#$%^*-_=+?,()&). The value must be
-     * different from name or name spelled backwards.
-     */
     password: pulumi.Input<string>;
-    /**
-     * The region in which to create the rds account resource. If omitted, the
-     * provider-level region will be used. Changing this creates a new resource.
-     */
     region?: pulumi.Input<string>;
 }

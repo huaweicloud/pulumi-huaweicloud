@@ -20,15 +20,17 @@ class EnvironmentArgs:
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Environment resource.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API
-               environment belongs to. Changing this will create a new APIG environment resource.
-        :param pulumi.Input[str] description: Specifies the description about the API environment. The description contain a
-               maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-               Unicode format.
-        :param pulumi.Input[str] name: Specifies the name of the API environment. The API environment name consists of 3 to 64
-               characters, starting with a letter. Only letters, digits and underscores (_) are allowed.
-        :param pulumi.Input[str] region: Specifies the region in which to create the APIG environment resource. If
-               omitted, the provider-level region will be used. Changing this will create a new APIG environment resource.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the environment
+               belongs.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] description: Specifies the environment description.  
+               The value can contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
+               Chinese characters must be in **UTF-8** or **Unicode** format.
+        :param pulumi.Input[str] name: Specifies the environment name.  
+               The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+               The name must start with a letter.
+        :param pulumi.Input[str] region: Specifies the region where the dedicated instance is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         pulumi.set(__self__, "instance_id", instance_id)
         if description is not None:
@@ -42,8 +44,9 @@ class EnvironmentArgs:
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Input[str]:
         """
-        Specifies an ID of the APIG dedicated instance to which the API
-        environment belongs to. Changing this will create a new APIG environment resource.
+        Specifies the ID of the dedicated instance to which the environment
+        belongs.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -55,9 +58,9 @@ class EnvironmentArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description about the API environment. The description contain a
-        maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-        Unicode format.
+        Specifies the environment description.  
+        The value can contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
+        Chinese characters must be in **UTF-8** or **Unicode** format.
         """
         return pulumi.get(self, "description")
 
@@ -69,8 +72,9 @@ class EnvironmentArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the API environment. The API environment name consists of 3 to 64
-        characters, starting with a letter. Only letters, digits and underscores (_) are allowed.
+        Specifies the environment name.  
+        The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+        The name must start with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -82,8 +86,8 @@ class EnvironmentArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create the APIG environment resource. If
-        omitted, the provider-level region will be used. Changing this will create a new APIG environment resource.
+        Specifies the region where the dedicated instance is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -96,25 +100,34 @@ class EnvironmentArgs:
 class _EnvironmentState:
     def __init__(__self__, *,
                  create_time: Optional[pulumi.Input[str]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Environment resources.
-        :param pulumi.Input[str] create_time: Time when the APIG environment was created, in RFC-3339 format.
-        :param pulumi.Input[str] description: Specifies the description about the API environment. The description contain a
-               maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-               Unicode format.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API
-               environment belongs to. Changing this will create a new APIG environment resource.
-        :param pulumi.Input[str] name: Specifies the name of the API environment. The API environment name consists of 3 to 64
-               characters, starting with a letter. Only letters, digits and underscores (_) are allowed.
-        :param pulumi.Input[str] region: Specifies the region in which to create the APIG environment resource. If
-               omitted, the provider-level region will be used. Changing this will create a new APIG environment resource.
+        :param pulumi.Input[str] create_time: schema: Deprecated; The time when the environment was created.
+        :param pulumi.Input[str] created_at: The time when the environment was created.
+        :param pulumi.Input[str] description: Specifies the environment description.  
+               The value can contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
+               Chinese characters must be in **UTF-8** or **Unicode** format.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the environment
+               belongs.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the environment name.  
+               The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+               The name must start with a letter.
+        :param pulumi.Input[str] region: Specifies the region where the dedicated instance is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         if create_time is not None:
+            warnings.warn("""Use 'created_at' instead""", DeprecationWarning)
+            pulumi.log.warn("""create_time is deprecated: Use 'created_at' instead""")
+        if create_time is not None:
             pulumi.set(__self__, "create_time", create_time)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if instance_id is not None:
@@ -128,7 +141,7 @@ class _EnvironmentState:
     @pulumi.getter(name="createTime")
     def create_time(self) -> Optional[pulumi.Input[str]]:
         """
-        Time when the APIG environment was created, in RFC-3339 format.
+        schema: Deprecated; The time when the environment was created.
         """
         return pulumi.get(self, "create_time")
 
@@ -137,12 +150,24 @@ class _EnvironmentState:
         pulumi.set(self, "create_time", value)
 
     @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The time when the environment was created.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
+
+    @property
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description about the API environment. The description contain a
-        maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-        Unicode format.
+        Specifies the environment description.  
+        The value can contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
+        Chinese characters must be in **UTF-8** or **Unicode** format.
         """
         return pulumi.get(self, "description")
 
@@ -154,8 +179,9 @@ class _EnvironmentState:
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies an ID of the APIG dedicated instance to which the API
-        environment belongs to. Changing this will create a new APIG environment resource.
+        Specifies the ID of the dedicated instance to which the environment
+        belongs.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -167,8 +193,9 @@ class _EnvironmentState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the API environment. The API environment name consists of 3 to 64
-        characters, starting with a letter. Only letters, digits and underscores (_) are allowed.
+        Specifies the environment name.  
+        The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+        The name must start with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -180,8 +207,8 @@ class _EnvironmentState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create the APIG environment resource. If
-        omitted, the provider-level region will be used. Changing this will create a new APIG environment resource.
+        Specifies the region where the dedicated instance is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -220,23 +247,25 @@ class Environment(pulumi.CustomResource):
 
         ## Import
 
-        Environments can be imported using their `id` and the ID of the APIG instance to which the environment belongs, separated by a slash, e.g.
+        Environments can be imported using their `name` and the ID of the related dedicated instance, separated by a slash, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/environment:Environment test <instance ID>/<id>
+         $ pulumi import huaweicloud:DedicatedApig/environment:Environment test &ltinstance_id&gt/&ltname&gt
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] description: Specifies the description about the API environment. The description contain a
-               maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-               Unicode format.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API
-               environment belongs to. Changing this will create a new APIG environment resource.
-        :param pulumi.Input[str] name: Specifies the name of the API environment. The API environment name consists of 3 to 64
-               characters, starting with a letter. Only letters, digits and underscores (_) are allowed.
-        :param pulumi.Input[str] region: Specifies the region in which to create the APIG environment resource. If
-               omitted, the provider-level region will be used. Changing this will create a new APIG environment resource.
+        :param pulumi.Input[str] description: Specifies the environment description.  
+               The value can contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
+               Chinese characters must be in **UTF-8** or **Unicode** format.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the environment
+               belongs.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the environment name.  
+               The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+               The name must start with a letter.
+        :param pulumi.Input[str] region: Specifies the region where the dedicated instance is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         ...
     @overload
@@ -264,10 +293,10 @@ class Environment(pulumi.CustomResource):
 
         ## Import
 
-        Environments can be imported using their `id` and the ID of the APIG instance to which the environment belongs, separated by a slash, e.g.
+        Environments can be imported using their `name` and the ID of the related dedicated instance, separated by a slash, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/environment:Environment test <instance ID>/<id>
+         $ pulumi import huaweicloud:DedicatedApig/environment:Environment test &ltinstance_id&gt/&ltname&gt
         ```
 
         :param str resource_name: The name of the resource.
@@ -305,6 +334,7 @@ class Environment(pulumi.CustomResource):
             __props__.__dict__["name"] = name
             __props__.__dict__["region"] = region
             __props__.__dict__["create_time"] = None
+            __props__.__dict__["created_at"] = None
         super(Environment, __self__).__init__(
             'huaweicloud:DedicatedApig/environment:Environment',
             resource_name,
@@ -316,6 +346,7 @@ class Environment(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             create_time: Optional[pulumi.Input[str]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
             instance_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
@@ -327,22 +358,26 @@ class Environment(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] create_time: Time when the APIG environment was created, in RFC-3339 format.
-        :param pulumi.Input[str] description: Specifies the description about the API environment. The description contain a
-               maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-               Unicode format.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API
-               environment belongs to. Changing this will create a new APIG environment resource.
-        :param pulumi.Input[str] name: Specifies the name of the API environment. The API environment name consists of 3 to 64
-               characters, starting with a letter. Only letters, digits and underscores (_) are allowed.
-        :param pulumi.Input[str] region: Specifies the region in which to create the APIG environment resource. If
-               omitted, the provider-level region will be used. Changing this will create a new APIG environment resource.
+        :param pulumi.Input[str] create_time: schema: Deprecated; The time when the environment was created.
+        :param pulumi.Input[str] created_at: The time when the environment was created.
+        :param pulumi.Input[str] description: Specifies the environment description.  
+               The value can contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
+               Chinese characters must be in **UTF-8** or **Unicode** format.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the environment
+               belongs.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the environment name.  
+               The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+               The name must start with a letter.
+        :param pulumi.Input[str] region: Specifies the region where the dedicated instance is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _EnvironmentState.__new__(_EnvironmentState)
 
         __props__.__dict__["create_time"] = create_time
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["description"] = description
         __props__.__dict__["instance_id"] = instance_id
         __props__.__dict__["name"] = name
@@ -353,17 +388,25 @@ class Environment(pulumi.CustomResource):
     @pulumi.getter(name="createTime")
     def create_time(self) -> pulumi.Output[str]:
         """
-        Time when the APIG environment was created, in RFC-3339 format.
+        schema: Deprecated; The time when the environment was created.
         """
         return pulumi.get(self, "create_time")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        The time when the environment was created.
+        """
+        return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the description about the API environment. The description contain a
-        maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-        Unicode format.
+        Specifies the environment description.  
+        The value can contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
+        Chinese characters must be in **UTF-8** or **Unicode** format.
         """
         return pulumi.get(self, "description")
 
@@ -371,8 +414,9 @@ class Environment(pulumi.CustomResource):
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Output[str]:
         """
-        Specifies an ID of the APIG dedicated instance to which the API
-        environment belongs to. Changing this will create a new APIG environment resource.
+        Specifies the ID of the dedicated instance to which the environment
+        belongs.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -380,8 +424,9 @@ class Environment(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of the API environment. The API environment name consists of 3 to 64
-        characters, starting with a letter. Only letters, digits and underscores (_) are allowed.
+        Specifies the environment name.  
+        The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+        The name must start with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -389,8 +434,8 @@ class Environment(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        Specifies the region in which to create the APIG environment resource. If
-        omitted, the provider-level region will be used. Changing this will create a new APIG environment resource.
+        Specifies the region where the dedicated instance is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 

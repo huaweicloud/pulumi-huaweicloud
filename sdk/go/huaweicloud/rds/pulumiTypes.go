@@ -11,12 +11,8 @@ import (
 )
 
 type Database_privilegeUser struct {
-	// Specifies the username of the database account. Changing this creates a new resource.
-	Name string `pulumi:"name"`
-	// Specifies the read-only permission. The value can be:
-	// + **true**: indicates the read-only permission.
-	// + **false**: indicates the read and write permission.
-	Readonly *bool `pulumi:"readonly"`
+	Name     string `pulumi:"name"`
+	Readonly *bool  `pulumi:"readonly"`
 }
 
 // Database_privilegeUserInput is an input type that accepts Database_privilegeUserArgs and Database_privilegeUserOutput values.
@@ -31,11 +27,7 @@ type Database_privilegeUserInput interface {
 }
 
 type Database_privilegeUserArgs struct {
-	// Specifies the username of the database account. Changing this creates a new resource.
-	Name pulumi.StringInput `pulumi:"name"`
-	// Specifies the read-only permission. The value can be:
-	// + **true**: indicates the read-only permission.
-	// + **false**: indicates the read and write permission.
+	Name     pulumi.StringInput  `pulumi:"name"`
 	Readonly pulumi.BoolPtrInput `pulumi:"readonly"`
 }
 
@@ -90,14 +82,10 @@ func (o Database_privilegeUserOutput) ToDatabase_privilegeUserOutputWithContext(
 	return o
 }
 
-// Specifies the username of the database account. Changing this creates a new resource.
 func (o Database_privilegeUserOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v Database_privilegeUser) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the read-only permission. The value can be:
-// + **true**: indicates the read-only permission.
-// + **false**: indicates the read and write permission.
 func (o Database_privilegeUserOutput) Readonly() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v Database_privilegeUser) *bool { return v.Readonly }).(pulumi.BoolPtrOutput)
 }
@@ -123,9 +111,13 @@ func (o Database_privilegeUserArrayOutput) Index(i pulumi.IntInput) Database_pri
 }
 
 type InstanceBackupStrategy struct {
-	// Specifies the retention days for specific backup files. The value range is from 0 to
-	// 732. If this parameter is not specified or set to 0, the automated backup policy is disabled.
+	// Specifies the retention days for specific backup files. The value range is from 0 to 732.
 	KeepDays *int `pulumi:"keepDays"`
+	// Specifies the backup cycle. Automatic backups will be performed on the specified days of
+	// the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+	// number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+	// Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
+	Period *string `pulumi:"period"`
 	// Specifies the backup time window. Automated backups will be triggered during the
 	// backup time window. It must be a valid value in the **hh:mm-HH:MM**
 	// format. The current time is in the UTC format. The HH value must be 1 greater than the hh value. The values of mm and
@@ -146,9 +138,13 @@ type InstanceBackupStrategyInput interface {
 }
 
 type InstanceBackupStrategyArgs struct {
-	// Specifies the retention days for specific backup files. The value range is from 0 to
-	// 732. If this parameter is not specified or set to 0, the automated backup policy is disabled.
+	// Specifies the retention days for specific backup files. The value range is from 0 to 732.
 	KeepDays pulumi.IntPtrInput `pulumi:"keepDays"`
+	// Specifies the backup cycle. Automatic backups will be performed on the specified days of
+	// the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+	// number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+	// Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
+	Period pulumi.StringPtrInput `pulumi:"period"`
 	// Specifies the backup time window. Automated backups will be triggered during the
 	// backup time window. It must be a valid value in the **hh:mm-HH:MM**
 	// format. The current time is in the UTC format. The HH value must be 1 greater than the hh value. The values of mm and
@@ -234,10 +230,17 @@ func (o InstanceBackupStrategyOutput) ToInstanceBackupStrategyPtrOutputWithConte
 	}).(InstanceBackupStrategyPtrOutput)
 }
 
-// Specifies the retention days for specific backup files. The value range is from 0 to
-// 732. If this parameter is not specified or set to 0, the automated backup policy is disabled.
+// Specifies the retention days for specific backup files. The value range is from 0 to 732.
 func (o InstanceBackupStrategyOutput) KeepDays() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v InstanceBackupStrategy) *int { return v.KeepDays }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the backup cycle. Automatic backups will be performed on the specified days of
+// the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+// number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+// Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
+func (o InstanceBackupStrategyOutput) Period() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v InstanceBackupStrategy) *string { return v.Period }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the backup time window. Automated backups will be triggered during the
@@ -273,8 +276,7 @@ func (o InstanceBackupStrategyPtrOutput) Elem() InstanceBackupStrategyOutput {
 	}).(InstanceBackupStrategyOutput)
 }
 
-// Specifies the retention days for specific backup files. The value range is from 0 to
-// 732. If this parameter is not specified or set to 0, the automated backup policy is disabled.
+// Specifies the retention days for specific backup files. The value range is from 0 to 732.
 func (o InstanceBackupStrategyPtrOutput) KeepDays() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *InstanceBackupStrategy) *int {
 		if v == nil {
@@ -282,6 +284,19 @@ func (o InstanceBackupStrategyPtrOutput) KeepDays() pulumi.IntPtrOutput {
 		}
 		return v.KeepDays
 	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the backup cycle. Automatic backups will be performed on the specified days of
+// the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+// number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+// Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
+func (o InstanceBackupStrategyPtrOutput) Period() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *InstanceBackupStrategy) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Period
+	}).(pulumi.StringPtrOutput)
 }
 
 // Specifies the backup time window. Automated backups will be triggered during the
@@ -302,7 +317,7 @@ type InstanceDb struct {
 	// Specifies the database password. The value cannot be empty and should
 	// contain 8 to 32 characters, including uppercase and lowercase letters, digits, and the following special
 	// characters: ~!@#%^*-_=+? You are advised to enter a strong password to improve security, preventing security risks
-	// such as brute force cracking. Changing this parameter will create a new resource.
+	// such as brute force cracking.
 	Password string `pulumi:"password"`
 	// Specifies the database port.
 	// + The MySQL database port ranges from 1024 to 65535 (excluding 12017 and 33071, which are occupied by the RDS system
@@ -341,7 +356,7 @@ type InstanceDbArgs struct {
 	// Specifies the database password. The value cannot be empty and should
 	// contain 8 to 32 characters, including uppercase and lowercase letters, digits, and the following special
 	// characters: ~!@#%^*-_=+? You are advised to enter a strong password to improve security, preventing security risks
-	// such as brute force cracking. Changing this parameter will create a new resource.
+	// such as brute force cracking.
 	Password pulumi.StringInput `pulumi:"password"`
 	// Specifies the database port.
 	// + The MySQL database port ranges from 1024 to 65535 (excluding 12017 and 33071, which are occupied by the RDS system
@@ -445,7 +460,7 @@ func (o InstanceDbOutput) ToInstanceDbPtrOutputWithContext(ctx context.Context) 
 // Specifies the database password. The value cannot be empty and should
 // contain 8 to 32 characters, including uppercase and lowercase letters, digits, and the following special
 // characters: ~!@#%^*-_=+? You are advised to enter a strong password to improve security, preventing security risks
-// such as brute force cracking. Changing this parameter will create a new resource.
+// such as brute force cracking.
 func (o InstanceDbOutput) Password() pulumi.StringOutput {
 	return o.ApplyT(func(v InstanceDb) string { return v.Password }).(pulumi.StringOutput)
 }
@@ -509,7 +524,7 @@ func (o InstanceDbPtrOutput) Elem() InstanceDbOutput {
 // Specifies the database password. The value cannot be empty and should
 // contain 8 to 32 characters, including uppercase and lowercase letters, digits, and the following special
 // characters: ~!@#%^*-_=+? You are advised to enter a strong password to improve security, preventing security risks
-// such as brute force cracking. Changing this parameter will create a new resource.
+// such as brute force cracking.
 func (o InstanceDbPtrOutput) Password() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *InstanceDb) *string {
 		if v == nil {
@@ -577,9 +592,8 @@ type InstanceNode struct {
 	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// Indicates the node ID.
 	Id *string `pulumi:"id"`
-	// Specifies the DB instance name. The DB instance name of the same type must be unique for
-	// the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can
-	// contain only letters, digits, hyphens (-), and underscores (_).
+	// Specifies the parameter name. Some of them needs the instance to be restarted
+	// to take effect.
 	Name *string `pulumi:"name"`
 	// Indicates the node type. The value can be master or slave, indicating the primary node or standby node
 	// respectively.
@@ -605,9 +619,8 @@ type InstanceNodeArgs struct {
 	AvailabilityZone pulumi.StringPtrInput `pulumi:"availabilityZone"`
 	// Indicates the node ID.
 	Id pulumi.StringPtrInput `pulumi:"id"`
-	// Specifies the DB instance name. The DB instance name of the same type must be unique for
-	// the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can
-	// contain only letters, digits, hyphens (-), and underscores (_).
+	// Specifies the parameter name. Some of them needs the instance to be restarted
+	// to take effect.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Indicates the node type. The value can be master or slave, indicating the primary node or standby node
 	// respectively.
@@ -678,9 +691,8 @@ func (o InstanceNodeOutput) Id() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v InstanceNode) *string { return v.Id }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the DB instance name. The DB instance name of the same type must be unique for
-// the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can
-// contain only letters, digits, hyphens (-), and underscores (_).
+// Specifies the parameter name. Some of them needs the instance to be restarted
+// to take effect.
 func (o InstanceNodeOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v InstanceNode) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
@@ -716,13 +728,131 @@ func (o InstanceNodeArrayOutput) Index(i pulumi.IntInput) InstanceNodeOutput {
 	}).(InstanceNodeOutput)
 }
 
+type InstanceParameter struct {
+	// Specifies the parameter name. Some of them needs the instance to be restarted
+	// to take effect.
+	Name string `pulumi:"name"`
+	// Specifies the parameter value.
+	Value string `pulumi:"value"`
+}
+
+// InstanceParameterInput is an input type that accepts InstanceParameterArgs and InstanceParameterOutput values.
+// You can construct a concrete instance of `InstanceParameterInput` via:
+//
+//	InstanceParameterArgs{...}
+type InstanceParameterInput interface {
+	pulumi.Input
+
+	ToInstanceParameterOutput() InstanceParameterOutput
+	ToInstanceParameterOutputWithContext(context.Context) InstanceParameterOutput
+}
+
+type InstanceParameterArgs struct {
+	// Specifies the parameter name. Some of them needs the instance to be restarted
+	// to take effect.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the parameter value.
+	Value pulumi.StringInput `pulumi:"value"`
+}
+
+func (InstanceParameterArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*InstanceParameter)(nil)).Elem()
+}
+
+func (i InstanceParameterArgs) ToInstanceParameterOutput() InstanceParameterOutput {
+	return i.ToInstanceParameterOutputWithContext(context.Background())
+}
+
+func (i InstanceParameterArgs) ToInstanceParameterOutputWithContext(ctx context.Context) InstanceParameterOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(InstanceParameterOutput)
+}
+
+// InstanceParameterArrayInput is an input type that accepts InstanceParameterArray and InstanceParameterArrayOutput values.
+// You can construct a concrete instance of `InstanceParameterArrayInput` via:
+//
+//	InstanceParameterArray{ InstanceParameterArgs{...} }
+type InstanceParameterArrayInput interface {
+	pulumi.Input
+
+	ToInstanceParameterArrayOutput() InstanceParameterArrayOutput
+	ToInstanceParameterArrayOutputWithContext(context.Context) InstanceParameterArrayOutput
+}
+
+type InstanceParameterArray []InstanceParameterInput
+
+func (InstanceParameterArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]InstanceParameter)(nil)).Elem()
+}
+
+func (i InstanceParameterArray) ToInstanceParameterArrayOutput() InstanceParameterArrayOutput {
+	return i.ToInstanceParameterArrayOutputWithContext(context.Background())
+}
+
+func (i InstanceParameterArray) ToInstanceParameterArrayOutputWithContext(ctx context.Context) InstanceParameterArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(InstanceParameterArrayOutput)
+}
+
+type InstanceParameterOutput struct{ *pulumi.OutputState }
+
+func (InstanceParameterOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*InstanceParameter)(nil)).Elem()
+}
+
+func (o InstanceParameterOutput) ToInstanceParameterOutput() InstanceParameterOutput {
+	return o
+}
+
+func (o InstanceParameterOutput) ToInstanceParameterOutputWithContext(ctx context.Context) InstanceParameterOutput {
+	return o
+}
+
+// Specifies the parameter name. Some of them needs the instance to be restarted
+// to take effect.
+func (o InstanceParameterOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v InstanceParameter) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the parameter value.
+func (o InstanceParameterOutput) Value() pulumi.StringOutput {
+	return o.ApplyT(func(v InstanceParameter) string { return v.Value }).(pulumi.StringOutput)
+}
+
+type InstanceParameterArrayOutput struct{ *pulumi.OutputState }
+
+func (InstanceParameterArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]InstanceParameter)(nil)).Elem()
+}
+
+func (o InstanceParameterArrayOutput) ToInstanceParameterArrayOutput() InstanceParameterArrayOutput {
+	return o
+}
+
+func (o InstanceParameterArrayOutput) ToInstanceParameterArrayOutputWithContext(ctx context.Context) InstanceParameterArrayOutput {
+	return o
+}
+
+func (o InstanceParameterArrayOutput) Index(i pulumi.IntInput) InstanceParameterOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) InstanceParameter {
+		return vs[0].([]InstanceParameter)[vs[1].(int)]
+	}).(InstanceParameterOutput)
+}
+
 type InstanceVolume struct {
-	// Specifies the key ID for disk encryption. Changing this parameter will create a new
-	// resource.
+	// Specifies the key ID for disk encryption.
+	// Changing this parameter will create a new resource.
 	DiskEncryptionId *string `pulumi:"diskEncryptionId"`
+	// Specifies the upper limit of automatic expansion of storage, in GB.
+	LimitSize *int `pulumi:"limitSize"`
 	// Specifies the volume size. Its value range is from 40 GB to 4000 GB. The value must be a
 	// multiple of 10 and greater than the original size.
 	Size int `pulumi:"size"`
+	// Specifies the threshold to trigger automatic expansion.\
+	// If the available storage drops to this threshold or `10` GB, the automatic expansion is triggered.
+	// The valid values are as follows:
+	// + **10**
+	// + **15**
+	// + **20**
+	TriggerThreshold *int `pulumi:"triggerThreshold"`
 	// Specifies the volume type. Its value can be any of the following and is
 	// case-sensitive:
 	// + *ULTRAHIGH*: SSD storage.
@@ -745,12 +875,21 @@ type InstanceVolumeInput interface {
 }
 
 type InstanceVolumeArgs struct {
-	// Specifies the key ID for disk encryption. Changing this parameter will create a new
-	// resource.
+	// Specifies the key ID for disk encryption.
+	// Changing this parameter will create a new resource.
 	DiskEncryptionId pulumi.StringPtrInput `pulumi:"diskEncryptionId"`
+	// Specifies the upper limit of automatic expansion of storage, in GB.
+	LimitSize pulumi.IntPtrInput `pulumi:"limitSize"`
 	// Specifies the volume size. Its value range is from 40 GB to 4000 GB. The value must be a
 	// multiple of 10 and greater than the original size.
 	Size pulumi.IntInput `pulumi:"size"`
+	// Specifies the threshold to trigger automatic expansion.\
+	// If the available storage drops to this threshold or `10` GB, the automatic expansion is triggered.
+	// The valid values are as follows:
+	// + **10**
+	// + **15**
+	// + **20**
+	TriggerThreshold pulumi.IntPtrInput `pulumi:"triggerThreshold"`
 	// Specifies the volume type. Its value can be any of the following and is
 	// case-sensitive:
 	// + *ULTRAHIGH*: SSD storage.
@@ -838,16 +977,31 @@ func (o InstanceVolumeOutput) ToInstanceVolumePtrOutputWithContext(ctx context.C
 	}).(InstanceVolumePtrOutput)
 }
 
-// Specifies the key ID for disk encryption. Changing this parameter will create a new
-// resource.
+// Specifies the key ID for disk encryption.
+// Changing this parameter will create a new resource.
 func (o InstanceVolumeOutput) DiskEncryptionId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v InstanceVolume) *string { return v.DiskEncryptionId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the upper limit of automatic expansion of storage, in GB.
+func (o InstanceVolumeOutput) LimitSize() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v InstanceVolume) *int { return v.LimitSize }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the volume size. Its value range is from 40 GB to 4000 GB. The value must be a
 // multiple of 10 and greater than the original size.
 func (o InstanceVolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v InstanceVolume) int { return v.Size }).(pulumi.IntOutput)
+}
+
+// Specifies the threshold to trigger automatic expansion.\
+// If the available storage drops to this threshold or `10` GB, the automatic expansion is triggered.
+// The valid values are as follows:
+// + **10**
+// + **15**
+// + **20**
+func (o InstanceVolumeOutput) TriggerThreshold() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v InstanceVolume) *int { return v.TriggerThreshold }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the volume type. Its value can be any of the following and is
@@ -885,8 +1039,8 @@ func (o InstanceVolumePtrOutput) Elem() InstanceVolumeOutput {
 	}).(InstanceVolumeOutput)
 }
 
-// Specifies the key ID for disk encryption. Changing this parameter will create a new
-// resource.
+// Specifies the key ID for disk encryption.
+// Changing this parameter will create a new resource.
 func (o InstanceVolumePtrOutput) DiskEncryptionId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *InstanceVolume) *string {
 		if v == nil {
@@ -894,6 +1048,16 @@ func (o InstanceVolumePtrOutput) DiskEncryptionId() pulumi.StringPtrOutput {
 		}
 		return v.DiskEncryptionId
 	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the upper limit of automatic expansion of storage, in GB.
+func (o InstanceVolumePtrOutput) LimitSize() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *InstanceVolume) *int {
+		if v == nil {
+			return nil
+		}
+		return v.LimitSize
+	}).(pulumi.IntPtrOutput)
 }
 
 // Specifies the volume size. Its value range is from 40 GB to 4000 GB. The value must be a
@@ -904,6 +1068,21 @@ func (o InstanceVolumePtrOutput) Size() pulumi.IntPtrOutput {
 			return nil
 		}
 		return &v.Size
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the threshold to trigger automatic expansion.\
+// If the available storage drops to this threshold or `10` GB, the automatic expansion is triggered.
+// The valid values are as follows:
+// + **10**
+// + **15**
+// + **20**
+func (o InstanceVolumePtrOutput) TriggerThreshold() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *InstanceVolume) *int {
+		if v == nil {
+			return nil
+		}
+		return v.TriggerThreshold
 	}).(pulumi.IntPtrOutput)
 }
 
@@ -2686,6 +2865,8 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceDbPtrInput)(nil)).Elem(), InstanceDbArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceNodeInput)(nil)).Elem(), InstanceNodeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceNodeArrayInput)(nil)).Elem(), InstanceNodeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*InstanceParameterInput)(nil)).Elem(), InstanceParameterArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*InstanceParameterArrayInput)(nil)).Elem(), InstanceParameterArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceVolumeInput)(nil)).Elem(), InstanceVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceVolumePtrInput)(nil)).Elem(), InstanceVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ParametergroupConfigurationParameterInput)(nil)).Elem(), ParametergroupConfigurationParameterArgs{})
@@ -2718,6 +2899,8 @@ func init() {
 	pulumi.RegisterOutputType(InstanceDbPtrOutput{})
 	pulumi.RegisterOutputType(InstanceNodeOutput{})
 	pulumi.RegisterOutputType(InstanceNodeArrayOutput{})
+	pulumi.RegisterOutputType(InstanceParameterOutput{})
+	pulumi.RegisterOutputType(InstanceParameterArrayOutput{})
 	pulumi.RegisterOutputType(InstanceVolumeOutput{})
 	pulumi.RegisterOutputType(InstanceVolumePtrOutput{})
 	pulumi.RegisterOutputType(ParametergroupConfigurationParameterOutput{})

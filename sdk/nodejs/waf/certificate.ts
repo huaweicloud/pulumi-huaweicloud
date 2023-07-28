@@ -14,9 +14,12 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const certificate1 = new huaweicloud.Waf.Certificate("certificate_1", {
+ * const config = new pulumi.Config();
+ * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
+ * const certificate1 = new huaweicloud.waf.Certificate("certificate1", {
+ *     enterpriseProjectId: enterpriseProjectId,
  *     certificate: `-----BEGIN CERTIFICATE-----
  * MIIFmQl5dh2QUAeo39TIKtadgAgh4zHx09kSgayS9Wph9LEqq7MA+2042L3J9aOa
  * DAYDVR0TAQH/BAIwADAdBgNVHQ4EFgQUR+SosWwALt6PkP0J9iOIxA6RW8gVsLwq
@@ -37,10 +40,16 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Certificates can be imported using the `id`, e.g.
+ * There are two ways to import WAF certificate state. * Using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Waf/certificate:Certificate certificate_2 3ebd3201238d41f9bfc3623b61435954
+ *  $ pulumi import huaweicloud:Waf/certificate:Certificate test <id>
+ * ```
+ *
+ *  * Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:Waf/certificate:Certificate test <id>/<enterprise_project_id>
  * ```
  *
  *  Note that the imported state is not identical to your resource definition, due to security reason. The missing attributes include `certificate`, and `private_key`. You can ignore changes as below. resource "huaweicloud_waf_certificate" "certificate_2" {
@@ -91,6 +100,11 @@ export class Certificate extends pulumi.CustomResource {
      */
     public readonly certificate!: pulumi.Output<string>;
     /**
+     * Specifies the enterprise project ID of WAF certificate.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
+    /**
      * Indicates the time when the certificate expires.
      */
     public /*out*/ readonly expiration!: pulumi.Output<string>;
@@ -123,6 +137,7 @@ export class Certificate extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as CertificateState | undefined;
             resourceInputs["certificate"] = state ? state.certificate : undefined;
+            resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["expiration"] = state ? state.expiration : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["privateKey"] = state ? state.privateKey : undefined;
@@ -136,6 +151,7 @@ export class Certificate extends pulumi.CustomResource {
                 throw new Error("Missing required property 'privateKey'");
             }
             resourceInputs["certificate"] = args ? args.certificate : undefined;
+            resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["privateKey"] = args ? args.privateKey : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
@@ -155,6 +171,11 @@ export interface CertificateState {
      * certificate.
      */
     certificate?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID of WAF certificate.
+     * Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Indicates the time when the certificate expires.
      */
@@ -184,6 +205,11 @@ export interface CertificateArgs {
      * certificate.
      */
     certificate: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID of WAF certificate.
+     * Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Specifies the certificate name. The maximum length is 256 characters. Only digits,
      * letters, underscores(`_`), and hyphens(`-`) are allowed.

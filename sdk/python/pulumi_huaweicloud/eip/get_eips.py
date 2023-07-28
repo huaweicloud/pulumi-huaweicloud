@@ -140,6 +140,23 @@ def get_eips(enterprise_project_id: Optional[str] = None,
     """
     Use this data source to get a list of EIPs.
 
+    ## Example Usage
+
+    An example filter by name and tag
+
+    ```python
+    import pulumi
+    import pulumi_huaweicloud as huaweicloud
+
+    config = pulumi.Config()
+    public_ip = config.require_object("publicIp")
+    eip = huaweicloud.Eip.get_eips(public_ips=[public_ip],
+        tags={
+            "foo": "bar",
+        })
+    pulumi.export("eipIds", [__item.id for __item in [eip.eips]])
+    ```
+
 
     :param str enterprise_project_id: Specifies the enterprise project ID which the desired EIP belongs to.
     :param Sequence[str] ids: Specifies an array of one or more IDs of the desired EIP.
@@ -186,6 +203,23 @@ def get_eips_output(enterprise_project_id: Optional[pulumi.Input[Optional[str]]]
                     opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetEipsResult]:
     """
     Use this data source to get a list of EIPs.
+
+    ## Example Usage
+
+    An example filter by name and tag
+
+    ```python
+    import pulumi
+    import pulumi_huaweicloud as huaweicloud
+
+    config = pulumi.Config()
+    public_ip = config.require_object("publicIp")
+    eip = huaweicloud.Eip.get_eips(public_ips=[public_ip],
+        tags={
+            "foo": "bar",
+        })
+    pulumi.export("eipIds", [__item.id for __item in [eip.eips]])
+    ```
 
 
     :param str enterprise_project_id: Specifies the enterprise project ID which the desired EIP belongs to.

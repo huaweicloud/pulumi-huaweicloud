@@ -78,7 +78,7 @@ type Device struct {
 	// + **CERTIFICATES**: Use an x.509 certificate for identity authentication.
 	AuthType pulumi.StringOutput `pulumi:"authType"`
 	// Specifies the description of device. The description contains a maximum of 2048
-	// characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters
+	// characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
 	// are allowed: `?'#().,&%@!`.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the device ID, which contains 4 to 256 characters.
@@ -96,7 +96,7 @@ type Device struct {
 	// to the platform, the `deviceId` of the device is the same as the `gatewayId`.
 	GatewayId pulumi.StringOutput `pulumi:"gatewayId"`
 	// Specifies the device name, which contains 4 to 256 characters. Only letters,
-	// Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+	// Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the node ID, which contains 4 to 256 characters.
 	// The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
@@ -168,7 +168,7 @@ type deviceState struct {
 	// + **CERTIFICATES**: Use an x.509 certificate for identity authentication.
 	AuthType *string `pulumi:"authType"`
 	// Specifies the description of device. The description contains a maximum of 2048
-	// characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters
+	// characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
 	// are allowed: `?'#().,&%@!`.
 	Description *string `pulumi:"description"`
 	// Specifies the device ID, which contains 4 to 256 characters.
@@ -186,7 +186,7 @@ type deviceState struct {
 	// to the platform, the `deviceId` of the device is the same as the `gatewayId`.
 	GatewayId *string `pulumi:"gatewayId"`
 	// Specifies the device name, which contains 4 to 256 characters. Only letters,
-	// Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+	// Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
 	Name *string `pulumi:"name"`
 	// Specifies the node ID, which contains 4 to 256 characters.
 	// The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
@@ -220,7 +220,7 @@ type DeviceState struct {
 	// + **CERTIFICATES**: Use an x.509 certificate for identity authentication.
 	AuthType pulumi.StringPtrInput
 	// Specifies the description of device. The description contains a maximum of 2048
-	// characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters
+	// characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
 	// are allowed: `?'#().,&%@!`.
 	Description pulumi.StringPtrInput
 	// Specifies the device ID, which contains 4 to 256 characters.
@@ -238,7 +238,7 @@ type DeviceState struct {
 	// to the platform, the `deviceId` of the device is the same as the `gatewayId`.
 	GatewayId pulumi.StringPtrInput
 	// Specifies the device name, which contains 4 to 256 characters. Only letters,
-	// Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+	// Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
 	Name pulumi.StringPtrInput
 	// Specifies the node ID, which contains 4 to 256 characters.
 	// The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
@@ -272,7 +272,7 @@ func (DeviceState) ElementType() reflect.Type {
 
 type deviceArgs struct {
 	// Specifies the description of device. The description contains a maximum of 2048
-	// characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters
+	// characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
 	// are allowed: `?'#().,&%@!`.
 	Description *string `pulumi:"description"`
 	// Specifies the device ID, which contains 4 to 256 characters.
@@ -290,7 +290,7 @@ type deviceArgs struct {
 	// to the platform, the `deviceId` of the device is the same as the `gatewayId`.
 	GatewayId *string `pulumi:"gatewayId"`
 	// Specifies the device name, which contains 4 to 256 characters. Only letters,
-	// Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+	// Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
 	Name *string `pulumi:"name"`
 	// Specifies the node ID, which contains 4 to 256 characters.
 	// The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
@@ -314,7 +314,7 @@ type deviceArgs struct {
 // The set of arguments for constructing a Device resource.
 type DeviceArgs struct {
 	// Specifies the description of device. The description contains a maximum of 2048
-	// characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters
+	// characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
 	// are allowed: `?'#().,&%@!`.
 	Description pulumi.StringPtrInput
 	// Specifies the device ID, which contains 4 to 256 characters.
@@ -332,7 +332,7 @@ type DeviceArgs struct {
 	// to the platform, the `deviceId` of the device is the same as the `gatewayId`.
 	GatewayId pulumi.StringPtrInput
 	// Specifies the device name, which contains 4 to 256 characters. Only letters,
-	// Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+	// Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
 	Name pulumi.StringPtrInput
 	// Specifies the node ID, which contains 4 to 256 characters.
 	// The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
@@ -448,7 +448,7 @@ func (o DeviceOutput) AuthType() pulumi.StringOutput {
 }
 
 // Specifies the description of device. The description contains a maximum of 2048
-// characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters
+// characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
 // are allowed: `?'#().,&%@!`.
 func (o DeviceOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Device) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
@@ -481,7 +481,7 @@ func (o DeviceOutput) GatewayId() pulumi.StringOutput {
 }
 
 // Specifies the device name, which contains 4 to 256 characters. Only letters,
-// Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+// Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
 func (o DeviceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Device) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }

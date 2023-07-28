@@ -580,6 +580,7 @@ class _FlinksqlJobState:
                users subscribed to the SMN topic.
         :param pulumi.Input[str] sql: Specifies stream SQL statement, which includes at least the following
                three parts: source, query, and sink. Length range: 1024x1024 characters.
+        :param pulumi.Input[str] status: The Job status.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the resource.
         :param pulumi.Input[int] tm_cus: Specifies number of CUs for each Task Manager. The default value is 1.
         :param pulumi.Input[int] tm_slot_num: Specifies number of slots in each Task Manager.
@@ -936,6 +937,9 @@ class _FlinksqlJobState:
     @property
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
+        """
+        The Job status.
+        """
         return pulumi.get(self, "status")
 
     @status.setter
@@ -1322,6 +1326,7 @@ class FlinksqlJob(pulumi.CustomResource):
                users subscribed to the SMN topic.
         :param pulumi.Input[str] sql: Specifies stream SQL statement, which includes at least the following
                three parts: source, query, and sink. Length range: 1024x1024 characters.
+        :param pulumi.Input[str] status: The Job status.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the resource.
         :param pulumi.Input[int] tm_cus: Specifies number of CUs for each Task Manager. The default value is 1.
         :param pulumi.Input[int] tm_slot_num: Specifies number of slots in each Task Manager.
@@ -1567,6 +1572,9 @@ class FlinksqlJob(pulumi.CustomResource):
     @property
     @pulumi.getter
     def status(self) -> pulumi.Output[str]:
+        """
+        The Job status.
+        """
         return pulumi.get(self, "status")
 
     @property

@@ -25,7 +25,7 @@ class DeviceGroupArgs:
         :param pulumi.Input[str] space_id: Specifies the resource space ID to which the device group belongs.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] description: Specifies the description of device group. The description contains a maximum of 64
-               characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters
+               characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
                are allowed: `?'#().,&%@!`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] device_ids: Specifies the list of device IDs bound to the group.
         :param pulumi.Input[str] name: Specifies the name of device group. The name contains a maximum of 64 characters.
@@ -65,7 +65,7 @@ class DeviceGroupArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of device group. The description contains a maximum of 64
-        characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters
+        characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
         are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")
@@ -138,7 +138,7 @@ class _DeviceGroupState:
         """
         Input properties used for looking up and filtering DeviceGroup resources.
         :param pulumi.Input[str] description: Specifies the description of device group. The description contains a maximum of 64
-               characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters
+               characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
                are allowed: `?'#().,&%@!`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] device_ids: Specifies the list of device IDs bound to the group.
         :param pulumi.Input[str] name: Specifies the name of device group. The name contains a maximum of 64 characters.
@@ -168,7 +168,7 @@ class _DeviceGroupState:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of device group. The description contains a maximum of 64
-        characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters
+        characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
         are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")
@@ -296,7 +296,7 @@ class DeviceGroup(pulumi.CustomResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: Specifies the description of device group. The description contains a maximum of 64
-               characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters
+               characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
                are allowed: `?'#().,&%@!`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] device_ids: Specifies the list of device IDs bound to the group.
         :param pulumi.Input[str] name: Specifies the name of device group. The name contains a maximum of 64 characters.
@@ -415,7 +415,7 @@ class DeviceGroup(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: Specifies the description of device group. The description contains a maximum of 64
-               characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters
+               characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
                are allowed: `?'#().,&%@!`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] device_ids: Specifies the list of device IDs bound to the group.
         :param pulumi.Input[str] name: Specifies the name of device group. The name contains a maximum of 64 characters.
@@ -444,7 +444,7 @@ class DeviceGroup(pulumi.CustomResource):
     def description(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the description of device group. The description contains a maximum of 64
-        characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters
+        characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
         are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")

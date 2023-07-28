@@ -8,12 +8,16 @@ import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
+from . import outputs
 
 __all__ = [
     'ClusterEndpoint',
+    'ClusterMaintainWindow',
     'ClusterPublicEndpoint',
     'ClusterPublicIp',
+    'ClusterVolume',
     'GetFlaovrsFlavorResult',
+    'GetFlaovrsFlavorElasticVolumeSpecResult',
 ]
 
 @pulumi.output_type
@@ -41,10 +45,8 @@ class ClusterEndpoint(dict):
                  connect_info: Optional[str] = None,
                  jdbc_url: Optional[str] = None):
         """
-        :param str connect_info: (Optional, String) Private network connection information.
-        :param str jdbc_url: (Optional, String)
-               JDBC URL. The following is the default format:
-               jdbc:postgresql://< public_connect_info>/<YOUR_DATABASE_NAME>
+        :param str connect_info: Private network connection information.
+        :param str jdbc_url: JDBC URL. Format: jdbc:postgresql://<public_connect_info>/<YOUR_DATABASE_NAME>
         """
         if connect_info is not None:
             pulumi.set(__self__, "connect_info", connect_info)
@@ -55,7 +57,7 @@ class ClusterEndpoint(dict):
     @pulumi.getter(name="connectInfo")
     def connect_info(self) -> Optional[str]:
         """
-        (Optional, String) Private network connection information.
+        Private network connection information.
         """
         return pulumi.get(self, "connect_info")
 
@@ -63,11 +65,75 @@ class ClusterEndpoint(dict):
     @pulumi.getter(name="jdbcUrl")
     def jdbc_url(self) -> Optional[str]:
         """
-        (Optional, String)
-        JDBC URL. The following is the default format:
-        jdbc:postgresql://< public_connect_info>/<YOUR_DATABASE_NAME>
+        JDBC URL. Format: jdbc:postgresql://<public_connect_info>/<YOUR_DATABASE_NAME>
         """
         return pulumi.get(self, "jdbc_url")
+
+
+@pulumi.output_type
+class ClusterMaintainWindow(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "endTime":
+            suggest = "end_time"
+        elif key == "startTime":
+            suggest = "start_time"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ClusterMaintainWindow. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ClusterMaintainWindow.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ClusterMaintainWindow.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 day: Optional[str] = None,
+                 end_time: Optional[str] = None,
+                 start_time: Optional[str] = None):
+        """
+        :param str day: Maintenance time in each week in the unit of day.  
+               The valid values are **Mon**, **Tue**, **Wed**, **Thu**, **Fri**,
+               **Sat**, and **Sun**.
+        :param str end_time: Maintenance end time in HH:mm format. The time zone is GMT+0.
+        :param str start_time: Maintenance start time in HH:mm format. The time zone is GMT+0.
+        """
+        if day is not None:
+            pulumi.set(__self__, "day", day)
+        if end_time is not None:
+            pulumi.set(__self__, "end_time", end_time)
+        if start_time is not None:
+            pulumi.set(__self__, "start_time", start_time)
+
+    @property
+    @pulumi.getter
+    def day(self) -> Optional[str]:
+        """
+        Maintenance time in each week in the unit of day.  
+        The valid values are **Mon**, **Tue**, **Wed**, **Thu**, **Fri**,
+        **Sat**, and **Sun**.
+        """
+        return pulumi.get(self, "day")
+
+    @property
+    @pulumi.getter(name="endTime")
+    def end_time(self) -> Optional[str]:
+        """
+        Maintenance end time in HH:mm format. The time zone is GMT+0.
+        """
+        return pulumi.get(self, "end_time")
+
+    @property
+    @pulumi.getter(name="startTime")
+    def start_time(self) -> Optional[str]:
+        """
+        Maintenance start time in HH:mm format. The time zone is GMT+0.
+        """
+        return pulumi.get(self, "start_time")
 
 
 @pulumi.output_type
@@ -95,11 +161,8 @@ class ClusterPublicEndpoint(dict):
                  jdbc_url: Optional[str] = None,
                  public_connect_info: Optional[str] = None):
         """
-        :param str jdbc_url: (Optional, String)
-               JDBC URL. The following is the default format:
-               jdbc:postgresql://< public_connect_info>/<YOUR_DATABASE_NAME>
-        :param str public_connect_info: (Optional, String)
-               Public network connection information.
+        :param str jdbc_url: JDBC URL. Format: jdbc:postgresql://<public_connect_info>/<YOUR_DATABASE_NAME>
+        :param str public_connect_info: Public network connection information.
         """
         if jdbc_url is not None:
             pulumi.set(__self__, "jdbc_url", jdbc_url)
@@ -110,9 +173,7 @@ class ClusterPublicEndpoint(dict):
     @pulumi.getter(name="jdbcUrl")
     def jdbc_url(self) -> Optional[str]:
         """
-        (Optional, String)
-        JDBC URL. The following is the default format:
-        jdbc:postgresql://< public_connect_info>/<YOUR_DATABASE_NAME>
+        JDBC URL. Format: jdbc:postgresql://<public_connect_info>/<YOUR_DATABASE_NAME>
         """
         return pulumi.get(self, "jdbc_url")
 
@@ -120,7 +181,6 @@ class ClusterPublicEndpoint(dict):
     @pulumi.getter(name="publicConnectInfo")
     def public_connect_info(self) -> Optional[str]:
         """
-        (Optional, String)
         Public network connection information.
         """
         return pulumi.get(self, "public_connect_info")
@@ -151,9 +211,9 @@ class ClusterPublicIp(dict):
                  eip_id: Optional[str] = None,
                  public_bind_type: Optional[str] = None):
         """
-        :param str eip_id: EIP ID.
-        :param str public_bind_type: Binding type of an EIP. The value can be either of the following:
-               auto_assign not_use bind_existing The default value is not_use.
+        :param str eip_id: The EIP ID.
+        :param str public_bind_type: The bind type of public IP.  
+               The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
         """
         if eip_id is not None:
             pulumi.set(__self__, "eip_id", eip_id)
@@ -164,7 +224,7 @@ class ClusterPublicIp(dict):
     @pulumi.getter(name="eipId")
     def eip_id(self) -> Optional[str]:
         """
-        EIP ID.
+        The EIP ID.
         """
         return pulumi.get(self, "eip_id")
 
@@ -172,32 +232,84 @@ class ClusterPublicIp(dict):
     @pulumi.getter(name="publicBindType")
     def public_bind_type(self) -> Optional[str]:
         """
-        Binding type of an EIP. The value can be either of the following:
-        auto_assign not_use bind_existing The default value is not_use.
+        The bind type of public IP.  
+        The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
         """
         return pulumi.get(self, "public_bind_type")
 
 
 @pulumi.output_type
+class ClusterVolume(dict):
+    def __init__(__self__, *,
+                 capacity: Optional[str] = None,
+                 type: Optional[str] = None):
+        """
+        :param str capacity: The capacity size, in GB.
+        :param str type: The volume type. Value options are as follows:
+               + **SATA**: Common I/O. The SATA disk is used.
+               + **SAS**: High I/O. The SAS disk is used.
+               + **SSD**: Ultra-high I/O. The solid-state drive (SSD) is used.
+               The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
+        """
+        if capacity is not None:
+            pulumi.set(__self__, "capacity", capacity)
+        if type is not None:
+            pulumi.set(__self__, "type", type)
+
+    @property
+    @pulumi.getter
+    def capacity(self) -> Optional[str]:
+        """
+        The capacity size, in GB.
+        """
+        return pulumi.get(self, "capacity")
+
+    @property
+    @pulumi.getter
+    def type(self) -> Optional[str]:
+        """
+        The volume type. Value options are as follows:
+        + **SATA**: Common I/O. The SATA disk is used.
+        + **SAS**: High I/O. The SAS disk is used.
+        + **SSD**: Ultra-high I/O. The solid-state drive (SSD) is used.
+        The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
+        """
+        return pulumi.get(self, "type")
+
+
+@pulumi.output_type
 class GetFlaovrsFlavorResult(dict):
     def __init__(__self__, *,
-                 availability_zone: str,
+                 availability_zones: Sequence[str],
+                 datastore_type: str,
+                 elastic_volume_specs: Sequence['outputs.GetFlaovrsFlavorElasticVolumeSpecResult'],
                  flavor_id: str,
                  memory: int,
                  size: int,
                  vcpus: int,
                  volumetype: str):
         """
-        :param str availability_zone: Specifies the availability zone name.
-        :param str flavor_id: The name of the dws node flavor. It is referenced by `node_type` in `_dws.get_flaovrs`.
-        :param int memory: Specifies the ram of the dws node flavor in GB.
-        :param int size: Indicates the Disk size in GB.
-        :param int vcpus: Specifies the vcpus of the dws node flavor.
-        :param str volumetype: Indicates Disk type.
-               + **LOCAL_DISK**: common I/O disk
-               + **SSD**: ultra-high I/O disk
+        :param Sequence[str] availability_zones: The list of availability zones.
+        :param str datastore_type: The type of datastore.  
+               The options are as follows:
+               - **dws**: OLAP, elastic scaling, unlimited scaling of compute and storage capacity.
+               - **hybrid**: a single data warehouse used for transaction and analytics workloads,
+               in single-node or cluster mode.
+               - **stream**: built-in time series operators; up to 40:1 compression ratio; applicable to IoT services.
+        :param Sequence['GetFlaovrsFlavorElasticVolumeSpecArgs'] elastic_volume_specs: The ElasticVolumeSpec structure is documented below.
+        :param str flavor_id: The name of the dws node flavor.  
+               It is referenced by `node_type` in `_dws.get_flaovrs`.
+        :param int memory: The ram of the dws node flavor in GB.
+        :param int size: The default disk size in GB.
+        :param int vcpus: The vcpus of the dws node flavor.
+        :param str volumetype: Disk type.  
+               The options are as follows:
+               - **LOCAL_DISK**:common I/O disk.
+               - **SSD**: ultra-high I/O disk.
         """
-        pulumi.set(__self__, "availability_zone", availability_zone)
+        pulumi.set(__self__, "availability_zones", availability_zones)
+        pulumi.set(__self__, "datastore_type", datastore_type)
+        pulumi.set(__self__, "elastic_volume_specs", elastic_volume_specs)
         pulumi.set(__self__, "flavor_id", flavor_id)
         pulumi.set(__self__, "memory", memory)
         pulumi.set(__self__, "size", size)
@@ -205,18 +317,40 @@ class GetFlaovrsFlavorResult(dict):
         pulumi.set(__self__, "volumetype", volumetype)
 
     @property
-    @pulumi.getter(name="availabilityZone")
-    def availability_zone(self) -> str:
+    @pulumi.getter(name="availabilityZones")
+    def availability_zones(self) -> Sequence[str]:
         """
-        Specifies the availability zone name.
+        The list of availability zones.
         """
-        return pulumi.get(self, "availability_zone")
+        return pulumi.get(self, "availability_zones")
+
+    @property
+    @pulumi.getter(name="datastoreType")
+    def datastore_type(self) -> str:
+        """
+        The type of datastore.  
+        The options are as follows:
+        - **dws**: OLAP, elastic scaling, unlimited scaling of compute and storage capacity.
+        - **hybrid**: a single data warehouse used for transaction and analytics workloads,
+        in single-node or cluster mode.
+        - **stream**: built-in time series operators; up to 40:1 compression ratio; applicable to IoT services.
+        """
+        return pulumi.get(self, "datastore_type")
+
+    @property
+    @pulumi.getter(name="elasticVolumeSpecs")
+    def elastic_volume_specs(self) -> Sequence['outputs.GetFlaovrsFlavorElasticVolumeSpecResult']:
+        """
+        The ElasticVolumeSpec structure is documented below.
+        """
+        return pulumi.get(self, "elastic_volume_specs")
 
     @property
     @pulumi.getter(name="flavorId")
     def flavor_id(self) -> str:
         """
-        The name of the dws node flavor. It is referenced by `node_type` in `_dws.get_flaovrs`.
+        The name of the dws node flavor.  
+        It is referenced by `node_type` in `_dws.get_flaovrs`.
         """
         return pulumi.get(self, "flavor_id")
 
@@ -224,7 +358,7 @@ class GetFlaovrsFlavorResult(dict):
     @pulumi.getter
     def memory(self) -> int:
         """
-        Specifies the ram of the dws node flavor in GB.
+        The ram of the dws node flavor in GB.
         """
         return pulumi.get(self, "memory")
 
@@ -232,7 +366,7 @@ class GetFlaovrsFlavorResult(dict):
     @pulumi.getter
     def size(self) -> int:
         """
-        Indicates the Disk size in GB.
+        The default disk size in GB.
         """
         return pulumi.get(self, "size")
 
@@ -240,7 +374,7 @@ class GetFlaovrsFlavorResult(dict):
     @pulumi.getter
     def vcpus(self) -> int:
         """
-        Specifies the vcpus of the dws node flavor.
+        The vcpus of the dws node flavor.
         """
         return pulumi.get(self, "vcpus")
 
@@ -248,10 +382,51 @@ class GetFlaovrsFlavorResult(dict):
     @pulumi.getter
     def volumetype(self) -> str:
         """
-        Indicates Disk type.
-        + **LOCAL_DISK**: common I/O disk
-        + **SSD**: ultra-high I/O disk
+        Disk type.  
+        The options are as follows:
+        - **LOCAL_DISK**:common I/O disk.
+        - **SSD**: ultra-high I/O disk.
         """
         return pulumi.get(self, "volumetype")
+
+
+@pulumi.output_type
+class GetFlaovrsFlavorElasticVolumeSpecResult(dict):
+    def __init__(__self__, *,
+                 max_size: int,
+                 min_size: int,
+                 step: int):
+        """
+        :param int max_size: Maximum disk size.
+        :param int min_size: Minimum disk size.
+        :param int step: Disk size increment step.
+        """
+        pulumi.set(__self__, "max_size", max_size)
+        pulumi.set(__self__, "min_size", min_size)
+        pulumi.set(__self__, "step", step)
+
+    @property
+    @pulumi.getter(name="maxSize")
+    def max_size(self) -> int:
+        """
+        Maximum disk size.
+        """
+        return pulumi.get(self, "max_size")
+
+    @property
+    @pulumi.getter(name="minSize")
+    def min_size(self) -> int:
+        """
+        Minimum disk size.
+        """
+        return pulumi.get(self, "min_size")
+
+    @property
+    @pulumi.getter
+    def step(self) -> int:
+        """
+        Disk size increment step.
+        """
+        return pulumi.get(self, "step")
 
 

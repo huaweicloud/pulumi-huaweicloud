@@ -10,7 +10,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Use this data source to get the information of an available HuaweiCloud NAT gateway.
+// Use this data source to get an available public NAT gateway within HuaweiCloud.
 //
 // ## Example Usage
 //
@@ -22,13 +22,16 @@ import (
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Nat"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Nat"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			gatewayName := cfg.RequireObject("gatewayName")
 //			_, err := Nat.GetGateway(ctx, &nat.GetGatewayArgs{
-//				Name: pulumi.StringRef("tf_test_natgateway"),
+//				Name: pulumi.StringRef(gatewayName),
 //			}, nil)
 //			if err != nil {
 //				return err
@@ -60,26 +63,26 @@ type LookupGatewayArgs struct {
 	Id *string `pulumi:"id"`
 	// Deprecated: use subnet_id instead
 	InternalNetworkId *string `pulumi:"internalNetworkId"`
-	// Specifies the NAT gateway name. The name can contain only digits, letters, underscores (_)
-	// , and hyphens(-).
+	// Specifies the public NAT gateway name.\
+	// The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
 	Name *string `pulumi:"name"`
 	// Specifies the region in which to create the NAT gateway resource. If omitted, the
 	// provider-level region will be used.
 	Region *string `pulumi:"region"`
 	// Deprecated: use vpc_id instead
 	RouterId *string `pulumi:"routerId"`
-	// The NAT gateway type. The value can be:
-	// + `1`: small type, which supports up to 10,000 SNAT connections.
-	// + `2`: medium type, which supports up to 50,000 SNAT connections.
-	// + `3`: large type, which supports up to 200,000 SNAT connections.
-	// + `4`: extra-large type, which supports up to 1,000,000 SNAT connections.
+	// The public NAT gateway type. The valid values are as follows:
+	// + **1**: Small type, which supports up to `10,000` SNAT connections.
+	// + **2**: Medium type, which supports up to `50,000` SNAT connections.
+	// + **3**: Large type, which supports up to `200,000` SNAT connections.
+	// + **4**: Extra-large type, which supports up to `1,000,000` SNAT connections.
 	Spec *string `pulumi:"spec"`
 	// Specifies the status of the NAT gateway.
 	Status *string `pulumi:"status"`
 	// Specifies the subnet ID of the downstream interface (the next hop of the DVR) of the
-	// NAT gateway.
+	// public NAT gateway.
 	SubnetId *string `pulumi:"subnetId"`
-	// Specifies the ID of the VPC this NAT gateway belongs to.
+	// Specifies the ID of the VPC this public NAT gateway belongs to.
 	VpcId *string `pulumi:"vpcId"`
 }
 
@@ -125,26 +128,26 @@ type LookupGatewayOutputArgs struct {
 	Id pulumi.StringPtrInput `pulumi:"id"`
 	// Deprecated: use subnet_id instead
 	InternalNetworkId pulumi.StringPtrInput `pulumi:"internalNetworkId"`
-	// Specifies the NAT gateway name. The name can contain only digits, letters, underscores (_)
-	// , and hyphens(-).
+	// Specifies the public NAT gateway name.\
+	// The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Specifies the region in which to create the NAT gateway resource. If omitted, the
 	// provider-level region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
 	// Deprecated: use vpc_id instead
 	RouterId pulumi.StringPtrInput `pulumi:"routerId"`
-	// The NAT gateway type. The value can be:
-	// + `1`: small type, which supports up to 10,000 SNAT connections.
-	// + `2`: medium type, which supports up to 50,000 SNAT connections.
-	// + `3`: large type, which supports up to 200,000 SNAT connections.
-	// + `4`: extra-large type, which supports up to 1,000,000 SNAT connections.
+	// The public NAT gateway type. The valid values are as follows:
+	// + **1**: Small type, which supports up to `10,000` SNAT connections.
+	// + **2**: Medium type, which supports up to `50,000` SNAT connections.
+	// + **3**: Large type, which supports up to `200,000` SNAT connections.
+	// + **4**: Extra-large type, which supports up to `1,000,000` SNAT connections.
 	Spec pulumi.StringPtrInput `pulumi:"spec"`
 	// Specifies the status of the NAT gateway.
 	Status pulumi.StringPtrInput `pulumi:"status"`
 	// Specifies the subnet ID of the downstream interface (the next hop of the DVR) of the
-	// NAT gateway.
+	// public NAT gateway.
 	SubnetId pulumi.StringPtrInput `pulumi:"subnetId"`
-	// Specifies the ID of the VPC this NAT gateway belongs to.
+	// Specifies the ID of the VPC this public NAT gateway belongs to.
 	VpcId pulumi.StringPtrInput `pulumi:"vpcId"`
 }
 

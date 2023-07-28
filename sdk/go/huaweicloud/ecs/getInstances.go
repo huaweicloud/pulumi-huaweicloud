@@ -64,6 +64,8 @@ type GetInstancesArgs struct {
 	FlavorName *string `pulumi:"flavorName"`
 	// Specifies the image ID of the instance.
 	ImageId *string `pulumi:"imageId"`
+	// Specifies the ECS ID.
+	InstanceId *string `pulumi:"instanceId"`
 	// Specifies the key pair that is used to authenticate the instance.
 	KeyPair *string `pulumi:"keyPair"`
 	// Specifies the instance name, which can be queried with a regular expression.
@@ -92,7 +94,8 @@ type GetInstancesResult struct {
 	// The provider-assigned unique ID for this managed resource.
 	Id string `pulumi:"id"`
 	// The image ID of the instance.
-	ImageId *string `pulumi:"imageId"`
+	ImageId    *string `pulumi:"imageId"`
+	InstanceId *string `pulumi:"instanceId"`
 	// List of ECS instance details. The object structure of each ECS instance is documented below.
 	Instances []GetInstancesInstance `pulumi:"instances"`
 	// The key pair that is used to authenticate the instance.
@@ -130,6 +133,8 @@ type GetInstancesOutputArgs struct {
 	FlavorName pulumi.StringPtrInput `pulumi:"flavorName"`
 	// Specifies the image ID of the instance.
 	ImageId pulumi.StringPtrInput `pulumi:"imageId"`
+	// Specifies the ECS ID.
+	InstanceId pulumi.StringPtrInput `pulumi:"instanceId"`
 	// Specifies the key pair that is used to authenticate the instance.
 	KeyPair pulumi.StringPtrInput `pulumi:"keyPair"`
 	// Specifies the instance name, which can be queried with a regular expression.
@@ -192,6 +197,10 @@ func (o GetInstancesResultOutput) Id() pulumi.StringOutput {
 // The image ID of the instance.
 func (o GetInstancesResultOutput) ImageId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetInstancesResult) *string { return v.ImageId }).(pulumi.StringPtrOutput)
+}
+
+func (o GetInstancesResultOutput) InstanceId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v GetInstancesResult) *string { return v.InstanceId }).(pulumi.StringPtrOutput)
 }
 
 // List of ECS instance details. The object structure of each ECS instance is documented below.

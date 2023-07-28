@@ -26,20 +26,22 @@ class PolicyArgs:
                  scheduled_policy: Optional[pulumi.Input['PolicyScheduledPolicyArgs']] = None):
         """
         The set of arguments for constructing a Policy resource.
-        :param pulumi.Input[str] scaling_group_id: The AS group ID. Changing this creates a new AS policy.
-        :param pulumi.Input[str] scaling_policy_name: The name of the AS policy. The name can contain letters, digits,
+        :param pulumi.Input[str] scaling_group_id: Specifies the AS group ID. Changing this creates a new AS policy.
+        :param pulumi.Input[str] scaling_policy_name: Specifies the name of the AS policy. The name contains only letters, digits,
                underscores(_), and hyphens(-), and cannot exceed 64 characters.
-        :param pulumi.Input[str] scaling_policy_type: The AS policy type. The values can be `ALARM`, `SCHEDULED`,
-               and `RECURRENCE`.
-        :param pulumi.Input[str] alarm_id: The alarm rule ID. This argument is mandatory when `scaling_policy_type`
-               is set to `ALARM`. You can create an alarm rule with `Cse.Alarmrule`.
-        :param pulumi.Input[int] cool_down_time: The cooling duration (in seconds), and is 900 by default.
-        :param pulumi.Input[str] region: The region in which to create the AS policy. If omitted, the `region` argument
-               of the provider is used. Changing this creates a new AS policy.
-        :param pulumi.Input['PolicyScalingPolicyActionArgs'] scaling_policy_action: The action of the AS policy. The scaling_policy_action structure is
-               documented below.
-        :param pulumi.Input['PolicyScheduledPolicyArgs'] scheduled_policy: The periodic or scheduled AS policy. This argument is mandatory
-               when `scaling_policy_type` is set to `SCHEDULED` or `RECURRENCE`. The scheduled_policy structure is documented below.
+        :param pulumi.Input[str] scaling_policy_type: Specifies the AS policy type. The value can be `ALARM`, `SCHEDULED` or `RECURRENCE`.
+               + **ALARM**: indicates that the scaling action is triggered by an alarm.
+               + **SCHEDULED**: indicates that the scaling action is triggered as scheduled.
+               + **RECURRENCE**: indicates that the scaling action is triggered periodically.
+        :param pulumi.Input[int] cool_down_time: Specifies the cooling duration (in seconds).
+               The value ranges from 0 to 86400 and is 300 by default.
+        :param pulumi.Input[str] region: Specifies the region in which to create the AS policy. If omitted, the
+               provider-level region will be used. Changing this creates a new AS policy.
+        :param pulumi.Input['PolicyScalingPolicyActionArgs'] scaling_policy_action: Specifies the action of the AS policy.
+               The object structure is documented below.
+        :param pulumi.Input['PolicyScheduledPolicyArgs'] scheduled_policy: Specifies the periodic or scheduled AS policy.
+               This parameter is mandatory when `scaling_policy_type` is set to `SCHEDULED` or `RECURRENCE`.
+               The object structure is documented below.
         """
         pulumi.set(__self__, "scaling_group_id", scaling_group_id)
         pulumi.set(__self__, "scaling_policy_name", scaling_policy_name)
@@ -59,7 +61,7 @@ class PolicyArgs:
     @pulumi.getter(name="scalingGroupId")
     def scaling_group_id(self) -> pulumi.Input[str]:
         """
-        The AS group ID. Changing this creates a new AS policy.
+        Specifies the AS group ID. Changing this creates a new AS policy.
         """
         return pulumi.get(self, "scaling_group_id")
 
@@ -71,7 +73,7 @@ class PolicyArgs:
     @pulumi.getter(name="scalingPolicyName")
     def scaling_policy_name(self) -> pulumi.Input[str]:
         """
-        The name of the AS policy. The name can contain letters, digits,
+        Specifies the name of the AS policy. The name contains only letters, digits,
         underscores(_), and hyphens(-), and cannot exceed 64 characters.
         """
         return pulumi.get(self, "scaling_policy_name")
@@ -84,8 +86,10 @@ class PolicyArgs:
     @pulumi.getter(name="scalingPolicyType")
     def scaling_policy_type(self) -> pulumi.Input[str]:
         """
-        The AS policy type. The values can be `ALARM`, `SCHEDULED`,
-        and `RECURRENCE`.
+        Specifies the AS policy type. The value can be `ALARM`, `SCHEDULED` or `RECURRENCE`.
+        + **ALARM**: indicates that the scaling action is triggered by an alarm.
+        + **SCHEDULED**: indicates that the scaling action is triggered as scheduled.
+        + **RECURRENCE**: indicates that the scaling action is triggered periodically.
         """
         return pulumi.get(self, "scaling_policy_type")
 
@@ -96,10 +100,6 @@ class PolicyArgs:
     @property
     @pulumi.getter(name="alarmId")
     def alarm_id(self) -> Optional[pulumi.Input[str]]:
-        """
-        The alarm rule ID. This argument is mandatory when `scaling_policy_type`
-        is set to `ALARM`. You can create an alarm rule with `Cse.Alarmrule`.
-        """
         return pulumi.get(self, "alarm_id")
 
     @alarm_id.setter
@@ -110,7 +110,8 @@ class PolicyArgs:
     @pulumi.getter(name="coolDownTime")
     def cool_down_time(self) -> Optional[pulumi.Input[int]]:
         """
-        The cooling duration (in seconds), and is 900 by default.
+        Specifies the cooling duration (in seconds).
+        The value ranges from 0 to 86400 and is 300 by default.
         """
         return pulumi.get(self, "cool_down_time")
 
@@ -122,8 +123,8 @@ class PolicyArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the AS policy. If omitted, the `region` argument
-        of the provider is used. Changing this creates a new AS policy.
+        Specifies the region in which to create the AS policy. If omitted, the
+        provider-level region will be used. Changing this creates a new AS policy.
         """
         return pulumi.get(self, "region")
 
@@ -135,8 +136,8 @@ class PolicyArgs:
     @pulumi.getter(name="scalingPolicyAction")
     def scaling_policy_action(self) -> Optional[pulumi.Input['PolicyScalingPolicyActionArgs']]:
         """
-        The action of the AS policy. The scaling_policy_action structure is
-        documented below.
+        Specifies the action of the AS policy.
+        The object structure is documented below.
         """
         return pulumi.get(self, "scaling_policy_action")
 
@@ -148,8 +149,9 @@ class PolicyArgs:
     @pulumi.getter(name="scheduledPolicy")
     def scheduled_policy(self) -> Optional[pulumi.Input['PolicyScheduledPolicyArgs']]:
         """
-        The periodic or scheduled AS policy. This argument is mandatory
-        when `scaling_policy_type` is set to `SCHEDULED` or `RECURRENCE`. The scheduled_policy structure is documented below.
+        Specifies the periodic or scheduled AS policy.
+        This parameter is mandatory when `scaling_policy_type` is set to `SCHEDULED` or `RECURRENCE`.
+        The object structure is documented below.
         """
         return pulumi.get(self, "scheduled_policy")
 
@@ -168,23 +170,27 @@ class _PolicyState:
                  scaling_policy_action: Optional[pulumi.Input['PolicyScalingPolicyActionArgs']] = None,
                  scaling_policy_name: Optional[pulumi.Input[str]] = None,
                  scaling_policy_type: Optional[pulumi.Input[str]] = None,
-                 scheduled_policy: Optional[pulumi.Input['PolicyScheduledPolicyArgs']] = None):
+                 scheduled_policy: Optional[pulumi.Input['PolicyScheduledPolicyArgs']] = None,
+                 status: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Policy resources.
-        :param pulumi.Input[str] alarm_id: The alarm rule ID. This argument is mandatory when `scaling_policy_type`
-               is set to `ALARM`. You can create an alarm rule with `Cse.Alarmrule`.
-        :param pulumi.Input[int] cool_down_time: The cooling duration (in seconds), and is 900 by default.
-        :param pulumi.Input[str] region: The region in which to create the AS policy. If omitted, the `region` argument
-               of the provider is used. Changing this creates a new AS policy.
-        :param pulumi.Input[str] scaling_group_id: The AS group ID. Changing this creates a new AS policy.
-        :param pulumi.Input['PolicyScalingPolicyActionArgs'] scaling_policy_action: The action of the AS policy. The scaling_policy_action structure is
-               documented below.
-        :param pulumi.Input[str] scaling_policy_name: The name of the AS policy. The name can contain letters, digits,
+        :param pulumi.Input[int] cool_down_time: Specifies the cooling duration (in seconds).
+               The value ranges from 0 to 86400 and is 300 by default.
+        :param pulumi.Input[str] region: Specifies the region in which to create the AS policy. If omitted, the
+               provider-level region will be used. Changing this creates a new AS policy.
+        :param pulumi.Input[str] scaling_group_id: Specifies the AS group ID. Changing this creates a new AS policy.
+        :param pulumi.Input['PolicyScalingPolicyActionArgs'] scaling_policy_action: Specifies the action of the AS policy.
+               The object structure is documented below.
+        :param pulumi.Input[str] scaling_policy_name: Specifies the name of the AS policy. The name contains only letters, digits,
                underscores(_), and hyphens(-), and cannot exceed 64 characters.
-        :param pulumi.Input[str] scaling_policy_type: The AS policy type. The values can be `ALARM`, `SCHEDULED`,
-               and `RECURRENCE`.
-        :param pulumi.Input['PolicyScheduledPolicyArgs'] scheduled_policy: The periodic or scheduled AS policy. This argument is mandatory
-               when `scaling_policy_type` is set to `SCHEDULED` or `RECURRENCE`. The scheduled_policy structure is documented below.
+        :param pulumi.Input[str] scaling_policy_type: Specifies the AS policy type. The value can be `ALARM`, `SCHEDULED` or `RECURRENCE`.
+               + **ALARM**: indicates that the scaling action is triggered by an alarm.
+               + **SCHEDULED**: indicates that the scaling action is triggered as scheduled.
+               + **RECURRENCE**: indicates that the scaling action is triggered periodically.
+        :param pulumi.Input['PolicyScheduledPolicyArgs'] scheduled_policy: Specifies the periodic or scheduled AS policy.
+               This parameter is mandatory when `scaling_policy_type` is set to `SCHEDULED` or `RECURRENCE`.
+               The object structure is documented below.
+        :param pulumi.Input[str] status: The AS policy status. The value can be *INSERVICE*, *PAUSED* or *EXECUTING*.
         """
         if alarm_id is not None:
             pulumi.set(__self__, "alarm_id", alarm_id)
@@ -202,14 +208,12 @@ class _PolicyState:
             pulumi.set(__self__, "scaling_policy_type", scaling_policy_type)
         if scheduled_policy is not None:
             pulumi.set(__self__, "scheduled_policy", scheduled_policy)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
 
     @property
     @pulumi.getter(name="alarmId")
     def alarm_id(self) -> Optional[pulumi.Input[str]]:
-        """
-        The alarm rule ID. This argument is mandatory when `scaling_policy_type`
-        is set to `ALARM`. You can create an alarm rule with `Cse.Alarmrule`.
-        """
         return pulumi.get(self, "alarm_id")
 
     @alarm_id.setter
@@ -220,7 +224,8 @@ class _PolicyState:
     @pulumi.getter(name="coolDownTime")
     def cool_down_time(self) -> Optional[pulumi.Input[int]]:
         """
-        The cooling duration (in seconds), and is 900 by default.
+        Specifies the cooling duration (in seconds).
+        The value ranges from 0 to 86400 and is 300 by default.
         """
         return pulumi.get(self, "cool_down_time")
 
@@ -232,8 +237,8 @@ class _PolicyState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the AS policy. If omitted, the `region` argument
-        of the provider is used. Changing this creates a new AS policy.
+        Specifies the region in which to create the AS policy. If omitted, the
+        provider-level region will be used. Changing this creates a new AS policy.
         """
         return pulumi.get(self, "region")
 
@@ -245,7 +250,7 @@ class _PolicyState:
     @pulumi.getter(name="scalingGroupId")
     def scaling_group_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The AS group ID. Changing this creates a new AS policy.
+        Specifies the AS group ID. Changing this creates a new AS policy.
         """
         return pulumi.get(self, "scaling_group_id")
 
@@ -257,8 +262,8 @@ class _PolicyState:
     @pulumi.getter(name="scalingPolicyAction")
     def scaling_policy_action(self) -> Optional[pulumi.Input['PolicyScalingPolicyActionArgs']]:
         """
-        The action of the AS policy. The scaling_policy_action structure is
-        documented below.
+        Specifies the action of the AS policy.
+        The object structure is documented below.
         """
         return pulumi.get(self, "scaling_policy_action")
 
@@ -270,7 +275,7 @@ class _PolicyState:
     @pulumi.getter(name="scalingPolicyName")
     def scaling_policy_name(self) -> Optional[pulumi.Input[str]]:
         """
-        The name of the AS policy. The name can contain letters, digits,
+        Specifies the name of the AS policy. The name contains only letters, digits,
         underscores(_), and hyphens(-), and cannot exceed 64 characters.
         """
         return pulumi.get(self, "scaling_policy_name")
@@ -283,8 +288,10 @@ class _PolicyState:
     @pulumi.getter(name="scalingPolicyType")
     def scaling_policy_type(self) -> Optional[pulumi.Input[str]]:
         """
-        The AS policy type. The values can be `ALARM`, `SCHEDULED`,
-        and `RECURRENCE`.
+        Specifies the AS policy type. The value can be `ALARM`, `SCHEDULED` or `RECURRENCE`.
+        + **ALARM**: indicates that the scaling action is triggered by an alarm.
+        + **SCHEDULED**: indicates that the scaling action is triggered as scheduled.
+        + **RECURRENCE**: indicates that the scaling action is triggered periodically.
         """
         return pulumi.get(self, "scaling_policy_type")
 
@@ -296,14 +303,27 @@ class _PolicyState:
     @pulumi.getter(name="scheduledPolicy")
     def scheduled_policy(self) -> Optional[pulumi.Input['PolicyScheduledPolicyArgs']]:
         """
-        The periodic or scheduled AS policy. This argument is mandatory
-        when `scaling_policy_type` is set to `SCHEDULED` or `RECURRENCE`. The scheduled_policy structure is documented below.
+        Specifies the periodic or scheduled AS policy.
+        This parameter is mandatory when `scaling_policy_type` is set to `SCHEDULED` or `RECURRENCE`.
+        The object structure is documented below.
         """
         return pulumi.get(self, "scheduled_policy")
 
     @scheduled_policy.setter
     def scheduled_policy(self, value: Optional[pulumi.Input['PolicyScheduledPolicyArgs']]):
         pulumi.set(self, "scheduled_policy", value)
+
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input[str]]:
+        """
+        The AS policy status. The value can be *INSERVICE*, *PAUSED* or *EXECUTING*.
+        """
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "status", value)
 
 
 class Policy(pulumi.CustomResource):
@@ -321,7 +341,7 @@ class Policy(pulumi.CustomResource):
                  scheduled_policy: Optional[pulumi.Input[pulumi.InputType['PolicyScheduledPolicyArgs']]] = None,
                  __props__=None):
         """
-        Manages a AS Policy resource within HuaweiCloud.
+        Manages an AS policy resource within HuaweiCloud.
 
         ## Example Usage
         ### AS Recurrence Policy
@@ -330,20 +350,21 @@ class Policy(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        as_group_id = config.require_object("asGroupId")
         my_aspolicy = huaweicloud.as_.Policy("myAspolicy",
-            cool_down_time=900,
-            scaling_group_id="4579f2f5-cbe8-425a-8f32-53dcb9d9053a",
-            scaling_policy_action=huaweicloud.as_.PolicyScalingPolicyActionArgs(
-                instance_number=1,
-                operation="ADD",
-            ),
             scaling_policy_name="my_aspolicy",
             scaling_policy_type="RECURRENCE",
+            scaling_group_id=as_group_id,
+            scaling_policy_action=huaweicloud.as_.PolicyScalingPolicyActionArgs(
+                operation="ADD",
+                instance_number=1,
+            ),
             scheduled_policy=huaweicloud.as_.PolicyScheduledPolicyArgs(
-                end_time="2020-12-30T12:00Z",
                 launch_time="07:00",
                 recurrence_type="Daily",
-                start_time="2020-11-30T12:00Z",
+                start_time="2022-11-30T12:00Z",
+                end_time="2022-12-30T12:00Z",
             ))
         ```
         ### AS Scheduled Policy
@@ -352,27 +373,28 @@ class Policy(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        as_group_id = config.require_object("asGroupId")
         my_aspolicy1 = huaweicloud.as_.Policy("myAspolicy1",
-            cool_down_time=900,
-            scaling_group_id="4579f2f5-cbe8-425a-8f32-53dcb9d9053a",
-            scaling_policy_action=huaweicloud.as_.PolicyScalingPolicyActionArgs(
-                instance_number=1,
-                operation="REMOVE",
-            ),
             scaling_policy_name="my_aspolicy_1",
             scaling_policy_type="SCHEDULED",
+            scaling_group_id=as_group_id,
+            scaling_policy_action=huaweicloud.as_.PolicyScalingPolicyActionArgs(
+                operation="REMOVE",
+                instance_number=1,
+            ),
             scheduled_policy=huaweicloud.as_.PolicyScheduledPolicyArgs(
-                launch_time="2020-12-22T12:00Z",
+                launch_time="2022-12-22T12:00Z",
             ))
         ```
-
-        Please note that the `launch_time` of the `SCHEDULED` policy cannot be earlier than the current time.
         ### AS Alarm Policy
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        as_group_id = config.require_object("asGroupId")
         alarm_rule = huaweicloud.cse.Alarmrule("alarmRule",
             alarm_name="as_alarm_rule",
             metric=huaweicloud.cse.AlarmruleMetricArgs(
@@ -380,17 +402,17 @@ class Policy(pulumi.CustomResource):
                 metric_name="cpu_util",
                 dimensions=[huaweicloud.cse.AlarmruleMetricDimensionArgs(
                     name="AutoScalingGroup",
-                    value="4579f2f5-cbe8-425a-8f32-53dcb9d9053a",
+                    value=as_group_id,
                 )],
             ),
-            condition=huaweicloud.cse.AlarmruleConditionArgs(
+            conditions=[huaweicloud.cse.AlarmruleConditionArgs(
                 period=300,
                 filter="average",
                 comparison_operator=">=",
                 value=60,
                 unit="%",
                 count=1,
-            ),
+            )],
             alarm_actions=[huaweicloud.cse.AlarmruleAlarmActionArgs(
                 type="autoscaling",
                 notification_lists=[],
@@ -398,7 +420,7 @@ class Policy(pulumi.CustomResource):
         my_aspolicy2 = huaweicloud.as_.Policy("myAspolicy2",
             scaling_policy_name="my_aspolicy_2",
             scaling_policy_type="ALARM",
-            scaling_group_id="4579f2f5-cbe8-425a-8f32-53dcb9d9053a",
+            scaling_group_id=as_group_id,
             alarm_id=alarm_rule.id,
             cool_down_time=900,
             scaling_policy_action=huaweicloud.as_.PolicyScalingPolicyActionArgs(
@@ -407,22 +429,32 @@ class Policy(pulumi.CustomResource):
             ))
         ```
 
+        ## Import
+
+        AS policies can be imported by their `id`, e.g.
+
+        ```sh
+         $ pulumi import huaweicloud:As/policy:Policy test 9fcb65fe-fd79-4407-8fa0-07602044e1c3
+        ```
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] alarm_id: The alarm rule ID. This argument is mandatory when `scaling_policy_type`
-               is set to `ALARM`. You can create an alarm rule with `Cse.Alarmrule`.
-        :param pulumi.Input[int] cool_down_time: The cooling duration (in seconds), and is 900 by default.
-        :param pulumi.Input[str] region: The region in which to create the AS policy. If omitted, the `region` argument
-               of the provider is used. Changing this creates a new AS policy.
-        :param pulumi.Input[str] scaling_group_id: The AS group ID. Changing this creates a new AS policy.
-        :param pulumi.Input[pulumi.InputType['PolicyScalingPolicyActionArgs']] scaling_policy_action: The action of the AS policy. The scaling_policy_action structure is
-               documented below.
-        :param pulumi.Input[str] scaling_policy_name: The name of the AS policy. The name can contain letters, digits,
+        :param pulumi.Input[int] cool_down_time: Specifies the cooling duration (in seconds).
+               The value ranges from 0 to 86400 and is 300 by default.
+        :param pulumi.Input[str] region: Specifies the region in which to create the AS policy. If omitted, the
+               provider-level region will be used. Changing this creates a new AS policy.
+        :param pulumi.Input[str] scaling_group_id: Specifies the AS group ID. Changing this creates a new AS policy.
+        :param pulumi.Input[pulumi.InputType['PolicyScalingPolicyActionArgs']] scaling_policy_action: Specifies the action of the AS policy.
+               The object structure is documented below.
+        :param pulumi.Input[str] scaling_policy_name: Specifies the name of the AS policy. The name contains only letters, digits,
                underscores(_), and hyphens(-), and cannot exceed 64 characters.
-        :param pulumi.Input[str] scaling_policy_type: The AS policy type. The values can be `ALARM`, `SCHEDULED`,
-               and `RECURRENCE`.
-        :param pulumi.Input[pulumi.InputType['PolicyScheduledPolicyArgs']] scheduled_policy: The periodic or scheduled AS policy. This argument is mandatory
-               when `scaling_policy_type` is set to `SCHEDULED` or `RECURRENCE`. The scheduled_policy structure is documented below.
+        :param pulumi.Input[str] scaling_policy_type: Specifies the AS policy type. The value can be `ALARM`, `SCHEDULED` or `RECURRENCE`.
+               + **ALARM**: indicates that the scaling action is triggered by an alarm.
+               + **SCHEDULED**: indicates that the scaling action is triggered as scheduled.
+               + **RECURRENCE**: indicates that the scaling action is triggered periodically.
+        :param pulumi.Input[pulumi.InputType['PolicyScheduledPolicyArgs']] scheduled_policy: Specifies the periodic or scheduled AS policy.
+               This parameter is mandatory when `scaling_policy_type` is set to `SCHEDULED` or `RECURRENCE`.
+               The object structure is documented below.
         """
         ...
     @overload
@@ -431,7 +463,7 @@ class Policy(pulumi.CustomResource):
                  args: PolicyArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a AS Policy resource within HuaweiCloud.
+        Manages an AS policy resource within HuaweiCloud.
 
         ## Example Usage
         ### AS Recurrence Policy
@@ -440,20 +472,21 @@ class Policy(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        as_group_id = config.require_object("asGroupId")
         my_aspolicy = huaweicloud.as_.Policy("myAspolicy",
-            cool_down_time=900,
-            scaling_group_id="4579f2f5-cbe8-425a-8f32-53dcb9d9053a",
-            scaling_policy_action=huaweicloud.as_.PolicyScalingPolicyActionArgs(
-                instance_number=1,
-                operation="ADD",
-            ),
             scaling_policy_name="my_aspolicy",
             scaling_policy_type="RECURRENCE",
+            scaling_group_id=as_group_id,
+            scaling_policy_action=huaweicloud.as_.PolicyScalingPolicyActionArgs(
+                operation="ADD",
+                instance_number=1,
+            ),
             scheduled_policy=huaweicloud.as_.PolicyScheduledPolicyArgs(
-                end_time="2020-12-30T12:00Z",
                 launch_time="07:00",
                 recurrence_type="Daily",
-                start_time="2020-11-30T12:00Z",
+                start_time="2022-11-30T12:00Z",
+                end_time="2022-12-30T12:00Z",
             ))
         ```
         ### AS Scheduled Policy
@@ -462,27 +495,28 @@ class Policy(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        as_group_id = config.require_object("asGroupId")
         my_aspolicy1 = huaweicloud.as_.Policy("myAspolicy1",
-            cool_down_time=900,
-            scaling_group_id="4579f2f5-cbe8-425a-8f32-53dcb9d9053a",
-            scaling_policy_action=huaweicloud.as_.PolicyScalingPolicyActionArgs(
-                instance_number=1,
-                operation="REMOVE",
-            ),
             scaling_policy_name="my_aspolicy_1",
             scaling_policy_type="SCHEDULED",
+            scaling_group_id=as_group_id,
+            scaling_policy_action=huaweicloud.as_.PolicyScalingPolicyActionArgs(
+                operation="REMOVE",
+                instance_number=1,
+            ),
             scheduled_policy=huaweicloud.as_.PolicyScheduledPolicyArgs(
-                launch_time="2020-12-22T12:00Z",
+                launch_time="2022-12-22T12:00Z",
             ))
         ```
-
-        Please note that the `launch_time` of the `SCHEDULED` policy cannot be earlier than the current time.
         ### AS Alarm Policy
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        as_group_id = config.require_object("asGroupId")
         alarm_rule = huaweicloud.cse.Alarmrule("alarmRule",
             alarm_name="as_alarm_rule",
             metric=huaweicloud.cse.AlarmruleMetricArgs(
@@ -490,17 +524,17 @@ class Policy(pulumi.CustomResource):
                 metric_name="cpu_util",
                 dimensions=[huaweicloud.cse.AlarmruleMetricDimensionArgs(
                     name="AutoScalingGroup",
-                    value="4579f2f5-cbe8-425a-8f32-53dcb9d9053a",
+                    value=as_group_id,
                 )],
             ),
-            condition=huaweicloud.cse.AlarmruleConditionArgs(
+            conditions=[huaweicloud.cse.AlarmruleConditionArgs(
                 period=300,
                 filter="average",
                 comparison_operator=">=",
                 value=60,
                 unit="%",
                 count=1,
-            ),
+            )],
             alarm_actions=[huaweicloud.cse.AlarmruleAlarmActionArgs(
                 type="autoscaling",
                 notification_lists=[],
@@ -508,13 +542,21 @@ class Policy(pulumi.CustomResource):
         my_aspolicy2 = huaweicloud.as_.Policy("myAspolicy2",
             scaling_policy_name="my_aspolicy_2",
             scaling_policy_type="ALARM",
-            scaling_group_id="4579f2f5-cbe8-425a-8f32-53dcb9d9053a",
+            scaling_group_id=as_group_id,
             alarm_id=alarm_rule.id,
             cool_down_time=900,
             scaling_policy_action=huaweicloud.as_.PolicyScalingPolicyActionArgs(
                 operation="ADD",
                 instance_number=1,
             ))
+        ```
+
+        ## Import
+
+        AS policies can be imported by their `id`, e.g.
+
+        ```sh
+         $ pulumi import huaweicloud:As/policy:Policy test 9fcb65fe-fd79-4407-8fa0-07602044e1c3
         ```
 
         :param str resource_name: The name of the resource.
@@ -563,6 +605,7 @@ class Policy(pulumi.CustomResource):
                 raise TypeError("Missing required property 'scaling_policy_type'")
             __props__.__dict__["scaling_policy_type"] = scaling_policy_type
             __props__.__dict__["scheduled_policy"] = scheduled_policy
+            __props__.__dict__["status"] = None
         super(Policy, __self__).__init__(
             'huaweicloud:As/policy:Policy',
             resource_name,
@@ -580,7 +623,8 @@ class Policy(pulumi.CustomResource):
             scaling_policy_action: Optional[pulumi.Input[pulumi.InputType['PolicyScalingPolicyActionArgs']]] = None,
             scaling_policy_name: Optional[pulumi.Input[str]] = None,
             scaling_policy_type: Optional[pulumi.Input[str]] = None,
-            scheduled_policy: Optional[pulumi.Input[pulumi.InputType['PolicyScheduledPolicyArgs']]] = None) -> 'Policy':
+            scheduled_policy: Optional[pulumi.Input[pulumi.InputType['PolicyScheduledPolicyArgs']]] = None,
+            status: Optional[pulumi.Input[str]] = None) -> 'Policy':
         """
         Get an existing Policy resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -588,20 +632,23 @@ class Policy(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] alarm_id: The alarm rule ID. This argument is mandatory when `scaling_policy_type`
-               is set to `ALARM`. You can create an alarm rule with `Cse.Alarmrule`.
-        :param pulumi.Input[int] cool_down_time: The cooling duration (in seconds), and is 900 by default.
-        :param pulumi.Input[str] region: The region in which to create the AS policy. If omitted, the `region` argument
-               of the provider is used. Changing this creates a new AS policy.
-        :param pulumi.Input[str] scaling_group_id: The AS group ID. Changing this creates a new AS policy.
-        :param pulumi.Input[pulumi.InputType['PolicyScalingPolicyActionArgs']] scaling_policy_action: The action of the AS policy. The scaling_policy_action structure is
-               documented below.
-        :param pulumi.Input[str] scaling_policy_name: The name of the AS policy. The name can contain letters, digits,
+        :param pulumi.Input[int] cool_down_time: Specifies the cooling duration (in seconds).
+               The value ranges from 0 to 86400 and is 300 by default.
+        :param pulumi.Input[str] region: Specifies the region in which to create the AS policy. If omitted, the
+               provider-level region will be used. Changing this creates a new AS policy.
+        :param pulumi.Input[str] scaling_group_id: Specifies the AS group ID. Changing this creates a new AS policy.
+        :param pulumi.Input[pulumi.InputType['PolicyScalingPolicyActionArgs']] scaling_policy_action: Specifies the action of the AS policy.
+               The object structure is documented below.
+        :param pulumi.Input[str] scaling_policy_name: Specifies the name of the AS policy. The name contains only letters, digits,
                underscores(_), and hyphens(-), and cannot exceed 64 characters.
-        :param pulumi.Input[str] scaling_policy_type: The AS policy type. The values can be `ALARM`, `SCHEDULED`,
-               and `RECURRENCE`.
-        :param pulumi.Input[pulumi.InputType['PolicyScheduledPolicyArgs']] scheduled_policy: The periodic or scheduled AS policy. This argument is mandatory
-               when `scaling_policy_type` is set to `SCHEDULED` or `RECURRENCE`. The scheduled_policy structure is documented below.
+        :param pulumi.Input[str] scaling_policy_type: Specifies the AS policy type. The value can be `ALARM`, `SCHEDULED` or `RECURRENCE`.
+               + **ALARM**: indicates that the scaling action is triggered by an alarm.
+               + **SCHEDULED**: indicates that the scaling action is triggered as scheduled.
+               + **RECURRENCE**: indicates that the scaling action is triggered periodically.
+        :param pulumi.Input[pulumi.InputType['PolicyScheduledPolicyArgs']] scheduled_policy: Specifies the periodic or scheduled AS policy.
+               This parameter is mandatory when `scaling_policy_type` is set to `SCHEDULED` or `RECURRENCE`.
+               The object structure is documented below.
+        :param pulumi.Input[str] status: The AS policy status. The value can be *INSERVICE*, *PAUSED* or *EXECUTING*.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -615,22 +662,20 @@ class Policy(pulumi.CustomResource):
         __props__.__dict__["scaling_policy_name"] = scaling_policy_name
         __props__.__dict__["scaling_policy_type"] = scaling_policy_type
         __props__.__dict__["scheduled_policy"] = scheduled_policy
+        __props__.__dict__["status"] = status
         return Policy(resource_name, opts=opts, __props__=__props__)
 
     @property
     @pulumi.getter(name="alarmId")
     def alarm_id(self) -> pulumi.Output[Optional[str]]:
-        """
-        The alarm rule ID. This argument is mandatory when `scaling_policy_type`
-        is set to `ALARM`. You can create an alarm rule with `Cse.Alarmrule`.
-        """
         return pulumi.get(self, "alarm_id")
 
     @property
     @pulumi.getter(name="coolDownTime")
-    def cool_down_time(self) -> pulumi.Output[Optional[int]]:
+    def cool_down_time(self) -> pulumi.Output[int]:
         """
-        The cooling duration (in seconds), and is 900 by default.
+        Specifies the cooling duration (in seconds).
+        The value ranges from 0 to 86400 and is 300 by default.
         """
         return pulumi.get(self, "cool_down_time")
 
@@ -638,8 +683,8 @@ class Policy(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        The region in which to create the AS policy. If omitted, the `region` argument
-        of the provider is used. Changing this creates a new AS policy.
+        Specifies the region in which to create the AS policy. If omitted, the
+        provider-level region will be used. Changing this creates a new AS policy.
         """
         return pulumi.get(self, "region")
 
@@ -647,7 +692,7 @@ class Policy(pulumi.CustomResource):
     @pulumi.getter(name="scalingGroupId")
     def scaling_group_id(self) -> pulumi.Output[str]:
         """
-        The AS group ID. Changing this creates a new AS policy.
+        Specifies the AS group ID. Changing this creates a new AS policy.
         """
         return pulumi.get(self, "scaling_group_id")
 
@@ -655,8 +700,8 @@ class Policy(pulumi.CustomResource):
     @pulumi.getter(name="scalingPolicyAction")
     def scaling_policy_action(self) -> pulumi.Output['outputs.PolicyScalingPolicyAction']:
         """
-        The action of the AS policy. The scaling_policy_action structure is
-        documented below.
+        Specifies the action of the AS policy.
+        The object structure is documented below.
         """
         return pulumi.get(self, "scaling_policy_action")
 
@@ -664,7 +709,7 @@ class Policy(pulumi.CustomResource):
     @pulumi.getter(name="scalingPolicyName")
     def scaling_policy_name(self) -> pulumi.Output[str]:
         """
-        The name of the AS policy. The name can contain letters, digits,
+        Specifies the name of the AS policy. The name contains only letters, digits,
         underscores(_), and hyphens(-), and cannot exceed 64 characters.
         """
         return pulumi.get(self, "scaling_policy_name")
@@ -673,8 +718,10 @@ class Policy(pulumi.CustomResource):
     @pulumi.getter(name="scalingPolicyType")
     def scaling_policy_type(self) -> pulumi.Output[str]:
         """
-        The AS policy type. The values can be `ALARM`, `SCHEDULED`,
-        and `RECURRENCE`.
+        Specifies the AS policy type. The value can be `ALARM`, `SCHEDULED` or `RECURRENCE`.
+        + **ALARM**: indicates that the scaling action is triggered by an alarm.
+        + **SCHEDULED**: indicates that the scaling action is triggered as scheduled.
+        + **RECURRENCE**: indicates that the scaling action is triggered periodically.
         """
         return pulumi.get(self, "scaling_policy_type")
 
@@ -682,8 +729,17 @@ class Policy(pulumi.CustomResource):
     @pulumi.getter(name="scheduledPolicy")
     def scheduled_policy(self) -> pulumi.Output['outputs.PolicyScheduledPolicy']:
         """
-        The periodic or scheduled AS policy. This argument is mandatory
-        when `scaling_policy_type` is set to `SCHEDULED` or `RECURRENCE`. The scheduled_policy structure is documented below.
+        Specifies the periodic or scheduled AS policy.
+        This parameter is mandatory when `scaling_policy_type` is set to `SCHEDULED` or `RECURRENCE`.
+        The object structure is documented below.
         """
         return pulumi.get(self, "scheduled_policy")
+
+    @property
+    @pulumi.getter
+    def status(self) -> pulumi.Output[str]:
+        """
+        The AS policy status. The value can be *INSERVICE*, *PAUSED* or *EXECUTING*.
+        """
+        return pulumi.get(self, "status")
 

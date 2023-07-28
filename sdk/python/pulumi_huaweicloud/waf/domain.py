@@ -20,19 +20,25 @@ class DomainArgs:
                  servers: pulumi.Input[Sequence[pulumi.Input['DomainServerArgs']]],
                  certificate_id: Optional[pulumi.Input[str]] = None,
                  certificate_name: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  keep_policy: Optional[pulumi.Input[bool]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  proxy: Optional[pulumi.Input[bool]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Domain resource.
-        :param pulumi.Input[str] domain: Specifies the domain name to be protected. For example, www.example.com or
-               *.example.com. Changing this creates a new domain.
+        :param pulumi.Input[str] domain: Specifies the domain name to be protected. For example, `www.example.com` or
+               `*.example.com`. Changing this creates a new domain.
         :param pulumi.Input[Sequence[pulumi.Input['DomainServerArgs']]] servers: Specifies an array of origin web servers. The object structure is documented below.
         :param pulumi.Input[str] certificate_id: Specifies the certificate ID. This parameter is mandatory when `client_protocol`
                is set to HTTPS.
         :param pulumi.Input[str] certificate_name: Specifies the certificate name. This parameter is mandatory
                when `client_protocol` is set to HTTPS.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the domain. Valid values are *prePaid*
+               and *postPaid*, defaults to *prePaid*. Changing this creates a new instance.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF domain.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[bool] keep_policy: Specifies whether to retain the policy when deleting a domain name.
                Defaults to true.
         :param pulumi.Input[str] policy_id: Specifies the policy ID associated with the domain. If not specified, a new
@@ -47,6 +53,10 @@ class DomainArgs:
             pulumi.set(__self__, "certificate_id", certificate_id)
         if certificate_name is not None:
             pulumi.set(__self__, "certificate_name", certificate_name)
+        if charging_mode is not None:
+            pulumi.set(__self__, "charging_mode", charging_mode)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if keep_policy is not None:
             pulumi.set(__self__, "keep_policy", keep_policy)
         if policy_id is not None:
@@ -60,8 +70,8 @@ class DomainArgs:
     @pulumi.getter
     def domain(self) -> pulumi.Input[str]:
         """
-        Specifies the domain name to be protected. For example, www.example.com or
-        *.example.com. Changing this creates a new domain.
+        Specifies the domain name to be protected. For example, `www.example.com` or
+        `*.example.com`. Changing this creates a new domain.
         """
         return pulumi.get(self, "domain")
 
@@ -106,6 +116,32 @@ class DomainArgs:
     @certificate_name.setter
     def certificate_name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "certificate_name", value)
+
+    @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging mode of the domain. Valid values are *prePaid*
+        and *postPaid*, defaults to *prePaid*. Changing this creates a new instance.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @charging_mode.setter
+    def charging_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "charging_mode", value)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID of WAF domain.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
 
     @property
     @pulumi.getter(name="keepPolicy")
@@ -165,7 +201,9 @@ class _DomainState:
                  access_status: Optional[pulumi.Input[int]] = None,
                  certificate_id: Optional[pulumi.Input[str]] = None,
                  certificate_name: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  domain: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  keep_policy: Optional[pulumi.Input[bool]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  protect_status: Optional[pulumi.Input[int]] = None,
@@ -181,8 +219,12 @@ class _DomainState:
                is set to HTTPS.
         :param pulumi.Input[str] certificate_name: Specifies the certificate name. This parameter is mandatory
                when `client_protocol` is set to HTTPS.
-        :param pulumi.Input[str] domain: Specifies the domain name to be protected. For example, www.example.com or
-               *.example.com. Changing this creates a new domain.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the domain. Valid values are *prePaid*
+               and *postPaid*, defaults to *prePaid*. Changing this creates a new instance.
+        :param pulumi.Input[str] domain: Specifies the domain name to be protected. For example, `www.example.com` or
+               `*.example.com`. Changing this creates a new domain.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF domain.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[bool] keep_policy: Specifies whether to retain the policy when deleting a domain name.
                Defaults to true.
         :param pulumi.Input[str] policy_id: Specifies the policy ID associated with the domain. If not specified, a new
@@ -200,8 +242,12 @@ class _DomainState:
             pulumi.set(__self__, "certificate_id", certificate_id)
         if certificate_name is not None:
             pulumi.set(__self__, "certificate_name", certificate_name)
+        if charging_mode is not None:
+            pulumi.set(__self__, "charging_mode", charging_mode)
         if domain is not None:
             pulumi.set(__self__, "domain", domain)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if keep_policy is not None:
             pulumi.set(__self__, "keep_policy", keep_policy)
         if policy_id is not None:
@@ -257,17 +303,43 @@ class _DomainState:
         pulumi.set(self, "certificate_name", value)
 
     @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging mode of the domain. Valid values are *prePaid*
+        and *postPaid*, defaults to *prePaid*. Changing this creates a new instance.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @charging_mode.setter
+    def charging_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "charging_mode", value)
+
+    @property
     @pulumi.getter
     def domain(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the domain name to be protected. For example, www.example.com or
-        *.example.com. Changing this creates a new domain.
+        Specifies the domain name to be protected. For example, `www.example.com` or
+        `*.example.com`. Changing this creates a new domain.
         """
         return pulumi.get(self, "domain")
 
     @domain.setter
     def domain(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "domain", value)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID of WAF domain.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
 
     @property
     @pulumi.getter(name="keepPolicy")
@@ -364,7 +436,9 @@ class Domain(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  certificate_id: Optional[pulumi.Input[str]] = None,
                  certificate_name: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  domain: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  keep_policy: Optional[pulumi.Input[bool]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  proxy: Optional[pulumi.Input[bool]] = None,
@@ -383,7 +457,10 @@ class Domain(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        enterprise_project_id = config.require_object("enterpriseProjectId")
         certificate1 = huaweicloud.waf.Certificate("certificate1",
+            enterprise_project_id=enterprise_project_id,
             certificate=\"\"\"-----BEGIN CERTIFICATE-----
         MIIFmQl5dh2QUAeo39TIKtadgAgh4zHx09kSgayS9Wph9LEqq7MA+2042L3J9aOa
         DAYDVR0TAQH/BAIwADAdBgNVHQ4EFgQUR+SosWwALt6PkP0J9iOIxA6RW8gVsLwq
@@ -404,6 +481,7 @@ class Domain(pulumi.CustomResource):
             certificate_id=certificate1.id,
             certificate_name=certificate1.name,
             proxy=True,
+            enterprise_project_id=enterprise_project_id,
             servers=[huaweicloud.waf.DomainServerArgs(
                 client_protocol="HTTPS",
                 server_protocol="HTTP",
@@ -414,10 +492,16 @@ class Domain(pulumi.CustomResource):
 
         ## Import
 
-        Domains can be imported using the `id`, e.g.
+        There are two ways to import WAF domain state. * Using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Waf/domain:Domain domain_2 7902bd9e01104cb794dcb668f235e0c5
+         $ pulumi import huaweicloud:Waf/domain:Domain test <id>
+        ```
+
+         * Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Waf/domain:Domain test <id>/<enterprise_project_id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -426,8 +510,12 @@ class Domain(pulumi.CustomResource):
                is set to HTTPS.
         :param pulumi.Input[str] certificate_name: Specifies the certificate name. This parameter is mandatory
                when `client_protocol` is set to HTTPS.
-        :param pulumi.Input[str] domain: Specifies the domain name to be protected. For example, www.example.com or
-               *.example.com. Changing this creates a new domain.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the domain. Valid values are *prePaid*
+               and *postPaid*, defaults to *prePaid*. Changing this creates a new instance.
+        :param pulumi.Input[str] domain: Specifies the domain name to be protected. For example, `www.example.com` or
+               `*.example.com`. Changing this creates a new domain.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF domain.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[bool] keep_policy: Specifies whether to retain the policy when deleting a domain name.
                Defaults to true.
         :param pulumi.Input[str] policy_id: Specifies the policy ID associated with the domain. If not specified, a new
@@ -455,7 +543,10 @@ class Domain(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        enterprise_project_id = config.require_object("enterpriseProjectId")
         certificate1 = huaweicloud.waf.Certificate("certificate1",
+            enterprise_project_id=enterprise_project_id,
             certificate=\"\"\"-----BEGIN CERTIFICATE-----
         MIIFmQl5dh2QUAeo39TIKtadgAgh4zHx09kSgayS9Wph9LEqq7MA+2042L3J9aOa
         DAYDVR0TAQH/BAIwADAdBgNVHQ4EFgQUR+SosWwALt6PkP0J9iOIxA6RW8gVsLwq
@@ -476,6 +567,7 @@ class Domain(pulumi.CustomResource):
             certificate_id=certificate1.id,
             certificate_name=certificate1.name,
             proxy=True,
+            enterprise_project_id=enterprise_project_id,
             servers=[huaweicloud.waf.DomainServerArgs(
                 client_protocol="HTTPS",
                 server_protocol="HTTP",
@@ -486,10 +578,16 @@ class Domain(pulumi.CustomResource):
 
         ## Import
 
-        Domains can be imported using the `id`, e.g.
+        There are two ways to import WAF domain state. * Using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Waf/domain:Domain domain_2 7902bd9e01104cb794dcb668f235e0c5
+         $ pulumi import huaweicloud:Waf/domain:Domain test <id>
+        ```
+
+         * Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Waf/domain:Domain test <id>/<enterprise_project_id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -509,7 +607,9 @@ class Domain(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  certificate_id: Optional[pulumi.Input[str]] = None,
                  certificate_name: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  domain: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  keep_policy: Optional[pulumi.Input[bool]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  proxy: Optional[pulumi.Input[bool]] = None,
@@ -526,9 +626,11 @@ class Domain(pulumi.CustomResource):
 
             __props__.__dict__["certificate_id"] = certificate_id
             __props__.__dict__["certificate_name"] = certificate_name
+            __props__.__dict__["charging_mode"] = charging_mode
             if domain is None and not opts.urn:
                 raise TypeError("Missing required property 'domain'")
             __props__.__dict__["domain"] = domain
+            __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["keep_policy"] = keep_policy
             __props__.__dict__["policy_id"] = policy_id
             __props__.__dict__["proxy"] = proxy
@@ -552,7 +654,9 @@ class Domain(pulumi.CustomResource):
             access_status: Optional[pulumi.Input[int]] = None,
             certificate_id: Optional[pulumi.Input[str]] = None,
             certificate_name: Optional[pulumi.Input[str]] = None,
+            charging_mode: Optional[pulumi.Input[str]] = None,
             domain: Optional[pulumi.Input[str]] = None,
+            enterprise_project_id: Optional[pulumi.Input[str]] = None,
             keep_policy: Optional[pulumi.Input[bool]] = None,
             policy_id: Optional[pulumi.Input[str]] = None,
             protect_status: Optional[pulumi.Input[int]] = None,
@@ -573,8 +677,12 @@ class Domain(pulumi.CustomResource):
                is set to HTTPS.
         :param pulumi.Input[str] certificate_name: Specifies the certificate name. This parameter is mandatory
                when `client_protocol` is set to HTTPS.
-        :param pulumi.Input[str] domain: Specifies the domain name to be protected. For example, www.example.com or
-               *.example.com. Changing this creates a new domain.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the domain. Valid values are *prePaid*
+               and *postPaid*, defaults to *prePaid*. Changing this creates a new instance.
+        :param pulumi.Input[str] domain: Specifies the domain name to be protected. For example, `www.example.com` or
+               `*.example.com`. Changing this creates a new domain.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF domain.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[bool] keep_policy: Specifies whether to retain the policy when deleting a domain name.
                Defaults to true.
         :param pulumi.Input[str] policy_id: Specifies the policy ID associated with the domain. If not specified, a new
@@ -593,7 +701,9 @@ class Domain(pulumi.CustomResource):
         __props__.__dict__["access_status"] = access_status
         __props__.__dict__["certificate_id"] = certificate_id
         __props__.__dict__["certificate_name"] = certificate_name
+        __props__.__dict__["charging_mode"] = charging_mode
         __props__.__dict__["domain"] = domain
+        __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["keep_policy"] = keep_policy
         __props__.__dict__["policy_id"] = policy_id
         __props__.__dict__["protect_status"] = protect_status
@@ -631,13 +741,31 @@ class Domain(pulumi.CustomResource):
         return pulumi.get(self, "certificate_name")
 
     @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the charging mode of the domain. Valid values are *prePaid*
+        and *postPaid*, defaults to *prePaid*. Changing this creates a new instance.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @property
     @pulumi.getter
     def domain(self) -> pulumi.Output[str]:
         """
-        Specifies the domain name to be protected. For example, www.example.com or
-        *.example.com. Changing this creates a new domain.
+        Specifies the domain name to be protected. For example, `www.example.com` or
+        `*.example.com`. Changing this creates a new domain.
         """
         return pulumi.get(self, "domain")
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the enterprise project ID of WAF domain.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
 
     @property
     @pulumi.getter(name="keepPolicy")

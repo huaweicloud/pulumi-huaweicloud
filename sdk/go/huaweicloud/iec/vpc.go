@@ -74,8 +74,9 @@ type Vpc struct {
 	Name pulumi.StringOutput `pulumi:"name"`
 	// The region in which to create the IEC VPC. If omitted, the provider-level
 	// region will be used. Changing this creates a new resource.
-	Region    pulumi.StringPtrOutput `pulumi:"region"`
-	SubnetNum pulumi.IntOutput       `pulumi:"subnetNum"`
+	Region pulumi.StringPtrOutput `pulumi:"region"`
+	// Indicates the number of subnets.
+	SubnetNum pulumi.IntOutput `pulumi:"subnetNum"`
 }
 
 // NewVpc registers a new resource with the given unique name, arguments, and options.
@@ -123,8 +124,9 @@ type vpcState struct {
 	Name *string `pulumi:"name"`
 	// The region in which to create the IEC VPC. If omitted, the provider-level
 	// region will be used. Changing this creates a new resource.
-	Region    *string `pulumi:"region"`
-	SubnetNum *int    `pulumi:"subnetNum"`
+	Region *string `pulumi:"region"`
+	// Indicates the number of subnets.
+	SubnetNum *int `pulumi:"subnetNum"`
 }
 
 type VpcState struct {
@@ -140,7 +142,8 @@ type VpcState struct {
 	Name pulumi.StringPtrInput
 	// The region in which to create the IEC VPC. If omitted, the provider-level
 	// region will be used. Changing this creates a new resource.
-	Region    pulumi.StringPtrInput
+	Region pulumi.StringPtrInput
+	// Indicates the number of subnets.
 	SubnetNum pulumi.IntPtrInput
 }
 
@@ -293,6 +296,7 @@ func (o VpcOutput) Region() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Vpc) pulumi.StringPtrOutput { return v.Region }).(pulumi.StringPtrOutput)
 }
 
+// Indicates the number of subnets.
 func (o VpcOutput) SubnetNum() pulumi.IntOutput {
 	return o.ApplyT(func(v *Vpc) pulumi.IntOutput { return v.SubnetNum }).(pulumi.IntOutput)
 }

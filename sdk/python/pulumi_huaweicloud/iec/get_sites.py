@@ -22,7 +22,7 @@ class GetSitesResult:
     """
     A collection of values returned by getSites.
     """
-    def __init__(__self__, area=None, city=None, id=None, province=None, region=None, sites=None):
+    def __init__(__self__, area=None, city=None, id=None, province=None, sites=None):
         if area and not isinstance(area, str):
             raise TypeError("Expected argument 'area' to be a str")
         pulumi.set(__self__, "area", area)
@@ -35,9 +35,6 @@ class GetSitesResult:
         if province and not isinstance(province, str):
             raise TypeError("Expected argument 'province' to be a str")
         pulumi.set(__self__, "province", province)
-        if region and not isinstance(region, str):
-            raise TypeError("Expected argument 'region' to be a str")
-        pulumi.set(__self__, "region", region)
         if sites and not isinstance(sites, list):
             raise TypeError("Expected argument 'sites' to be a list")
         pulumi.set(__self__, "sites", sites)
@@ -76,11 +73,6 @@ class GetSitesResult:
 
     @property
     @pulumi.getter
-    def region(self) -> str:
-        return pulumi.get(self, "region")
-
-    @property
-    @pulumi.getter
     def sites(self) -> Sequence['outputs.GetSitesSiteResult']:
         """
         An array of one or more IEC service sites. The sites object structure is documented below.
@@ -98,14 +90,12 @@ class AwaitableGetSitesResult(GetSitesResult):
             city=self.city,
             id=self.id,
             province=self.province,
-            region=self.region,
             sites=self.sites)
 
 
 def get_sites(area: Optional[str] = None,
               city: Optional[str] = None,
               province: Optional[str] = None,
-              region: Optional[str] = None,
               opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetSitesResult:
     """
     Use this data source to get the available of HuaweiCloud IEC sites.
@@ -129,7 +119,6 @@ def get_sites(area: Optional[str] = None,
     __args__['area'] = area
     __args__['city'] = city
     __args__['province'] = province
-    __args__['region'] = region
     opts = pulumi.InvokeOptions.merge(_utilities.get_invoke_opts_defaults(), opts)
     __ret__ = pulumi.runtime.invoke('huaweicloud:Iec/getSites:getSites', __args__, opts=opts, typ=GetSitesResult).value
 
@@ -138,7 +127,6 @@ def get_sites(area: Optional[str] = None,
         city=__ret__.city,
         id=__ret__.id,
         province=__ret__.province,
-        region=__ret__.region,
         sites=__ret__.sites)
 
 
@@ -146,7 +134,6 @@ def get_sites(area: Optional[str] = None,
 def get_sites_output(area: Optional[pulumi.Input[Optional[str]]] = None,
                      city: Optional[pulumi.Input[Optional[str]]] = None,
                      province: Optional[pulumi.Input[Optional[str]]] = None,
-                     region: Optional[pulumi.Input[Optional[str]]] = None,
                      opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetSitesResult]:
     """
     Use this data source to get the available of HuaweiCloud IEC sites.

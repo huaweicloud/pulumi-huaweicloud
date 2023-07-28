@@ -273,10 +273,8 @@ type ClusterClientNodeConfig struct {
 	// to 10240 GB. Changing this parameter will create a new resource.
 	Flavor string `pulumi:"flavor"`
 	// Specifies the number of cluster instances.
-	// + When it is `essNodeConfig`, The value range is 1 to 200.
 	// + When it is `masterNodeConfig`, The value range is 3 to 10.
 	// + When it is `clientNodeConfig`, The value range is 1 to 32.
-	// + When it is `coldNodeConfig`, The value range is 1 to 32.
 	InstanceNumber int `pulumi:"instanceNumber"`
 	// Specifies the information about the volume.
 	// The volume structure is documented below.
@@ -301,10 +299,8 @@ type ClusterClientNodeConfigArgs struct {
 	// to 10240 GB. Changing this parameter will create a new resource.
 	Flavor pulumi.StringInput `pulumi:"flavor"`
 	// Specifies the number of cluster instances.
-	// + When it is `essNodeConfig`, The value range is 1 to 200.
 	// + When it is `masterNodeConfig`, The value range is 3 to 10.
 	// + When it is `clientNodeConfig`, The value range is 1 to 32.
-	// + When it is `coldNodeConfig`, The value range is 1 to 32.
 	InstanceNumber pulumi.IntInput `pulumi:"instanceNumber"`
 	// Specifies the information about the volume.
 	// The volume structure is documented below.
@@ -397,10 +393,8 @@ func (o ClusterClientNodeConfigOutput) Flavor() pulumi.StringOutput {
 }
 
 // Specifies the number of cluster instances.
-// + When it is `essNodeConfig`, The value range is 1 to 200.
 // + When it is `masterNodeConfig`, The value range is 3 to 10.
 // + When it is `clientNodeConfig`, The value range is 1 to 32.
-// + When it is `coldNodeConfig`, The value range is 1 to 32.
 func (o ClusterClientNodeConfigOutput) InstanceNumber() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterClientNodeConfig) int { return v.InstanceNumber }).(pulumi.IntOutput)
 }
@@ -449,10 +443,8 @@ func (o ClusterClientNodeConfigPtrOutput) Flavor() pulumi.StringPtrOutput {
 }
 
 // Specifies the number of cluster instances.
-// + When it is `essNodeConfig`, The value range is 1 to 200.
 // + When it is `masterNodeConfig`, The value range is 3 to 10.
 // + When it is `clientNodeConfig`, The value range is 1 to 32.
-// + When it is `coldNodeConfig`, The value range is 1 to 32.
 func (o ClusterClientNodeConfigPtrOutput) InstanceNumber() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterClientNodeConfig) *int {
 		if v == nil {
@@ -475,10 +467,12 @@ func (o ClusterClientNodeConfigPtrOutput) Volume() ClusterClientNodeConfigVolume
 
 type ClusterClientNodeConfigVolume struct {
 	// Specifies the volume size in GB, which must be a multiple of 10.
+	// Changing this parameter will create a new resource.
 	Size int `pulumi:"size"`
-	// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-	// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-	// parameter will create a new resource.
+	// Specifies the volume type. Value options are as follows:
+	// + **COMMON**: Common I/O. The SATA disk is used.
+	// + **HIGH**: High I/O. The SAS disk is used.
+	// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 	VolumeType string `pulumi:"volumeType"`
 }
 
@@ -495,10 +489,12 @@ type ClusterClientNodeConfigVolumeInput interface {
 
 type ClusterClientNodeConfigVolumeArgs struct {
 	// Specifies the volume size in GB, which must be a multiple of 10.
+	// Changing this parameter will create a new resource.
 	Size pulumi.IntInput `pulumi:"size"`
-	// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-	// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-	// parameter will create a new resource.
+	// Specifies the volume type. Value options are as follows:
+	// + **COMMON**: Common I/O. The SATA disk is used.
+	// + **HIGH**: High I/O. The SAS disk is used.
+	// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 	VolumeType pulumi.StringInput `pulumi:"volumeType"`
 }
 
@@ -580,13 +576,15 @@ func (o ClusterClientNodeConfigVolumeOutput) ToClusterClientNodeConfigVolumePtrO
 }
 
 // Specifies the volume size in GB, which must be a multiple of 10.
+// Changing this parameter will create a new resource.
 func (o ClusterClientNodeConfigVolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterClientNodeConfigVolume) int { return v.Size }).(pulumi.IntOutput)
 }
 
-// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-// parameter will create a new resource.
+// Specifies the volume type. Value options are as follows:
+// + **COMMON**: Common I/O. The SATA disk is used.
+// + **HIGH**: High I/O. The SAS disk is used.
+// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 func (o ClusterClientNodeConfigVolumeOutput) VolumeType() pulumi.StringOutput {
 	return o.ApplyT(func(v ClusterClientNodeConfigVolume) string { return v.VolumeType }).(pulumi.StringOutput)
 }
@@ -616,6 +614,7 @@ func (o ClusterClientNodeConfigVolumePtrOutput) Elem() ClusterClientNodeConfigVo
 }
 
 // Specifies the volume size in GB, which must be a multiple of 10.
+// Changing this parameter will create a new resource.
 func (o ClusterClientNodeConfigVolumePtrOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterClientNodeConfigVolume) *int {
 		if v == nil {
@@ -625,9 +624,10 @@ func (o ClusterClientNodeConfigVolumePtrOutput) Size() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-// parameter will create a new resource.
+// Specifies the volume type. Value options are as follows:
+// + **COMMON**: Common I/O. The SATA disk is used.
+// + **HIGH**: High I/O. The SAS disk is used.
+// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 func (o ClusterClientNodeConfigVolumePtrOutput) VolumeType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterClientNodeConfigVolume) *string {
 		if v == nil {
@@ -644,14 +644,12 @@ type ClusterColdNodeConfig struct {
 	// to 10240 GB. Changing this parameter will create a new resource.
 	Flavor string `pulumi:"flavor"`
 	// Specifies the number of cluster instances.
-	// + When it is `essNodeConfig`, The value range is 1 to 200.
 	// + When it is `masterNodeConfig`, The value range is 3 to 10.
 	// + When it is `clientNodeConfig`, The value range is 1 to 32.
-	// + When it is `coldNodeConfig`, The value range is 1 to 32.
 	InstanceNumber int `pulumi:"instanceNumber"`
 	// Specifies the information about the volume.
 	// The volume structure is documented below.
-	Volume ClusterColdNodeConfigVolume `pulumi:"volume"`
+	Volume *ClusterColdNodeConfigVolume `pulumi:"volume"`
 }
 
 // ClusterColdNodeConfigInput is an input type that accepts ClusterColdNodeConfigArgs and ClusterColdNodeConfigOutput values.
@@ -672,14 +670,12 @@ type ClusterColdNodeConfigArgs struct {
 	// to 10240 GB. Changing this parameter will create a new resource.
 	Flavor pulumi.StringInput `pulumi:"flavor"`
 	// Specifies the number of cluster instances.
-	// + When it is `essNodeConfig`, The value range is 1 to 200.
 	// + When it is `masterNodeConfig`, The value range is 3 to 10.
 	// + When it is `clientNodeConfig`, The value range is 1 to 32.
-	// + When it is `coldNodeConfig`, The value range is 1 to 32.
 	InstanceNumber pulumi.IntInput `pulumi:"instanceNumber"`
 	// Specifies the information about the volume.
 	// The volume structure is documented below.
-	Volume ClusterColdNodeConfigVolumeInput `pulumi:"volume"`
+	Volume ClusterColdNodeConfigVolumePtrInput `pulumi:"volume"`
 }
 
 func (ClusterColdNodeConfigArgs) ElementType() reflect.Type {
@@ -768,18 +764,16 @@ func (o ClusterColdNodeConfigOutput) Flavor() pulumi.StringOutput {
 }
 
 // Specifies the number of cluster instances.
-// + When it is `essNodeConfig`, The value range is 1 to 200.
 // + When it is `masterNodeConfig`, The value range is 3 to 10.
 // + When it is `clientNodeConfig`, The value range is 1 to 32.
-// + When it is `coldNodeConfig`, The value range is 1 to 32.
 func (o ClusterColdNodeConfigOutput) InstanceNumber() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterColdNodeConfig) int { return v.InstanceNumber }).(pulumi.IntOutput)
 }
 
 // Specifies the information about the volume.
 // The volume structure is documented below.
-func (o ClusterColdNodeConfigOutput) Volume() ClusterColdNodeConfigVolumeOutput {
-	return o.ApplyT(func(v ClusterColdNodeConfig) ClusterColdNodeConfigVolume { return v.Volume }).(ClusterColdNodeConfigVolumeOutput)
+func (o ClusterColdNodeConfigOutput) Volume() ClusterColdNodeConfigVolumePtrOutput {
+	return o.ApplyT(func(v ClusterColdNodeConfig) *ClusterColdNodeConfigVolume { return v.Volume }).(ClusterColdNodeConfigVolumePtrOutput)
 }
 
 type ClusterColdNodeConfigPtrOutput struct{ *pulumi.OutputState }
@@ -820,10 +814,8 @@ func (o ClusterColdNodeConfigPtrOutput) Flavor() pulumi.StringPtrOutput {
 }
 
 // Specifies the number of cluster instances.
-// + When it is `essNodeConfig`, The value range is 1 to 200.
 // + When it is `masterNodeConfig`, The value range is 3 to 10.
 // + When it is `clientNodeConfig`, The value range is 1 to 32.
-// + When it is `coldNodeConfig`, The value range is 1 to 32.
 func (o ClusterColdNodeConfigPtrOutput) InstanceNumber() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterColdNodeConfig) *int {
 		if v == nil {
@@ -840,16 +832,18 @@ func (o ClusterColdNodeConfigPtrOutput) Volume() ClusterColdNodeConfigVolumePtrO
 		if v == nil {
 			return nil
 		}
-		return &v.Volume
+		return v.Volume
 	}).(ClusterColdNodeConfigVolumePtrOutput)
 }
 
 type ClusterColdNodeConfigVolume struct {
 	// Specifies the volume size in GB, which must be a multiple of 10.
+	// Changing this parameter will create a new resource.
 	Size int `pulumi:"size"`
-	// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-	// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-	// parameter will create a new resource.
+	// Specifies the volume type. Value options are as follows:
+	// + **COMMON**: Common I/O. The SATA disk is used.
+	// + **HIGH**: High I/O. The SAS disk is used.
+	// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 	VolumeType string `pulumi:"volumeType"`
 }
 
@@ -866,10 +860,12 @@ type ClusterColdNodeConfigVolumeInput interface {
 
 type ClusterColdNodeConfigVolumeArgs struct {
 	// Specifies the volume size in GB, which must be a multiple of 10.
+	// Changing this parameter will create a new resource.
 	Size pulumi.IntInput `pulumi:"size"`
-	// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-	// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-	// parameter will create a new resource.
+	// Specifies the volume type. Value options are as follows:
+	// + **COMMON**: Common I/O. The SATA disk is used.
+	// + **HIGH**: High I/O. The SAS disk is used.
+	// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 	VolumeType pulumi.StringInput `pulumi:"volumeType"`
 }
 
@@ -951,13 +947,15 @@ func (o ClusterColdNodeConfigVolumeOutput) ToClusterColdNodeConfigVolumePtrOutpu
 }
 
 // Specifies the volume size in GB, which must be a multiple of 10.
+// Changing this parameter will create a new resource.
 func (o ClusterColdNodeConfigVolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterColdNodeConfigVolume) int { return v.Size }).(pulumi.IntOutput)
 }
 
-// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-// parameter will create a new resource.
+// Specifies the volume type. Value options are as follows:
+// + **COMMON**: Common I/O. The SATA disk is used.
+// + **HIGH**: High I/O. The SAS disk is used.
+// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 func (o ClusterColdNodeConfigVolumeOutput) VolumeType() pulumi.StringOutput {
 	return o.ApplyT(func(v ClusterColdNodeConfigVolume) string { return v.VolumeType }).(pulumi.StringOutput)
 }
@@ -987,6 +985,7 @@ func (o ClusterColdNodeConfigVolumePtrOutput) Elem() ClusterColdNodeConfigVolume
 }
 
 // Specifies the volume size in GB, which must be a multiple of 10.
+// Changing this parameter will create a new resource.
 func (o ClusterColdNodeConfigVolumePtrOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterColdNodeConfigVolume) *int {
 		if v == nil {
@@ -996,9 +995,10 @@ func (o ClusterColdNodeConfigVolumePtrOutput) Size() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-// parameter will create a new resource.
+// Specifies the volume type. Value options are as follows:
+// + **COMMON**: Common I/O. The SATA disk is used.
+// + **HIGH**: High I/O. The SAS disk is used.
+// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 func (o ClusterColdNodeConfigVolumePtrOutput) VolumeType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterColdNodeConfigVolume) *string {
 		if v == nil {
@@ -1015,14 +1015,12 @@ type ClusterEssNodeConfig struct {
 	// to 10240 GB. Changing this parameter will create a new resource.
 	Flavor string `pulumi:"flavor"`
 	// Specifies the number of cluster instances.
-	// + When it is `essNodeConfig`, The value range is 1 to 200.
 	// + When it is `masterNodeConfig`, The value range is 3 to 10.
 	// + When it is `clientNodeConfig`, The value range is 1 to 32.
-	// + When it is `coldNodeConfig`, The value range is 1 to 32.
 	InstanceNumber int `pulumi:"instanceNumber"`
 	// Specifies the information about the volume.
 	// The volume structure is documented below.
-	Volume ClusterEssNodeConfigVolume `pulumi:"volume"`
+	Volume *ClusterEssNodeConfigVolume `pulumi:"volume"`
 }
 
 // ClusterEssNodeConfigInput is an input type that accepts ClusterEssNodeConfigArgs and ClusterEssNodeConfigOutput values.
@@ -1043,14 +1041,12 @@ type ClusterEssNodeConfigArgs struct {
 	// to 10240 GB. Changing this parameter will create a new resource.
 	Flavor pulumi.StringInput `pulumi:"flavor"`
 	// Specifies the number of cluster instances.
-	// + When it is `essNodeConfig`, The value range is 1 to 200.
 	// + When it is `masterNodeConfig`, The value range is 3 to 10.
 	// + When it is `clientNodeConfig`, The value range is 1 to 32.
-	// + When it is `coldNodeConfig`, The value range is 1 to 32.
 	InstanceNumber pulumi.IntInput `pulumi:"instanceNumber"`
 	// Specifies the information about the volume.
 	// The volume structure is documented below.
-	Volume ClusterEssNodeConfigVolumeInput `pulumi:"volume"`
+	Volume ClusterEssNodeConfigVolumePtrInput `pulumi:"volume"`
 }
 
 func (ClusterEssNodeConfigArgs) ElementType() reflect.Type {
@@ -1139,18 +1135,16 @@ func (o ClusterEssNodeConfigOutput) Flavor() pulumi.StringOutput {
 }
 
 // Specifies the number of cluster instances.
-// + When it is `essNodeConfig`, The value range is 1 to 200.
 // + When it is `masterNodeConfig`, The value range is 3 to 10.
 // + When it is `clientNodeConfig`, The value range is 1 to 32.
-// + When it is `coldNodeConfig`, The value range is 1 to 32.
 func (o ClusterEssNodeConfigOutput) InstanceNumber() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterEssNodeConfig) int { return v.InstanceNumber }).(pulumi.IntOutput)
 }
 
 // Specifies the information about the volume.
 // The volume structure is documented below.
-func (o ClusterEssNodeConfigOutput) Volume() ClusterEssNodeConfigVolumeOutput {
-	return o.ApplyT(func(v ClusterEssNodeConfig) ClusterEssNodeConfigVolume { return v.Volume }).(ClusterEssNodeConfigVolumeOutput)
+func (o ClusterEssNodeConfigOutput) Volume() ClusterEssNodeConfigVolumePtrOutput {
+	return o.ApplyT(func(v ClusterEssNodeConfig) *ClusterEssNodeConfigVolume { return v.Volume }).(ClusterEssNodeConfigVolumePtrOutput)
 }
 
 type ClusterEssNodeConfigPtrOutput struct{ *pulumi.OutputState }
@@ -1191,10 +1185,8 @@ func (o ClusterEssNodeConfigPtrOutput) Flavor() pulumi.StringPtrOutput {
 }
 
 // Specifies the number of cluster instances.
-// + When it is `essNodeConfig`, The value range is 1 to 200.
 // + When it is `masterNodeConfig`, The value range is 3 to 10.
 // + When it is `clientNodeConfig`, The value range is 1 to 32.
-// + When it is `coldNodeConfig`, The value range is 1 to 32.
 func (o ClusterEssNodeConfigPtrOutput) InstanceNumber() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterEssNodeConfig) *int {
 		if v == nil {
@@ -1211,16 +1203,18 @@ func (o ClusterEssNodeConfigPtrOutput) Volume() ClusterEssNodeConfigVolumePtrOut
 		if v == nil {
 			return nil
 		}
-		return &v.Volume
+		return v.Volume
 	}).(ClusterEssNodeConfigVolumePtrOutput)
 }
 
 type ClusterEssNodeConfigVolume struct {
 	// Specifies the volume size in GB, which must be a multiple of 10.
+	// Changing this parameter will create a new resource.
 	Size int `pulumi:"size"`
-	// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-	// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-	// parameter will create a new resource.
+	// Specifies the volume type. Value options are as follows:
+	// + **COMMON**: Common I/O. The SATA disk is used.
+	// + **HIGH**: High I/O. The SAS disk is used.
+	// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 	VolumeType string `pulumi:"volumeType"`
 }
 
@@ -1237,10 +1231,12 @@ type ClusterEssNodeConfigVolumeInput interface {
 
 type ClusterEssNodeConfigVolumeArgs struct {
 	// Specifies the volume size in GB, which must be a multiple of 10.
+	// Changing this parameter will create a new resource.
 	Size pulumi.IntInput `pulumi:"size"`
-	// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-	// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-	// parameter will create a new resource.
+	// Specifies the volume type. Value options are as follows:
+	// + **COMMON**: Common I/O. The SATA disk is used.
+	// + **HIGH**: High I/O. The SAS disk is used.
+	// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 	VolumeType pulumi.StringInput `pulumi:"volumeType"`
 }
 
@@ -1322,13 +1318,15 @@ func (o ClusterEssNodeConfigVolumeOutput) ToClusterEssNodeConfigVolumePtrOutputW
 }
 
 // Specifies the volume size in GB, which must be a multiple of 10.
+// Changing this parameter will create a new resource.
 func (o ClusterEssNodeConfigVolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterEssNodeConfigVolume) int { return v.Size }).(pulumi.IntOutput)
 }
 
-// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-// parameter will create a new resource.
+// Specifies the volume type. Value options are as follows:
+// + **COMMON**: Common I/O. The SATA disk is used.
+// + **HIGH**: High I/O. The SAS disk is used.
+// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 func (o ClusterEssNodeConfigVolumeOutput) VolumeType() pulumi.StringOutput {
 	return o.ApplyT(func(v ClusterEssNodeConfigVolume) string { return v.VolumeType }).(pulumi.StringOutput)
 }
@@ -1358,6 +1356,7 @@ func (o ClusterEssNodeConfigVolumePtrOutput) Elem() ClusterEssNodeConfigVolumeOu
 }
 
 // Specifies the volume size in GB, which must be a multiple of 10.
+// Changing this parameter will create a new resource.
 func (o ClusterEssNodeConfigVolumePtrOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterEssNodeConfigVolume) *int {
 		if v == nil {
@@ -1367,9 +1366,10 @@ func (o ClusterEssNodeConfigVolumePtrOutput) Size() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-// parameter will create a new resource.
+// Specifies the volume type. Value options are as follows:
+// + **COMMON**: Common I/O. The SATA disk is used.
+// + **HIGH**: High I/O. The SAS disk is used.
+// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 func (o ClusterEssNodeConfigVolumePtrOutput) VolumeType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterEssNodeConfigVolume) *string {
 		if v == nil {
@@ -1383,8 +1383,7 @@ type ClusterKibanaPublicAccess struct {
 	// Specifies the public network bandwidth.
 	Bandwidth int     `pulumi:"bandwidth"`
 	PublicIp  *string `pulumi:"publicIp"`
-	// Specifies the whitelist of access control.
-	// Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+	// Specifies the whitelist of access control. The whitelisted account id must be unique.
 	Whitelist *string `pulumi:"whitelist"`
 	// Specifies whether to enable the public network access control.
 	WhitelistEnabled bool `pulumi:"whitelistEnabled"`
@@ -1405,8 +1404,7 @@ type ClusterKibanaPublicAccessArgs struct {
 	// Specifies the public network bandwidth.
 	Bandwidth pulumi.IntInput       `pulumi:"bandwidth"`
 	PublicIp  pulumi.StringPtrInput `pulumi:"publicIp"`
-	// Specifies the whitelist of access control.
-	// Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+	// Specifies the whitelist of access control. The whitelisted account id must be unique.
 	Whitelist pulumi.StringPtrInput `pulumi:"whitelist"`
 	// Specifies whether to enable the public network access control.
 	WhitelistEnabled pulumi.BoolInput `pulumi:"whitelistEnabled"`
@@ -1498,8 +1496,7 @@ func (o ClusterKibanaPublicAccessOutput) PublicIp() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterKibanaPublicAccess) *string { return v.PublicIp }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the whitelist of access control.
-// Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+// Specifies the whitelist of access control. The whitelisted account id must be unique.
 func (o ClusterKibanaPublicAccessOutput) Whitelist() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterKibanaPublicAccess) *string { return v.Whitelist }).(pulumi.StringPtrOutput)
 }
@@ -1552,8 +1549,7 @@ func (o ClusterKibanaPublicAccessPtrOutput) PublicIp() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the whitelist of access control.
-// Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+// Specifies the whitelist of access control. The whitelisted account id must be unique.
 func (o ClusterKibanaPublicAccessPtrOutput) Whitelist() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterKibanaPublicAccess) *string {
 		if v == nil {
@@ -1580,10 +1576,8 @@ type ClusterMasterNodeConfig struct {
 	// to 10240 GB. Changing this parameter will create a new resource.
 	Flavor string `pulumi:"flavor"`
 	// Specifies the number of cluster instances.
-	// + When it is `essNodeConfig`, The value range is 1 to 200.
 	// + When it is `masterNodeConfig`, The value range is 3 to 10.
 	// + When it is `clientNodeConfig`, The value range is 1 to 32.
-	// + When it is `coldNodeConfig`, The value range is 1 to 32.
 	InstanceNumber int `pulumi:"instanceNumber"`
 	// Specifies the information about the volume.
 	// The volume structure is documented below.
@@ -1608,10 +1602,8 @@ type ClusterMasterNodeConfigArgs struct {
 	// to 10240 GB. Changing this parameter will create a new resource.
 	Flavor pulumi.StringInput `pulumi:"flavor"`
 	// Specifies the number of cluster instances.
-	// + When it is `essNodeConfig`, The value range is 1 to 200.
 	// + When it is `masterNodeConfig`, The value range is 3 to 10.
 	// + When it is `clientNodeConfig`, The value range is 1 to 32.
-	// + When it is `coldNodeConfig`, The value range is 1 to 32.
 	InstanceNumber pulumi.IntInput `pulumi:"instanceNumber"`
 	// Specifies the information about the volume.
 	// The volume structure is documented below.
@@ -1704,10 +1696,8 @@ func (o ClusterMasterNodeConfigOutput) Flavor() pulumi.StringOutput {
 }
 
 // Specifies the number of cluster instances.
-// + When it is `essNodeConfig`, The value range is 1 to 200.
 // + When it is `masterNodeConfig`, The value range is 3 to 10.
 // + When it is `clientNodeConfig`, The value range is 1 to 32.
-// + When it is `coldNodeConfig`, The value range is 1 to 32.
 func (o ClusterMasterNodeConfigOutput) InstanceNumber() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterMasterNodeConfig) int { return v.InstanceNumber }).(pulumi.IntOutput)
 }
@@ -1756,10 +1746,8 @@ func (o ClusterMasterNodeConfigPtrOutput) Flavor() pulumi.StringPtrOutput {
 }
 
 // Specifies the number of cluster instances.
-// + When it is `essNodeConfig`, The value range is 1 to 200.
 // + When it is `masterNodeConfig`, The value range is 3 to 10.
 // + When it is `clientNodeConfig`, The value range is 1 to 32.
-// + When it is `coldNodeConfig`, The value range is 1 to 32.
 func (o ClusterMasterNodeConfigPtrOutput) InstanceNumber() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterMasterNodeConfig) *int {
 		if v == nil {
@@ -1782,10 +1770,12 @@ func (o ClusterMasterNodeConfigPtrOutput) Volume() ClusterMasterNodeConfigVolume
 
 type ClusterMasterNodeConfigVolume struct {
 	// Specifies the volume size in GB, which must be a multiple of 10.
+	// Changing this parameter will create a new resource.
 	Size int `pulumi:"size"`
-	// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-	// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-	// parameter will create a new resource.
+	// Specifies the volume type. Value options are as follows:
+	// + **COMMON**: Common I/O. The SATA disk is used.
+	// + **HIGH**: High I/O. The SAS disk is used.
+	// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 	VolumeType string `pulumi:"volumeType"`
 }
 
@@ -1802,10 +1792,12 @@ type ClusterMasterNodeConfigVolumeInput interface {
 
 type ClusterMasterNodeConfigVolumeArgs struct {
 	// Specifies the volume size in GB, which must be a multiple of 10.
+	// Changing this parameter will create a new resource.
 	Size pulumi.IntInput `pulumi:"size"`
-	// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-	// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-	// parameter will create a new resource.
+	// Specifies the volume type. Value options are as follows:
+	// + **COMMON**: Common I/O. The SATA disk is used.
+	// + **HIGH**: High I/O. The SAS disk is used.
+	// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 	VolumeType pulumi.StringInput `pulumi:"volumeType"`
 }
 
@@ -1887,13 +1879,15 @@ func (o ClusterMasterNodeConfigVolumeOutput) ToClusterMasterNodeConfigVolumePtrO
 }
 
 // Specifies the volume size in GB, which must be a multiple of 10.
+// Changing this parameter will create a new resource.
 func (o ClusterMasterNodeConfigVolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterMasterNodeConfigVolume) int { return v.Size }).(pulumi.IntOutput)
 }
 
-// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-// parameter will create a new resource.
+// Specifies the volume type. Value options are as follows:
+// + **COMMON**: Common I/O. The SATA disk is used.
+// + **HIGH**: High I/O. The SAS disk is used.
+// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 func (o ClusterMasterNodeConfigVolumeOutput) VolumeType() pulumi.StringOutput {
 	return o.ApplyT(func(v ClusterMasterNodeConfigVolume) string { return v.VolumeType }).(pulumi.StringOutput)
 }
@@ -1923,6 +1917,7 @@ func (o ClusterMasterNodeConfigVolumePtrOutput) Elem() ClusterMasterNodeConfigVo
 }
 
 // Specifies the volume size in GB, which must be a multiple of 10.
+// Changing this parameter will create a new resource.
 func (o ClusterMasterNodeConfigVolumePtrOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterMasterNodeConfigVolume) *int {
 		if v == nil {
@@ -1932,9 +1927,10 @@ func (o ClusterMasterNodeConfigVolumePtrOutput) Size() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-// parameter will create a new resource.
+// Specifies the volume type. Value options are as follows:
+// + **COMMON**: Common I/O. The SATA disk is used.
+// + **HIGH**: High I/O. The SAS disk is used.
+// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 func (o ClusterMasterNodeConfigVolumePtrOutput) VolumeType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterMasterNodeConfigVolume) *string {
 		if v == nil {
@@ -1957,12 +1953,10 @@ type ClusterNode struct {
 	// Specifies the cluster name. It contains 4 to 32 characters.
 	// Only letters, digits, hyphens (-), and underscores (_) are allowed. The value must start with a letter.
 	// Changing this parameter will create a new resource.
-	Name     *string `pulumi:"name"`
+	Name *string `pulumi:"name"`
+	// Instance specification code.
 	SpecCode *string `pulumi:"specCode"`
-	// The cluster status
-	// + `100`: The operation, such as instance creation, is in progress.
-	// + `200`: The cluster is available.
-	// + `303`: The cluster is unavailable.
+	// Instance status.
 	Status *string `pulumi:"status"`
 	// Node type. The options are as follows:
 	Type *string `pulumi:"type"`
@@ -1992,12 +1986,10 @@ type ClusterNodeArgs struct {
 	// Specifies the cluster name. It contains 4 to 32 characters.
 	// Only letters, digits, hyphens (-), and underscores (_) are allowed. The value must start with a letter.
 	// Changing this parameter will create a new resource.
-	Name     pulumi.StringPtrInput `pulumi:"name"`
+	Name pulumi.StringPtrInput `pulumi:"name"`
+	// Instance specification code.
 	SpecCode pulumi.StringPtrInput `pulumi:"specCode"`
-	// The cluster status
-	// + `100`: The operation, such as instance creation, is in progress.
-	// + `200`: The cluster is available.
-	// + `303`: The cluster is unavailable.
+	// Instance status.
 	Status pulumi.StringPtrInput `pulumi:"status"`
 	// Node type. The options are as follows:
 	Type pulumi.StringPtrInput `pulumi:"type"`
@@ -2076,14 +2068,12 @@ func (o ClusterNodeOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterNode) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
 
+// Instance specification code.
 func (o ClusterNodeOutput) SpecCode() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterNode) *string { return v.SpecCode }).(pulumi.StringPtrOutput)
 }
 
-// The cluster status
-// + `100`: The operation, such as instance creation, is in progress.
-// + `200`: The cluster is available.
-// + `303`: The cluster is unavailable.
+// Instance status.
 func (o ClusterNodeOutput) Status() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterNode) *string { return v.Status }).(pulumi.StringPtrOutput)
 }
@@ -2520,10 +2510,12 @@ func (o ClusterNodeConfigNetworkInfoPtrOutput) VpcId() pulumi.StringPtrOutput {
 
 type ClusterNodeConfigVolume struct {
 	// Specifies the volume size in GB, which must be a multiple of 10.
+	// Changing this parameter will create a new resource.
 	Size int `pulumi:"size"`
-	// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-	// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-	// parameter will create a new resource.
+	// Specifies the volume type. Value options are as follows:
+	// + **COMMON**: Common I/O. The SATA disk is used.
+	// + **HIGH**: High I/O. The SAS disk is used.
+	// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 	VolumeType string `pulumi:"volumeType"`
 }
 
@@ -2540,10 +2532,12 @@ type ClusterNodeConfigVolumeInput interface {
 
 type ClusterNodeConfigVolumeArgs struct {
 	// Specifies the volume size in GB, which must be a multiple of 10.
+	// Changing this parameter will create a new resource.
 	Size pulumi.IntInput `pulumi:"size"`
-	// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-	// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-	// parameter will create a new resource.
+	// Specifies the volume type. Value options are as follows:
+	// + **COMMON**: Common I/O. The SATA disk is used.
+	// + **HIGH**: High I/O. The SAS disk is used.
+	// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 	VolumeType pulumi.StringInput `pulumi:"volumeType"`
 }
 
@@ -2625,13 +2619,15 @@ func (o ClusterNodeConfigVolumeOutput) ToClusterNodeConfigVolumePtrOutputWithCon
 }
 
 // Specifies the volume size in GB, which must be a multiple of 10.
+// Changing this parameter will create a new resource.
 func (o ClusterNodeConfigVolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterNodeConfigVolume) int { return v.Size }).(pulumi.IntOutput)
 }
 
-// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-// parameter will create a new resource.
+// Specifies the volume type. Value options are as follows:
+// + **COMMON**: Common I/O. The SATA disk is used.
+// + **HIGH**: High I/O. The SAS disk is used.
+// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 func (o ClusterNodeConfigVolumeOutput) VolumeType() pulumi.StringOutput {
 	return o.ApplyT(func(v ClusterNodeConfigVolume) string { return v.VolumeType }).(pulumi.StringOutput)
 }
@@ -2661,6 +2657,7 @@ func (o ClusterNodeConfigVolumePtrOutput) Elem() ClusterNodeConfigVolumeOutput {
 }
 
 // Specifies the volume size in GB, which must be a multiple of 10.
+// Changing this parameter will create a new resource.
 func (o ClusterNodeConfigVolumePtrOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterNodeConfigVolume) *int {
 		if v == nil {
@@ -2670,9 +2667,10 @@ func (o ClusterNodeConfigVolumePtrOutput) Size() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-// HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-// parameter will create a new resource.
+// Specifies the volume type. Value options are as follows:
+// + **COMMON**: Common I/O. The SATA disk is used.
+// + **HIGH**: High I/O. The SAS disk is used.
+// + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
 func (o ClusterNodeConfigVolumePtrOutput) VolumeType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterNodeConfigVolume) *string {
 		if v == nil {
@@ -2686,8 +2684,7 @@ type ClusterPublicAccess struct {
 	// Specifies the public network bandwidth.
 	Bandwidth int     `pulumi:"bandwidth"`
 	PublicIp  *string `pulumi:"publicIp"`
-	// Specifies the whitelist of access control.
-	// Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+	// Specifies the whitelist of access control. The whitelisted account id must be unique.
 	Whitelist *string `pulumi:"whitelist"`
 	// Specifies whether to enable the public network access control.
 	WhitelistEnabled bool `pulumi:"whitelistEnabled"`
@@ -2708,8 +2705,7 @@ type ClusterPublicAccessArgs struct {
 	// Specifies the public network bandwidth.
 	Bandwidth pulumi.IntInput       `pulumi:"bandwidth"`
 	PublicIp  pulumi.StringPtrInput `pulumi:"publicIp"`
-	// Specifies the whitelist of access control.
-	// Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+	// Specifies the whitelist of access control. The whitelisted account id must be unique.
 	Whitelist pulumi.StringPtrInput `pulumi:"whitelist"`
 	// Specifies whether to enable the public network access control.
 	WhitelistEnabled pulumi.BoolInput `pulumi:"whitelistEnabled"`
@@ -2801,8 +2797,7 @@ func (o ClusterPublicAccessOutput) PublicIp() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterPublicAccess) *string { return v.PublicIp }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the whitelist of access control.
-// Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+// Specifies the whitelist of access control. The whitelisted account id must be unique.
 func (o ClusterPublicAccessOutput) Whitelist() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterPublicAccess) *string { return v.Whitelist }).(pulumi.StringPtrOutput)
 }
@@ -2855,8 +2850,7 @@ func (o ClusterPublicAccessPtrOutput) PublicIp() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the whitelist of access control.
-// Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+// Specifies the whitelist of access control. The whitelisted account id must be unique.
 func (o ClusterPublicAccessPtrOutput) Whitelist() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterPublicAccess) *string {
 		if v == nil {
@@ -2879,8 +2873,7 @@ func (o ClusterPublicAccessPtrOutput) WhitelistEnabled() pulumi.BoolPtrOutput {
 type ClusterVpcepEndpoint struct {
 	// Specifies whether to enable the private domain name.
 	EndpointWithDnsName bool `pulumi:"endpointWithDnsName"`
-	// Specifies the whitelist of access control.
-	// Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+	// Specifies the whitelist of access control. The whitelisted account id must be unique.
 	Whitelists []string `pulumi:"whitelists"`
 }
 
@@ -2898,8 +2891,7 @@ type ClusterVpcepEndpointInput interface {
 type ClusterVpcepEndpointArgs struct {
 	// Specifies whether to enable the private domain name.
 	EndpointWithDnsName pulumi.BoolInput `pulumi:"endpointWithDnsName"`
-	// Specifies the whitelist of access control.
-	// Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+	// Specifies the whitelist of access control. The whitelisted account id must be unique.
 	Whitelists pulumi.StringArrayInput `pulumi:"whitelists"`
 }
 
@@ -2985,8 +2977,7 @@ func (o ClusterVpcepEndpointOutput) EndpointWithDnsName() pulumi.BoolOutput {
 	return o.ApplyT(func(v ClusterVpcepEndpoint) bool { return v.EndpointWithDnsName }).(pulumi.BoolOutput)
 }
 
-// Specifies the whitelist of access control.
-// Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+// Specifies the whitelist of access control. The whitelisted account id must be unique.
 func (o ClusterVpcepEndpointOutput) Whitelists() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ClusterVpcepEndpoint) []string { return v.Whitelists }).(pulumi.StringArrayOutput)
 }
@@ -3025,8 +3016,7 @@ func (o ClusterVpcepEndpointPtrOutput) EndpointWithDnsName() pulumi.BoolPtrOutpu
 	}).(pulumi.BoolPtrOutput)
 }
 
-// Specifies the whitelist of access control.
-// Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+// Specifies the whitelist of access control. The whitelisted account id must be unique.
 func (o ClusterVpcepEndpointPtrOutput) Whitelists() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *ClusterVpcepEndpoint) []string {
 		if v == nil {

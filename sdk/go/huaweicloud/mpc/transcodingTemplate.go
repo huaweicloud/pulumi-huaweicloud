@@ -49,7 +49,6 @@ import (
 //					Level:                 pulumi.Int(15),
 //					MaxConsecutiveBframes: pulumi.Int(7),
 //					MaxIframesInterval:    pulumi.Int(5),
-//					MaxReferenceFrames:    pulumi.Int(4),
 //					OutputPolicy:          pulumi.String("transcode"),
 //					Profile:               pulumi.Int(4),
 //					Quality:               pulumi.Int(1),

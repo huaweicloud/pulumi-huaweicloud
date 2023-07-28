@@ -9,7 +9,6 @@ import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
 from . import outputs
-from ._inputs import *
 
 __all__ = [
     'GetEngineVersionsResult',
@@ -57,7 +56,7 @@ class GetEngineVersionsResult:
 
     @property
     @pulumi.getter
-    def versions(self) -> Optional[Sequence['outputs.GetEngineVersionsVersionResult']]:
+    def versions(self) -> Sequence['outputs.GetEngineVersionsVersionResult']:
         """
         List of RDS versions. Structure is documented below.
         """
@@ -78,7 +77,6 @@ class AwaitableGetEngineVersionsResult(GetEngineVersionsResult):
 
 def get_engine_versions(region: Optional[str] = None,
                         type: Optional[str] = None,
-                        versions: Optional[Sequence[pulumi.InputType['GetEngineVersionsVersionArgs']]] = None,
                         opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetEngineVersionsResult:
     """
     Use this data source to obtain all version information of the specified engine type of HuaweiCloud RDS.
@@ -97,12 +95,10 @@ def get_engine_versions(region: Optional[str] = None,
            If omitted, the provider-level region will be used.
     :param str type: Specifies the RDS engine type.
            The valid values are **MySQL**, **PostgreSQL** and **SQLServer**, default to **MySQL**.
-    :param Sequence[pulumi.InputType['GetEngineVersionsVersionArgs']] versions: List of RDS versions. Structure is documented below.
     """
     __args__ = dict()
     __args__['region'] = region
     __args__['type'] = type
-    __args__['versions'] = versions
     opts = pulumi.InvokeOptions.merge(_utilities.get_invoke_opts_defaults(), opts)
     __ret__ = pulumi.runtime.invoke('huaweicloud:Rds/getEngineVersions:getEngineVersions', __args__, opts=opts, typ=GetEngineVersionsResult).value
 
@@ -116,7 +112,6 @@ def get_engine_versions(region: Optional[str] = None,
 @_utilities.lift_output_func(get_engine_versions)
 def get_engine_versions_output(region: Optional[pulumi.Input[Optional[str]]] = None,
                                type: Optional[pulumi.Input[Optional[str]]] = None,
-                               versions: Optional[pulumi.Input[Optional[Sequence[pulumi.InputType['GetEngineVersionsVersionArgs']]]]] = None,
                                opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetEngineVersionsResult]:
     """
     Use this data source to obtain all version information of the specified engine type of HuaweiCloud RDS.
@@ -135,6 +130,5 @@ def get_engine_versions_output(region: Optional[pulumi.Input[Optional[str]]] = N
            If omitted, the provider-level region will be used.
     :param str type: Specifies the RDS engine type.
            The valid values are **MySQL**, **PostgreSQL** and **SQLServer**, default to **MySQL**.
-    :param Sequence[pulumi.InputType['GetEngineVersionsVersionArgs']] versions: List of RDS versions. Structure is documented below.
     """
     ...

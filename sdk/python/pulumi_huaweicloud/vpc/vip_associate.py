@@ -183,7 +183,9 @@ class VipAssociate(pulumi.CustomResource):
                  vip_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages a Vip associate resource within HuaweiCloud.
+        Using this resource, one or more NICs (to which the ECS instance belongs) can be bound to the VIP.
+
+        > A VIP can only have one resource.
 
         ## Example Usage
 
@@ -191,14 +193,12 @@ class VipAssociate(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        mynet = huaweicloud.Vpc.get_subnet(name="subnet-default")
-        myvip = huaweicloud.vpc.Vip("myvip", network_id=mynet.id)
+        config = pulumi.Config()
+        vip_id = config.require_object("vipId")
+        nic_port_ids = config.require_object("nicPortIds")
         vip_associated = huaweicloud.vpc.VipAssociate("vipAssociated",
-            vip_id=myvip.id,
-            port_ids=[
-                var["port_1"],
-                var["port_2"],
-            ])
+            vip_id=vip_id,
+            port_ids=nic_port_ids)
         ```
 
         ## Import
@@ -223,7 +223,9 @@ class VipAssociate(pulumi.CustomResource):
                  args: VipAssociateArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a Vip associate resource within HuaweiCloud.
+        Using this resource, one or more NICs (to which the ECS instance belongs) can be bound to the VIP.
+
+        > A VIP can only have one resource.
 
         ## Example Usage
 
@@ -231,14 +233,12 @@ class VipAssociate(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        mynet = huaweicloud.Vpc.get_subnet(name="subnet-default")
-        myvip = huaweicloud.vpc.Vip("myvip", network_id=mynet.id)
+        config = pulumi.Config()
+        vip_id = config.require_object("vipId")
+        nic_port_ids = config.require_object("nicPortIds")
         vip_associated = huaweicloud.vpc.VipAssociate("vipAssociated",
-            vip_id=myvip.id,
-            port_ids=[
-                var["port_1"],
-                var["port_2"],
-            ])
+            vip_id=vip_id,
+            port_ids=nic_port_ids)
         ```
 
         ## Import

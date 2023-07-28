@@ -36,6 +36,7 @@ class ProviderArgs:
                  project_id: Optional[pulumi.Input[str]] = None,
                  project_name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 regional: Optional[pulumi.Input[bool]] = None,
                  secret_key: Optional[pulumi.Input[str]] = None,
                  security_token: Optional[pulumi.Input[str]] = None,
                  shared_config_file: Optional[pulumi.Input[str]] = None,
@@ -66,6 +67,7 @@ class ProviderArgs:
         :param pulumi.Input[str] project_id: The ID of the project to login with.
         :param pulumi.Input[str] project_name: The name of the project to login with.
         :param pulumi.Input[str] region: The HuaweiCloud region to connect to.
+        :param pulumi.Input[bool] regional: Whether the service endpoints are regional
         :param pulumi.Input[str] secret_key: The secret key of the HuaweiCloud to use.
         :param pulumi.Input[str] security_token: The security token to authenticate with a temporary security credential.
         :param pulumi.Input[str] shared_config_file: The path to the shared config file. If not set, the default is ~/.hcloud/config.json.
@@ -117,6 +119,8 @@ class ProviderArgs:
             pulumi.set(__self__, "project_name", project_name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if regional is not None:
+            pulumi.set(__self__, "regional", regional)
         if secret_key is not None:
             pulumi.set(__self__, "secret_key", secret_key)
         if security_token is not None:
@@ -384,6 +388,18 @@ class ProviderArgs:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter
+    def regional(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Whether the service endpoints are regional
+        """
+        return pulumi.get(self, "regional")
+
+    @regional.setter
+    def regional(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "regional", value)
+
+    @property
     @pulumi.getter(name="secretKey")
     def secret_key(self) -> Optional[pulumi.Input[str]]:
         """
@@ -506,6 +522,7 @@ class Provider(pulumi.ProviderResource):
                  project_id: Optional[pulumi.Input[str]] = None,
                  project_name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 regional: Optional[pulumi.Input[bool]] = None,
                  secret_key: Optional[pulumi.Input[str]] = None,
                  security_token: Optional[pulumi.Input[str]] = None,
                  shared_config_file: Optional[pulumi.Input[str]] = None,
@@ -543,6 +560,7 @@ class Provider(pulumi.ProviderResource):
         :param pulumi.Input[str] project_id: The ID of the project to login with.
         :param pulumi.Input[str] project_name: The name of the project to login with.
         :param pulumi.Input[str] region: The HuaweiCloud region to connect to.
+        :param pulumi.Input[bool] regional: Whether the service endpoints are regional
         :param pulumi.Input[str] secret_key: The secret key of the HuaweiCloud to use.
         :param pulumi.Input[str] security_token: The security token to authenticate with a temporary security credential.
         :param pulumi.Input[str] shared_config_file: The path to the shared config file. If not set, the default is ~/.hcloud/config.json.
@@ -600,6 +618,7 @@ class Provider(pulumi.ProviderResource):
                  project_id: Optional[pulumi.Input[str]] = None,
                  project_name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 regional: Optional[pulumi.Input[bool]] = None,
                  secret_key: Optional[pulumi.Input[str]] = None,
                  security_token: Optional[pulumi.Input[str]] = None,
                  shared_config_file: Optional[pulumi.Input[str]] = None,
@@ -638,6 +657,7 @@ class Provider(pulumi.ProviderResource):
             __props__.__dict__["project_id"] = project_id
             __props__.__dict__["project_name"] = project_name
             __props__.__dict__["region"] = region
+            __props__.__dict__["regional"] = pulumi.Output.from_input(regional).apply(pulumi.runtime.to_json) if regional is not None else None
             __props__.__dict__["secret_key"] = secret_key
             __props__.__dict__["security_token"] = security_token
             __props__.__dict__["shared_config_file"] = shared_config_file

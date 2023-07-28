@@ -101,6 +101,9 @@ class GetAddonTemplateResult:
     @property
     @pulumi.getter(name="supportVersions")
     def support_versions(self) -> Sequence['outputs.GetAddonTemplateSupportVersionResult']:
+        """
+        The cluster information.
+        """
         return pulumi.get(self, "support_versions")
 
     @property

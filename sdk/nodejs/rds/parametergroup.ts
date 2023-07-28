@@ -82,6 +82,10 @@ export class Parametergroup extends pulumi.CustomResource {
      * The parameter group name. It contains a maximum of 64 characters.
      */
     public readonly name!: pulumi.Output<string>;
+    /**
+     * The region in which to create the RDS parameter group. If omitted, the
+     * provider-level region will be used. Changing this creates a new parameter group.
+     */
     public readonly region!: pulumi.Output<string>;
     /**
      * Parameter group values key/value pairs defined by users based on the default parameter
@@ -148,6 +152,10 @@ export interface ParametergroupState {
      * The parameter group name. It contains a maximum of 64 characters.
      */
     name?: pulumi.Input<string>;
+    /**
+     * The region in which to create the RDS parameter group. If omitted, the
+     * provider-level region will be used. Changing this creates a new parameter group.
+     */
     region?: pulumi.Input<string>;
     /**
      * Parameter group values key/value pairs defined by users based on the default parameter
@@ -174,6 +182,10 @@ export interface ParametergroupArgs {
      * The parameter group name. It contains a maximum of 64 characters.
      */
     name?: pulumi.Input<string>;
+    /**
+     * The region in which to create the RDS parameter group. If omitted, the
+     * provider-level region will be used. Changing this creates a new parameter group.
+     */
     region?: pulumi.Input<string>;
     /**
      * Parameter group values key/value pairs defined by users based on the default parameter

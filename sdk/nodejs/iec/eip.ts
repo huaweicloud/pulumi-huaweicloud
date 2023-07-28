@@ -54,16 +54,28 @@ export class Eip extends pulumi.CustomResource {
         return obj['__pulumiType'] === Eip.__pulumiType;
     }
 
+    /**
+     * The id of bandwidth.
+     */
     public /*out*/ readonly bandwidthId!: pulumi.Output<string>;
+    /**
+     * The name of bandwidth.
+     */
     public /*out*/ readonly bandwidthName!: pulumi.Output<string>;
+    /**
+     * Whether the bandwidth is shared or exclusive.
+     */
     public /*out*/ readonly bandwidthShareType!: pulumi.Output<string>;
+    /**
+     * The size of bandwidth.
+     */
     public /*out*/ readonly bandwidthSize!: pulumi.Output<number>;
     /**
      * The version of elastic IP address.
      */
     public readonly ipVersion!: pulumi.Output<number>;
     /**
-     * Specifies the line ID of IEC sevice site.
+     * Specifies the line ID of IEC service site.
      * Changing this parameter creates a new resource.
      */
     public readonly lineId!: pulumi.Output<string>;
@@ -79,9 +91,13 @@ export class Eip extends pulumi.CustomResource {
      * The address of elastic IP.
      */
     public /*out*/ readonly publicIp!: pulumi.Output<string>;
+    /**
+     * The region in which to create the resource. If omitted, the
+     * provider-level region will be used. Changing this creates a new resource.
+     */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Specifies the ID of IEC sevice site. Changing this parameter creates a new
+     * Specifies the ID of IEC service site. Changing this parameter creates a new
      * resource.
      */
     public readonly siteId!: pulumi.Output<string>;
@@ -148,16 +164,28 @@ export class Eip extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Eip resources.
  */
 export interface EipState {
+    /**
+     * The id of bandwidth.
+     */
     bandwidthId?: pulumi.Input<string>;
+    /**
+     * The name of bandwidth.
+     */
     bandwidthName?: pulumi.Input<string>;
+    /**
+     * Whether the bandwidth is shared or exclusive.
+     */
     bandwidthShareType?: pulumi.Input<string>;
+    /**
+     * The size of bandwidth.
+     */
     bandwidthSize?: pulumi.Input<number>;
     /**
      * The version of elastic IP address.
      */
     ipVersion?: pulumi.Input<number>;
     /**
-     * Specifies the line ID of IEC sevice site.
+     * Specifies the line ID of IEC service site.
      * Changing this parameter creates a new resource.
      */
     lineId?: pulumi.Input<string>;
@@ -173,9 +201,13 @@ export interface EipState {
      * The address of elastic IP.
      */
     publicIp?: pulumi.Input<string>;
+    /**
+     * The region in which to create the resource. If omitted, the
+     * provider-level region will be used. Changing this creates a new resource.
+     */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the ID of IEC sevice site. Changing this parameter creates a new
+     * Specifies the ID of IEC service site. Changing this parameter creates a new
      * resource.
      */
     siteId?: pulumi.Input<string>;
@@ -198,7 +230,7 @@ export interface EipArgs {
      */
     ipVersion?: pulumi.Input<number>;
     /**
-     * Specifies the line ID of IEC sevice site.
+     * Specifies the line ID of IEC service site.
      * Changing this parameter creates a new resource.
      */
     lineId?: pulumi.Input<string>;
@@ -206,9 +238,13 @@ export interface EipArgs {
      * Specifies the port ID which this eip will associate with.
      */
     portId?: pulumi.Input<string>;
+    /**
+     * The region in which to create the resource. If omitted, the
+     * provider-level region will be used. Changing this creates a new resource.
+     */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the ID of IEC sevice site. Changing this parameter creates a new
+     * Specifies the ID of IEC service site. Changing this parameter creates a new
      * resource.
      */
     siteId: pulumi.Input<string>;

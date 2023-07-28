@@ -40,6 +40,14 @@ import * as utilities from "../utilities";
  *     endpoints: [demoEndpoint.id],
  * });
  * ```
+ *
+ * ## Import
+ *
+ * VPC endpoint approval can be imported using the `id`, e.g. bash
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:Vpcep/approval:Approval test <id>
+ * ```
  */
 export class Approval extends pulumi.CustomResource {
     /**
@@ -74,7 +82,7 @@ export class Approval extends pulumi.CustomResource {
      */
     public /*out*/ readonly connections!: pulumi.Output<outputs.Vpcep.ApprovalConnection[]>;
     /**
-     * - Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
+     * Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
      * service. The VPC endpoints will be rejected when the resource was destroyed.
      */
     public readonly endpoints!: pulumi.Output<string[]>;
@@ -84,7 +92,7 @@ export class Approval extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * - Specifies the ID of the VPC endpoint service. Changing this creates a new
+     * Specifies the ID of the VPC endpoint service. Changing this creates a new
      * resource.
      */
     public readonly serviceId!: pulumi.Output<string>;
@@ -133,7 +141,7 @@ export interface ApprovalState {
      */
     connections?: pulumi.Input<pulumi.Input<inputs.Vpcep.ApprovalConnection>[]>;
     /**
-     * - Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
+     * Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
      * service. The VPC endpoints will be rejected when the resource was destroyed.
      */
     endpoints?: pulumi.Input<pulumi.Input<string>[]>;
@@ -143,7 +151,7 @@ export interface ApprovalState {
      */
     region?: pulumi.Input<string>;
     /**
-     * - Specifies the ID of the VPC endpoint service. Changing this creates a new
+     * Specifies the ID of the VPC endpoint service. Changing this creates a new
      * resource.
      */
     serviceId?: pulumi.Input<string>;
@@ -154,7 +162,7 @@ export interface ApprovalState {
  */
 export interface ApprovalArgs {
     /**
-     * - Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
+     * Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
      * service. The VPC endpoints will be rejected when the resource was destroyed.
      */
     endpoints: pulumi.Input<pulumi.Input<string>[]>;
@@ -164,7 +172,7 @@ export interface ApprovalArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * - Specifies the ID of the VPC endpoint service. Changing this creates a new
+     * Specifies the ID of the VPC endpoint service. Changing this creates a new
      * resource.
      */
     serviceId: pulumi.Input<string>;

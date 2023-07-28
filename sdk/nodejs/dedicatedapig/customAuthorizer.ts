@@ -32,10 +32,10 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Custom Authorizers of the APIG can be imported using their `name` and the ID of the APIG instance to which the group belongs, separated by a slash, e.g.
+ * Custom Authorizers of the APIG can be imported using their `name` and related dedicated instance IDs, separated by a slash, e.g.
  *
  * ```sh
- *  $ pulumi import huaweicloud:DedicatedApig/customAuthorizer:CustomAuthorizer test <instance id>/<name>
+ *  $ pulumi import huaweicloud:DedicatedApig/customAuthorizer:CustomAuthorizer test <instance_id>/<name>
  * ```
  */
 export class CustomAuthorizer extends pulumi.CustomResource {
@@ -68,16 +68,14 @@ export class CustomAuthorizer extends pulumi.CustomResource {
 
     /**
      * Specifies the maximum cache age.
-     * Changing this will create a new custom authorizer resource.
      */
     public readonly cacheAge!: pulumi.Output<number | undefined>;
     /**
-     * Time when the APIG custom authorizer was created.
+     * The creation time of the custom authorizer.
      */
-    public /*out*/ readonly createTime!: pulumi.Output<string>;
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
     /**
      * Specifies the uniform function URN of the function graph resource.
-     * Changing this will create a new custom authorizer resource.
      */
     public readonly functionUrn!: pulumi.Output<string>;
     /**
@@ -93,13 +91,11 @@ export class CustomAuthorizer extends pulumi.CustomResource {
     public readonly instanceId!: pulumi.Output<string>;
     /**
      * Specifies whether to send the body.
-     * Changing this will create a new custom authorizer resource.
      */
     public readonly isBodySend!: pulumi.Output<boolean | undefined>;
     /**
      * Specifies the name of the parameter to be verified.
      * The parameter includes front-end and back-end parameters.
-     * Changing this will create a new custom authorizer resource.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -110,14 +106,13 @@ export class CustomAuthorizer extends pulumi.CustomResource {
     public readonly region!: pulumi.Output<string>;
     /**
      * Specifies the custom authoriz type.
-     * The valid values are *FRONTEND* and *BACKEND*.
+     * The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
      * Changing this will create a new custom authorizer resource.
      */
     public readonly type!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the user data, which can contain a maximum of 2,048 characters.
+     * Specifies the user data, which can contain a maximum of `2,048` characters.
      * The user data is used by APIG to invoke the specified authentication function when accessing the backend service.
-     * Changing this will create a new custom authorizer resource.
      */
     public readonly userData!: pulumi.Output<string | undefined>;
 
@@ -135,7 +130,7 @@ export class CustomAuthorizer extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as CustomAuthorizerState | undefined;
             resourceInputs["cacheAge"] = state ? state.cacheAge : undefined;
-            resourceInputs["createTime"] = state ? state.createTime : undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["functionUrn"] = state ? state.functionUrn : undefined;
             resourceInputs["identities"] = state ? state.identities : undefined;
             resourceInputs["instanceId"] = state ? state.instanceId : undefined;
@@ -161,7 +156,7 @@ export class CustomAuthorizer extends pulumi.CustomResource {
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["type"] = args ? args.type : undefined;
             resourceInputs["userData"] = args ? args.userData : undefined;
-            resourceInputs["createTime"] = undefined /*out*/;
+            resourceInputs["createdAt"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(CustomAuthorizer.__pulumiType, name, resourceInputs, opts);
@@ -174,16 +169,14 @@ export class CustomAuthorizer extends pulumi.CustomResource {
 export interface CustomAuthorizerState {
     /**
      * Specifies the maximum cache age.
-     * Changing this will create a new custom authorizer resource.
      */
     cacheAge?: pulumi.Input<number>;
     /**
-     * Time when the APIG custom authorizer was created.
+     * The creation time of the custom authorizer.
      */
-    createTime?: pulumi.Input<string>;
+    createdAt?: pulumi.Input<string>;
     /**
      * Specifies the uniform function URN of the function graph resource.
-     * Changing this will create a new custom authorizer resource.
      */
     functionUrn?: pulumi.Input<string>;
     /**
@@ -199,13 +192,11 @@ export interface CustomAuthorizerState {
     instanceId?: pulumi.Input<string>;
     /**
      * Specifies whether to send the body.
-     * Changing this will create a new custom authorizer resource.
      */
     isBodySend?: pulumi.Input<boolean>;
     /**
      * Specifies the name of the parameter to be verified.
      * The parameter includes front-end and back-end parameters.
-     * Changing this will create a new custom authorizer resource.
      */
     name?: pulumi.Input<string>;
     /**
@@ -216,14 +207,13 @@ export interface CustomAuthorizerState {
     region?: pulumi.Input<string>;
     /**
      * Specifies the custom authoriz type.
-     * The valid values are *FRONTEND* and *BACKEND*.
+     * The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
      * Changing this will create a new custom authorizer resource.
      */
     type?: pulumi.Input<string>;
     /**
-     * Specifies the user data, which can contain a maximum of 2,048 characters.
+     * Specifies the user data, which can contain a maximum of `2,048` characters.
      * The user data is used by APIG to invoke the specified authentication function when accessing the backend service.
-     * Changing this will create a new custom authorizer resource.
      */
     userData?: pulumi.Input<string>;
 }
@@ -234,12 +224,10 @@ export interface CustomAuthorizerState {
 export interface CustomAuthorizerArgs {
     /**
      * Specifies the maximum cache age.
-     * Changing this will create a new custom authorizer resource.
      */
     cacheAge?: pulumi.Input<number>;
     /**
      * Specifies the uniform function URN of the function graph resource.
-     * Changing this will create a new custom authorizer resource.
      */
     functionUrn: pulumi.Input<string>;
     /**
@@ -255,13 +243,11 @@ export interface CustomAuthorizerArgs {
     instanceId: pulumi.Input<string>;
     /**
      * Specifies whether to send the body.
-     * Changing this will create a new custom authorizer resource.
      */
     isBodySend?: pulumi.Input<boolean>;
     /**
      * Specifies the name of the parameter to be verified.
      * The parameter includes front-end and back-end parameters.
-     * Changing this will create a new custom authorizer resource.
      */
     name?: pulumi.Input<string>;
     /**
@@ -272,14 +258,13 @@ export interface CustomAuthorizerArgs {
     region?: pulumi.Input<string>;
     /**
      * Specifies the custom authoriz type.
-     * The valid values are *FRONTEND* and *BACKEND*.
+     * The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
      * Changing this will create a new custom authorizer resource.
      */
     type?: pulumi.Input<string>;
     /**
-     * Specifies the user data, which can contain a maximum of 2,048 characters.
+     * Specifies the user data, which can contain a maximum of `2,048` characters.
      * The user data is used by APIG to invoke the specified authentication function when accessing the backend service.
-     * Changing this will create a new custom authorizer resource.
      */
     userData?: pulumi.Input<string>;
 }

@@ -52,64 +52,62 @@ func GetVaults(ctx *pulumi.Context, args *GetVaultsArgs, opts ...pulumi.InvokeOp
 // A collection of arguments for invoking getVaults.
 type GetVaultsArgs struct {
 	// Specifies whether to enable automatic expansion of the backup protection
-	// type vault. Default to **false**.
+	// type vault. Defaults to **false**.
 	AutoExpandEnabled *bool `pulumi:"autoExpandEnabled"`
-	// Specifies the backup specifications.
+	// Specifies the consistent level (specification) of the vault.
 	// The valid values are as follows:
 	// + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	// + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	ConsistentLevel *string `pulumi:"consistentLevel"`
-	// Specifies a unique ID in UUID format of enterprise project.
+	// Specifies the ID of the enterprise project to which the vault belongs.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
+	// Specifies the vault name. This parameter can contain a maximum of 64
 	// characters, which may consist of letters, digits, underscores(_) and hyphens (-).
 	Name *string `pulumi:"name"`
-	// Specifies a policy to associate with the CBR vault.
+	// Specifies the ID of the policy associated with the vault.
 	// The `policyId` cannot be used with the vault of replicate protection type.
 	PolicyId *string `pulumi:"policyId"`
-	// Specifies the protection type of the CBR vault.
+	// Specifies the protection type of the vault.
 	// The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
 	ProtectionType *string `pulumi:"protectionType"`
-	// Specifies the region in which to query the CBR vaults.
+	// Specifies the region in which to query the vaults.
 	// If omitted, the provider-level region will be used.
 	Region *string `pulumi:"region"`
 	// Specifies the vault sapacity, in GB. The valid value range is `1` to `10,485,760`.
 	Size *int `pulumi:"size"`
-	// Specifies the CBR vault status, including **available**, **lock**, **frozen** and **error**.
+	// Specifies the vault status, including **available**, **lock**, **frozen** and **error**.
 	Status *string `pulumi:"status"`
-	// Specifies the object type of the CBR vault. The vaild values are as follows:
+	// Specifies the object type of the vault. The vaild values are as follows:
 	// + **server** (Cloud Servers)
 	// + **disk** (EVS Disks)
 	// + **turbo** (SFS Turbo file systems)
 	Type *string `pulumi:"type"`
-	// List of CBR vault details. The object structure of each CBR vault is documented below.
-	Vaults []GetVaultsVault `pulumi:"vaults"`
 }
 
 // A collection of values returned by getVaults.
 type GetVaultsResult struct {
 	// Whether to enable automatic expansion of the backup protection type vault.
 	AutoExpandEnabled *bool `pulumi:"autoExpandEnabled"`
-	// The backup specifications.
+	// The consistent level (specification) of the vault.
 	ConsistentLevel *string `pulumi:"consistentLevel"`
 	// The enterprise project ID.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// The provider-assigned unique ID for this managed resource.
 	Id string `pulumi:"id"`
-	// The CBR vault name.
+	// The vault name.
 	Name *string `pulumi:"name"`
-	// The policy associated with the CBR vault.
+	// The ID of the policy associated with the vault.
 	PolicyId *string `pulumi:"policyId"`
-	// The protection type of the CBR vault.
+	// The protection type of the vault.
 	ProtectionType *string `pulumi:"protectionType"`
 	Region         *string `pulumi:"region"`
 	// The vault capacity, in GB.
 	Size *int `pulumi:"size"`
 	// The vault status.
 	Status *string `pulumi:"status"`
-	// The object type of the CBR vault.
+	// The object type of the vault.
 	Type *string `pulumi:"type"`
-	// List of CBR vault details. The object structure of each CBR vault is documented below.
+	// List of vault details. The object structure of each vault is documented below.
 	Vaults []GetVaultsVault `pulumi:"vaults"`
 }
 
@@ -129,38 +127,36 @@ func GetVaultsOutput(ctx *pulumi.Context, args GetVaultsOutputArgs, opts ...pulu
 // A collection of arguments for invoking getVaults.
 type GetVaultsOutputArgs struct {
 	// Specifies whether to enable automatic expansion of the backup protection
-	// type vault. Default to **false**.
+	// type vault. Defaults to **false**.
 	AutoExpandEnabled pulumi.BoolPtrInput `pulumi:"autoExpandEnabled"`
-	// Specifies the backup specifications.
+	// Specifies the consistent level (specification) of the vault.
 	// The valid values are as follows:
 	// + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	// + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	ConsistentLevel pulumi.StringPtrInput `pulumi:"consistentLevel"`
-	// Specifies a unique ID in UUID format of enterprise project.
+	// Specifies the ID of the enterprise project to which the vault belongs.
 	EnterpriseProjectId pulumi.StringPtrInput `pulumi:"enterpriseProjectId"`
-	// Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
+	// Specifies the vault name. This parameter can contain a maximum of 64
 	// characters, which may consist of letters, digits, underscores(_) and hyphens (-).
 	Name pulumi.StringPtrInput `pulumi:"name"`
-	// Specifies a policy to associate with the CBR vault.
+	// Specifies the ID of the policy associated with the vault.
 	// The `policyId` cannot be used with the vault of replicate protection type.
 	PolicyId pulumi.StringPtrInput `pulumi:"policyId"`
-	// Specifies the protection type of the CBR vault.
+	// Specifies the protection type of the vault.
 	// The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
 	ProtectionType pulumi.StringPtrInput `pulumi:"protectionType"`
-	// Specifies the region in which to query the CBR vaults.
+	// Specifies the region in which to query the vaults.
 	// If omitted, the provider-level region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
 	// Specifies the vault sapacity, in GB. The valid value range is `1` to `10,485,760`.
 	Size pulumi.IntPtrInput `pulumi:"size"`
-	// Specifies the CBR vault status, including **available**, **lock**, **frozen** and **error**.
+	// Specifies the vault status, including **available**, **lock**, **frozen** and **error**.
 	Status pulumi.StringPtrInput `pulumi:"status"`
-	// Specifies the object type of the CBR vault. The vaild values are as follows:
+	// Specifies the object type of the vault. The vaild values are as follows:
 	// + **server** (Cloud Servers)
 	// + **disk** (EVS Disks)
 	// + **turbo** (SFS Turbo file systems)
 	Type pulumi.StringPtrInput `pulumi:"type"`
-	// List of CBR vault details. The object structure of each CBR vault is documented below.
-	Vaults GetVaultsVaultArrayInput `pulumi:"vaults"`
 }
 
 func (GetVaultsOutputArgs) ElementType() reflect.Type {
@@ -187,7 +183,7 @@ func (o GetVaultsResultOutput) AutoExpandEnabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v GetVaultsResult) *bool { return v.AutoExpandEnabled }).(pulumi.BoolPtrOutput)
 }
 
-// The backup specifications.
+// The consistent level (specification) of the vault.
 func (o GetVaultsResultOutput) ConsistentLevel() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetVaultsResult) *string { return v.ConsistentLevel }).(pulumi.StringPtrOutput)
 }
@@ -202,17 +198,17 @@ func (o GetVaultsResultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetVaultsResult) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// The CBR vault name.
+// The vault name.
 func (o GetVaultsResultOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetVaultsResult) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
 
-// The policy associated with the CBR vault.
+// The ID of the policy associated with the vault.
 func (o GetVaultsResultOutput) PolicyId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetVaultsResult) *string { return v.PolicyId }).(pulumi.StringPtrOutput)
 }
 
-// The protection type of the CBR vault.
+// The protection type of the vault.
 func (o GetVaultsResultOutput) ProtectionType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetVaultsResult) *string { return v.ProtectionType }).(pulumi.StringPtrOutput)
 }
@@ -231,12 +227,12 @@ func (o GetVaultsResultOutput) Status() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetVaultsResult) *string { return v.Status }).(pulumi.StringPtrOutput)
 }
 
-// The object type of the CBR vault.
+// The object type of the vault.
 func (o GetVaultsResultOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetVaultsResult) *string { return v.Type }).(pulumi.StringPtrOutput)
 }
 
-// List of CBR vault details. The object structure of each CBR vault is documented below.
+// List of vault details. The object structure of each vault is documented below.
 func (o GetVaultsResultOutput) Vaults() GetVaultsVaultArrayOutput {
 	return o.ApplyT(func(v GetVaultsResult) []GetVaultsVault { return v.Vaults }).(GetVaultsVaultArrayOutput)
 }

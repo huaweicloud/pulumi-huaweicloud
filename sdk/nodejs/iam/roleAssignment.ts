@@ -74,21 +74,24 @@ export class RoleAssignment extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies the domain to assign the role
-     * in.
+     * Specifies the domain to assign the role in.
+     * Required if `projectId` is empty. Changing this parameter will create a new resource.
      */
     public readonly domainId!: pulumi.Output<string | undefined>;
+    public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
     /**
      * Specifies the group to assign the role to.
+     * Changing this parameter will create a new resource.
      */
     public readonly groupId!: pulumi.Output<string>;
     /**
-     * Specifies the project to assign the role
-     * in.
+     * Specifies the project to assign the role in.
+     * Required if `domainId` is empty. Changing this parameter will create a new resource.
      */
     public readonly projectId!: pulumi.Output<string | undefined>;
     /**
      * Specifies the role to assign.
+     * Changing this parameter will create a new resource.
      */
     public readonly roleId!: pulumi.Output<string>;
 
@@ -106,6 +109,7 @@ export class RoleAssignment extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as RoleAssignmentState | undefined;
             resourceInputs["domainId"] = state ? state.domainId : undefined;
+            resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["groupId"] = state ? state.groupId : undefined;
             resourceInputs["projectId"] = state ? state.projectId : undefined;
             resourceInputs["roleId"] = state ? state.roleId : undefined;
@@ -118,6 +122,7 @@ export class RoleAssignment extends pulumi.CustomResource {
                 throw new Error("Missing required property 'roleId'");
             }
             resourceInputs["domainId"] = args ? args.domainId : undefined;
+            resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["groupId"] = args ? args.groupId : undefined;
             resourceInputs["projectId"] = args ? args.projectId : undefined;
             resourceInputs["roleId"] = args ? args.roleId : undefined;
@@ -132,21 +137,24 @@ export class RoleAssignment extends pulumi.CustomResource {
  */
 export interface RoleAssignmentState {
     /**
-     * Specifies the domain to assign the role
-     * in.
+     * Specifies the domain to assign the role in.
+     * Required if `projectId` is empty. Changing this parameter will create a new resource.
      */
     domainId?: pulumi.Input<string>;
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Specifies the group to assign the role to.
+     * Changing this parameter will create a new resource.
      */
     groupId?: pulumi.Input<string>;
     /**
-     * Specifies the project to assign the role
-     * in.
+     * Specifies the project to assign the role in.
+     * Required if `domainId` is empty. Changing this parameter will create a new resource.
      */
     projectId?: pulumi.Input<string>;
     /**
      * Specifies the role to assign.
+     * Changing this parameter will create a new resource.
      */
     roleId?: pulumi.Input<string>;
 }
@@ -156,21 +164,24 @@ export interface RoleAssignmentState {
  */
 export interface RoleAssignmentArgs {
     /**
-     * Specifies the domain to assign the role
-     * in.
+     * Specifies the domain to assign the role in.
+     * Required if `projectId` is empty. Changing this parameter will create a new resource.
      */
     domainId?: pulumi.Input<string>;
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Specifies the group to assign the role to.
+     * Changing this parameter will create a new resource.
      */
     groupId: pulumi.Input<string>;
     /**
-     * Specifies the project to assign the role
-     * in.
+     * Specifies the project to assign the role in.
+     * Required if `domainId` is empty. Changing this parameter will create a new resource.
      */
     projectId?: pulumi.Input<string>;
     /**
      * Specifies the role to assign.
+     * Changing this parameter will create a new resource.
      */
     roleId: pulumi.Input<string>;
 }

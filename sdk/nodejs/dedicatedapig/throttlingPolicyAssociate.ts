@@ -16,15 +16,11 @@ import * as utilities from "../utilities";
  * const config = new pulumi.Config();
  * const instanceId = config.requireObject("instanceId");
  * const policyId = config.requireObject("policyId");
- * const apiPublishId1 = config.requireObject("apiPublishId1");
- * const apiPublishId2 = config.requireObject("apiPublishId2");
+ * const apiPublishIds = config.requireObject("apiPublishIds");
  * const test = new huaweicloud.dedicatedapig.ThrottlingPolicyAssociate("test", {
  *     instanceId: instanceId,
  *     policyId: policyId,
- *     publishIds: [
- *         apiPublishId1,
- *         apiPublishId2,
- *     ],
+ *     publishIds: apiPublishIds,
  * });
  * ```
  *
@@ -33,7 +29,7 @@ import * as utilities from "../utilities";
  * Associate resources can be imported using their `policy_id` and the APIG dedicated instance ID to which the policy belongs, separated by a slash, e.g.
  *
  * ```sh
- *  $ pulumi import huaweicloud:DedicatedApig/throttlingPolicyAssociate:ThrottlingPolicyAssociate test &ltinstance id&gt/&ltpolicy_id&gt
+ *  $ pulumi import huaweicloud:DedicatedApig/throttlingPolicyAssociate:ThrottlingPolicyAssociate test <instance_id>/<policy_id>
  * ```
  */
 export class ThrottlingPolicyAssociate extends pulumi.CustomResource {
@@ -65,21 +61,23 @@ export class ThrottlingPolicyAssociate extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies the ID of the APIG dedicated instance to which the APIs and the
-     * throttling policy belongs. Changing this will create a new resource.
+     * Specifies the ID of the dedicated instance to which the APIs and the
+     * throttling policy belongs.
+     * Changing this will create a new resource.
      */
     public readonly instanceId!: pulumi.Output<string>;
     /**
-     * Specifies the ID of the API group to which the API response belongs to.
+     * Specifies the ID of the throttling policy.  
      * Changing this will create a new resource.
      */
     public readonly policyId!: pulumi.Output<string>;
     /**
-     * Specifies the publish ID corresponding to the API bound by the throttling policy.
+     * Specifies the publish IDs corresponding to the APIs bound by the throttling policy.
      */
     public readonly publishIds!: pulumi.Output<string[]>;
     /**
-     * Specifies the region where the API instance and throttling policy are located.
+     * Specifies the region where the dedicated instance and the throttling policy
+     * are located.
      * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
@@ -127,21 +125,23 @@ export class ThrottlingPolicyAssociate extends pulumi.CustomResource {
  */
 export interface ThrottlingPolicyAssociateState {
     /**
-     * Specifies the ID of the APIG dedicated instance to which the APIs and the
-     * throttling policy belongs. Changing this will create a new resource.
+     * Specifies the ID of the dedicated instance to which the APIs and the
+     * throttling policy belongs.
+     * Changing this will create a new resource.
      */
     instanceId?: pulumi.Input<string>;
     /**
-     * Specifies the ID of the API group to which the API response belongs to.
+     * Specifies the ID of the throttling policy.  
      * Changing this will create a new resource.
      */
     policyId?: pulumi.Input<string>;
     /**
-     * Specifies the publish ID corresponding to the API bound by the throttling policy.
+     * Specifies the publish IDs corresponding to the APIs bound by the throttling policy.
      */
     publishIds?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * Specifies the region where the API instance and throttling policy are located.
+     * Specifies the region where the dedicated instance and the throttling policy
+     * are located.
      * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
@@ -152,21 +152,23 @@ export interface ThrottlingPolicyAssociateState {
  */
 export interface ThrottlingPolicyAssociateArgs {
     /**
-     * Specifies the ID of the APIG dedicated instance to which the APIs and the
-     * throttling policy belongs. Changing this will create a new resource.
+     * Specifies the ID of the dedicated instance to which the APIs and the
+     * throttling policy belongs.
+     * Changing this will create a new resource.
      */
     instanceId: pulumi.Input<string>;
     /**
-     * Specifies the ID of the API group to which the API response belongs to.
+     * Specifies the ID of the throttling policy.  
      * Changing this will create a new resource.
      */
     policyId: pulumi.Input<string>;
     /**
-     * Specifies the publish ID corresponding to the API bound by the throttling policy.
+     * Specifies the publish IDs corresponding to the APIs bound by the throttling policy.
      */
     publishIds: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * Specifies the region where the API instance and throttling policy are located.
+     * Specifies the region where the dedicated instance and the throttling policy
+     * are located.
      * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;

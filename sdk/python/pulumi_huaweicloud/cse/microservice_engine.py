@@ -54,9 +54,12 @@ class MicroserviceEngineArgs:
                + Cannot be the account name or account name spelled backwards.
                + The password can only start with a letter.
         :param pulumi.Input[str] description: Specifies the description of the dedicated microservice engine.
-               The description can contian a maximum of `255` characters.
+               The description can contain a maximum of `255` characters.
                Changing this will create a new engine.
         :param pulumi.Input[str] eip_id: Specifies the EIP ID to which the dedicated microservice engine assocated.
+               Changing this will create a new engine.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the dedicated
+               microservice engine belongs.
                Changing this will create a new engine.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_params: Specifies the additional parameters for the dedicated microservice engine.
                Changing this will create a new engine.
@@ -173,7 +176,7 @@ class MicroserviceEngineArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of the dedicated microservice engine.
-        The description can contian a maximum of `255` characters.
+        The description can contain a maximum of `255` characters.
         Changing this will create a new engine.
         """
         return pulumi.get(self, "description")
@@ -198,6 +201,11 @@ class MicroserviceEngineArgs:
     @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID to which the dedicated
+        microservice engine belongs.
+        Changing this will create a new engine.
+        """
         return pulumi.get(self, "enterprise_project_id")
 
     @enterprise_project_id.setter
@@ -302,9 +310,12 @@ class _MicroserviceEngineState:
         :param pulumi.Input[Sequence[pulumi.Input['MicroserviceEngineConfigCenterAddressArgs']]] config_center_addresses: The address of config center.
                The object structure is documented below.
         :param pulumi.Input[str] description: Specifies the description of the dedicated microservice engine.
-               The description can contian a maximum of `255` characters.
+               The description can contain a maximum of `255` characters.
                Changing this will create a new engine.
         :param pulumi.Input[str] eip_id: Specifies the EIP ID to which the dedicated microservice engine assocated.
+               Changing this will create a new engine.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the dedicated
+               microservice engine belongs.
                Changing this will create a new engine.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_params: Specifies the additional parameters for the dedicated microservice engine.
                Changing this will create a new engine.
@@ -428,7 +439,7 @@ class _MicroserviceEngineState:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of the dedicated microservice engine.
-        The description can contian a maximum of `255` characters.
+        The description can contain a maximum of `255` characters.
         Changing this will create a new engine.
         """
         return pulumi.get(self, "description")
@@ -453,6 +464,11 @@ class _MicroserviceEngineState:
     @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID to which the dedicated
+        microservice engine belongs.
+        Changing this will create a new engine.
+        """
         return pulumi.get(self, "enterprise_project_id")
 
     @enterprise_project_id.setter
@@ -617,7 +633,7 @@ class MicroserviceEngine(pulumi.CustomResource):
 
         ## Import
 
-        Engines can be imported using their `id`, e.g.
+        Engines can be imported using their `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Cse/microserviceEngine:MicroserviceEngine test eddc5d42-f9d5-4f8e-984b-d6f3e088561c
@@ -637,7 +653,11 @@ class MicroserviceEngine(pulumi.CustomResource):
 
          ]
 
-         } }
+         } } For the engine created with the `enterprise_project_id`, its enterprise project ID needs to be specified additionally when importing, the format is `<id>/<enterprise_project_id>`, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Cse/microserviceEngine:MicroserviceEngine test eddc5d42-f9d5-4f8e-984b-d6f3e088561c/ef101e1a-990c-42cd-bb99-a4474e41e461
+        ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -661,9 +681,12 @@ class MicroserviceEngine(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the list of availability zone.
                Changing this will create a new engine.
         :param pulumi.Input[str] description: Specifies the description of the dedicated microservice engine.
-               The description can contian a maximum of `255` characters.
+               The description can contain a maximum of `255` characters.
                Changing this will create a new engine.
         :param pulumi.Input[str] eip_id: Specifies the EIP ID to which the dedicated microservice engine assocated.
+               Changing this will create a new engine.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the dedicated
+               microservice engine belongs.
                Changing this will create a new engine.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_params: Specifies the additional parameters for the dedicated microservice engine.
                Changing this will create a new engine.
@@ -708,7 +731,7 @@ class MicroserviceEngine(pulumi.CustomResource):
 
         ## Import
 
-        Engines can be imported using their `id`, e.g.
+        Engines can be imported using their `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Cse/microserviceEngine:MicroserviceEngine test eddc5d42-f9d5-4f8e-984b-d6f3e088561c
@@ -728,7 +751,11 @@ class MicroserviceEngine(pulumi.CustomResource):
 
          ]
 
-         } }
+         } } For the engine created with the `enterprise_project_id`, its enterprise project ID needs to be specified additionally when importing, the format is `<id>/<enterprise_project_id>`, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Cse/microserviceEngine:MicroserviceEngine test eddc5d42-f9d5-4f8e-984b-d6f3e088561c/ef101e1a-990c-42cd-bb99-a4474e41e461
+        ```
 
         :param str resource_name: The name of the resource.
         :param MicroserviceEngineArgs args: The arguments to use to populate this resource's properties.
@@ -845,9 +872,12 @@ class MicroserviceEngine(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MicroserviceEngineConfigCenterAddressArgs']]]] config_center_addresses: The address of config center.
                The object structure is documented below.
         :param pulumi.Input[str] description: Specifies the description of the dedicated microservice engine.
-               The description can contian a maximum of `255` characters.
+               The description can contain a maximum of `255` characters.
                Changing this will create a new engine.
         :param pulumi.Input[str] eip_id: Specifies the EIP ID to which the dedicated microservice engine assocated.
+               Changing this will create a new engine.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the dedicated
+               microservice engine belongs.
                Changing this will create a new engine.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_params: Specifies the additional parameters for the dedicated microservice engine.
                Changing this will create a new engine.
@@ -944,7 +974,7 @@ class MicroserviceEngine(pulumi.CustomResource):
     def description(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the description of the dedicated microservice engine.
-        The description can contian a maximum of `255` characters.
+        The description can contain a maximum of `255` characters.
         Changing this will create a new engine.
         """
         return pulumi.get(self, "description")
@@ -961,6 +991,11 @@ class MicroserviceEngine(pulumi.CustomResource):
     @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the enterprise project ID to which the dedicated
+        microservice engine belongs.
+        Changing this will create a new engine.
+        """
         return pulumi.get(self, "enterprise_project_id")
 
     @property

@@ -129,18 +129,19 @@ class EipBandwidth(dict):
                  name: Optional[str] = None,
                  size: Optional[int] = None):
         """
-        :param str share_type: Whether the bandwidth is dedicated or shared. Changing this creates a new
-               resource. Possible values are as follows:
+        :param str share_type: Specifies whether the bandwidth is dedicated or shared.  
+               Changing this will create a new resource. Possible values are as follows:
                + **PER**: Dedicated bandwidth
                + **WHOLE**: Shared bandwidth
         :param str charge_mode: Specifies whether the bandwidth is billed by traffic or by bandwidth
-               size. The value can be *traffic* or *bandwidth*. Changing this creates a new resource.
-        :param str id: The shared bandwidth id. This parameter is mandatory when
-               `share_type` is set to **WHOLE**. Changing this creates a new resource.
-        :param str name: The bandwidth name, which is a string of 1 to 64 characters that contain letters, digits,
-               underscores (_), and hyphens (-). This parameter is mandatory when `share_type` is set to **PER**.
-        :param int size: The bandwidth size. The value ranges from 1 to 300 Mbit/s. This parameter is mandatory
-               when `share_type` is set to **PER**.
+               size. The value can be **traffic** or **bandwidth**. Changing this will create a new resource.
+        :param str id: The shared bandwidth ID.  
+               This parameter is mandatory when `share_type` is set to **WHOLE**. Changing this will create a new resource.
+        :param str name: Specifies the bandwidth name.  
+               The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
+               This parameter is mandatory when `share_type` is set to **PER**.
+        :param int size: The bandwidth size.  
+               The value ranges from `1` to `300` Mbit/s. This parameter is mandatory when `share_type` is set to **PER**.
         """
         pulumi.set(__self__, "share_type", share_type)
         if charge_mode is not None:
@@ -156,8 +157,8 @@ class EipBandwidth(dict):
     @pulumi.getter(name="shareType")
     def share_type(self) -> str:
         """
-        Whether the bandwidth is dedicated or shared. Changing this creates a new
-        resource. Possible values are as follows:
+        Specifies whether the bandwidth is dedicated or shared.  
+        Changing this will create a new resource. Possible values are as follows:
         + **PER**: Dedicated bandwidth
         + **WHOLE**: Shared bandwidth
         """
@@ -168,7 +169,7 @@ class EipBandwidth(dict):
     def charge_mode(self) -> Optional[str]:
         """
         Specifies whether the bandwidth is billed by traffic or by bandwidth
-        size. The value can be *traffic* or *bandwidth*. Changing this creates a new resource.
+        size. The value can be **traffic** or **bandwidth**. Changing this will create a new resource.
         """
         return pulumi.get(self, "charge_mode")
 
@@ -176,8 +177,8 @@ class EipBandwidth(dict):
     @pulumi.getter
     def id(self) -> Optional[str]:
         """
-        The shared bandwidth id. This parameter is mandatory when
-        `share_type` is set to **WHOLE**. Changing this creates a new resource.
+        The shared bandwidth ID.  
+        This parameter is mandatory when `share_type` is set to **WHOLE**. Changing this will create a new resource.
         """
         return pulumi.get(self, "id")
 
@@ -185,8 +186,9 @@ class EipBandwidth(dict):
     @pulumi.getter
     def name(self) -> Optional[str]:
         """
-        The bandwidth name, which is a string of 1 to 64 characters that contain letters, digits,
-        underscores (_), and hyphens (-). This parameter is mandatory when `share_type` is set to **PER**.
+        Specifies the bandwidth name.  
+        The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
+        This parameter is mandatory when `share_type` is set to **PER**.
         """
         return pulumi.get(self, "name")
 
@@ -194,8 +196,8 @@ class EipBandwidth(dict):
     @pulumi.getter
     def size(self) -> Optional[int]:
         """
-        The bandwidth size. The value ranges from 1 to 300 Mbit/s. This parameter is mandatory
-        when `share_type` is set to **PER**.
+        The bandwidth size.  
+        The value ranges from `1` to `300` Mbit/s. This parameter is mandatory when `share_type` is set to **PER**.
         """
         return pulumi.get(self, "size")
 
@@ -229,13 +231,13 @@ class EipPublicip(dict):
                  port_id: Optional[str] = None,
                  type: Optional[str] = None):
         """
-        :param str ip_address: Specifies the EIP to be assigned. The value must be a valid **IPv4**
-               address in the available IP address range. The system automatically assigns an EIP if you do not specify it.
-               Changing this creates a new resource.
-        :param int ip_version: Specifies the IP version, either 4 (default) or 6.
+        :param str ip_address: Specifies the EIP address to be assigned.  
+               The value must be a valid **IPv4** address in the available IP address range.
+               The system automatically assigns an EIP if you do not specify it. Changing this will create a new resource.
+        :param int ip_version: Specifies the IP version, either `4` (default) or `6`.
         :param str port_id: The port ID which the EIP associated with.
-        :param str type: Specifies the EIP type. Possible values are *5_bgp* (dynamic BGP)
-               and *5_sbgp* (static BGP), the default value is *5_bgp*. Changing this creates a new resource.
+        :param str type: Specifies the EIP type. Possible values are **5_bgp** (dynamic BGP)
+               and **5_sbgp** (static BGP), the default value is **5_bgp**. Changing this will create a new resource.
         """
         if ip_address is not None:
             pulumi.set(__self__, "ip_address", ip_address)
@@ -250,9 +252,9 @@ class EipPublicip(dict):
     @pulumi.getter(name="ipAddress")
     def ip_address(self) -> Optional[str]:
         """
-        Specifies the EIP to be assigned. The value must be a valid **IPv4**
-        address in the available IP address range. The system automatically assigns an EIP if you do not specify it.
-        Changing this creates a new resource.
+        Specifies the EIP address to be assigned.  
+        The value must be a valid **IPv4** address in the available IP address range.
+        The system automatically assigns an EIP if you do not specify it. Changing this will create a new resource.
         """
         return pulumi.get(self, "ip_address")
 
@@ -260,7 +262,7 @@ class EipPublicip(dict):
     @pulumi.getter(name="ipVersion")
     def ip_version(self) -> Optional[int]:
         """
-        Specifies the IP version, either 4 (default) or 6.
+        Specifies the IP version, either `4` (default) or `6`.
         """
         return pulumi.get(self, "ip_version")
 
@@ -276,8 +278,8 @@ class EipPublicip(dict):
     @pulumi.getter
     def type(self) -> Optional[str]:
         """
-        Specifies the EIP type. Possible values are *5_bgp* (dynamic BGP)
-        and *5_sbgp* (static BGP), the default value is *5_bgp*. Changing this creates a new resource.
+        Specifies the EIP type. Possible values are **5_bgp** (dynamic BGP)
+        and **5_sbgp** (static BGP), the default value is **5_bgp**. Changing this will create a new resource.
         """
         return pulumi.get(self, "type")
 
@@ -412,10 +414,10 @@ class RouteTableRoute(dict):
                  type: str,
                  description: Optional[str] = None):
         """
-        :param str destination: - Specifies the destination address in the CIDR notation format,
+        :param str destination: Specifies the destination address in the CIDR notation format,
                for example, 192.168.200.0/24. The destination of each route must be unique and cannot overlap
                with any subnet in the VPC.
-        :param str nexthop: - Specifies the next hop.
+        :param str nexthop: Specifies the next hop.
                + If the route type is **ecs**, the value is an ECS instance ID in the VPC.
                + If the route type is **eni**, the value is the extension NIC of an ECS in the VPC.
                + If the route type is **vip**, the value is a virtual IP address.
@@ -424,9 +426,9 @@ class RouteTableRoute(dict):
                + If the route type is **vpn**, the value is a VPN gateway ID.
                + If the route type is **dc**, the value is a Direct Connect gateway ID.
                + If the route type is **cc**, the value is a Cloud Connection ID.
-        :param str type: - Specifies the route type. Currently, the value can be:
+        :param str type: Specifies the route type. Currently, the value can be:
                **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
-        :param str description: - Specifies the supplementary information about the route.
+        :param str description: Specifies the supplementary information about the route.
                The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
         """
         pulumi.set(__self__, "destination", destination)
@@ -439,7 +441,7 @@ class RouteTableRoute(dict):
     @pulumi.getter
     def destination(self) -> str:
         """
-        - Specifies the destination address in the CIDR notation format,
+        Specifies the destination address in the CIDR notation format,
         for example, 192.168.200.0/24. The destination of each route must be unique and cannot overlap
         with any subnet in the VPC.
         """
@@ -449,7 +451,7 @@ class RouteTableRoute(dict):
     @pulumi.getter
     def nexthop(self) -> str:
         """
-        - Specifies the next hop.
+        Specifies the next hop.
         + If the route type is **ecs**, the value is an ECS instance ID in the VPC.
         + If the route type is **eni**, the value is the extension NIC of an ECS in the VPC.
         + If the route type is **vip**, the value is a virtual IP address.
@@ -465,7 +467,7 @@ class RouteTableRoute(dict):
     @pulumi.getter
     def type(self) -> str:
         """
-        - Specifies the route type. Currently, the value can be:
+        Specifies the route type. Currently, the value can be:
         **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
         """
         return pulumi.get(self, "type")
@@ -474,7 +476,7 @@ class RouteTableRoute(dict):
     @pulumi.getter
     def description(self) -> Optional[str]:
         """
-        - Specifies the supplementary information about the route.
+        Specifies the supplementary information about the route.
         The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
         """
         return pulumi.get(self, "description")
@@ -688,6 +690,12 @@ class GetRouteTableRouteResult(dict):
                  destination: str,
                  nexthop: str,
                  type: str):
+        """
+        :param str description: The description about the route.
+        :param str destination: The destination address in the CIDR notation format
+        :param str nexthop: The next hop.
+        :param str type: The route type.
+        """
         pulumi.set(__self__, "description", description)
         pulumi.set(__self__, "destination", destination)
         pulumi.set(__self__, "nexthop", nexthop)
@@ -696,21 +704,33 @@ class GetRouteTableRouteResult(dict):
     @property
     @pulumi.getter
     def description(self) -> str:
+        """
+        The description about the route.
+        """
         return pulumi.get(self, "description")
 
     @property
     @pulumi.getter
     def destination(self) -> str:
+        """
+        The destination address in the CIDR notation format
+        """
         return pulumi.get(self, "destination")
 
     @property
     @pulumi.getter
     def nexthop(self) -> str:
+        """
+        The next hop.
+        """
         return pulumi.get(self, "nexthop")
 
     @property
     @pulumi.getter
     def type(self) -> str:
+        """
+        The route type.
+        """
         return pulumi.get(self, "type")
 
 
@@ -870,7 +890,7 @@ class GetSecgroupsSecurityGroupResult(dict):
         :param str description: Specifies the description of the security group. The security groups can be
                filtered by keywords in the description.
         :param str enterprise_project_id: Specifies the enterprise project ID of the security group.
-        :param str id: The security group ID.
+        :param str id: Specifies the id of the desired security group.
         :param str name: Specifies the name of the security group.
         :param str updated_at: The last update time, in UTC format.
         """
@@ -910,7 +930,7 @@ class GetSecgroupsSecurityGroupResult(dict):
     @pulumi.getter
     def id(self) -> str:
         """
-        The security group ID.
+        Specifies the id of the desired security group.
         """
         return pulumi.get(self, "id")
 

@@ -11,74 +11,13 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages RDS Mysql database privilege resource within HuaweiCloud.
-//
-// ## Example Usage
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Rds"
-//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Rds"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			cfg := config.New(ctx, "")
-//			instanceId := cfg.RequireObject("instanceId")
-//			dbName := cfg.RequireObject("dbName")
-//			userName1 := cfg.RequireObject("userName1")
-//			userName2 := cfg.RequireObject("userName2")
-//			_, err := Rds.NewDatabase_privilege(ctx, "test", &Rds.Database_privilegeArgs{
-//				InstanceId: pulumi.Any(instanceId),
-//				DbName:     pulumi.Any(dbName),
-//				Users: rds.Database_privilegeUserArray{
-//					&rds.Database_privilegeUserArgs{
-//						Name:     pulumi.Any(userName1),
-//						Readonly: pulumi.Bool(true),
-//					},
-//					&rds.Database_privilegeUserArgs{
-//						Name:     pulumi.Any(userName2),
-//						Readonly: pulumi.Bool(false),
-//					},
-//				},
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
-//
-// ## Import
-//
-// RDS database privilege can be imported using the `instance id` and `database name`, e.g.
-//
-// ```sh
-//
-//	$ pulumi import huaweicloud:Rds/database_privilege:Database_privilege test instance_id/database_name
-//
-// ```
 type Database_privilege struct {
 	pulumi.CustomResourceState
 
-	// Specifies the database name. Changing this creates a new resource.
-	DbName pulumi.StringOutput `pulumi:"dbName"`
-	// Specifies the RDS instance ID. Changing this will create a new resource.
-	InstanceId pulumi.StringOutput `pulumi:"instanceId"`
-	// The region in which to create the RDS database privilege resource. If omitted,
-	// the provider-level region will be used. Changing this creates a new resource.
-	Region pulumi.StringOutput `pulumi:"region"`
-	// Specifies the account that associated with the database. This parameter supports
-	// a maximum of 50 elements. Structure is documented below. Changing this creates a new resource.
-	Users Database_privilegeUserArrayOutput `pulumi:"users"`
+	DbName     pulumi.StringOutput               `pulumi:"dbName"`
+	InstanceId pulumi.StringOutput               `pulumi:"instanceId"`
+	Region     pulumi.StringOutput               `pulumi:"region"`
+	Users      Database_privilegeUserArrayOutput `pulumi:"users"`
 }
 
 // NewDatabase_privilege registers a new resource with the given unique name, arguments, and options.
@@ -120,29 +59,17 @@ func GetDatabase_privilege(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Database_privilege resources.
 type database_privilegeState struct {
-	// Specifies the database name. Changing this creates a new resource.
-	DbName *string `pulumi:"dbName"`
-	// Specifies the RDS instance ID. Changing this will create a new resource.
-	InstanceId *string `pulumi:"instanceId"`
-	// The region in which to create the RDS database privilege resource. If omitted,
-	// the provider-level region will be used. Changing this creates a new resource.
-	Region *string `pulumi:"region"`
-	// Specifies the account that associated with the database. This parameter supports
-	// a maximum of 50 elements. Structure is documented below. Changing this creates a new resource.
-	Users []Database_privilegeUser `pulumi:"users"`
+	DbName     *string                  `pulumi:"dbName"`
+	InstanceId *string                  `pulumi:"instanceId"`
+	Region     *string                  `pulumi:"region"`
+	Users      []Database_privilegeUser `pulumi:"users"`
 }
 
 type Database_privilegeState struct {
-	// Specifies the database name. Changing this creates a new resource.
-	DbName pulumi.StringPtrInput
-	// Specifies the RDS instance ID. Changing this will create a new resource.
+	DbName     pulumi.StringPtrInput
 	InstanceId pulumi.StringPtrInput
-	// The region in which to create the RDS database privilege resource. If omitted,
-	// the provider-level region will be used. Changing this creates a new resource.
-	Region pulumi.StringPtrInput
-	// Specifies the account that associated with the database. This parameter supports
-	// a maximum of 50 elements. Structure is documented below. Changing this creates a new resource.
-	Users Database_privilegeUserArrayInput
+	Region     pulumi.StringPtrInput
+	Users      Database_privilegeUserArrayInput
 }
 
 func (Database_privilegeState) ElementType() reflect.Type {
@@ -150,30 +77,18 @@ func (Database_privilegeState) ElementType() reflect.Type {
 }
 
 type database_privilegeArgs struct {
-	// Specifies the database name. Changing this creates a new resource.
-	DbName string `pulumi:"dbName"`
-	// Specifies the RDS instance ID. Changing this will create a new resource.
-	InstanceId string `pulumi:"instanceId"`
-	// The region in which to create the RDS database privilege resource. If omitted,
-	// the provider-level region will be used. Changing this creates a new resource.
-	Region *string `pulumi:"region"`
-	// Specifies the account that associated with the database. This parameter supports
-	// a maximum of 50 elements. Structure is documented below. Changing this creates a new resource.
-	Users []Database_privilegeUser `pulumi:"users"`
+	DbName     string                   `pulumi:"dbName"`
+	InstanceId string                   `pulumi:"instanceId"`
+	Region     *string                  `pulumi:"region"`
+	Users      []Database_privilegeUser `pulumi:"users"`
 }
 
 // The set of arguments for constructing a Database_privilege resource.
 type Database_privilegeArgs struct {
-	// Specifies the database name. Changing this creates a new resource.
-	DbName pulumi.StringInput
-	// Specifies the RDS instance ID. Changing this will create a new resource.
+	DbName     pulumi.StringInput
 	InstanceId pulumi.StringInput
-	// The region in which to create the RDS database privilege resource. If omitted,
-	// the provider-level region will be used. Changing this creates a new resource.
-	Region pulumi.StringPtrInput
-	// Specifies the account that associated with the database. This parameter supports
-	// a maximum of 50 elements. Structure is documented below. Changing this creates a new resource.
-	Users Database_privilegeUserArrayInput
+	Region     pulumi.StringPtrInput
+	Users      Database_privilegeUserArrayInput
 }
 
 func (Database_privilegeArgs) ElementType() reflect.Type {
@@ -263,24 +178,18 @@ func (o Database_privilegeOutput) ToDatabase_privilegeOutputWithContext(ctx cont
 	return o
 }
 
-// Specifies the database name. Changing this creates a new resource.
 func (o Database_privilegeOutput) DbName() pulumi.StringOutput {
 	return o.ApplyT(func(v *Database_privilege) pulumi.StringOutput { return v.DbName }).(pulumi.StringOutput)
 }
 
-// Specifies the RDS instance ID. Changing this will create a new resource.
 func (o Database_privilegeOutput) InstanceId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Database_privilege) pulumi.StringOutput { return v.InstanceId }).(pulumi.StringOutput)
 }
 
-// The region in which to create the RDS database privilege resource. If omitted,
-// the provider-level region will be used. Changing this creates a new resource.
 func (o Database_privilegeOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Database_privilege) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Specifies the account that associated with the database. This parameter supports
-// a maximum of 50 elements. Structure is documented below. Changing this creates a new resource.
 func (o Database_privilegeOutput) Users() Database_privilegeUserArrayOutput {
 	return o.ApplyT(func(v *Database_privilege) Database_privilegeUserArrayOutput { return v.Users }).(Database_privilegeUserArrayOutput)
 }

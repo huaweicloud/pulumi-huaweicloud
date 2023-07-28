@@ -16,6 +16,74 @@ import (
 // > When deleting a microservice, all instances under it will also be deleted together.
 //
 // ## Example Usage
+// ### Create a microservice in an engine with RBAC authentication disabled
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cse"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			engineConnAddr := cfg.RequireObject("engineConnAddr")
+//			serviceName := cfg.RequireObject("serviceName")
+//			appName := cfg.RequireObject("appName")
+//			_, err := Cse.NewMicroservice(ctx, "test", &Cse.MicroserviceArgs{
+//				ConnectAddress: pulumi.Any(engineConnAddr),
+//				Version:        pulumi.String("1.0.0"),
+//				Environment:    pulumi.String("development"),
+//				AppName:        pulumi.Any(appName),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
+// ### Create a microservice in an engine with RBAC authentication enabled
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cse"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			engineConnAddr := cfg.RequireObject("engineConnAddr")
+//			serviceName := cfg.RequireObject("serviceName")
+//			appName := cfg.RequireObject("appName")
+//			_, err := Cse.NewMicroservice(ctx, "test", &Cse.MicroserviceArgs{
+//				ConnectAddress: pulumi.Any(engineConnAddr),
+//				Version:        pulumi.String("1.0.0"),
+//				Environment:    pulumi.String("development"),
+//				AppName:        pulumi.Any(appName),
+//				AdminUser:      pulumi.String("root"),
+//				AdminPass:      pulumi.String("Huawei!123"),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
 //
 // ## Import
 //
@@ -58,7 +126,7 @@ type Microservice struct {
 	// specified dedicated CSE engine. Changing this will create a new microservice.
 	ConnectAddress pulumi.StringOutput `pulumi:"connectAddress"`
 	// Specifies the description of the dedicated microservice.
-	// The description can contian a maximum of `256` characters.
+	// The description can contain a maximum of `256` characters.
 	// Changing this will create a new microservice.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the environment (stage) type.
@@ -138,7 +206,7 @@ type microserviceState struct {
 	// specified dedicated CSE engine. Changing this will create a new microservice.
 	ConnectAddress *string `pulumi:"connectAddress"`
 	// Specifies the description of the dedicated microservice.
-	// The description can contian a maximum of `256` characters.
+	// The description can contain a maximum of `256` characters.
 	// Changing this will create a new microservice.
 	Description *string `pulumi:"description"`
 	// Specifies the environment (stage) type.
@@ -180,7 +248,7 @@ type MicroserviceState struct {
 	// specified dedicated CSE engine. Changing this will create a new microservice.
 	ConnectAddress pulumi.StringPtrInput
 	// Specifies the description of the dedicated microservice.
-	// The description can contian a maximum of `256` characters.
+	// The description can contain a maximum of `256` characters.
 	// Changing this will create a new microservice.
 	Description pulumi.StringPtrInput
 	// Specifies the environment (stage) type.
@@ -226,7 +294,7 @@ type microserviceArgs struct {
 	// specified dedicated CSE engine. Changing this will create a new microservice.
 	ConnectAddress string `pulumi:"connectAddress"`
 	// Specifies the description of the dedicated microservice.
-	// The description can contian a maximum of `256` characters.
+	// The description can contain a maximum of `256` characters.
 	// Changing this will create a new microservice.
 	Description *string `pulumi:"description"`
 	// Specifies the environment (stage) type.
@@ -267,7 +335,7 @@ type MicroserviceArgs struct {
 	// specified dedicated CSE engine. Changing this will create a new microservice.
 	ConnectAddress pulumi.StringInput
 	// Specifies the description of the dedicated microservice.
-	// The description can contian a maximum of `256` characters.
+	// The description can contain a maximum of `256` characters.
 	// Changing this will create a new microservice.
 	Description pulumi.StringPtrInput
 	// Specifies the environment (stage) type.
@@ -405,7 +473,7 @@ func (o MicroserviceOutput) ConnectAddress() pulumi.StringOutput {
 }
 
 // Specifies the description of the dedicated microservice.
-// The description can contian a maximum of `256` characters.
+// The description can contain a maximum of `256` characters.
 // Changing this will create a new microservice.
 func (o MicroserviceOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Microservice) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)

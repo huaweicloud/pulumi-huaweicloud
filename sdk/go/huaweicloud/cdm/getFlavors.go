@@ -10,7 +10,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Use this data source to get available Huaweicloud cdm flavors.
+// Use this data source to get available HuaweiCloud CDM flavors.
 //
 // ## Example Usage
 //
@@ -48,7 +48,8 @@ func GetFlavors(ctx *pulumi.Context, args *GetFlavorsArgs, opts ...pulumi.Invoke
 
 // A collection of arguments for invoking getFlavors.
 type GetFlavorsArgs struct {
-	// The region in which to obtain the CDM flavors. If omitted, the provider-level region will be used.
+	// The region in which to obtain the CDM flavors.
+	// If omitted, the provider-level region will be used.
 	Region *string `pulumi:"region"`
 }
 
@@ -57,10 +58,9 @@ type GetFlavorsResult struct {
 	// Indicates the flavors information. Structure is documented below.
 	Flavors []GetFlavorsFlavor `pulumi:"flavors"`
 	// The provider-assigned unique ID for this managed resource.
-	Id string `pulumi:"id"`
-	// The region in which to obtain the CDM flavors. If omitted, the provider-level region will be used.
+	Id     string `pulumi:"id"`
 	Region string `pulumi:"region"`
-	// The version of the flavor.
+	// The version of the CDM cluster.
 	Version string `pulumi:"version"`
 }
 
@@ -79,7 +79,8 @@ func GetFlavorsOutput(ctx *pulumi.Context, args GetFlavorsOutputArgs, opts ...pu
 
 // A collection of arguments for invoking getFlavors.
 type GetFlavorsOutputArgs struct {
-	// The region in which to obtain the CDM flavors. If omitted, the provider-level region will be used.
+	// The region in which to obtain the CDM flavors.
+	// If omitted, the provider-level region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
 }
 
@@ -112,12 +113,11 @@ func (o GetFlavorsResultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlavorsResult) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// The region in which to obtain the CDM flavors. If omitted, the provider-level region will be used.
 func (o GetFlavorsResultOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlavorsResult) string { return v.Region }).(pulumi.StringOutput)
 }
 
-// The version of the flavor.
+// The version of the CDM cluster.
 func (o GetFlavorsResultOutput) Version() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlavorsResult) string { return v.Version }).(pulumi.StringOutput)
 }

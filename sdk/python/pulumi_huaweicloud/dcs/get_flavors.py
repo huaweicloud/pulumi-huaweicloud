@@ -158,10 +158,10 @@ def get_flavors(cache_mode: Optional[str] = None,
 
     :param str cache_mode: The mode of a cache engine. The valid values are as follows:
     :param float capacity: The total memory of the cache, in GB.
-           + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values:
+           + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values:
            `0.125`, `0.25`, `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
-           Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-           `1024`.
+           Cluster instance specifications support `4`,`8`,`16`,`24`, `32`, `48`, `64`, `96`, `128`, `192`,
+           `256`, `384`, `512`, `768` and `1024`.
            + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
            Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
            + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -170,7 +170,7 @@ def get_flavors(cache_mode: Optional[str] = None,
     :param str engine: The engine of the cache instance. Valid values are *Redis* and *Memcached*.
            Default value is *Redis*.
     :param str engine_version: The version of a cache engine.
-           It is mandatory when the engine is *Redis*, the value can be `3.0`, `4.0`, or `5.0`.
+           It is mandatory when the engine is *Redis*, the value can be `3.0`, `4.0`, `5.0`, or `6.0`.
     :param str name: The flavor name of the cache instance.
     :param str region: Specifies the region in which to obtain the DCS flavors.
            If omitted, the provider-level region will be used.
@@ -222,10 +222,10 @@ def get_flavors_output(cache_mode: Optional[pulumi.Input[Optional[str]]] = None,
 
     :param str cache_mode: The mode of a cache engine. The valid values are as follows:
     :param float capacity: The total memory of the cache, in GB.
-           + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values:
+           + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values:
            `0.125`, `0.25`, `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
-           Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-           `1024`.
+           Cluster instance specifications support `4`,`8`,`16`,`24`, `32`, `48`, `64`, `96`, `128`, `192`,
+           `256`, `384`, `512`, `768` and `1024`.
            + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
            Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
            + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -234,7 +234,7 @@ def get_flavors_output(cache_mode: Optional[pulumi.Input[Optional[str]]] = None,
     :param str engine: The engine of the cache instance. Valid values are *Redis* and *Memcached*.
            Default value is *Redis*.
     :param str engine_version: The version of a cache engine.
-           It is mandatory when the engine is *Redis*, the value can be `3.0`, `4.0`, or `5.0`.
+           It is mandatory when the engine is *Redis*, the value can be `3.0`, `4.0`, `5.0`, or `6.0`.
     :param str name: The flavor name of the cache instance.
     :param str region: Specifies the region in which to obtain the DCS flavors.
            If omitted, the provider-level region will be used.

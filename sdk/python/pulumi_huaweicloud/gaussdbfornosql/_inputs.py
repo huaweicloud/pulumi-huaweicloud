@@ -80,8 +80,11 @@ class CassandraInstanceDatastoreArgs:
                  version: pulumi.Input[str]):
         """
         :param pulumi.Input[str] engine: Specifies the database engine. Only "GeminiDB-Cassandra" is supported now.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] storage_engine: Specifies the storage engine. Only "rocksDB" is supported now.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] version: Specifies the database version.
+               Changing this parameter will create a new resource.
         """
         pulumi.set(__self__, "engine", engine)
         pulumi.set(__self__, "storage_engine", storage_engine)
@@ -92,6 +95,7 @@ class CassandraInstanceDatastoreArgs:
     def engine(self) -> pulumi.Input[str]:
         """
         Specifies the database engine. Only "GeminiDB-Cassandra" is supported now.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "engine")
 
@@ -104,6 +108,7 @@ class CassandraInstanceDatastoreArgs:
     def storage_engine(self) -> pulumi.Input[str]:
         """
         Specifies the storage engine. Only "rocksDB" is supported now.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "storage_engine")
 
@@ -116,6 +121,7 @@ class CassandraInstanceDatastoreArgs:
     def version(self) -> pulumi.Input[str]:
         """
         Specifies the database version.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "version")
 
@@ -271,8 +277,11 @@ class InfluxInstanceDatastoreArgs:
                  version: pulumi.Input[str]):
         """
         :param pulumi.Input[str] engine: Specifies the database engine. Only **influxdb** is supported now.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] storage_engine: Specifies the storage engine. Only **rocksDB** is supported now.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] version: Specifies the database version.
+               Changing this parameter will create a new resource.
         """
         pulumi.set(__self__, "engine", engine)
         pulumi.set(__self__, "storage_engine", storage_engine)
@@ -283,6 +292,7 @@ class InfluxInstanceDatastoreArgs:
     def engine(self) -> pulumi.Input[str]:
         """
         Specifies the database engine. Only **influxdb** is supported now.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "engine")
 
@@ -295,6 +305,7 @@ class InfluxInstanceDatastoreArgs:
     def storage_engine(self) -> pulumi.Input[str]:
         """
         Specifies the storage engine. Only **rocksDB** is supported now.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "storage_engine")
 
@@ -307,6 +318,7 @@ class InfluxInstanceDatastoreArgs:
     def version(self) -> pulumi.Input[str]:
         """
         Specifies the database version.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "version")
 
@@ -653,8 +665,11 @@ class RedisInstanceDatastoreArgs:
                  version: pulumi.Input[str]):
         """
         :param pulumi.Input[str] engine: Specifies the database engine. Only "redis" is supported now.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] storage_engine: Specifies the storage engine. Only "rocksDB" is supported now.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] version: Specifies the database version. Only "5.0" is supported now.
+               Changing this parameter will create a new resource.
         """
         pulumi.set(__self__, "engine", engine)
         pulumi.set(__self__, "storage_engine", storage_engine)
@@ -665,6 +680,7 @@ class RedisInstanceDatastoreArgs:
     def engine(self) -> pulumi.Input[str]:
         """
         Specifies the database engine. Only "redis" is supported now.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "engine")
 
@@ -677,6 +693,7 @@ class RedisInstanceDatastoreArgs:
     def storage_engine(self) -> pulumi.Input[str]:
         """
         Specifies the storage engine. Only "rocksDB" is supported now.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "storage_engine")
 
@@ -689,6 +706,7 @@ class RedisInstanceDatastoreArgs:
     def version(self) -> pulumi.Input[str]:
         """
         Specifies the database version. Only "5.0" is supported now.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "version")
 
@@ -703,6 +721,7 @@ class RedisInstanceNodeArgs:
                  id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  private_ip: Optional[pulumi.Input[str]] = None,
+                 public_ip: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  support_reduce: Optional[pulumi.Input[bool]] = None):
         """
@@ -711,6 +730,7 @@ class RedisInstanceNodeArgs:
                must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
                digits, hyphens (-), and underscores (_). Chinese characters must be in UTF-8 or Unicode format.
         :param pulumi.Input[str] private_ip: Indicates the private IP address of a node.
+        :param pulumi.Input[str] public_ip: Indicates the public IP address of a node.
         :param pulumi.Input[str] status: Indicates the node status.
         :param pulumi.Input[bool] support_reduce: Indicates whether the node support reduce or not.
         """
@@ -720,6 +740,8 @@ class RedisInstanceNodeArgs:
             pulumi.set(__self__, "name", name)
         if private_ip is not None:
             pulumi.set(__self__, "private_ip", private_ip)
+        if public_ip is not None:
+            pulumi.set(__self__, "public_ip", public_ip)
         if status is not None:
             pulumi.set(__self__, "status", status)
         if support_reduce is not None:
@@ -762,6 +784,18 @@ class RedisInstanceNodeArgs:
     @private_ip.setter
     def private_ip(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "private_ip", value)
+
+    @property
+    @pulumi.getter(name="publicIp")
+    def public_ip(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the public IP address of a node.
+        """
+        return pulumi.get(self, "public_ip")
+
+    @public_ip.setter
+    def public_ip(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "public_ip", value)
 
     @property
     @pulumi.getter

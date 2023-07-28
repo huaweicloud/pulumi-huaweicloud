@@ -84,18 +84,18 @@ export class Route extends pulumi.CustomResource {
     }
 
     /**
-     * - Specifies the supplementary information about the route.
+     * Specifies the supplementary information about the route.
      * The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * - Specifies the destination address in the CIDR notation format,
+     * Specifies the destination address in the CIDR notation format,
      * for example, 192.168.200.0/24. The destination of each route must be unique and cannot overlap with any
      * subnet in the VPC. Changing this creates a new resource.
      */
     public readonly destination!: pulumi.Output<string>;
     /**
-     * - Specifies the next hop.
+     * Specifies the next hop.
      * + If the route type is **ecs**, the value is an ECS instance ID in the VPC.
      * + If the route type is **eni**, the value is the extension NIC of an ECS in the VPC.
      * + If the route type is **vip**, the value is a virtual IP address.
@@ -112,7 +112,7 @@ export class Route extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * - Specifies the route table ID for which a route is to be added.
+     * Specifies the route table ID for which a route is to be added.
      * If the value is not set, the route will be added to the *default* route table.
      */
     public readonly routeTableId!: pulumi.Output<string>;
@@ -121,12 +121,12 @@ export class Route extends pulumi.CustomResource {
      */
     public /*out*/ readonly routeTableName!: pulumi.Output<string>;
     /**
-     * - Specifies the route type. Currently, the value can be:
+     * Specifies the route type. Currently, the value can be:
      * **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
      */
     public readonly type!: pulumi.Output<string>;
     /**
-     * - Specifies the VPC for which a route is to be added. Changing this creates a
+     * Specifies the VPC for which a route is to be added. Changing this creates a
      * new resource.
      */
     public readonly vpcId!: pulumi.Output<string>;
@@ -185,18 +185,18 @@ export class Route extends pulumi.CustomResource {
  */
 export interface RouteState {
     /**
-     * - Specifies the supplementary information about the route.
+     * Specifies the supplementary information about the route.
      * The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
      */
     description?: pulumi.Input<string>;
     /**
-     * - Specifies the destination address in the CIDR notation format,
+     * Specifies the destination address in the CIDR notation format,
      * for example, 192.168.200.0/24. The destination of each route must be unique and cannot overlap with any
      * subnet in the VPC. Changing this creates a new resource.
      */
     destination?: pulumi.Input<string>;
     /**
-     * - Specifies the next hop.
+     * Specifies the next hop.
      * + If the route type is **ecs**, the value is an ECS instance ID in the VPC.
      * + If the route type is **eni**, the value is the extension NIC of an ECS in the VPC.
      * + If the route type is **vip**, the value is a virtual IP address.
@@ -213,7 +213,7 @@ export interface RouteState {
      */
     region?: pulumi.Input<string>;
     /**
-     * - Specifies the route table ID for which a route is to be added.
+     * Specifies the route table ID for which a route is to be added.
      * If the value is not set, the route will be added to the *default* route table.
      */
     routeTableId?: pulumi.Input<string>;
@@ -222,12 +222,12 @@ export interface RouteState {
      */
     routeTableName?: pulumi.Input<string>;
     /**
-     * - Specifies the route type. Currently, the value can be:
+     * Specifies the route type. Currently, the value can be:
      * **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
      */
     type?: pulumi.Input<string>;
     /**
-     * - Specifies the VPC for which a route is to be added. Changing this creates a
+     * Specifies the VPC for which a route is to be added. Changing this creates a
      * new resource.
      */
     vpcId?: pulumi.Input<string>;
@@ -238,18 +238,18 @@ export interface RouteState {
  */
 export interface RouteArgs {
     /**
-     * - Specifies the supplementary information about the route.
+     * Specifies the supplementary information about the route.
      * The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
      */
     description?: pulumi.Input<string>;
     /**
-     * - Specifies the destination address in the CIDR notation format,
+     * Specifies the destination address in the CIDR notation format,
      * for example, 192.168.200.0/24. The destination of each route must be unique and cannot overlap with any
      * subnet in the VPC. Changing this creates a new resource.
      */
     destination: pulumi.Input<string>;
     /**
-     * - Specifies the next hop.
+     * Specifies the next hop.
      * + If the route type is **ecs**, the value is an ECS instance ID in the VPC.
      * + If the route type is **eni**, the value is the extension NIC of an ECS in the VPC.
      * + If the route type is **vip**, the value is a virtual IP address.
@@ -266,17 +266,17 @@ export interface RouteArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * - Specifies the route table ID for which a route is to be added.
+     * Specifies the route table ID for which a route is to be added.
      * If the value is not set, the route will be added to the *default* route table.
      */
     routeTableId?: pulumi.Input<string>;
     /**
-     * - Specifies the route type. Currently, the value can be:
+     * Specifies the route type. Currently, the value can be:
      * **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
      */
     type: pulumi.Input<string>;
     /**
-     * - Specifies the VPC for which a route is to be added. Changing this creates a
+     * Specifies the VPC for which a route is to be added. Changing this creates a
      * new resource.
      */
     vpcId: pulumi.Input<string>;

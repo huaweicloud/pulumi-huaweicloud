@@ -36,6 +36,7 @@ class BucketObjectArgs:
         :param pulumi.Input[bool] encryption: Whether enable server-side encryption of the object in SSE-KMS mode.
         :param pulumi.Input[str] etag: Specifies the unique identifier of the object content. It can be used to trigger updates.
                The only meaningful value is `md5(file("path_to_file"))`.
+        :param pulumi.Input[str] kms_key_id: The ID of the kms key. If omitted, the default master key will be used.
         :param pulumi.Input[str] region: The region in which to create the OBS bucket object resource. If omitted, the
                provider-level region will be used. Changing this creates a new OBS bucket object resource.
         :param pulumi.Input[str] source: The path to the source file being uploaded to the bucket.
@@ -151,6 +152,9 @@ class BucketObjectArgs:
     @property
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The ID of the kms key. If omitted, the default master key will be used.
+        """
         return pulumi.get(self, "kms_key_id")
 
     @kms_key_id.setter
@@ -222,6 +226,7 @@ class _BucketObjectState:
         :param pulumi.Input[str] etag: Specifies the unique identifier of the object content. It can be used to trigger updates.
                The only meaningful value is `md5(file("path_to_file"))`.
         :param pulumi.Input[str] key: The name of the object once it is in the bucket.
+        :param pulumi.Input[str] kms_key_id: The ID of the kms key. If omitted, the default master key will be used.
         :param pulumi.Input[str] region: The region in which to create the OBS bucket object resource. If omitted, the
                provider-level region will be used. Changing this creates a new OBS bucket object resource.
         :param pulumi.Input[int] size: the size of the object in bytes.
@@ -345,6 +350,9 @@ class _BucketObjectState:
     @property
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The ID of the kms key. If omitted, the default master key will be used.
+        """
         return pulumi.get(self, "kms_key_id")
 
     @kms_key_id.setter
@@ -481,7 +489,7 @@ class BucketObject(pulumi.CustomResource):
          $ pulumi import huaweicloud:Obs/bucketObject:BucketObject object bucket/key
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`encryption`, `source`, `acl` and `sse_kms_key_id`. It is generally recommended running `terraform plan` after importing an object. You can then decide if changes should be applied to the object, or the resource definition should be updated to align with the object. Also you can ignore changes as below. resource "huaweicloud_obs_bucket_object" "object" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`encryption`, `source`, `acl` and `kms_key_id`. It is generally recommended running `terraform plan` after importing an object. You can then decide if changes should be applied to the object, or the resource definition should be updated to align with the object. Also you can ignore changes as below. resource "huaweicloud_obs_bucket_object" "object" {
 
          ...
 
@@ -489,7 +497,7 @@ class BucketObject(pulumi.CustomResource):
 
          ignore_changes = [
 
-         encryption, source, acl, sse_kms_key_id,
+         encryption, source, acl, kms_key_id,
 
          ]
 
@@ -506,6 +514,7 @@ class BucketObject(pulumi.CustomResource):
         :param pulumi.Input[str] etag: Specifies the unique identifier of the object content. It can be used to trigger updates.
                The only meaningful value is `md5(file("path_to_file"))`.
         :param pulumi.Input[str] key: The name of the object once it is in the bucket.
+        :param pulumi.Input[str] kms_key_id: The ID of the kms key. If omitted, the default master key will be used.
         :param pulumi.Input[str] region: The region in which to create the OBS bucket object resource. If omitted, the
                provider-level region will be used. Changing this creates a new OBS bucket object resource.
         :param pulumi.Input[str] source: The path to the source file being uploaded to the bucket.
@@ -568,7 +577,7 @@ class BucketObject(pulumi.CustomResource):
          $ pulumi import huaweicloud:Obs/bucketObject:BucketObject object bucket/key
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`encryption`, `source`, `acl` and `sse_kms_key_id`. It is generally recommended running `terraform plan` after importing an object. You can then decide if changes should be applied to the object, or the resource definition should be updated to align with the object. Also you can ignore changes as below. resource "huaweicloud_obs_bucket_object" "object" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`encryption`, `source`, `acl` and `kms_key_id`. It is generally recommended running `terraform plan` after importing an object. You can then decide if changes should be applied to the object, or the resource definition should be updated to align with the object. Also you can ignore changes as below. resource "huaweicloud_obs_bucket_object" "object" {
 
          ...
 
@@ -576,7 +585,7 @@ class BucketObject(pulumi.CustomResource):
 
          ignore_changes = [
 
-         encryption, source, acl, sse_kms_key_id,
+         encryption, source, acl, kms_key_id,
 
          ]
 
@@ -673,6 +682,7 @@ class BucketObject(pulumi.CustomResource):
         :param pulumi.Input[str] etag: Specifies the unique identifier of the object content. It can be used to trigger updates.
                The only meaningful value is `md5(file("path_to_file"))`.
         :param pulumi.Input[str] key: The name of the object once it is in the bucket.
+        :param pulumi.Input[str] kms_key_id: The ID of the kms key. If omitted, the default master key will be used.
         :param pulumi.Input[str] region: The region in which to create the OBS bucket object resource. If omitted, the
                provider-level region will be used. Changing this creates a new OBS bucket object resource.
         :param pulumi.Input[int] size: the size of the object in bytes.
@@ -760,6 +770,9 @@ class BucketObject(pulumi.CustomResource):
     @property
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        The ID of the kms key. If omitted, the default master key will be used.
+        """
         return pulumi.get(self, "kms_key_id")
 
     @property

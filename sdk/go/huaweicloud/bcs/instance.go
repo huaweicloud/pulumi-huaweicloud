@@ -21,6 +21,7 @@ type Instance struct {
 	//   `Isdeleting`, `Normal`, `AbNormal` and `Unknown`.
 	// * `peer_orgs/status_detail` - The peer status in the format like `1/1`. The denominator is the total number of peers in
 	//   the organization, and the numerator is the number of normal peers.
+	// * `peer_orgs/address` - The peer domain name or IP address of the cluster.
 	// * `peer_orgs/address/domain_port` - The domain name address.
 	// * `peer_orgs/address/ip_port` - The IP address.
 	// * `kafka/name` - The Kafka instance name.
@@ -38,19 +39,23 @@ type Instance struct {
 	// Specifies an array of one or more channels to attach to the BCS instance. If
 	// omitted, the bcs instance will create a `channels` named `channel` by default. Changing this will create a new
 	// instance. The channels object structure is documented below.
-	Channels    InstanceChannelArrayOutput `pulumi:"channels"`
-	ClusterType pulumi.StringOutput        `pulumi:"clusterType"`
+	Channels InstanceChannelArrayOutput `pulumi:"channels"`
+	// The type of the cluster where the BCS service is deployed.
+	ClusterType pulumi.StringOutput `pulumi:"clusterType"`
 	// Specifies the consensus algorithm used by the BCS instance. The valid
 	// values of fabric 1.4 are `solo`, `kafka` and `SFLIC`, and the valid values of fabric 2.0 are `SFLIC`
 	// and `etcdraft`. Changing this will create a new instance.
 	Consensus pulumi.StringOutput `pulumi:"consensus"`
 	// Specifies the NoSQL database used by BCS instance. If omitted, the bcs instance
-	// will create a `goleveldb`(File Database) database by default. Changing this will create a new instance. The couchdb
-	// object structure is documented below.
+	// will create a `goleveldb`(File Database) database by default. This field is required when databaseType is `couchdb`.
+	// Changing this will create a new instance. The couchdb object structure is documented below.
 	Couchdb InstanceCouchdbPtrOutput `pulumi:"couchdb"`
 	// Whether the BCS instance is deployed across regions.
-	CrossRegionSupport pulumi.BoolOutput   `pulumi:"crossRegionSupport"`
-	DatabaseType       pulumi.StringOutput `pulumi:"databaseType"`
+	CrossRegionSupport pulumi.BoolOutput `pulumi:"crossRegionSupport"`
+	// Specifies the type of the database used by the BCS service.
+	// Valid values are `goleveldb` and `couchdb`. The default value is `goleveldb`.
+	// If `couchdb` is used, specify the couchdb field. Changing this will create a new instance.
+	DatabaseType pulumi.StringOutput `pulumi:"databaseType"`
 	// Specified whether to delete the associated OBS bucket when deleting BCS instance.
 	// `deleteObs` is used to delete the OBS created by the BCS instance of the Kafka consensus strategy. Default is false.
 	DeleteObs pulumi.BoolPtrOutput `pulumi:"deleteObs"`
@@ -86,7 +91,7 @@ type Instance struct {
 	OrgDiskSize pulumi.IntOutput `pulumi:"orgDiskSize"`
 	// Specifies the password of the couch datebase. The password consists of 8 to
 	// 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-	// charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+	// characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
 	Password pulumi.StringOutput `pulumi:"password"`
 	// Specifies an array of one or more Peer organizations to attach to the BCS
 	// instance. Changing this will create a new instance. If omitted, the bcs instance will create a `peerOrgs`
@@ -114,7 +119,7 @@ type Instance struct {
 	// Specified whether to add Trusted computing platform. Changing this will create
 	// a new instance.
 	Tc3Need pulumi.BoolOutput `pulumi:"tc3Need"`
-	// The service verison of the BCS instance.
+	// The service version of the BCS instance.
 	Version pulumi.StringOutput `pulumi:"version"`
 	// Specifies the storage volume type to attach to each organization of the
 	// BCS instance. Valid values are `nfs` (SFS) and `efs` (SFS Turbo). Changing this will create a new instance.
@@ -184,6 +189,7 @@ type instanceState struct {
 	//   `Isdeleting`, `Normal`, `AbNormal` and `Unknown`.
 	// * `peer_orgs/status_detail` - The peer status in the format like `1/1`. The denominator is the total number of peers in
 	//   the organization, and the numerator is the number of normal peers.
+	// * `peer_orgs/address` - The peer domain name or IP address of the cluster.
 	// * `peer_orgs/address/domain_port` - The domain name address.
 	// * `peer_orgs/address/ip_port` - The IP address.
 	// * `kafka/name` - The Kafka instance name.
@@ -201,19 +207,23 @@ type instanceState struct {
 	// Specifies an array of one or more channels to attach to the BCS instance. If
 	// omitted, the bcs instance will create a `channels` named `channel` by default. Changing this will create a new
 	// instance. The channels object structure is documented below.
-	Channels    []InstanceChannel `pulumi:"channels"`
-	ClusterType *string           `pulumi:"clusterType"`
+	Channels []InstanceChannel `pulumi:"channels"`
+	// The type of the cluster where the BCS service is deployed.
+	ClusterType *string `pulumi:"clusterType"`
 	// Specifies the consensus algorithm used by the BCS instance. The valid
 	// values of fabric 1.4 are `solo`, `kafka` and `SFLIC`, and the valid values of fabric 2.0 are `SFLIC`
 	// and `etcdraft`. Changing this will create a new instance.
 	Consensus *string `pulumi:"consensus"`
 	// Specifies the NoSQL database used by BCS instance. If omitted, the bcs instance
-	// will create a `goleveldb`(File Database) database by default. Changing this will create a new instance. The couchdb
-	// object structure is documented below.
+	// will create a `goleveldb`(File Database) database by default. This field is required when databaseType is `couchdb`.
+	// Changing this will create a new instance. The couchdb object structure is documented below.
 	Couchdb *InstanceCouchdb `pulumi:"couchdb"`
 	// Whether the BCS instance is deployed across regions.
-	CrossRegionSupport *bool   `pulumi:"crossRegionSupport"`
-	DatabaseType       *string `pulumi:"databaseType"`
+	CrossRegionSupport *bool `pulumi:"crossRegionSupport"`
+	// Specifies the type of the database used by the BCS service.
+	// Valid values are `goleveldb` and `couchdb`. The default value is `goleveldb`.
+	// If `couchdb` is used, specify the couchdb field. Changing this will create a new instance.
+	DatabaseType *string `pulumi:"databaseType"`
 	// Specified whether to delete the associated OBS bucket when deleting BCS instance.
 	// `deleteObs` is used to delete the OBS created by the BCS instance of the Kafka consensus strategy. Default is false.
 	DeleteObs *bool `pulumi:"deleteObs"`
@@ -249,7 +259,7 @@ type instanceState struct {
 	OrgDiskSize *int `pulumi:"orgDiskSize"`
 	// Specifies the password of the couch datebase. The password consists of 8 to
 	// 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-	// charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+	// characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
 	Password *string `pulumi:"password"`
 	// Specifies an array of one or more Peer organizations to attach to the BCS
 	// instance. Changing this will create a new instance. If omitted, the bcs instance will create a `peerOrgs`
@@ -277,7 +287,7 @@ type instanceState struct {
 	// Specified whether to add Trusted computing platform. Changing this will create
 	// a new instance.
 	Tc3Need *bool `pulumi:"tc3Need"`
-	// The service verison of the BCS instance.
+	// The service version of the BCS instance.
 	Version *string `pulumi:"version"`
 	// Specifies the storage volume type to attach to each organization of the
 	// BCS instance. Valid values are `nfs` (SFS) and `efs` (SFS Turbo). Changing this will create a new instance.
@@ -291,6 +301,7 @@ type InstanceState struct {
 	//   `Isdeleting`, `Normal`, `AbNormal` and `Unknown`.
 	// * `peer_orgs/status_detail` - The peer status in the format like `1/1`. The denominator is the total number of peers in
 	//   the organization, and the numerator is the number of normal peers.
+	// * `peer_orgs/address` - The peer domain name or IP address of the cluster.
 	// * `peer_orgs/address/domain_port` - The domain name address.
 	// * `peer_orgs/address/ip_port` - The IP address.
 	// * `kafka/name` - The Kafka instance name.
@@ -308,19 +319,23 @@ type InstanceState struct {
 	// Specifies an array of one or more channels to attach to the BCS instance. If
 	// omitted, the bcs instance will create a `channels` named `channel` by default. Changing this will create a new
 	// instance. The channels object structure is documented below.
-	Channels    InstanceChannelArrayInput
+	Channels InstanceChannelArrayInput
+	// The type of the cluster where the BCS service is deployed.
 	ClusterType pulumi.StringPtrInput
 	// Specifies the consensus algorithm used by the BCS instance. The valid
 	// values of fabric 1.4 are `solo`, `kafka` and `SFLIC`, and the valid values of fabric 2.0 are `SFLIC`
 	// and `etcdraft`. Changing this will create a new instance.
 	Consensus pulumi.StringPtrInput
 	// Specifies the NoSQL database used by BCS instance. If omitted, the bcs instance
-	// will create a `goleveldb`(File Database) database by default. Changing this will create a new instance. The couchdb
-	// object structure is documented below.
+	// will create a `goleveldb`(File Database) database by default. This field is required when databaseType is `couchdb`.
+	// Changing this will create a new instance. The couchdb object structure is documented below.
 	Couchdb InstanceCouchdbPtrInput
 	// Whether the BCS instance is deployed across regions.
 	CrossRegionSupport pulumi.BoolPtrInput
-	DatabaseType       pulumi.StringPtrInput
+	// Specifies the type of the database used by the BCS service.
+	// Valid values are `goleveldb` and `couchdb`. The default value is `goleveldb`.
+	// If `couchdb` is used, specify the couchdb field. Changing this will create a new instance.
+	DatabaseType pulumi.StringPtrInput
 	// Specified whether to delete the associated OBS bucket when deleting BCS instance.
 	// `deleteObs` is used to delete the OBS created by the BCS instance of the Kafka consensus strategy. Default is false.
 	DeleteObs pulumi.BoolPtrInput
@@ -356,7 +371,7 @@ type InstanceState struct {
 	OrgDiskSize pulumi.IntPtrInput
 	// Specifies the password of the couch datebase. The password consists of 8 to
 	// 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-	// charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+	// characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
 	Password pulumi.StringPtrInput
 	// Specifies an array of one or more Peer organizations to attach to the BCS
 	// instance. Changing this will create a new instance. If omitted, the bcs instance will create a `peerOrgs`
@@ -384,7 +399,7 @@ type InstanceState struct {
 	// Specified whether to add Trusted computing platform. Changing this will create
 	// a new instance.
 	Tc3Need pulumi.BoolPtrInput
-	// The service verison of the BCS instance.
+	// The service version of the BCS instance.
 	Version pulumi.StringPtrInput
 	// Specifies the storage volume type to attach to each organization of the
 	// BCS instance. Valid values are `nfs` (SFS) and `efs` (SFS Turbo). Changing this will create a new instance.
@@ -415,10 +430,13 @@ type instanceArgs struct {
 	// and `etcdraft`. Changing this will create a new instance.
 	Consensus string `pulumi:"consensus"`
 	// Specifies the NoSQL database used by BCS instance. If omitted, the bcs instance
-	// will create a `goleveldb`(File Database) database by default. Changing this will create a new instance. The couchdb
-	// object structure is documented below.
-	Couchdb      *InstanceCouchdb `pulumi:"couchdb"`
-	DatabaseType *string          `pulumi:"databaseType"`
+	// will create a `goleveldb`(File Database) database by default. This field is required when databaseType is `couchdb`.
+	// Changing this will create a new instance. The couchdb object structure is documented below.
+	Couchdb *InstanceCouchdb `pulumi:"couchdb"`
+	// Specifies the type of the database used by the BCS service.
+	// Valid values are `goleveldb` and `couchdb`. The default value is `goleveldb`.
+	// If `couchdb` is used, specify the couchdb field. Changing this will create a new instance.
+	DatabaseType *string `pulumi:"databaseType"`
 	// Specified whether to delete the associated OBS bucket when deleting BCS instance.
 	// `deleteObs` is used to delete the OBS created by the BCS instance of the Kafka consensus strategy. Default is false.
 	DeleteObs *bool `pulumi:"deleteObs"`
@@ -452,7 +470,7 @@ type instanceArgs struct {
 	OrgDiskSize int `pulumi:"orgDiskSize"`
 	// Specifies the password of the couch datebase. The password consists of 8 to
 	// 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-	// charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+	// characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
 	Password string `pulumi:"password"`
 	// Specifies an array of one or more Peer organizations to attach to the BCS
 	// instance. Changing this will create a new instance. If omitted, the bcs instance will create a `peerOrgs`
@@ -500,9 +518,12 @@ type InstanceArgs struct {
 	// and `etcdraft`. Changing this will create a new instance.
 	Consensus pulumi.StringInput
 	// Specifies the NoSQL database used by BCS instance. If omitted, the bcs instance
-	// will create a `goleveldb`(File Database) database by default. Changing this will create a new instance. The couchdb
-	// object structure is documented below.
-	Couchdb      InstanceCouchdbPtrInput
+	// will create a `goleveldb`(File Database) database by default. This field is required when databaseType is `couchdb`.
+	// Changing this will create a new instance. The couchdb object structure is documented below.
+	Couchdb InstanceCouchdbPtrInput
+	// Specifies the type of the database used by the BCS service.
+	// Valid values are `goleveldb` and `couchdb`. The default value is `goleveldb`.
+	// If `couchdb` is used, specify the couchdb field. Changing this will create a new instance.
 	DatabaseType pulumi.StringPtrInput
 	// Specified whether to delete the associated OBS bucket when deleting BCS instance.
 	// `deleteObs` is used to delete the OBS created by the BCS instance of the Kafka consensus strategy. Default is false.
@@ -537,7 +558,7 @@ type InstanceArgs struct {
 	OrgDiskSize pulumi.IntInput
 	// Specifies the password of the couch datebase. The password consists of 8 to
 	// 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-	// charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+	// characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
 	Password pulumi.StringInput
 	// Specifies an array of one or more Peer organizations to attach to the BCS
 	// instance. Changing this will create a new instance. If omitted, the bcs instance will create a `peerOrgs`
@@ -657,6 +678,7 @@ func (o InstanceOutput) ToInstanceOutputWithContext(ctx context.Context) Instanc
 //     `Isdeleting`, `Normal`, `AbNormal` and `Unknown`.
 //   - `peer_orgs/status_detail` - The peer status in the format like `1/1`. The denominator is the total number of peers in
 //     the organization, and the numerator is the number of normal peers.
+//   - `peer_orgs/address` - The peer domain name or IP address of the cluster.
 //   - `peer_orgs/address/domain_port` - The domain name address.
 //   - `peer_orgs/address/ip_port` - The IP address.
 //   - `kafka/name` - The Kafka instance name.
@@ -690,6 +712,7 @@ func (o InstanceOutput) Channels() InstanceChannelArrayOutput {
 	return o.ApplyT(func(v *Instance) InstanceChannelArrayOutput { return v.Channels }).(InstanceChannelArrayOutput)
 }
 
+// The type of the cluster where the BCS service is deployed.
 func (o InstanceOutput) ClusterType() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.ClusterType }).(pulumi.StringOutput)
 }
@@ -702,8 +725,8 @@ func (o InstanceOutput) Consensus() pulumi.StringOutput {
 }
 
 // Specifies the NoSQL database used by BCS instance. If omitted, the bcs instance
-// will create a `goleveldb`(File Database) database by default. Changing this will create a new instance. The couchdb
-// object structure is documented below.
+// will create a `goleveldb`(File Database) database by default. This field is required when databaseType is `couchdb`.
+// Changing this will create a new instance. The couchdb object structure is documented below.
 func (o InstanceOutput) Couchdb() InstanceCouchdbPtrOutput {
 	return o.ApplyT(func(v *Instance) InstanceCouchdbPtrOutput { return v.Couchdb }).(InstanceCouchdbPtrOutput)
 }
@@ -713,6 +736,9 @@ func (o InstanceOutput) CrossRegionSupport() pulumi.BoolOutput {
 	return o.ApplyT(func(v *Instance) pulumi.BoolOutput { return v.CrossRegionSupport }).(pulumi.BoolOutput)
 }
 
+// Specifies the type of the database used by the BCS service.
+// Valid values are `goleveldb` and `couchdb`. The default value is `goleveldb`.
+// If `couchdb` is used, specify the couchdb field. Changing this will create a new instance.
 func (o InstanceOutput) DatabaseType() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.DatabaseType }).(pulumi.StringOutput)
 }
@@ -785,7 +811,7 @@ func (o InstanceOutput) OrgDiskSize() pulumi.IntOutput {
 
 // Specifies the password of the couch datebase. The password consists of 8 to
 // 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-// charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+// characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
 func (o InstanceOutput) Password() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.Password }).(pulumi.StringOutput)
 }
@@ -843,7 +869,7 @@ func (o InstanceOutput) Tc3Need() pulumi.BoolOutput {
 	return o.ApplyT(func(v *Instance) pulumi.BoolOutput { return v.Tc3Need }).(pulumi.BoolOutput)
 }
 
-// The service verison of the BCS instance.
+// The service version of the BCS instance.
 func (o InstanceOutput) Version() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.Version }).(pulumi.StringOutput)
 }

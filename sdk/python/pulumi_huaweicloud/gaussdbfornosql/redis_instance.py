@@ -33,13 +33,16 @@ class RedisInstanceArgs:
                  node_num: Optional[pulumi.Input[int]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
+                 port: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 ssl: Optional[pulumi.Input[bool]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a RedisInstance resource.
         :param pulumi.Input[str] availability_zone: Specifies the AZ name.
                See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail.
+               For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] flavor: Specifies the instance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/redisug-nosql/nosql_05_0059.html).
@@ -73,11 +76,17 @@ class RedisInstanceArgs:
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the GaussDB for Redis instance. Valid values
                are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Do nothing in update
                method if change this parameter.
+        :param pulumi.Input[int] port: Specifies the port number for accessing the instance. You can specify a port number
+               based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
+               **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
+               **50069**. Defaults to **6379**.
+               If you want to use this instance for dual-active DR, set the port to **8635**.
         :param pulumi.Input[str] region: The region in which to create the Redis instance resource.
                See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail. If
                omitted, the provider-level region will be used. Changing this creates a new Redis instance resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID. Required if the selected subnet doesn't
                enable network ACL.
+        :param pulumi.Input[bool] ssl: Specifies whether SSL is enabled. Defaults to **false**.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the instance.
         """
         pulumi.set(__self__, "availability_zone", availability_zone)
@@ -108,10 +117,14 @@ class RedisInstanceArgs:
             pulumi.set(__self__, "period", period)
         if period_unit is not None:
             pulumi.set(__self__, "period_unit", period_unit)
+        if port is not None:
+            pulumi.set(__self__, "port", port)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if security_group_id is not None:
             pulumi.set(__self__, "security_group_id", security_group_id)
+        if ssl is not None:
+            pulumi.set(__self__, "ssl", ssl)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
 
@@ -121,6 +134,7 @@ class RedisInstanceArgs:
         """
         Specifies the AZ name.
         See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail.
+        For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "availability_zone")
@@ -337,6 +351,22 @@ class RedisInstanceArgs:
 
     @property
     @pulumi.getter
+    def port(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the port number for accessing the instance. You can specify a port number
+        based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
+        **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
+        **50069**. Defaults to **6379**.
+        If you want to use this instance for dual-active DR, set the port to **8635**.
+        """
+        return pulumi.get(self, "port")
+
+    @port.setter
+    def port(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "port", value)
+
+    @property
+    @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
         The region in which to create the Redis instance resource.
@@ -364,6 +394,18 @@ class RedisInstanceArgs:
 
     @property
     @pulumi.getter
+    def ssl(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether SSL is enabled. Defaults to **false**.
+        """
+        return pulumi.get(self, "ssl")
+
+    @ssl.setter
+    def ssl(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "ssl", value)
+
+    @property
+    @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
         The key/value pairs to associate with the instance.
@@ -388,6 +430,8 @@ class _RedisInstanceState:
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  force_import: Optional[pulumi.Input[bool]] = None,
+                 lb_ip_address: Optional[pulumi.Input[str]] = None,
+                 lb_port: Optional[pulumi.Input[str]] = None,
                  mode: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  node_num: Optional[pulumi.Input[int]] = None,
@@ -399,6 +443,7 @@ class _RedisInstanceState:
                  private_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 ssl: Optional[pulumi.Input[bool]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -409,6 +454,7 @@ class _RedisInstanceState:
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "false".
         :param pulumi.Input[str] availability_zone: Specifies the AZ name.
                See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail.
+               For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
                Changing this parameter will create a new resource.
         :param pulumi.Input['RedisInstanceBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy. Structure is documented below. Do nothing
                in update method if change this parameter.
@@ -423,6 +469,8 @@ class _RedisInstanceState:
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/redisug-nosql/nosql_05_0059.html).
         :param pulumi.Input[bool] force_import: If specified, try to import the instance instead of creating if the name already
                existed.
+        :param pulumi.Input[str] lb_ip_address: Indicates the LB IP address of the db.
+        :param pulumi.Input[str] lb_port: Indicates the LB port of the db.
         :param pulumi.Input[str] mode: Indicates the instance type.
         :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The value
                must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
@@ -438,13 +486,18 @@ class _RedisInstanceState:
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the GaussDB for Redis instance. Valid values
                are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Do nothing in update
                method if change this parameter.
-        :param pulumi.Input[int] port: Indicates the database port.
+        :param pulumi.Input[int] port: Specifies the port number for accessing the instance. You can specify a port number
+               based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
+               **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
+               **50069**. Defaults to **6379**.
+               If you want to use this instance for dual-active DR, set the port to **8635**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] private_ips: Indicates the IP address list of the db.
         :param pulumi.Input[str] region: The region in which to create the Redis instance resource.
                See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail. If
                omitted, the provider-level region will be used. Changing this creates a new Redis instance resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID. Required if the selected subnet doesn't
                enable network ACL.
+        :param pulumi.Input[bool] ssl: Specifies whether SSL is enabled. Defaults to **false**.
         :param pulumi.Input[str] status: Indicates the node status.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this parameter will create a
                new resource.
@@ -474,6 +527,10 @@ class _RedisInstanceState:
             pulumi.set(__self__, "flavor", flavor)
         if force_import is not None:
             pulumi.set(__self__, "force_import", force_import)
+        if lb_ip_address is not None:
+            pulumi.set(__self__, "lb_ip_address", lb_ip_address)
+        if lb_port is not None:
+            pulumi.set(__self__, "lb_port", lb_port)
         if mode is not None:
             pulumi.set(__self__, "mode", mode)
         if name is not None:
@@ -496,6 +553,8 @@ class _RedisInstanceState:
             pulumi.set(__self__, "region", region)
         if security_group_id is not None:
             pulumi.set(__self__, "security_group_id", security_group_id)
+        if ssl is not None:
+            pulumi.set(__self__, "ssl", ssl)
         if status is not None:
             pulumi.set(__self__, "status", status)
         if subnet_id is not None:
@@ -534,6 +593,7 @@ class _RedisInstanceState:
         """
         Specifies the AZ name.
         See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail.
+        For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "availability_zone")
@@ -633,6 +693,30 @@ class _RedisInstanceState:
         pulumi.set(self, "force_import", value)
 
     @property
+    @pulumi.getter(name="lbIpAddress")
+    def lb_ip_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the LB IP address of the db.
+        """
+        return pulumi.get(self, "lb_ip_address")
+
+    @lb_ip_address.setter
+    def lb_ip_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "lb_ip_address", value)
+
+    @property
+    @pulumi.getter(name="lbPort")
+    def lb_port(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the LB port of the db.
+        """
+        return pulumi.get(self, "lb_port")
+
+    @lb_port.setter
+    def lb_port(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "lb_port", value)
+
+    @property
     @pulumi.getter
     def mode(self) -> Optional[pulumi.Input[str]]:
         """
@@ -728,7 +812,11 @@ class _RedisInstanceState:
     @pulumi.getter
     def port(self) -> Optional[pulumi.Input[int]]:
         """
-        Indicates the database port.
+        Specifies the port number for accessing the instance. You can specify a port number
+        based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
+        **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
+        **50069**. Defaults to **6379**.
+        If you want to use this instance for dual-active DR, set the port to **8635**.
         """
         return pulumi.get(self, "port")
 
@@ -774,6 +862,18 @@ class _RedisInstanceState:
     @security_group_id.setter
     def security_group_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "security_group_id", value)
+
+    @property
+    @pulumi.getter
+    def ssl(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether SSL is enabled. Defaults to **false**.
+        """
+        return pulumi.get(self, "ssl")
+
+    @ssl.setter
+    def ssl(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "ssl", value)
 
     @property
     @pulumi.getter
@@ -858,8 +958,10 @@ class RedisInstance(pulumi.CustomResource):
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
+                 port: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 ssl: Optional[pulumi.Input[bool]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  volume_size: Optional[pulumi.Input[int]] = None,
@@ -913,7 +1015,7 @@ class RedisInstance(pulumi.CustomResource):
         GaussDB Redis instance can be imported using the `id`, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:GaussDBforNoSQL/redisInstance:RedisInstance instance_1 2e045d8b-b226-4aa2-91b9-7e76357655c06
+         $ pulumi import huaweicloud:GaussDBforNoSQL/redisInstance:RedisInstance instance_1 d54b21f037ed447aad4bfd20927711c6in12
         ```
 
         :param str resource_name: The name of the resource.
@@ -921,6 +1023,7 @@ class RedisInstance(pulumi.CustomResource):
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "false".
         :param pulumi.Input[str] availability_zone: Specifies the AZ name.
                See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail.
+               For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
                Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['RedisInstanceBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy. Structure is documented below. Do nothing
                in update method if change this parameter.
@@ -947,11 +1050,17 @@ class RedisInstance(pulumi.CustomResource):
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the GaussDB for Redis instance. Valid values
                are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Do nothing in update
                method if change this parameter.
+        :param pulumi.Input[int] port: Specifies the port number for accessing the instance. You can specify a port number
+               based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
+               **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
+               **50069**. Defaults to **6379**.
+               If you want to use this instance for dual-active DR, set the port to **8635**.
         :param pulumi.Input[str] region: The region in which to create the Redis instance resource.
                See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail. If
                omitted, the provider-level region will be used. Changing this creates a new Redis instance resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID. Required if the selected subnet doesn't
                enable network ACL.
+        :param pulumi.Input[bool] ssl: Specifies whether SSL is enabled. Defaults to **false**.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this parameter will create a
                new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the instance.
@@ -1014,7 +1123,7 @@ class RedisInstance(pulumi.CustomResource):
         GaussDB Redis instance can be imported using the `id`, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:GaussDBforNoSQL/redisInstance:RedisInstance instance_1 2e045d8b-b226-4aa2-91b9-7e76357655c06
+         $ pulumi import huaweicloud:GaussDBforNoSQL/redisInstance:RedisInstance instance_1 d54b21f037ed447aad4bfd20927711c6in12
         ```
 
         :param str resource_name: The name of the resource.
@@ -1046,8 +1155,10 @@ class RedisInstance(pulumi.CustomResource):
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
+                 port: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 ssl: Optional[pulumi.Input[bool]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  volume_size: Optional[pulumi.Input[int]] = None,
@@ -1081,8 +1192,10 @@ class RedisInstance(pulumi.CustomResource):
             __props__.__dict__["password"] = password
             __props__.__dict__["period"] = period
             __props__.__dict__["period_unit"] = period_unit
+            __props__.__dict__["port"] = port
             __props__.__dict__["region"] = region
             __props__.__dict__["security_group_id"] = security_group_id
+            __props__.__dict__["ssl"] = ssl
             if subnet_id is None and not opts.urn:
                 raise TypeError("Missing required property 'subnet_id'")
             __props__.__dict__["subnet_id"] = subnet_id
@@ -1094,9 +1207,10 @@ class RedisInstance(pulumi.CustomResource):
                 raise TypeError("Missing required property 'vpc_id'")
             __props__.__dict__["vpc_id"] = vpc_id
             __props__.__dict__["db_user_name"] = None
+            __props__.__dict__["lb_ip_address"] = None
+            __props__.__dict__["lb_port"] = None
             __props__.__dict__["mode"] = None
             __props__.__dict__["nodes"] = None
-            __props__.__dict__["port"] = None
             __props__.__dict__["private_ips"] = None
             __props__.__dict__["status"] = None
         super(RedisInstance, __self__).__init__(
@@ -1119,6 +1233,8 @@ class RedisInstance(pulumi.CustomResource):
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             flavor: Optional[pulumi.Input[str]] = None,
             force_import: Optional[pulumi.Input[bool]] = None,
+            lb_ip_address: Optional[pulumi.Input[str]] = None,
+            lb_port: Optional[pulumi.Input[str]] = None,
             mode: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             node_num: Optional[pulumi.Input[int]] = None,
@@ -1130,6 +1246,7 @@ class RedisInstance(pulumi.CustomResource):
             private_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             region: Optional[pulumi.Input[str]] = None,
             security_group_id: Optional[pulumi.Input[str]] = None,
+            ssl: Optional[pulumi.Input[bool]] = None,
             status: Optional[pulumi.Input[str]] = None,
             subnet_id: Optional[pulumi.Input[str]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -1145,6 +1262,7 @@ class RedisInstance(pulumi.CustomResource):
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "false".
         :param pulumi.Input[str] availability_zone: Specifies the AZ name.
                See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail.
+               For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
                Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['RedisInstanceBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy. Structure is documented below. Do nothing
                in update method if change this parameter.
@@ -1159,6 +1277,8 @@ class RedisInstance(pulumi.CustomResource):
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/redisug-nosql/nosql_05_0059.html).
         :param pulumi.Input[bool] force_import: If specified, try to import the instance instead of creating if the name already
                existed.
+        :param pulumi.Input[str] lb_ip_address: Indicates the LB IP address of the db.
+        :param pulumi.Input[str] lb_port: Indicates the LB port of the db.
         :param pulumi.Input[str] mode: Indicates the instance type.
         :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The value
                must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
@@ -1174,13 +1294,18 @@ class RedisInstance(pulumi.CustomResource):
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the GaussDB for Redis instance. Valid values
                are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Do nothing in update
                method if change this parameter.
-        :param pulumi.Input[int] port: Indicates the database port.
+        :param pulumi.Input[int] port: Specifies the port number for accessing the instance. You can specify a port number
+               based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
+               **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
+               **50069**. Defaults to **6379**.
+               If you want to use this instance for dual-active DR, set the port to **8635**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] private_ips: Indicates the IP address list of the db.
         :param pulumi.Input[str] region: The region in which to create the Redis instance resource.
                See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail. If
                omitted, the provider-level region will be used. Changing this creates a new Redis instance resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID. Required if the selected subnet doesn't
                enable network ACL.
+        :param pulumi.Input[bool] ssl: Specifies whether SSL is enabled. Defaults to **false**.
         :param pulumi.Input[str] status: Indicates the node status.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this parameter will create a
                new resource.
@@ -1204,6 +1329,8 @@ class RedisInstance(pulumi.CustomResource):
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["flavor"] = flavor
         __props__.__dict__["force_import"] = force_import
+        __props__.__dict__["lb_ip_address"] = lb_ip_address
+        __props__.__dict__["lb_port"] = lb_port
         __props__.__dict__["mode"] = mode
         __props__.__dict__["name"] = name
         __props__.__dict__["node_num"] = node_num
@@ -1215,6 +1342,7 @@ class RedisInstance(pulumi.CustomResource):
         __props__.__dict__["private_ips"] = private_ips
         __props__.__dict__["region"] = region
         __props__.__dict__["security_group_id"] = security_group_id
+        __props__.__dict__["ssl"] = ssl
         __props__.__dict__["status"] = status
         __props__.__dict__["subnet_id"] = subnet_id
         __props__.__dict__["tags"] = tags
@@ -1241,6 +1369,7 @@ class RedisInstance(pulumi.CustomResource):
         """
         Specifies the AZ name.
         See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail.
+        For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "availability_zone")
@@ -1306,6 +1435,22 @@ class RedisInstance(pulumi.CustomResource):
         existed.
         """
         return pulumi.get(self, "force_import")
+
+    @property
+    @pulumi.getter(name="lbIpAddress")
+    def lb_ip_address(self) -> pulumi.Output[str]:
+        """
+        Indicates the LB IP address of the db.
+        """
+        return pulumi.get(self, "lb_ip_address")
+
+    @property
+    @pulumi.getter(name="lbPort")
+    def lb_port(self) -> pulumi.Output[str]:
+        """
+        Indicates the LB port of the db.
+        """
+        return pulumi.get(self, "lb_port")
 
     @property
     @pulumi.getter
@@ -1375,7 +1520,11 @@ class RedisInstance(pulumi.CustomResource):
     @pulumi.getter
     def port(self) -> pulumi.Output[int]:
         """
-        Indicates the database port.
+        Specifies the port number for accessing the instance. You can specify a port number
+        based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
+        **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
+        **50069**. Defaults to **6379**.
+        If you want to use this instance for dual-active DR, set the port to **8635**.
         """
         return pulumi.get(self, "port")
 
@@ -1405,6 +1554,14 @@ class RedisInstance(pulumi.CustomResource):
         enable network ACL.
         """
         return pulumi.get(self, "security_group_id")
+
+    @property
+    @pulumi.getter
+    def ssl(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether SSL is enabled. Defaults to **false**.
+        """
+        return pulumi.get(self, "ssl")
 
     @property
     @pulumi.getter

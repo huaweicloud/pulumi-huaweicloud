@@ -16,9 +16,12 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const policy1 = new huaweicloud.waf.Policy("policy1", {});
+ * const config = new pulumi.Config();
+ * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
+ * const policyId = config.requireObject("policyId");
  * const rule1 = new huaweicloud.waf.RuleDataMasking("rule1", {
- *     policyId: policy1.id,
+ *     policyId: policyId,
+ *     enterpriseProjectId: enterpriseProjectId,
  *     path: "/login",
  *     field: "params",
  *     subfield: "password",
@@ -27,10 +30,16 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Data Masking Rules can be imported using the policy ID and rule ID separated by a slash, e.g.
+ * There are two ways to import WAF rule data masking state. * Using `policy_id` and `rule_id`, separated by a slash, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Waf/ruleDataMasking:RuleDataMasking rule_1 d78b439fd5e54ea08886e5f63ee7b3f5/ac01a092d50e4e6ba3cd622c1128ba2c
+ *  $ pulumi import huaweicloud:Waf/ruleDataMasking:RuleDataMasking test <policy_id>/<rule_id>
+ * ```
+ *
+ *  * Using `policy_id`, `rule_id` and `enterprise_project_id`, separated by slashes, e.g. bash
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:Waf/ruleDataMasking:RuleDataMasking test <policy_id>/<rule_id>/<enterprise_project_id>
  * ```
  */
 export class RuleDataMasking extends pulumi.CustomResource {
@@ -61,6 +70,11 @@ export class RuleDataMasking extends pulumi.CustomResource {
         return obj['__pulumiType'] === RuleDataMasking.__pulumiType;
     }
 
+    /**
+     * Specifies the enterprise project ID of WAF data masking rule.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
     /**
      * The position where the masked field stored. Valid values are:
      * + `params`: The field in the parameter.
@@ -100,6 +114,7 @@ export class RuleDataMasking extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as RuleDataMaskingState | undefined;
+            resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["field"] = state ? state.field : undefined;
             resourceInputs["path"] = state ? state.path : undefined;
             resourceInputs["policyId"] = state ? state.policyId : undefined;
@@ -119,6 +134,7 @@ export class RuleDataMasking extends pulumi.CustomResource {
             if ((!args || args.subfield === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'subfield'");
             }
+            resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["field"] = args ? args.field : undefined;
             resourceInputs["path"] = args ? args.path : undefined;
             resourceInputs["policyId"] = args ? args.policyId : undefined;
@@ -134,6 +150,11 @@ export class RuleDataMasking extends pulumi.CustomResource {
  * Input properties used for looking up and filtering RuleDataMasking resources.
  */
 export interface RuleDataMaskingState {
+    /**
+     * Specifies the enterprise project ID of WAF data masking rule.
+     * Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * The position where the masked field stored. Valid values are:
      * + `params`: The field in the parameter.
@@ -165,6 +186,11 @@ export interface RuleDataMaskingState {
  * The set of arguments for constructing a RuleDataMasking resource.
  */
 export interface RuleDataMaskingArgs {
+    /**
+     * Specifies the enterprise project ID of WAF data masking rule.
+     * Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * The position where the masked field stored. Valid values are:
      * + `params`: The field in the parameter.

@@ -21,6 +21,7 @@ class ServiceArgs:
                  server_type: pulumi.Input[str],
                  vpc_id: pulumi.Input[str],
                  approval: Optional[pulumi.Input[bool]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  permissions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -28,27 +29,27 @@ class ServiceArgs:
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Service resource.
-        :param pulumi.Input[str] port_id: - Specifies the ID for identifying the backend resource of the VPC endpoint
-               service.
+        :param pulumi.Input[str] port_id: Specifies the ID for identifying the backend resource of the VPC endpoint service.
                + If the `server_type` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
-               + If the `server_type` is **VIP**, the value is the NIC ID of the physical server where virtual resources are
-               created.
                + If the `server_type` is **LB**, the value is the ID of the port bound to the private IP address of the load
                balancer.
-        :param pulumi.Input[Sequence[pulumi.Input['ServicePortMappingArgs']]] port_mappings: - Specified the port mappings opened to the VPC endpoint service. Structure is
+        :param pulumi.Input[Sequence[pulumi.Input['ServicePortMappingArgs']]] port_mappings: Specifies the port mappings opened to the VPC endpoint service. Structure is
                documented below.
-        :param pulumi.Input[str] server_type: - Specifies the backend resource type. The value can be **VM**, **VIP**
-               or **LB**.
-        :param pulumi.Input[str] vpc_id: - Specifies the ID of the VPC to which the backend resource of the VPC endpoint
+        :param pulumi.Input[str] server_type: Specifies the backend resource type. The valid values are as follows:
+               + **VM**: Indicates the cloud server, which can be used as a server.
+               + **LB**: Indicates the shared load balancer, which is applicable to services with high access traffic and services
+               that require high reliability and disaster recovery.
+        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the backend resource of the VPC endpoint
                service belongs. Changing this creates a new VPC endpoint service.
-        :param pulumi.Input[bool] approval: - Specifies whether connection approval is required. The default value is false.
-        :param pulumi.Input[str] name: - Specifies the name of the VPC endpoint service. The value contains a maximum of 16
+        :param pulumi.Input[bool] approval: Specifies whether connection approval is required. The default value is false.
+        :param pulumi.Input[str] description: Specifies the description of the VPC endpoint service.
+        :param pulumi.Input[str] name: Specifies the name of the VPC endpoint service. The value contains a maximum of 16
                characters, including letters, digits, underscores (_), and hyphens (-).
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] permissions: - Specifies the list of accounts to access the VPC endpoint service. The record is in
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] permissions: Specifies the list of accounts to access the VPC endpoint service. The record is in
                the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
         :param pulumi.Input[str] region: The region in which to create the VPC endpoint service. If omitted, the
                provider-level region will be used. Changing this creates a new VPC endpoint service resource.
-        :param pulumi.Input[str] service_type: The type of the VPC endpoint service. Only **interface** can be configured.
+        :param pulumi.Input[str] service_type: The type of the VPC endpoint service.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the VPC endpoint service.
         """
         pulumi.set(__self__, "port_id", port_id)
@@ -57,6 +58,8 @@ class ServiceArgs:
         pulumi.set(__self__, "vpc_id", vpc_id)
         if approval is not None:
             pulumi.set(__self__, "approval", approval)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if permissions is not None:
@@ -72,11 +75,8 @@ class ServiceArgs:
     @pulumi.getter(name="portId")
     def port_id(self) -> pulumi.Input[str]:
         """
-        - Specifies the ID for identifying the backend resource of the VPC endpoint
-        service.
+        Specifies the ID for identifying the backend resource of the VPC endpoint service.
         + If the `server_type` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
-        + If the `server_type` is **VIP**, the value is the NIC ID of the physical server where virtual resources are
-        created.
         + If the `server_type` is **LB**, the value is the ID of the port bound to the private IP address of the load
         balancer.
         """
@@ -90,7 +90,7 @@ class ServiceArgs:
     @pulumi.getter(name="portMappings")
     def port_mappings(self) -> pulumi.Input[Sequence[pulumi.Input['ServicePortMappingArgs']]]:
         """
-        - Specified the port mappings opened to the VPC endpoint service. Structure is
+        Specifies the port mappings opened to the VPC endpoint service. Structure is
         documented below.
         """
         return pulumi.get(self, "port_mappings")
@@ -103,8 +103,10 @@ class ServiceArgs:
     @pulumi.getter(name="serverType")
     def server_type(self) -> pulumi.Input[str]:
         """
-        - Specifies the backend resource type. The value can be **VM**, **VIP**
-        or **LB**.
+        Specifies the backend resource type. The valid values are as follows:
+        + **VM**: Indicates the cloud server, which can be used as a server.
+        + **LB**: Indicates the shared load balancer, which is applicable to services with high access traffic and services
+        that require high reliability and disaster recovery.
         """
         return pulumi.get(self, "server_type")
 
@@ -116,7 +118,7 @@ class ServiceArgs:
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Input[str]:
         """
-        - Specifies the ID of the VPC to which the backend resource of the VPC endpoint
+        Specifies the ID of the VPC to which the backend resource of the VPC endpoint
         service belongs. Changing this creates a new VPC endpoint service.
         """
         return pulumi.get(self, "vpc_id")
@@ -129,7 +131,7 @@ class ServiceArgs:
     @pulumi.getter
     def approval(self) -> Optional[pulumi.Input[bool]]:
         """
-        - Specifies whether connection approval is required. The default value is false.
+        Specifies whether connection approval is required. The default value is false.
         """
         return pulumi.get(self, "approval")
 
@@ -139,9 +141,21 @@ class ServiceArgs:
 
     @property
     @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the VPC endpoint service.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the name of the VPC endpoint service. The value contains a maximum of 16
+        Specifies the name of the VPC endpoint service. The value contains a maximum of 16
         characters, including letters, digits, underscores (_), and hyphens (-).
         """
         return pulumi.get(self, "name")
@@ -154,7 +168,7 @@ class ServiceArgs:
     @pulumi.getter
     def permissions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        - Specifies the list of accounts to access the VPC endpoint service. The record is in
+        Specifies the list of accounts to access the VPC endpoint service. The record is in
         the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
         """
         return pulumi.get(self, "permissions")
@@ -180,7 +194,7 @@ class ServiceArgs:
     @pulumi.getter(name="serviceType")
     def service_type(self) -> Optional[pulumi.Input[str]]:
         """
-        The type of the VPC endpoint service. Only **interface** can be configured.
+        The type of the VPC endpoint service.
         """
         return pulumi.get(self, "service_type")
 
@@ -206,6 +220,7 @@ class _ServiceState:
     def __init__(__self__, *,
                  approval: Optional[pulumi.Input[bool]] = None,
                  connections: Optional[pulumi.Input[Sequence[pulumi.Input['ServiceConnectionArgs']]]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  permissions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
@@ -219,36 +234,38 @@ class _ServiceState:
                  vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Service resources.
-        :param pulumi.Input[bool] approval: - Specifies whether connection approval is required. The default value is false.
+        :param pulumi.Input[bool] approval: Specifies whether connection approval is required. The default value is false.
         :param pulumi.Input[Sequence[pulumi.Input['ServiceConnectionArgs']]] connections: An array of VPC endpoints connect to the VPC endpoint service. Structure is documented below.
-        :param pulumi.Input[str] name: - Specifies the name of the VPC endpoint service. The value contains a maximum of 16
+        :param pulumi.Input[str] description: Specifies the description of the VPC endpoint service.
+        :param pulumi.Input[str] name: Specifies the name of the VPC endpoint service. The value contains a maximum of 16
                characters, including letters, digits, underscores (_), and hyphens (-).
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] permissions: - Specifies the list of accounts to access the VPC endpoint service. The record is in
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] permissions: Specifies the list of accounts to access the VPC endpoint service. The record is in
                the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
-        :param pulumi.Input[str] port_id: - Specifies the ID for identifying the backend resource of the VPC endpoint
-               service.
+        :param pulumi.Input[str] port_id: Specifies the ID for identifying the backend resource of the VPC endpoint service.
                + If the `server_type` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
-               + If the `server_type` is **VIP**, the value is the NIC ID of the physical server where virtual resources are
-               created.
                + If the `server_type` is **LB**, the value is the ID of the port bound to the private IP address of the load
                balancer.
-        :param pulumi.Input[Sequence[pulumi.Input['ServicePortMappingArgs']]] port_mappings: - Specified the port mappings opened to the VPC endpoint service. Structure is
+        :param pulumi.Input[Sequence[pulumi.Input['ServicePortMappingArgs']]] port_mappings: Specifies the port mappings opened to the VPC endpoint service. Structure is
                documented below.
         :param pulumi.Input[str] region: The region in which to create the VPC endpoint service. If omitted, the
                provider-level region will be used. Changing this creates a new VPC endpoint service resource.
-        :param pulumi.Input[str] server_type: - Specifies the backend resource type. The value can be **VM**, **VIP**
-               or **LB**.
-        :param pulumi.Input[str] service_name: The full name of the VPC endpoint service in the format: *region.name.id*.
-        :param pulumi.Input[str] service_type: The type of the VPC endpoint service. Only **interface** can be configured.
+        :param pulumi.Input[str] server_type: Specifies the backend resource type. The valid values are as follows:
+               + **VM**: Indicates the cloud server, which can be used as a server.
+               + **LB**: Indicates the shared load balancer, which is applicable to services with high access traffic and services
+               that require high reliability and disaster recovery.
+        :param pulumi.Input[str] service_name: The full name of the VPC endpoint service in the format: *region.name.id* or *region.id*.
+        :param pulumi.Input[str] service_type: The type of the VPC endpoint service.
         :param pulumi.Input[str] status: The connection status of the VPC endpoint.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the VPC endpoint service.
-        :param pulumi.Input[str] vpc_id: - Specifies the ID of the VPC to which the backend resource of the VPC endpoint
+        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the backend resource of the VPC endpoint
                service belongs. Changing this creates a new VPC endpoint service.
         """
         if approval is not None:
             pulumi.set(__self__, "approval", approval)
         if connections is not None:
             pulumi.set(__self__, "connections", connections)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if permissions is not None:
@@ -276,7 +293,7 @@ class _ServiceState:
     @pulumi.getter
     def approval(self) -> Optional[pulumi.Input[bool]]:
         """
-        - Specifies whether connection approval is required. The default value is false.
+        Specifies whether connection approval is required. The default value is false.
         """
         return pulumi.get(self, "approval")
 
@@ -298,9 +315,21 @@ class _ServiceState:
 
     @property
     @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the VPC endpoint service.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the name of the VPC endpoint service. The value contains a maximum of 16
+        Specifies the name of the VPC endpoint service. The value contains a maximum of 16
         characters, including letters, digits, underscores (_), and hyphens (-).
         """
         return pulumi.get(self, "name")
@@ -313,7 +342,7 @@ class _ServiceState:
     @pulumi.getter
     def permissions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        - Specifies the list of accounts to access the VPC endpoint service. The record is in
+        Specifies the list of accounts to access the VPC endpoint service. The record is in
         the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
         """
         return pulumi.get(self, "permissions")
@@ -326,11 +355,8 @@ class _ServiceState:
     @pulumi.getter(name="portId")
     def port_id(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the ID for identifying the backend resource of the VPC endpoint
-        service.
+        Specifies the ID for identifying the backend resource of the VPC endpoint service.
         + If the `server_type` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
-        + If the `server_type` is **VIP**, the value is the NIC ID of the physical server where virtual resources are
-        created.
         + If the `server_type` is **LB**, the value is the ID of the port bound to the private IP address of the load
         balancer.
         """
@@ -344,7 +370,7 @@ class _ServiceState:
     @pulumi.getter(name="portMappings")
     def port_mappings(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ServicePortMappingArgs']]]]:
         """
-        - Specified the port mappings opened to the VPC endpoint service. Structure is
+        Specifies the port mappings opened to the VPC endpoint service. Structure is
         documented below.
         """
         return pulumi.get(self, "port_mappings")
@@ -370,8 +396,10 @@ class _ServiceState:
     @pulumi.getter(name="serverType")
     def server_type(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the backend resource type. The value can be **VM**, **VIP**
-        or **LB**.
+        Specifies the backend resource type. The valid values are as follows:
+        + **VM**: Indicates the cloud server, which can be used as a server.
+        + **LB**: Indicates the shared load balancer, which is applicable to services with high access traffic and services
+        that require high reliability and disaster recovery.
         """
         return pulumi.get(self, "server_type")
 
@@ -383,7 +411,7 @@ class _ServiceState:
     @pulumi.getter(name="serviceName")
     def service_name(self) -> Optional[pulumi.Input[str]]:
         """
-        The full name of the VPC endpoint service in the format: *region.name.id*.
+        The full name of the VPC endpoint service in the format: *region.name.id* or *region.id*.
         """
         return pulumi.get(self, "service_name")
 
@@ -395,7 +423,7 @@ class _ServiceState:
     @pulumi.getter(name="serviceType")
     def service_type(self) -> Optional[pulumi.Input[str]]:
         """
-        The type of the VPC endpoint service. Only **interface** can be configured.
+        The type of the VPC endpoint service.
         """
         return pulumi.get(self, "service_type")
 
@@ -431,7 +459,7 @@ class _ServiceState:
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the ID of the VPC to which the backend resource of the VPC endpoint
+        Specifies the ID of the VPC to which the backend resource of the VPC endpoint
         service belongs. Changing this creates a new VPC endpoint service.
         """
         return pulumi.get(self, "vpc_id")
@@ -447,6 +475,7 @@ class Service(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  approval: Optional[pulumi.Input[bool]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  permissions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
@@ -473,6 +502,7 @@ class Service(pulumi.CustomResource):
             server_type="VM",
             vpc_id=vpc_id,
             port_id=vm_port,
+            description="test description",
             port_mappings=[huaweicloud.vpcep.ServicePortMappingArgs(
                 service_port=8080,
                 terminal_port=80,
@@ -481,35 +511,35 @@ class Service(pulumi.CustomResource):
 
         ## Import
 
-        VPC endpoint services can be imported using the `id`, e.g.
+        VPC endpoint services can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Vpcep/service:Service test_service 950cd3ba-9d0e-4451-97c1-3e97dd515d46
+         $ pulumi import huaweicloud:Vpcep/service:Service test_service <id>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[bool] approval: - Specifies whether connection approval is required. The default value is false.
-        :param pulumi.Input[str] name: - Specifies the name of the VPC endpoint service. The value contains a maximum of 16
+        :param pulumi.Input[bool] approval: Specifies whether connection approval is required. The default value is false.
+        :param pulumi.Input[str] description: Specifies the description of the VPC endpoint service.
+        :param pulumi.Input[str] name: Specifies the name of the VPC endpoint service. The value contains a maximum of 16
                characters, including letters, digits, underscores (_), and hyphens (-).
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] permissions: - Specifies the list of accounts to access the VPC endpoint service. The record is in
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] permissions: Specifies the list of accounts to access the VPC endpoint service. The record is in
                the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
-        :param pulumi.Input[str] port_id: - Specifies the ID for identifying the backend resource of the VPC endpoint
-               service.
+        :param pulumi.Input[str] port_id: Specifies the ID for identifying the backend resource of the VPC endpoint service.
                + If the `server_type` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
-               + If the `server_type` is **VIP**, the value is the NIC ID of the physical server where virtual resources are
-               created.
                + If the `server_type` is **LB**, the value is the ID of the port bound to the private IP address of the load
                balancer.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ServicePortMappingArgs']]]] port_mappings: - Specified the port mappings opened to the VPC endpoint service. Structure is
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ServicePortMappingArgs']]]] port_mappings: Specifies the port mappings opened to the VPC endpoint service. Structure is
                documented below.
         :param pulumi.Input[str] region: The region in which to create the VPC endpoint service. If omitted, the
                provider-level region will be used. Changing this creates a new VPC endpoint service resource.
-        :param pulumi.Input[str] server_type: - Specifies the backend resource type. The value can be **VM**, **VIP**
-               or **LB**.
-        :param pulumi.Input[str] service_type: The type of the VPC endpoint service. Only **interface** can be configured.
+        :param pulumi.Input[str] server_type: Specifies the backend resource type. The valid values are as follows:
+               + **VM**: Indicates the cloud server, which can be used as a server.
+               + **LB**: Indicates the shared load balancer, which is applicable to services with high access traffic and services
+               that require high reliability and disaster recovery.
+        :param pulumi.Input[str] service_type: The type of the VPC endpoint service.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the VPC endpoint service.
-        :param pulumi.Input[str] vpc_id: - Specifies the ID of the VPC to which the backend resource of the VPC endpoint
+        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the backend resource of the VPC endpoint
                service belongs. Changing this creates a new VPC endpoint service.
         """
         ...
@@ -534,6 +564,7 @@ class Service(pulumi.CustomResource):
             server_type="VM",
             vpc_id=vpc_id,
             port_id=vm_port,
+            description="test description",
             port_mappings=[huaweicloud.vpcep.ServicePortMappingArgs(
                 service_port=8080,
                 terminal_port=80,
@@ -542,10 +573,10 @@ class Service(pulumi.CustomResource):
 
         ## Import
 
-        VPC endpoint services can be imported using the `id`, e.g.
+        VPC endpoint services can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Vpcep/service:Service test_service 950cd3ba-9d0e-4451-97c1-3e97dd515d46
+         $ pulumi import huaweicloud:Vpcep/service:Service test_service <id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -564,6 +595,7 @@ class Service(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  approval: Optional[pulumi.Input[bool]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  permissions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
@@ -583,6 +615,7 @@ class Service(pulumi.CustomResource):
             __props__ = ServiceArgs.__new__(ServiceArgs)
 
             __props__.__dict__["approval"] = approval
+            __props__.__dict__["description"] = description
             __props__.__dict__["name"] = name
             __props__.__dict__["permissions"] = permissions
             if port_id is None and not opts.urn:
@@ -615,6 +648,7 @@ class Service(pulumi.CustomResource):
             opts: Optional[pulumi.ResourceOptions] = None,
             approval: Optional[pulumi.Input[bool]] = None,
             connections: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ServiceConnectionArgs']]]]] = None,
+            description: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             permissions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             port_id: Optional[pulumi.Input[str]] = None,
@@ -633,30 +667,30 @@ class Service(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[bool] approval: - Specifies whether connection approval is required. The default value is false.
+        :param pulumi.Input[bool] approval: Specifies whether connection approval is required. The default value is false.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ServiceConnectionArgs']]]] connections: An array of VPC endpoints connect to the VPC endpoint service. Structure is documented below.
-        :param pulumi.Input[str] name: - Specifies the name of the VPC endpoint service. The value contains a maximum of 16
+        :param pulumi.Input[str] description: Specifies the description of the VPC endpoint service.
+        :param pulumi.Input[str] name: Specifies the name of the VPC endpoint service. The value contains a maximum of 16
                characters, including letters, digits, underscores (_), and hyphens (-).
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] permissions: - Specifies the list of accounts to access the VPC endpoint service. The record is in
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] permissions: Specifies the list of accounts to access the VPC endpoint service. The record is in
                the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
-        :param pulumi.Input[str] port_id: - Specifies the ID for identifying the backend resource of the VPC endpoint
-               service.
+        :param pulumi.Input[str] port_id: Specifies the ID for identifying the backend resource of the VPC endpoint service.
                + If the `server_type` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
-               + If the `server_type` is **VIP**, the value is the NIC ID of the physical server where virtual resources are
-               created.
                + If the `server_type` is **LB**, the value is the ID of the port bound to the private IP address of the load
                balancer.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ServicePortMappingArgs']]]] port_mappings: - Specified the port mappings opened to the VPC endpoint service. Structure is
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ServicePortMappingArgs']]]] port_mappings: Specifies the port mappings opened to the VPC endpoint service. Structure is
                documented below.
         :param pulumi.Input[str] region: The region in which to create the VPC endpoint service. If omitted, the
                provider-level region will be used. Changing this creates a new VPC endpoint service resource.
-        :param pulumi.Input[str] server_type: - Specifies the backend resource type. The value can be **VM**, **VIP**
-               or **LB**.
-        :param pulumi.Input[str] service_name: The full name of the VPC endpoint service in the format: *region.name.id*.
-        :param pulumi.Input[str] service_type: The type of the VPC endpoint service. Only **interface** can be configured.
+        :param pulumi.Input[str] server_type: Specifies the backend resource type. The valid values are as follows:
+               + **VM**: Indicates the cloud server, which can be used as a server.
+               + **LB**: Indicates the shared load balancer, which is applicable to services with high access traffic and services
+               that require high reliability and disaster recovery.
+        :param pulumi.Input[str] service_name: The full name of the VPC endpoint service in the format: *region.name.id* or *region.id*.
+        :param pulumi.Input[str] service_type: The type of the VPC endpoint service.
         :param pulumi.Input[str] status: The connection status of the VPC endpoint.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the VPC endpoint service.
-        :param pulumi.Input[str] vpc_id: - Specifies the ID of the VPC to which the backend resource of the VPC endpoint
+        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the backend resource of the VPC endpoint
                service belongs. Changing this creates a new VPC endpoint service.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -665,6 +699,7 @@ class Service(pulumi.CustomResource):
 
         __props__.__dict__["approval"] = approval
         __props__.__dict__["connections"] = connections
+        __props__.__dict__["description"] = description
         __props__.__dict__["name"] = name
         __props__.__dict__["permissions"] = permissions
         __props__.__dict__["port_id"] = port_id
@@ -682,7 +717,7 @@ class Service(pulumi.CustomResource):
     @pulumi.getter
     def approval(self) -> pulumi.Output[bool]:
         """
-        - Specifies whether connection approval is required. The default value is false.
+        Specifies whether connection approval is required. The default value is false.
         """
         return pulumi.get(self, "approval")
 
@@ -696,9 +731,17 @@ class Service(pulumi.CustomResource):
 
     @property
     @pulumi.getter
+    def description(self) -> pulumi.Output[str]:
+        """
+        Specifies the description of the VPC endpoint service.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        - Specifies the name of the VPC endpoint service. The value contains a maximum of 16
+        Specifies the name of the VPC endpoint service. The value contains a maximum of 16
         characters, including letters, digits, underscores (_), and hyphens (-).
         """
         return pulumi.get(self, "name")
@@ -707,7 +750,7 @@ class Service(pulumi.CustomResource):
     @pulumi.getter
     def permissions(self) -> pulumi.Output[Optional[Sequence[str]]]:
         """
-        - Specifies the list of accounts to access the VPC endpoint service. The record is in
+        Specifies the list of accounts to access the VPC endpoint service. The record is in
         the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
         """
         return pulumi.get(self, "permissions")
@@ -716,11 +759,8 @@ class Service(pulumi.CustomResource):
     @pulumi.getter(name="portId")
     def port_id(self) -> pulumi.Output[str]:
         """
-        - Specifies the ID for identifying the backend resource of the VPC endpoint
-        service.
+        Specifies the ID for identifying the backend resource of the VPC endpoint service.
         + If the `server_type` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
-        + If the `server_type` is **VIP**, the value is the NIC ID of the physical server where virtual resources are
-        created.
         + If the `server_type` is **LB**, the value is the ID of the port bound to the private IP address of the load
         balancer.
         """
@@ -730,7 +770,7 @@ class Service(pulumi.CustomResource):
     @pulumi.getter(name="portMappings")
     def port_mappings(self) -> pulumi.Output[Sequence['outputs.ServicePortMapping']]:
         """
-        - Specified the port mappings opened to the VPC endpoint service. Structure is
+        Specifies the port mappings opened to the VPC endpoint service. Structure is
         documented below.
         """
         return pulumi.get(self, "port_mappings")
@@ -748,8 +788,10 @@ class Service(pulumi.CustomResource):
     @pulumi.getter(name="serverType")
     def server_type(self) -> pulumi.Output[str]:
         """
-        - Specifies the backend resource type. The value can be **VM**, **VIP**
-        or **LB**.
+        Specifies the backend resource type. The valid values are as follows:
+        + **VM**: Indicates the cloud server, which can be used as a server.
+        + **LB**: Indicates the shared load balancer, which is applicable to services with high access traffic and services
+        that require high reliability and disaster recovery.
         """
         return pulumi.get(self, "server_type")
 
@@ -757,7 +799,7 @@ class Service(pulumi.CustomResource):
     @pulumi.getter(name="serviceName")
     def service_name(self) -> pulumi.Output[str]:
         """
-        The full name of the VPC endpoint service in the format: *region.name.id*.
+        The full name of the VPC endpoint service in the format: *region.name.id* or *region.id*.
         """
         return pulumi.get(self, "service_name")
 
@@ -765,7 +807,7 @@ class Service(pulumi.CustomResource):
     @pulumi.getter(name="serviceType")
     def service_type(self) -> pulumi.Output[Optional[str]]:
         """
-        The type of the VPC endpoint service. Only **interface** can be configured.
+        The type of the VPC endpoint service.
         """
         return pulumi.get(self, "service_type")
 
@@ -789,7 +831,7 @@ class Service(pulumi.CustomResource):
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Output[str]:
         """
-        - Specifies the ID of the VPC to which the backend resource of the VPC endpoint
+        Specifies the ID of the VPC to which the backend resource of the VPC endpoint
         service belongs. Changing this creates a new VPC endpoint service.
         """
         return pulumi.get(self, "vpc_id")

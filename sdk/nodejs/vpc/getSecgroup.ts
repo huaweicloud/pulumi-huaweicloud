@@ -38,6 +38,9 @@ export function getSecgroup(args?: GetSecgroupArgs, opts?: pulumi.InvokeOptions)
  * A collection of arguments for invoking getSecgroup.
  */
 export interface GetSecgroupArgs {
+    /**
+     * Specifies the enterprise project ID of the security group.
+     */
     enterpriseProjectId?: string;
     /**
      * Specifies the name of the security group.
@@ -93,6 +96,9 @@ export function getSecgroupOutput(args?: GetSecgroupOutputArgs, opts?: pulumi.In
  * A collection of arguments for invoking getSecgroup.
  */
 export interface GetSecgroupOutputArgs {
+    /**
+     * Specifies the enterprise project ID of the security group.
+     */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Specifies the name of the security group.

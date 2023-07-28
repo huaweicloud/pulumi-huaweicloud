@@ -25,19 +25,20 @@ class LifecycleHookArgs:
         """
         The set of arguments for constructing a LifecycleHook resource.
         :param pulumi.Input[str] notification_topic_urn: Specifies a unique topic in SMN.
-        :param pulumi.Input[str] scaling_group_id: Specifies the ID of the AS group in UUID format. Changing this
-               creates a new AS lifecycle hook.
+        :param pulumi.Input[str] scaling_group_id: Specifies the ID of the AS group in UUID format.
+               Changing this creates a new AS lifecycle hook.
         :param pulumi.Input[str] type: Specifies the lifecycle hook type. The valid values are following strings:
                + `ADD`: The hook suspends the instance when the instance is started.
                + `REMOVE`: The hook suspends the instance when the instance is terminated.
         :param pulumi.Input[str] default_result: Specifies the default lifecycle hook callback operation. This operation is
                performed when the timeout duration expires. The valid values are *ABANDON* and *CONTINUE*, default to *ABANDON*.
-        :param pulumi.Input[str] name: Specifies the lifecycle hook name. This parameter can contain a maximum of 32 characters,
-               which may consist of letters, digits, underscores (_) and hyphens (-).
+        :param pulumi.Input[str] name: Specifies the lifecycle hook name. This parameter can contain a maximum of
+               32 characters, which may consist of letters, digits, underscores (_) and hyphens (-).
+               Changing this creates a new AS lifecycle hook.
         :param pulumi.Input[str] notification_message: Specifies a customized notification. This parameter can contains a maximum
                of 256 characters, which cannot contain the following characters: <>&'().
-        :param pulumi.Input[str] region: The region in which to create the AS lifecycle hook. If omitted, the `region`
-               argument of the provider is used. Changing this creates a new AS lifecycle hook.
+        :param pulumi.Input[str] region: Specifies the region in which to create the AS lifecycle hook.
+               If omitted, the provider-level region will be used. Changing this creates a new AS lifecycle hook.
         :param pulumi.Input[int] timeout: Specifies the lifecycle hook timeout duration, which ranges from 300 to 86400 in the unit
                of second, default to 3600.
         """
@@ -71,8 +72,8 @@ class LifecycleHookArgs:
     @pulumi.getter(name="scalingGroupId")
     def scaling_group_id(self) -> pulumi.Input[str]:
         """
-        Specifies the ID of the AS group in UUID format. Changing this
-        creates a new AS lifecycle hook.
+        Specifies the ID of the AS group in UUID format.
+        Changing this creates a new AS lifecycle hook.
         """
         return pulumi.get(self, "scaling_group_id")
 
@@ -111,8 +112,9 @@ class LifecycleHookArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the lifecycle hook name. This parameter can contain a maximum of 32 characters,
-        which may consist of letters, digits, underscores (_) and hyphens (-).
+        Specifies the lifecycle hook name. This parameter can contain a maximum of
+        32 characters, which may consist of letters, digits, underscores (_) and hyphens (-).
+        Changing this creates a new AS lifecycle hook.
         """
         return pulumi.get(self, "name")
 
@@ -137,8 +139,8 @@ class LifecycleHookArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the AS lifecycle hook. If omitted, the `region`
-        argument of the provider is used. Changing this creates a new AS lifecycle hook.
+        Specifies the region in which to create the AS lifecycle hook.
+        If omitted, the provider-level region will be used. Changing this creates a new AS lifecycle hook.
         """
         return pulumi.get(self, "region")
 
@@ -178,16 +180,17 @@ class _LifecycleHookState:
         :param pulumi.Input[str] create_time: The server time in UTC format when the lifecycle hook is created.
         :param pulumi.Input[str] default_result: Specifies the default lifecycle hook callback operation. This operation is
                performed when the timeout duration expires. The valid values are *ABANDON* and *CONTINUE*, default to *ABANDON*.
-        :param pulumi.Input[str] name: Specifies the lifecycle hook name. This parameter can contain a maximum of 32 characters,
-               which may consist of letters, digits, underscores (_) and hyphens (-).
+        :param pulumi.Input[str] name: Specifies the lifecycle hook name. This parameter can contain a maximum of
+               32 characters, which may consist of letters, digits, underscores (_) and hyphens (-).
+               Changing this creates a new AS lifecycle hook.
         :param pulumi.Input[str] notification_message: Specifies a customized notification. This parameter can contains a maximum
                of 256 characters, which cannot contain the following characters: <>&'().
         :param pulumi.Input[str] notification_topic_name: The topic name in SMN.
         :param pulumi.Input[str] notification_topic_urn: Specifies a unique topic in SMN.
-        :param pulumi.Input[str] region: The region in which to create the AS lifecycle hook. If omitted, the `region`
-               argument of the provider is used. Changing this creates a new AS lifecycle hook.
-        :param pulumi.Input[str] scaling_group_id: Specifies the ID of the AS group in UUID format. Changing this
-               creates a new AS lifecycle hook.
+        :param pulumi.Input[str] region: Specifies the region in which to create the AS lifecycle hook.
+               If omitted, the provider-level region will be used. Changing this creates a new AS lifecycle hook.
+        :param pulumi.Input[str] scaling_group_id: Specifies the ID of the AS group in UUID format.
+               Changing this creates a new AS lifecycle hook.
         :param pulumi.Input[int] timeout: Specifies the lifecycle hook timeout duration, which ranges from 300 to 86400 in the unit
                of second, default to 3600.
         :param pulumi.Input[str] type: Specifies the lifecycle hook type. The valid values are following strings:
@@ -244,8 +247,9 @@ class _LifecycleHookState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the lifecycle hook name. This parameter can contain a maximum of 32 characters,
-        which may consist of letters, digits, underscores (_) and hyphens (-).
+        Specifies the lifecycle hook name. This parameter can contain a maximum of
+        32 characters, which may consist of letters, digits, underscores (_) and hyphens (-).
+        Changing this creates a new AS lifecycle hook.
         """
         return pulumi.get(self, "name")
 
@@ -294,8 +298,8 @@ class _LifecycleHookState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the AS lifecycle hook. If omitted, the `region`
-        argument of the provider is used. Changing this creates a new AS lifecycle hook.
+        Specifies the region in which to create the AS lifecycle hook.
+        If omitted, the provider-level region will be used. Changing this creates a new AS lifecycle hook.
         """
         return pulumi.get(self, "region")
 
@@ -307,8 +311,8 @@ class _LifecycleHookState:
     @pulumi.getter(name="scalingGroupId")
     def scaling_group_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ID of the AS group in UUID format. Changing this
-        creates a new AS lifecycle hook.
+        Specifies the ID of the AS group in UUID format.
+        Changing this creates a new AS lifecycle hook.
         """
         return pulumi.get(self, "scaling_group_id")
 
@@ -362,7 +366,6 @@ class LifecycleHook(pulumi.CustomResource):
         Manages an AS Lifecycle Hook resource within HuaweiCloud.
 
         ## Example Usage
-        ### Basic Lifecycle Hook
 
         ```python
         import pulumi
@@ -373,8 +376,8 @@ class LifecycleHook(pulumi.CustomResource):
         as_group_id = config.require_object("asGroupId")
         smn_topic_urn = config.require_object("smnTopicUrn")
         test = huaweicloud.as_.LifecycleHook("test",
-            type="ADD",
             scaling_group_id=as_group_id,
+            type="ADD",
             default_result="ABANDON",
             notification_topic_urn=smn_topic_urn,
             notification_message="This is a test message")
@@ -385,22 +388,23 @@ class LifecycleHook(pulumi.CustomResource):
         Lifecycle hooks can be imported using the AS group ID and hook ID separated by a slash, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:As/lifecycleHook:LifecycleHook test <AS group ID>/<Lifecycle hook ID>
+         $ pulumi import huaweicloud:As/lifecycleHook:LifecycleHook test &ltAS group ID&gt/&ltLifecycle hook ID&gt
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] default_result: Specifies the default lifecycle hook callback operation. This operation is
                performed when the timeout duration expires. The valid values are *ABANDON* and *CONTINUE*, default to *ABANDON*.
-        :param pulumi.Input[str] name: Specifies the lifecycle hook name. This parameter can contain a maximum of 32 characters,
-               which may consist of letters, digits, underscores (_) and hyphens (-).
+        :param pulumi.Input[str] name: Specifies the lifecycle hook name. This parameter can contain a maximum of
+               32 characters, which may consist of letters, digits, underscores (_) and hyphens (-).
+               Changing this creates a new AS lifecycle hook.
         :param pulumi.Input[str] notification_message: Specifies a customized notification. This parameter can contains a maximum
                of 256 characters, which cannot contain the following characters: <>&'().
         :param pulumi.Input[str] notification_topic_urn: Specifies a unique topic in SMN.
-        :param pulumi.Input[str] region: The region in which to create the AS lifecycle hook. If omitted, the `region`
-               argument of the provider is used. Changing this creates a new AS lifecycle hook.
-        :param pulumi.Input[str] scaling_group_id: Specifies the ID of the AS group in UUID format. Changing this
-               creates a new AS lifecycle hook.
+        :param pulumi.Input[str] region: Specifies the region in which to create the AS lifecycle hook.
+               If omitted, the provider-level region will be used. Changing this creates a new AS lifecycle hook.
+        :param pulumi.Input[str] scaling_group_id: Specifies the ID of the AS group in UUID format.
+               Changing this creates a new AS lifecycle hook.
         :param pulumi.Input[int] timeout: Specifies the lifecycle hook timeout duration, which ranges from 300 to 86400 in the unit
                of second, default to 3600.
         :param pulumi.Input[str] type: Specifies the lifecycle hook type. The valid values are following strings:
@@ -417,7 +421,6 @@ class LifecycleHook(pulumi.CustomResource):
         Manages an AS Lifecycle Hook resource within HuaweiCloud.
 
         ## Example Usage
-        ### Basic Lifecycle Hook
 
         ```python
         import pulumi
@@ -428,8 +431,8 @@ class LifecycleHook(pulumi.CustomResource):
         as_group_id = config.require_object("asGroupId")
         smn_topic_urn = config.require_object("smnTopicUrn")
         test = huaweicloud.as_.LifecycleHook("test",
-            type="ADD",
             scaling_group_id=as_group_id,
+            type="ADD",
             default_result="ABANDON",
             notification_topic_urn=smn_topic_urn,
             notification_message="This is a test message")
@@ -440,7 +443,7 @@ class LifecycleHook(pulumi.CustomResource):
         Lifecycle hooks can be imported using the AS group ID and hook ID separated by a slash, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:As/lifecycleHook:LifecycleHook test <AS group ID>/<Lifecycle hook ID>
+         $ pulumi import huaweicloud:As/lifecycleHook:LifecycleHook test &ltAS group ID&gt/&ltLifecycle hook ID&gt
         ```
 
         :param str resource_name: The name of the resource.
@@ -521,16 +524,17 @@ class LifecycleHook(pulumi.CustomResource):
         :param pulumi.Input[str] create_time: The server time in UTC format when the lifecycle hook is created.
         :param pulumi.Input[str] default_result: Specifies the default lifecycle hook callback operation. This operation is
                performed when the timeout duration expires. The valid values are *ABANDON* and *CONTINUE*, default to *ABANDON*.
-        :param pulumi.Input[str] name: Specifies the lifecycle hook name. This parameter can contain a maximum of 32 characters,
-               which may consist of letters, digits, underscores (_) and hyphens (-).
+        :param pulumi.Input[str] name: Specifies the lifecycle hook name. This parameter can contain a maximum of
+               32 characters, which may consist of letters, digits, underscores (_) and hyphens (-).
+               Changing this creates a new AS lifecycle hook.
         :param pulumi.Input[str] notification_message: Specifies a customized notification. This parameter can contains a maximum
                of 256 characters, which cannot contain the following characters: <>&'().
         :param pulumi.Input[str] notification_topic_name: The topic name in SMN.
         :param pulumi.Input[str] notification_topic_urn: Specifies a unique topic in SMN.
-        :param pulumi.Input[str] region: The region in which to create the AS lifecycle hook. If omitted, the `region`
-               argument of the provider is used. Changing this creates a new AS lifecycle hook.
-        :param pulumi.Input[str] scaling_group_id: Specifies the ID of the AS group in UUID format. Changing this
-               creates a new AS lifecycle hook.
+        :param pulumi.Input[str] region: Specifies the region in which to create the AS lifecycle hook.
+               If omitted, the provider-level region will be used. Changing this creates a new AS lifecycle hook.
+        :param pulumi.Input[str] scaling_group_id: Specifies the ID of the AS group in UUID format.
+               Changing this creates a new AS lifecycle hook.
         :param pulumi.Input[int] timeout: Specifies the lifecycle hook timeout duration, which ranges from 300 to 86400 in the unit
                of second, default to 3600.
         :param pulumi.Input[str] type: Specifies the lifecycle hook type. The valid values are following strings:
@@ -574,8 +578,9 @@ class LifecycleHook(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the lifecycle hook name. This parameter can contain a maximum of 32 characters,
-        which may consist of letters, digits, underscores (_) and hyphens (-).
+        Specifies the lifecycle hook name. This parameter can contain a maximum of
+        32 characters, which may consist of letters, digits, underscores (_) and hyphens (-).
+        Changing this creates a new AS lifecycle hook.
         """
         return pulumi.get(self, "name")
 
@@ -608,8 +613,8 @@ class LifecycleHook(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        The region in which to create the AS lifecycle hook. If omitted, the `region`
-        argument of the provider is used. Changing this creates a new AS lifecycle hook.
+        Specifies the region in which to create the AS lifecycle hook.
+        If omitted, the provider-level region will be used. Changing this creates a new AS lifecycle hook.
         """
         return pulumi.get(self, "region")
 
@@ -617,8 +622,8 @@ class LifecycleHook(pulumi.CustomResource):
     @pulumi.getter(name="scalingGroupId")
     def scaling_group_id(self) -> pulumi.Output[str]:
         """
-        Specifies the ID of the AS group in UUID format. Changing this
-        creates a new AS lifecycle hook.
+        Specifies the ID of the AS group in UUID format.
+        Changing this creates a new AS lifecycle hook.
         """
         return pulumi.get(self, "scaling_group_id")
 

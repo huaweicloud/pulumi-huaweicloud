@@ -351,8 +351,6 @@ class TranscodingTemplateGroupVideoCommonArgs:
                The vaule range is  0 to 7, and the default value is 4. The unit is frame.
         :param pulumi.Input[int] max_iframes_interval: Specifies the mximum I-frame interval. The value ranges from 2 to 10.
                The default value is 5. The unit is second.
-        :param pulumi.Input[int] max_reference_frames: Specifies the maximum reference frames. When the `codec` is H.264,
-               the vaule rang is 1 to 8. When the `codec` is H.265, the value is fixed at 4. The default value is 4. The unit is frame.
         :param pulumi.Input[str] output_policy: Specifies the output policy. Possible values are **discard** and **transcode**.
                The default value is transcode.
         :param pulumi.Input[int] profile: Specifies the encoding profile. The recommended value is 3. Possible values are:
@@ -485,10 +483,6 @@ class TranscodingTemplateGroupVideoCommonArgs:
     @property
     @pulumi.getter(name="maxReferenceFrames")
     def max_reference_frames(self) -> Optional[pulumi.Input[int]]:
-        """
-        Specifies the maximum reference frames. When the `codec` is H.264,
-        the vaule rang is 1 to 8. When the `codec` is H.265, the value is fixed at 4. The default value is 4. The unit is frame.
-        """
         return pulumi.get(self, "max_reference_frames")
 
     @max_reference_frames.setter
@@ -593,8 +587,6 @@ class TranscodingTemplateVideoArgs:
                The vaule range is  0 to 7, and the default value is 4. The unit is frame.
         :param pulumi.Input[int] max_iframes_interval: Specifies the mximum I-frame interval. The value ranges from 2 to 10.
                The default value is 5. The unit is second.
-        :param pulumi.Input[int] max_reference_frames: Specifies the maximum reference frames. When the `codec` is H.264,
-               the vaule rang is 1 to 8. When the `codec` is H.265, the value is fixed at 4. The default value is 4. The unit is frame.
         :param pulumi.Input[str] output_policy: Specifies the output policy. Possible values are **discard** and **transcode**.
                The default value is transcode.
         :param pulumi.Input[int] profile: Specifies the encoding profile. The recommended value is 3. Possible values are:
@@ -764,10 +756,6 @@ class TranscodingTemplateVideoArgs:
     @property
     @pulumi.getter(name="maxReferenceFrames")
     def max_reference_frames(self) -> Optional[pulumi.Input[int]]:
-        """
-        Specifies the maximum reference frames. When the `codec` is H.264,
-        the vaule rang is 1 to 8. When the `codec` is H.265, the value is fixed at 4. The default value is 4. The unit is frame.
-        """
         return pulumi.get(self, "max_reference_frames")
 
     @max_reference_frames.setter

@@ -15,69 +15,58 @@ __all__ = ['GatewayArgs', 'Gateway']
 class GatewayArgs:
     def __init__(__self__, *,
                  spec: pulumi.Input[str],
+                 subnet_id: pulumi.Input[str],
+                 vpc_id: pulumi.Input[str],
                  description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
-                 internal_network_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
-                 router_id: Optional[pulumi.Input[str]] = None,
-                 subnet_id: Optional[pulumi.Input[str]] = None,
-                 vpc_id: Optional[pulumi.Input[str]] = None):
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Gateway resource.
-        :param pulumi.Input[str] spec: Specifies the nat gateway type. The value can be:
-               + `1`: small type, which supports up to 10,000 SNAT connections.
-               + `2`: medium type, which supports up to 50,000 SNAT connections.
-               + `3`: large type, which supports up to 200,000 SNAT connections.
-               + `4`: extra-large type, which supports up to 1,000,000 SNAT connections.
-        :param pulumi.Input[str] description: Specifies the description of the nat gateway. The value contains 0 to 255
-               characters, and angle brackets (<)
-               and (>) are not allowed.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the nat gateway. The
-               value can contains maximum of 36 characters which it is string "0" or in UUID format with hyphens (-). Changing this
-               creates a new nat gateway.
-        :param pulumi.Input[str] name: Specifies the nat gateway name. The name can contain only digits, letters, underscores (_)
-               , and hyphens(-).
-        :param pulumi.Input[str] region: Specifies the region in which to create the Nat gateway resource. If omitted,
-               the provider-level region will be used. Changing this creates a new nat gateway.
+        :param pulumi.Input[str] spec: Specifies the specification of the NAT gateway. The valid values are as follows:
+               + **1**: Small type, which supports up to `10,000` SNAT connections.
+               + **2**: Medium type, which supports up to `50,000` SNAT connections.
+               + **3**: Large type, which supports up to `200,000` SNAT connections.
+               + **4**: Extra-large type, which supports up to `1,000,000` SNAT connections.
         :param pulumi.Input[str] subnet_id: Specifies the subnet ID of the downstream interface (the next hop of the
-               DVR) of the NAT gateway. Changing this creates a new nat gateway.
-        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC this nat gateway belongs to. Changing this creates
-               a new nat gateway.
+               DVR) of the NAT gateway.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the NAT gateway belongs.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] description: Specifies the description of the NAT gateway, which contain maximum of `512`
+               characters, and angle brackets (<) and (>) are not allowed.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the NAT gateway.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the NAT gateway name.  
+               The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
+        :param pulumi.Input[str] region: Specifies the region where the NAT gateway is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the NAT geteway.
         """
         pulumi.set(__self__, "spec", spec)
+        pulumi.set(__self__, "subnet_id", subnet_id)
+        pulumi.set(__self__, "vpc_id", vpc_id)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
-        if internal_network_id is not None:
-            warnings.warn("""use subnet_id instead""", DeprecationWarning)
-            pulumi.log.warn("""internal_network_id is deprecated: use subnet_id instead""")
-        if internal_network_id is not None:
-            pulumi.set(__self__, "internal_network_id", internal_network_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
-        if router_id is not None:
-            warnings.warn("""use vpc_id instead""", DeprecationWarning)
-            pulumi.log.warn("""router_id is deprecated: use vpc_id instead""")
-        if router_id is not None:
-            pulumi.set(__self__, "router_id", router_id)
-        if subnet_id is not None:
-            pulumi.set(__self__, "subnet_id", subnet_id)
-        if vpc_id is not None:
-            pulumi.set(__self__, "vpc_id", vpc_id)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
 
     @property
     @pulumi.getter
     def spec(self) -> pulumi.Input[str]:
         """
-        Specifies the nat gateway type. The value can be:
-        + `1`: small type, which supports up to 10,000 SNAT connections.
-        + `2`: medium type, which supports up to 50,000 SNAT connections.
-        + `3`: large type, which supports up to 200,000 SNAT connections.
-        + `4`: extra-large type, which supports up to 1,000,000 SNAT connections.
+        Specifies the specification of the NAT gateway. The valid values are as follows:
+        + **1**: Small type, which supports up to `10,000` SNAT connections.
+        + **2**: Medium type, which supports up to `50,000` SNAT connections.
+        + **3**: Large type, which supports up to `200,000` SNAT connections.
+        + **4**: Extra-large type, which supports up to `1,000,000` SNAT connections.
         """
         return pulumi.get(self, "spec")
 
@@ -86,12 +75,38 @@ class GatewayArgs:
         pulumi.set(self, "spec", value)
 
     @property
+    @pulumi.getter(name="subnetId")
+    def subnet_id(self) -> pulumi.Input[str]:
+        """
+        Specifies the subnet ID of the downstream interface (the next hop of the
+        DVR) of the NAT gateway.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "subnet_id")
+
+    @subnet_id.setter
+    def subnet_id(self, value: pulumi.Input[str]):
+        pulumi.set(self, "subnet_id", value)
+
+    @property
+    @pulumi.getter(name="vpcId")
+    def vpc_id(self) -> pulumi.Input[str]:
+        """
+        Specifies the ID of the VPC to which the NAT gateway belongs.  
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "vpc_id")
+
+    @vpc_id.setter
+    def vpc_id(self, value: pulumi.Input[str]):
+        pulumi.set(self, "vpc_id", value)
+
+    @property
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of the nat gateway. The value contains 0 to 255
-        characters, and angle brackets (<)
-        and (>) are not allowed.
+        Specifies the description of the NAT gateway, which contain maximum of `512`
+        characters, and angle brackets (<) and (>) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -103,9 +118,8 @@ class GatewayArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project id of the nat gateway. The
-        value can contains maximum of 36 characters which it is string "0" or in UUID format with hyphens (-). Changing this
-        creates a new nat gateway.
+        Specifies the enterprise project ID of the NAT gateway.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -114,20 +128,11 @@ class GatewayArgs:
         pulumi.set(self, "enterprise_project_id", value)
 
     @property
-    @pulumi.getter(name="internalNetworkId")
-    def internal_network_id(self) -> Optional[pulumi.Input[str]]:
-        return pulumi.get(self, "internal_network_id")
-
-    @internal_network_id.setter
-    def internal_network_id(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "internal_network_id", value)
-
-    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the nat gateway name. The name can contain only digits, letters, underscores (_)
-        , and hyphens(-).
+        Specifies the NAT gateway name.  
+        The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -139,8 +144,8 @@ class GatewayArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create the Nat gateway resource. If omitted,
-        the provider-level region will be used. Changing this creates a new nat gateway.
+        Specifies the region where the NAT gateway is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -149,39 +154,16 @@ class GatewayArgs:
         pulumi.set(self, "region", value)
 
     @property
-    @pulumi.getter(name="routerId")
-    def router_id(self) -> Optional[pulumi.Input[str]]:
-        return pulumi.get(self, "router_id")
-
-    @router_id.setter
-    def router_id(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "router_id", value)
-
-    @property
-    @pulumi.getter(name="subnetId")
-    def subnet_id(self) -> Optional[pulumi.Input[str]]:
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
-        Specifies the subnet ID of the downstream interface (the next hop of the
-        DVR) of the NAT gateway. Changing this creates a new nat gateway.
+        Specifies the key/value pairs to associate with the NAT geteway.
         """
-        return pulumi.get(self, "subnet_id")
+        return pulumi.get(self, "tags")
 
-    @subnet_id.setter
-    def subnet_id(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "subnet_id", value)
-
-    @property
-    @pulumi.getter(name="vpcId")
-    def vpc_id(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the ID of the VPC this nat gateway belongs to. Changing this creates
-        a new nat gateway.
-        """
-        return pulumi.get(self, "vpc_id")
-
-    @vpc_id.setter
-    def vpc_id(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "vpc_id", value)
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
@@ -189,61 +171,52 @@ class _GatewayState:
     def __init__(__self__, *,
                  description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
-                 internal_network_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
-                 router_id: Optional[pulumi.Input[str]] = None,
                  spec: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Gateway resources.
-        :param pulumi.Input[str] description: Specifies the description of the nat gateway. The value contains 0 to 255
-               characters, and angle brackets (<)
-               and (>) are not allowed.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the nat gateway. The
-               value can contains maximum of 36 characters which it is string "0" or in UUID format with hyphens (-). Changing this
-               creates a new nat gateway.
-        :param pulumi.Input[str] name: Specifies the nat gateway name. The name can contain only digits, letters, underscores (_)
-               , and hyphens(-).
-        :param pulumi.Input[str] region: Specifies the region in which to create the Nat gateway resource. If omitted,
-               the provider-level region will be used. Changing this creates a new nat gateway.
-        :param pulumi.Input[str] spec: Specifies the nat gateway type. The value can be:
-               + `1`: small type, which supports up to 10,000 SNAT connections.
-               + `2`: medium type, which supports up to 50,000 SNAT connections.
-               + `3`: large type, which supports up to 200,000 SNAT connections.
-               + `4`: extra-large type, which supports up to 1,000,000 SNAT connections.
-        :param pulumi.Input[str] status: The status of the nat gateway.
+        :param pulumi.Input[str] description: Specifies the description of the NAT gateway, which contain maximum of `512`
+               characters, and angle brackets (<) and (>) are not allowed.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the NAT gateway.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the NAT gateway name.  
+               The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
+        :param pulumi.Input[str] region: Specifies the region where the NAT gateway is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[str] spec: Specifies the specification of the NAT gateway. The valid values are as follows:
+               + **1**: Small type, which supports up to `10,000` SNAT connections.
+               + **2**: Medium type, which supports up to `50,000` SNAT connections.
+               + **3**: Large type, which supports up to `200,000` SNAT connections.
+               + **4**: Extra-large type, which supports up to `1,000,000` SNAT connections.
+        :param pulumi.Input[str] status: The current status of the NAT gateway.
         :param pulumi.Input[str] subnet_id: Specifies the subnet ID of the downstream interface (the next hop of the
-               DVR) of the NAT gateway. Changing this creates a new nat gateway.
-        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC this nat gateway belongs to. Changing this creates
-               a new nat gateway.
+               DVR) of the NAT gateway.
+               Changing this will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the NAT geteway.
+        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the NAT gateway belongs.  
+               Changing this will create a new resource.
         """
         if description is not None:
             pulumi.set(__self__, "description", description)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
-        if internal_network_id is not None:
-            warnings.warn("""use subnet_id instead""", DeprecationWarning)
-            pulumi.log.warn("""internal_network_id is deprecated: use subnet_id instead""")
-        if internal_network_id is not None:
-            pulumi.set(__self__, "internal_network_id", internal_network_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
-        if router_id is not None:
-            warnings.warn("""use vpc_id instead""", DeprecationWarning)
-            pulumi.log.warn("""router_id is deprecated: use vpc_id instead""")
-        if router_id is not None:
-            pulumi.set(__self__, "router_id", router_id)
         if spec is not None:
             pulumi.set(__self__, "spec", spec)
         if status is not None:
             pulumi.set(__self__, "status", status)
         if subnet_id is not None:
             pulumi.set(__self__, "subnet_id", subnet_id)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
         if vpc_id is not None:
             pulumi.set(__self__, "vpc_id", vpc_id)
 
@@ -251,9 +224,8 @@ class _GatewayState:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of the nat gateway. The value contains 0 to 255
-        characters, and angle brackets (<)
-        and (>) are not allowed.
+        Specifies the description of the NAT gateway, which contain maximum of `512`
+        characters, and angle brackets (<) and (>) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -265,9 +237,8 @@ class _GatewayState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project id of the nat gateway. The
-        value can contains maximum of 36 characters which it is string "0" or in UUID format with hyphens (-). Changing this
-        creates a new nat gateway.
+        Specifies the enterprise project ID of the NAT gateway.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -276,20 +247,11 @@ class _GatewayState:
         pulumi.set(self, "enterprise_project_id", value)
 
     @property
-    @pulumi.getter(name="internalNetworkId")
-    def internal_network_id(self) -> Optional[pulumi.Input[str]]:
-        return pulumi.get(self, "internal_network_id")
-
-    @internal_network_id.setter
-    def internal_network_id(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "internal_network_id", value)
-
-    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the nat gateway name. The name can contain only digits, letters, underscores (_)
-        , and hyphens(-).
+        Specifies the NAT gateway name.  
+        The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -301,8 +263,8 @@ class _GatewayState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create the Nat gateway resource. If omitted,
-        the provider-level region will be used. Changing this creates a new nat gateway.
+        Specifies the region where the NAT gateway is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -311,23 +273,14 @@ class _GatewayState:
         pulumi.set(self, "region", value)
 
     @property
-    @pulumi.getter(name="routerId")
-    def router_id(self) -> Optional[pulumi.Input[str]]:
-        return pulumi.get(self, "router_id")
-
-    @router_id.setter
-    def router_id(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "router_id", value)
-
-    @property
     @pulumi.getter
     def spec(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the nat gateway type. The value can be:
-        + `1`: small type, which supports up to 10,000 SNAT connections.
-        + `2`: medium type, which supports up to 50,000 SNAT connections.
-        + `3`: large type, which supports up to 200,000 SNAT connections.
-        + `4`: extra-large type, which supports up to 1,000,000 SNAT connections.
+        Specifies the specification of the NAT gateway. The valid values are as follows:
+        + **1**: Small type, which supports up to `10,000` SNAT connections.
+        + **2**: Medium type, which supports up to `50,000` SNAT connections.
+        + **3**: Large type, which supports up to `200,000` SNAT connections.
+        + **4**: Extra-large type, which supports up to `1,000,000` SNAT connections.
         """
         return pulumi.get(self, "spec")
 
@@ -339,7 +292,7 @@ class _GatewayState:
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
         """
-        The status of the nat gateway.
+        The current status of the NAT gateway.
         """
         return pulumi.get(self, "status")
 
@@ -352,7 +305,8 @@ class _GatewayState:
     def subnet_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the subnet ID of the downstream interface (the next hop of the
-        DVR) of the NAT gateway. Changing this creates a new nat gateway.
+        DVR) of the NAT gateway.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "subnet_id")
 
@@ -361,11 +315,23 @@ class _GatewayState:
         pulumi.set(self, "subnet_id", value)
 
     @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the NAT geteway.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
+
+    @property
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ID of the VPC this nat gateway belongs to. Changing this creates
-        a new nat gateway.
+        Specifies the ID of the VPC to which the NAT gateway belongs.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "vpc_id")
 
@@ -381,16 +347,15 @@ class Gateway(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
-                 internal_network_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
-                 router_id: Optional[pulumi.Input[str]] = None,
                  spec: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages a Nat gateway resource within HuaweiCloud Nat.
+        Manages a gateway resource of the **public** NAT within HuaweiCloud.
 
         ## Example Usage
 
@@ -398,42 +363,46 @@ class Gateway(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        nat1 = huaweicloud.nat.Gateway("nat1",
+        config = pulumi.Config()
+        gateway_name = config.require_object("gatewayName")
+        vpc_id = config.require_object("vpcId")
+        network_id = config.require_object("networkId")
+        test = huaweicloud.nat.Gateway("test",
             description="test for terraform",
             spec="3",
-            subnet_id="dc8632e2-d9ff-41b1-aa0c-d455557314a0",
-            vpc_id="2c1fe4bd-ebad-44ca-ae9d-e94e63847b75")
+            vpc_id=vpc_id,
+            subnet_id=network_id)
         ```
 
         ## Import
 
-        Nat gateway can be imported using the following format
+        NAT gateways can be imported using their `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Nat/gateway:Gateway nat_1 d126fb87-43ce-4867-a2ff-cf34af3765d9
+         $ pulumi import huaweicloud:Nat/gateway:Gateway test d126fb87-43ce-4867-a2ff-cf34af3765d9
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] description: Specifies the description of the nat gateway. The value contains 0 to 255
-               characters, and angle brackets (<)
-               and (>) are not allowed.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the nat gateway. The
-               value can contains maximum of 36 characters which it is string "0" or in UUID format with hyphens (-). Changing this
-               creates a new nat gateway.
-        :param pulumi.Input[str] name: Specifies the nat gateway name. The name can contain only digits, letters, underscores (_)
-               , and hyphens(-).
-        :param pulumi.Input[str] region: Specifies the region in which to create the Nat gateway resource. If omitted,
-               the provider-level region will be used. Changing this creates a new nat gateway.
-        :param pulumi.Input[str] spec: Specifies the nat gateway type. The value can be:
-               + `1`: small type, which supports up to 10,000 SNAT connections.
-               + `2`: medium type, which supports up to 50,000 SNAT connections.
-               + `3`: large type, which supports up to 200,000 SNAT connections.
-               + `4`: extra-large type, which supports up to 1,000,000 SNAT connections.
+        :param pulumi.Input[str] description: Specifies the description of the NAT gateway, which contain maximum of `512`
+               characters, and angle brackets (<) and (>) are not allowed.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the NAT gateway.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the NAT gateway name.  
+               The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
+        :param pulumi.Input[str] region: Specifies the region where the NAT gateway is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[str] spec: Specifies the specification of the NAT gateway. The valid values are as follows:
+               + **1**: Small type, which supports up to `10,000` SNAT connections.
+               + **2**: Medium type, which supports up to `50,000` SNAT connections.
+               + **3**: Large type, which supports up to `200,000` SNAT connections.
+               + **4**: Extra-large type, which supports up to `1,000,000` SNAT connections.
         :param pulumi.Input[str] subnet_id: Specifies the subnet ID of the downstream interface (the next hop of the
-               DVR) of the NAT gateway. Changing this creates a new nat gateway.
-        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC this nat gateway belongs to. Changing this creates
-               a new nat gateway.
+               DVR) of the NAT gateway.
+               Changing this will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the NAT geteway.
+        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the NAT gateway belongs.  
+               Changing this will create a new resource.
         """
         ...
     @overload
@@ -442,7 +411,7 @@ class Gateway(pulumi.CustomResource):
                  args: GatewayArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a Nat gateway resource within HuaweiCloud Nat.
+        Manages a gateway resource of the **public** NAT within HuaweiCloud.
 
         ## Example Usage
 
@@ -450,19 +419,23 @@ class Gateway(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        nat1 = huaweicloud.nat.Gateway("nat1",
+        config = pulumi.Config()
+        gateway_name = config.require_object("gatewayName")
+        vpc_id = config.require_object("vpcId")
+        network_id = config.require_object("networkId")
+        test = huaweicloud.nat.Gateway("test",
             description="test for terraform",
             spec="3",
-            subnet_id="dc8632e2-d9ff-41b1-aa0c-d455557314a0",
-            vpc_id="2c1fe4bd-ebad-44ca-ae9d-e94e63847b75")
+            vpc_id=vpc_id,
+            subnet_id=network_id)
         ```
 
         ## Import
 
-        Nat gateway can be imported using the following format
+        NAT gateways can be imported using their `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Nat/gateway:Gateway nat_1 d126fb87-43ce-4867-a2ff-cf34af3765d9
+         $ pulumi import huaweicloud:Nat/gateway:Gateway test d126fb87-43ce-4867-a2ff-cf34af3765d9
         ```
 
         :param str resource_name: The name of the resource.
@@ -482,12 +455,11 @@ class Gateway(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
-                 internal_network_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
-                 router_id: Optional[pulumi.Input[str]] = None,
                  spec: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
@@ -500,20 +472,17 @@ class Gateway(pulumi.CustomResource):
 
             __props__.__dict__["description"] = description
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
-            if internal_network_id is not None and not opts.urn:
-                warnings.warn("""use subnet_id instead""", DeprecationWarning)
-                pulumi.log.warn("""internal_network_id is deprecated: use subnet_id instead""")
-            __props__.__dict__["internal_network_id"] = internal_network_id
             __props__.__dict__["name"] = name
             __props__.__dict__["region"] = region
-            if router_id is not None and not opts.urn:
-                warnings.warn("""use vpc_id instead""", DeprecationWarning)
-                pulumi.log.warn("""router_id is deprecated: use vpc_id instead""")
-            __props__.__dict__["router_id"] = router_id
             if spec is None and not opts.urn:
                 raise TypeError("Missing required property 'spec'")
             __props__.__dict__["spec"] = spec
+            if subnet_id is None and not opts.urn:
+                raise TypeError("Missing required property 'subnet_id'")
             __props__.__dict__["subnet_id"] = subnet_id
+            __props__.__dict__["tags"] = tags
+            if vpc_id is None and not opts.urn:
+                raise TypeError("Missing required property 'vpc_id'")
             __props__.__dict__["vpc_id"] = vpc_id
             __props__.__dict__["status"] = None
         super(Gateway, __self__).__init__(
@@ -528,13 +497,12 @@ class Gateway(pulumi.CustomResource):
             opts: Optional[pulumi.ResourceOptions] = None,
             description: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
-            internal_network_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
-            router_id: Optional[pulumi.Input[str]] = None,
             spec: Optional[pulumi.Input[str]] = None,
             status: Optional[pulumi.Input[str]] = None,
             subnet_id: Optional[pulumi.Input[str]] = None,
+            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             vpc_id: Optional[pulumi.Input[str]] = None) -> 'Gateway':
         """
         Get an existing Gateway resource's state with the given name, id, and optional extra
@@ -543,26 +511,26 @@ class Gateway(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] description: Specifies the description of the nat gateway. The value contains 0 to 255
-               characters, and angle brackets (<)
-               and (>) are not allowed.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the nat gateway. The
-               value can contains maximum of 36 characters which it is string "0" or in UUID format with hyphens (-). Changing this
-               creates a new nat gateway.
-        :param pulumi.Input[str] name: Specifies the nat gateway name. The name can contain only digits, letters, underscores (_)
-               , and hyphens(-).
-        :param pulumi.Input[str] region: Specifies the region in which to create the Nat gateway resource. If omitted,
-               the provider-level region will be used. Changing this creates a new nat gateway.
-        :param pulumi.Input[str] spec: Specifies the nat gateway type. The value can be:
-               + `1`: small type, which supports up to 10,000 SNAT connections.
-               + `2`: medium type, which supports up to 50,000 SNAT connections.
-               + `3`: large type, which supports up to 200,000 SNAT connections.
-               + `4`: extra-large type, which supports up to 1,000,000 SNAT connections.
-        :param pulumi.Input[str] status: The status of the nat gateway.
+        :param pulumi.Input[str] description: Specifies the description of the NAT gateway, which contain maximum of `512`
+               characters, and angle brackets (<) and (>) are not allowed.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the NAT gateway.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the NAT gateway name.  
+               The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
+        :param pulumi.Input[str] region: Specifies the region where the NAT gateway is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[str] spec: Specifies the specification of the NAT gateway. The valid values are as follows:
+               + **1**: Small type, which supports up to `10,000` SNAT connections.
+               + **2**: Medium type, which supports up to `50,000` SNAT connections.
+               + **3**: Large type, which supports up to `200,000` SNAT connections.
+               + **4**: Extra-large type, which supports up to `1,000,000` SNAT connections.
+        :param pulumi.Input[str] status: The current status of the NAT gateway.
         :param pulumi.Input[str] subnet_id: Specifies the subnet ID of the downstream interface (the next hop of the
-               DVR) of the NAT gateway. Changing this creates a new nat gateway.
-        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC this nat gateway belongs to. Changing this creates
-               a new nat gateway.
+               DVR) of the NAT gateway.
+               Changing this will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the NAT geteway.
+        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the NAT gateway belongs.  
+               Changing this will create a new resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -570,23 +538,21 @@ class Gateway(pulumi.CustomResource):
 
         __props__.__dict__["description"] = description
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
-        __props__.__dict__["internal_network_id"] = internal_network_id
         __props__.__dict__["name"] = name
         __props__.__dict__["region"] = region
-        __props__.__dict__["router_id"] = router_id
         __props__.__dict__["spec"] = spec
         __props__.__dict__["status"] = status
         __props__.__dict__["subnet_id"] = subnet_id
+        __props__.__dict__["tags"] = tags
         __props__.__dict__["vpc_id"] = vpc_id
         return Gateway(resource_name, opts=opts, __props__=__props__)
 
     @property
     @pulumi.getter
-    def description(self) -> pulumi.Output[str]:
+    def description(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the description of the nat gateway. The value contains 0 to 255
-        characters, and angle brackets (<)
-        and (>) are not allowed.
+        Specifies the description of the NAT gateway, which contain maximum of `512`
+        characters, and angle brackets (<) and (>) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -594,23 +560,17 @@ class Gateway(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        Specifies the enterprise project id of the nat gateway. The
-        value can contains maximum of 36 characters which it is string "0" or in UUID format with hyphens (-). Changing this
-        creates a new nat gateway.
+        Specifies the enterprise project ID of the NAT gateway.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
-
-    @property
-    @pulumi.getter(name="internalNetworkId")
-    def internal_network_id(self) -> pulumi.Output[Optional[str]]:
-        return pulumi.get(self, "internal_network_id")
 
     @property
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the nat gateway name. The name can contain only digits, letters, underscores (_)
-        , and hyphens(-).
+        Specifies the NAT gateway name.  
+        The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -618,25 +578,20 @@ class Gateway(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        Specifies the region in which to create the Nat gateway resource. If omitted,
-        the provider-level region will be used. Changing this creates a new nat gateway.
+        Specifies the region where the NAT gateway is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
-
-    @property
-    @pulumi.getter(name="routerId")
-    def router_id(self) -> pulumi.Output[Optional[str]]:
-        return pulumi.get(self, "router_id")
 
     @property
     @pulumi.getter
     def spec(self) -> pulumi.Output[str]:
         """
-        Specifies the nat gateway type. The value can be:
-        + `1`: small type, which supports up to 10,000 SNAT connections.
-        + `2`: medium type, which supports up to 50,000 SNAT connections.
-        + `3`: large type, which supports up to 200,000 SNAT connections.
-        + `4`: extra-large type, which supports up to 1,000,000 SNAT connections.
+        Specifies the specification of the NAT gateway. The valid values are as follows:
+        + **1**: Small type, which supports up to `10,000` SNAT connections.
+        + **2**: Medium type, which supports up to `50,000` SNAT connections.
+        + **3**: Large type, which supports up to `200,000` SNAT connections.
+        + **4**: Extra-large type, which supports up to `1,000,000` SNAT connections.
         """
         return pulumi.get(self, "spec")
 
@@ -644,7 +599,7 @@ class Gateway(pulumi.CustomResource):
     @pulumi.getter
     def status(self) -> pulumi.Output[str]:
         """
-        The status of the nat gateway.
+        The current status of the NAT gateway.
         """
         return pulumi.get(self, "status")
 
@@ -653,16 +608,25 @@ class Gateway(pulumi.CustomResource):
     def subnet_id(self) -> pulumi.Output[str]:
         """
         Specifies the subnet ID of the downstream interface (the next hop of the
-        DVR) of the NAT gateway. Changing this creates a new nat gateway.
+        DVR) of the NAT gateway.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "subnet_id")
+
+    @property
+    @pulumi.getter
+    def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
+        """
+        Specifies the key/value pairs to associate with the NAT geteway.
+        """
+        return pulumi.get(self, "tags")
 
     @property
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Output[str]:
         """
-        Specifies the ID of the VPC this nat gateway belongs to. Changing this creates
-        a new nat gateway.
+        Specifies the ID of the VPC to which the NAT gateway belongs.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "vpc_id")
 

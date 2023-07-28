@@ -10,6 +10,42 @@ import * as utilities from "../utilities";
  * > When deleting a microservice, all instances under it will also be deleted together.
  *
  * ## Example Usage
+ * ### Create a microservice in an engine with RBAC authentication disabled
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const engineConnAddr = config.requireObject("engineConnAddr");
+ * const serviceName = config.requireObject("serviceName");
+ * const appName = config.requireObject("appName");
+ * const test = new huaweicloud.cse.Microservice("test", {
+ *     connectAddress: engineConnAddr,
+ *     version: "1.0.0",
+ *     environment: "development",
+ *     appName: appName,
+ * });
+ * ```
+ * ### Create a microservice in an engine with RBAC authentication enabled
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const engineConnAddr = config.requireObject("engineConnAddr");
+ * const serviceName = config.requireObject("serviceName");
+ * const appName = config.requireObject("appName");
+ * const test = new huaweicloud.cse.Microservice("test", {
+ *     connectAddress: engineConnAddr,
+ *     version: "1.0.0",
+ *     environment: "development",
+ *     appName: appName,
+ *     adminUser: "root",
+ *     adminPass: "Huawei!123",
+ * });
+ * ```
  *
  * ## Import
  *
@@ -83,7 +119,7 @@ export class Microservice extends pulumi.CustomResource {
     public readonly connectAddress!: pulumi.Output<string>;
     /**
      * Specifies the description of the dedicated microservice.
-     * The description can contian a maximum of `256` characters.
+     * The description can contain a maximum of `256` characters.
      * Changing this will create a new microservice.
      */
     public readonly description!: pulumi.Output<string | undefined>;
@@ -197,7 +233,7 @@ export interface MicroserviceState {
     connectAddress?: pulumi.Input<string>;
     /**
      * Specifies the description of the dedicated microservice.
-     * The description can contian a maximum of `256` characters.
+     * The description can contain a maximum of `256` characters.
      * Changing this will create a new microservice.
      */
     description?: pulumi.Input<string>;
@@ -262,7 +298,7 @@ export interface MicroserviceArgs {
     connectAddress: pulumi.Input<string>;
     /**
      * Specifies the description of the dedicated microservice.
-     * The description can contian a maximum of `256` characters.
+     * The description can contain a maximum of `256` characters.
      * Changing this will create a new microservice.
      */
     description?: pulumi.Input<string>;

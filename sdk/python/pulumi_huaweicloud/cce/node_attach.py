@@ -44,6 +44,7 @@ class NodeAttachArgs:
                resource.
         :param pulumi.Input[int] docker_base_size: Specifies the available disk space of a single docker container on the
                node in device mapper mode. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] image_id: schema: Internal
         :param pulumi.Input[str] key_pair: Specifies the key pair name when logging in to select the key pair mode.
                This parameter and `password` are alternative. Changing this parameter will reset the node.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the tags of a Kubernetes node, key/value pair format.
@@ -53,6 +54,8 @@ class NodeAttachArgs:
         :param pulumi.Input[int] max_pods: Specifies the the maximum number of instances a node is allowed to create.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: Specifies the Node Name.
+        :param pulumi.Input[str] nic_multi_queue: schema: Internal
+        :param pulumi.Input[str] nic_threshold: schema: Internal
         :param pulumi.Input[str] password: Specifies the root password when logging in to select the password mode.
                This parameter can be plain or salted and is alternative to `key_pair`.
                Changing this parameter will reset the node.
@@ -155,6 +158,9 @@ class NodeAttachArgs:
     @property
     @pulumi.getter(name="imageId")
     def image_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "image_id")
 
     @image_id.setter
@@ -228,6 +234,9 @@ class NodeAttachArgs:
     @property
     @pulumi.getter(name="nicMultiQueue")
     def nic_multi_queue(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "nic_multi_queue")
 
     @nic_multi_queue.setter
@@ -237,6 +246,9 @@ class NodeAttachArgs:
     @property
     @pulumi.getter(name="nicThreshold")
     def nic_threshold(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "nic_threshold")
 
     @nic_threshold.setter
@@ -360,11 +372,12 @@ class _NodeAttachState:
         :param pulumi.Input[str] charging_mode: The charging mode of the CCE node. Valid values are *prePaid* and *postPaid*.
         :param pulumi.Input[str] cluster_id: Specifies the ID of the cluster. Changing this parameter will create a new
                resource.
-        :param pulumi.Input[Sequence[pulumi.Input['NodeAttachDataVolumeArgs']]] data_volumes: The data disks related configuration.
+        :param pulumi.Input[Sequence[pulumi.Input['NodeAttachDataVolumeArgs']]] data_volumes: The configurations of the data disk.
         :param pulumi.Input[int] docker_base_size: Specifies the available disk space of a single docker container on the
                node in device mapper mode. Changing this parameter will create a new resource.
         :param pulumi.Input[str] ecs_group_id: The Ecs group ID.
         :param pulumi.Input[str] flavor_id: The flavor ID of the CCE node.
+        :param pulumi.Input[str] image_id: schema: Internal
         :param pulumi.Input[str] key_pair: Specifies the key pair name when logging in to select the key pair mode.
                This parameter and `password` are alternative. Changing this parameter will reset the node.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the tags of a Kubernetes node, key/value pair format.
@@ -374,6 +387,8 @@ class _NodeAttachState:
         :param pulumi.Input[int] max_pods: Specifies the the maximum number of instances a node is allowed to create.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: Specifies the Node Name.
+        :param pulumi.Input[str] nic_multi_queue: schema: Internal
+        :param pulumi.Input[str] nic_threshold: schema: Internal
         :param pulumi.Input[str] os: Specifies the operating System of the node. Changing this parameter will reset the node.
                + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
         :param pulumi.Input[str] password: Specifies the root password when logging in to select the password mode.
@@ -387,7 +402,7 @@ class _NodeAttachState:
         :param pulumi.Input[str] public_ip: Public IP of the CCE node.
         :param pulumi.Input[str] region: The region in which to create the CCE node attach resource. If omitted, the
                provider-level region will be used. Changing this creates a new CCE node attach resource.
-        :param pulumi.Input[Sequence[pulumi.Input['NodeAttachRootVolumeArgs']]] root_volumes: The system disk related configuration.
+        :param pulumi.Input[Sequence[pulumi.Input['NodeAttachRootVolumeArgs']]] root_volumes: The configuration of the system disk.
         :param pulumi.Input[str] runtime: The runtime of the CCE node.
         :param pulumi.Input[str] server_id: Specifies the ecs server ID. Changing this parameter will create a new
                resource.
@@ -497,7 +512,7 @@ class _NodeAttachState:
     @pulumi.getter(name="dataVolumes")
     def data_volumes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['NodeAttachDataVolumeArgs']]]]:
         """
-        The data disks related configuration.
+        The configurations of the data disk.
         """
         return pulumi.get(self, "data_volumes")
 
@@ -545,6 +560,9 @@ class _NodeAttachState:
     @property
     @pulumi.getter(name="imageId")
     def image_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "image_id")
 
     @image_id.setter
@@ -618,6 +636,9 @@ class _NodeAttachState:
     @property
     @pulumi.getter(name="nicMultiQueue")
     def nic_multi_queue(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "nic_multi_queue")
 
     @nic_multi_queue.setter
@@ -627,6 +648,9 @@ class _NodeAttachState:
     @property
     @pulumi.getter(name="nicThreshold")
     def nic_threshold(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "nic_threshold")
 
     @nic_threshold.setter
@@ -727,7 +751,7 @@ class _NodeAttachState:
     @pulumi.getter(name="rootVolumes")
     def root_volumes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['NodeAttachRootVolumeArgs']]]]:
         """
-        The system disk related configuration.
+        The configuration of the system disk.
         """
         return pulumi.get(self, "root_volumes")
 
@@ -860,6 +884,7 @@ class NodeAttach(pulumi.CustomResource):
                resource.
         :param pulumi.Input[int] docker_base_size: Specifies the available disk space of a single docker container on the
                node in device mapper mode. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] image_id: schema: Internal
         :param pulumi.Input[str] key_pair: Specifies the key pair name when logging in to select the key pair mode.
                This parameter and `password` are alternative. Changing this parameter will reset the node.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the tags of a Kubernetes node, key/value pair format.
@@ -869,6 +894,8 @@ class NodeAttach(pulumi.CustomResource):
         :param pulumi.Input[int] max_pods: Specifies the the maximum number of instances a node is allowed to create.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: Specifies the Node Name.
+        :param pulumi.Input[str] nic_multi_queue: schema: Internal
+        :param pulumi.Input[str] nic_threshold: schema: Internal
         :param pulumi.Input[str] os: Specifies the operating System of the node. Changing this parameter will reset the node.
                + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
         :param pulumi.Input[str] password: Specifies the root password when logging in to select the password mode.
@@ -1039,11 +1066,12 @@ class NodeAttach(pulumi.CustomResource):
         :param pulumi.Input[str] charging_mode: The charging mode of the CCE node. Valid values are *prePaid* and *postPaid*.
         :param pulumi.Input[str] cluster_id: Specifies the ID of the cluster. Changing this parameter will create a new
                resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeAttachDataVolumeArgs']]]] data_volumes: The data disks related configuration.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeAttachDataVolumeArgs']]]] data_volumes: The configurations of the data disk.
         :param pulumi.Input[int] docker_base_size: Specifies the available disk space of a single docker container on the
                node in device mapper mode. Changing this parameter will create a new resource.
         :param pulumi.Input[str] ecs_group_id: The Ecs group ID.
         :param pulumi.Input[str] flavor_id: The flavor ID of the CCE node.
+        :param pulumi.Input[str] image_id: schema: Internal
         :param pulumi.Input[str] key_pair: Specifies the key pair name when logging in to select the key pair mode.
                This parameter and `password` are alternative. Changing this parameter will reset the node.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the tags of a Kubernetes node, key/value pair format.
@@ -1053,6 +1081,8 @@ class NodeAttach(pulumi.CustomResource):
         :param pulumi.Input[int] max_pods: Specifies the the maximum number of instances a node is allowed to create.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: Specifies the Node Name.
+        :param pulumi.Input[str] nic_multi_queue: schema: Internal
+        :param pulumi.Input[str] nic_threshold: schema: Internal
         :param pulumi.Input[str] os: Specifies the operating System of the node. Changing this parameter will reset the node.
                + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
         :param pulumi.Input[str] password: Specifies the root password when logging in to select the password mode.
@@ -1066,7 +1096,7 @@ class NodeAttach(pulumi.CustomResource):
         :param pulumi.Input[str] public_ip: Public IP of the CCE node.
         :param pulumi.Input[str] region: The region in which to create the CCE node attach resource. If omitted, the
                provider-level region will be used. Changing this creates a new CCE node attach resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeAttachRootVolumeArgs']]]] root_volumes: The system disk related configuration.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeAttachRootVolumeArgs']]]] root_volumes: The configuration of the system disk.
         :param pulumi.Input[str] runtime: The runtime of the CCE node.
         :param pulumi.Input[str] server_id: Specifies the ecs server ID. Changing this parameter will create a new
                resource.
@@ -1140,7 +1170,7 @@ class NodeAttach(pulumi.CustomResource):
     @pulumi.getter(name="dataVolumes")
     def data_volumes(self) -> pulumi.Output[Sequence['outputs.NodeAttachDataVolume']]:
         """
-        The data disks related configuration.
+        The configurations of the data disk.
         """
         return pulumi.get(self, "data_volumes")
 
@@ -1172,6 +1202,9 @@ class NodeAttach(pulumi.CustomResource):
     @property
     @pulumi.getter(name="imageId")
     def image_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "image_id")
 
     @property
@@ -1221,11 +1254,17 @@ class NodeAttach(pulumi.CustomResource):
     @property
     @pulumi.getter(name="nicMultiQueue")
     def nic_multi_queue(self) -> pulumi.Output[Optional[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "nic_multi_queue")
 
     @property
     @pulumi.getter(name="nicThreshold")
     def nic_threshold(self) -> pulumi.Output[Optional[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "nic_threshold")
 
     @property
@@ -1294,7 +1333,7 @@ class NodeAttach(pulumi.CustomResource):
     @pulumi.getter(name="rootVolumes")
     def root_volumes(self) -> pulumi.Output[Sequence['outputs.NodeAttachRootVolume']]:
         """
-        The system disk related configuration.
+        The configuration of the system disk.
         """
         return pulumi.get(self, "root_volumes")
 

@@ -44,11 +44,11 @@ export function getRouteTable(args: GetRouteTableArgs, opts?: pulumi.InvokeOptio
  */
 export interface GetRouteTableArgs {
     /**
-     * - Specifies the ID of the route table.
+     * Specifies the ID of the route table.
      */
     id?: string;
     /**
-     * - Specifies the name of the route table.
+     * Specifies the name of the route table.
      */
     name?: string;
     /**
@@ -57,7 +57,7 @@ export interface GetRouteTableArgs {
      */
     region?: string;
     /**
-     * - Specifies the VPC ID where the route table resides.
+     * Specifies the VPC ID where the route table resides.
      */
     vpcId: string;
 }
@@ -66,12 +66,24 @@ export interface GetRouteTableArgs {
  * A collection of values returned by getRouteTable.
  */
 export interface GetRouteTableResult {
+    /**
+     * Whether the route table is default or not.
+     */
     readonly default: boolean;
+    /**
+     * The description about the route.
+     */
     readonly description: string;
     readonly id: string;
     readonly name: string;
     readonly region: string;
+    /**
+     * The route object list. The route object is documented below.
+     */
     readonly routes: outputs.Vpc.GetRouteTableRoute[];
+    /**
+     * An array of one or more subnets associating with the route table.
+     */
     readonly subnets: string[];
     readonly vpcId: string;
 }
@@ -85,11 +97,11 @@ export function getRouteTableOutput(args: GetRouteTableOutputArgs, opts?: pulumi
  */
 export interface GetRouteTableOutputArgs {
     /**
-     * - Specifies the ID of the route table.
+     * Specifies the ID of the route table.
      */
     id?: pulumi.Input<string>;
     /**
-     * - Specifies the name of the route table.
+     * Specifies the name of the route table.
      */
     name?: pulumi.Input<string>;
     /**
@@ -98,7 +110,7 @@ export interface GetRouteTableOutputArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * - Specifies the VPC ID where the route table resides.
+     * Specifies the VPC ID where the route table resides.
      */
     vpcId: pulumi.Input<string>;
 }

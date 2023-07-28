@@ -1430,9 +1430,13 @@ type GetOpengaussInstancesInstance struct {
 	Port int `pulumi:"port"`
 	// Indicates the list of private IP address of the nodes.
 	PrivateIps []string `pulumi:"privateIps"`
+	// Indicates the public IP address of the DB instance.
+	PublicIps []string `pulumi:"publicIps"`
 	// The region in which to obtain the instance. If omitted, the provider-level region will
 	// be used.
 	Region string `pulumi:"region"`
+	// Indicates the replica num.
+	ReplicaNum int `pulumi:"replicaNum"`
 	// Indicates the security group ID.
 	SecurityGroupId string `pulumi:"securityGroupId"`
 	// Indicates the sharding num.
@@ -1493,9 +1497,13 @@ type GetOpengaussInstancesInstanceArgs struct {
 	Port pulumi.IntInput `pulumi:"port"`
 	// Indicates the list of private IP address of the nodes.
 	PrivateIps pulumi.StringArrayInput `pulumi:"privateIps"`
+	// Indicates the public IP address of the DB instance.
+	PublicIps pulumi.StringArrayInput `pulumi:"publicIps"`
 	// The region in which to obtain the instance. If omitted, the provider-level region will
 	// be used.
 	Region pulumi.StringInput `pulumi:"region"`
+	// Indicates the replica num.
+	ReplicaNum pulumi.IntInput `pulumi:"replicaNum"`
 	// Indicates the security group ID.
 	SecurityGroupId pulumi.StringInput `pulumi:"securityGroupId"`
 	// Indicates the sharding num.
@@ -1639,10 +1647,20 @@ func (o GetOpengaussInstancesInstanceOutput) PrivateIps() pulumi.StringArrayOutp
 	return o.ApplyT(func(v GetOpengaussInstancesInstance) []string { return v.PrivateIps }).(pulumi.StringArrayOutput)
 }
 
+// Indicates the public IP address of the DB instance.
+func (o GetOpengaussInstancesInstanceOutput) PublicIps() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetOpengaussInstancesInstance) []string { return v.PublicIps }).(pulumi.StringArrayOutput)
+}
+
 // The region in which to obtain the instance. If omitted, the provider-level region will
 // be used.
 func (o GetOpengaussInstancesInstanceOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v GetOpengaussInstancesInstance) string { return v.Region }).(pulumi.StringOutput)
+}
+
+// Indicates the replica num.
+func (o GetOpengaussInstancesInstanceOutput) ReplicaNum() pulumi.IntOutput {
+	return o.ApplyT(func(v GetOpengaussInstancesInstance) int { return v.ReplicaNum }).(pulumi.IntOutput)
 }
 
 // Indicates the security group ID.

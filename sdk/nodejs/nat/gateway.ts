@@ -5,28 +5,32 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Manages a Nat gateway resource within HuaweiCloud Nat.
+ * Manages a gateway resource of the **public** NAT within HuaweiCloud.
  *
  * ## Example Usage
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const nat1 = new huaweicloud.Nat.Gateway("nat_1", {
+ * const config = new pulumi.Config();
+ * const gatewayName = config.requireObject("gatewayName");
+ * const vpcId = config.requireObject("vpcId");
+ * const networkId = config.requireObject("networkId");
+ * const test = new huaweicloud.nat.Gateway("test", {
  *     description: "test for terraform",
  *     spec: "3",
- *     subnetId: "dc8632e2-d9ff-41b1-aa0c-d455557314a0",
- *     vpcId: "2c1fe4bd-ebad-44ca-ae9d-e94e63847b75",
+ *     vpcId: vpcId,
+ *     subnetId: networkId,
  * });
  * ```
  *
  * ## Import
  *
- * Nat gateway can be imported using the following format
+ * NAT gateways can be imported using their `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Nat/gateway:Gateway nat_1 d126fb87-43ce-4867-a2ff-cf34af3765d9
+ *  $ pulumi import huaweicloud:Nat/gateway:Gateway test d126fb87-43ce-4867-a2ff-cf34af3765d9
  * ```
  */
 export class Gateway extends pulumi.CustomResource {
@@ -58,55 +62,50 @@ export class Gateway extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies the description of the nat gateway. The value contains 0 to 255
-     * characters, and angle brackets (<)
-     * and (>) are not allowed.
+     * Specifies the description of the NAT gateway, which contain maximum of `512`
+     * characters, and angle brackets (<) and (>) are not allowed.
      */
-    public readonly description!: pulumi.Output<string>;
+    public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the enterprise project id of the nat gateway. The
-     * value can contains maximum of 36 characters which it is string "0" or in UUID format with hyphens (-). Changing this
-     * creates a new nat gateway.
+     * Specifies the enterprise project ID of the NAT gateway.  
+     * Changing this will create a new resource.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
-     * @deprecated use subnet_id instead
-     */
-    public readonly internalNetworkId!: pulumi.Output<string | undefined>;
-    /**
-     * Specifies the nat gateway name. The name can contain only digits, letters, underscores (_)
-     * , and hyphens(-).
+     * Specifies the NAT gateway name.  
+     * The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Specifies the region in which to create the Nat gateway resource. If omitted,
-     * the provider-level region will be used. Changing this creates a new nat gateway.
+     * Specifies the region where the NAT gateway is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * @deprecated use vpc_id instead
-     */
-    public readonly routerId!: pulumi.Output<string | undefined>;
-    /**
-     * Specifies the nat gateway type. The value can be:
-     * + `1`: small type, which supports up to 10,000 SNAT connections.
-     * + `2`: medium type, which supports up to 50,000 SNAT connections.
-     * + `3`: large type, which supports up to 200,000 SNAT connections.
-     * + `4`: extra-large type, which supports up to 1,000,000 SNAT connections.
+     * Specifies the specification of the NAT gateway. The valid values are as follows:
+     * + **1**: Small type, which supports up to `10,000` SNAT connections.
+     * + **2**: Medium type, which supports up to `50,000` SNAT connections.
+     * + **3**: Large type, which supports up to `200,000` SNAT connections.
+     * + **4**: Extra-large type, which supports up to `1,000,000` SNAT connections.
      */
     public readonly spec!: pulumi.Output<string>;
     /**
-     * The status of the nat gateway.
+     * The current status of the NAT gateway.
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
      * Specifies the subnet ID of the downstream interface (the next hop of the
-     * DVR) of the NAT gateway. Changing this creates a new nat gateway.
+     * DVR) of the NAT gateway.
+     * Changing this will create a new resource.
      */
     public readonly subnetId!: pulumi.Output<string>;
     /**
-     * Specifies the ID of the VPC this nat gateway belongs to. Changing this creates
-     * a new nat gateway.
+     * Specifies the key/value pairs to associate with the NAT geteway.
+     */
+    public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
+    /**
+     * Specifies the ID of the VPC to which the NAT gateway belongs.  
+     * Changing this will create a new resource.
      */
     public readonly vpcId!: pulumi.Output<string>;
 
@@ -125,27 +124,31 @@ export class Gateway extends pulumi.CustomResource {
             const state = argsOrState as GatewayState | undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
-            resourceInputs["internalNetworkId"] = state ? state.internalNetworkId : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
-            resourceInputs["routerId"] = state ? state.routerId : undefined;
             resourceInputs["spec"] = state ? state.spec : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["subnetId"] = state ? state.subnetId : undefined;
+            resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["vpcId"] = state ? state.vpcId : undefined;
         } else {
             const args = argsOrState as GatewayArgs | undefined;
             if ((!args || args.spec === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'spec'");
             }
+            if ((!args || args.subnetId === undefined) && !opts.urn) {
+                throw new Error("Missing required property 'subnetId'");
+            }
+            if ((!args || args.vpcId === undefined) && !opts.urn) {
+                throw new Error("Missing required property 'vpcId'");
+            }
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
-            resourceInputs["internalNetworkId"] = args ? args.internalNetworkId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
-            resourceInputs["routerId"] = args ? args.routerId : undefined;
             resourceInputs["spec"] = args ? args.spec : undefined;
             resourceInputs["subnetId"] = args ? args.subnetId : undefined;
+            resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
             resourceInputs["status"] = undefined /*out*/;
         }
@@ -159,55 +162,50 @@ export class Gateway extends pulumi.CustomResource {
  */
 export interface GatewayState {
     /**
-     * Specifies the description of the nat gateway. The value contains 0 to 255
-     * characters, and angle brackets (<)
-     * and (>) are not allowed.
+     * Specifies the description of the NAT gateway, which contain maximum of `512`
+     * characters, and angle brackets (<) and (>) are not allowed.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the enterprise project id of the nat gateway. The
-     * value can contains maximum of 36 characters which it is string "0" or in UUID format with hyphens (-). Changing this
-     * creates a new nat gateway.
+     * Specifies the enterprise project ID of the NAT gateway.  
+     * Changing this will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * @deprecated use subnet_id instead
-     */
-    internalNetworkId?: pulumi.Input<string>;
-    /**
-     * Specifies the nat gateway name. The name can contain only digits, letters, underscores (_)
-     * , and hyphens(-).
+     * Specifies the NAT gateway name.  
+     * The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to create the Nat gateway resource. If omitted,
-     * the provider-level region will be used. Changing this creates a new nat gateway.
+     * Specifies the region where the NAT gateway is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * @deprecated use vpc_id instead
-     */
-    routerId?: pulumi.Input<string>;
-    /**
-     * Specifies the nat gateway type. The value can be:
-     * + `1`: small type, which supports up to 10,000 SNAT connections.
-     * + `2`: medium type, which supports up to 50,000 SNAT connections.
-     * + `3`: large type, which supports up to 200,000 SNAT connections.
-     * + `4`: extra-large type, which supports up to 1,000,000 SNAT connections.
+     * Specifies the specification of the NAT gateway. The valid values are as follows:
+     * + **1**: Small type, which supports up to `10,000` SNAT connections.
+     * + **2**: Medium type, which supports up to `50,000` SNAT connections.
+     * + **3**: Large type, which supports up to `200,000` SNAT connections.
+     * + **4**: Extra-large type, which supports up to `1,000,000` SNAT connections.
      */
     spec?: pulumi.Input<string>;
     /**
-     * The status of the nat gateway.
+     * The current status of the NAT gateway.
      */
     status?: pulumi.Input<string>;
     /**
      * Specifies the subnet ID of the downstream interface (the next hop of the
-     * DVR) of the NAT gateway. Changing this creates a new nat gateway.
+     * DVR) of the NAT gateway.
+     * Changing this will create a new resource.
      */
     subnetId?: pulumi.Input<string>;
     /**
-     * Specifies the ID of the VPC this nat gateway belongs to. Changing this creates
-     * a new nat gateway.
+     * Specifies the key/value pairs to associate with the NAT geteway.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Specifies the ID of the VPC to which the NAT gateway belongs.  
+     * Changing this will create a new resource.
      */
     vpcId?: pulumi.Input<string>;
 }
@@ -217,51 +215,46 @@ export interface GatewayState {
  */
 export interface GatewayArgs {
     /**
-     * Specifies the description of the nat gateway. The value contains 0 to 255
-     * characters, and angle brackets (<)
-     * and (>) are not allowed.
+     * Specifies the description of the NAT gateway, which contain maximum of `512`
+     * characters, and angle brackets (<) and (>) are not allowed.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the enterprise project id of the nat gateway. The
-     * value can contains maximum of 36 characters which it is string "0" or in UUID format with hyphens (-). Changing this
-     * creates a new nat gateway.
+     * Specifies the enterprise project ID of the NAT gateway.  
+     * Changing this will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * @deprecated use subnet_id instead
-     */
-    internalNetworkId?: pulumi.Input<string>;
-    /**
-     * Specifies the nat gateway name. The name can contain only digits, letters, underscores (_)
-     * , and hyphens(-).
+     * Specifies the NAT gateway name.  
+     * The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to create the Nat gateway resource. If omitted,
-     * the provider-level region will be used. Changing this creates a new nat gateway.
+     * Specifies the region where the NAT gateway is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * @deprecated use vpc_id instead
-     */
-    routerId?: pulumi.Input<string>;
-    /**
-     * Specifies the nat gateway type. The value can be:
-     * + `1`: small type, which supports up to 10,000 SNAT connections.
-     * + `2`: medium type, which supports up to 50,000 SNAT connections.
-     * + `3`: large type, which supports up to 200,000 SNAT connections.
-     * + `4`: extra-large type, which supports up to 1,000,000 SNAT connections.
+     * Specifies the specification of the NAT gateway. The valid values are as follows:
+     * + **1**: Small type, which supports up to `10,000` SNAT connections.
+     * + **2**: Medium type, which supports up to `50,000` SNAT connections.
+     * + **3**: Large type, which supports up to `200,000` SNAT connections.
+     * + **4**: Extra-large type, which supports up to `1,000,000` SNAT connections.
      */
     spec: pulumi.Input<string>;
     /**
      * Specifies the subnet ID of the downstream interface (the next hop of the
-     * DVR) of the NAT gateway. Changing this creates a new nat gateway.
+     * DVR) of the NAT gateway.
+     * Changing this will create a new resource.
      */
-    subnetId?: pulumi.Input<string>;
+    subnetId: pulumi.Input<string>;
     /**
-     * Specifies the ID of the VPC this nat gateway belongs to. Changing this creates
-     * a new nat gateway.
+     * Specifies the key/value pairs to associate with the NAT geteway.
      */
-    vpcId?: pulumi.Input<string>;
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Specifies the ID of the VPC to which the NAT gateway belongs.  
+     * Changing this will create a new resource.
+     */
+    vpcId: pulumi.Input<string>;
 }

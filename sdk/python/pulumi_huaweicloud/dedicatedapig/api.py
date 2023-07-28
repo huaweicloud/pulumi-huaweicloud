@@ -47,55 +47,59 @@ class ApiArgs:
         :param pulumi.Input[str] group_id: Specifies an ID of the APIG group to which the API belongs to.
         :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API belongs
                to. Changing this will create a new API resource.
-        :param pulumi.Input[str] request_method: Specifies the backend request method of the API. The valid types are **GET**,
-               **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
-        :param pulumi.Input[str] request_path: Specifies the request address, which can contain a maximum of 512 characters
-               request parameters enclosed with brackets ({}).
-               + The address can contain special characters, such as asterisks (), percent signs (%), hyphens (-), and
+        :param pulumi.Input[str] request_method: Specifies the backend request method of the API.  
+               The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+        :param pulumi.Input[str] request_path: Specifies the request address, which can contain a maximum of `512` characters,
+               the request parameters enclosed with brackets ({}).
+               + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-), and
                underscores (_) and must comply with URI specifications.
-               + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
-               Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
+               + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
         :param pulumi.Input[str] request_protocol: Specifies the backend request protocol. The valid values are **HTTP** and
-               **HTTPS**, default to **HTTPS**.
-        :param pulumi.Input[str] type: Specifies the condition type of the backend policy. The valid values are **Equal**,
-               **Enumerated** and **Matching**, default to **Equal**.
+               **HTTPS**, defaults to **HTTPS**.
+        :param pulumi.Input[str] type: Specifies the condition type of the backend policy.  
+               The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
         :param pulumi.Input[str] authorizer_id: Specifies the ID of the backend custom authorization.
         :param pulumi.Input[Sequence[pulumi.Input['ApiBackendParamArgs']]] backend_params: Specifies an array of one or more backend parameters. The maximum of request
                parameters is 50. The object structure is documented above.
         :param pulumi.Input[str] body_description: Specifies the description of the API request body, which can be an example
-               request body, media type or parameters. The request body does not exceed 20,480 characters. Chinese characters must be
-               in UTF-8 or Unicode format.
-        :param pulumi.Input[bool] cors: Specifies whether CORS is supported, default to false.
-        :param pulumi.Input[str] description: Specifies the description of the constant or system parameter, which contain a
-               maximum of 255 characters, and the angle brackets (< and >) are not allowed.
-        :param pulumi.Input[str] failure_response: Specifies the example response for a successful request. Ensure that the
-               response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
-        :param pulumi.Input['ApiFuncGraphArgs'] func_graph: Specifies the function graph backend details. The object
-               structure is documented below. Changing this will create a new API resource.
-        :param pulumi.Input[Sequence[pulumi.Input['ApiFuncGraphPolicyArgs']]] func_graph_policies: Specifies the Mock policy backends. The maximum of the policy is 5.
+               request body, media type or parameters.
+               The request body does not exceed `20,480` characters.
+        :param pulumi.Input[bool] cors: Specifies whether CORS is supported, defaults to **false**.
+        :param pulumi.Input[str] description: Specifies the description of the constant or system parameter.  
+               The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
+        :param pulumi.Input[str] failure_response: Specifies the example response for a failure request.  
+               The response contains a maximum of `20,480` characters.
+        :param pulumi.Input['ApiFuncGraphArgs'] func_graph: Specifies the function graph backend details.  
                The object structure is documented below.
-        :param pulumi.Input[str] matching: Specifies the route matching mode. The valid value are **Exact** and **Prefix**,
-               default to **Exact**.
-        :param pulumi.Input['ApiMockArgs'] mock: Specifies the mock backend details. The object structure is documented
-               below. Changing this will create a new API resource.
-        :param pulumi.Input[Sequence[pulumi.Input['ApiMockPolicyArgs']]] mock_policies: Specifies the Mock policy backends. The maximum of the policy is 5.
+               Changing this will create a new API resource.
+        :param pulumi.Input[Sequence[pulumi.Input['ApiFuncGraphPolicyArgs']]] func_graph_policies: Specifies the Mock policy backends.  
+               The maximum blocks of the policy is 5.
                The object structure is documented below.
-        :param pulumi.Input[str] name: Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-               a letter. Only letters, digits, and underscores (_) are allowed.
-        :param pulumi.Input[str] region: Specifies the region in which to create the API resource. If omitted, the
-               provider-level region will be used. Changing this will create a new API resource.
-        :param pulumi.Input[Sequence[pulumi.Input['ApiRequestParamArgs']]] request_params: Specifies an array of one or more request parameters of the front-end. The maximum
-               of request parameters is 50. The object structure is documented below.
+        :param pulumi.Input[str] matching: Specifies the route matching mode.  
+               The valid values are **Exact** and **Prefix**, defaults to **Exact**.
+        :param pulumi.Input['ApiMockArgs'] mock: Specifies the mock backend details.  
+               The object structure is documented below.
+               Changing this will create a new API resource.
+        :param pulumi.Input[Sequence[pulumi.Input['ApiMockPolicyArgs']]] mock_policies: Specifies the Mock policy backends.  
+               The maximum blocks of the policy is 5.
+               The object structure is documented below.
+        :param pulumi.Input[str] name: Specifies the backend policy name.  
+               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        :param pulumi.Input[str] region: Specifies the region where the API is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new API resource.
+        :param pulumi.Input[Sequence[pulumi.Input['ApiRequestParamArgs']]] request_params: Specifies the configurations of the front-end parameters.  
+               The object structure is documented below.
         :param pulumi.Input[str] response_id: Specifies the APIG group response ID.
-        :param pulumi.Input[str] security_authentication: Specifies the security authentication mode. The valid values are
-               **NONE**, **APP** and **IAM**, default to **NONE**.
-        :param pulumi.Input[bool] simple_authentication: Specifies whether AppCode authentication is enabled. The applicaiton code
-               must located in the header when `simple_authentication` is true.
-        :param pulumi.Input[str] success_response: Specifies the example response for a successful request. Ensure that the
-               response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
-        :param pulumi.Input['ApiWebArgs'] web: Specifies the web backend details. The object structure is documented
-               below. Changing this will create a new API resource.
-        :param pulumi.Input[Sequence[pulumi.Input['ApiWebPolicyArgs']]] web_policies: Specifies the example response for a failed request. The maximum of the policy is 5.
+        :param pulumi.Input[str] security_authentication: Specifies the security authentication mode of the API request.  
+               The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+        :param pulumi.Input[bool] simple_authentication: Specifies whether the authentication of the application code is enabled.  
+               The application code must located in the header when `simple_authentication` is true.
+        :param pulumi.Input[str] success_response: Specifies the example response for a successful request.  
+               The response contains a maximum of `20,480` characters.
+        :param pulumi.Input['ApiWebArgs'] web: Specifies the web backend details.  
+               The object structure is documented below. Changing this will create a new API resource.
+        :param pulumi.Input[Sequence[pulumi.Input['ApiWebPolicyArgs']]] web_policies: Specifies the example response for a failed request.  
+               The maximum blocks of the policy is 5.
                The object structure is documented below.
         """
         pulumi.set(__self__, "group_id", group_id)
@@ -174,8 +178,8 @@ class ApiArgs:
     @pulumi.getter(name="requestMethod")
     def request_method(self) -> pulumi.Input[str]:
         """
-        Specifies the backend request method of the API. The valid types are **GET**,
-        **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+        Specifies the backend request method of the API.  
+        The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
         """
         return pulumi.get(self, "request_method")
 
@@ -187,12 +191,11 @@ class ApiArgs:
     @pulumi.getter(name="requestPath")
     def request_path(self) -> pulumi.Input[str]:
         """
-        Specifies the request address, which can contain a maximum of 512 characters
-        request parameters enclosed with brackets ({}).
-        + The address can contain special characters, such as asterisks (), percent signs (%), hyphens (-), and
+        Specifies the request address, which can contain a maximum of `512` characters,
+        the request parameters enclosed with brackets ({}).
+        + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-), and
         underscores (_) and must comply with URI specifications.
-        + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
-        Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
+        + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
         """
         return pulumi.get(self, "request_path")
 
@@ -205,7 +208,7 @@ class ApiArgs:
     def request_protocol(self) -> pulumi.Input[str]:
         """
         Specifies the backend request protocol. The valid values are **HTTP** and
-        **HTTPS**, default to **HTTPS**.
+        **HTTPS**, defaults to **HTTPS**.
         """
         return pulumi.get(self, "request_protocol")
 
@@ -217,8 +220,8 @@ class ApiArgs:
     @pulumi.getter
     def type(self) -> pulumi.Input[str]:
         """
-        Specifies the condition type of the backend policy. The valid values are **Equal**,
-        **Enumerated** and **Matching**, default to **Equal**.
+        Specifies the condition type of the backend policy.  
+        The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
         """
         return pulumi.get(self, "type")
 
@@ -256,8 +259,8 @@ class ApiArgs:
     def body_description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of the API request body, which can be an example
-        request body, media type or parameters. The request body does not exceed 20,480 characters. Chinese characters must be
-        in UTF-8 or Unicode format.
+        request body, media type or parameters.
+        The request body does not exceed `20,480` characters.
         """
         return pulumi.get(self, "body_description")
 
@@ -269,7 +272,7 @@ class ApiArgs:
     @pulumi.getter
     def cors(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether CORS is supported, default to false.
+        Specifies whether CORS is supported, defaults to **false**.
         """
         return pulumi.get(self, "cors")
 
@@ -281,8 +284,8 @@ class ApiArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of the constant or system parameter, which contain a
-        maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+        Specifies the description of the constant or system parameter.  
+        The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -294,8 +297,8 @@ class ApiArgs:
     @pulumi.getter(name="failureResponse")
     def failure_response(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the example response for a successful request. Ensure that the
-        response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
+        Specifies the example response for a failure request.  
+        The response contains a maximum of `20,480` characters.
         """
         return pulumi.get(self, "failure_response")
 
@@ -307,8 +310,9 @@ class ApiArgs:
     @pulumi.getter(name="funcGraph")
     def func_graph(self) -> Optional[pulumi.Input['ApiFuncGraphArgs']]:
         """
-        Specifies the function graph backend details. The object
-        structure is documented below. Changing this will create a new API resource.
+        Specifies the function graph backend details.  
+        The object structure is documented below.
+        Changing this will create a new API resource.
         """
         return pulumi.get(self, "func_graph")
 
@@ -320,7 +324,8 @@ class ApiArgs:
     @pulumi.getter(name="funcGraphPolicies")
     def func_graph_policies(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ApiFuncGraphPolicyArgs']]]]:
         """
-        Specifies the Mock policy backends. The maximum of the policy is 5.
+        Specifies the Mock policy backends.  
+        The maximum blocks of the policy is 5.
         The object structure is documented below.
         """
         return pulumi.get(self, "func_graph_policies")
@@ -333,8 +338,8 @@ class ApiArgs:
     @pulumi.getter
     def matching(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the route matching mode. The valid value are **Exact** and **Prefix**,
-        default to **Exact**.
+        Specifies the route matching mode.  
+        The valid values are **Exact** and **Prefix**, defaults to **Exact**.
         """
         return pulumi.get(self, "matching")
 
@@ -346,8 +351,9 @@ class ApiArgs:
     @pulumi.getter
     def mock(self) -> Optional[pulumi.Input['ApiMockArgs']]:
         """
-        Specifies the mock backend details. The object structure is documented
-        below. Changing this will create a new API resource.
+        Specifies the mock backend details.  
+        The object structure is documented below.
+        Changing this will create a new API resource.
         """
         return pulumi.get(self, "mock")
 
@@ -359,7 +365,8 @@ class ApiArgs:
     @pulumi.getter(name="mockPolicies")
     def mock_policies(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ApiMockPolicyArgs']]]]:
         """
-        Specifies the Mock policy backends. The maximum of the policy is 5.
+        Specifies the Mock policy backends.  
+        The maximum blocks of the policy is 5.
         The object structure is documented below.
         """
         return pulumi.get(self, "mock_policies")
@@ -372,8 +379,8 @@ class ApiArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-        a letter. Only letters, digits, and underscores (_) are allowed.
+        Specifies the backend policy name.  
+        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -385,8 +392,8 @@ class ApiArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create the API resource. If omitted, the
-        provider-level region will be used. Changing this will create a new API resource.
+        Specifies the region where the API is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new API resource.
         """
         return pulumi.get(self, "region")
 
@@ -398,8 +405,8 @@ class ApiArgs:
     @pulumi.getter(name="requestParams")
     def request_params(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ApiRequestParamArgs']]]]:
         """
-        Specifies an array of one or more request parameters of the front-end. The maximum
-        of request parameters is 50. The object structure is documented below.
+        Specifies the configurations of the front-end parameters.  
+        The object structure is documented below.
         """
         return pulumi.get(self, "request_params")
 
@@ -423,8 +430,8 @@ class ApiArgs:
     @pulumi.getter(name="securityAuthentication")
     def security_authentication(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the security authentication mode. The valid values are
-        **NONE**, **APP** and **IAM**, default to **NONE**.
+        Specifies the security authentication mode of the API request.  
+        The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
         """
         return pulumi.get(self, "security_authentication")
 
@@ -436,8 +443,8 @@ class ApiArgs:
     @pulumi.getter(name="simpleAuthentication")
     def simple_authentication(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether AppCode authentication is enabled. The applicaiton code
-        must located in the header when `simple_authentication` is true.
+        Specifies whether the authentication of the application code is enabled.  
+        The application code must located in the header when `simple_authentication` is true.
         """
         return pulumi.get(self, "simple_authentication")
 
@@ -449,8 +456,8 @@ class ApiArgs:
     @pulumi.getter(name="successResponse")
     def success_response(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the example response for a successful request. Ensure that the
-        response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
+        Specifies the example response for a successful request.  
+        The response contains a maximum of `20,480` characters.
         """
         return pulumi.get(self, "success_response")
 
@@ -462,8 +469,8 @@ class ApiArgs:
     @pulumi.getter
     def web(self) -> Optional[pulumi.Input['ApiWebArgs']]:
         """
-        Specifies the web backend details. The object structure is documented
-        below. Changing this will create a new API resource.
+        Specifies the web backend details.  
+        The object structure is documented below. Changing this will create a new API resource.
         """
         return pulumi.get(self, "web")
 
@@ -475,7 +482,8 @@ class ApiArgs:
     @pulumi.getter(name="webPolicies")
     def web_policies(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ApiWebPolicyArgs']]]]:
         """
-        Specifies the example response for a failed request. The maximum of the policy is 5.
+        Specifies the example response for a failed request.  
+        The maximum blocks of the policy is 5.
         The object structure is documented below.
         """
         return pulumi.get(self, "web_policies")
@@ -503,7 +511,7 @@ class _ApiState:
                  mock_policies: Optional[pulumi.Input[Sequence[pulumi.Input['ApiMockPolicyArgs']]]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
-                 register_time: Optional[pulumi.Input[str]] = None,
+                 registered_at: Optional[pulumi.Input[str]] = None,
                  request_method: Optional[pulumi.Input[str]] = None,
                  request_params: Optional[pulumi.Input[Sequence[pulumi.Input['ApiRequestParamArgs']]]] = None,
                  request_path: Optional[pulumi.Input[str]] = None,
@@ -513,7 +521,7 @@ class _ApiState:
                  simple_authentication: Optional[pulumi.Input[bool]] = None,
                  success_response: Optional[pulumi.Input[str]] = None,
                  type: Optional[pulumi.Input[str]] = None,
-                 update_time: Optional[pulumi.Input[str]] = None,
+                 updated_at: Optional[pulumi.Input[str]] = None,
                  web: Optional[pulumi.Input['ApiWebArgs']] = None,
                  web_policies: Optional[pulumi.Input[Sequence[pulumi.Input['ApiWebPolicyArgs']]]] = None):
         """
@@ -522,56 +530,60 @@ class _ApiState:
         :param pulumi.Input[Sequence[pulumi.Input['ApiBackendParamArgs']]] backend_params: Specifies an array of one or more backend parameters. The maximum of request
                parameters is 50. The object structure is documented above.
         :param pulumi.Input[str] body_description: Specifies the description of the API request body, which can be an example
-               request body, media type or parameters. The request body does not exceed 20,480 characters. Chinese characters must be
-               in UTF-8 or Unicode format.
-        :param pulumi.Input[bool] cors: Specifies whether CORS is supported, default to false.
-        :param pulumi.Input[str] description: Specifies the description of the constant or system parameter, which contain a
-               maximum of 255 characters, and the angle brackets (< and >) are not allowed.
-        :param pulumi.Input[str] failure_response: Specifies the example response for a successful request. Ensure that the
-               response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
-        :param pulumi.Input['ApiFuncGraphArgs'] func_graph: Specifies the function graph backend details. The object
-               structure is documented below. Changing this will create a new API resource.
-        :param pulumi.Input[Sequence[pulumi.Input['ApiFuncGraphPolicyArgs']]] func_graph_policies: Specifies the Mock policy backends. The maximum of the policy is 5.
+               request body, media type or parameters.
+               The request body does not exceed `20,480` characters.
+        :param pulumi.Input[bool] cors: Specifies whether CORS is supported, defaults to **false**.
+        :param pulumi.Input[str] description: Specifies the description of the constant or system parameter.  
+               The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
+        :param pulumi.Input[str] failure_response: Specifies the example response for a failure request.  
+               The response contains a maximum of `20,480` characters.
+        :param pulumi.Input['ApiFuncGraphArgs'] func_graph: Specifies the function graph backend details.  
+               The object structure is documented below.
+               Changing this will create a new API resource.
+        :param pulumi.Input[Sequence[pulumi.Input['ApiFuncGraphPolicyArgs']]] func_graph_policies: Specifies the Mock policy backends.  
+               The maximum blocks of the policy is 5.
                The object structure is documented below.
         :param pulumi.Input[str] group_id: Specifies an ID of the APIG group to which the API belongs to.
         :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API belongs
                to. Changing this will create a new API resource.
-        :param pulumi.Input[str] matching: Specifies the route matching mode. The valid value are **Exact** and **Prefix**,
-               default to **Exact**.
-        :param pulumi.Input['ApiMockArgs'] mock: Specifies the mock backend details. The object structure is documented
-               below. Changing this will create a new API resource.
-        :param pulumi.Input[Sequence[pulumi.Input['ApiMockPolicyArgs']]] mock_policies: Specifies the Mock policy backends. The maximum of the policy is 5.
+        :param pulumi.Input[str] matching: Specifies the route matching mode.  
+               The valid values are **Exact** and **Prefix**, defaults to **Exact**.
+        :param pulumi.Input['ApiMockArgs'] mock: Specifies the mock backend details.  
                The object structure is documented below.
-        :param pulumi.Input[str] name: Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-               a letter. Only letters, digits, and underscores (_) are allowed.
-        :param pulumi.Input[str] region: Specifies the region in which to create the API resource. If omitted, the
-               provider-level region will be used. Changing this will create a new API resource.
-        :param pulumi.Input[str] register_time: Time when the API is registered, in UTC format.
-        :param pulumi.Input[str] request_method: Specifies the backend request method of the API. The valid types are **GET**,
-               **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
-        :param pulumi.Input[Sequence[pulumi.Input['ApiRequestParamArgs']]] request_params: Specifies an array of one or more request parameters of the front-end. The maximum
-               of request parameters is 50. The object structure is documented below.
-        :param pulumi.Input[str] request_path: Specifies the request address, which can contain a maximum of 512 characters
-               request parameters enclosed with brackets ({}).
-               + The address can contain special characters, such as asterisks (), percent signs (%), hyphens (-), and
+               Changing this will create a new API resource.
+        :param pulumi.Input[Sequence[pulumi.Input['ApiMockPolicyArgs']]] mock_policies: Specifies the Mock policy backends.  
+               The maximum blocks of the policy is 5.
+               The object structure is documented below.
+        :param pulumi.Input[str] name: Specifies the backend policy name.  
+               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        :param pulumi.Input[str] region: Specifies the region where the API is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new API resource.
+        :param pulumi.Input[str] registered_at: The registered time of the API.
+        :param pulumi.Input[str] request_method: Specifies the backend request method of the API.  
+               The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+        :param pulumi.Input[Sequence[pulumi.Input['ApiRequestParamArgs']]] request_params: Specifies the configurations of the front-end parameters.  
+               The object structure is documented below.
+        :param pulumi.Input[str] request_path: Specifies the request address, which can contain a maximum of `512` characters,
+               the request parameters enclosed with brackets ({}).
+               + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-), and
                underscores (_) and must comply with URI specifications.
-               + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
-               Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
+               + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
         :param pulumi.Input[str] request_protocol: Specifies the backend request protocol. The valid values are **HTTP** and
-               **HTTPS**, default to **HTTPS**.
+               **HTTPS**, defaults to **HTTPS**.
         :param pulumi.Input[str] response_id: Specifies the APIG group response ID.
-        :param pulumi.Input[str] security_authentication: Specifies the security authentication mode. The valid values are
-               **NONE**, **APP** and **IAM**, default to **NONE**.
-        :param pulumi.Input[bool] simple_authentication: Specifies whether AppCode authentication is enabled. The applicaiton code
-               must located in the header when `simple_authentication` is true.
-        :param pulumi.Input[str] success_response: Specifies the example response for a successful request. Ensure that the
-               response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
-        :param pulumi.Input[str] type: Specifies the condition type of the backend policy. The valid values are **Equal**,
-               **Enumerated** and **Matching**, default to **Equal**.
-        :param pulumi.Input[str] update_time: Time when the API was last modified, in UTC format.
-        :param pulumi.Input['ApiWebArgs'] web: Specifies the web backend details. The object structure is documented
-               below. Changing this will create a new API resource.
-        :param pulumi.Input[Sequence[pulumi.Input['ApiWebPolicyArgs']]] web_policies: Specifies the example response for a failed request. The maximum of the policy is 5.
+        :param pulumi.Input[str] security_authentication: Specifies the security authentication mode of the API request.  
+               The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+        :param pulumi.Input[bool] simple_authentication: Specifies whether the authentication of the application code is enabled.  
+               The application code must located in the header when `simple_authentication` is true.
+        :param pulumi.Input[str] success_response: Specifies the example response for a successful request.  
+               The response contains a maximum of `20,480` characters.
+        :param pulumi.Input[str] type: Specifies the condition type of the backend policy.  
+               The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+        :param pulumi.Input[str] updated_at: The latest update time of the API.
+        :param pulumi.Input['ApiWebArgs'] web: Specifies the web backend details.  
+               The object structure is documented below. Changing this will create a new API resource.
+        :param pulumi.Input[Sequence[pulumi.Input['ApiWebPolicyArgs']]] web_policies: Specifies the example response for a failed request.  
+               The maximum blocks of the policy is 5.
                The object structure is documented below.
         """
         if authorizer_id is not None:
@@ -604,8 +616,8 @@ class _ApiState:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
-        if register_time is not None:
-            pulumi.set(__self__, "register_time", register_time)
+        if registered_at is not None:
+            pulumi.set(__self__, "registered_at", registered_at)
         if request_method is not None:
             pulumi.set(__self__, "request_method", request_method)
         if request_params is not None:
@@ -624,8 +636,8 @@ class _ApiState:
             pulumi.set(__self__, "success_response", success_response)
         if type is not None:
             pulumi.set(__self__, "type", type)
-        if update_time is not None:
-            pulumi.set(__self__, "update_time", update_time)
+        if updated_at is not None:
+            pulumi.set(__self__, "updated_at", updated_at)
         if web is not None:
             pulumi.set(__self__, "web", web)
         if web_policies is not None:
@@ -661,8 +673,8 @@ class _ApiState:
     def body_description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of the API request body, which can be an example
-        request body, media type or parameters. The request body does not exceed 20,480 characters. Chinese characters must be
-        in UTF-8 or Unicode format.
+        request body, media type or parameters.
+        The request body does not exceed `20,480` characters.
         """
         return pulumi.get(self, "body_description")
 
@@ -674,7 +686,7 @@ class _ApiState:
     @pulumi.getter
     def cors(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether CORS is supported, default to false.
+        Specifies whether CORS is supported, defaults to **false**.
         """
         return pulumi.get(self, "cors")
 
@@ -686,8 +698,8 @@ class _ApiState:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of the constant or system parameter, which contain a
-        maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+        Specifies the description of the constant or system parameter.  
+        The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -699,8 +711,8 @@ class _ApiState:
     @pulumi.getter(name="failureResponse")
     def failure_response(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the example response for a successful request. Ensure that the
-        response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
+        Specifies the example response for a failure request.  
+        The response contains a maximum of `20,480` characters.
         """
         return pulumi.get(self, "failure_response")
 
@@ -712,8 +724,9 @@ class _ApiState:
     @pulumi.getter(name="funcGraph")
     def func_graph(self) -> Optional[pulumi.Input['ApiFuncGraphArgs']]:
         """
-        Specifies the function graph backend details. The object
-        structure is documented below. Changing this will create a new API resource.
+        Specifies the function graph backend details.  
+        The object structure is documented below.
+        Changing this will create a new API resource.
         """
         return pulumi.get(self, "func_graph")
 
@@ -725,7 +738,8 @@ class _ApiState:
     @pulumi.getter(name="funcGraphPolicies")
     def func_graph_policies(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ApiFuncGraphPolicyArgs']]]]:
         """
-        Specifies the Mock policy backends. The maximum of the policy is 5.
+        Specifies the Mock policy backends.  
+        The maximum blocks of the policy is 5.
         The object structure is documented below.
         """
         return pulumi.get(self, "func_graph_policies")
@@ -763,8 +777,8 @@ class _ApiState:
     @pulumi.getter
     def matching(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the route matching mode. The valid value are **Exact** and **Prefix**,
-        default to **Exact**.
+        Specifies the route matching mode.  
+        The valid values are **Exact** and **Prefix**, defaults to **Exact**.
         """
         return pulumi.get(self, "matching")
 
@@ -776,8 +790,9 @@ class _ApiState:
     @pulumi.getter
     def mock(self) -> Optional[pulumi.Input['ApiMockArgs']]:
         """
-        Specifies the mock backend details. The object structure is documented
-        below. Changing this will create a new API resource.
+        Specifies the mock backend details.  
+        The object structure is documented below.
+        Changing this will create a new API resource.
         """
         return pulumi.get(self, "mock")
 
@@ -789,7 +804,8 @@ class _ApiState:
     @pulumi.getter(name="mockPolicies")
     def mock_policies(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ApiMockPolicyArgs']]]]:
         """
-        Specifies the Mock policy backends. The maximum of the policy is 5.
+        Specifies the Mock policy backends.  
+        The maximum blocks of the policy is 5.
         The object structure is documented below.
         """
         return pulumi.get(self, "mock_policies")
@@ -802,8 +818,8 @@ class _ApiState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-        a letter. Only letters, digits, and underscores (_) are allowed.
+        Specifies the backend policy name.  
+        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -815,8 +831,8 @@ class _ApiState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create the API resource. If omitted, the
-        provider-level region will be used. Changing this will create a new API resource.
+        Specifies the region where the API is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new API resource.
         """
         return pulumi.get(self, "region")
 
@@ -825,23 +841,23 @@ class _ApiState:
         pulumi.set(self, "region", value)
 
     @property
-    @pulumi.getter(name="registerTime")
-    def register_time(self) -> Optional[pulumi.Input[str]]:
+    @pulumi.getter(name="registeredAt")
+    def registered_at(self) -> Optional[pulumi.Input[str]]:
         """
-        Time when the API is registered, in UTC format.
+        The registered time of the API.
         """
-        return pulumi.get(self, "register_time")
+        return pulumi.get(self, "registered_at")
 
-    @register_time.setter
-    def register_time(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "register_time", value)
+    @registered_at.setter
+    def registered_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "registered_at", value)
 
     @property
     @pulumi.getter(name="requestMethod")
     def request_method(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the backend request method of the API. The valid types are **GET**,
-        **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+        Specifies the backend request method of the API.  
+        The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
         """
         return pulumi.get(self, "request_method")
 
@@ -853,8 +869,8 @@ class _ApiState:
     @pulumi.getter(name="requestParams")
     def request_params(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ApiRequestParamArgs']]]]:
         """
-        Specifies an array of one or more request parameters of the front-end. The maximum
-        of request parameters is 50. The object structure is documented below.
+        Specifies the configurations of the front-end parameters.  
+        The object structure is documented below.
         """
         return pulumi.get(self, "request_params")
 
@@ -866,12 +882,11 @@ class _ApiState:
     @pulumi.getter(name="requestPath")
     def request_path(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the request address, which can contain a maximum of 512 characters
-        request parameters enclosed with brackets ({}).
-        + The address can contain special characters, such as asterisks (), percent signs (%), hyphens (-), and
+        Specifies the request address, which can contain a maximum of `512` characters,
+        the request parameters enclosed with brackets ({}).
+        + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-), and
         underscores (_) and must comply with URI specifications.
-        + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
-        Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
+        + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
         """
         return pulumi.get(self, "request_path")
 
@@ -884,7 +899,7 @@ class _ApiState:
     def request_protocol(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the backend request protocol. The valid values are **HTTP** and
-        **HTTPS**, default to **HTTPS**.
+        **HTTPS**, defaults to **HTTPS**.
         """
         return pulumi.get(self, "request_protocol")
 
@@ -908,8 +923,8 @@ class _ApiState:
     @pulumi.getter(name="securityAuthentication")
     def security_authentication(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the security authentication mode. The valid values are
-        **NONE**, **APP** and **IAM**, default to **NONE**.
+        Specifies the security authentication mode of the API request.  
+        The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
         """
         return pulumi.get(self, "security_authentication")
 
@@ -921,8 +936,8 @@ class _ApiState:
     @pulumi.getter(name="simpleAuthentication")
     def simple_authentication(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether AppCode authentication is enabled. The applicaiton code
-        must located in the header when `simple_authentication` is true.
+        Specifies whether the authentication of the application code is enabled.  
+        The application code must located in the header when `simple_authentication` is true.
         """
         return pulumi.get(self, "simple_authentication")
 
@@ -934,8 +949,8 @@ class _ApiState:
     @pulumi.getter(name="successResponse")
     def success_response(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the example response for a successful request. Ensure that the
-        response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
+        Specifies the example response for a successful request.  
+        The response contains a maximum of `20,480` characters.
         """
         return pulumi.get(self, "success_response")
 
@@ -947,8 +962,8 @@ class _ApiState:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the condition type of the backend policy. The valid values are **Equal**,
-        **Enumerated** and **Matching**, default to **Equal**.
+        Specifies the condition type of the backend policy.  
+        The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
         """
         return pulumi.get(self, "type")
 
@@ -957,23 +972,23 @@ class _ApiState:
         pulumi.set(self, "type", value)
 
     @property
-    @pulumi.getter(name="updateTime")
-    def update_time(self) -> Optional[pulumi.Input[str]]:
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> Optional[pulumi.Input[str]]:
         """
-        Time when the API was last modified, in UTC format.
+        The latest update time of the API.
         """
-        return pulumi.get(self, "update_time")
+        return pulumi.get(self, "updated_at")
 
-    @update_time.setter
-    def update_time(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "update_time", value)
+    @updated_at.setter
+    def updated_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "updated_at", value)
 
     @property
     @pulumi.getter
     def web(self) -> Optional[pulumi.Input['ApiWebArgs']]:
         """
-        Specifies the web backend details. The object structure is documented
-        below. Changing this will create a new API resource.
+        Specifies the web backend details.  
+        The object structure is documented below. Changing this will create a new API resource.
         """
         return pulumi.get(self, "web")
 
@@ -985,7 +1000,8 @@ class _ApiState:
     @pulumi.getter(name="webPolicies")
     def web_policies(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ApiWebPolicyArgs']]]]:
         """
-        Specifies the example response for a failed request. The maximum of the policy is 5.
+        Specifies the example response for a failed request.  
+        The maximum blocks of the policy is 5.
         The object structure is documented below.
         """
         return pulumi.get(self, "web_policies")
@@ -1072,7 +1088,7 @@ class Api(pulumi.CustomResource):
 
         ## Import
 
-        APIs can be imported using their `name` and ID of the APIG dedicated instance to which the API belongs, separated by a slash, e.g.
+        APIs can be imported using their `name` and the related dedicated instance IDs, separated by a slash, e.g.
 
         ```sh
          $ pulumi import huaweicloud:DedicatedApig/api:Api test <instance_id>/<name>
@@ -1084,54 +1100,58 @@ class Api(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiBackendParamArgs']]]] backend_params: Specifies an array of one or more backend parameters. The maximum of request
                parameters is 50. The object structure is documented above.
         :param pulumi.Input[str] body_description: Specifies the description of the API request body, which can be an example
-               request body, media type or parameters. The request body does not exceed 20,480 characters. Chinese characters must be
-               in UTF-8 or Unicode format.
-        :param pulumi.Input[bool] cors: Specifies whether CORS is supported, default to false.
-        :param pulumi.Input[str] description: Specifies the description of the constant or system parameter, which contain a
-               maximum of 255 characters, and the angle brackets (< and >) are not allowed.
-        :param pulumi.Input[str] failure_response: Specifies the example response for a successful request. Ensure that the
-               response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
-        :param pulumi.Input[pulumi.InputType['ApiFuncGraphArgs']] func_graph: Specifies the function graph backend details. The object
-               structure is documented below. Changing this will create a new API resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiFuncGraphPolicyArgs']]]] func_graph_policies: Specifies the Mock policy backends. The maximum of the policy is 5.
+               request body, media type or parameters.
+               The request body does not exceed `20,480` characters.
+        :param pulumi.Input[bool] cors: Specifies whether CORS is supported, defaults to **false**.
+        :param pulumi.Input[str] description: Specifies the description of the constant or system parameter.  
+               The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
+        :param pulumi.Input[str] failure_response: Specifies the example response for a failure request.  
+               The response contains a maximum of `20,480` characters.
+        :param pulumi.Input[pulumi.InputType['ApiFuncGraphArgs']] func_graph: Specifies the function graph backend details.  
+               The object structure is documented below.
+               Changing this will create a new API resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiFuncGraphPolicyArgs']]]] func_graph_policies: Specifies the Mock policy backends.  
+               The maximum blocks of the policy is 5.
                The object structure is documented below.
         :param pulumi.Input[str] group_id: Specifies an ID of the APIG group to which the API belongs to.
         :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API belongs
                to. Changing this will create a new API resource.
-        :param pulumi.Input[str] matching: Specifies the route matching mode. The valid value are **Exact** and **Prefix**,
-               default to **Exact**.
-        :param pulumi.Input[pulumi.InputType['ApiMockArgs']] mock: Specifies the mock backend details. The object structure is documented
-               below. Changing this will create a new API resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiMockPolicyArgs']]]] mock_policies: Specifies the Mock policy backends. The maximum of the policy is 5.
+        :param pulumi.Input[str] matching: Specifies the route matching mode.  
+               The valid values are **Exact** and **Prefix**, defaults to **Exact**.
+        :param pulumi.Input[pulumi.InputType['ApiMockArgs']] mock: Specifies the mock backend details.  
                The object structure is documented below.
-        :param pulumi.Input[str] name: Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-               a letter. Only letters, digits, and underscores (_) are allowed.
-        :param pulumi.Input[str] region: Specifies the region in which to create the API resource. If omitted, the
-               provider-level region will be used. Changing this will create a new API resource.
-        :param pulumi.Input[str] request_method: Specifies the backend request method of the API. The valid types are **GET**,
-               **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiRequestParamArgs']]]] request_params: Specifies an array of one or more request parameters of the front-end. The maximum
-               of request parameters is 50. The object structure is documented below.
-        :param pulumi.Input[str] request_path: Specifies the request address, which can contain a maximum of 512 characters
-               request parameters enclosed with brackets ({}).
-               + The address can contain special characters, such as asterisks (), percent signs (%), hyphens (-), and
+               Changing this will create a new API resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiMockPolicyArgs']]]] mock_policies: Specifies the Mock policy backends.  
+               The maximum blocks of the policy is 5.
+               The object structure is documented below.
+        :param pulumi.Input[str] name: Specifies the backend policy name.  
+               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        :param pulumi.Input[str] region: Specifies the region where the API is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new API resource.
+        :param pulumi.Input[str] request_method: Specifies the backend request method of the API.  
+               The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiRequestParamArgs']]]] request_params: Specifies the configurations of the front-end parameters.  
+               The object structure is documented below.
+        :param pulumi.Input[str] request_path: Specifies the request address, which can contain a maximum of `512` characters,
+               the request parameters enclosed with brackets ({}).
+               + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-), and
                underscores (_) and must comply with URI specifications.
-               + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
-               Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
+               + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
         :param pulumi.Input[str] request_protocol: Specifies the backend request protocol. The valid values are **HTTP** and
-               **HTTPS**, default to **HTTPS**.
+               **HTTPS**, defaults to **HTTPS**.
         :param pulumi.Input[str] response_id: Specifies the APIG group response ID.
-        :param pulumi.Input[str] security_authentication: Specifies the security authentication mode. The valid values are
-               **NONE**, **APP** and **IAM**, default to **NONE**.
-        :param pulumi.Input[bool] simple_authentication: Specifies whether AppCode authentication is enabled. The applicaiton code
-               must located in the header when `simple_authentication` is true.
-        :param pulumi.Input[str] success_response: Specifies the example response for a successful request. Ensure that the
-               response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
-        :param pulumi.Input[str] type: Specifies the condition type of the backend policy. The valid values are **Equal**,
-               **Enumerated** and **Matching**, default to **Equal**.
-        :param pulumi.Input[pulumi.InputType['ApiWebArgs']] web: Specifies the web backend details. The object structure is documented
-               below. Changing this will create a new API resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiWebPolicyArgs']]]] web_policies: Specifies the example response for a failed request. The maximum of the policy is 5.
+        :param pulumi.Input[str] security_authentication: Specifies the security authentication mode of the API request.  
+               The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+        :param pulumi.Input[bool] simple_authentication: Specifies whether the authentication of the application code is enabled.  
+               The application code must located in the header when `simple_authentication` is true.
+        :param pulumi.Input[str] success_response: Specifies the example response for a successful request.  
+               The response contains a maximum of `20,480` characters.
+        :param pulumi.Input[str] type: Specifies the condition type of the backend policy.  
+               The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+        :param pulumi.Input[pulumi.InputType['ApiWebArgs']] web: Specifies the web backend details.  
+               The object structure is documented below. Changing this will create a new API resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiWebPolicyArgs']]]] web_policies: Specifies the example response for a failed request.  
+               The maximum blocks of the policy is 5.
                The object structure is documented below.
         """
         ...
@@ -1185,7 +1205,7 @@ class Api(pulumi.CustomResource):
 
         ## Import
 
-        APIs can be imported using their `name` and ID of the APIG dedicated instance to which the API belongs, separated by a slash, e.g.
+        APIs can be imported using their `name` and the related dedicated instance IDs, separated by a slash, e.g.
 
         ```sh
          $ pulumi import huaweicloud:DedicatedApig/api:Api test <instance_id>/<name>
@@ -1279,8 +1299,8 @@ class Api(pulumi.CustomResource):
             __props__.__dict__["type"] = type
             __props__.__dict__["web"] = web
             __props__.__dict__["web_policies"] = web_policies
-            __props__.__dict__["register_time"] = None
-            __props__.__dict__["update_time"] = None
+            __props__.__dict__["registered_at"] = None
+            __props__.__dict__["updated_at"] = None
         super(Api, __self__).__init__(
             'huaweicloud:DedicatedApig/api:Api',
             resource_name,
@@ -1306,7 +1326,7 @@ class Api(pulumi.CustomResource):
             mock_policies: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiMockPolicyArgs']]]]] = None,
             name: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
-            register_time: Optional[pulumi.Input[str]] = None,
+            registered_at: Optional[pulumi.Input[str]] = None,
             request_method: Optional[pulumi.Input[str]] = None,
             request_params: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiRequestParamArgs']]]]] = None,
             request_path: Optional[pulumi.Input[str]] = None,
@@ -1316,7 +1336,7 @@ class Api(pulumi.CustomResource):
             simple_authentication: Optional[pulumi.Input[bool]] = None,
             success_response: Optional[pulumi.Input[str]] = None,
             type: Optional[pulumi.Input[str]] = None,
-            update_time: Optional[pulumi.Input[str]] = None,
+            updated_at: Optional[pulumi.Input[str]] = None,
             web: Optional[pulumi.Input[pulumi.InputType['ApiWebArgs']]] = None,
             web_policies: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiWebPolicyArgs']]]]] = None) -> 'Api':
         """
@@ -1330,56 +1350,60 @@ class Api(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiBackendParamArgs']]]] backend_params: Specifies an array of one or more backend parameters. The maximum of request
                parameters is 50. The object structure is documented above.
         :param pulumi.Input[str] body_description: Specifies the description of the API request body, which can be an example
-               request body, media type or parameters. The request body does not exceed 20,480 characters. Chinese characters must be
-               in UTF-8 or Unicode format.
-        :param pulumi.Input[bool] cors: Specifies whether CORS is supported, default to false.
-        :param pulumi.Input[str] description: Specifies the description of the constant or system parameter, which contain a
-               maximum of 255 characters, and the angle brackets (< and >) are not allowed.
-        :param pulumi.Input[str] failure_response: Specifies the example response for a successful request. Ensure that the
-               response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
-        :param pulumi.Input[pulumi.InputType['ApiFuncGraphArgs']] func_graph: Specifies the function graph backend details. The object
-               structure is documented below. Changing this will create a new API resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiFuncGraphPolicyArgs']]]] func_graph_policies: Specifies the Mock policy backends. The maximum of the policy is 5.
+               request body, media type or parameters.
+               The request body does not exceed `20,480` characters.
+        :param pulumi.Input[bool] cors: Specifies whether CORS is supported, defaults to **false**.
+        :param pulumi.Input[str] description: Specifies the description of the constant or system parameter.  
+               The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
+        :param pulumi.Input[str] failure_response: Specifies the example response for a failure request.  
+               The response contains a maximum of `20,480` characters.
+        :param pulumi.Input[pulumi.InputType['ApiFuncGraphArgs']] func_graph: Specifies the function graph backend details.  
+               The object structure is documented below.
+               Changing this will create a new API resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiFuncGraphPolicyArgs']]]] func_graph_policies: Specifies the Mock policy backends.  
+               The maximum blocks of the policy is 5.
                The object structure is documented below.
         :param pulumi.Input[str] group_id: Specifies an ID of the APIG group to which the API belongs to.
         :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API belongs
                to. Changing this will create a new API resource.
-        :param pulumi.Input[str] matching: Specifies the route matching mode. The valid value are **Exact** and **Prefix**,
-               default to **Exact**.
-        :param pulumi.Input[pulumi.InputType['ApiMockArgs']] mock: Specifies the mock backend details. The object structure is documented
-               below. Changing this will create a new API resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiMockPolicyArgs']]]] mock_policies: Specifies the Mock policy backends. The maximum of the policy is 5.
+        :param pulumi.Input[str] matching: Specifies the route matching mode.  
+               The valid values are **Exact** and **Prefix**, defaults to **Exact**.
+        :param pulumi.Input[pulumi.InputType['ApiMockArgs']] mock: Specifies the mock backend details.  
                The object structure is documented below.
-        :param pulumi.Input[str] name: Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-               a letter. Only letters, digits, and underscores (_) are allowed.
-        :param pulumi.Input[str] region: Specifies the region in which to create the API resource. If omitted, the
-               provider-level region will be used. Changing this will create a new API resource.
-        :param pulumi.Input[str] register_time: Time when the API is registered, in UTC format.
-        :param pulumi.Input[str] request_method: Specifies the backend request method of the API. The valid types are **GET**,
-               **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiRequestParamArgs']]]] request_params: Specifies an array of one or more request parameters of the front-end. The maximum
-               of request parameters is 50. The object structure is documented below.
-        :param pulumi.Input[str] request_path: Specifies the request address, which can contain a maximum of 512 characters
-               request parameters enclosed with brackets ({}).
-               + The address can contain special characters, such as asterisks (), percent signs (%), hyphens (-), and
+               Changing this will create a new API resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiMockPolicyArgs']]]] mock_policies: Specifies the Mock policy backends.  
+               The maximum blocks of the policy is 5.
+               The object structure is documented below.
+        :param pulumi.Input[str] name: Specifies the backend policy name.  
+               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        :param pulumi.Input[str] region: Specifies the region where the API is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new API resource.
+        :param pulumi.Input[str] registered_at: The registered time of the API.
+        :param pulumi.Input[str] request_method: Specifies the backend request method of the API.  
+               The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiRequestParamArgs']]]] request_params: Specifies the configurations of the front-end parameters.  
+               The object structure is documented below.
+        :param pulumi.Input[str] request_path: Specifies the request address, which can contain a maximum of `512` characters,
+               the request parameters enclosed with brackets ({}).
+               + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-), and
                underscores (_) and must comply with URI specifications.
-               + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
-               Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
+               + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
         :param pulumi.Input[str] request_protocol: Specifies the backend request protocol. The valid values are **HTTP** and
-               **HTTPS**, default to **HTTPS**.
+               **HTTPS**, defaults to **HTTPS**.
         :param pulumi.Input[str] response_id: Specifies the APIG group response ID.
-        :param pulumi.Input[str] security_authentication: Specifies the security authentication mode. The valid values are
-               **NONE**, **APP** and **IAM**, default to **NONE**.
-        :param pulumi.Input[bool] simple_authentication: Specifies whether AppCode authentication is enabled. The applicaiton code
-               must located in the header when `simple_authentication` is true.
-        :param pulumi.Input[str] success_response: Specifies the example response for a successful request. Ensure that the
-               response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
-        :param pulumi.Input[str] type: Specifies the condition type of the backend policy. The valid values are **Equal**,
-               **Enumerated** and **Matching**, default to **Equal**.
-        :param pulumi.Input[str] update_time: Time when the API was last modified, in UTC format.
-        :param pulumi.Input[pulumi.InputType['ApiWebArgs']] web: Specifies the web backend details. The object structure is documented
-               below. Changing this will create a new API resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiWebPolicyArgs']]]] web_policies: Specifies the example response for a failed request. The maximum of the policy is 5.
+        :param pulumi.Input[str] security_authentication: Specifies the security authentication mode of the API request.  
+               The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+        :param pulumi.Input[bool] simple_authentication: Specifies whether the authentication of the application code is enabled.  
+               The application code must located in the header when `simple_authentication` is true.
+        :param pulumi.Input[str] success_response: Specifies the example response for a successful request.  
+               The response contains a maximum of `20,480` characters.
+        :param pulumi.Input[str] type: Specifies the condition type of the backend policy.  
+               The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+        :param pulumi.Input[str] updated_at: The latest update time of the API.
+        :param pulumi.Input[pulumi.InputType['ApiWebArgs']] web: Specifies the web backend details.  
+               The object structure is documented below. Changing this will create a new API resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiWebPolicyArgs']]]] web_policies: Specifies the example response for a failed request.  
+               The maximum blocks of the policy is 5.
                The object structure is documented below.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -1401,7 +1425,7 @@ class Api(pulumi.CustomResource):
         __props__.__dict__["mock_policies"] = mock_policies
         __props__.__dict__["name"] = name
         __props__.__dict__["region"] = region
-        __props__.__dict__["register_time"] = register_time
+        __props__.__dict__["registered_at"] = registered_at
         __props__.__dict__["request_method"] = request_method
         __props__.__dict__["request_params"] = request_params
         __props__.__dict__["request_path"] = request_path
@@ -1411,7 +1435,7 @@ class Api(pulumi.CustomResource):
         __props__.__dict__["simple_authentication"] = simple_authentication
         __props__.__dict__["success_response"] = success_response
         __props__.__dict__["type"] = type
-        __props__.__dict__["update_time"] = update_time
+        __props__.__dict__["updated_at"] = updated_at
         __props__.__dict__["web"] = web
         __props__.__dict__["web_policies"] = web_policies
         return Api(resource_name, opts=opts, __props__=__props__)
@@ -1438,8 +1462,8 @@ class Api(pulumi.CustomResource):
     def body_description(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the description of the API request body, which can be an example
-        request body, media type or parameters. The request body does not exceed 20,480 characters. Chinese characters must be
-        in UTF-8 or Unicode format.
+        request body, media type or parameters.
+        The request body does not exceed `20,480` characters.
         """
         return pulumi.get(self, "body_description")
 
@@ -1447,7 +1471,7 @@ class Api(pulumi.CustomResource):
     @pulumi.getter
     def cors(self) -> pulumi.Output[Optional[bool]]:
         """
-        Specifies whether CORS is supported, default to false.
+        Specifies whether CORS is supported, defaults to **false**.
         """
         return pulumi.get(self, "cors")
 
@@ -1455,8 +1479,8 @@ class Api(pulumi.CustomResource):
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the description of the constant or system parameter, which contain a
-        maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+        Specifies the description of the constant or system parameter.  
+        The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -1464,8 +1488,8 @@ class Api(pulumi.CustomResource):
     @pulumi.getter(name="failureResponse")
     def failure_response(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the example response for a successful request. Ensure that the
-        response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
+        Specifies the example response for a failure request.  
+        The response contains a maximum of `20,480` characters.
         """
         return pulumi.get(self, "failure_response")
 
@@ -1473,8 +1497,9 @@ class Api(pulumi.CustomResource):
     @pulumi.getter(name="funcGraph")
     def func_graph(self) -> pulumi.Output['outputs.ApiFuncGraph']:
         """
-        Specifies the function graph backend details. The object
-        structure is documented below. Changing this will create a new API resource.
+        Specifies the function graph backend details.  
+        The object structure is documented below.
+        Changing this will create a new API resource.
         """
         return pulumi.get(self, "func_graph")
 
@@ -1482,7 +1507,8 @@ class Api(pulumi.CustomResource):
     @pulumi.getter(name="funcGraphPolicies")
     def func_graph_policies(self) -> pulumi.Output[Optional[Sequence['outputs.ApiFuncGraphPolicy']]]:
         """
-        Specifies the Mock policy backends. The maximum of the policy is 5.
+        Specifies the Mock policy backends.  
+        The maximum blocks of the policy is 5.
         The object structure is documented below.
         """
         return pulumi.get(self, "func_graph_policies")
@@ -1508,8 +1534,8 @@ class Api(pulumi.CustomResource):
     @pulumi.getter
     def matching(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the route matching mode. The valid value are **Exact** and **Prefix**,
-        default to **Exact**.
+        Specifies the route matching mode.  
+        The valid values are **Exact** and **Prefix**, defaults to **Exact**.
         """
         return pulumi.get(self, "matching")
 
@@ -1517,8 +1543,9 @@ class Api(pulumi.CustomResource):
     @pulumi.getter
     def mock(self) -> pulumi.Output['outputs.ApiMock']:
         """
-        Specifies the mock backend details. The object structure is documented
-        below. Changing this will create a new API resource.
+        Specifies the mock backend details.  
+        The object structure is documented below.
+        Changing this will create a new API resource.
         """
         return pulumi.get(self, "mock")
 
@@ -1526,7 +1553,8 @@ class Api(pulumi.CustomResource):
     @pulumi.getter(name="mockPolicies")
     def mock_policies(self) -> pulumi.Output[Optional[Sequence['outputs.ApiMockPolicy']]]:
         """
-        Specifies the Mock policy backends. The maximum of the policy is 5.
+        Specifies the Mock policy backends.  
+        The maximum blocks of the policy is 5.
         The object structure is documented below.
         """
         return pulumi.get(self, "mock_policies")
@@ -1535,8 +1563,8 @@ class Api(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-        a letter. Only letters, digits, and underscores (_) are allowed.
+        Specifies the backend policy name.  
+        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -1544,25 +1572,25 @@ class Api(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        Specifies the region in which to create the API resource. If omitted, the
-        provider-level region will be used. Changing this will create a new API resource.
+        Specifies the region where the API is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new API resource.
         """
         return pulumi.get(self, "region")
 
     @property
-    @pulumi.getter(name="registerTime")
-    def register_time(self) -> pulumi.Output[str]:
+    @pulumi.getter(name="registeredAt")
+    def registered_at(self) -> pulumi.Output[str]:
         """
-        Time when the API is registered, in UTC format.
+        The registered time of the API.
         """
-        return pulumi.get(self, "register_time")
+        return pulumi.get(self, "registered_at")
 
     @property
     @pulumi.getter(name="requestMethod")
     def request_method(self) -> pulumi.Output[str]:
         """
-        Specifies the backend request method of the API. The valid types are **GET**,
-        **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+        Specifies the backend request method of the API.  
+        The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
         """
         return pulumi.get(self, "request_method")
 
@@ -1570,8 +1598,8 @@ class Api(pulumi.CustomResource):
     @pulumi.getter(name="requestParams")
     def request_params(self) -> pulumi.Output[Optional[Sequence['outputs.ApiRequestParam']]]:
         """
-        Specifies an array of one or more request parameters of the front-end. The maximum
-        of request parameters is 50. The object structure is documented below.
+        Specifies the configurations of the front-end parameters.  
+        The object structure is documented below.
         """
         return pulumi.get(self, "request_params")
 
@@ -1579,12 +1607,11 @@ class Api(pulumi.CustomResource):
     @pulumi.getter(name="requestPath")
     def request_path(self) -> pulumi.Output[str]:
         """
-        Specifies the request address, which can contain a maximum of 512 characters
-        request parameters enclosed with brackets ({}).
-        + The address can contain special characters, such as asterisks (), percent signs (%), hyphens (-), and
+        Specifies the request address, which can contain a maximum of `512` characters,
+        the request parameters enclosed with brackets ({}).
+        + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-), and
         underscores (_) and must comply with URI specifications.
-        + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
-        Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
+        + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
         """
         return pulumi.get(self, "request_path")
 
@@ -1593,7 +1620,7 @@ class Api(pulumi.CustomResource):
     def request_protocol(self) -> pulumi.Output[str]:
         """
         Specifies the backend request protocol. The valid values are **HTTP** and
-        **HTTPS**, default to **HTTPS**.
+        **HTTPS**, defaults to **HTTPS**.
         """
         return pulumi.get(self, "request_protocol")
 
@@ -1609,8 +1636,8 @@ class Api(pulumi.CustomResource):
     @pulumi.getter(name="securityAuthentication")
     def security_authentication(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the security authentication mode. The valid values are
-        **NONE**, **APP** and **IAM**, default to **NONE**.
+        Specifies the security authentication mode of the API request.  
+        The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
         """
         return pulumi.get(self, "security_authentication")
 
@@ -1618,8 +1645,8 @@ class Api(pulumi.CustomResource):
     @pulumi.getter(name="simpleAuthentication")
     def simple_authentication(self) -> pulumi.Output[bool]:
         """
-        Specifies whether AppCode authentication is enabled. The applicaiton code
-        must located in the header when `simple_authentication` is true.
+        Specifies whether the authentication of the application code is enabled.  
+        The application code must located in the header when `simple_authentication` is true.
         """
         return pulumi.get(self, "simple_authentication")
 
@@ -1627,8 +1654,8 @@ class Api(pulumi.CustomResource):
     @pulumi.getter(name="successResponse")
     def success_response(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the example response for a successful request. Ensure that the
-        response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
+        Specifies the example response for a successful request.  
+        The response contains a maximum of `20,480` characters.
         """
         return pulumi.get(self, "success_response")
 
@@ -1636,25 +1663,25 @@ class Api(pulumi.CustomResource):
     @pulumi.getter
     def type(self) -> pulumi.Output[str]:
         """
-        Specifies the condition type of the backend policy. The valid values are **Equal**,
-        **Enumerated** and **Matching**, default to **Equal**.
+        Specifies the condition type of the backend policy.  
+        The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
         """
         return pulumi.get(self, "type")
 
     @property
-    @pulumi.getter(name="updateTime")
-    def update_time(self) -> pulumi.Output[str]:
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> pulumi.Output[str]:
         """
-        Time when the API was last modified, in UTC format.
+        The latest update time of the API.
         """
-        return pulumi.get(self, "update_time")
+        return pulumi.get(self, "updated_at")
 
     @property
     @pulumi.getter
     def web(self) -> pulumi.Output['outputs.ApiWeb']:
         """
-        Specifies the web backend details. The object structure is documented
-        below. Changing this will create a new API resource.
+        Specifies the web backend details.  
+        The object structure is documented below. Changing this will create a new API resource.
         """
         return pulumi.get(self, "web")
 
@@ -1662,7 +1689,8 @@ class Api(pulumi.CustomResource):
     @pulumi.getter(name="webPolicies")
     def web_policies(self) -> pulumi.Output[Optional[Sequence['outputs.ApiWebPolicy']]]:
         """
-        Specifies the example response for a failed request. The maximum of the policy is 5.
+        Specifies the example response for a failed request.  
+        The maximum blocks of the policy is 5.
         The object structure is documented below.
         """
         return pulumi.get(self, "web_policies")

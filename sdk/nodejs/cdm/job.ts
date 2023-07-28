@@ -9,16 +9,100 @@ import * as utilities from "../utilities";
  * Manages CDM job resource within HuaweiCloud.
  *
  * ## Example Usage
+ * ### Create a cdm job
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const name = config.requireObject("name");
+ * const obsLinkName = config.requireObject("obsLinkName");
+ * const obsInputBucket = config.requireObject("obsInputBucket");
+ * const obsOutputBucket = config.requireObject("obsOutputBucket");
+ * const obsLinkNameInput = config.requireObject("obsLinkNameInput");
+ * const input = new huaweicloud.obs.Bucket("input", {
+ *     bucket: "job-input",
+ *     acl: "private",
+ *     forceDestroy: true,
+ * });
+ * const output = new huaweicloud.obs.Bucket("output", {
+ *     bucket: "job-output",
+ *     acl: "private",
+ *     forceDestroy: true,
+ * });
+ * const test = new huaweicloud.cdm.Job("test", {
+ *     jobType: "NORMAL_JOB",
+ *     clusterId: huaweicloud_cdm_cluster.test.id,
+ *     sourceConnector: "obs-connector",
+ *     sourceLinkName: obsLinkName,
+ *     sourceJobConfig: {
+ *         bucketName: obsInputBucket,
+ *         inputDirectory: "/",
+ *         listTextFile: "false",
+ *         inputFormat: "BINARY_FILE",
+ *         fromCompression: "NONE",
+ *         fromFileOpType: "DO_NOTHING",
+ *         useMarkerFile: "false",
+ *         useTimeFilter: "false",
+ *         fileSeparator: "|",
+ *         filterType: "NONE",
+ *         useWildCard: "false",
+ *         decryption: "NONE",
+ *         nonexistentPathDisregard: "false",
+ *     },
+ *     destinationConnector: "obs-connector",
+ *     destinationLinkName: obsLinkName,
+ *     destinationJobConfig: {
+ *         bucketName: obsOutputBucket,
+ *         outputDirectory: "/",
+ *         outputFormat: "BINARY_FILE",
+ *         validateMD5: "true",
+ *         recordMD5Result: "false",
+ *         duplicateFileOpType: "REPLACE",
+ *         useCustomDirectory: "false",
+ *         encryption: "NONE",
+ *         copyContentType: "false",
+ *         shouldClearTable: "false",
+ *     },
+ *     config: {
+ *         retryType: "NONE",
+ *         schedulerEnabled: false,
+ *         throttlingExtractorsNumber: 4,
+ *         throttlingRecordDirtyData: false,
+ *         throttlingMaxErrorRecords: 10,
+ *         throttlingLoaderNumber: 1,
+ *     },
+ * });
+ * ```
  *
  * ## Import
  *
  * Jobs can be imported by `id`. It is composed of the ID of CDM cluster which this job run in and the name of job,
  *
- * separated by a slash. For example,
+ * separated by a slash. For example, bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Cdm/job:Job test b11b407c-e604-4e8d-8bc4-92398320b847/jobName
  * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`source_job_config` and `destination_job_config`.
+ *
+ * It is generally recommended running `terraform plan` after importing a cluster.
+ *
+ * You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_cdm_cluster" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [
+ *
+ *  source_job_config, destination_job_config,
+ *
+ *  ]
+ *
+ *  } }
  */
 export class Job extends pulumi.CustomResource {
     /**

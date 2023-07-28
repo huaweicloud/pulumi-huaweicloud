@@ -80,8 +80,6 @@ export class Vip extends pulumi.CustomResource {
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
-     * The subnet ID in which to allocate IP address for this VIP.
-     *
      * @deprecated use ip_version instead
      */
     public readonly subnetId!: pulumi.Output<string>;
@@ -169,8 +167,6 @@ export interface VipState {
      */
     status?: pulumi.Input<string>;
     /**
-     * The subnet ID in which to allocate IP address for this VIP.
-     *
      * @deprecated use ip_version instead
      */
     subnetId?: pulumi.Input<string>;
@@ -205,8 +201,6 @@ export interface VipArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * The subnet ID in which to allocate IP address for this VIP.
-     *
      * @deprecated use ip_version instead
      */
     subnetId?: pulumi.Input<string>;

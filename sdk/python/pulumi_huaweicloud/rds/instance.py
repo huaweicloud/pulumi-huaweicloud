@@ -31,8 +31,10 @@ class InstanceArgs:
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  fixed_ip: Optional[pulumi.Input[str]] = None,
                  ha_replication_mode: Optional[pulumi.Input[str]] = None,
+                 lower_case_table_names: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  param_group_id: Optional[pulumi.Input[str]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -51,8 +53,7 @@ class InstanceArgs:
                new resource.
         :param pulumi.Input['InstanceVolumeArgs'] volume: Specifies the volume information. Structure is documented below.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "
-               false". Changing this creates a new resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled. Valid values are "true" and "false".
         :param pulumi.Input['InstanceBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the RDS DB instance. Valid values are
                *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
@@ -67,14 +68,20 @@ class InstanceArgs:
                + For MySQL, the value is *async* or *semisync*.
                + For PostgreSQL, the value is *async* or *sync*.
                + For Microsoft SQL Server, the value is *sync*.
-        :param pulumi.Input[str] name: Specifies the DB instance name. The DB instance name of the same type must be unique for
-               the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can
-               contain only letters, digits, hyphens (-), and underscores (_).
+        :param pulumi.Input[str] lower_case_table_names: Specifies the case-sensitive state of the database table name,
+               the default value is "1". Changing this parameter will create a new resource.
+               + 0: Table names are stored as fixed and table names are case-sensitive.
+               + 1: Table names will be stored in lower case and table names are not case-sensitive.
+        :param pulumi.Input[str] name: Specifies the parameter name. Some of them needs the instance to be restarted
+               to take effect.
         :param pulumi.Input[str] param_group_id: Specifies the parameter group ID. Changing this parameter will create
                a new resource.
-        :param pulumi.Input[int] period: Specifies the charging period of the RDS DB instance. If `period_unit` is set
-               to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-               parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]] parameters: Specify an array of one or more parameters to be set to the RDS instance after
+               launched. You can check on console to see which parameters supported. Structure is documented below.
+        :param pulumi.Input[int] period: Specifies the backup cycle. Automatic backups will be performed on the specified days of
+               the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+               number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+               Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the RDS DB instance. Valid values
                are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a
                new resource.
@@ -98,6 +105,9 @@ class InstanceArgs:
         pulumi.set(__self__, "volume", volume)
         pulumi.set(__self__, "vpc_id", vpc_id)
         if auto_pay is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
+        if auto_pay is not None:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
             pulumi.set(__self__, "auto_renew", auto_renew)
@@ -113,10 +123,14 @@ class InstanceArgs:
             pulumi.set(__self__, "fixed_ip", fixed_ip)
         if ha_replication_mode is not None:
             pulumi.set(__self__, "ha_replication_mode", ha_replication_mode)
+        if lower_case_table_names is not None:
+            pulumi.set(__self__, "lower_case_table_names", lower_case_table_names)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if param_group_id is not None:
             pulumi.set(__self__, "param_group_id", param_group_id)
+        if parameters is not None:
+            pulumi.set(__self__, "parameters", parameters)
         if period is not None:
             pulumi.set(__self__, "period", period)
         if period_unit is not None:
@@ -230,8 +244,7 @@ class InstanceArgs:
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies whether auto renew is enabled. Valid values are "true" and "
-        false". Changing this creates a new resource.
+        Specifies whether auto-renew is enabled. Valid values are "true" and "false".
         """
         return pulumi.get(self, "auto_renew")
 
@@ -320,12 +333,26 @@ class InstanceArgs:
         pulumi.set(self, "ha_replication_mode", value)
 
     @property
+    @pulumi.getter(name="lowerCaseTableNames")
+    def lower_case_table_names(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the case-sensitive state of the database table name,
+        the default value is "1". Changing this parameter will create a new resource.
+        + 0: Table names are stored as fixed and table names are case-sensitive.
+        + 1: Table names will be stored in lower case and table names are not case-sensitive.
+        """
+        return pulumi.get(self, "lower_case_table_names")
+
+    @lower_case_table_names.setter
+    def lower_case_table_names(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "lower_case_table_names", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the DB instance name. The DB instance name of the same type must be unique for
-        the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can
-        contain only letters, digits, hyphens (-), and underscores (_).
+        Specifies the parameter name. Some of them needs the instance to be restarted
+        to take effect.
         """
         return pulumi.get(self, "name")
 
@@ -348,11 +375,25 @@ class InstanceArgs:
 
     @property
     @pulumi.getter
+    def parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]]]:
+        """
+        Specify an array of one or more parameters to be set to the RDS instance after
+        launched. You can check on console to see which parameters supported. Structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
+
+    @parameters.setter
+    def parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]]]):
+        pulumi.set(self, "parameters", value)
+
+    @property
+    @pulumi.getter
     def period(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the charging period of the RDS DB instance. If `period_unit` is set
-        to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-        parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
+        Specifies the backup cycle. Automatic backups will be performed on the specified days of
+        the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+        number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+        Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
         """
         return pulumi.get(self, "period")
 
@@ -445,9 +486,11 @@ class _InstanceState:
                  fixed_ip: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  ha_replication_mode: Optional[pulumi.Input[str]] = None,
+                 lower_case_table_names: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  nodes: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceNodeArgs']]]] = None,
                  param_group_id: Optional[pulumi.Input[str]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  private_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
@@ -463,8 +506,7 @@ class _InstanceState:
                  vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Instance resources.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "
-               false". Changing this creates a new resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled. Valid values are "true" and "false".
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the list of AZ name. Changing this parameter will create a
                new resource.
         :param pulumi.Input['InstanceBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
@@ -485,15 +527,21 @@ class _InstanceState:
                + For MySQL, the value is *async* or *semisync*.
                + For PostgreSQL, the value is *async* or *sync*.
                + For Microsoft SQL Server, the value is *sync*.
-        :param pulumi.Input[str] name: Specifies the DB instance name. The DB instance name of the same type must be unique for
-               the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can
-               contain only letters, digits, hyphens (-), and underscores (_).
+        :param pulumi.Input[str] lower_case_table_names: Specifies the case-sensitive state of the database table name,
+               the default value is "1". Changing this parameter will create a new resource.
+               + 0: Table names are stored as fixed and table names are case-sensitive.
+               + 1: Table names will be stored in lower case and table names are not case-sensitive.
+        :param pulumi.Input[str] name: Specifies the parameter name. Some of them needs the instance to be restarted
+               to take effect.
         :param pulumi.Input[Sequence[pulumi.Input['InstanceNodeArgs']]] nodes: Indicates the instance nodes information. Structure is documented below.
         :param pulumi.Input[str] param_group_id: Specifies the parameter group ID. Changing this parameter will create
                a new resource.
-        :param pulumi.Input[int] period: Specifies the charging period of the RDS DB instance. If `period_unit` is set
-               to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-               parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]] parameters: Specify an array of one or more parameters to be set to the RDS instance after
+               launched. You can check on console to see which parameters supported. Structure is documented below.
+        :param pulumi.Input[int] period: Specifies the backup cycle. Automatic backups will be performed on the specified days of
+               the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+               number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+               Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the RDS DB instance. Valid values
                are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a
                new resource.
@@ -518,6 +566,9 @@ class _InstanceState:
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
         """
         if auto_pay is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
+        if auto_pay is not None:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
             pulumi.set(__self__, "auto_renew", auto_renew)
@@ -541,12 +592,16 @@ class _InstanceState:
             pulumi.set(__self__, "flavor", flavor)
         if ha_replication_mode is not None:
             pulumi.set(__self__, "ha_replication_mode", ha_replication_mode)
+        if lower_case_table_names is not None:
+            pulumi.set(__self__, "lower_case_table_names", lower_case_table_names)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if nodes is not None:
             pulumi.set(__self__, "nodes", nodes)
         if param_group_id is not None:
             pulumi.set(__self__, "param_group_id", param_group_id)
+        if parameters is not None:
+            pulumi.set(__self__, "parameters", parameters)
         if period is not None:
             pulumi.set(__self__, "period", period)
         if period_unit is not None:
@@ -587,8 +642,7 @@ class _InstanceState:
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies whether auto renew is enabled. Valid values are "true" and "
-        false". Changing this creates a new resource.
+        Specifies whether auto-renew is enabled. Valid values are "true" and "false".
         """
         return pulumi.get(self, "auto_renew")
 
@@ -727,12 +781,26 @@ class _InstanceState:
         pulumi.set(self, "ha_replication_mode", value)
 
     @property
+    @pulumi.getter(name="lowerCaseTableNames")
+    def lower_case_table_names(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the case-sensitive state of the database table name,
+        the default value is "1". Changing this parameter will create a new resource.
+        + 0: Table names are stored as fixed and table names are case-sensitive.
+        + 1: Table names will be stored in lower case and table names are not case-sensitive.
+        """
+        return pulumi.get(self, "lower_case_table_names")
+
+    @lower_case_table_names.setter
+    def lower_case_table_names(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "lower_case_table_names", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the DB instance name. The DB instance name of the same type must be unique for
-        the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can
-        contain only letters, digits, hyphens (-), and underscores (_).
+        Specifies the parameter name. Some of them needs the instance to be restarted
+        to take effect.
         """
         return pulumi.get(self, "name")
 
@@ -767,11 +835,25 @@ class _InstanceState:
 
     @property
     @pulumi.getter
+    def parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]]]:
+        """
+        Specify an array of one or more parameters to be set to the RDS instance after
+        launched. You can check on console to see which parameters supported. Structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
+
+    @parameters.setter
+    def parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]]]):
+        pulumi.set(self, "parameters", value)
+
+    @property
+    @pulumi.getter
     def period(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the charging period of the RDS DB instance. If `period_unit` is set
-        to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-        parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
+        Specifies the backup cycle. Automatic backups will be performed on the specified days of
+        the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+        number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+        Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
         """
         return pulumi.get(self, "period")
 
@@ -950,8 +1032,10 @@ class Instance(pulumi.CustomResource):
                  fixed_ip: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  ha_replication_mode: Optional[pulumi.Input[str]] = None,
+                 lower_case_table_names: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  param_group_id: Optional[pulumi.Input[str]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceParameterArgs']]]]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -973,13 +1057,17 @@ class Instance(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        secgroup = huaweicloud.vpc.Secgroup("secgroup", description="terraform security group acceptance test")
+        config = pulumi.Config()
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        secgroup_id = config.require_object("secgroupId")
+        availability_zone = config.require_object("availabilityZone")
         instance = huaweicloud.rds.Instance("instance",
             flavor="rds.pg.n1.large.2",
-            vpc_id="{{ vpc_id }}",
-            subnet_id="{{ subnet_id }}",
-            security_group_id=secgroup.id,
-            availability_zones=["{{ availability_zone }}"],
+            vpc_id=vpc_id,
+            subnet_id=subnet_id,
+            security_group_id=secgroup_id,
+            availability_zones=[availability_zone],
             db=huaweicloud.rds.InstanceDbArgs(
                 type="PostgreSQL",
                 version="12",
@@ -1000,16 +1088,21 @@ class Instance(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        secgroup = huaweicloud.vpc.Secgroup("secgroup", description="terraform security group acceptance test")
+        config = pulumi.Config()
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        secgroup_id = config.require_object("secgroupId")
+        availability_zone1 = config.require_object("availabilityZone1")
+        availability_zone2 = config.require_object("availabilityZone2")
         instance = huaweicloud.rds.Instance("instance",
             flavor="rds.pg.n1.large.2.ha",
             ha_replication_mode="async",
-            vpc_id="{{ vpc_id }}",
-            subnet_id="{{ subnet_id }}",
-            security_group_id=secgroup.id,
+            vpc_id=vpc_id,
+            subnet_id=subnet_id,
+            security_group_id=secgroup_id,
             availability_zones=[
-                "{{ availability_zone_1 }}",
-                "{{ availability_zone_2 }}",
+                var["availability_zone_1"],
+                var["availability_zone_2"],
             ],
             db=huaweicloud.rds.InstanceDbArgs(
                 type="PostgreSQL",
@@ -1031,17 +1124,18 @@ class Instance(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        key = huaweicloud.dew.Key("key",
-            key_alias="key_1",
-            key_description="first test key",
-            is_enabled=True)
-        secgroup = huaweicloud.vpc.Secgroup("secgroup", description="security group acceptance test")
+        config = pulumi.Config()
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        secgroup_id = config.require_object("secgroupId")
+        availability_zone = config.require_object("availabilityZone")
+        kms_id = config.require_object("kmsId")
         instance = huaweicloud.rds.Instance("instance",
             flavor="rds.pg.n1.large.2",
-            vpc_id="{{ vpc_id }}",
-            subnet_id="{{ subnet_id }}",
-            security_group_id=secgroup.id,
-            availability_zones=["{{ availability_zone }}"],
+            vpc_id=vpc_id,
+            subnet_id=subnet_id,
+            security_group_id=secgroup_id,
+            availability_zones=[availability_zone],
             db=huaweicloud.rds.InstanceDbArgs(
                 type="PostgreSQL",
                 version="12",
@@ -1050,12 +1144,53 @@ class Instance(pulumi.CustomResource):
             volume=huaweicloud.rds.InstanceVolumeArgs(
                 type="ULTRAHIGH",
                 size=100,
-                disk_encryption_id=key.id,
+                disk_encryption_id=kms_id,
             ),
             backup_strategy=huaweicloud.rds.InstanceBackupStrategyArgs(
                 start_time="08:00-09:00",
                 keep_days=1,
             ))
+        ```
+        ### create db instance with customized parameters
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        secgroup_id = config.require_object("secgroupId")
+        availability_zone = config.require_object("availabilityZone")
+        instance = huaweicloud.rds.Instance("instance",
+            flavor="rds.pg.n1.large.2",
+            vpc_id=vpc_id,
+            subnet_id=subnet_id,
+            security_group_id=secgroup_id,
+            availability_zones=[availability_zone],
+            db=huaweicloud.rds.InstanceDbArgs(
+                type="PostgreSQL",
+                version="12",
+                password="Huangwei!120521",
+            ),
+            volume=huaweicloud.rds.InstanceVolumeArgs(
+                type="ULTRAHIGH",
+                size=100,
+            ),
+            backup_strategy=huaweicloud.rds.InstanceBackupStrategyArgs(
+                start_time="08:00-09:00",
+                keep_days=1,
+            ),
+            parameters=[
+                huaweicloud.rds.InstanceParameterArgs(
+                    name="div_precision_increment",
+                    value="12",
+                ),
+                huaweicloud.rds.InstanceParameterArgs(
+                    name="connect_timeout",
+                    value="13",
+                ),
+            ])
         ```
 
         ## Import
@@ -1063,10 +1198,10 @@ class Instance(pulumi.CustomResource):
         RDS instance can be imported using the `id`, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:Rds/instance:Instance instance_1 7117d38e-4c8f-4624-a505-bd96b97d024c
+         $ pulumi import huaweicloud:Rds/instance:Instance instance_1 52e4b497d2c94df88a2eb4c661314903in01
         ```
 
-         But due to some attributes missing from the API response, it's required to ignore changes as below. resource "huaweicloud_rds_instance" "instance_1" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`db`, `collation`, `availability_zone`,`lower_case_table_names`. It is generally recommended running `terraform plan` after importing a RDS instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also, you can ignore changes as below. resource "huaweicloud_rds_instance" "instance_1" {
 
          ...
 
@@ -1074,7 +1209,7 @@ class Instance(pulumi.CustomResource):
 
          ignore_changes = [
 
-         "db", "collation"
+         "db", "collation", "availability_zone", "lower_case_table_names"
 
          ]
 
@@ -1082,8 +1217,7 @@ class Instance(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "
-               false". Changing this creates a new resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled. Valid values are "true" and "false".
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the list of AZ name. Changing this parameter will create a
                new resource.
         :param pulumi.Input[pulumi.InputType['InstanceBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
@@ -1103,14 +1237,20 @@ class Instance(pulumi.CustomResource):
                + For MySQL, the value is *async* or *semisync*.
                + For PostgreSQL, the value is *async* or *sync*.
                + For Microsoft SQL Server, the value is *sync*.
-        :param pulumi.Input[str] name: Specifies the DB instance name. The DB instance name of the same type must be unique for
-               the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can
-               contain only letters, digits, hyphens (-), and underscores (_).
+        :param pulumi.Input[str] lower_case_table_names: Specifies the case-sensitive state of the database table name,
+               the default value is "1". Changing this parameter will create a new resource.
+               + 0: Table names are stored as fixed and table names are case-sensitive.
+               + 1: Table names will be stored in lower case and table names are not case-sensitive.
+        :param pulumi.Input[str] name: Specifies the parameter name. Some of them needs the instance to be restarted
+               to take effect.
         :param pulumi.Input[str] param_group_id: Specifies the parameter group ID. Changing this parameter will create
                a new resource.
-        :param pulumi.Input[int] period: Specifies the charging period of the RDS DB instance. If `period_unit` is set
-               to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-               parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceParameterArgs']]]] parameters: Specify an array of one or more parameters to be set to the RDS instance after
+               launched. You can check on console to see which parameters supported. Structure is documented below.
+        :param pulumi.Input[int] period: Specifies the backup cycle. Automatic backups will be performed on the specified days of
+               the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+               number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+               Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the RDS DB instance. Valid values
                are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a
                new resource.
@@ -1147,13 +1287,17 @@ class Instance(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        secgroup = huaweicloud.vpc.Secgroup("secgroup", description="terraform security group acceptance test")
+        config = pulumi.Config()
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        secgroup_id = config.require_object("secgroupId")
+        availability_zone = config.require_object("availabilityZone")
         instance = huaweicloud.rds.Instance("instance",
             flavor="rds.pg.n1.large.2",
-            vpc_id="{{ vpc_id }}",
-            subnet_id="{{ subnet_id }}",
-            security_group_id=secgroup.id,
-            availability_zones=["{{ availability_zone }}"],
+            vpc_id=vpc_id,
+            subnet_id=subnet_id,
+            security_group_id=secgroup_id,
+            availability_zones=[availability_zone],
             db=huaweicloud.rds.InstanceDbArgs(
                 type="PostgreSQL",
                 version="12",
@@ -1174,16 +1318,21 @@ class Instance(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        secgroup = huaweicloud.vpc.Secgroup("secgroup", description="terraform security group acceptance test")
+        config = pulumi.Config()
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        secgroup_id = config.require_object("secgroupId")
+        availability_zone1 = config.require_object("availabilityZone1")
+        availability_zone2 = config.require_object("availabilityZone2")
         instance = huaweicloud.rds.Instance("instance",
             flavor="rds.pg.n1.large.2.ha",
             ha_replication_mode="async",
-            vpc_id="{{ vpc_id }}",
-            subnet_id="{{ subnet_id }}",
-            security_group_id=secgroup.id,
+            vpc_id=vpc_id,
+            subnet_id=subnet_id,
+            security_group_id=secgroup_id,
             availability_zones=[
-                "{{ availability_zone_1 }}",
-                "{{ availability_zone_2 }}",
+                var["availability_zone_1"],
+                var["availability_zone_2"],
             ],
             db=huaweicloud.rds.InstanceDbArgs(
                 type="PostgreSQL",
@@ -1205,17 +1354,18 @@ class Instance(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        key = huaweicloud.dew.Key("key",
-            key_alias="key_1",
-            key_description="first test key",
-            is_enabled=True)
-        secgroup = huaweicloud.vpc.Secgroup("secgroup", description="security group acceptance test")
+        config = pulumi.Config()
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        secgroup_id = config.require_object("secgroupId")
+        availability_zone = config.require_object("availabilityZone")
+        kms_id = config.require_object("kmsId")
         instance = huaweicloud.rds.Instance("instance",
             flavor="rds.pg.n1.large.2",
-            vpc_id="{{ vpc_id }}",
-            subnet_id="{{ subnet_id }}",
-            security_group_id=secgroup.id,
-            availability_zones=["{{ availability_zone }}"],
+            vpc_id=vpc_id,
+            subnet_id=subnet_id,
+            security_group_id=secgroup_id,
+            availability_zones=[availability_zone],
             db=huaweicloud.rds.InstanceDbArgs(
                 type="PostgreSQL",
                 version="12",
@@ -1224,12 +1374,53 @@ class Instance(pulumi.CustomResource):
             volume=huaweicloud.rds.InstanceVolumeArgs(
                 type="ULTRAHIGH",
                 size=100,
-                disk_encryption_id=key.id,
+                disk_encryption_id=kms_id,
             ),
             backup_strategy=huaweicloud.rds.InstanceBackupStrategyArgs(
                 start_time="08:00-09:00",
                 keep_days=1,
             ))
+        ```
+        ### create db instance with customized parameters
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        secgroup_id = config.require_object("secgroupId")
+        availability_zone = config.require_object("availabilityZone")
+        instance = huaweicloud.rds.Instance("instance",
+            flavor="rds.pg.n1.large.2",
+            vpc_id=vpc_id,
+            subnet_id=subnet_id,
+            security_group_id=secgroup_id,
+            availability_zones=[availability_zone],
+            db=huaweicloud.rds.InstanceDbArgs(
+                type="PostgreSQL",
+                version="12",
+                password="Huangwei!120521",
+            ),
+            volume=huaweicloud.rds.InstanceVolumeArgs(
+                type="ULTRAHIGH",
+                size=100,
+            ),
+            backup_strategy=huaweicloud.rds.InstanceBackupStrategyArgs(
+                start_time="08:00-09:00",
+                keep_days=1,
+            ),
+            parameters=[
+                huaweicloud.rds.InstanceParameterArgs(
+                    name="div_precision_increment",
+                    value="12",
+                ),
+                huaweicloud.rds.InstanceParameterArgs(
+                    name="connect_timeout",
+                    value="13",
+                ),
+            ])
         ```
 
         ## Import
@@ -1237,10 +1428,10 @@ class Instance(pulumi.CustomResource):
         RDS instance can be imported using the `id`, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:Rds/instance:Instance instance_1 7117d38e-4c8f-4624-a505-bd96b97d024c
+         $ pulumi import huaweicloud:Rds/instance:Instance instance_1 52e4b497d2c94df88a2eb4c661314903in01
         ```
 
-         But due to some attributes missing from the API response, it's required to ignore changes as below. resource "huaweicloud_rds_instance" "instance_1" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`db`, `collation`, `availability_zone`,`lower_case_table_names`. It is generally recommended running `terraform plan` after importing a RDS instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also, you can ignore changes as below. resource "huaweicloud_rds_instance" "instance_1" {
 
          ...
 
@@ -1248,7 +1439,7 @@ class Instance(pulumi.CustomResource):
 
          ignore_changes = [
 
-         "db", "collation"
+         "db", "collation", "availability_zone", "lower_case_table_names"
 
          ]
 
@@ -1280,8 +1471,10 @@ class Instance(pulumi.CustomResource):
                  fixed_ip: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  ha_replication_mode: Optional[pulumi.Input[str]] = None,
+                 lower_case_table_names: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  param_group_id: Optional[pulumi.Input[str]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceParameterArgs']]]]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -1301,6 +1494,9 @@ class Instance(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = InstanceArgs.__new__(InstanceArgs)
 
+            if auto_pay is not None and not opts.urn:
+                warnings.warn("""Deprecated""", DeprecationWarning)
+                pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
             __props__.__dict__["auto_pay"] = auto_pay
             __props__.__dict__["auto_renew"] = auto_renew
             if availability_zones is None and not opts.urn:
@@ -1318,8 +1514,10 @@ class Instance(pulumi.CustomResource):
                 raise TypeError("Missing required property 'flavor'")
             __props__.__dict__["flavor"] = flavor
             __props__.__dict__["ha_replication_mode"] = ha_replication_mode
+            __props__.__dict__["lower_case_table_names"] = lower_case_table_names
             __props__.__dict__["name"] = name
             __props__.__dict__["param_group_id"] = param_group_id
+            __props__.__dict__["parameters"] = parameters
             __props__.__dict__["period"] = period
             __props__.__dict__["period_unit"] = period_unit
             __props__.__dict__["region"] = region
@@ -1365,9 +1563,11 @@ class Instance(pulumi.CustomResource):
             fixed_ip: Optional[pulumi.Input[str]] = None,
             flavor: Optional[pulumi.Input[str]] = None,
             ha_replication_mode: Optional[pulumi.Input[str]] = None,
+            lower_case_table_names: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             nodes: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceNodeArgs']]]]] = None,
             param_group_id: Optional[pulumi.Input[str]] = None,
+            parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceParameterArgs']]]]] = None,
             period: Optional[pulumi.Input[int]] = None,
             period_unit: Optional[pulumi.Input[str]] = None,
             private_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
@@ -1388,8 +1588,7 @@ class Instance(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "
-               false". Changing this creates a new resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled. Valid values are "true" and "false".
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the list of AZ name. Changing this parameter will create a
                new resource.
         :param pulumi.Input[pulumi.InputType['InstanceBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
@@ -1410,15 +1609,21 @@ class Instance(pulumi.CustomResource):
                + For MySQL, the value is *async* or *semisync*.
                + For PostgreSQL, the value is *async* or *sync*.
                + For Microsoft SQL Server, the value is *sync*.
-        :param pulumi.Input[str] name: Specifies the DB instance name. The DB instance name of the same type must be unique for
-               the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can
-               contain only letters, digits, hyphens (-), and underscores (_).
+        :param pulumi.Input[str] lower_case_table_names: Specifies the case-sensitive state of the database table name,
+               the default value is "1". Changing this parameter will create a new resource.
+               + 0: Table names are stored as fixed and table names are case-sensitive.
+               + 1: Table names will be stored in lower case and table names are not case-sensitive.
+        :param pulumi.Input[str] name: Specifies the parameter name. Some of them needs the instance to be restarted
+               to take effect.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceNodeArgs']]]] nodes: Indicates the instance nodes information. Structure is documented below.
         :param pulumi.Input[str] param_group_id: Specifies the parameter group ID. Changing this parameter will create
                a new resource.
-        :param pulumi.Input[int] period: Specifies the charging period of the RDS DB instance. If `period_unit` is set
-               to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-               parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceParameterArgs']]]] parameters: Specify an array of one or more parameters to be set to the RDS instance after
+               launched. You can check on console to see which parameters supported. Structure is documented below.
+        :param pulumi.Input[int] period: Specifies the backup cycle. Automatic backups will be performed on the specified days of
+               the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+               number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+               Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the RDS DB instance. Valid values
                are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a
                new resource.
@@ -1458,9 +1663,11 @@ class Instance(pulumi.CustomResource):
         __props__.__dict__["fixed_ip"] = fixed_ip
         __props__.__dict__["flavor"] = flavor
         __props__.__dict__["ha_replication_mode"] = ha_replication_mode
+        __props__.__dict__["lower_case_table_names"] = lower_case_table_names
         __props__.__dict__["name"] = name
         __props__.__dict__["nodes"] = nodes
         __props__.__dict__["param_group_id"] = param_group_id
+        __props__.__dict__["parameters"] = parameters
         __props__.__dict__["period"] = period
         __props__.__dict__["period_unit"] = period_unit
         __props__.__dict__["private_ips"] = private_ips
@@ -1485,8 +1692,7 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies whether auto renew is enabled. Valid values are "true" and "
-        false". Changing this creates a new resource.
+        Specifies whether auto-renew is enabled. Valid values are "true" and "false".
         """
         return pulumi.get(self, "auto_renew")
 
@@ -1581,12 +1787,22 @@ class Instance(pulumi.CustomResource):
         return pulumi.get(self, "ha_replication_mode")
 
     @property
+    @pulumi.getter(name="lowerCaseTableNames")
+    def lower_case_table_names(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the case-sensitive state of the database table name,
+        the default value is "1". Changing this parameter will create a new resource.
+        + 0: Table names are stored as fixed and table names are case-sensitive.
+        + 1: Table names will be stored in lower case and table names are not case-sensitive.
+        """
+        return pulumi.get(self, "lower_case_table_names")
+
+    @property
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the DB instance name. The DB instance name of the same type must be unique for
-        the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can
-        contain only letters, digits, hyphens (-), and underscores (_).
+        Specifies the parameter name. Some of them needs the instance to be restarted
+        to take effect.
         """
         return pulumi.get(self, "name")
 
@@ -1609,11 +1825,21 @@ class Instance(pulumi.CustomResource):
 
     @property
     @pulumi.getter
+    def parameters(self) -> pulumi.Output[Sequence['outputs.InstanceParameter']]:
+        """
+        Specify an array of one or more parameters to be set to the RDS instance after
+        launched. You can check on console to see which parameters supported. Structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
+
+    @property
+    @pulumi.getter
     def period(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the charging period of the RDS DB instance. If `period_unit` is set
-        to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-        parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
+        Specifies the backup cycle. Automatic backups will be performed on the specified days of
+        the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+        number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+        Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
         """
         return pulumi.get(self, "period")
 

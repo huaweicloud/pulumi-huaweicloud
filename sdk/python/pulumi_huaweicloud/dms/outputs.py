@@ -31,6 +31,8 @@ class KafkaInstanceCrossVpcAccess(dict):
             suggest = "advertised_ip"
         elif key == "lisenterIp":
             suggest = "lisenter_ip"
+        elif key == "listenerIp":
+            suggest = "listener_ip"
         elif key == "portId":
             suggest = "port_id"
 
@@ -48,11 +50,12 @@ class KafkaInstanceCrossVpcAccess(dict):
     def __init__(__self__, *,
                  advertised_ip: Optional[str] = None,
                  lisenter_ip: Optional[str] = None,
+                 listener_ip: Optional[str] = None,
                  port: Optional[int] = None,
                  port_id: Optional[str] = None):
         """
-        :param str advertised_ip: -(Optional, String) The advertised IP Address or domain name.
-        :param str lisenter_ip: The listener IP address.
+        :param str advertised_ip: The advertised IP Address or domain name.
+        :param str listener_ip: The listener IP address.
         :param int port: The port number.
         :param str port_id: The port ID associated with the address.
         """
@@ -60,6 +63,8 @@ class KafkaInstanceCrossVpcAccess(dict):
             pulumi.set(__self__, "advertised_ip", advertised_ip)
         if lisenter_ip is not None:
             pulumi.set(__self__, "lisenter_ip", lisenter_ip)
+        if listener_ip is not None:
+            pulumi.set(__self__, "listener_ip", listener_ip)
         if port is not None:
             pulumi.set(__self__, "port", port)
         if port_id is not None:
@@ -69,17 +74,22 @@ class KafkaInstanceCrossVpcAccess(dict):
     @pulumi.getter(name="advertisedIp")
     def advertised_ip(self) -> Optional[str]:
         """
-        -(Optional, String) The advertised IP Address or domain name.
+        The advertised IP Address or domain name.
         """
         return pulumi.get(self, "advertised_ip")
 
     @property
     @pulumi.getter(name="lisenterIp")
     def lisenter_ip(self) -> Optional[str]:
+        return pulumi.get(self, "lisenter_ip")
+
+    @property
+    @pulumi.getter(name="listenerIp")
+    def listener_ip(self) -> Optional[str]:
         """
         The listener IP address.
         """
-        return pulumi.get(self, "lisenter_ip")
+        return pulumi.get(self, "listener_ip")
 
     @property
     @pulumi.getter
@@ -123,11 +133,11 @@ class KafkaPermissionsPolicy(dict):
                  access_policy: str,
                  user_name: str):
         """
-        :param str access_policy: -(Required, String) Specifies the permissions type. The value can be:
+        :param str access_policy: Specifies the permissions type. The value can be:
                + **all**: publish and subscribe permissions.
                + **pub**: publish permissions.
                + **sub**: subscribe permissions.
-        :param str user_name: -(Required, String) Specifies the user name.
+        :param str user_name: Specifies the username.
         """
         pulumi.set(__self__, "access_policy", access_policy)
         pulumi.set(__self__, "user_name", user_name)
@@ -136,7 +146,7 @@ class KafkaPermissionsPolicy(dict):
     @pulumi.getter(name="accessPolicy")
     def access_policy(self) -> str:
         """
-        -(Required, String) Specifies the permissions type. The value can be:
+        Specifies the permissions type. The value can be:
         + **all**: publish and subscribe permissions.
         + **pub**: publish permissions.
         + **sub**: subscribe permissions.
@@ -147,7 +157,7 @@ class KafkaPermissionsPolicy(dict):
     @pulumi.getter(name="userName")
     def user_name(self) -> str:
         """
-        -(Required, String) Specifies the user name.
+        Specifies the username.
         """
         return pulumi.get(self, "user_name")
 
@@ -512,6 +522,7 @@ class GetInstancesInstanceResult(dict):
                  id: str,
                  maintain_begin: str,
                  maintain_end: str,
+                 management_connect_address: str,
                  manager_user: str,
                  manegement_connect_address: str,
                  name: str,
@@ -549,8 +560,8 @@ class GetInstancesInstanceResult(dict):
         :param str id: The instance ID.
         :param str maintain_begin: The time at which a maintenance time window starts, the format is `HH:mm`.
         :param str maintain_end: The time at which a maintenance time window ends, the format is `HH:mm`.
+        :param str management_connect_address: The connection address of the Kafka manager of an instance.
         :param str manager_user: The username for logging in to the Kafka Manager.
-        :param str manegement_connect_address: The connection address of the Kafka manager of an instance.
         :param str name: Specifies the kafka instance name for data-source queries.
         :param str network_id: The subnet ID to which the instance belongs.
         :param int partition_num: The maximum number of topics in the DMS kafka instance.
@@ -560,6 +571,7 @@ class GetInstancesInstanceResult(dict):
                The format of each connection address is `{IP address}:{port}`.
         :param Sequence[str] public_ip_ids: The IDs of the elastic IP address (EIP).
         :param str resource_spec_code: The resource specifications identifier.
+        :param str retention_policy: The action to be taken when the memory usage reaches the disk capacity threshold.
         :param str security_group_id: The security group ID associated with the instance.
         :param bool ssl_enable: Whether the Kafka SASL_SSL is enabled.
         :param str status: Specifies the kafka instance status for data-source queries.
@@ -585,6 +597,7 @@ class GetInstancesInstanceResult(dict):
         pulumi.set(__self__, "id", id)
         pulumi.set(__self__, "maintain_begin", maintain_begin)
         pulumi.set(__self__, "maintain_end", maintain_end)
+        pulumi.set(__self__, "management_connect_address", management_connect_address)
         pulumi.set(__self__, "manager_user", manager_user)
         pulumi.set(__self__, "manegement_connect_address", manegement_connect_address)
         pulumi.set(__self__, "name", name)
@@ -714,6 +727,14 @@ class GetInstancesInstanceResult(dict):
         return pulumi.get(self, "maintain_end")
 
     @property
+    @pulumi.getter(name="managementConnectAddress")
+    def management_connect_address(self) -> str:
+        """
+        The connection address of the Kafka manager of an instance.
+        """
+        return pulumi.get(self, "management_connect_address")
+
+    @property
     @pulumi.getter(name="managerUser")
     def manager_user(self) -> str:
         """
@@ -724,9 +745,6 @@ class GetInstancesInstanceResult(dict):
     @property
     @pulumi.getter(name="manegementConnectAddress")
     def manegement_connect_address(self) -> str:
-        """
-        The connection address of the Kafka manager of an instance.
-        """
         return pulumi.get(self, "manegement_connect_address")
 
     @property
@@ -797,6 +815,9 @@ class GetInstancesInstanceResult(dict):
     @property
     @pulumi.getter(name="retentionPolicy")
     def retention_policy(self) -> str:
+        """
+        The action to be taken when the memory usage reaches the disk capacity threshold.
+        """
         return pulumi.get(self, "retention_policy")
 
     @property
@@ -893,16 +914,18 @@ class GetInstancesInstanceCrossVpcAccessResult(dict):
     def __init__(__self__, *,
                  advertised_ip: str,
                  lisenter_ip: str,
+                 listener_ip: str,
                  port: int,
                  port_id: str):
         """
         :param str advertised_ip: The advertised IP Address.
-        :param str lisenter_ip: The listener IP address.
+        :param str listener_ip: The listener IP address.
         :param int port: The port number.
         :param str port_id: The port ID associated with the address.
         """
         pulumi.set(__self__, "advertised_ip", advertised_ip)
         pulumi.set(__self__, "lisenter_ip", lisenter_ip)
+        pulumi.set(__self__, "listener_ip", listener_ip)
         pulumi.set(__self__, "port", port)
         pulumi.set(__self__, "port_id", port_id)
 
@@ -917,10 +940,15 @@ class GetInstancesInstanceCrossVpcAccessResult(dict):
     @property
     @pulumi.getter(name="lisenterIp")
     def lisenter_ip(self) -> str:
+        return pulumi.get(self, "lisenter_ip")
+
+    @property
+    @pulumi.getter(name="listenerIp")
+    def listener_ip(self) -> str:
         """
         The listener IP address.
         """
-        return pulumi.get(self, "lisenter_ip")
+        return pulumi.get(self, "listener_ip")
 
     @property
     @pulumi.getter

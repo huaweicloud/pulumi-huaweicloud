@@ -445,8 +445,8 @@ class GetFlavorsFlavorResult(dict):
                  id: str,
                  name: str):
         """
-        :param str id: The id of the cdm flavor.
-        :param str name: The name of the cdm flavor.
+        :param str id: The id of the CDM flavor.
+        :param str name: The name of the CDM flavor.
         """
         pulumi.set(__self__, "id", id)
         pulumi.set(__self__, "name", name)
@@ -455,7 +455,7 @@ class GetFlavorsFlavorResult(dict):
     @pulumi.getter
     def id(self) -> str:
         """
-        The id of the cdm flavor.
+        The id of the CDM flavor.
         """
         return pulumi.get(self, "id")
 
@@ -463,7 +463,7 @@ class GetFlavorsFlavorResult(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        The name of the cdm flavor.
+        The name of the CDM flavor.
         """
         return pulumi.get(self, "name")
 

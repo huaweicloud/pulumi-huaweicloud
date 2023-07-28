@@ -19,22 +19,30 @@ import * as utilities from "../utilities";
  * const vpcId = config.requireObject("vpcId");
  * const subnetId = config.requireObject("subnetId");
  * const securityGroupId = config.requireObject("securityGroupId");
+ * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
  * const instance1 = new huaweicloud.waf.DedicatedInstance("instance1", {
  *     availableZone: azName,
  *     specificationCode: "waf.instance.professional",
  *     ecsFlavor: ecsFlavorId,
  *     vpcId: vpcId,
  *     subnetId: subnetId,
+ *     enterpriseProjectId: enterpriseProjectId,
  *     securityGroups: [securityGroupId],
  * });
  * ```
  *
  * ## Import
  *
- * WAF dedicated instance can be imported using the `id`, e.g.
+ * There are two ways to import WAF dedicated instance state. * Using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Waf/dedicatedInstance:DedicatedInstance instance_1 2f87641090206b821f07e0f6bd6
+ *  $ pulumi import huaweicloud:Waf/dedicatedInstance:DedicatedInstance test <id>
+ * ```
+ *
+ *  * Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:Waf/dedicatedInstance:DedicatedInstance test <id>/<enterprise_project_id>
  * ```
  */
 export class DedicatedInstance extends pulumi.CustomResource {
@@ -85,6 +93,11 @@ export class DedicatedInstance extends pulumi.CustomResource {
      */
     public readonly ecsFlavor!: pulumi.Output<string>;
     /**
+     * The enterprise project ID of WAF dedicated instance. Changing this
+     * will migrate the WAF instance to a new enterprise project.
+     */
+    public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
+    /**
      * The instance group ID used by the WAF dedicated instance in ELB mode.
      * Changing this will create a new instance.
      */
@@ -99,6 +112,10 @@ export class DedicatedInstance extends pulumi.CustomResource {
      * provider-level region will be used. Changing this setting will create a new instance.
      */
     public readonly region!: pulumi.Output<string>;
+    /**
+     * schema: Internal; Specifies whether this is resource tenant.
+     */
+    public readonly resTenant!: pulumi.Output<boolean | undefined>;
     /**
      * The running status of the instance. Values are:
      */
@@ -155,9 +172,11 @@ export class DedicatedInstance extends pulumi.CustomResource {
             resourceInputs["availableZone"] = state ? state.availableZone : undefined;
             resourceInputs["cpuArchitecture"] = state ? state.cpuArchitecture : undefined;
             resourceInputs["ecsFlavor"] = state ? state.ecsFlavor : undefined;
+            resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["groupId"] = state ? state.groupId : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["resTenant"] = state ? state.resTenant : undefined;
             resourceInputs["runStatus"] = state ? state.runStatus : undefined;
             resourceInputs["securityGroups"] = state ? state.securityGroups : undefined;
             resourceInputs["serverId"] = state ? state.serverId : undefined;
@@ -189,9 +208,11 @@ export class DedicatedInstance extends pulumi.CustomResource {
             resourceInputs["availableZone"] = args ? args.availableZone : undefined;
             resourceInputs["cpuArchitecture"] = args ? args.cpuArchitecture : undefined;
             resourceInputs["ecsFlavor"] = args ? args.ecsFlavor : undefined;
+            resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["groupId"] = args ? args.groupId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["resTenant"] = args ? args.resTenant : undefined;
             resourceInputs["securityGroups"] = args ? args.securityGroups : undefined;
             resourceInputs["specificationCode"] = args ? args.specificationCode : undefined;
             resourceInputs["subnetId"] = args ? args.subnetId : undefined;
@@ -231,6 +252,11 @@ export interface DedicatedInstanceState {
      */
     ecsFlavor?: pulumi.Input<string>;
     /**
+     * The enterprise project ID of WAF dedicated instance. Changing this
+     * will migrate the WAF instance to a new enterprise project.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
      * The instance group ID used by the WAF dedicated instance in ELB mode.
      * Changing this will create a new instance.
      */
@@ -245,6 +271,10 @@ export interface DedicatedInstanceState {
      * provider-level region will be used. Changing this setting will create a new instance.
      */
     region?: pulumi.Input<string>;
+    /**
+     * schema: Internal; Specifies whether this is resource tenant.
+     */
+    resTenant?: pulumi.Input<boolean>;
     /**
      * The running status of the instance. Values are:
      */
@@ -305,6 +335,11 @@ export interface DedicatedInstanceArgs {
      */
     ecsFlavor: pulumi.Input<string>;
     /**
+     * The enterprise project ID of WAF dedicated instance. Changing this
+     * will migrate the WAF instance to a new enterprise project.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
      * The instance group ID used by the WAF dedicated instance in ELB mode.
      * Changing this will create a new instance.
      */
@@ -319,6 +354,10 @@ export interface DedicatedInstanceArgs {
      * provider-level region will be used. Changing this setting will create a new instance.
      */
     region?: pulumi.Input<string>;
+    /**
+     * schema: Internal; Specifies whether this is resource tenant.
+     */
+    resTenant?: pulumi.Input<boolean>;
     /**
      * The security group of the instance. This is an array of security group
      * ids. Changing this will create a new instance.

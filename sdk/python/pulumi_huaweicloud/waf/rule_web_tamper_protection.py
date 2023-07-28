@@ -17,6 +17,7 @@ class RuleWebTamperProtectionArgs:
                  domain: pulumi.Input[str],
                  path: pulumi.Input[str],
                  policy_id: pulumi.Input[str],
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a RuleWebTamperProtection resource.
@@ -24,12 +25,16 @@ class RuleWebTamperProtectionArgs:
         :param pulumi.Input[str] path: Specifies the URL protected by the web tamper protection rule, excluding a
                domain name. Changing this creates a new rule.
         :param pulumi.Input[str] policy_id: Specifies the WAF policy ID. Changing this creates a new rule.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF tamper protection
+               rule. Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: The region in which to create the WAF web tamper protection rules resource. If
                omitted, the provider-level region will be used. Changing this creates a new rule.
         """
         pulumi.set(__self__, "domain", domain)
         pulumi.set(__self__, "path", path)
         pulumi.set(__self__, "policy_id", policy_id)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if region is not None:
             pulumi.set(__self__, "region", region)
 
@@ -71,6 +76,19 @@ class RuleWebTamperProtectionArgs:
         pulumi.set(self, "policy_id", value)
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID of WAF tamper protection
+        rule. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
@@ -88,12 +106,15 @@ class RuleWebTamperProtectionArgs:
 class _RuleWebTamperProtectionState:
     def __init__(__self__, *,
                  domain: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  path: Optional[pulumi.Input[str]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering RuleWebTamperProtection resources.
         :param pulumi.Input[str] domain: Specifies the domain name. Changing this creates a new rule.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF tamper protection
+               rule. Changing this parameter will create a new resource.
         :param pulumi.Input[str] path: Specifies the URL protected by the web tamper protection rule, excluding a
                domain name. Changing this creates a new rule.
         :param pulumi.Input[str] policy_id: Specifies the WAF policy ID. Changing this creates a new rule.
@@ -102,6 +123,8 @@ class _RuleWebTamperProtectionState:
         """
         if domain is not None:
             pulumi.set(__self__, "domain", domain)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if path is not None:
             pulumi.set(__self__, "path", path)
         if policy_id is not None:
@@ -120,6 +143,19 @@ class _RuleWebTamperProtectionState:
     @domain.setter
     def domain(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "domain", value)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID of WAF tamper protection
+        rule. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
 
     @property
     @pulumi.getter
@@ -166,6 +202,7 @@ class RuleWebTamperProtection(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  domain: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  path: Optional[pulumi.Input[str]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -182,24 +219,35 @@ class RuleWebTamperProtection(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        policy1 = huaweicloud.waf.Policy("policy1")
+        config = pulumi.Config()
+        enterprise_project_id = config.require_object("enterpriseProjectId")
+        policy_id = config.require_object("policyId")
         rule1 = huaweicloud.waf.RuleWebTamperProtection("rule1",
-            policy_id=policy1.id,
+            policy_id=policy_id,
+            enterprise_project_id=enterprise_project_id,
             domain="www.your-domain.com",
             path="/payment")
         ```
 
         ## Import
 
-        Web Tamper Protection Rules can be imported using the policy ID and rule ID separated by a slash, e.g.
+        There are two ways to import WAF rule web tamper protection state. * Using `policy_id` and `rule_id`, separated by a slash, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Waf/ruleWebTamperProtection:RuleWebTamperProtection rule_1 840c6dfdd5604c1781eea033eae2004f/c6dbc13bb7e74788ae53ecc9254b3ea8
+         $ pulumi import huaweicloud:Waf/ruleWebTamperProtection:RuleWebTamperProtection test <policy_id>/<rule_id>
+        ```
+
+         * Using `policy_id`, `rule_id` and `enterprise_project_id`, separated by slashes, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Waf/ruleWebTamperProtection:RuleWebTamperProtection test <policy_id>/<rule_id>/<enterprise_project_id>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] domain: Specifies the domain name. Changing this creates a new rule.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF tamper protection
+               rule. Changing this parameter will create a new resource.
         :param pulumi.Input[str] path: Specifies the URL protected by the web tamper protection rule, excluding a
                domain name. Changing this creates a new rule.
         :param pulumi.Input[str] policy_id: Specifies the WAF policy ID. Changing this creates a new rule.
@@ -224,19 +272,28 @@ class RuleWebTamperProtection(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        policy1 = huaweicloud.waf.Policy("policy1")
+        config = pulumi.Config()
+        enterprise_project_id = config.require_object("enterpriseProjectId")
+        policy_id = config.require_object("policyId")
         rule1 = huaweicloud.waf.RuleWebTamperProtection("rule1",
-            policy_id=policy1.id,
+            policy_id=policy_id,
+            enterprise_project_id=enterprise_project_id,
             domain="www.your-domain.com",
             path="/payment")
         ```
 
         ## Import
 
-        Web Tamper Protection Rules can be imported using the policy ID and rule ID separated by a slash, e.g.
+        There are two ways to import WAF rule web tamper protection state. * Using `policy_id` and `rule_id`, separated by a slash, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Waf/ruleWebTamperProtection:RuleWebTamperProtection rule_1 840c6dfdd5604c1781eea033eae2004f/c6dbc13bb7e74788ae53ecc9254b3ea8
+         $ pulumi import huaweicloud:Waf/ruleWebTamperProtection:RuleWebTamperProtection test <policy_id>/<rule_id>
+        ```
+
+         * Using `policy_id`, `rule_id` and `enterprise_project_id`, separated by slashes, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Waf/ruleWebTamperProtection:RuleWebTamperProtection test <policy_id>/<rule_id>/<enterprise_project_id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -255,6 +312,7 @@ class RuleWebTamperProtection(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  domain: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  path: Optional[pulumi.Input[str]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -270,6 +328,7 @@ class RuleWebTamperProtection(pulumi.CustomResource):
             if domain is None and not opts.urn:
                 raise TypeError("Missing required property 'domain'")
             __props__.__dict__["domain"] = domain
+            __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             if path is None and not opts.urn:
                 raise TypeError("Missing required property 'path'")
             __props__.__dict__["path"] = path
@@ -288,6 +347,7 @@ class RuleWebTamperProtection(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             domain: Optional[pulumi.Input[str]] = None,
+            enterprise_project_id: Optional[pulumi.Input[str]] = None,
             path: Optional[pulumi.Input[str]] = None,
             policy_id: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None) -> 'RuleWebTamperProtection':
@@ -299,6 +359,8 @@ class RuleWebTamperProtection(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] domain: Specifies the domain name. Changing this creates a new rule.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF tamper protection
+               rule. Changing this parameter will create a new resource.
         :param pulumi.Input[str] path: Specifies the URL protected by the web tamper protection rule, excluding a
                domain name. Changing this creates a new rule.
         :param pulumi.Input[str] policy_id: Specifies the WAF policy ID. Changing this creates a new rule.
@@ -310,6 +372,7 @@ class RuleWebTamperProtection(pulumi.CustomResource):
         __props__ = _RuleWebTamperProtectionState.__new__(_RuleWebTamperProtectionState)
 
         __props__.__dict__["domain"] = domain
+        __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["path"] = path
         __props__.__dict__["policy_id"] = policy_id
         __props__.__dict__["region"] = region
@@ -322,6 +385,15 @@ class RuleWebTamperProtection(pulumi.CustomResource):
         Specifies the domain name. Changing this creates a new rule.
         """
         return pulumi.get(self, "domain")
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the enterprise project ID of WAF tamper protection
+        rule. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
 
     @property
     @pulumi.getter

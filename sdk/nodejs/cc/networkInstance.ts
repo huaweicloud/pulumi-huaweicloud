@@ -60,7 +60,7 @@ export class NetworkInstance extends pulumi.CustomResource {
      * The description about the network instance.  
      * The description can contain a maximum of 255 characters.
      */
-    public readonly description!: pulumi.Output<string>;
+    public readonly description!: pulumi.Output<string | undefined>;
     /**
      * Account ID.
      */

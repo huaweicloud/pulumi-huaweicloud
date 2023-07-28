@@ -188,10 +188,13 @@ func (o CassandraInstanceBackupStrategyPtrOutput) StartTime() pulumi.StringPtrOu
 
 type CassandraInstanceDatastore struct {
 	// Specifies the database engine. Only "GeminiDB-Cassandra" is supported now.
+	// Changing this parameter will create a new resource.
 	Engine string `pulumi:"engine"`
 	// Specifies the storage engine. Only "rocksDB" is supported now.
+	// Changing this parameter will create a new resource.
 	StorageEngine string `pulumi:"storageEngine"`
 	// Specifies the database version.
+	// Changing this parameter will create a new resource.
 	Version string `pulumi:"version"`
 }
 
@@ -208,10 +211,13 @@ type CassandraInstanceDatastoreInput interface {
 
 type CassandraInstanceDatastoreArgs struct {
 	// Specifies the database engine. Only "GeminiDB-Cassandra" is supported now.
+	// Changing this parameter will create a new resource.
 	Engine pulumi.StringInput `pulumi:"engine"`
 	// Specifies the storage engine. Only "rocksDB" is supported now.
+	// Changing this parameter will create a new resource.
 	StorageEngine pulumi.StringInput `pulumi:"storageEngine"`
 	// Specifies the database version.
+	// Changing this parameter will create a new resource.
 	Version pulumi.StringInput `pulumi:"version"`
 }
 
@@ -293,16 +299,19 @@ func (o CassandraInstanceDatastoreOutput) ToCassandraInstanceDatastorePtrOutputW
 }
 
 // Specifies the database engine. Only "GeminiDB-Cassandra" is supported now.
+// Changing this parameter will create a new resource.
 func (o CassandraInstanceDatastoreOutput) Engine() pulumi.StringOutput {
 	return o.ApplyT(func(v CassandraInstanceDatastore) string { return v.Engine }).(pulumi.StringOutput)
 }
 
 // Specifies the storage engine. Only "rocksDB" is supported now.
+// Changing this parameter will create a new resource.
 func (o CassandraInstanceDatastoreOutput) StorageEngine() pulumi.StringOutput {
 	return o.ApplyT(func(v CassandraInstanceDatastore) string { return v.StorageEngine }).(pulumi.StringOutput)
 }
 
 // Specifies the database version.
+// Changing this parameter will create a new resource.
 func (o CassandraInstanceDatastoreOutput) Version() pulumi.StringOutput {
 	return o.ApplyT(func(v CassandraInstanceDatastore) string { return v.Version }).(pulumi.StringOutput)
 }
@@ -332,6 +341,7 @@ func (o CassandraInstanceDatastorePtrOutput) Elem() CassandraInstanceDatastoreOu
 }
 
 // Specifies the database engine. Only "GeminiDB-Cassandra" is supported now.
+// Changing this parameter will create a new resource.
 func (o CassandraInstanceDatastorePtrOutput) Engine() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *CassandraInstanceDatastore) *string {
 		if v == nil {
@@ -342,6 +352,7 @@ func (o CassandraInstanceDatastorePtrOutput) Engine() pulumi.StringPtrOutput {
 }
 
 // Specifies the storage engine. Only "rocksDB" is supported now.
+// Changing this parameter will create a new resource.
 func (o CassandraInstanceDatastorePtrOutput) StorageEngine() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *CassandraInstanceDatastore) *string {
 		if v == nil {
@@ -352,6 +363,7 @@ func (o CassandraInstanceDatastorePtrOutput) StorageEngine() pulumi.StringPtrOut
 }
 
 // Specifies the database version.
+// Changing this parameter will create a new resource.
 func (o CassandraInstanceDatastorePtrOutput) Version() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *CassandraInstanceDatastore) *string {
 		if v == nil {
@@ -678,10 +690,13 @@ func (o InfluxInstanceBackupStrategyPtrOutput) StartTime() pulumi.StringPtrOutpu
 
 type InfluxInstanceDatastore struct {
 	// Specifies the database engine. Only **influxdb** is supported now.
+	// Changing this parameter will create a new resource.
 	Engine string `pulumi:"engine"`
 	// Specifies the storage engine. Only **rocksDB** is supported now.
+	// Changing this parameter will create a new resource.
 	StorageEngine string `pulumi:"storageEngine"`
 	// Specifies the database version.
+	// Changing this parameter will create a new resource.
 	Version string `pulumi:"version"`
 }
 
@@ -698,10 +713,13 @@ type InfluxInstanceDatastoreInput interface {
 
 type InfluxInstanceDatastoreArgs struct {
 	// Specifies the database engine. Only **influxdb** is supported now.
+	// Changing this parameter will create a new resource.
 	Engine pulumi.StringInput `pulumi:"engine"`
 	// Specifies the storage engine. Only **rocksDB** is supported now.
+	// Changing this parameter will create a new resource.
 	StorageEngine pulumi.StringInput `pulumi:"storageEngine"`
 	// Specifies the database version.
+	// Changing this parameter will create a new resource.
 	Version pulumi.StringInput `pulumi:"version"`
 }
 
@@ -783,16 +801,19 @@ func (o InfluxInstanceDatastoreOutput) ToInfluxInstanceDatastorePtrOutputWithCon
 }
 
 // Specifies the database engine. Only **influxdb** is supported now.
+// Changing this parameter will create a new resource.
 func (o InfluxInstanceDatastoreOutput) Engine() pulumi.StringOutput {
 	return o.ApplyT(func(v InfluxInstanceDatastore) string { return v.Engine }).(pulumi.StringOutput)
 }
 
 // Specifies the storage engine. Only **rocksDB** is supported now.
+// Changing this parameter will create a new resource.
 func (o InfluxInstanceDatastoreOutput) StorageEngine() pulumi.StringOutput {
 	return o.ApplyT(func(v InfluxInstanceDatastore) string { return v.StorageEngine }).(pulumi.StringOutput)
 }
 
 // Specifies the database version.
+// Changing this parameter will create a new resource.
 func (o InfluxInstanceDatastoreOutput) Version() pulumi.StringOutput {
 	return o.ApplyT(func(v InfluxInstanceDatastore) string { return v.Version }).(pulumi.StringOutput)
 }
@@ -822,6 +843,7 @@ func (o InfluxInstanceDatastorePtrOutput) Elem() InfluxInstanceDatastoreOutput {
 }
 
 // Specifies the database engine. Only **influxdb** is supported now.
+// Changing this parameter will create a new resource.
 func (o InfluxInstanceDatastorePtrOutput) Engine() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *InfluxInstanceDatastore) *string {
 		if v == nil {
@@ -832,6 +854,7 @@ func (o InfluxInstanceDatastorePtrOutput) Engine() pulumi.StringPtrOutput {
 }
 
 // Specifies the storage engine. Only **rocksDB** is supported now.
+// Changing this parameter will create a new resource.
 func (o InfluxInstanceDatastorePtrOutput) StorageEngine() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *InfluxInstanceDatastore) *string {
 		if v == nil {
@@ -842,6 +865,7 @@ func (o InfluxInstanceDatastorePtrOutput) StorageEngine() pulumi.StringPtrOutput
 }
 
 // Specifies the database version.
+// Changing this parameter will create a new resource.
 func (o InfluxInstanceDatastorePtrOutput) Version() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *InfluxInstanceDatastore) *string {
 		if v == nil {
@@ -1658,10 +1682,13 @@ func (o RedisInstanceBackupStrategyPtrOutput) StartTime() pulumi.StringPtrOutput
 
 type RedisInstanceDatastore struct {
 	// Specifies the database engine. Only "redis" is supported now.
+	// Changing this parameter will create a new resource.
 	Engine string `pulumi:"engine"`
 	// Specifies the storage engine. Only "rocksDB" is supported now.
+	// Changing this parameter will create a new resource.
 	StorageEngine string `pulumi:"storageEngine"`
 	// Specifies the database version. Only "5.0" is supported now.
+	// Changing this parameter will create a new resource.
 	Version string `pulumi:"version"`
 }
 
@@ -1678,10 +1705,13 @@ type RedisInstanceDatastoreInput interface {
 
 type RedisInstanceDatastoreArgs struct {
 	// Specifies the database engine. Only "redis" is supported now.
+	// Changing this parameter will create a new resource.
 	Engine pulumi.StringInput `pulumi:"engine"`
 	// Specifies the storage engine. Only "rocksDB" is supported now.
+	// Changing this parameter will create a new resource.
 	StorageEngine pulumi.StringInput `pulumi:"storageEngine"`
 	// Specifies the database version. Only "5.0" is supported now.
+	// Changing this parameter will create a new resource.
 	Version pulumi.StringInput `pulumi:"version"`
 }
 
@@ -1763,16 +1793,19 @@ func (o RedisInstanceDatastoreOutput) ToRedisInstanceDatastorePtrOutputWithConte
 }
 
 // Specifies the database engine. Only "redis" is supported now.
+// Changing this parameter will create a new resource.
 func (o RedisInstanceDatastoreOutput) Engine() pulumi.StringOutput {
 	return o.ApplyT(func(v RedisInstanceDatastore) string { return v.Engine }).(pulumi.StringOutput)
 }
 
 // Specifies the storage engine. Only "rocksDB" is supported now.
+// Changing this parameter will create a new resource.
 func (o RedisInstanceDatastoreOutput) StorageEngine() pulumi.StringOutput {
 	return o.ApplyT(func(v RedisInstanceDatastore) string { return v.StorageEngine }).(pulumi.StringOutput)
 }
 
 // Specifies the database version. Only "5.0" is supported now.
+// Changing this parameter will create a new resource.
 func (o RedisInstanceDatastoreOutput) Version() pulumi.StringOutput {
 	return o.ApplyT(func(v RedisInstanceDatastore) string { return v.Version }).(pulumi.StringOutput)
 }
@@ -1802,6 +1835,7 @@ func (o RedisInstanceDatastorePtrOutput) Elem() RedisInstanceDatastoreOutput {
 }
 
 // Specifies the database engine. Only "redis" is supported now.
+// Changing this parameter will create a new resource.
 func (o RedisInstanceDatastorePtrOutput) Engine() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *RedisInstanceDatastore) *string {
 		if v == nil {
@@ -1812,6 +1846,7 @@ func (o RedisInstanceDatastorePtrOutput) Engine() pulumi.StringPtrOutput {
 }
 
 // Specifies the storage engine. Only "rocksDB" is supported now.
+// Changing this parameter will create a new resource.
 func (o RedisInstanceDatastorePtrOutput) StorageEngine() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *RedisInstanceDatastore) *string {
 		if v == nil {
@@ -1822,6 +1857,7 @@ func (o RedisInstanceDatastorePtrOutput) StorageEngine() pulumi.StringPtrOutput 
 }
 
 // Specifies the database version. Only "5.0" is supported now.
+// Changing this parameter will create a new resource.
 func (o RedisInstanceDatastorePtrOutput) Version() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *RedisInstanceDatastore) *string {
 		if v == nil {
@@ -1840,6 +1876,8 @@ type RedisInstanceNode struct {
 	Name *string `pulumi:"name"`
 	// Indicates the private IP address of a node.
 	PrivateIp *string `pulumi:"privateIp"`
+	// Indicates the public IP address of a node.
+	PublicIp *string `pulumi:"publicIp"`
 	// Indicates the node status.
 	Status *string `pulumi:"status"`
 	// Indicates whether the node support reduce or not.
@@ -1866,6 +1904,8 @@ type RedisInstanceNodeArgs struct {
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Indicates the private IP address of a node.
 	PrivateIp pulumi.StringPtrInput `pulumi:"privateIp"`
+	// Indicates the public IP address of a node.
+	PublicIp pulumi.StringPtrInput `pulumi:"publicIp"`
 	// Indicates the node status.
 	Status pulumi.StringPtrInput `pulumi:"status"`
 	// Indicates whether the node support reduce or not.
@@ -1938,6 +1978,11 @@ func (o RedisInstanceNodeOutput) Name() pulumi.StringPtrOutput {
 // Indicates the private IP address of a node.
 func (o RedisInstanceNodeOutput) PrivateIp() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v RedisInstanceNode) *string { return v.PrivateIp }).(pulumi.StringPtrOutput)
+}
+
+// Indicates the public IP address of a node.
+func (o RedisInstanceNodeOutput) PublicIp() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v RedisInstanceNode) *string { return v.PublicIp }).(pulumi.StringPtrOutput)
 }
 
 // Indicates the node status.

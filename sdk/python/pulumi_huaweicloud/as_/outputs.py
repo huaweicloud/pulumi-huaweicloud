@@ -219,10 +219,18 @@ class ConfigurationInstanceConfig(dict):
         suggest = None
         if key == "keyName":
             suggest = "key_name"
+        elif key == "chargingMode":
+            suggest = "charging_mode"
+        elif key == "ecsGroupId":
+            suggest = "ecs_group_id"
+        elif key == "flavorPriorityPolicy":
+            suggest = "flavor_priority_policy"
         elif key == "instanceId":
             suggest = "instance_id"
         elif key == "publicIp":
             suggest = "public_ip"
+        elif key == "securityGroupIds":
+            suggest = "security_group_ids"
         elif key == "userData":
             suggest = "user_data"
 
@@ -239,22 +247,31 @@ class ConfigurationInstanceConfig(dict):
 
     def __init__(__self__, *,
                  key_name: str,
+                 charging_mode: Optional[str] = None,
                  disks: Optional[Sequence['outputs.ConfigurationInstanceConfigDisk']] = None,
+                 ecs_group_id: Optional[str] = None,
                  flavor: Optional[str] = None,
+                 flavor_priority_policy: Optional[str] = None,
                  image: Optional[str] = None,
                  instance_id: Optional[str] = None,
                  metadata: Optional[Mapping[str, str]] = None,
                  personalities: Optional[Sequence['outputs.ConfigurationInstanceConfigPersonality']] = None,
                  public_ip: Optional['outputs.ConfigurationInstanceConfigPublicIp'] = None,
+                 security_group_ids: Optional[Sequence[str]] = None,
                  user_data: Optional[str] = None):
         """
         :param str key_name: Specifies the name of the SSH key pair used to log in to the instance.
                Changing this will create a new resource.
+        :param str charging_mode: Specifies whether the bandwidth is billed by traffic or by bandwidth
+               size. The value can be **traffic** or **bandwidth**. Changing this creates a new resource.
         :param Sequence['ConfigurationInstanceConfigDiskArgs'] disks: Specifies the disk group information. System disks are mandatory and
                data disks are optional. The object structure is documented below.
                Changing this will create a new resource.
+        :param str ecs_group_id: Specifies the ECS group ID. Changing this will create a new resource.
         :param str flavor: Specifies the ECS flavor name. A maximum of 10 flavors can be selected.
                Use a comma (,) to separate multiple flavor names. Changing this will create a new resource.
+        :param str flavor_priority_policy: Specifies the priority policy used when there are multiple flavors
+               and instances to be created using an AS configuration. The value can be `PICK_FIRST` and `COST_FIRST`.
         :param str image: Specifies the ECS image ID. Changing this will create a new resource.
         :param str instance_id: Specifies the ECS instance ID when using its specification
                as the template to create AS configurations. In this case, `flavor`, `image`, and `disk` arguments do not take effect.
@@ -268,14 +285,22 @@ class ConfigurationInstanceConfig(dict):
         :param 'ConfigurationInstanceConfigPublicIpArgs' public_ip: Specifies the EIP of the ECS instance.
                The object structure is documented below.
                Changing this will create a new resource.
+        :param Sequence[str] security_group_ids: Specifies an array of one or more security group IDs.
+               Changing this will create a new resource.
         :param str user_data: Specifies the user data to provide when launching the instance.
                The file content must be encoded with Base64. Changing this will create a new resource.
         """
         pulumi.set(__self__, "key_name", key_name)
+        if charging_mode is not None:
+            pulumi.set(__self__, "charging_mode", charging_mode)
         if disks is not None:
             pulumi.set(__self__, "disks", disks)
+        if ecs_group_id is not None:
+            pulumi.set(__self__, "ecs_group_id", ecs_group_id)
         if flavor is not None:
             pulumi.set(__self__, "flavor", flavor)
+        if flavor_priority_policy is not None:
+            pulumi.set(__self__, "flavor_priority_policy", flavor_priority_policy)
         if image is not None:
             pulumi.set(__self__, "image", image)
         if instance_id is not None:
@@ -286,6 +311,8 @@ class ConfigurationInstanceConfig(dict):
             pulumi.set(__self__, "personalities", personalities)
         if public_ip is not None:
             pulumi.set(__self__, "public_ip", public_ip)
+        if security_group_ids is not None:
+            pulumi.set(__self__, "security_group_ids", security_group_ids)
         if user_data is not None:
             pulumi.set(__self__, "user_data", user_data)
 
@@ -299,6 +326,15 @@ class ConfigurationInstanceConfig(dict):
         return pulumi.get(self, "key_name")
 
     @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> Optional[str]:
+        """
+        Specifies whether the bandwidth is billed by traffic or by bandwidth
+        size. The value can be **traffic** or **bandwidth**. Changing this creates a new resource.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @property
     @pulumi.getter
     def disks(self) -> Optional[Sequence['outputs.ConfigurationInstanceConfigDisk']]:
         """
@@ -309,6 +345,14 @@ class ConfigurationInstanceConfig(dict):
         return pulumi.get(self, "disks")
 
     @property
+    @pulumi.getter(name="ecsGroupId")
+    def ecs_group_id(self) -> Optional[str]:
+        """
+        Specifies the ECS group ID. Changing this will create a new resource.
+        """
+        return pulumi.get(self, "ecs_group_id")
+
+    @property
     @pulumi.getter
     def flavor(self) -> Optional[str]:
         """
@@ -316,6 +360,15 @@ class ConfigurationInstanceConfig(dict):
         Use a comma (,) to separate multiple flavor names. Changing this will create a new resource.
         """
         return pulumi.get(self, "flavor")
+
+    @property
+    @pulumi.getter(name="flavorPriorityPolicy")
+    def flavor_priority_policy(self) -> Optional[str]:
+        """
+        Specifies the priority policy used when there are multiple flavors
+        and instances to be created using an AS configuration. The value can be `PICK_FIRST` and `COST_FIRST`.
+        """
+        return pulumi.get(self, "flavor_priority_policy")
 
     @property
     @pulumi.getter
@@ -364,6 +417,15 @@ class ConfigurationInstanceConfig(dict):
         Changing this will create a new resource.
         """
         return pulumi.get(self, "public_ip")
+
+    @property
+    @pulumi.getter(name="securityGroupIds")
+    def security_group_ids(self) -> Optional[Sequence[str]]:
+        """
+        Specifies an array of one or more security group IDs.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "security_group_ids")
 
     @property
     @pulumi.getter(name="userData")
@@ -472,6 +534,8 @@ class ConfigurationInstanceConfigPersonality(dict):
                  content: str,
                  path: str):
         """
+        :param str content: Specifies the content of the injected file, which must be encoded with base64.
+               Changing this creates a new resource.
         :param str path: Specifies the path of the injected file. Changing this creates a new resource.
         """
         pulumi.set(__self__, "content", content)
@@ -480,6 +544,10 @@ class ConfigurationInstanceConfigPersonality(dict):
     @property
     @pulumi.getter
     def content(self) -> str:
+        """
+        Specifies the content of the injected file, which must be encoded with base64.
+        Changing this creates a new resource.
+        """
         return pulumi.get(self, "content")
 
     @property
@@ -696,20 +764,79 @@ class GroupLbaasListener(dict):
 
 @pulumi.output_type
 class GroupNetwork(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "ipv6BandwidthId":
+            suggest = "ipv6_bandwidth_id"
+        elif key == "ipv6Enable":
+            suggest = "ipv6_enable"
+        elif key == "sourceDestCheck":
+            suggest = "source_dest_check"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in GroupNetwork. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        GroupNetwork.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        GroupNetwork.__key_warning(key)
+        return super().get(key, default)
+
     def __init__(__self__, *,
-                 id: str):
+                 id: str,
+                 ipv6_bandwidth_id: Optional[str] = None,
+                 ipv6_enable: Optional[bool] = None,
+                 source_dest_check: Optional[bool] = None):
         """
-        :param str id: The UUID of the security group.
+        :param str id: Specifies the ID of the security group.
+        :param str ipv6_bandwidth_id: Specifies the ID of the shared bandwidth of an IPv6 address.
+        :param bool ipv6_enable: Specifies whether to support IPv6 addresses. The default value is `false`.
+        :param bool source_dest_check: Specifies whether processesing only traffic that is destined specifically
+               for it. Defaults to true.
         """
         pulumi.set(__self__, "id", id)
+        if ipv6_bandwidth_id is not None:
+            pulumi.set(__self__, "ipv6_bandwidth_id", ipv6_bandwidth_id)
+        if ipv6_enable is not None:
+            pulumi.set(__self__, "ipv6_enable", ipv6_enable)
+        if source_dest_check is not None:
+            pulumi.set(__self__, "source_dest_check", source_dest_check)
 
     @property
     @pulumi.getter
     def id(self) -> str:
         """
-        The UUID of the security group.
+        Specifies the ID of the security group.
         """
         return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="ipv6BandwidthId")
+    def ipv6_bandwidth_id(self) -> Optional[str]:
+        """
+        Specifies the ID of the shared bandwidth of an IPv6 address.
+        """
+        return pulumi.get(self, "ipv6_bandwidth_id")
+
+    @property
+    @pulumi.getter(name="ipv6Enable")
+    def ipv6_enable(self) -> Optional[bool]:
+        """
+        Specifies whether to support IPv6 addresses. The default value is `false`.
+        """
+        return pulumi.get(self, "ipv6_enable")
+
+    @property
+    @pulumi.getter(name="sourceDestCheck")
+    def source_dest_check(self) -> Optional[bool]:
+        """
+        Specifies whether processesing only traffic that is destined specifically
+        for it. Defaults to true.
+        """
+        return pulumi.get(self, "source_dest_check")
 
 
 @pulumi.output_type
@@ -717,7 +844,7 @@ class GroupSecurityGroup(dict):
     def __init__(__self__, *,
                  id: str):
         """
-        :param str id: The UUID of the security group.
+        :param str id: Specifies the ID of the security group.
         """
         pulumi.set(__self__, "id", id)
 
@@ -725,7 +852,7 @@ class GroupSecurityGroup(dict):
     @pulumi.getter
     def id(self) -> str:
         """
-        The UUID of the security group.
+        Specifies the ID of the security group.
         """
         return pulumi.get(self, "id")
 
@@ -753,8 +880,8 @@ class PolicyScalingPolicyAction(dict):
                  instance_number: Optional[int] = None,
                  operation: Optional[str] = None):
         """
-        :param int instance_number: The number of instances to be operated. The default number is 1.
-        :param str operation: The operation to be performed. The options include `ADD` (default), `REMOVE`,
+        :param int instance_number: Specifies the number of instances to be operated. The default number is 1.
+        :param str operation: Specifies the operation to be performed. The options include `ADD` (default), `REMOVE`,
                and `SET`.
         """
         if instance_number is not None:
@@ -766,7 +893,7 @@ class PolicyScalingPolicyAction(dict):
     @pulumi.getter(name="instanceNumber")
     def instance_number(self) -> Optional[int]:
         """
-        The number of instances to be operated. The default number is 1.
+        Specifies the number of instances to be operated. The default number is 1.
         """
         return pulumi.get(self, "instance_number")
 
@@ -774,7 +901,7 @@ class PolicyScalingPolicyAction(dict):
     @pulumi.getter
     def operation(self) -> Optional[str]:
         """
-        The operation to be performed. The options include `ADD` (default), `REMOVE`,
+        Specifies the operation to be performed. The options include `ADD` (default), `REMOVE`,
         and `SET`.
         """
         return pulumi.get(self, "operation")
@@ -814,16 +941,16 @@ class PolicyScheduledPolicy(dict):
                  recurrence_value: Optional[str] = None,
                  start_time: Optional[str] = None):
         """
-        :param str launch_time: The time when the scaling action is triggered.
-               + If `scaling_policy_type` is set to `SCHEDULED`, the time format is YYYY-MM-DDThh:mmZ.
-               + If `scaling_policy_type` is set to `RECURRENCE`, the time format is hh:mm.
-        :param str end_time: The end time of the scaling action triggered periodically. The time format complies
+        :param str launch_time: Specifies the time when the scaling action is triggered.
+               + If `scaling_policy_type` is set to `SCHEDULED`, the time format is **YYYY-MM-DDThh:mmZ**.
+               + If `scaling_policy_type` is set to `RECURRENCE`, the time format is **hh:mm**.
+        :param str end_time: Specifies the end time of the scaling action triggered periodically. The time format complies
                with UTC. This argument is mandatory when `scaling_policy_type`
                is set to `RECURRENCE`. The time format is YYYY-MM-DDThh:mmZ.
-        :param str recurrence_type: The periodic triggering type. This argument is mandatory when
+        :param str recurrence_type: Specifies the periodic triggering type. This argument is mandatory when
                `scaling_policy_type` is set to `RECURRENCE`. The options include `Daily`, `Weekly`, and `Monthly`.
-        :param str recurrence_value: The frequency at which scaling actions are triggered.
-        :param str start_time: The start time of the scaling action triggered periodically. The time format
+        :param str recurrence_value: Specifies the frequency at which scaling actions are triggered.
+        :param str start_time: Specifies the start time of the scaling action triggered periodically. The time format
                complies with UTC. The current time is used by default. The time format is YYYY-MM-DDThh:mmZ.
         """
         pulumi.set(__self__, "launch_time", launch_time)
@@ -840,9 +967,9 @@ class PolicyScheduledPolicy(dict):
     @pulumi.getter(name="launchTime")
     def launch_time(self) -> str:
         """
-        The time when the scaling action is triggered.
-        + If `scaling_policy_type` is set to `SCHEDULED`, the time format is YYYY-MM-DDThh:mmZ.
-        + If `scaling_policy_type` is set to `RECURRENCE`, the time format is hh:mm.
+        Specifies the time when the scaling action is triggered.
+        + If `scaling_policy_type` is set to `SCHEDULED`, the time format is **YYYY-MM-DDThh:mmZ**.
+        + If `scaling_policy_type` is set to `RECURRENCE`, the time format is **hh:mm**.
         """
         return pulumi.get(self, "launch_time")
 
@@ -850,7 +977,7 @@ class PolicyScheduledPolicy(dict):
     @pulumi.getter(name="endTime")
     def end_time(self) -> Optional[str]:
         """
-        The end time of the scaling action triggered periodically. The time format complies
+        Specifies the end time of the scaling action triggered periodically. The time format complies
         with UTC. This argument is mandatory when `scaling_policy_type`
         is set to `RECURRENCE`. The time format is YYYY-MM-DDThh:mmZ.
         """
@@ -860,7 +987,7 @@ class PolicyScheduledPolicy(dict):
     @pulumi.getter(name="recurrenceType")
     def recurrence_type(self) -> Optional[str]:
         """
-        The periodic triggering type. This argument is mandatory when
+        Specifies the periodic triggering type. This argument is mandatory when
         `scaling_policy_type` is set to `RECURRENCE`. The options include `Daily`, `Weekly`, and `Monthly`.
         """
         return pulumi.get(self, "recurrence_type")
@@ -869,7 +996,7 @@ class PolicyScheduledPolicy(dict):
     @pulumi.getter(name="recurrenceValue")
     def recurrence_value(self) -> Optional[str]:
         """
-        The frequency at which scaling actions are triggered.
+        Specifies the frequency at which scaling actions are triggered.
         """
         return pulumi.get(self, "recurrence_value")
 
@@ -877,7 +1004,7 @@ class PolicyScheduledPolicy(dict):
     @pulumi.getter(name="startTime")
     def start_time(self) -> Optional[str]:
         """
-        The start time of the scaling action triggered periodically. The time format
+        Specifies the start time of the scaling action triggered periodically. The time format
         complies with UTC. The current time is used by default. The time format is YYYY-MM-DDThh:mmZ.
         """
         return pulumi.get(self, "start_time")

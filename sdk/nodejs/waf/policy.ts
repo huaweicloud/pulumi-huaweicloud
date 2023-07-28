@@ -15,20 +15,29 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const policy1 = new huaweicloud.Waf.Policy("policy_1", {
- *     level: 2,
+ * const config = new pulumi.Config();
+ * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
+ * const policy1 = new huaweicloud.waf.Policy("policy1", {
  *     protectionMode: "log",
+ *     level: 2,
+ *     enterpriseProjectId: enterpriseProjectId,
  * });
  * ```
  *
  * ## Import
  *
- * Policies can be imported using the `id`, e.g.
+ * There are two ways to import WAF policy state. * Using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Waf/policy:Policy policy_2 25e1df831bea4022a6e22bebe678915a
+ *  $ pulumi import huaweicloud:Waf/policy:Policy test <id>
+ * ```
+ *
+ *  * Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:Waf/policy:Policy test <id>/<enterprise_project_id>
  * ```
  */
 export class Policy extends pulumi.CustomResource {
@@ -59,6 +68,11 @@ export class Policy extends pulumi.CustomResource {
         return obj['__pulumiType'] === Policy.__pulumiType;
     }
 
+    /**
+     * Specifies the enterprise project ID of WAF policy.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
     /**
      * The detection mode in Precise Protection.
      * + `true`: full detection, Full detection finishes all threat detections before blocking requests that meet Precise
@@ -109,6 +123,7 @@ export class Policy extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as PolicyState | undefined;
+            resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["fullDetection"] = state ? state.fullDetection : undefined;
             resourceInputs["level"] = state ? state.level : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
@@ -117,6 +132,7 @@ export class Policy extends pulumi.CustomResource {
             resourceInputs["region"] = state ? state.region : undefined;
         } else {
             const args = argsOrState as PolicyArgs | undefined;
+            resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["level"] = args ? args.level : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["protectionMode"] = args ? args.protectionMode : undefined;
@@ -133,6 +149,11 @@ export class Policy extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Policy resources.
  */
 export interface PolicyState {
+    /**
+     * Specifies the enterprise project ID of WAF policy.
+     * Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * The detection mode in Precise Protection.
      * + `true`: full detection, Full detection finishes all threat detections before blocking requests that meet Precise
@@ -175,6 +196,11 @@ export interface PolicyState {
  * The set of arguments for constructing a Policy resource.
  */
 export interface PolicyArgs {
+    /**
+     * Specifies the enterprise project ID of WAF policy.
+     * Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Specifies the protection level. Defaults to `2`. Valid values are:
      * + `1`: low

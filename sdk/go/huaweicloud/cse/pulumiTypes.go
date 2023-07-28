@@ -14,7 +14,7 @@ type AlarmruleAlarmAction struct {
 	// specifies the list of objects to be notified if the alarm status changes, the
 	// maximum length is 5.
 	NotificationLists []string `pulumi:"notificationLists"`
-	// specifies the type of action triggered by an alarm. the value is notification.
+	// Specifies the type of action triggered by an alarm. the value is notification.
 	// notification: indicates that a notification will be sent to the user.
 	Type string `pulumi:"type"`
 }
@@ -34,7 +34,7 @@ type AlarmruleAlarmActionArgs struct {
 	// specifies the list of objects to be notified if the alarm status changes, the
 	// maximum length is 5.
 	NotificationLists pulumi.StringArrayInput `pulumi:"notificationLists"`
-	// specifies the type of action triggered by an alarm. the value is notification.
+	// Specifies the type of action triggered by an alarm. the value is notification.
 	// notification: indicates that a notification will be sent to the user.
 	Type pulumi.StringInput `pulumi:"type"`
 }
@@ -96,7 +96,7 @@ func (o AlarmruleAlarmActionOutput) NotificationLists() pulumi.StringArrayOutput
 	return o.ApplyT(func(v AlarmruleAlarmAction) []string { return v.NotificationLists }).(pulumi.StringArrayOutput)
 }
 
-// specifies the type of action triggered by an alarm. the value is notification.
+// Specifies the type of action triggered by an alarm. the value is notification.
 // notification: indicates that a notification will be sent to the user.
 func (o AlarmruleAlarmActionOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v AlarmruleAlarmAction) string { return v.Type }).(pulumi.StringOutput)
@@ -123,6 +123,10 @@ func (o AlarmruleAlarmActionArrayOutput) Index(i pulumi.IntInput) AlarmruleAlarm
 }
 
 type AlarmruleCondition struct {
+	// Specifies the alarm severity of the condition. The value can be 1, 2, 3 or 4,
+	// which indicates *critical*, *major*, *minor*, and *informational*, respectively.
+	// The default value is 2.
+	AlarmLevel *int `pulumi:"alarmLevel"`
 	// Specifies the comparison condition of alarm thresholds. The value can be >,
 	// =, <, >=, or <=.
 	ComparisonOperator string `pulumi:"comparisonOperator"`
@@ -130,11 +134,15 @@ type AlarmruleCondition struct {
 	Count int `pulumi:"count"`
 	// Specifies the data rollup methods. The value can be max, min, average, sum, and vaiance.
 	Filter string `pulumi:"filter"`
+	// Specifies the metric name of the condition. The value can be a string of
+	// 1 to 64 characters that must start with a letter and contain only letters, digits, and underscores (_).
+	// For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
+	MetricName *string `pulumi:"metricName"`
 	// Specifies the alarm checking period in seconds. The value can be 0, 1, 300, 1200, 3600, 14400,
 	// and 86400.
 	Period int `pulumi:"period"`
 	// Specifies the interval for triggering an alarm if the alarm persists.
-	// Changing this creates a new resource. Possible values are as follows:
+	// Possible values are as follows:
 	// + **0**: Cloud Eye triggers the alarm only once;
 	// + **300**: Cloud Eye triggers the alarm every 5 minutes;
 	// + **600**: Cloud Eye triggers the alarm every 10 minutes;
@@ -146,12 +154,12 @@ type AlarmruleCondition struct {
 	// + **43200**: Cloud Eye triggers the alarm every 12 hour;
 	// + **86400**: Cloud Eye triggers the alarm every day.
 	SuppressDuration *int `pulumi:"suppressDuration"`
-	// Specifies the data unit. Changing this creates a new resource.
+	// Specifies the data unit.
 	// For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
 	Unit *string `pulumi:"unit"`
 	// Specifies the alarm threshold. The value ranges from 0 to Number of
-	// 1.7976931348623157e+308.
-	Value int `pulumi:"value"`
+	// 1.7976931348623157e+108.
+	Value float64 `pulumi:"value"`
 }
 
 // AlarmruleConditionInput is an input type that accepts AlarmruleConditionArgs and AlarmruleConditionOutput values.
@@ -166,6 +174,10 @@ type AlarmruleConditionInput interface {
 }
 
 type AlarmruleConditionArgs struct {
+	// Specifies the alarm severity of the condition. The value can be 1, 2, 3 or 4,
+	// which indicates *critical*, *major*, *minor*, and *informational*, respectively.
+	// The default value is 2.
+	AlarmLevel pulumi.IntPtrInput `pulumi:"alarmLevel"`
 	// Specifies the comparison condition of alarm thresholds. The value can be >,
 	// =, <, >=, or <=.
 	ComparisonOperator pulumi.StringInput `pulumi:"comparisonOperator"`
@@ -173,11 +185,15 @@ type AlarmruleConditionArgs struct {
 	Count pulumi.IntInput `pulumi:"count"`
 	// Specifies the data rollup methods. The value can be max, min, average, sum, and vaiance.
 	Filter pulumi.StringInput `pulumi:"filter"`
+	// Specifies the metric name of the condition. The value can be a string of
+	// 1 to 64 characters that must start with a letter and contain only letters, digits, and underscores (_).
+	// For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
+	MetricName pulumi.StringPtrInput `pulumi:"metricName"`
 	// Specifies the alarm checking period in seconds. The value can be 0, 1, 300, 1200, 3600, 14400,
 	// and 86400.
 	Period pulumi.IntInput `pulumi:"period"`
 	// Specifies the interval for triggering an alarm if the alarm persists.
-	// Changing this creates a new resource. Possible values are as follows:
+	// Possible values are as follows:
 	// + **0**: Cloud Eye triggers the alarm only once;
 	// + **300**: Cloud Eye triggers the alarm every 5 minutes;
 	// + **600**: Cloud Eye triggers the alarm every 10 minutes;
@@ -189,12 +205,12 @@ type AlarmruleConditionArgs struct {
 	// + **43200**: Cloud Eye triggers the alarm every 12 hour;
 	// + **86400**: Cloud Eye triggers the alarm every day.
 	SuppressDuration pulumi.IntPtrInput `pulumi:"suppressDuration"`
-	// Specifies the data unit. Changing this creates a new resource.
+	// Specifies the data unit.
 	// For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
 	Unit pulumi.StringPtrInput `pulumi:"unit"`
 	// Specifies the alarm threshold. The value ranges from 0 to Number of
-	// 1.7976931348623157e+308.
-	Value pulumi.IntInput `pulumi:"value"`
+	// 1.7976931348623157e+108.
+	Value pulumi.Float64Input `pulumi:"value"`
 }
 
 func (AlarmruleConditionArgs) ElementType() reflect.Type {
@@ -209,45 +225,29 @@ func (i AlarmruleConditionArgs) ToAlarmruleConditionOutputWithContext(ctx contex
 	return pulumi.ToOutputWithContext(ctx, i).(AlarmruleConditionOutput)
 }
 
-func (i AlarmruleConditionArgs) ToAlarmruleConditionPtrOutput() AlarmruleConditionPtrOutput {
-	return i.ToAlarmruleConditionPtrOutputWithContext(context.Background())
-}
-
-func (i AlarmruleConditionArgs) ToAlarmruleConditionPtrOutputWithContext(ctx context.Context) AlarmruleConditionPtrOutput {
-	return pulumi.ToOutputWithContext(ctx, i).(AlarmruleConditionOutput).ToAlarmruleConditionPtrOutputWithContext(ctx)
-}
-
-// AlarmruleConditionPtrInput is an input type that accepts AlarmruleConditionArgs, AlarmruleConditionPtr and AlarmruleConditionPtrOutput values.
-// You can construct a concrete instance of `AlarmruleConditionPtrInput` via:
+// AlarmruleConditionArrayInput is an input type that accepts AlarmruleConditionArray and AlarmruleConditionArrayOutput values.
+// You can construct a concrete instance of `AlarmruleConditionArrayInput` via:
 //
-//	        AlarmruleConditionArgs{...}
-//
-//	or:
-//
-//	        nil
-type AlarmruleConditionPtrInput interface {
+//	AlarmruleConditionArray{ AlarmruleConditionArgs{...} }
+type AlarmruleConditionArrayInput interface {
 	pulumi.Input
 
-	ToAlarmruleConditionPtrOutput() AlarmruleConditionPtrOutput
-	ToAlarmruleConditionPtrOutputWithContext(context.Context) AlarmruleConditionPtrOutput
+	ToAlarmruleConditionArrayOutput() AlarmruleConditionArrayOutput
+	ToAlarmruleConditionArrayOutputWithContext(context.Context) AlarmruleConditionArrayOutput
 }
 
-type alarmruleConditionPtrType AlarmruleConditionArgs
+type AlarmruleConditionArray []AlarmruleConditionInput
 
-func AlarmruleConditionPtr(v *AlarmruleConditionArgs) AlarmruleConditionPtrInput {
-	return (*alarmruleConditionPtrType)(v)
+func (AlarmruleConditionArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]AlarmruleCondition)(nil)).Elem()
 }
 
-func (*alarmruleConditionPtrType) ElementType() reflect.Type {
-	return reflect.TypeOf((**AlarmruleCondition)(nil)).Elem()
+func (i AlarmruleConditionArray) ToAlarmruleConditionArrayOutput() AlarmruleConditionArrayOutput {
+	return i.ToAlarmruleConditionArrayOutputWithContext(context.Background())
 }
 
-func (i *alarmruleConditionPtrType) ToAlarmruleConditionPtrOutput() AlarmruleConditionPtrOutput {
-	return i.ToAlarmruleConditionPtrOutputWithContext(context.Background())
-}
-
-func (i *alarmruleConditionPtrType) ToAlarmruleConditionPtrOutputWithContext(ctx context.Context) AlarmruleConditionPtrOutput {
-	return pulumi.ToOutputWithContext(ctx, i).(AlarmruleConditionPtrOutput)
+func (i AlarmruleConditionArray) ToAlarmruleConditionArrayOutputWithContext(ctx context.Context) AlarmruleConditionArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(AlarmruleConditionArrayOutput)
 }
 
 type AlarmruleConditionOutput struct{ *pulumi.OutputState }
@@ -264,14 +264,11 @@ func (o AlarmruleConditionOutput) ToAlarmruleConditionOutputWithContext(ctx cont
 	return o
 }
 
-func (o AlarmruleConditionOutput) ToAlarmruleConditionPtrOutput() AlarmruleConditionPtrOutput {
-	return o.ToAlarmruleConditionPtrOutputWithContext(context.Background())
-}
-
-func (o AlarmruleConditionOutput) ToAlarmruleConditionPtrOutputWithContext(ctx context.Context) AlarmruleConditionPtrOutput {
-	return o.ApplyTWithContext(ctx, func(_ context.Context, v AlarmruleCondition) *AlarmruleCondition {
-		return &v
-	}).(AlarmruleConditionPtrOutput)
+// Specifies the alarm severity of the condition. The value can be 1, 2, 3 or 4,
+// which indicates *critical*, *major*, *minor*, and *informational*, respectively.
+// The default value is 2.
+func (o AlarmruleConditionOutput) AlarmLevel() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v AlarmruleCondition) *int { return v.AlarmLevel }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the comparison condition of alarm thresholds. The value can be >,
@@ -290,6 +287,13 @@ func (o AlarmruleConditionOutput) Filter() pulumi.StringOutput {
 	return o.ApplyT(func(v AlarmruleCondition) string { return v.Filter }).(pulumi.StringOutput)
 }
 
+// Specifies the metric name of the condition. The value can be a string of
+// 1 to 64 characters that must start with a letter and contain only letters, digits, and underscores (_).
+// For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
+func (o AlarmruleConditionOutput) MetricName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v AlarmruleCondition) *string { return v.MetricName }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the alarm checking period in seconds. The value can be 0, 1, 300, 1200, 3600, 14400,
 // and 86400.
 func (o AlarmruleConditionOutput) Period() pulumi.IntOutput {
@@ -297,7 +301,7 @@ func (o AlarmruleConditionOutput) Period() pulumi.IntOutput {
 }
 
 // Specifies the interval for triggering an alarm if the alarm persists.
-// Changing this creates a new resource. Possible values are as follows:
+// Possible values are as follows:
 // + **0**: Cloud Eye triggers the alarm only once;
 // + **300**: Cloud Eye triggers the alarm every 5 minutes;
 // + **600**: Cloud Eye triggers the alarm every 10 minutes;
@@ -312,132 +316,43 @@ func (o AlarmruleConditionOutput) SuppressDuration() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v AlarmruleCondition) *int { return v.SuppressDuration }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the data unit. Changing this creates a new resource.
+// Specifies the data unit.
 // For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
 func (o AlarmruleConditionOutput) Unit() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v AlarmruleCondition) *string { return v.Unit }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the alarm threshold. The value ranges from 0 to Number of
-// 1.7976931348623157e+308.
-func (o AlarmruleConditionOutput) Value() pulumi.IntOutput {
-	return o.ApplyT(func(v AlarmruleCondition) int { return v.Value }).(pulumi.IntOutput)
+// 1.7976931348623157e+108.
+func (o AlarmruleConditionOutput) Value() pulumi.Float64Output {
+	return o.ApplyT(func(v AlarmruleCondition) float64 { return v.Value }).(pulumi.Float64Output)
 }
 
-type AlarmruleConditionPtrOutput struct{ *pulumi.OutputState }
+type AlarmruleConditionArrayOutput struct{ *pulumi.OutputState }
 
-func (AlarmruleConditionPtrOutput) ElementType() reflect.Type {
-	return reflect.TypeOf((**AlarmruleCondition)(nil)).Elem()
+func (AlarmruleConditionArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]AlarmruleCondition)(nil)).Elem()
 }
 
-func (o AlarmruleConditionPtrOutput) ToAlarmruleConditionPtrOutput() AlarmruleConditionPtrOutput {
+func (o AlarmruleConditionArrayOutput) ToAlarmruleConditionArrayOutput() AlarmruleConditionArrayOutput {
 	return o
 }
 
-func (o AlarmruleConditionPtrOutput) ToAlarmruleConditionPtrOutputWithContext(ctx context.Context) AlarmruleConditionPtrOutput {
+func (o AlarmruleConditionArrayOutput) ToAlarmruleConditionArrayOutputWithContext(ctx context.Context) AlarmruleConditionArrayOutput {
 	return o
 }
 
-func (o AlarmruleConditionPtrOutput) Elem() AlarmruleConditionOutput {
-	return o.ApplyT(func(v *AlarmruleCondition) AlarmruleCondition {
-		if v != nil {
-			return *v
-		}
-		var ret AlarmruleCondition
-		return ret
+func (o AlarmruleConditionArrayOutput) Index(i pulumi.IntInput) AlarmruleConditionOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) AlarmruleCondition {
+		return vs[0].([]AlarmruleCondition)[vs[1].(int)]
 	}).(AlarmruleConditionOutput)
-}
-
-// Specifies the comparison condition of alarm thresholds. The value can be >,
-// =, <, >=, or <=.
-func (o AlarmruleConditionPtrOutput) ComparisonOperator() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *AlarmruleCondition) *string {
-		if v == nil {
-			return nil
-		}
-		return &v.ComparisonOperator
-	}).(pulumi.StringPtrOutput)
-}
-
-// Specifies the number of consecutive occurrence times. The value ranges from 1 to 5.
-func (o AlarmruleConditionPtrOutput) Count() pulumi.IntPtrOutput {
-	return o.ApplyT(func(v *AlarmruleCondition) *int {
-		if v == nil {
-			return nil
-		}
-		return &v.Count
-	}).(pulumi.IntPtrOutput)
-}
-
-// Specifies the data rollup methods. The value can be max, min, average, sum, and vaiance.
-func (o AlarmruleConditionPtrOutput) Filter() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *AlarmruleCondition) *string {
-		if v == nil {
-			return nil
-		}
-		return &v.Filter
-	}).(pulumi.StringPtrOutput)
-}
-
-// Specifies the alarm checking period in seconds. The value can be 0, 1, 300, 1200, 3600, 14400,
-// and 86400.
-func (o AlarmruleConditionPtrOutput) Period() pulumi.IntPtrOutput {
-	return o.ApplyT(func(v *AlarmruleCondition) *int {
-		if v == nil {
-			return nil
-		}
-		return &v.Period
-	}).(pulumi.IntPtrOutput)
-}
-
-// Specifies the interval for triggering an alarm if the alarm persists.
-// Changing this creates a new resource. Possible values are as follows:
-// + **0**: Cloud Eye triggers the alarm only once;
-// + **300**: Cloud Eye triggers the alarm every 5 minutes;
-// + **600**: Cloud Eye triggers the alarm every 10 minutes;
-// + **900**: Cloud Eye triggers the alarm every 15 minutes;
-// + **1800**: Cloud Eye triggers the alarm every 30 minutes;
-// + **3600**: Cloud Eye triggers the alarm every hour;
-// + **10800**: Cloud Eye triggers the alarm every 3 hours;
-// + **21600**: Cloud Eye triggers the alarm every 6 hours;
-// + **43200**: Cloud Eye triggers the alarm every 12 hour;
-// + **86400**: Cloud Eye triggers the alarm every day.
-func (o AlarmruleConditionPtrOutput) SuppressDuration() pulumi.IntPtrOutput {
-	return o.ApplyT(func(v *AlarmruleCondition) *int {
-		if v == nil {
-			return nil
-		}
-		return v.SuppressDuration
-	}).(pulumi.IntPtrOutput)
-}
-
-// Specifies the data unit. Changing this creates a new resource.
-// For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
-func (o AlarmruleConditionPtrOutput) Unit() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *AlarmruleCondition) *string {
-		if v == nil {
-			return nil
-		}
-		return v.Unit
-	}).(pulumi.StringPtrOutput)
-}
-
-// Specifies the alarm threshold. The value ranges from 0 to Number of
-// 1.7976931348623157e+308.
-func (o AlarmruleConditionPtrOutput) Value() pulumi.IntPtrOutput {
-	return o.ApplyT(func(v *AlarmruleCondition) *int {
-		if v == nil {
-			return nil
-		}
-		return &v.Value
-	}).(pulumi.IntPtrOutput)
 }
 
 type AlarmruleInsufficientdataAction struct {
 	// specifies the list of objects to be notified if the alarm status changes, the
 	// maximum length is 5.
 	NotificationLists []string `pulumi:"notificationLists"`
-	// specifies the type of action triggered by an alarm. the value is notification.
+	// Specifies the type of action triggered by an alarm. the value is notification.
 	// notification: indicates that a notification will be sent to the user.
 	Type string `pulumi:"type"`
 }
@@ -457,7 +372,7 @@ type AlarmruleInsufficientdataActionArgs struct {
 	// specifies the list of objects to be notified if the alarm status changes, the
 	// maximum length is 5.
 	NotificationLists pulumi.StringArrayInput `pulumi:"notificationLists"`
-	// specifies the type of action triggered by an alarm. the value is notification.
+	// Specifies the type of action triggered by an alarm. the value is notification.
 	// notification: indicates that a notification will be sent to the user.
 	Type pulumi.StringInput `pulumi:"type"`
 }
@@ -519,7 +434,7 @@ func (o AlarmruleInsufficientdataActionOutput) NotificationLists() pulumi.String
 	return o.ApplyT(func(v AlarmruleInsufficientdataAction) []string { return v.NotificationLists }).(pulumi.StringArrayOutput)
 }
 
-// specifies the type of action triggered by an alarm. the value is notification.
+// Specifies the type of action triggered by an alarm. the value is notification.
 // notification: indicates that a notification will be sent to the user.
 func (o AlarmruleInsufficientdataActionOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v AlarmruleInsufficientdataAction) string { return v.Type }).(pulumi.StringOutput)
@@ -547,13 +462,11 @@ func (o AlarmruleInsufficientdataActionArrayOutput) Index(i pulumi.IntInput) Ala
 
 type AlarmruleMetric struct {
 	// Specifies the list of metric dimensions. The structure is described below.
-	// Changing this creates a new resource.
 	Dimensions []AlarmruleMetricDimension `pulumi:"dimensions"`
-	// Specifies the metric name. The value can be a string of 1 to 64
-	// characters that must start with a letter and contain only letters, digits, and underscores (_).
-	// Changing this creates a new resource.
+	// Specifies the metric name of the condition. The value can be a string of
+	// 1 to 64 characters that must start with a letter and contain only letters, digits, and underscores (_).
 	// For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
-	MetricName string `pulumi:"metricName"`
+	MetricName *string `pulumi:"metricName"`
 	// Specifies the namespace in **service.item** format. **service** and **item**
 	// each must be a string that starts with a letter and contains only letters, digits, and underscores (_).
 	// Changing this creates a new resource.
@@ -574,13 +487,11 @@ type AlarmruleMetricInput interface {
 
 type AlarmruleMetricArgs struct {
 	// Specifies the list of metric dimensions. The structure is described below.
-	// Changing this creates a new resource.
 	Dimensions AlarmruleMetricDimensionArrayInput `pulumi:"dimensions"`
-	// Specifies the metric name. The value can be a string of 1 to 64
-	// characters that must start with a letter and contain only letters, digits, and underscores (_).
-	// Changing this creates a new resource.
+	// Specifies the metric name of the condition. The value can be a string of
+	// 1 to 64 characters that must start with a letter and contain only letters, digits, and underscores (_).
 	// For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
-	MetricName pulumi.StringInput `pulumi:"metricName"`
+	MetricName pulumi.StringPtrInput `pulumi:"metricName"`
 	// Specifies the namespace in **service.item** format. **service** and **item**
 	// each must be a string that starts with a letter and contains only letters, digits, and underscores (_).
 	// Changing this creates a new resource.
@@ -666,17 +577,15 @@ func (o AlarmruleMetricOutput) ToAlarmruleMetricPtrOutputWithContext(ctx context
 }
 
 // Specifies the list of metric dimensions. The structure is described below.
-// Changing this creates a new resource.
 func (o AlarmruleMetricOutput) Dimensions() AlarmruleMetricDimensionArrayOutput {
 	return o.ApplyT(func(v AlarmruleMetric) []AlarmruleMetricDimension { return v.Dimensions }).(AlarmruleMetricDimensionArrayOutput)
 }
 
-// Specifies the metric name. The value can be a string of 1 to 64
-// characters that must start with a letter and contain only letters, digits, and underscores (_).
-// Changing this creates a new resource.
+// Specifies the metric name of the condition. The value can be a string of
+// 1 to 64 characters that must start with a letter and contain only letters, digits, and underscores (_).
 // For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
-func (o AlarmruleMetricOutput) MetricName() pulumi.StringOutput {
-	return o.ApplyT(func(v AlarmruleMetric) string { return v.MetricName }).(pulumi.StringOutput)
+func (o AlarmruleMetricOutput) MetricName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v AlarmruleMetric) *string { return v.MetricName }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the namespace in **service.item** format. **service** and **item**
@@ -712,7 +621,6 @@ func (o AlarmruleMetricPtrOutput) Elem() AlarmruleMetricOutput {
 }
 
 // Specifies the list of metric dimensions. The structure is described below.
-// Changing this creates a new resource.
 func (o AlarmruleMetricPtrOutput) Dimensions() AlarmruleMetricDimensionArrayOutput {
 	return o.ApplyT(func(v *AlarmruleMetric) []AlarmruleMetricDimension {
 		if v == nil {
@@ -722,16 +630,15 @@ func (o AlarmruleMetricPtrOutput) Dimensions() AlarmruleMetricDimensionArrayOutp
 	}).(AlarmruleMetricDimensionArrayOutput)
 }
 
-// Specifies the metric name. The value can be a string of 1 to 64
-// characters that must start with a letter and contain only letters, digits, and underscores (_).
-// Changing this creates a new resource.
+// Specifies the metric name of the condition. The value can be a string of
+// 1 to 64 characters that must start with a letter and contain only letters, digits, and underscores (_).
 // For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
 func (o AlarmruleMetricPtrOutput) MetricName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *AlarmruleMetric) *string {
 		if v == nil {
 			return nil
 		}
-		return &v.MetricName
+		return v.MetricName
 	}).(pulumi.StringPtrOutput)
 }
 
@@ -751,11 +658,10 @@ func (o AlarmruleMetricPtrOutput) Namespace() pulumi.StringPtrOutput {
 type AlarmruleMetricDimension struct {
 	// Specifies the dimension name. The value can be a string of 1 to 32 characters
 	// that must start with a letter and contain only letters, digits, underscores (_), and hyphens (-).
-	// Changing this creates a new resource.
 	Name string `pulumi:"name"`
 	// Specifies the alarm threshold. The value ranges from 0 to Number of
-	// 1.7976931348623157e+308.
-	Value string `pulumi:"value"`
+	// 1.7976931348623157e+108.
+	Value *string `pulumi:"value"`
 }
 
 // AlarmruleMetricDimensionInput is an input type that accepts AlarmruleMetricDimensionArgs and AlarmruleMetricDimensionOutput values.
@@ -772,11 +678,10 @@ type AlarmruleMetricDimensionInput interface {
 type AlarmruleMetricDimensionArgs struct {
 	// Specifies the dimension name. The value can be a string of 1 to 32 characters
 	// that must start with a letter and contain only letters, digits, underscores (_), and hyphens (-).
-	// Changing this creates a new resource.
 	Name pulumi.StringInput `pulumi:"name"`
 	// Specifies the alarm threshold. The value ranges from 0 to Number of
-	// 1.7976931348623157e+308.
-	Value pulumi.StringInput `pulumi:"value"`
+	// 1.7976931348623157e+108.
+	Value pulumi.StringPtrInput `pulumi:"value"`
 }
 
 func (AlarmruleMetricDimensionArgs) ElementType() reflect.Type {
@@ -832,15 +737,14 @@ func (o AlarmruleMetricDimensionOutput) ToAlarmruleMetricDimensionOutputWithCont
 
 // Specifies the dimension name. The value can be a string of 1 to 32 characters
 // that must start with a letter and contain only letters, digits, underscores (_), and hyphens (-).
-// Changing this creates a new resource.
 func (o AlarmruleMetricDimensionOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v AlarmruleMetricDimension) string { return v.Name }).(pulumi.StringOutput)
 }
 
 // Specifies the alarm threshold. The value ranges from 0 to Number of
-// 1.7976931348623157e+308.
-func (o AlarmruleMetricDimensionOutput) Value() pulumi.StringOutput {
-	return o.ApplyT(func(v AlarmruleMetricDimension) string { return v.Value }).(pulumi.StringOutput)
+// 1.7976931348623157e+108.
+func (o AlarmruleMetricDimensionOutput) Value() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v AlarmruleMetricDimension) *string { return v.Value }).(pulumi.StringPtrOutput)
 }
 
 type AlarmruleMetricDimensionArrayOutput struct{ *pulumi.OutputState }
@@ -867,7 +771,7 @@ type AlarmruleOkAction struct {
 	// specifies the list of objects to be notified if the alarm status changes, the
 	// maximum length is 5.
 	NotificationLists []string `pulumi:"notificationLists"`
-	// specifies the type of action triggered by an alarm. the value is notification.
+	// Specifies the type of action triggered by an alarm. the value is notification.
 	// notification: indicates that a notification will be sent to the user.
 	Type string `pulumi:"type"`
 }
@@ -887,7 +791,7 @@ type AlarmruleOkActionArgs struct {
 	// specifies the list of objects to be notified if the alarm status changes, the
 	// maximum length is 5.
 	NotificationLists pulumi.StringArrayInput `pulumi:"notificationLists"`
-	// specifies the type of action triggered by an alarm. the value is notification.
+	// Specifies the type of action triggered by an alarm. the value is notification.
 	// notification: indicates that a notification will be sent to the user.
 	Type pulumi.StringInput `pulumi:"type"`
 }
@@ -949,7 +853,7 @@ func (o AlarmruleOkActionOutput) NotificationLists() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v AlarmruleOkAction) []string { return v.NotificationLists }).(pulumi.StringArrayOutput)
 }
 
-// specifies the type of action triggered by an alarm. the value is notification.
+// Specifies the type of action triggered by an alarm. the value is notification.
 // notification: indicates that a notification will be sent to the user.
 func (o AlarmruleOkActionOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v AlarmruleOkAction) string { return v.Type }).(pulumi.StringOutput)
@@ -973,6 +877,215 @@ func (o AlarmruleOkActionArrayOutput) Index(i pulumi.IntInput) AlarmruleOkAction
 	return pulumi.All(o, i).ApplyT(func(vs []interface{}) AlarmruleOkAction {
 		return vs[0].([]AlarmruleOkAction)[vs[1].(int)]
 	}).(AlarmruleOkActionOutput)
+}
+
+type AlarmruleResource struct {
+	// Specifies the list of metric dimensions. The structure is described below.
+	Dimensions []AlarmruleResourceDimension `pulumi:"dimensions"`
+}
+
+// AlarmruleResourceInput is an input type that accepts AlarmruleResourceArgs and AlarmruleResourceOutput values.
+// You can construct a concrete instance of `AlarmruleResourceInput` via:
+//
+//	AlarmruleResourceArgs{...}
+type AlarmruleResourceInput interface {
+	pulumi.Input
+
+	ToAlarmruleResourceOutput() AlarmruleResourceOutput
+	ToAlarmruleResourceOutputWithContext(context.Context) AlarmruleResourceOutput
+}
+
+type AlarmruleResourceArgs struct {
+	// Specifies the list of metric dimensions. The structure is described below.
+	Dimensions AlarmruleResourceDimensionArrayInput `pulumi:"dimensions"`
+}
+
+func (AlarmruleResourceArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*AlarmruleResource)(nil)).Elem()
+}
+
+func (i AlarmruleResourceArgs) ToAlarmruleResourceOutput() AlarmruleResourceOutput {
+	return i.ToAlarmruleResourceOutputWithContext(context.Background())
+}
+
+func (i AlarmruleResourceArgs) ToAlarmruleResourceOutputWithContext(ctx context.Context) AlarmruleResourceOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(AlarmruleResourceOutput)
+}
+
+// AlarmruleResourceArrayInput is an input type that accepts AlarmruleResourceArray and AlarmruleResourceArrayOutput values.
+// You can construct a concrete instance of `AlarmruleResourceArrayInput` via:
+//
+//	AlarmruleResourceArray{ AlarmruleResourceArgs{...} }
+type AlarmruleResourceArrayInput interface {
+	pulumi.Input
+
+	ToAlarmruleResourceArrayOutput() AlarmruleResourceArrayOutput
+	ToAlarmruleResourceArrayOutputWithContext(context.Context) AlarmruleResourceArrayOutput
+}
+
+type AlarmruleResourceArray []AlarmruleResourceInput
+
+func (AlarmruleResourceArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]AlarmruleResource)(nil)).Elem()
+}
+
+func (i AlarmruleResourceArray) ToAlarmruleResourceArrayOutput() AlarmruleResourceArrayOutput {
+	return i.ToAlarmruleResourceArrayOutputWithContext(context.Background())
+}
+
+func (i AlarmruleResourceArray) ToAlarmruleResourceArrayOutputWithContext(ctx context.Context) AlarmruleResourceArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(AlarmruleResourceArrayOutput)
+}
+
+type AlarmruleResourceOutput struct{ *pulumi.OutputState }
+
+func (AlarmruleResourceOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*AlarmruleResource)(nil)).Elem()
+}
+
+func (o AlarmruleResourceOutput) ToAlarmruleResourceOutput() AlarmruleResourceOutput {
+	return o
+}
+
+func (o AlarmruleResourceOutput) ToAlarmruleResourceOutputWithContext(ctx context.Context) AlarmruleResourceOutput {
+	return o
+}
+
+// Specifies the list of metric dimensions. The structure is described below.
+func (o AlarmruleResourceOutput) Dimensions() AlarmruleResourceDimensionArrayOutput {
+	return o.ApplyT(func(v AlarmruleResource) []AlarmruleResourceDimension { return v.Dimensions }).(AlarmruleResourceDimensionArrayOutput)
+}
+
+type AlarmruleResourceArrayOutput struct{ *pulumi.OutputState }
+
+func (AlarmruleResourceArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]AlarmruleResource)(nil)).Elem()
+}
+
+func (o AlarmruleResourceArrayOutput) ToAlarmruleResourceArrayOutput() AlarmruleResourceArrayOutput {
+	return o
+}
+
+func (o AlarmruleResourceArrayOutput) ToAlarmruleResourceArrayOutputWithContext(ctx context.Context) AlarmruleResourceArrayOutput {
+	return o
+}
+
+func (o AlarmruleResourceArrayOutput) Index(i pulumi.IntInput) AlarmruleResourceOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) AlarmruleResource {
+		return vs[0].([]AlarmruleResource)[vs[1].(int)]
+	}).(AlarmruleResourceOutput)
+}
+
+type AlarmruleResourceDimension struct {
+	// Specifies the dimension name. The value can be a string of 1 to 32 characters
+	// that must start with a letter and contain only letters, digits, underscores (_), and hyphens (-).
+	Name string `pulumi:"name"`
+	// Specifies the alarm threshold. The value ranges from 0 to Number of
+	// 1.7976931348623157e+108.
+	Value *string `pulumi:"value"`
+}
+
+// AlarmruleResourceDimensionInput is an input type that accepts AlarmruleResourceDimensionArgs and AlarmruleResourceDimensionOutput values.
+// You can construct a concrete instance of `AlarmruleResourceDimensionInput` via:
+//
+//	AlarmruleResourceDimensionArgs{...}
+type AlarmruleResourceDimensionInput interface {
+	pulumi.Input
+
+	ToAlarmruleResourceDimensionOutput() AlarmruleResourceDimensionOutput
+	ToAlarmruleResourceDimensionOutputWithContext(context.Context) AlarmruleResourceDimensionOutput
+}
+
+type AlarmruleResourceDimensionArgs struct {
+	// Specifies the dimension name. The value can be a string of 1 to 32 characters
+	// that must start with a letter and contain only letters, digits, underscores (_), and hyphens (-).
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the alarm threshold. The value ranges from 0 to Number of
+	// 1.7976931348623157e+108.
+	Value pulumi.StringPtrInput `pulumi:"value"`
+}
+
+func (AlarmruleResourceDimensionArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*AlarmruleResourceDimension)(nil)).Elem()
+}
+
+func (i AlarmruleResourceDimensionArgs) ToAlarmruleResourceDimensionOutput() AlarmruleResourceDimensionOutput {
+	return i.ToAlarmruleResourceDimensionOutputWithContext(context.Background())
+}
+
+func (i AlarmruleResourceDimensionArgs) ToAlarmruleResourceDimensionOutputWithContext(ctx context.Context) AlarmruleResourceDimensionOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(AlarmruleResourceDimensionOutput)
+}
+
+// AlarmruleResourceDimensionArrayInput is an input type that accepts AlarmruleResourceDimensionArray and AlarmruleResourceDimensionArrayOutput values.
+// You can construct a concrete instance of `AlarmruleResourceDimensionArrayInput` via:
+//
+//	AlarmruleResourceDimensionArray{ AlarmruleResourceDimensionArgs{...} }
+type AlarmruleResourceDimensionArrayInput interface {
+	pulumi.Input
+
+	ToAlarmruleResourceDimensionArrayOutput() AlarmruleResourceDimensionArrayOutput
+	ToAlarmruleResourceDimensionArrayOutputWithContext(context.Context) AlarmruleResourceDimensionArrayOutput
+}
+
+type AlarmruleResourceDimensionArray []AlarmruleResourceDimensionInput
+
+func (AlarmruleResourceDimensionArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]AlarmruleResourceDimension)(nil)).Elem()
+}
+
+func (i AlarmruleResourceDimensionArray) ToAlarmruleResourceDimensionArrayOutput() AlarmruleResourceDimensionArrayOutput {
+	return i.ToAlarmruleResourceDimensionArrayOutputWithContext(context.Background())
+}
+
+func (i AlarmruleResourceDimensionArray) ToAlarmruleResourceDimensionArrayOutputWithContext(ctx context.Context) AlarmruleResourceDimensionArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(AlarmruleResourceDimensionArrayOutput)
+}
+
+type AlarmruleResourceDimensionOutput struct{ *pulumi.OutputState }
+
+func (AlarmruleResourceDimensionOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*AlarmruleResourceDimension)(nil)).Elem()
+}
+
+func (o AlarmruleResourceDimensionOutput) ToAlarmruleResourceDimensionOutput() AlarmruleResourceDimensionOutput {
+	return o
+}
+
+func (o AlarmruleResourceDimensionOutput) ToAlarmruleResourceDimensionOutputWithContext(ctx context.Context) AlarmruleResourceDimensionOutput {
+	return o
+}
+
+// Specifies the dimension name. The value can be a string of 1 to 32 characters
+// that must start with a letter and contain only letters, digits, underscores (_), and hyphens (-).
+func (o AlarmruleResourceDimensionOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v AlarmruleResourceDimension) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the alarm threshold. The value ranges from 0 to Number of
+// 1.7976931348623157e+108.
+func (o AlarmruleResourceDimensionOutput) Value() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v AlarmruleResourceDimension) *string { return v.Value }).(pulumi.StringPtrOutput)
+}
+
+type AlarmruleResourceDimensionArrayOutput struct{ *pulumi.OutputState }
+
+func (AlarmruleResourceDimensionArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]AlarmruleResourceDimension)(nil)).Elem()
+}
+
+func (o AlarmruleResourceDimensionArrayOutput) ToAlarmruleResourceDimensionArrayOutput() AlarmruleResourceDimensionArrayOutput {
+	return o
+}
+
+func (o AlarmruleResourceDimensionArrayOutput) ToAlarmruleResourceDimensionArrayOutputWithContext(ctx context.Context) AlarmruleResourceDimensionArrayOutput {
+	return o
+}
+
+func (o AlarmruleResourceDimensionArrayOutput) Index(i pulumi.IntInput) AlarmruleResourceDimensionOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) AlarmruleResourceDimension {
+		return vs[0].([]AlarmruleResourceDimension)[vs[1].(int)]
+	}).(AlarmruleResourceDimensionOutput)
 }
 
 type MicroserviceEngineConfigCenterAddress struct {
@@ -1588,7 +1701,7 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*AlarmruleAlarmActionInput)(nil)).Elem(), AlarmruleAlarmActionArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*AlarmruleAlarmActionArrayInput)(nil)).Elem(), AlarmruleAlarmActionArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*AlarmruleConditionInput)(nil)).Elem(), AlarmruleConditionArgs{})
-	pulumi.RegisterInputType(reflect.TypeOf((*AlarmruleConditionPtrInput)(nil)).Elem(), AlarmruleConditionArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*AlarmruleConditionArrayInput)(nil)).Elem(), AlarmruleConditionArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*AlarmruleInsufficientdataActionInput)(nil)).Elem(), AlarmruleInsufficientdataActionArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*AlarmruleInsufficientdataActionArrayInput)(nil)).Elem(), AlarmruleInsufficientdataActionArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*AlarmruleMetricInput)(nil)).Elem(), AlarmruleMetricArgs{})
@@ -1597,6 +1710,10 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*AlarmruleMetricDimensionArrayInput)(nil)).Elem(), AlarmruleMetricDimensionArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*AlarmruleOkActionInput)(nil)).Elem(), AlarmruleOkActionArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*AlarmruleOkActionArrayInput)(nil)).Elem(), AlarmruleOkActionArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*AlarmruleResourceInput)(nil)).Elem(), AlarmruleResourceArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*AlarmruleResourceArrayInput)(nil)).Elem(), AlarmruleResourceArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*AlarmruleResourceDimensionInput)(nil)).Elem(), AlarmruleResourceDimensionArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*AlarmruleResourceDimensionArrayInput)(nil)).Elem(), AlarmruleResourceDimensionArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*MicroserviceEngineConfigCenterAddressInput)(nil)).Elem(), MicroserviceEngineConfigCenterAddressArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*MicroserviceEngineConfigCenterAddressArrayInput)(nil)).Elem(), MicroserviceEngineConfigCenterAddressArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*MicroserviceEngineServiceRegistryAddressInput)(nil)).Elem(), MicroserviceEngineServiceRegistryAddressArgs{})
@@ -1608,7 +1725,7 @@ func init() {
 	pulumi.RegisterOutputType(AlarmruleAlarmActionOutput{})
 	pulumi.RegisterOutputType(AlarmruleAlarmActionArrayOutput{})
 	pulumi.RegisterOutputType(AlarmruleConditionOutput{})
-	pulumi.RegisterOutputType(AlarmruleConditionPtrOutput{})
+	pulumi.RegisterOutputType(AlarmruleConditionArrayOutput{})
 	pulumi.RegisterOutputType(AlarmruleInsufficientdataActionOutput{})
 	pulumi.RegisterOutputType(AlarmruleInsufficientdataActionArrayOutput{})
 	pulumi.RegisterOutputType(AlarmruleMetricOutput{})
@@ -1617,6 +1734,10 @@ func init() {
 	pulumi.RegisterOutputType(AlarmruleMetricDimensionArrayOutput{})
 	pulumi.RegisterOutputType(AlarmruleOkActionOutput{})
 	pulumi.RegisterOutputType(AlarmruleOkActionArrayOutput{})
+	pulumi.RegisterOutputType(AlarmruleResourceOutput{})
+	pulumi.RegisterOutputType(AlarmruleResourceArrayOutput{})
+	pulumi.RegisterOutputType(AlarmruleResourceDimensionOutput{})
+	pulumi.RegisterOutputType(AlarmruleResourceDimensionArrayOutput{})
 	pulumi.RegisterOutputType(MicroserviceEngineConfigCenterAddressOutput{})
 	pulumi.RegisterOutputType(MicroserviceEngineConfigCenterAddressArrayOutput{})
 	pulumi.RegisterOutputType(MicroserviceEngineServiceRegistryAddressOutput{})

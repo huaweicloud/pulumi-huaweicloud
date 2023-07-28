@@ -46,6 +46,9 @@ export interface GetVpcArgs {
      * Specifies the cidr block of the desired VPC.
      */
     cidr?: string;
+    /**
+     * Specifies the enterprise project ID which the desired VPC belongs to.
+     */
     enterpriseProjectId?: string;
     /**
      * Specifies the id of the VPC to retrieve.
@@ -104,6 +107,9 @@ export interface GetVpcOutputArgs {
      * Specifies the cidr block of the desired VPC.
      */
     cidr?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID which the desired VPC belongs to.
+     */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Specifies the id of the VPC to retrieve.

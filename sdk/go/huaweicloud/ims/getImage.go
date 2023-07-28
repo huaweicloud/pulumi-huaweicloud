@@ -84,6 +84,9 @@ type LookupImageArgs struct {
 	Architecture *string `pulumi:"architecture"`
 	// Specifies the enterprise project ID of the image.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies the ECS flavor ID used to filter out available images.
+	// You can specify only one flavor ID and only ECS flavor ID is valid, BMS flavor is not supported.
+	FlavorId *string `pulumi:"flavorId"`
 	// Specifies the environment where the image is used. For a BMS image, the value is **Ironic**.
 	ImageType *string `pulumi:"imageType"`
 	// If more than one result is returned, use the latest updated image.
@@ -116,13 +119,15 @@ type LookupImageArgs struct {
 	// Search for images with a specific tag in "Key=Value" format.
 	Tag *string `pulumi:"tag"`
 	// The visibility of the image. Must be one of
-	// **public**, **private** or **shared**.
+	// **public**, **private**, **market** or **shared**.
 	Visibility *string `pulumi:"visibility"`
 }
 
 // A collection of values returned by getImage.
 type LookupImageResult struct {
 	Architecture *string `pulumi:"architecture"`
+	// The backup ID of the whole image in the CBR vault.
+	BackupId string `pulumi:"backupId"`
 	// The checksum of the data associated with the image.
 	Checksum string `pulumi:"checksum"`
 	// The format of the image's container.
@@ -134,7 +139,8 @@ type LookupImageResult struct {
 	EnterpriseProjectId string `pulumi:"enterpriseProjectId"`
 	// the trailing path after the glance endpoint that represent the location of the image or the path to retrieve
 	// it.
-	File string `pulumi:"file"`
+	File     string `pulumi:"file"`
+	FlavorId string `pulumi:"flavorId"`
 	// The provider-assigned unique ID for this managed resource.
 	Id        string `pulumi:"id"`
 	ImageType string `pulumi:"imageType"`
@@ -165,10 +171,11 @@ type LookupImageResult struct {
 	SortDirection *string `pulumi:"sortDirection"`
 	SortKey       *string `pulumi:"sortKey"`
 	// The status of the image.
-	Status     string  `pulumi:"status"`
-	Tag        *string `pulumi:"tag"`
-	UpdatedAt  string  `pulumi:"updatedAt"`
-	Visibility string  `pulumi:"visibility"`
+	Status string  `pulumi:"status"`
+	Tag    *string `pulumi:"tag"`
+	// The date when the image was last updated.
+	UpdatedAt  string `pulumi:"updatedAt"`
+	Visibility string `pulumi:"visibility"`
 }
 
 func LookupImageOutput(ctx *pulumi.Context, args LookupImageOutputArgs, opts ...pulumi.InvokeOption) LookupImageResultOutput {
@@ -190,6 +197,9 @@ type LookupImageOutputArgs struct {
 	Architecture pulumi.StringPtrInput `pulumi:"architecture"`
 	// Specifies the enterprise project ID of the image.
 	EnterpriseProjectId pulumi.StringPtrInput `pulumi:"enterpriseProjectId"`
+	// Specifies the ECS flavor ID used to filter out available images.
+	// You can specify only one flavor ID and only ECS flavor ID is valid, BMS flavor is not supported.
+	FlavorId pulumi.StringPtrInput `pulumi:"flavorId"`
 	// Specifies the environment where the image is used. For a BMS image, the value is **Ironic**.
 	ImageType pulumi.StringPtrInput `pulumi:"imageType"`
 	// If more than one result is returned, use the latest updated image.
@@ -222,7 +232,7 @@ type LookupImageOutputArgs struct {
 	// Search for images with a specific tag in "Key=Value" format.
 	Tag pulumi.StringPtrInput `pulumi:"tag"`
 	// The visibility of the image. Must be one of
-	// **public**, **private** or **shared**.
+	// **public**, **private**, **market** or **shared**.
 	Visibility pulumi.StringPtrInput `pulumi:"visibility"`
 }
 
@@ -247,6 +257,11 @@ func (o LookupImageResultOutput) ToLookupImageResultOutputWithContext(ctx contex
 
 func (o LookupImageResultOutput) Architecture() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v LookupImageResult) *string { return v.Architecture }).(pulumi.StringPtrOutput)
+}
+
+// The backup ID of the whole image in the CBR vault.
+func (o LookupImageResultOutput) BackupId() pulumi.StringOutput {
+	return o.ApplyT(func(v LookupImageResult) string { return v.BackupId }).(pulumi.StringOutput)
 }
 
 // The checksum of the data associated with the image.
@@ -277,6 +292,10 @@ func (o LookupImageResultOutput) EnterpriseProjectId() pulumi.StringOutput {
 // it.
 func (o LookupImageResultOutput) File() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupImageResult) string { return v.File }).(pulumi.StringOutput)
+}
+
+func (o LookupImageResultOutput) FlavorId() pulumi.StringOutput {
+	return o.ApplyT(func(v LookupImageResult) string { return v.FlavorId }).(pulumi.StringOutput)
 }
 
 // The provider-assigned unique ID for this managed resource.
@@ -374,6 +393,7 @@ func (o LookupImageResultOutput) Tag() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v LookupImageResult) *string { return v.Tag }).(pulumi.StringPtrOutput)
 }
 
+// The date when the image was last updated.
 func (o LookupImageResultOutput) UpdatedAt() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupImageResult) string { return v.UpdatedAt }).(pulumi.StringOutput)
 }

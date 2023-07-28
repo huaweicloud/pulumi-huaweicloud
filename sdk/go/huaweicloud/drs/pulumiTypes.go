@@ -19,8 +19,8 @@ type JobDestinationDb struct {
 	InstanceId *string `pulumi:"instanceId"`
 	// Specifies the IP of database. Changing this parameter will create a new resource.
 	Ip string `pulumi:"ip"`
-	// Specifies the job name. The name consists of 4 to 50 characters, starting with
-	// a letter. Only letters, digits, underscores (\_) and hyphens (-) are allowed.
+	// Specifies the name of database.
+	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the password of database.
 	// Changing this parameter will create a new resource.
@@ -73,8 +73,8 @@ type JobDestinationDbArgs struct {
 	InstanceId pulumi.StringPtrInput `pulumi:"instanceId"`
 	// Specifies the IP of database. Changing this parameter will create a new resource.
 	Ip pulumi.StringInput `pulumi:"ip"`
-	// Specifies the job name. The name consists of 4 to 50 characters, starting with
-	// a letter. Only letters, digits, underscores (\_) and hyphens (-) are allowed.
+	// Specifies the name of database.
+	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Specifies the password of database.
 	// Changing this parameter will create a new resource.
@@ -201,8 +201,8 @@ func (o JobDestinationDbOutput) Ip() pulumi.StringOutput {
 	return o.ApplyT(func(v JobDestinationDb) string { return v.Ip }).(pulumi.StringOutput)
 }
 
-// Specifies the job name. The name consists of 4 to 50 characters, starting with
-// a letter. Only letters, digits, underscores (\_) and hyphens (-) are allowed.
+// Specifies the name of database.
+// Changing this parameter will create a new resource.
 func (o JobDestinationDbOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v JobDestinationDb) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
@@ -322,8 +322,8 @@ func (o JobDestinationDbPtrOutput) Ip() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the job name. The name consists of 4 to 50 characters, starting with
-// a letter. Only letters, digits, underscores (\_) and hyphens (-) are allowed.
+// Specifies the name of database.
+// Changing this parameter will create a new resource.
 func (o JobDestinationDbPtrOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *JobDestinationDb) *string {
 		if v == nil {
@@ -578,8 +578,8 @@ type JobSourceDb struct {
 	InstanceId *string `pulumi:"instanceId"`
 	// Specifies the IP of database. Changing this parameter will create a new resource.
 	Ip string `pulumi:"ip"`
-	// Specifies the job name. The name consists of 4 to 50 characters, starting with
-	// a letter. Only letters, digits, underscores (\_) and hyphens (-) are allowed.
+	// Specifies the name of database.
+	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the password of database.
 	// Changing this parameter will create a new resource.
@@ -632,8 +632,8 @@ type JobSourceDbArgs struct {
 	InstanceId pulumi.StringPtrInput `pulumi:"instanceId"`
 	// Specifies the IP of database. Changing this parameter will create a new resource.
 	Ip pulumi.StringInput `pulumi:"ip"`
-	// Specifies the job name. The name consists of 4 to 50 characters, starting with
-	// a letter. Only letters, digits, underscores (\_) and hyphens (-) are allowed.
+	// Specifies the name of database.
+	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Specifies the password of database.
 	// Changing this parameter will create a new resource.
@@ -760,8 +760,8 @@ func (o JobSourceDbOutput) Ip() pulumi.StringOutput {
 	return o.ApplyT(func(v JobSourceDb) string { return v.Ip }).(pulumi.StringOutput)
 }
 
-// Specifies the job name. The name consists of 4 to 50 characters, starting with
-// a letter. Only letters, digits, underscores (\_) and hyphens (-) are allowed.
+// Specifies the name of database.
+// Changing this parameter will create a new resource.
 func (o JobSourceDbOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v JobSourceDb) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
@@ -881,8 +881,8 @@ func (o JobSourceDbPtrOutput) Ip() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the job name. The name consists of 4 to 50 characters, starting with
-// a letter. Only letters, digits, underscores (\_) and hyphens (-) are allowed.
+// Specifies the name of database.
+// Changing this parameter will create a new resource.
 func (o JobSourceDbPtrOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *JobSourceDb) *string {
 		if v == nil {

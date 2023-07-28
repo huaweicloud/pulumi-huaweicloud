@@ -72,10 +72,10 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * CCE PVC can be imported using the cluster ID, namespace and name separated by a slash, e.g.
+ * CCE PVC can be imported using the cluster ID, namespace and ID separated by slashes, e.g.
  *
  * ```sh
- *  $ pulumi import huaweicloud:Cce/pvc:Pvc test 5c20fdad-7288-11eb-b817-0255ac10158b/default/pvc_name
+ *  $ pulumi import huaweicloud:Cce/pvc:Pvc test 5c20fdad-7288-11eb-b817-0255ac10158b/default/fa540f3b-12d9-40e5-8268-04bcfed95a46
  * ```
  *
  *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`annotations`. It is generally recommended running `terraform plan` after importing a PVC. You can then decide if changes should be applied to the PVC, or the resource definition should be updated to align with the PVC. Also you can ignore changes as below. resource "huaweicloud_cce_pvc" "test" {

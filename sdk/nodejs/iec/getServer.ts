@@ -39,7 +39,7 @@ export function getServer(args: GetServerArgs, opts?: pulumi.InvokeOptions): Pro
  */
 export interface GetServerArgs {
     /**
-     * The ID of the edgecloud service.
+     * Specifies the ID of the edgecloud service.
      */
     edgecloudId?: string;
     /**
@@ -60,9 +60,6 @@ export interface GetServerResult {
      * An array of site ID and operator for the IEC server. The object structure is documented below.
      */
     readonly coverageSites: outputs.Iec.GetServerCoverageSite[];
-    /**
-     * The ID of the edgecloud service.
-     */
     readonly edgecloudId: string;
     /**
      * The Name of the edgecloud service.
@@ -80,11 +77,17 @@ export interface GetServerResult {
      * The provider-assigned unique ID for this managed resource.
      */
     readonly id: string;
+    /**
+     * The image ID of the IEC server.
+     */
     readonly imageId: string;
     /**
      * The image name of the IEC server.
      */
     readonly imageName: string;
+    /**
+     * The name of a key pair to put on the IEC server.
+     */
     readonly keyPair: string;
     readonly name: string;
     /**
@@ -104,6 +107,9 @@ export interface GetServerResult {
      * The system disk voume ID.
      */
     readonly systemDiskId: string;
+    /**
+     * The user data (information after encoding) configured during IEC server creation.
+     */
     readonly userData: string;
     /**
      * An array of one or more disks to attach to the IEC server. The object structure is documented
@@ -125,7 +131,7 @@ export function getServerOutput(args: GetServerOutputArgs, opts?: pulumi.InvokeO
  */
 export interface GetServerOutputArgs {
     /**
-     * The ID of the edgecloud service.
+     * Specifies the ID of the edgecloud service.
      */
     edgecloudId?: pulumi.Input<string>;
     /**

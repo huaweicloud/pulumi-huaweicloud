@@ -270,7 +270,7 @@ class GetNodePoolResult:
 
     @property
     @pulumi.getter
-    def tags(self) -> Optional[Mapping[str, str]]:
+    def tags(self) -> Mapping[str, str]:
         """
         Tags of a VM node, key/value pair format.
         """
@@ -323,7 +323,6 @@ def get_node_pool(cluster_id: Optional[str] = None,
                   node_pool_id: Optional[str] = None,
                   region: Optional[str] = None,
                   status: Optional[str] = None,
-                  tags: Optional[Mapping[str, str]] = None,
                   opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetNodePoolResult:
     """
     To get the specified node pool in a cluster.
@@ -348,7 +347,6 @@ def get_node_pool(cluster_id: Optional[str] = None,
     :param str region: Specifies the region in which to obtain the CCE node pools.
            If omitted, the provider-level region will be used.
     :param str status: Specifies the state of the node pool.
-    :param Mapping[str, str] tags: Tags of a VM node, key/value pair format.
     """
     __args__ = dict()
     __args__['clusterId'] = cluster_id
@@ -356,7 +354,6 @@ def get_node_pool(cluster_id: Optional[str] = None,
     __args__['nodePoolId'] = node_pool_id
     __args__['region'] = region
     __args__['status'] = status
-    __args__['tags'] = tags
     opts = pulumi.InvokeOptions.merge(_utilities.get_invoke_opts_defaults(), opts)
     __ret__ = pulumi.runtime.invoke('huaweicloud:Cce/getNodePool:getNodePool', __args__, opts=opts, typ=GetNodePoolResult).value
 
@@ -394,7 +391,6 @@ def get_node_pool_output(cluster_id: Optional[pulumi.Input[str]] = None,
                          node_pool_id: Optional[pulumi.Input[Optional[str]]] = None,
                          region: Optional[pulumi.Input[Optional[str]]] = None,
                          status: Optional[pulumi.Input[Optional[str]]] = None,
-                         tags: Optional[pulumi.Input[Optional[Mapping[str, str]]]] = None,
                          opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetNodePoolResult]:
     """
     To get the specified node pool in a cluster.
@@ -419,6 +415,5 @@ def get_node_pool_output(cluster_id: Optional[pulumi.Input[str]] = None,
     :param str region: Specifies the region in which to obtain the CCE node pools.
            If omitted, the provider-level region will be used.
     :param str status: Specifies the state of the node pool.
-    :param Mapping[str, str] tags: Tags of a VM node, key/value pair format.
     """
     ...

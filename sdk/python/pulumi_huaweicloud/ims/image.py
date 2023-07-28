@@ -14,6 +14,7 @@ __all__ = ['ImageArgs', 'Image']
 @pulumi.input_type
 class ImageArgs:
     def __init__(__self__, *,
+                 backup_id: Optional[pulumi.Input[str]] = None,
                  cmk_id: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -26,9 +27,12 @@ class ImageArgs:
                  name: Optional[pulumi.Input[str]] = None,
                  os_version: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
-                 type: Optional[pulumi.Input[str]] = None):
+                 type: Optional[pulumi.Input[str]] = None,
+                 vault_id: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Image resource.
+        :param pulumi.Input[str] backup_id: The ID of the CBR backup that needs to be converted into an image. This
+               parameter is mandatory when you create a private whole image from a CBR backup.
         :param pulumi.Input[str] cmk_id: The master key used for encrypting an image.
         :param pulumi.Input[str] description: A description of the image.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the image. Changing this creates a
@@ -37,7 +41,8 @@ class ImageArgs:
                mandatory when you create a private image from an external file uploaded to an OBS bucket. The format is *OBS bucket
                name:Image file name*.
         :param pulumi.Input[str] instance_id: The ID of the ECS that needs to be converted into an image. This
-               parameter is mandatory when you create a privete image from an ECS.
+               parameter is mandatory when you create a private image or a private whole image from an ECS.
+               If the value of `vault_id` is not empty, then a whole image will be created.
         :param pulumi.Input[bool] is_config: If automatic configuration is required, set the value to true. Otherwise, set
                the value to false.
         :param pulumi.Input[int] max_ram: The maximum memory of the image in the unit of MB.
@@ -51,7 +56,11 @@ class ImageArgs:
                from an external file uploaded to an OBS bucket.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The tags of the image.
         :param pulumi.Input[str] type: The image type. Must be one of `ECS`, `FusionCompute`, `BMS`, or `Ironic`.
+        :param pulumi.Input[str] vault_id: The ID of the vault to which an ECS is to be added or has been added.
+               This parameter is mandatory when you create a private whole image from an ECS.
         """
+        if backup_id is not None:
+            pulumi.set(__self__, "backup_id", backup_id)
         if cmk_id is not None:
             pulumi.set(__self__, "cmk_id", cmk_id)
         if description is not None:
@@ -78,6 +87,21 @@ class ImageArgs:
             pulumi.set(__self__, "tags", tags)
         if type is not None:
             pulumi.set(__self__, "type", type)
+        if vault_id is not None:
+            pulumi.set(__self__, "vault_id", vault_id)
+
+    @property
+    @pulumi.getter(name="backupId")
+    def backup_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The ID of the CBR backup that needs to be converted into an image. This
+        parameter is mandatory when you create a private whole image from a CBR backup.
+        """
+        return pulumi.get(self, "backup_id")
+
+    @backup_id.setter
+    def backup_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "backup_id", value)
 
     @property
     @pulumi.getter(name="cmkId")
@@ -135,7 +159,8 @@ class ImageArgs:
     def instance_id(self) -> Optional[pulumi.Input[str]]:
         """
         The ID of the ECS that needs to be converted into an image. This
-        parameter is mandatory when you create a privete image from an ECS.
+        parameter is mandatory when you create a private image or a private whole image from an ECS.
+        If the value of `vault_id` is not empty, then a whole image will be created.
         """
         return pulumi.get(self, "instance_id")
 
@@ -244,10 +269,24 @@ class ImageArgs:
     def type(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "type", value)
 
+    @property
+    @pulumi.getter(name="vaultId")
+    def vault_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The ID of the vault to which an ECS is to be added or has been added.
+        This parameter is mandatory when you create a private whole image from an ECS.
+        """
+        return pulumi.get(self, "vault_id")
+
+    @vault_id.setter
+    def vault_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "vault_id", value)
+
 
 @pulumi.input_type
 class _ImageState:
     def __init__(__self__, *,
+                 backup_id: Optional[pulumi.Input[str]] = None,
                  checksum: Optional[pulumi.Input[str]] = None,
                  cmk_id: Optional[pulumi.Input[str]] = None,
                  data_origin: Optional[pulumi.Input[str]] = None,
@@ -266,12 +305,16 @@ class _ImageState:
                  status: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  type: Optional[pulumi.Input[str]] = None,
+                 vault_id: Optional[pulumi.Input[str]] = None,
                  visibility: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Image resources.
+        :param pulumi.Input[str] backup_id: The ID of the CBR backup that needs to be converted into an image. This
+               parameter is mandatory when you create a private whole image from a CBR backup.
         :param pulumi.Input[str] checksum: The checksum of the data associated with the image.
         :param pulumi.Input[str] cmk_id: The master key used for encrypting an image.
-        :param pulumi.Input[str] data_origin: The image resource. The pattern can be 'instance,*instance_id*' or 'file,*image_url*'.
+        :param pulumi.Input[str] data_origin: The image resource. The pattern can be 'instance,*instance_id*', 'file,*image_url*'
+               or 'server_backup,*backup_id*'.
         :param pulumi.Input[str] description: A description of the image.
         :param pulumi.Input[str] disk_format: The image file format. The value can be `vhd`, `zvhd`, `raw`, `zvhd2`, or `qcow2`.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the image. Changing this creates a
@@ -281,7 +324,8 @@ class _ImageState:
                mandatory when you create a private image from an external file uploaded to an OBS bucket. The format is *OBS bucket
                name:Image file name*.
         :param pulumi.Input[str] instance_id: The ID of the ECS that needs to be converted into an image. This
-               parameter is mandatory when you create a privete image from an ECS.
+               parameter is mandatory when you create a private image or a private whole image from an ECS.
+               If the value of `vault_id` is not empty, then a whole image will be created.
         :param pulumi.Input[bool] is_config: If automatic configuration is required, set the value to true. Otherwise, set
                the value to false.
         :param pulumi.Input[int] max_ram: The maximum memory of the image in the unit of MB.
@@ -296,8 +340,12 @@ class _ImageState:
         :param pulumi.Input[str] status: The status of the image.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The tags of the image.
         :param pulumi.Input[str] type: The image type. Must be one of `ECS`, `FusionCompute`, `BMS`, or `Ironic`.
+        :param pulumi.Input[str] vault_id: The ID of the vault to which an ECS is to be added or has been added.
+               This parameter is mandatory when you create a private whole image from an ECS.
         :param pulumi.Input[str] visibility: Whether the image is visible to other tenants.
         """
+        if backup_id is not None:
+            pulumi.set(__self__, "backup_id", backup_id)
         if checksum is not None:
             pulumi.set(__self__, "checksum", checksum)
         if cmk_id is not None:
@@ -334,8 +382,23 @@ class _ImageState:
             pulumi.set(__self__, "tags", tags)
         if type is not None:
             pulumi.set(__self__, "type", type)
+        if vault_id is not None:
+            pulumi.set(__self__, "vault_id", vault_id)
         if visibility is not None:
             pulumi.set(__self__, "visibility", visibility)
+
+    @property
+    @pulumi.getter(name="backupId")
+    def backup_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The ID of the CBR backup that needs to be converted into an image. This
+        parameter is mandatory when you create a private whole image from a CBR backup.
+        """
+        return pulumi.get(self, "backup_id")
+
+    @backup_id.setter
+    def backup_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "backup_id", value)
 
     @property
     @pulumi.getter
@@ -365,7 +428,8 @@ class _ImageState:
     @pulumi.getter(name="dataOrigin")
     def data_origin(self) -> Optional[pulumi.Input[str]]:
         """
-        The image resource. The pattern can be 'instance,*instance_id*' or 'file,*image_url*'.
+        The image resource. The pattern can be 'instance,*instance_id*', 'file,*image_url*'
+        or 'server_backup,*backup_id*'.
         """
         return pulumi.get(self, "data_origin")
 
@@ -441,7 +505,8 @@ class _ImageState:
     def instance_id(self) -> Optional[pulumi.Input[str]]:
         """
         The ID of the ECS that needs to be converted into an image. This
-        parameter is mandatory when you create a privete image from an ECS.
+        parameter is mandatory when you create a private image or a private whole image from an ECS.
+        If the value of `vault_id` is not empty, then a whole image will be created.
         """
         return pulumi.get(self, "instance_id")
 
@@ -563,6 +628,19 @@ class _ImageState:
         pulumi.set(self, "type", value)
 
     @property
+    @pulumi.getter(name="vaultId")
+    def vault_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The ID of the vault to which an ECS is to be added or has been added.
+        This parameter is mandatory when you create a private whole image from an ECS.
+        """
+        return pulumi.get(self, "vault_id")
+
+    @vault_id.setter
+    def vault_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "vault_id", value)
+
+    @property
     @pulumi.getter
     def visibility(self) -> Optional[pulumi.Input[str]]:
         """
@@ -580,6 +658,7 @@ class Image(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 backup_id: Optional[pulumi.Input[str]] = None,
                  cmk_id: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -593,6 +672,7 @@ class Image(pulumi.CustomResource):
                  os_version: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  type: Optional[pulumi.Input[str]] = None,
+                 vault_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
         Manages an Image resource within HuaweiCloud IMS.
@@ -613,17 +693,65 @@ class Image(pulumi.CustomResource):
                 "key": "value",
             })
         ```
+        ### Creating a whole image from an existing ECS
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        vault_id = config.require_object("vaultId")
+        instance_id = config.require_object("instanceId")
+        test = huaweicloud.ims.Image("test",
+            instance_id=instance_id,
+            vault_id=vault_id,
+            tags={
+                "foo": "bar2",
+                "key": "value",
+            })
+        ```
+        ### Creating a whole image from CBR backup
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        backup_id = config.require_object("backupId")
+        test = huaweicloud.ims.Image("test",
+            backup_id=backup_id,
+            tags={
+                "foo": "bar1",
+                "key": "value",
+            })
+        ```
 
         ## Import
 
-        Images can be imported using the `id`, e.g.
+        Images can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Ims/image:Image my_image 7886e623-f1b3-473e-b882-67ba1c35887f
+         $ pulumi import huaweicloud:Ims/image:Image my_image <id>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`vault_id`. It is generally recommended running `terraform plan` after importing the image. You can then decide if changes should be applied to the image, or the resource definition should be updated to align with the image. Also you can ignore changes as below. resource "huaweicloud_images_image" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         vault_id,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] backup_id: The ID of the CBR backup that needs to be converted into an image. This
+               parameter is mandatory when you create a private whole image from a CBR backup.
         :param pulumi.Input[str] cmk_id: The master key used for encrypting an image.
         :param pulumi.Input[str] description: A description of the image.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the image. Changing this creates a
@@ -632,7 +760,8 @@ class Image(pulumi.CustomResource):
                mandatory when you create a private image from an external file uploaded to an OBS bucket. The format is *OBS bucket
                name:Image file name*.
         :param pulumi.Input[str] instance_id: The ID of the ECS that needs to be converted into an image. This
-               parameter is mandatory when you create a privete image from an ECS.
+               parameter is mandatory when you create a private image or a private whole image from an ECS.
+               If the value of `vault_id` is not empty, then a whole image will be created.
         :param pulumi.Input[bool] is_config: If automatic configuration is required, set the value to true. Otherwise, set
                the value to false.
         :param pulumi.Input[int] max_ram: The maximum memory of the image in the unit of MB.
@@ -646,6 +775,8 @@ class Image(pulumi.CustomResource):
                from an external file uploaded to an OBS bucket.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The tags of the image.
         :param pulumi.Input[str] type: The image type. Must be one of `ECS`, `FusionCompute`, `BMS`, or `Ironic`.
+        :param pulumi.Input[str] vault_id: The ID of the vault to which an ECS is to be added or has been added.
+               This parameter is mandatory when you create a private whole image from an ECS.
         """
         ...
     @overload
@@ -672,14 +803,60 @@ class Image(pulumi.CustomResource):
                 "key": "value",
             })
         ```
+        ### Creating a whole image from an existing ECS
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        vault_id = config.require_object("vaultId")
+        instance_id = config.require_object("instanceId")
+        test = huaweicloud.ims.Image("test",
+            instance_id=instance_id,
+            vault_id=vault_id,
+            tags={
+                "foo": "bar2",
+                "key": "value",
+            })
+        ```
+        ### Creating a whole image from CBR backup
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        backup_id = config.require_object("backupId")
+        test = huaweicloud.ims.Image("test",
+            backup_id=backup_id,
+            tags={
+                "foo": "bar1",
+                "key": "value",
+            })
+        ```
 
         ## Import
 
-        Images can be imported using the `id`, e.g.
+        Images can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Ims/image:Image my_image 7886e623-f1b3-473e-b882-67ba1c35887f
+         $ pulumi import huaweicloud:Ims/image:Image my_image <id>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`vault_id`. It is generally recommended running `terraform plan` after importing the image. You can then decide if changes should be applied to the image, or the resource definition should be updated to align with the image. Also you can ignore changes as below. resource "huaweicloud_images_image" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         vault_id,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param ImageArgs args: The arguments to use to populate this resource's properties.
@@ -696,6 +873,7 @@ class Image(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 backup_id: Optional[pulumi.Input[str]] = None,
                  cmk_id: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -709,6 +887,7 @@ class Image(pulumi.CustomResource):
                  os_version: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  type: Optional[pulumi.Input[str]] = None,
+                 vault_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -718,6 +897,7 @@ class Image(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = ImageArgs.__new__(ImageArgs)
 
+            __props__.__dict__["backup_id"] = backup_id
             __props__.__dict__["cmk_id"] = cmk_id
             __props__.__dict__["description"] = description
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
@@ -731,6 +911,7 @@ class Image(pulumi.CustomResource):
             __props__.__dict__["os_version"] = os_version
             __props__.__dict__["tags"] = tags
             __props__.__dict__["type"] = type
+            __props__.__dict__["vault_id"] = vault_id
             __props__.__dict__["checksum"] = None
             __props__.__dict__["data_origin"] = None
             __props__.__dict__["disk_format"] = None
@@ -747,6 +928,7 @@ class Image(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            backup_id: Optional[pulumi.Input[str]] = None,
             checksum: Optional[pulumi.Input[str]] = None,
             cmk_id: Optional[pulumi.Input[str]] = None,
             data_origin: Optional[pulumi.Input[str]] = None,
@@ -765,6 +947,7 @@ class Image(pulumi.CustomResource):
             status: Optional[pulumi.Input[str]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             type: Optional[pulumi.Input[str]] = None,
+            vault_id: Optional[pulumi.Input[str]] = None,
             visibility: Optional[pulumi.Input[str]] = None) -> 'Image':
         """
         Get an existing Image resource's state with the given name, id, and optional extra
@@ -773,9 +956,12 @@ class Image(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] backup_id: The ID of the CBR backup that needs to be converted into an image. This
+               parameter is mandatory when you create a private whole image from a CBR backup.
         :param pulumi.Input[str] checksum: The checksum of the data associated with the image.
         :param pulumi.Input[str] cmk_id: The master key used for encrypting an image.
-        :param pulumi.Input[str] data_origin: The image resource. The pattern can be 'instance,*instance_id*' or 'file,*image_url*'.
+        :param pulumi.Input[str] data_origin: The image resource. The pattern can be 'instance,*instance_id*', 'file,*image_url*'
+               or 'server_backup,*backup_id*'.
         :param pulumi.Input[str] description: A description of the image.
         :param pulumi.Input[str] disk_format: The image file format. The value can be `vhd`, `zvhd`, `raw`, `zvhd2`, or `qcow2`.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the image. Changing this creates a
@@ -785,7 +971,8 @@ class Image(pulumi.CustomResource):
                mandatory when you create a private image from an external file uploaded to an OBS bucket. The format is *OBS bucket
                name:Image file name*.
         :param pulumi.Input[str] instance_id: The ID of the ECS that needs to be converted into an image. This
-               parameter is mandatory when you create a privete image from an ECS.
+               parameter is mandatory when you create a private image or a private whole image from an ECS.
+               If the value of `vault_id` is not empty, then a whole image will be created.
         :param pulumi.Input[bool] is_config: If automatic configuration is required, set the value to true. Otherwise, set
                the value to false.
         :param pulumi.Input[int] max_ram: The maximum memory of the image in the unit of MB.
@@ -800,12 +987,15 @@ class Image(pulumi.CustomResource):
         :param pulumi.Input[str] status: The status of the image.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The tags of the image.
         :param pulumi.Input[str] type: The image type. Must be one of `ECS`, `FusionCompute`, `BMS`, or `Ironic`.
+        :param pulumi.Input[str] vault_id: The ID of the vault to which an ECS is to be added or has been added.
+               This parameter is mandatory when you create a private whole image from an ECS.
         :param pulumi.Input[str] visibility: Whether the image is visible to other tenants.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _ImageState.__new__(_ImageState)
 
+        __props__.__dict__["backup_id"] = backup_id
         __props__.__dict__["checksum"] = checksum
         __props__.__dict__["cmk_id"] = cmk_id
         __props__.__dict__["data_origin"] = data_origin
@@ -824,8 +1014,18 @@ class Image(pulumi.CustomResource):
         __props__.__dict__["status"] = status
         __props__.__dict__["tags"] = tags
         __props__.__dict__["type"] = type
+        __props__.__dict__["vault_id"] = vault_id
         __props__.__dict__["visibility"] = visibility
         return Image(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter(name="backupId")
+    def backup_id(self) -> pulumi.Output[str]:
+        """
+        The ID of the CBR backup that needs to be converted into an image. This
+        parameter is mandatory when you create a private whole image from a CBR backup.
+        """
+        return pulumi.get(self, "backup_id")
 
     @property
     @pulumi.getter
@@ -847,7 +1047,8 @@ class Image(pulumi.CustomResource):
     @pulumi.getter(name="dataOrigin")
     def data_origin(self) -> pulumi.Output[str]:
         """
-        The image resource. The pattern can be 'instance,*instance_id*' or 'file,*image_url*'.
+        The image resource. The pattern can be 'instance,*instance_id*', 'file,*image_url*'
+        or 'server_backup,*backup_id*'.
         """
         return pulumi.get(self, "data_origin")
 
@@ -896,10 +1097,11 @@ class Image(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="instanceId")
-    def instance_id(self) -> pulumi.Output[Optional[str]]:
+    def instance_id(self) -> pulumi.Output[str]:
         """
         The ID of the ECS that needs to be converted into an image. This
-        parameter is mandatory when you create a privete image from an ECS.
+        parameter is mandatory when you create a private image or a private whole image from an ECS.
+        If the value of `vault_id` is not empty, then a whole image will be created.
         """
         return pulumi.get(self, "instance_id")
 
@@ -914,7 +1116,7 @@ class Image(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="maxRam")
-    def max_ram(self) -> pulumi.Output[Optional[int]]:
+    def max_ram(self) -> pulumi.Output[int]:
         """
         The maximum memory of the image in the unit of MB.
         """
@@ -932,7 +1134,7 @@ class Image(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="minRam")
-    def min_ram(self) -> pulumi.Output[Optional[int]]:
+    def min_ram(self) -> pulumi.Output[int]:
         """
         The minimum memory of the image in the unit of MB. The default value is 0,
         indicating that the memory is not restricted.
@@ -979,6 +1181,15 @@ class Image(pulumi.CustomResource):
         The image type. Must be one of `ECS`, `FusionCompute`, `BMS`, or `Ironic`.
         """
         return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter(name="vaultId")
+    def vault_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        The ID of the vault to which an ECS is to be added or has been added.
+        This parameter is mandatory when you create a private whole image from an ECS.
+        """
+        return pulumi.get(self, "vault_id")
 
     @property
     @pulumi.getter

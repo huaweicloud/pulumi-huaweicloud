@@ -32,7 +32,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * MapReduce jobs can be imported using their `id` and the IDs of the MapReduce cluster to which the job belongs, separated by a slash, e.g.
+ * MapReduce jobs can be imported using their `id` and the IDs of the MapReduce cluster to which the job belongs, separated by a slash, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Mrs/job:Job test <cluster_id>/<id>
@@ -133,6 +133,18 @@ export class Job extends pulumi.CustomResource {
      * The submission time of the MapReduce job.
      */
     public /*out*/ readonly submitTime!: pulumi.Output<string>;
+    /**
+     * Specifies the job type.
+     * <a name="mapreduceJobType"></a>
+     * The valid values are as follows:
+     * + [Flink](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0527.html)
+     * + [HiveSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+     * + [HiveScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+     * + [MapReduce](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0052.html)
+     * + [SparkSubmit](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0524.html)
+     * + [SparkSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+     * + [SparkScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+     */
     public readonly type!: pulumi.Output<string>;
 
     /**
@@ -259,6 +271,18 @@ export interface JobState {
      * The submission time of the MapReduce job.
      */
     submitTime?: pulumi.Input<string>;
+    /**
+     * Specifies the job type.
+     * <a name="mapreduceJobType"></a>
+     * The valid values are as follows:
+     * + [Flink](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0527.html)
+     * + [HiveSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+     * + [HiveScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+     * + [MapReduce](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0052.html)
+     * + [SparkSubmit](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0524.html)
+     * + [SparkSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+     * + [SparkScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+     */
     type?: pulumi.Input<string>;
 }
 
@@ -317,5 +341,17 @@ export interface JobArgs {
      * or **SparkSql**. Changing this will create a new MapReduce job resource.
      */
     sql?: pulumi.Input<string>;
+    /**
+     * Specifies the job type.
+     * <a name="mapreduceJobType"></a>
+     * The valid values are as follows:
+     * + [Flink](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0527.html)
+     * + [HiveSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+     * + [HiveScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+     * + [MapReduce](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0052.html)
+     * + [SparkSubmit](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0524.html)
+     * + [SparkSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+     * + [SparkScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+     */
     type: pulumi.Input<string>;
 }

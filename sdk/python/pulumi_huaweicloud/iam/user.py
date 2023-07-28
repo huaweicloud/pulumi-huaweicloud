@@ -208,7 +208,7 @@ class _UserState:
         :param pulumi.Input[str] description: Specifies the description of the user.
         :param pulumi.Input[str] email: Specifies the email address with a maximum of 255 characters.
         :param pulumi.Input[bool] enabled: Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
-        :param pulumi.Input[str] last_login: The tiem when the IAM user last login.
+        :param pulumi.Input[str] last_login: The time when the IAM user last login.
         :param pulumi.Input[str] name: Specifies the name of the user. The user name consists of 5 to 32 characters. It can
                contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
                digit.
@@ -325,7 +325,7 @@ class _UserState:
     @pulumi.getter(name="lastLogin")
     def last_login(self) -> Optional[pulumi.Input[str]]:
         """
-        The tiem when the IAM user last login.
+        The time when the IAM user last login.
         """
         return pulumi.get(self, "last_login")
 
@@ -601,7 +601,7 @@ class User(pulumi.CustomResource):
         :param pulumi.Input[str] description: Specifies the description of the user.
         :param pulumi.Input[str] email: Specifies the email address with a maximum of 255 characters.
         :param pulumi.Input[bool] enabled: Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
-        :param pulumi.Input[str] last_login: The tiem when the IAM user last login.
+        :param pulumi.Input[str] last_login: The time when the IAM user last login.
         :param pulumi.Input[str] name: Specifies the name of the user. The user name consists of 5 to 32 characters. It can
                contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
                digit.
@@ -687,7 +687,7 @@ class User(pulumi.CustomResource):
     @pulumi.getter(name="lastLogin")
     def last_login(self) -> pulumi.Output[str]:
         """
-        The tiem when the IAM user last login.
+        The time when the IAM user last login.
         """
         return pulumi.get(self, "last_login")
 

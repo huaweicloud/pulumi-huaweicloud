@@ -341,6 +341,10 @@ class ConferenceJoinPassword(dict):
     def __init__(__self__, *,
                  guest: Optional[str] = None,
                  host: Optional[str] = None):
+        """
+        :param str guest: The password of the common participant.
+        :param str host: The password of the meeting host.
+        """
         if guest is not None:
             pulumi.set(__self__, "guest", guest)
         if host is not None:
@@ -349,11 +353,17 @@ class ConferenceJoinPassword(dict):
     @property
     @pulumi.getter
     def guest(self) -> Optional[str]:
+        """
+        The password of the common participant.
+        """
         return pulumi.get(self, "guest")
 
     @property
     @pulumi.getter
     def host(self) -> Optional[str]:
+        """
+        The password of the meeting host.
+        """
         return pulumi.get(self, "host")
 
 
@@ -723,6 +733,8 @@ class ConferenceSubconferenceSubconfiguration(dict):
                + **0**: All users.
                + **2**: Users within the enterprise.
                + **3**: The invited user.
+        :param Sequence['ConferenceSubconferenceSubconfigurationShowAudiencePolicyArgs'] show_audience_policies: The webinar Audience Display Strategy.
+               The object structure is documented below.
         :param bool waiting_room_enabled: Specifies whether to open the waiting room (only valid for RTC enterprises).
         """
         if allow_guest_start is not None:
@@ -770,6 +782,10 @@ class ConferenceSubconferenceSubconfiguration(dict):
     @property
     @pulumi.getter(name="showAudiencePolicies")
     def show_audience_policies(self) -> Optional[Sequence['outputs.ConferenceSubconferenceSubconfigurationShowAudiencePolicy']]:
+        """
+        The webinar Audience Display Strategy.
+        The object structure is documented below.
+        """
         return pulumi.get(self, "show_audience_policies")
 
     @property

@@ -17,9 +17,9 @@ class MemberArgs:
                  address: pulumi.Input[str],
                  pool_id: pulumi.Input[str],
                  protocol_port: pulumi.Input[int],
-                 subnet_id: pulumi.Input[str],
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 subnet_id: Optional[pulumi.Input[str]] = None,
                  weight: Optional[pulumi.Input[int]] = None):
         """
         The set of arguments for constructing a Member resource.
@@ -28,10 +28,14 @@ class MemberArgs:
         :param pulumi.Input[str] pool_id: The id of the pool that this member will be assigned to.
         :param pulumi.Input[int] protocol_port: The port on which to listen for client traffic. Changing this creates a
                new member.
-        :param pulumi.Input[str] subnet_id: The subnet in which to access the member
         :param pulumi.Input[str] name: Human-readable name for the member.
         :param pulumi.Input[str] region: The region in which to create the ELB member resource. If omitted, the the
                provider-level region will be used. Changing this creates a new member.
+        :param pulumi.Input[str] subnet_id: The **IPv4 or IPv6 subnet ID** of the subnet in which to access the member.
+               + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+               + If this parameter is not specified, **cross-VPC backend** has been enabled for the load balancer.
+               In this case, cross-VPC backend servers must use private IPv4 addresses,
+               and the protocol of the backend server group must be TCP, HTTP, or HTTPS.
         :param pulumi.Input[int] weight: A positive integer value that indicates the relative portion of traffic that this member
                should receive from the pool. For example, a member with a weight of 10 receives five times as much traffic as a
                member with a weight of 2.
@@ -39,11 +43,12 @@ class MemberArgs:
         pulumi.set(__self__, "address", address)
         pulumi.set(__self__, "pool_id", pool_id)
         pulumi.set(__self__, "protocol_port", protocol_port)
-        pulumi.set(__self__, "subnet_id", subnet_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if subnet_id is not None:
+            pulumi.set(__self__, "subnet_id", subnet_id)
         if weight is not None:
             pulumi.set(__self__, "weight", weight)
 
@@ -86,18 +91,6 @@ class MemberArgs:
         pulumi.set(self, "protocol_port", value)
 
     @property
-    @pulumi.getter(name="subnetId")
-    def subnet_id(self) -> pulumi.Input[str]:
-        """
-        The subnet in which to access the member
-        """
-        return pulumi.get(self, "subnet_id")
-
-    @subnet_id.setter
-    def subnet_id(self, value: pulumi.Input[str]):
-        pulumi.set(self, "subnet_id", value)
-
-    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
@@ -121,6 +114,22 @@ class MemberArgs:
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter(name="subnetId")
+    def subnet_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The **IPv4 or IPv6 subnet ID** of the subnet in which to access the member.
+        + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+        + If this parameter is not specified, **cross-VPC backend** has been enabled for the load balancer.
+        In this case, cross-VPC backend servers must use private IPv4 addresses,
+        and the protocol of the backend server group must be TCP, HTTP, or HTTPS.
+        """
+        return pulumi.get(self, "subnet_id")
+
+    @subnet_id.setter
+    def subnet_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "subnet_id", value)
 
     @property
     @pulumi.getter
@@ -157,7 +166,11 @@ class _MemberState:
                new member.
         :param pulumi.Input[str] region: The region in which to create the ELB member resource. If omitted, the the
                provider-level region will be used. Changing this creates a new member.
-        :param pulumi.Input[str] subnet_id: The subnet in which to access the member
+        :param pulumi.Input[str] subnet_id: The **IPv4 or IPv6 subnet ID** of the subnet in which to access the member.
+               + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+               + If this parameter is not specified, **cross-VPC backend** has been enabled for the load balancer.
+               In this case, cross-VPC backend servers must use private IPv4 addresses,
+               and the protocol of the backend server group must be TCP, HTTP, or HTTPS.
         :param pulumi.Input[int] weight: A positive integer value that indicates the relative portion of traffic that this member
                should receive from the pool. For example, a member with a weight of 10 receives five times as much traffic as a
                member with a weight of 2.
@@ -244,7 +257,11 @@ class _MemberState:
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The subnet in which to access the member
+        The **IPv4 or IPv6 subnet ID** of the subnet in which to access the member.
+        + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+        + If this parameter is not specified, **cross-VPC backend** has been enabled for the load balancer.
+        In this case, cross-VPC backend servers must use private IPv4 addresses,
+        and the protocol of the backend server group must be TCP, HTTP, or HTTPS.
         """
         return pulumi.get(self, "subnet_id")
 
@@ -289,11 +306,14 @@ class Member(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        elb_pool_id = config.require_object("elbPoolId")
+        ipv4_subnet_id = config.require_object("ipv4SubnetId")
         member1 = huaweicloud.dedicated_elb.Member("member1",
             address="192.168.199.23",
             protocol_port=8080,
-            pool_id=var["pool_id"],
-            subnet_id=var["subnet_id"])
+            pool_id=elb_pool_id,
+            subnet_id=ipv4_subnet_id)
         ```
 
         ## Import
@@ -314,7 +334,11 @@ class Member(pulumi.CustomResource):
                new member.
         :param pulumi.Input[str] region: The region in which to create the ELB member resource. If omitted, the the
                provider-level region will be used. Changing this creates a new member.
-        :param pulumi.Input[str] subnet_id: The subnet in which to access the member
+        :param pulumi.Input[str] subnet_id: The **IPv4 or IPv6 subnet ID** of the subnet in which to access the member.
+               + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+               + If this parameter is not specified, **cross-VPC backend** has been enabled for the load balancer.
+               In this case, cross-VPC backend servers must use private IPv4 addresses,
+               and the protocol of the backend server group must be TCP, HTTP, or HTTPS.
         :param pulumi.Input[int] weight: A positive integer value that indicates the relative portion of traffic that this member
                should receive from the pool. For example, a member with a weight of 10 receives five times as much traffic as a
                member with a weight of 2.
@@ -334,11 +358,14 @@ class Member(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        elb_pool_id = config.require_object("elbPoolId")
+        ipv4_subnet_id = config.require_object("ipv4SubnetId")
         member1 = huaweicloud.dedicated_elb.Member("member1",
             address="192.168.199.23",
             protocol_port=8080,
-            pool_id=var["pool_id"],
-            subnet_id=var["subnet_id"])
+            pool_id=elb_pool_id,
+            subnet_id=ipv4_subnet_id)
         ```
 
         ## Import
@@ -391,8 +418,6 @@ class Member(pulumi.CustomResource):
                 raise TypeError("Missing required property 'protocol_port'")
             __props__.__dict__["protocol_port"] = protocol_port
             __props__.__dict__["region"] = region
-            if subnet_id is None and not opts.urn:
-                raise TypeError("Missing required property 'subnet_id'")
             __props__.__dict__["subnet_id"] = subnet_id
             __props__.__dict__["weight"] = weight
         super(Member, __self__).__init__(
@@ -427,7 +452,11 @@ class Member(pulumi.CustomResource):
                new member.
         :param pulumi.Input[str] region: The region in which to create the ELB member resource. If omitted, the the
                provider-level region will be used. Changing this creates a new member.
-        :param pulumi.Input[str] subnet_id: The subnet in which to access the member
+        :param pulumi.Input[str] subnet_id: The **IPv4 or IPv6 subnet ID** of the subnet in which to access the member.
+               + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+               + If this parameter is not specified, **cross-VPC backend** has been enabled for the load balancer.
+               In this case, cross-VPC backend servers must use private IPv4 addresses,
+               and the protocol of the backend server group must be TCP, HTTP, or HTTPS.
         :param pulumi.Input[int] weight: A positive integer value that indicates the relative portion of traffic that this member
                should receive from the pool. For example, a member with a weight of 10 receives five times as much traffic as a
                member with a weight of 2.
@@ -490,9 +519,13 @@ class Member(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="subnetId")
-    def subnet_id(self) -> pulumi.Output[str]:
+    def subnet_id(self) -> pulumi.Output[Optional[str]]:
         """
-        The subnet in which to access the member
+        The **IPv4 or IPv6 subnet ID** of the subnet in which to access the member.
+        + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+        + If this parameter is not specified, **cross-VPC backend** has been enabled for the load balancer.
+        In this case, cross-VPC backend servers must use private IPv4 addresses,
+        and the protocol of the backend server group must be TCP, HTTP, or HTTPS.
         """
         return pulumi.get(self, "subnet_id")
 

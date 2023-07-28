@@ -242,8 +242,8 @@ export class Bucket extends pulumi.CustomResource {
      */
     public readonly encryption!: pulumi.Output<boolean | undefined>;
     /**
-     * Specifies the enterprise project id of the OBS bucket. Changing
-     * this will create a new bucket.
+     * Specifies the enterprise project id of the OBS bucket.
+     * Defaults to `0`.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
@@ -293,7 +293,6 @@ export class Bucket extends pulumi.CustomResource {
      * Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
      * storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
      * quota is not limited.
-     * <!-- markdownlint-enable MD033 -->
      */
     public readonly quota!: pulumi.Output<number | undefined>;
     /**
@@ -306,6 +305,11 @@ export class Bucket extends pulumi.CustomResource {
      * "STANDARD", "WARM" (Infrequent Access) and "COLD" (Archive). Defaults to `STANDARD`.
      */
     public readonly storageClass!: pulumi.Output<string | undefined>;
+    /**
+     * The OBS storage info of the bucket.
+     * The object structure is documented below.
+     */
+    public /*out*/ readonly storageInfos!: pulumi.Output<outputs.Obs.BucketStorageInfo[]>;
     /**
      * A mapping of tags to assign to the bucket. Each tag is represented by one key-value pair.
      */
@@ -352,6 +356,7 @@ export class Bucket extends pulumi.CustomResource {
             resourceInputs["quota"] = state ? state.quota : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["storageClass"] = state ? state.storageClass : undefined;
+            resourceInputs["storageInfos"] = state ? state.storageInfos : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["versioning"] = state ? state.versioning : undefined;
             resourceInputs["website"] = state ? state.website : undefined;
@@ -382,6 +387,7 @@ export class Bucket extends pulumi.CustomResource {
             resourceInputs["website"] = args ? args.website : undefined;
             resourceInputs["bucketDomainName"] = undefined /*out*/;
             resourceInputs["bucketVersion"] = undefined /*out*/;
+            resourceInputs["storageInfos"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Bucket.__pulumiType, name, resourceInputs, opts);
@@ -427,8 +433,8 @@ export interface BucketState {
      */
     encryption?: pulumi.Input<boolean>;
     /**
-     * Specifies the enterprise project id of the OBS bucket. Changing
-     * this will create a new bucket.
+     * Specifies the enterprise project id of the OBS bucket.
+     * Defaults to `0`.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -478,7 +484,6 @@ export interface BucketState {
      * Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
      * storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
      * quota is not limited.
-     * <!-- markdownlint-enable MD033 -->
      */
     quota?: pulumi.Input<number>;
     /**
@@ -491,6 +496,11 @@ export interface BucketState {
      * "STANDARD", "WARM" (Infrequent Access) and "COLD" (Archive). Defaults to `STANDARD`.
      */
     storageClass?: pulumi.Input<string>;
+    /**
+     * The OBS storage info of the bucket.
+     * The object structure is documented below.
+     */
+    storageInfos?: pulumi.Input<pulumi.Input<inputs.Obs.BucketStorageInfo>[]>;
     /**
      * A mapping of tags to assign to the bucket. Each tag is represented by one key-value pair.
      */
@@ -537,8 +547,8 @@ export interface BucketArgs {
      */
     encryption?: pulumi.Input<boolean>;
     /**
-     * Specifies the enterprise project id of the OBS bucket. Changing
-     * this will create a new bucket.
+     * Specifies the enterprise project id of the OBS bucket.
+     * Defaults to `0`.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -588,7 +598,6 @@ export interface BucketArgs {
      * Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
      * storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
      * quota is not limited.
-     * <!-- markdownlint-enable MD033 -->
      */
     quota?: pulumi.Input<number>;
     /**

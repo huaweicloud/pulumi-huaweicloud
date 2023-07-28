@@ -32,11 +32,9 @@ export function getDataKey(args: GetDataKeyArgs, opts?: pulumi.InvokeOptions): P
 
     opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
     return pulumi.runtime.invoke("huaweicloud:Dew/getDataKey:getDataKey", {
-        "cipherText": args.cipherText,
         "datakeyLength": args.datakeyLength,
         "encryptionContext": args.encryptionContext,
         "keyId": args.keyId,
-        "plainText": args.plainText,
         "region": args.region,
     }, opts);
 }
@@ -45,10 +43,6 @@ export function getDataKey(args: GetDataKeyArgs, opts?: pulumi.InvokeOptions): P
  * A collection of arguments for invoking getDataKey.
  */
 export interface GetDataKeyArgs {
-    /**
-     * The ciphertext of a DEK is expressed in hexadecimal format, and two characters indicate one byte.
-     */
-    cipherText?: string;
     /**
      * Number of bits in the length of a DEK (data encryption keys). The maximum number
      * is 512. Changing this gets the new data encryption key.
@@ -65,10 +59,6 @@ export interface GetDataKeyArgs {
      * key.
      */
     keyId: string;
-    /**
-     * The plaintext of a DEK is expressed in hexadecimal format, and two characters indicate one byte.
-     */
-    plainText?: string;
     /**
      * The region in which to obtain the keys. If omitted, the provider-level region will be
      * used.
@@ -107,10 +97,6 @@ export function getDataKeyOutput(args: GetDataKeyOutputArgs, opts?: pulumi.Invok
  */
 export interface GetDataKeyOutputArgs {
     /**
-     * The ciphertext of a DEK is expressed in hexadecimal format, and two characters indicate one byte.
-     */
-    cipherText?: pulumi.Input<string>;
-    /**
      * Number of bits in the length of a DEK (data encryption keys). The maximum number
      * is 512. Changing this gets the new data encryption key.
      */
@@ -126,10 +112,6 @@ export interface GetDataKeyOutputArgs {
      * key.
      */
     keyId: pulumi.Input<string>;
-    /**
-     * The plaintext of a DEK is expressed in hexadecimal format, and two characters indicate one byte.
-     */
-    plainText?: pulumi.Input<string>;
     /**
      * The region in which to obtain the keys. If omitted, the provider-level region will be
      * used.

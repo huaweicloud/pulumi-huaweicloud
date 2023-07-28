@@ -39,17 +39,33 @@ class SparkJobDependentPackage(dict):
     def __init__(__self__, *,
                  group_name: str,
                  packages: Sequence['outputs.SparkJobDependentPackagePackage']):
+        """
+        :param str group_name: Specifies the user group name.
+               Changing this parameter will submit a new spark job.
+        :param Sequence['SparkJobDependentPackagePackageArgs'] packages: Specifies the user group resource for details.
+               Changing this parameter will submit a new spark job.
+               The object structure is documented below.
+        """
         pulumi.set(__self__, "group_name", group_name)
         pulumi.set(__self__, "packages", packages)
 
     @property
     @pulumi.getter(name="groupName")
     def group_name(self) -> str:
+        """
+        Specifies the user group name.
+        Changing this parameter will submit a new spark job.
+        """
         return pulumi.get(self, "group_name")
 
     @property
     @pulumi.getter
     def packages(self) -> Sequence['outputs.SparkJobDependentPackagePackage']:
+        """
+        Specifies the user group resource for details.
+        Changing this parameter will submit a new spark job.
+        The object structure is documented below.
+        """
         return pulumi.get(self, "packages")
 
 

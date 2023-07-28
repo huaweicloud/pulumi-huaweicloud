@@ -14,23 +14,32 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const refTable = new huaweicloud.Waf.ReferenceTable("ref_table", {
+ * const config = new pulumi.Config();
+ * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
+ * const refTable = new huaweicloud.waf.ReferenceTable("refTable", {
+ *     type: "url",
+ *     enterpriseProjectId: enterpriseProjectId,
  *     conditions: [
  *         "/admin",
  *         "/manage",
  *     ],
- *     type: "url",
  * });
  * ```
  *
  * ## Import
  *
- * The reference table can be imported using the `id`, e.g.
+ * There are two ways to import WAF reference table state. * Using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Waf/referenceTable:ReferenceTable ref_table 96e46e5e702b4e2aa5609ad287de4788
+ *  $ pulumi import huaweicloud:Waf/referenceTable:ReferenceTable test <id>
+ * ```
+ *
+ *  * Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:Waf/referenceTable:ReferenceTable test <id>/<enterprise_project_id>
  * ```
  */
 export class ReferenceTable extends pulumi.CustomResource {
@@ -75,6 +84,11 @@ export class ReferenceTable extends pulumi.CustomResource {
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
+     * Specifies the enterprise project ID of WAF reference table.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
+    /**
      * The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
      * maximum length is 64 characters.
      */
@@ -106,6 +120,7 @@ export class ReferenceTable extends pulumi.CustomResource {
             resourceInputs["conditions"] = state ? state.conditions : undefined;
             resourceInputs["creationTime"] = state ? state.creationTime : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
+            resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["type"] = state ? state.type : undefined;
@@ -116,6 +131,7 @@ export class ReferenceTable extends pulumi.CustomResource {
             }
             resourceInputs["conditions"] = args ? args.conditions : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
+            resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["type"] = args ? args.type : undefined;
@@ -143,6 +159,11 @@ export interface ReferenceTableState {
      * The description of the reference table. The maximum length is 128 characters.
      */
     description?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID of WAF reference table.
+     * Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
      * maximum length is 64 characters.
@@ -173,6 +194,11 @@ export interface ReferenceTableArgs {
      * The description of the reference table. The maximum length is 128 characters.
      */
     description?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID of WAF reference table.
+     * Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
      * maximum length is 64 characters.

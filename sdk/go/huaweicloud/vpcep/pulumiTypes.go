@@ -11,6 +11,8 @@ import (
 )
 
 type ApprovalConnection struct {
+	// The description of the VPC endpoint service connection.
+	Description *string `pulumi:"description"`
 	// The user's domain ID.
 	DomainId *string `pulumi:"domainId"`
 	// The unique ID of the VPC endpoint.
@@ -33,6 +35,8 @@ type ApprovalConnectionInput interface {
 }
 
 type ApprovalConnectionArgs struct {
+	// The description of the VPC endpoint service connection.
+	Description pulumi.StringPtrInput `pulumi:"description"`
 	// The user's domain ID.
 	DomainId pulumi.StringPtrInput `pulumi:"domainId"`
 	// The unique ID of the VPC endpoint.
@@ -94,6 +98,11 @@ func (o ApprovalConnectionOutput) ToApprovalConnectionOutputWithContext(ctx cont
 	return o
 }
 
+// The description of the VPC endpoint service connection.
+func (o ApprovalConnectionOutput) Description() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ApprovalConnection) *string { return v.Description }).(pulumi.StringPtrOutput)
+}
+
 // The user's domain ID.
 func (o ApprovalConnectionOutput) DomainId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApprovalConnection) *string { return v.DomainId }).(pulumi.StringPtrOutput)
@@ -135,6 +144,8 @@ func (o ApprovalConnectionArrayOutput) Index(i pulumi.IntInput) ApprovalConnecti
 }
 
 type ServiceConnection struct {
+	// Specifies the description of the VPC endpoint service.
+	Description *string `pulumi:"description"`
 	// The user's domain ID.
 	DomainId *string `pulumi:"domainId"`
 	// The unique ID of the VPC endpoint.
@@ -157,6 +168,8 @@ type ServiceConnectionInput interface {
 }
 
 type ServiceConnectionArgs struct {
+	// Specifies the description of the VPC endpoint service.
+	Description pulumi.StringPtrInput `pulumi:"description"`
 	// The user's domain ID.
 	DomainId pulumi.StringPtrInput `pulumi:"domainId"`
 	// The unique ID of the VPC endpoint.
@@ -218,6 +231,11 @@ func (o ServiceConnectionOutput) ToServiceConnectionOutputWithContext(ctx contex
 	return o
 }
 
+// Specifies the description of the VPC endpoint service.
+func (o ServiceConnectionOutput) Description() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ServiceConnection) *string { return v.Description }).(pulumi.StringPtrOutput)
+}
+
 // The user's domain ID.
 func (o ServiceConnectionOutput) DomainId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ServiceConnection) *string { return v.DomainId }).(pulumi.StringPtrOutput)
@@ -259,8 +277,7 @@ func (o ServiceConnectionArrayOutput) Index(i pulumi.IntInput) ServiceConnection
 }
 
 type ServicePortMapping struct {
-	// Specifies the protocol used in port mappings. The value can be **TCP** or **UDP**. The
-	// default value is **TCP**.
+	// Specifies the protocol used in port mappings. Only **TCP** is supported.
 	Protocol *string `pulumi:"protocol"`
 	// Specifies the port for accessing the VPC endpoint service. This port is provided by
 	// the backend service to provide services. The value ranges from 1 to 65535.
@@ -282,8 +299,7 @@ type ServicePortMappingInput interface {
 }
 
 type ServicePortMappingArgs struct {
-	// Specifies the protocol used in port mappings. The value can be **TCP** or **UDP**. The
-	// default value is **TCP**.
+	// Specifies the protocol used in port mappings. Only **TCP** is supported.
 	Protocol pulumi.StringPtrInput `pulumi:"protocol"`
 	// Specifies the port for accessing the VPC endpoint service. This port is provided by
 	// the backend service to provide services. The value ranges from 1 to 65535.
@@ -344,8 +360,7 @@ func (o ServicePortMappingOutput) ToServicePortMappingOutputWithContext(ctx cont
 	return o
 }
 
-// Specifies the protocol used in port mappings. The value can be **TCP** or **UDP**. The
-// default value is **TCP**.
+// Specifies the protocol used in port mappings. Only **TCP** is supported.
 func (o ServicePortMappingOutput) Protocol() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ServicePortMapping) *string { return v.Protocol }).(pulumi.StringPtrOutput)
 }

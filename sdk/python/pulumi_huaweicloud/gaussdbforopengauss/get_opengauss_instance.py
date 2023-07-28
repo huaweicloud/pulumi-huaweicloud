@@ -22,7 +22,7 @@ class GetOpengaussInstanceResult:
     """
     A collection of values returned by getOpengaussInstance.
     """
-    def __init__(__self__, availability_zone=None, backup_strategies=None, coordinator_num=None, datastores=None, db_user_name=None, enterprise_project_id=None, flavor=None, has=None, id=None, maintenance_window=None, name=None, nodes=None, port=None, private_ips=None, region=None, security_group_id=None, sharding_num=None, status=None, subnet_id=None, switch_strategy=None, time_zone=None, type=None, volumes=None, vpc_id=None):
+    def __init__(__self__, availability_zone=None, backup_strategies=None, coordinator_num=None, datastores=None, db_user_name=None, enterprise_project_id=None, flavor=None, has=None, id=None, maintenance_window=None, name=None, nodes=None, port=None, private_ips=None, public_ips=None, region=None, replica_num=None, security_group_id=None, sharding_num=None, status=None, subnet_id=None, switch_strategy=None, time_zone=None, type=None, volumes=None, vpc_id=None):
         if availability_zone and not isinstance(availability_zone, str):
             raise TypeError("Expected argument 'availability_zone' to be a str")
         pulumi.set(__self__, "availability_zone", availability_zone)
@@ -65,9 +65,15 @@ class GetOpengaussInstanceResult:
         if private_ips and not isinstance(private_ips, list):
             raise TypeError("Expected argument 'private_ips' to be a list")
         pulumi.set(__self__, "private_ips", private_ips)
+        if public_ips and not isinstance(public_ips, list):
+            raise TypeError("Expected argument 'public_ips' to be a list")
+        pulumi.set(__self__, "public_ips", public_ips)
         if region and not isinstance(region, str):
             raise TypeError("Expected argument 'region' to be a str")
         pulumi.set(__self__, "region", region)
+        if replica_num and not isinstance(replica_num, int):
+            raise TypeError("Expected argument 'replica_num' to be a int")
+        pulumi.set(__self__, "replica_num", replica_num)
         if security_group_id and not isinstance(security_group_id, str):
             raise TypeError("Expected argument 'security_group_id' to be a str")
         pulumi.set(__self__, "security_group_id", security_group_id)
@@ -209,9 +215,25 @@ class GetOpengaussInstanceResult:
         return pulumi.get(self, "private_ips")
 
     @property
+    @pulumi.getter(name="publicIps")
+    def public_ips(self) -> Sequence[str]:
+        """
+        Indicates the public IP address of the DB instance.
+        """
+        return pulumi.get(self, "public_ips")
+
+    @property
     @pulumi.getter
     def region(self) -> str:
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter(name="replicaNum")
+    def replica_num(self) -> int:
+        """
+        Indicates the replica num.
+        """
+        return pulumi.get(self, "replica_num")
 
     @property
     @pulumi.getter(name="securityGroupId")
@@ -300,7 +322,9 @@ class AwaitableGetOpengaussInstanceResult(GetOpengaussInstanceResult):
             nodes=self.nodes,
             port=self.port,
             private_ips=self.private_ips,
+            public_ips=self.public_ips,
             region=self.region,
+            replica_num=self.replica_num,
             security_group_id=self.security_group_id,
             sharding_num=self.sharding_num,
             status=self.status,
@@ -359,7 +383,9 @@ def get_opengauss_instance(name: Optional[str] = None,
         nodes=__ret__.nodes,
         port=__ret__.port,
         private_ips=__ret__.private_ips,
+        public_ips=__ret__.public_ips,
         region=__ret__.region,
+        replica_num=__ret__.replica_num,
         security_group_id=__ret__.security_group_id,
         sharding_num=__ret__.sharding_num,
         status=__ret__.status,

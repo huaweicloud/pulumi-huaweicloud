@@ -92,7 +92,7 @@ import (
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:GaussDBforNoSQL/redisInstance:RedisInstance instance_1 2e045d8b-b226-4aa2-91b9-7e76357655c06
+//	$ pulumi import huaweicloud:GaussDBforNoSQL/redisInstance:RedisInstance instance_1 d54b21f037ed447aad4bfd20927711c6in12
 //
 // ```
 type RedisInstance struct {
@@ -103,6 +103,7 @@ type RedisInstance struct {
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
 	// Specifies the AZ name.
 	// See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail.
+	// For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
 	// Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringOutput `pulumi:"availabilityZone"`
 	// Specifies the advanced backup policy. Structure is documented below. Do nothing
@@ -125,6 +126,10 @@ type RedisInstance struct {
 	// If specified, try to import the instance instead of creating if the name already
 	// existed.
 	ForceImport pulumi.BoolPtrOutput `pulumi:"forceImport"`
+	// Indicates the LB IP address of the db.
+	LbIpAddress pulumi.StringOutput `pulumi:"lbIpAddress"`
+	// Indicates the LB port of the db.
+	LbPort pulumi.StringOutput `pulumi:"lbPort"`
 	// Indicates the instance type.
 	Mode pulumi.StringOutput `pulumi:"mode"`
 	// Specifies the instance name, which can be the same as an existing instance name. The value
@@ -147,7 +152,11 @@ type RedisInstance struct {
 	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Do nothing in update
 	// method if change this parameter.
 	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
-	// Indicates the database port.
+	// Specifies the port number for accessing the instance. You can specify a port number
+	// based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
+	// **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
+	// **50069**. Defaults to **6379**.
+	// If you want to use this instance for dual-active DR, set the port to **8635**.
 	Port pulumi.IntOutput `pulumi:"port"`
 	// Indicates the IP address list of the db.
 	PrivateIps pulumi.StringArrayOutput `pulumi:"privateIps"`
@@ -158,6 +167,8 @@ type RedisInstance struct {
 	// Specifies the security group ID. Required if the selected subnet doesn't
 	// enable network ACL.
 	SecurityGroupId pulumi.StringPtrOutput `pulumi:"securityGroupId"`
+	// Specifies whether SSL is enabled. Defaults to **false**.
+	Ssl pulumi.BoolPtrOutput `pulumi:"ssl"`
 	// Indicates the node status.
 	Status pulumi.StringOutput `pulumi:"status"`
 	// Specifies the network ID of a subnet. Changing this parameter will create a
@@ -226,6 +237,7 @@ type redisInstanceState struct {
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the AZ name.
 	// See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail.
+	// For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
 	// Changing this parameter will create a new resource.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// Specifies the advanced backup policy. Structure is documented below. Do nothing
@@ -248,6 +260,10 @@ type redisInstanceState struct {
 	// If specified, try to import the instance instead of creating if the name already
 	// existed.
 	ForceImport *bool `pulumi:"forceImport"`
+	// Indicates the LB IP address of the db.
+	LbIpAddress *string `pulumi:"lbIpAddress"`
+	// Indicates the LB port of the db.
+	LbPort *string `pulumi:"lbPort"`
 	// Indicates the instance type.
 	Mode *string `pulumi:"mode"`
 	// Specifies the instance name, which can be the same as an existing instance name. The value
@@ -270,7 +286,11 @@ type redisInstanceState struct {
 	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Do nothing in update
 	// method if change this parameter.
 	PeriodUnit *string `pulumi:"periodUnit"`
-	// Indicates the database port.
+	// Specifies the port number for accessing the instance. You can specify a port number
+	// based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
+	// **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
+	// **50069**. Defaults to **6379**.
+	// If you want to use this instance for dual-active DR, set the port to **8635**.
 	Port *int `pulumi:"port"`
 	// Indicates the IP address list of the db.
 	PrivateIps []string `pulumi:"privateIps"`
@@ -281,6 +301,8 @@ type redisInstanceState struct {
 	// Specifies the security group ID. Required if the selected subnet doesn't
 	// enable network ACL.
 	SecurityGroupId *string `pulumi:"securityGroupId"`
+	// Specifies whether SSL is enabled. Defaults to **false**.
+	Ssl *bool `pulumi:"ssl"`
 	// Indicates the node status.
 	Status *string `pulumi:"status"`
 	// Specifies the network ID of a subnet. Changing this parameter will create a
@@ -302,6 +324,7 @@ type RedisInstanceState struct {
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the AZ name.
 	// See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail.
+	// For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
 	// Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringPtrInput
 	// Specifies the advanced backup policy. Structure is documented below. Do nothing
@@ -324,6 +347,10 @@ type RedisInstanceState struct {
 	// If specified, try to import the instance instead of creating if the name already
 	// existed.
 	ForceImport pulumi.BoolPtrInput
+	// Indicates the LB IP address of the db.
+	LbIpAddress pulumi.StringPtrInput
+	// Indicates the LB port of the db.
+	LbPort pulumi.StringPtrInput
 	// Indicates the instance type.
 	Mode pulumi.StringPtrInput
 	// Specifies the instance name, which can be the same as an existing instance name. The value
@@ -346,7 +373,11 @@ type RedisInstanceState struct {
 	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Do nothing in update
 	// method if change this parameter.
 	PeriodUnit pulumi.StringPtrInput
-	// Indicates the database port.
+	// Specifies the port number for accessing the instance. You can specify a port number
+	// based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
+	// **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
+	// **50069**. Defaults to **6379**.
+	// If you want to use this instance for dual-active DR, set the port to **8635**.
 	Port pulumi.IntPtrInput
 	// Indicates the IP address list of the db.
 	PrivateIps pulumi.StringArrayInput
@@ -357,6 +388,8 @@ type RedisInstanceState struct {
 	// Specifies the security group ID. Required if the selected subnet doesn't
 	// enable network ACL.
 	SecurityGroupId pulumi.StringPtrInput
+	// Specifies whether SSL is enabled. Defaults to **false**.
+	Ssl pulumi.BoolPtrInput
 	// Indicates the node status.
 	Status pulumi.StringPtrInput
 	// Specifies the network ID of a subnet. Changing this parameter will create a
@@ -382,6 +415,7 @@ type redisInstanceArgs struct {
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the AZ name.
 	// See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail.
+	// For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
 	// Changing this parameter will create a new resource.
 	AvailabilityZone string `pulumi:"availabilityZone"`
 	// Specifies the advanced backup policy. Structure is documented below. Do nothing
@@ -420,6 +454,12 @@ type redisInstanceArgs struct {
 	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Do nothing in update
 	// method if change this parameter.
 	PeriodUnit *string `pulumi:"periodUnit"`
+	// Specifies the port number for accessing the instance. You can specify a port number
+	// based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
+	// **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
+	// **50069**. Defaults to **6379**.
+	// If you want to use this instance for dual-active DR, set the port to **8635**.
+	Port *int `pulumi:"port"`
 	// The region in which to create the Redis instance resource.
 	// See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail. If
 	// omitted, the provider-level region will be used. Changing this creates a new Redis instance resource.
@@ -427,6 +467,8 @@ type redisInstanceArgs struct {
 	// Specifies the security group ID. Required if the selected subnet doesn't
 	// enable network ACL.
 	SecurityGroupId *string `pulumi:"securityGroupId"`
+	// Specifies whether SSL is enabled. Defaults to **false**.
+	Ssl *bool `pulumi:"ssl"`
 	// Specifies the network ID of a subnet. Changing this parameter will create a
 	// new resource.
 	SubnetId string `pulumi:"subnetId"`
@@ -447,6 +489,7 @@ type RedisInstanceArgs struct {
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the AZ name.
 	// See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail.
+	// For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
 	// Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringInput
 	// Specifies the advanced backup policy. Structure is documented below. Do nothing
@@ -485,6 +528,12 @@ type RedisInstanceArgs struct {
 	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Do nothing in update
 	// method if change this parameter.
 	PeriodUnit pulumi.StringPtrInput
+	// Specifies the port number for accessing the instance. You can specify a port number
+	// based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
+	// **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
+	// **50069**. Defaults to **6379**.
+	// If you want to use this instance for dual-active DR, set the port to **8635**.
+	Port pulumi.IntPtrInput
 	// The region in which to create the Redis instance resource.
 	// See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail. If
 	// omitted, the provider-level region will be used. Changing this creates a new Redis instance resource.
@@ -492,6 +541,8 @@ type RedisInstanceArgs struct {
 	// Specifies the security group ID. Required if the selected subnet doesn't
 	// enable network ACL.
 	SecurityGroupId pulumi.StringPtrInput
+	// Specifies whether SSL is enabled. Defaults to **false**.
+	Ssl pulumi.BoolPtrInput
 	// Specifies the network ID of a subnet. Changing this parameter will create a
 	// new resource.
 	SubnetId pulumi.StringInput
@@ -603,6 +654,7 @@ func (o RedisInstanceOutput) AutoRenew() pulumi.StringPtrOutput {
 
 // Specifies the AZ name.
 // See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail.
+// For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
 // Changing this parameter will create a new resource.
 func (o RedisInstanceOutput) AvailabilityZone() pulumi.StringOutput {
 	return o.ApplyT(func(v *RedisInstance) pulumi.StringOutput { return v.AvailabilityZone }).(pulumi.StringOutput)
@@ -649,6 +701,16 @@ func (o RedisInstanceOutput) ForceImport() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *RedisInstance) pulumi.BoolPtrOutput { return v.ForceImport }).(pulumi.BoolPtrOutput)
 }
 
+// Indicates the LB IP address of the db.
+func (o RedisInstanceOutput) LbIpAddress() pulumi.StringOutput {
+	return o.ApplyT(func(v *RedisInstance) pulumi.StringOutput { return v.LbIpAddress }).(pulumi.StringOutput)
+}
+
+// Indicates the LB port of the db.
+func (o RedisInstanceOutput) LbPort() pulumi.StringOutput {
+	return o.ApplyT(func(v *RedisInstance) pulumi.StringOutput { return v.LbPort }).(pulumi.StringOutput)
+}
+
 // Indicates the instance type.
 func (o RedisInstanceOutput) Mode() pulumi.StringOutput {
 	return o.ApplyT(func(v *RedisInstance) pulumi.StringOutput { return v.Mode }).(pulumi.StringOutput)
@@ -692,7 +754,11 @@ func (o RedisInstanceOutput) PeriodUnit() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *RedisInstance) pulumi.StringPtrOutput { return v.PeriodUnit }).(pulumi.StringPtrOutput)
 }
 
-// Indicates the database port.
+// Specifies the port number for accessing the instance. You can specify a port number
+// based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
+// **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
+// **50069**. Defaults to **6379**.
+// If you want to use this instance for dual-active DR, set the port to **8635**.
 func (o RedisInstanceOutput) Port() pulumi.IntOutput {
 	return o.ApplyT(func(v *RedisInstance) pulumi.IntOutput { return v.Port }).(pulumi.IntOutput)
 }
@@ -713,6 +779,11 @@ func (o RedisInstanceOutput) Region() pulumi.StringOutput {
 // enable network ACL.
 func (o RedisInstanceOutput) SecurityGroupId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *RedisInstance) pulumi.StringPtrOutput { return v.SecurityGroupId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether SSL is enabled. Defaults to **false**.
+func (o RedisInstanceOutput) Ssl() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *RedisInstance) pulumi.BoolPtrOutput { return v.Ssl }).(pulumi.BoolPtrOutput)
 }
 
 // Indicates the node status.

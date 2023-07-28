@@ -14,7 +14,6 @@ import (
 // Manages an AS Lifecycle Hook resource within HuaweiCloud.
 //
 // ## Example Usage
-// ### Basic Lifecycle Hook
 //
 // ```go
 // package main
@@ -34,8 +33,8 @@ import (
 //			asGroupId := cfg.RequireObject("asGroupId")
 //			smnTopicUrn := cfg.RequireObject("smnTopicUrn")
 //			_, err := As.NewLifecycleHook(ctx, "test", &As.LifecycleHookArgs{
-//				Type:                 pulumi.String("ADD"),
 //				ScalingGroupId:       pulumi.Any(asGroupId),
+//				Type:                 pulumi.String("ADD"),
 //				DefaultResult:        pulumi.String("ABANDON"),
 //				NotificationTopicUrn: pulumi.Any(smnTopicUrn),
 //				NotificationMessage:  pulumi.String("This is a test message"),
@@ -55,7 +54,7 @@ import (
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:As/lifecycleHook:LifecycleHook test <AS group ID>/<Lifecycle hook ID>
+//	$ pulumi import huaweicloud:As/lifecycleHook:LifecycleHook test &ltAS group ID&gt/&ltLifecycle hook ID&gt
 //
 // ```
 type LifecycleHook struct {
@@ -66,8 +65,9 @@ type LifecycleHook struct {
 	// Specifies the default lifecycle hook callback operation. This operation is
 	// performed when the timeout duration expires. The valid values are *ABANDON* and *CONTINUE*, default to *ABANDON*.
 	DefaultResult pulumi.StringPtrOutput `pulumi:"defaultResult"`
-	// Specifies the lifecycle hook name. This parameter can contain a maximum of 32 characters,
-	// which may consist of letters, digits, underscores (_) and hyphens (-).
+	// Specifies the lifecycle hook name. This parameter can contain a maximum of
+	// 32 characters, which may consist of letters, digits, underscores (_) and hyphens (-).
+	// Changing this creates a new AS lifecycle hook.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies a customized notification. This parameter can contains a maximum
 	// of 256 characters, which cannot contain the following characters: <>&'().
@@ -76,11 +76,11 @@ type LifecycleHook struct {
 	NotificationTopicName pulumi.StringOutput `pulumi:"notificationTopicName"`
 	// Specifies a unique topic in SMN.
 	NotificationTopicUrn pulumi.StringOutput `pulumi:"notificationTopicUrn"`
-	// The region in which to create the AS lifecycle hook. If omitted, the `region`
-	// argument of the provider is used. Changing this creates a new AS lifecycle hook.
+	// Specifies the region in which to create the AS lifecycle hook.
+	// If omitted, the provider-level region will be used. Changing this creates a new AS lifecycle hook.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// Specifies the ID of the AS group in UUID format. Changing this
-	// creates a new AS lifecycle hook.
+	// Specifies the ID of the AS group in UUID format.
+	// Changing this creates a new AS lifecycle hook.
 	ScalingGroupId pulumi.StringOutput `pulumi:"scalingGroupId"`
 	// Specifies the lifecycle hook timeout duration, which ranges from 300 to 86400 in the unit
 	// of second, default to 3600.
@@ -135,8 +135,9 @@ type lifecycleHookState struct {
 	// Specifies the default lifecycle hook callback operation. This operation is
 	// performed when the timeout duration expires. The valid values are *ABANDON* and *CONTINUE*, default to *ABANDON*.
 	DefaultResult *string `pulumi:"defaultResult"`
-	// Specifies the lifecycle hook name. This parameter can contain a maximum of 32 characters,
-	// which may consist of letters, digits, underscores (_) and hyphens (-).
+	// Specifies the lifecycle hook name. This parameter can contain a maximum of
+	// 32 characters, which may consist of letters, digits, underscores (_) and hyphens (-).
+	// Changing this creates a new AS lifecycle hook.
 	Name *string `pulumi:"name"`
 	// Specifies a customized notification. This parameter can contains a maximum
 	// of 256 characters, which cannot contain the following characters: <>&'().
@@ -145,11 +146,11 @@ type lifecycleHookState struct {
 	NotificationTopicName *string `pulumi:"notificationTopicName"`
 	// Specifies a unique topic in SMN.
 	NotificationTopicUrn *string `pulumi:"notificationTopicUrn"`
-	// The region in which to create the AS lifecycle hook. If omitted, the `region`
-	// argument of the provider is used. Changing this creates a new AS lifecycle hook.
+	// Specifies the region in which to create the AS lifecycle hook.
+	// If omitted, the provider-level region will be used. Changing this creates a new AS lifecycle hook.
 	Region *string `pulumi:"region"`
-	// Specifies the ID of the AS group in UUID format. Changing this
-	// creates a new AS lifecycle hook.
+	// Specifies the ID of the AS group in UUID format.
+	// Changing this creates a new AS lifecycle hook.
 	ScalingGroupId *string `pulumi:"scalingGroupId"`
 	// Specifies the lifecycle hook timeout duration, which ranges from 300 to 86400 in the unit
 	// of second, default to 3600.
@@ -166,8 +167,9 @@ type LifecycleHookState struct {
 	// Specifies the default lifecycle hook callback operation. This operation is
 	// performed when the timeout duration expires. The valid values are *ABANDON* and *CONTINUE*, default to *ABANDON*.
 	DefaultResult pulumi.StringPtrInput
-	// Specifies the lifecycle hook name. This parameter can contain a maximum of 32 characters,
-	// which may consist of letters, digits, underscores (_) and hyphens (-).
+	// Specifies the lifecycle hook name. This parameter can contain a maximum of
+	// 32 characters, which may consist of letters, digits, underscores (_) and hyphens (-).
+	// Changing this creates a new AS lifecycle hook.
 	Name pulumi.StringPtrInput
 	// Specifies a customized notification. This parameter can contains a maximum
 	// of 256 characters, which cannot contain the following characters: <>&'().
@@ -176,11 +178,11 @@ type LifecycleHookState struct {
 	NotificationTopicName pulumi.StringPtrInput
 	// Specifies a unique topic in SMN.
 	NotificationTopicUrn pulumi.StringPtrInput
-	// The region in which to create the AS lifecycle hook. If omitted, the `region`
-	// argument of the provider is used. Changing this creates a new AS lifecycle hook.
+	// Specifies the region in which to create the AS lifecycle hook.
+	// If omitted, the provider-level region will be used. Changing this creates a new AS lifecycle hook.
 	Region pulumi.StringPtrInput
-	// Specifies the ID of the AS group in UUID format. Changing this
-	// creates a new AS lifecycle hook.
+	// Specifies the ID of the AS group in UUID format.
+	// Changing this creates a new AS lifecycle hook.
 	ScalingGroupId pulumi.StringPtrInput
 	// Specifies the lifecycle hook timeout duration, which ranges from 300 to 86400 in the unit
 	// of second, default to 3600.
@@ -199,19 +201,20 @@ type lifecycleHookArgs struct {
 	// Specifies the default lifecycle hook callback operation. This operation is
 	// performed when the timeout duration expires. The valid values are *ABANDON* and *CONTINUE*, default to *ABANDON*.
 	DefaultResult *string `pulumi:"defaultResult"`
-	// Specifies the lifecycle hook name. This parameter can contain a maximum of 32 characters,
-	// which may consist of letters, digits, underscores (_) and hyphens (-).
+	// Specifies the lifecycle hook name. This parameter can contain a maximum of
+	// 32 characters, which may consist of letters, digits, underscores (_) and hyphens (-).
+	// Changing this creates a new AS lifecycle hook.
 	Name *string `pulumi:"name"`
 	// Specifies a customized notification. This parameter can contains a maximum
 	// of 256 characters, which cannot contain the following characters: <>&'().
 	NotificationMessage *string `pulumi:"notificationMessage"`
 	// Specifies a unique topic in SMN.
 	NotificationTopicUrn string `pulumi:"notificationTopicUrn"`
-	// The region in which to create the AS lifecycle hook. If omitted, the `region`
-	// argument of the provider is used. Changing this creates a new AS lifecycle hook.
+	// Specifies the region in which to create the AS lifecycle hook.
+	// If omitted, the provider-level region will be used. Changing this creates a new AS lifecycle hook.
 	Region *string `pulumi:"region"`
-	// Specifies the ID of the AS group in UUID format. Changing this
-	// creates a new AS lifecycle hook.
+	// Specifies the ID of the AS group in UUID format.
+	// Changing this creates a new AS lifecycle hook.
 	ScalingGroupId string `pulumi:"scalingGroupId"`
 	// Specifies the lifecycle hook timeout duration, which ranges from 300 to 86400 in the unit
 	// of second, default to 3600.
@@ -227,19 +230,20 @@ type LifecycleHookArgs struct {
 	// Specifies the default lifecycle hook callback operation. This operation is
 	// performed when the timeout duration expires. The valid values are *ABANDON* and *CONTINUE*, default to *ABANDON*.
 	DefaultResult pulumi.StringPtrInput
-	// Specifies the lifecycle hook name. This parameter can contain a maximum of 32 characters,
-	// which may consist of letters, digits, underscores (_) and hyphens (-).
+	// Specifies the lifecycle hook name. This parameter can contain a maximum of
+	// 32 characters, which may consist of letters, digits, underscores (_) and hyphens (-).
+	// Changing this creates a new AS lifecycle hook.
 	Name pulumi.StringPtrInput
 	// Specifies a customized notification. This parameter can contains a maximum
 	// of 256 characters, which cannot contain the following characters: <>&'().
 	NotificationMessage pulumi.StringPtrInput
 	// Specifies a unique topic in SMN.
 	NotificationTopicUrn pulumi.StringInput
-	// The region in which to create the AS lifecycle hook. If omitted, the `region`
-	// argument of the provider is used. Changing this creates a new AS lifecycle hook.
+	// Specifies the region in which to create the AS lifecycle hook.
+	// If omitted, the provider-level region will be used. Changing this creates a new AS lifecycle hook.
 	Region pulumi.StringPtrInput
-	// Specifies the ID of the AS group in UUID format. Changing this
-	// creates a new AS lifecycle hook.
+	// Specifies the ID of the AS group in UUID format.
+	// Changing this creates a new AS lifecycle hook.
 	ScalingGroupId pulumi.StringInput
 	// Specifies the lifecycle hook timeout duration, which ranges from 300 to 86400 in the unit
 	// of second, default to 3600.
@@ -348,8 +352,9 @@ func (o LifecycleHookOutput) DefaultResult() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *LifecycleHook) pulumi.StringPtrOutput { return v.DefaultResult }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the lifecycle hook name. This parameter can contain a maximum of 32 characters,
-// which may consist of letters, digits, underscores (_) and hyphens (-).
+// Specifies the lifecycle hook name. This parameter can contain a maximum of
+// 32 characters, which may consist of letters, digits, underscores (_) and hyphens (-).
+// Changing this creates a new AS lifecycle hook.
 func (o LifecycleHookOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *LifecycleHook) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
@@ -370,14 +375,14 @@ func (o LifecycleHookOutput) NotificationTopicUrn() pulumi.StringOutput {
 	return o.ApplyT(func(v *LifecycleHook) pulumi.StringOutput { return v.NotificationTopicUrn }).(pulumi.StringOutput)
 }
 
-// The region in which to create the AS lifecycle hook. If omitted, the `region`
-// argument of the provider is used. Changing this creates a new AS lifecycle hook.
+// Specifies the region in which to create the AS lifecycle hook.
+// If omitted, the provider-level region will be used. Changing this creates a new AS lifecycle hook.
 func (o LifecycleHookOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *LifecycleHook) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Specifies the ID of the AS group in UUID format. Changing this
-// creates a new AS lifecycle hook.
+// Specifies the ID of the AS group in UUID format.
+// Changing this creates a new AS lifecycle hook.
 func (o LifecycleHookOutput) ScalingGroupId() pulumi.StringOutput {
 	return o.ApplyT(func(v *LifecycleHook) pulumi.StringOutput { return v.ScalingGroupId }).(pulumi.StringOutput)
 }

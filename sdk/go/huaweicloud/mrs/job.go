@@ -56,7 +56,7 @@ import (
 //
 // ## Import
 //
-// MapReduce jobs can be imported using their `id` and the IDs of the MapReduce cluster to which the job belongs, separated by a slash, e.g.
+// MapReduce jobs can be imported using their `id` and the IDs of the MapReduce cluster to which the job belongs, separated by a slash, e.g. bash
 //
 // ```sh
 //
@@ -109,7 +109,17 @@ type Job struct {
 	Status pulumi.StringOutput `pulumi:"status"`
 	// The submission time of the MapReduce job.
 	SubmitTime pulumi.StringOutput `pulumi:"submitTime"`
-	Type       pulumi.StringOutput `pulumi:"type"`
+	// Specifies the job type.
+	// <a name="mapreduceJobType"></a>
+	// The valid values are as follows:
+	// + [Flink](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0527.html)
+	// + [HiveSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+	// + [HiveScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+	// + [MapReduce](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0052.html)
+	// + [SparkSubmit](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0524.html)
+	// + [SparkSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+	// + [SparkScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+	Type pulumi.StringOutput `pulumi:"type"`
 }
 
 // NewJob registers a new resource with the given unique name, arguments, and options.
@@ -191,7 +201,17 @@ type jobState struct {
 	Status *string `pulumi:"status"`
 	// The submission time of the MapReduce job.
 	SubmitTime *string `pulumi:"submitTime"`
-	Type       *string `pulumi:"type"`
+	// Specifies the job type.
+	// <a name="mapreduceJobType"></a>
+	// The valid values are as follows:
+	// + [Flink](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0527.html)
+	// + [HiveSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+	// + [HiveScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+	// + [MapReduce](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0052.html)
+	// + [SparkSubmit](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0524.html)
+	// + [SparkSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+	// + [SparkScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+	Type *string `pulumi:"type"`
 }
 
 type JobState struct {
@@ -238,7 +258,17 @@ type JobState struct {
 	Status pulumi.StringPtrInput
 	// The submission time of the MapReduce job.
 	SubmitTime pulumi.StringPtrInput
-	Type       pulumi.StringPtrInput
+	// Specifies the job type.
+	// <a name="mapreduceJobType"></a>
+	// The valid values are as follows:
+	// + [Flink](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0527.html)
+	// + [HiveSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+	// + [HiveScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+	// + [MapReduce](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0052.html)
+	// + [SparkSubmit](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0524.html)
+	// + [SparkSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+	// + [SparkScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+	Type pulumi.StringPtrInput
 }
 
 func (JobState) ElementType() reflect.Type {
@@ -280,8 +310,18 @@ type jobArgs struct {
 	ServiceParameters map[string]string `pulumi:"serviceParameters"`
 	// Specifies the SQL command or file path. Only required if `type` is **HiveSql**
 	// or **SparkSql**. Changing this will create a new MapReduce job resource.
-	Sql  *string `pulumi:"sql"`
-	Type string  `pulumi:"type"`
+	Sql *string `pulumi:"sql"`
+	// Specifies the job type.
+	// <a name="mapreduceJobType"></a>
+	// The valid values are as follows:
+	// + [Flink](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0527.html)
+	// + [HiveSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+	// + [HiveScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+	// + [MapReduce](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0052.html)
+	// + [SparkSubmit](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0524.html)
+	// + [SparkSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+	// + [SparkScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+	Type string `pulumi:"type"`
 }
 
 // The set of arguments for constructing a Job resource.
@@ -320,7 +360,17 @@ type JobArgs struct {
 	ServiceParameters pulumi.StringMapInput
 	// Specifies the SQL command or file path. Only required if `type` is **HiveSql**
 	// or **SparkSql**. Changing this will create a new MapReduce job resource.
-	Sql  pulumi.StringPtrInput
+	Sql pulumi.StringPtrInput
+	// Specifies the job type.
+	// <a name="mapreduceJobType"></a>
+	// The valid values are as follows:
+	// + [Flink](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0527.html)
+	// + [HiveSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+	// + [HiveScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+	// + [MapReduce](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0052.html)
+	// + [SparkSubmit](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0524.html)
+	// + [SparkSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+	// + [SparkScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
 	Type pulumi.StringInput
 }
 
@@ -490,6 +540,16 @@ func (o JobOutput) SubmitTime() pulumi.StringOutput {
 	return o.ApplyT(func(v *Job) pulumi.StringOutput { return v.SubmitTime }).(pulumi.StringOutput)
 }
 
+// Specifies the job type.
+// <a name="mapreduceJobType"></a>
+// The valid values are as follows:
+// + [Flink](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0527.html)
+// + [HiveSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+// + [HiveScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0525.html)
+// + [MapReduce](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0052.html)
+// + [SparkSubmit](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0524.html)
+// + [SparkSql](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
+// + [SparkScript](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0526.html)
 func (o JobOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v *Job) pulumi.StringOutput { return v.Type }).(pulumi.StringOutput)
 }

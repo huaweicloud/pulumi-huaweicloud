@@ -17,6 +17,7 @@ class ReferenceTableArgs:
                  type: pulumi.Input[str],
                  conditions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
@@ -26,6 +27,8 @@ class ReferenceTableArgs:
         :param pulumi.Input[Sequence[pulumi.Input[str]]] conditions: The conditions of the reference table. The maximum length is 30. The maximum length of
                condition is 2048 characters.
         :param pulumi.Input[str] description: The description of the reference table. The maximum length is 128 characters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF reference table.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
                maximum length is 64 characters.
         :param pulumi.Input[str] region: The region in which to create the WAF reference table resource. If omitted,
@@ -36,6 +39,8 @@ class ReferenceTableArgs:
             pulumi.set(__self__, "conditions", conditions)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
@@ -80,6 +85,19 @@ class ReferenceTableArgs:
         pulumi.set(self, "description", value)
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID of WAF reference table.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
@@ -112,6 +130,7 @@ class _ReferenceTableState:
                  conditions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  creation_time: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  type: Optional[pulumi.Input[str]] = None):
@@ -121,6 +140,8 @@ class _ReferenceTableState:
                condition is 2048 characters.
         :param pulumi.Input[str] creation_time: The server time when reference table was created.
         :param pulumi.Input[str] description: The description of the reference table. The maximum length is 128 characters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF reference table.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
                maximum length is 64 characters.
         :param pulumi.Input[str] region: The region in which to create the WAF reference table resource. If omitted,
@@ -134,6 +155,8 @@ class _ReferenceTableState:
             pulumi.set(__self__, "creation_time", creation_time)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
@@ -177,6 +200,19 @@ class _ReferenceTableState:
     @description.setter
     def description(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID of WAF reference table.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
 
     @property
     @pulumi.getter
@@ -225,6 +261,7 @@ class ReferenceTable(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  conditions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  type: Optional[pulumi.Input[str]] = None,
@@ -241,20 +278,29 @@ class ReferenceTable(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        enterprise_project_id = config.require_object("enterpriseProjectId")
         ref_table = huaweicloud.waf.ReferenceTable("refTable",
+            type="url",
+            enterprise_project_id=enterprise_project_id,
             conditions=[
                 "/admin",
                 "/manage",
-            ],
-            type="url")
+            ])
         ```
 
         ## Import
 
-        The reference table can be imported using the `id`, e.g.
+        There are two ways to import WAF reference table state. * Using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Waf/referenceTable:ReferenceTable ref_table 96e46e5e702b4e2aa5609ad287de4788
+         $ pulumi import huaweicloud:Waf/referenceTable:ReferenceTable test <id>
+        ```
+
+         * Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Waf/referenceTable:ReferenceTable test <id>/<enterprise_project_id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -262,6 +308,8 @@ class ReferenceTable(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[str]]] conditions: The conditions of the reference table. The maximum length is 30. The maximum length of
                condition is 2048 characters.
         :param pulumi.Input[str] description: The description of the reference table. The maximum length is 128 characters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF reference table.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
                maximum length is 64 characters.
         :param pulumi.Input[str] region: The region in which to create the WAF reference table resource. If omitted,
@@ -287,20 +335,29 @@ class ReferenceTable(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        enterprise_project_id = config.require_object("enterpriseProjectId")
         ref_table = huaweicloud.waf.ReferenceTable("refTable",
+            type="url",
+            enterprise_project_id=enterprise_project_id,
             conditions=[
                 "/admin",
                 "/manage",
-            ],
-            type="url")
+            ])
         ```
 
         ## Import
 
-        The reference table can be imported using the `id`, e.g.
+        There are two ways to import WAF reference table state. * Using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Waf/referenceTable:ReferenceTable ref_table 96e46e5e702b4e2aa5609ad287de4788
+         $ pulumi import huaweicloud:Waf/referenceTable:ReferenceTable test <id>
+        ```
+
+         * Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Waf/referenceTable:ReferenceTable test <id>/<enterprise_project_id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -320,6 +377,7 @@ class ReferenceTable(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  conditions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  type: Optional[pulumi.Input[str]] = None,
@@ -334,6 +392,7 @@ class ReferenceTable(pulumi.CustomResource):
 
             __props__.__dict__["conditions"] = conditions
             __props__.__dict__["description"] = description
+            __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["name"] = name
             __props__.__dict__["region"] = region
             if type is None and not opts.urn:
@@ -353,6 +412,7 @@ class ReferenceTable(pulumi.CustomResource):
             conditions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             creation_time: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
+            enterprise_project_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             type: Optional[pulumi.Input[str]] = None) -> 'ReferenceTable':
@@ -367,6 +427,8 @@ class ReferenceTable(pulumi.CustomResource):
                condition is 2048 characters.
         :param pulumi.Input[str] creation_time: The server time when reference table was created.
         :param pulumi.Input[str] description: The description of the reference table. The maximum length is 128 characters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF reference table.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
                maximum length is 64 characters.
         :param pulumi.Input[str] region: The region in which to create the WAF reference table resource. If omitted,
@@ -381,6 +443,7 @@ class ReferenceTable(pulumi.CustomResource):
         __props__.__dict__["conditions"] = conditions
         __props__.__dict__["creation_time"] = creation_time
         __props__.__dict__["description"] = description
+        __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["name"] = name
         __props__.__dict__["region"] = region
         __props__.__dict__["type"] = type
@@ -410,6 +473,15 @@ class ReferenceTable(pulumi.CustomResource):
         The description of the reference table. The maximum length is 128 characters.
         """
         return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the enterprise project ID of WAF reference table.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
 
     @property
     @pulumi.getter

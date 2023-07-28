@@ -32,41 +32,45 @@ class VpcChannelArgs:
                  unhealthy_threshold: Optional[pulumi.Input[int]] = None):
         """
         The set of arguments for constructing a VpcChannel resource.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the APIG
-               vpc channel belongs to.
-               Changing this will create a new VPC channel resource.
-        :param pulumi.Input[Sequence[pulumi.Input['VpcChannelMemberArgs']]] members: Specifies an array of one or more backend server IDs or IP addresses that bind the VPC
-               channel.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the VPC channel
+               belongs.
+               Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['VpcChannelMemberArgs']]] members: Specifies the configuration of the backend servers that bind the VPC channel.  
                The object structure is documented below.
-        :param pulumi.Input[int] port: Specifies the host port of the VPC channel.
-               The valid value is range from 1 to 65535.
-        :param pulumi.Input[str] algorithm: Specifies the type of the backend service.
-               The valid types are *WRR*, *WLC*, *SH* and *URI hashing*, default to *WRR*.
+        :param pulumi.Input[int] port: Specifies the host port of the VPC channel.  
+               The valid value ranges from `1` to `65,535`.
+        :param pulumi.Input[str] algorithm: Specifies the distribution algorithm.  
+               The valid types are **WRR**, **WLC**, **SH** and **URI hashing**, defaults to **WRR**.
         :param pulumi.Input[int] healthy_threshold: Specifies the healthy threshold, which refers to the number of consecutive
                successful checks required for a backend server to be considered healthy.
-               The valid value is range from 2 to 10, default to 2.
-        :param pulumi.Input[int] interval: Specifies the interval between consecutive checks, in second.
-               The valid value is range from 5 to 300, default to 10.
-        :param pulumi.Input[str] member_type: Specifies the type of the backend service.
-               The valid types are *ECS* and *EIP*, default to *ECS*.
-        :param pulumi.Input[str] name: Specifies the name of the VPC channel.
-               The channel name consists of 3 to 64 characters, starting with a letter.
-               Only letters, digits and underscores (_) are allowed.
-               Chinese characters must be in UTF-8 or Unicode format.
-        :param pulumi.Input[str] path: Specifies the destination path for health checks.
-               Required if `protocol` is *HTTP* or *HTTPS*.
+               The valid value ranges from `2` to `10`, defaults to `2`.
+        :param pulumi.Input[str] http_code: Specifies the response codes for determining a successful HTTP response.  
+               The valid value ranges from `100` to `599` and the valid formats are as follows:
+               + The multiple values, for example, **200,201,202**.
+               + The range, for example, **200-299**.
+               + Both multiple values and ranges, for example, **201,202,210-299**.
+        :param pulumi.Input[int] interval: Specifies the interval between consecutive checks, in second.  
+               The valid value ranges from `5` to `300`, defaults to `10`.
+        :param pulumi.Input[str] member_type: Specifies the member type of the VPC channel.  
+               The valid types are **ECS** and **EIP**, defaults to **ECS**.
+        :param pulumi.Input[str] name: Specifies the name of the VPC channel.  
+               The valid length is limited from `3` to `64`, only chinese and english letters, digits, hyphens (-), underscores (_)
+               and dots (.) are allowed.
+               The name must start with a chinese or english letter, and the Chinese characters must be in **UTF-8** or **Unicode**
+               format.
+        :param pulumi.Input[str] path: Specifies the destination path for health checks.  
+               Required if the `protocol` is **HTTP** or **HTTPS**.
         :param pulumi.Input[str] protocol: Specifies the protocol for performing health checks on backend servers in the VPC
                channel.
-               The valid values are *TCP*, *HTTP* and *HTTPS*, default to *TCP*.
-        :param pulumi.Input[str] region: Specifies the region in which to create the VPC channel resource.
-               If omitted, the provider-level region will be used.
-               Changing this will create a new VPC channel resource.
-        :param pulumi.Input[int] timeout: Specifies the timeout for determining whether a health check fails, in second.
-               The value must be less than the value of time_interval.
-               The valid value is range from 2 to 30, default to 5.
+               The valid values are **TCP**, **HTTP** and **HTTPS**, defaults to **TCP**.
+        :param pulumi.Input[str] region: Specifies the region where the VPC channel is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[int] timeout: Specifies the timeout for determining whether a health check fails, in second.  
+               The value must be less than the value of the time `interval`.
+               The valid value ranges from `2` to `30`, defaults to `5`.
         :param pulumi.Input[int] unhealthy_threshold: Specifies the unhealthy threshold, which refers to the number of consecutive
                failed checks required for a backend server to be considered unhealthy.
-               The valid value is range from 2 to 10, default to 5.
+               The valid value ranges from `2` to `10`, defaults to `5`.
         """
         pulumi.set(__self__, "instance_id", instance_id)
         pulumi.set(__self__, "members", members)
@@ -98,9 +102,9 @@ class VpcChannelArgs:
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Input[str]:
         """
-        Specifies an ID of the APIG dedicated instance to which the APIG
-        vpc channel belongs to.
-        Changing this will create a new VPC channel resource.
+        Specifies the ID of the dedicated instance to which the VPC channel
+        belongs.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -112,8 +116,7 @@ class VpcChannelArgs:
     @pulumi.getter
     def members(self) -> pulumi.Input[Sequence[pulumi.Input['VpcChannelMemberArgs']]]:
         """
-        Specifies an array of one or more backend server IDs or IP addresses that bind the VPC
-        channel.
+        Specifies the configuration of the backend servers that bind the VPC channel.  
         The object structure is documented below.
         """
         return pulumi.get(self, "members")
@@ -126,8 +129,8 @@ class VpcChannelArgs:
     @pulumi.getter
     def port(self) -> pulumi.Input[int]:
         """
-        Specifies the host port of the VPC channel.
-        The valid value is range from 1 to 65535.
+        Specifies the host port of the VPC channel.  
+        The valid value ranges from `1` to `65,535`.
         """
         return pulumi.get(self, "port")
 
@@ -139,8 +142,8 @@ class VpcChannelArgs:
     @pulumi.getter
     def algorithm(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the type of the backend service.
-        The valid types are *WRR*, *WLC*, *SH* and *URI hashing*, default to *WRR*.
+        Specifies the distribution algorithm.  
+        The valid types are **WRR**, **WLC**, **SH** and **URI hashing**, defaults to **WRR**.
         """
         return pulumi.get(self, "algorithm")
 
@@ -154,7 +157,7 @@ class VpcChannelArgs:
         """
         Specifies the healthy threshold, which refers to the number of consecutive
         successful checks required for a backend server to be considered healthy.
-        The valid value is range from 2 to 10, default to 2.
+        The valid value ranges from `2` to `10`, defaults to `2`.
         """
         return pulumi.get(self, "healthy_threshold")
 
@@ -165,6 +168,13 @@ class VpcChannelArgs:
     @property
     @pulumi.getter(name="httpCode")
     def http_code(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the response codes for determining a successful HTTP response.  
+        The valid value ranges from `100` to `599` and the valid formats are as follows:
+        + The multiple values, for example, **200,201,202**.
+        + The range, for example, **200-299**.
+        + Both multiple values and ranges, for example, **201,202,210-299**.
+        """
         return pulumi.get(self, "http_code")
 
     @http_code.setter
@@ -175,8 +185,8 @@ class VpcChannelArgs:
     @pulumi.getter
     def interval(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the interval between consecutive checks, in second.
-        The valid value is range from 5 to 300, default to 10.
+        Specifies the interval between consecutive checks, in second.  
+        The valid value ranges from `5` to `300`, defaults to `10`.
         """
         return pulumi.get(self, "interval")
 
@@ -188,8 +198,8 @@ class VpcChannelArgs:
     @pulumi.getter(name="memberType")
     def member_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the type of the backend service.
-        The valid types are *ECS* and *EIP*, default to *ECS*.
+        Specifies the member type of the VPC channel.  
+        The valid types are **ECS** and **EIP**, defaults to **ECS**.
         """
         return pulumi.get(self, "member_type")
 
@@ -201,10 +211,11 @@ class VpcChannelArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the VPC channel.
-        The channel name consists of 3 to 64 characters, starting with a letter.
-        Only letters, digits and underscores (_) are allowed.
-        Chinese characters must be in UTF-8 or Unicode format.
+        Specifies the name of the VPC channel.  
+        The valid length is limited from `3` to `64`, only chinese and english letters, digits, hyphens (-), underscores (_)
+        and dots (.) are allowed.
+        The name must start with a chinese or english letter, and the Chinese characters must be in **UTF-8** or **Unicode**
+        format.
         """
         return pulumi.get(self, "name")
 
@@ -216,8 +227,8 @@ class VpcChannelArgs:
     @pulumi.getter
     def path(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the destination path for health checks.
-        Required if `protocol` is *HTTP* or *HTTPS*.
+        Specifies the destination path for health checks.  
+        Required if the `protocol` is **HTTP** or **HTTPS**.
         """
         return pulumi.get(self, "path")
 
@@ -231,7 +242,7 @@ class VpcChannelArgs:
         """
         Specifies the protocol for performing health checks on backend servers in the VPC
         channel.
-        The valid values are *TCP*, *HTTP* and *HTTPS*, default to *TCP*.
+        The valid values are **TCP**, **HTTP** and **HTTPS**, defaults to **TCP**.
         """
         return pulumi.get(self, "protocol")
 
@@ -243,9 +254,8 @@ class VpcChannelArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create the VPC channel resource.
-        If omitted, the provider-level region will be used.
-        Changing this will create a new VPC channel resource.
+        Specifies the region where the VPC channel is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -257,9 +267,9 @@ class VpcChannelArgs:
     @pulumi.getter
     def timeout(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the timeout for determining whether a health check fails, in second.
-        The value must be less than the value of time_interval.
-        The valid value is range from 2 to 30, default to 5.
+        Specifies the timeout for determining whether a health check fails, in second.  
+        The value must be less than the value of the time `interval`.
+        The valid value ranges from `2` to `30`, defaults to `5`.
         """
         return pulumi.get(self, "timeout")
 
@@ -273,7 +283,7 @@ class VpcChannelArgs:
         """
         Specifies the unhealthy threshold, which refers to the number of consecutive
         failed checks required for a backend server to be considered unhealthy.
-        The valid value is range from 2 to 10, default to 5.
+        The valid value ranges from `2` to `10`, defaults to `5`.
         """
         return pulumi.get(self, "unhealthy_threshold")
 
@@ -286,7 +296,7 @@ class VpcChannelArgs:
 class _VpcChannelState:
     def __init__(__self__, *,
                  algorithm: Optional[pulumi.Input[str]] = None,
-                 create_time: Optional[pulumi.Input[str]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  healthy_threshold: Optional[pulumi.Input[int]] = None,
                  http_code: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
@@ -303,48 +313,52 @@ class _VpcChannelState:
                  unhealthy_threshold: Optional[pulumi.Input[int]] = None):
         """
         Input properties used for looking up and filtering VpcChannel resources.
-        :param pulumi.Input[str] algorithm: Specifies the type of the backend service.
-               The valid types are *WRR*, *WLC*, *SH* and *URI hashing*, default to *WRR*.
-        :param pulumi.Input[str] create_time: Time when the channel created, in UTC format.
+        :param pulumi.Input[str] algorithm: Specifies the distribution algorithm.  
+               The valid types are **WRR**, **WLC**, **SH** and **URI hashing**, defaults to **WRR**.
+        :param pulumi.Input[str] created_at: The time when the VPC channel was created.
         :param pulumi.Input[int] healthy_threshold: Specifies the healthy threshold, which refers to the number of consecutive
                successful checks required for a backend server to be considered healthy.
-               The valid value is range from 2 to 10, default to 2.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the APIG
-               vpc channel belongs to.
-               Changing this will create a new VPC channel resource.
-        :param pulumi.Input[int] interval: Specifies the interval between consecutive checks, in second.
-               The valid value is range from 5 to 300, default to 10.
-        :param pulumi.Input[str] member_type: Specifies the type of the backend service.
-               The valid types are *ECS* and *EIP*, default to *ECS*.
-        :param pulumi.Input[Sequence[pulumi.Input['VpcChannelMemberArgs']]] members: Specifies an array of one or more backend server IDs or IP addresses that bind the VPC
-               channel.
+               The valid value ranges from `2` to `10`, defaults to `2`.
+        :param pulumi.Input[str] http_code: Specifies the response codes for determining a successful HTTP response.  
+               The valid value ranges from `100` to `599` and the valid formats are as follows:
+               + The multiple values, for example, **200,201,202**.
+               + The range, for example, **200-299**.
+               + Both multiple values and ranges, for example, **201,202,210-299**.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the VPC channel
+               belongs.
+               Changing this will create a new resource.
+        :param pulumi.Input[int] interval: Specifies the interval between consecutive checks, in second.  
+               The valid value ranges from `5` to `300`, defaults to `10`.
+        :param pulumi.Input[str] member_type: Specifies the member type of the VPC channel.  
+               The valid types are **ECS** and **EIP**, defaults to **ECS**.
+        :param pulumi.Input[Sequence[pulumi.Input['VpcChannelMemberArgs']]] members: Specifies the configuration of the backend servers that bind the VPC channel.  
                The object structure is documented below.
-        :param pulumi.Input[str] name: Specifies the name of the VPC channel.
-               The channel name consists of 3 to 64 characters, starting with a letter.
-               Only letters, digits and underscores (_) are allowed.
-               Chinese characters must be in UTF-8 or Unicode format.
-        :param pulumi.Input[str] path: Specifies the destination path for health checks.
-               Required if `protocol` is *HTTP* or *HTTPS*.
-        :param pulumi.Input[int] port: Specifies the host port of the VPC channel.
-               The valid value is range from 1 to 65535.
+        :param pulumi.Input[str] name: Specifies the name of the VPC channel.  
+               The valid length is limited from `3` to `64`, only chinese and english letters, digits, hyphens (-), underscores (_)
+               and dots (.) are allowed.
+               The name must start with a chinese or english letter, and the Chinese characters must be in **UTF-8** or **Unicode**
+               format.
+        :param pulumi.Input[str] path: Specifies the destination path for health checks.  
+               Required if the `protocol` is **HTTP** or **HTTPS**.
+        :param pulumi.Input[int] port: Specifies the host port of the VPC channel.  
+               The valid value ranges from `1` to `65,535`.
         :param pulumi.Input[str] protocol: Specifies the protocol for performing health checks on backend servers in the VPC
                channel.
-               The valid values are *TCP*, *HTTP* and *HTTPS*, default to *TCP*.
-        :param pulumi.Input[str] region: Specifies the region in which to create the VPC channel resource.
-               If omitted, the provider-level region will be used.
-               Changing this will create a new VPC channel resource.
-        :param pulumi.Input[str] status: The status of VPC channel, supports *Normal* and *Abnormal*.
-        :param pulumi.Input[int] timeout: Specifies the timeout for determining whether a health check fails, in second.
-               The value must be less than the value of time_interval.
-               The valid value is range from 2 to 30, default to 5.
+               The valid values are **TCP**, **HTTP** and **HTTPS**, defaults to **TCP**.
+        :param pulumi.Input[str] region: Specifies the region where the VPC channel is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[str] status: The current status of the VPC channel, supports **Normal** and **Abnormal**.
+        :param pulumi.Input[int] timeout: Specifies the timeout for determining whether a health check fails, in second.  
+               The value must be less than the value of the time `interval`.
+               The valid value ranges from `2` to `30`, defaults to `5`.
         :param pulumi.Input[int] unhealthy_threshold: Specifies the unhealthy threshold, which refers to the number of consecutive
                failed checks required for a backend server to be considered unhealthy.
-               The valid value is range from 2 to 10, default to 5.
+               The valid value ranges from `2` to `10`, defaults to `5`.
         """
         if algorithm is not None:
             pulumi.set(__self__, "algorithm", algorithm)
-        if create_time is not None:
-            pulumi.set(__self__, "create_time", create_time)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if healthy_threshold is not None:
             pulumi.set(__self__, "healthy_threshold", healthy_threshold)
         if http_code is not None:
@@ -378,8 +392,8 @@ class _VpcChannelState:
     @pulumi.getter
     def algorithm(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the type of the backend service.
-        The valid types are *WRR*, *WLC*, *SH* and *URI hashing*, default to *WRR*.
+        Specifies the distribution algorithm.  
+        The valid types are **WRR**, **WLC**, **SH** and **URI hashing**, defaults to **WRR**.
         """
         return pulumi.get(self, "algorithm")
 
@@ -388,16 +402,16 @@ class _VpcChannelState:
         pulumi.set(self, "algorithm", value)
 
     @property
-    @pulumi.getter(name="createTime")
-    def create_time(self) -> Optional[pulumi.Input[str]]:
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
         """
-        Time when the channel created, in UTC format.
+        The time when the VPC channel was created.
         """
-        return pulumi.get(self, "create_time")
+        return pulumi.get(self, "created_at")
 
-    @create_time.setter
-    def create_time(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "create_time", value)
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
 
     @property
     @pulumi.getter(name="healthyThreshold")
@@ -405,7 +419,7 @@ class _VpcChannelState:
         """
         Specifies the healthy threshold, which refers to the number of consecutive
         successful checks required for a backend server to be considered healthy.
-        The valid value is range from 2 to 10, default to 2.
+        The valid value ranges from `2` to `10`, defaults to `2`.
         """
         return pulumi.get(self, "healthy_threshold")
 
@@ -416,6 +430,13 @@ class _VpcChannelState:
     @property
     @pulumi.getter(name="httpCode")
     def http_code(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the response codes for determining a successful HTTP response.  
+        The valid value ranges from `100` to `599` and the valid formats are as follows:
+        + The multiple values, for example, **200,201,202**.
+        + The range, for example, **200-299**.
+        + Both multiple values and ranges, for example, **201,202,210-299**.
+        """
         return pulumi.get(self, "http_code")
 
     @http_code.setter
@@ -426,9 +447,9 @@ class _VpcChannelState:
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies an ID of the APIG dedicated instance to which the APIG
-        vpc channel belongs to.
-        Changing this will create a new VPC channel resource.
+        Specifies the ID of the dedicated instance to which the VPC channel
+        belongs.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -440,8 +461,8 @@ class _VpcChannelState:
     @pulumi.getter
     def interval(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the interval between consecutive checks, in second.
-        The valid value is range from 5 to 300, default to 10.
+        Specifies the interval between consecutive checks, in second.  
+        The valid value ranges from `5` to `300`, defaults to `10`.
         """
         return pulumi.get(self, "interval")
 
@@ -453,8 +474,8 @@ class _VpcChannelState:
     @pulumi.getter(name="memberType")
     def member_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the type of the backend service.
-        The valid types are *ECS* and *EIP*, default to *ECS*.
+        Specifies the member type of the VPC channel.  
+        The valid types are **ECS** and **EIP**, defaults to **ECS**.
         """
         return pulumi.get(self, "member_type")
 
@@ -466,8 +487,7 @@ class _VpcChannelState:
     @pulumi.getter
     def members(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['VpcChannelMemberArgs']]]]:
         """
-        Specifies an array of one or more backend server IDs or IP addresses that bind the VPC
-        channel.
+        Specifies the configuration of the backend servers that bind the VPC channel.  
         The object structure is documented below.
         """
         return pulumi.get(self, "members")
@@ -480,10 +500,11 @@ class _VpcChannelState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the VPC channel.
-        The channel name consists of 3 to 64 characters, starting with a letter.
-        Only letters, digits and underscores (_) are allowed.
-        Chinese characters must be in UTF-8 or Unicode format.
+        Specifies the name of the VPC channel.  
+        The valid length is limited from `3` to `64`, only chinese and english letters, digits, hyphens (-), underscores (_)
+        and dots (.) are allowed.
+        The name must start with a chinese or english letter, and the Chinese characters must be in **UTF-8** or **Unicode**
+        format.
         """
         return pulumi.get(self, "name")
 
@@ -495,8 +516,8 @@ class _VpcChannelState:
     @pulumi.getter
     def path(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the destination path for health checks.
-        Required if `protocol` is *HTTP* or *HTTPS*.
+        Specifies the destination path for health checks.  
+        Required if the `protocol` is **HTTP** or **HTTPS**.
         """
         return pulumi.get(self, "path")
 
@@ -508,8 +529,8 @@ class _VpcChannelState:
     @pulumi.getter
     def port(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the host port of the VPC channel.
-        The valid value is range from 1 to 65535.
+        Specifies the host port of the VPC channel.  
+        The valid value ranges from `1` to `65,535`.
         """
         return pulumi.get(self, "port")
 
@@ -523,7 +544,7 @@ class _VpcChannelState:
         """
         Specifies the protocol for performing health checks on backend servers in the VPC
         channel.
-        The valid values are *TCP*, *HTTP* and *HTTPS*, default to *TCP*.
+        The valid values are **TCP**, **HTTP** and **HTTPS**, defaults to **TCP**.
         """
         return pulumi.get(self, "protocol")
 
@@ -535,9 +556,8 @@ class _VpcChannelState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create the VPC channel resource.
-        If omitted, the provider-level region will be used.
-        Changing this will create a new VPC channel resource.
+        Specifies the region where the VPC channel is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -549,7 +569,7 @@ class _VpcChannelState:
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
         """
-        The status of VPC channel, supports *Normal* and *Abnormal*.
+        The current status of the VPC channel, supports **Normal** and **Abnormal**.
         """
         return pulumi.get(self, "status")
 
@@ -561,9 +581,9 @@ class _VpcChannelState:
     @pulumi.getter
     def timeout(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the timeout for determining whether a health check fails, in second.
-        The value must be less than the value of time_interval.
-        The valid value is range from 2 to 30, default to 5.
+        Specifies the timeout for determining whether a health check fails, in second.  
+        The value must be less than the value of the time `interval`.
+        The valid value ranges from `2` to `30`, defaults to `5`.
         """
         return pulumi.get(self, "timeout")
 
@@ -577,7 +597,7 @@ class _VpcChannelState:
         """
         Specifies the unhealthy threshold, which refers to the number of consecutive
         failed checks required for a backend server to be considered unhealthy.
-        The valid value is range from 2 to 10, default to 5.
+        The valid value ranges from `2` to `10`, defaults to `5`.
         """
         return pulumi.get(self, "unhealthy_threshold")
 
@@ -607,6 +627,8 @@ class VpcChannel(pulumi.CustomResource):
                  unhealthy_threshold: Optional[pulumi.Input[int]] = None,
                  __props__=None):
         """
+        !> **WARNING:** It has been deprecated.
+
         Manages a VPC channel resource within HuaweiCloud.
 
         ## Example Usage
@@ -640,49 +662,53 @@ class VpcChannel(pulumi.CustomResource):
 
         ## Import
 
-        VPC Channels can be imported using their `name` and ID of the APIG dedicated instance to which the channel belongs, separated by a slash, e.g.
+        VPC Channels can be imported using their `name` and the ID of the related dedicated instance, separated by a slash, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/vpcChannel:VpcChannel test <instance id>/<channel name>
+         $ pulumi import huaweicloud:DedicatedApig/vpcChannel:VpcChannel test <instance_id>/<name>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] algorithm: Specifies the type of the backend service.
-               The valid types are *WRR*, *WLC*, *SH* and *URI hashing*, default to *WRR*.
+        :param pulumi.Input[str] algorithm: Specifies the distribution algorithm.  
+               The valid types are **WRR**, **WLC**, **SH** and **URI hashing**, defaults to **WRR**.
         :param pulumi.Input[int] healthy_threshold: Specifies the healthy threshold, which refers to the number of consecutive
                successful checks required for a backend server to be considered healthy.
-               The valid value is range from 2 to 10, default to 2.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the APIG
-               vpc channel belongs to.
-               Changing this will create a new VPC channel resource.
-        :param pulumi.Input[int] interval: Specifies the interval between consecutive checks, in second.
-               The valid value is range from 5 to 300, default to 10.
-        :param pulumi.Input[str] member_type: Specifies the type of the backend service.
-               The valid types are *ECS* and *EIP*, default to *ECS*.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['VpcChannelMemberArgs']]]] members: Specifies an array of one or more backend server IDs or IP addresses that bind the VPC
-               channel.
+               The valid value ranges from `2` to `10`, defaults to `2`.
+        :param pulumi.Input[str] http_code: Specifies the response codes for determining a successful HTTP response.  
+               The valid value ranges from `100` to `599` and the valid formats are as follows:
+               + The multiple values, for example, **200,201,202**.
+               + The range, for example, **200-299**.
+               + Both multiple values and ranges, for example, **201,202,210-299**.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the VPC channel
+               belongs.
+               Changing this will create a new resource.
+        :param pulumi.Input[int] interval: Specifies the interval between consecutive checks, in second.  
+               The valid value ranges from `5` to `300`, defaults to `10`.
+        :param pulumi.Input[str] member_type: Specifies the member type of the VPC channel.  
+               The valid types are **ECS** and **EIP**, defaults to **ECS**.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['VpcChannelMemberArgs']]]] members: Specifies the configuration of the backend servers that bind the VPC channel.  
                The object structure is documented below.
-        :param pulumi.Input[str] name: Specifies the name of the VPC channel.
-               The channel name consists of 3 to 64 characters, starting with a letter.
-               Only letters, digits and underscores (_) are allowed.
-               Chinese characters must be in UTF-8 or Unicode format.
-        :param pulumi.Input[str] path: Specifies the destination path for health checks.
-               Required if `protocol` is *HTTP* or *HTTPS*.
-        :param pulumi.Input[int] port: Specifies the host port of the VPC channel.
-               The valid value is range from 1 to 65535.
+        :param pulumi.Input[str] name: Specifies the name of the VPC channel.  
+               The valid length is limited from `3` to `64`, only chinese and english letters, digits, hyphens (-), underscores (_)
+               and dots (.) are allowed.
+               The name must start with a chinese or english letter, and the Chinese characters must be in **UTF-8** or **Unicode**
+               format.
+        :param pulumi.Input[str] path: Specifies the destination path for health checks.  
+               Required if the `protocol` is **HTTP** or **HTTPS**.
+        :param pulumi.Input[int] port: Specifies the host port of the VPC channel.  
+               The valid value ranges from `1` to `65,535`.
         :param pulumi.Input[str] protocol: Specifies the protocol for performing health checks on backend servers in the VPC
                channel.
-               The valid values are *TCP*, *HTTP* and *HTTPS*, default to *TCP*.
-        :param pulumi.Input[str] region: Specifies the region in which to create the VPC channel resource.
-               If omitted, the provider-level region will be used.
-               Changing this will create a new VPC channel resource.
-        :param pulumi.Input[int] timeout: Specifies the timeout for determining whether a health check fails, in second.
-               The value must be less than the value of time_interval.
-               The valid value is range from 2 to 30, default to 5.
+               The valid values are **TCP**, **HTTP** and **HTTPS**, defaults to **TCP**.
+        :param pulumi.Input[str] region: Specifies the region where the VPC channel is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[int] timeout: Specifies the timeout for determining whether a health check fails, in second.  
+               The value must be less than the value of the time `interval`.
+               The valid value ranges from `2` to `30`, defaults to `5`.
         :param pulumi.Input[int] unhealthy_threshold: Specifies the unhealthy threshold, which refers to the number of consecutive
                failed checks required for a backend server to be considered unhealthy.
-               The valid value is range from 2 to 10, default to 5.
+               The valid value ranges from `2` to `10`, defaults to `5`.
         """
         ...
     @overload
@@ -691,6 +717,8 @@ class VpcChannel(pulumi.CustomResource):
                  args: VpcChannelArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
+        !> **WARNING:** It has been deprecated.
+
         Manages a VPC channel resource within HuaweiCloud.
 
         ## Example Usage
@@ -724,10 +752,10 @@ class VpcChannel(pulumi.CustomResource):
 
         ## Import
 
-        VPC Channels can be imported using their `name` and ID of the APIG dedicated instance to which the channel belongs, separated by a slash, e.g.
+        VPC Channels can be imported using their `name` and the ID of the related dedicated instance, separated by a slash, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/vpcChannel:VpcChannel test <instance id>/<channel name>
+         $ pulumi import huaweicloud:DedicatedApig/vpcChannel:VpcChannel test <instance_id>/<name>
         ```
 
         :param str resource_name: The name of the resource.
@@ -788,7 +816,7 @@ class VpcChannel(pulumi.CustomResource):
             __props__.__dict__["region"] = region
             __props__.__dict__["timeout"] = timeout
             __props__.__dict__["unhealthy_threshold"] = unhealthy_threshold
-            __props__.__dict__["create_time"] = None
+            __props__.__dict__["created_at"] = None
             __props__.__dict__["status"] = None
         super(VpcChannel, __self__).__init__(
             'huaweicloud:DedicatedApig/vpcChannel:VpcChannel',
@@ -801,7 +829,7 @@ class VpcChannel(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             algorithm: Optional[pulumi.Input[str]] = None,
-            create_time: Optional[pulumi.Input[str]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             healthy_threshold: Optional[pulumi.Input[int]] = None,
             http_code: Optional[pulumi.Input[str]] = None,
             instance_id: Optional[pulumi.Input[str]] = None,
@@ -823,50 +851,54 @@ class VpcChannel(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] algorithm: Specifies the type of the backend service.
-               The valid types are *WRR*, *WLC*, *SH* and *URI hashing*, default to *WRR*.
-        :param pulumi.Input[str] create_time: Time when the channel created, in UTC format.
+        :param pulumi.Input[str] algorithm: Specifies the distribution algorithm.  
+               The valid types are **WRR**, **WLC**, **SH** and **URI hashing**, defaults to **WRR**.
+        :param pulumi.Input[str] created_at: The time when the VPC channel was created.
         :param pulumi.Input[int] healthy_threshold: Specifies the healthy threshold, which refers to the number of consecutive
                successful checks required for a backend server to be considered healthy.
-               The valid value is range from 2 to 10, default to 2.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the APIG
-               vpc channel belongs to.
-               Changing this will create a new VPC channel resource.
-        :param pulumi.Input[int] interval: Specifies the interval between consecutive checks, in second.
-               The valid value is range from 5 to 300, default to 10.
-        :param pulumi.Input[str] member_type: Specifies the type of the backend service.
-               The valid types are *ECS* and *EIP*, default to *ECS*.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['VpcChannelMemberArgs']]]] members: Specifies an array of one or more backend server IDs or IP addresses that bind the VPC
-               channel.
+               The valid value ranges from `2` to `10`, defaults to `2`.
+        :param pulumi.Input[str] http_code: Specifies the response codes for determining a successful HTTP response.  
+               The valid value ranges from `100` to `599` and the valid formats are as follows:
+               + The multiple values, for example, **200,201,202**.
+               + The range, for example, **200-299**.
+               + Both multiple values and ranges, for example, **201,202,210-299**.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the VPC channel
+               belongs.
+               Changing this will create a new resource.
+        :param pulumi.Input[int] interval: Specifies the interval between consecutive checks, in second.  
+               The valid value ranges from `5` to `300`, defaults to `10`.
+        :param pulumi.Input[str] member_type: Specifies the member type of the VPC channel.  
+               The valid types are **ECS** and **EIP**, defaults to **ECS**.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['VpcChannelMemberArgs']]]] members: Specifies the configuration of the backend servers that bind the VPC channel.  
                The object structure is documented below.
-        :param pulumi.Input[str] name: Specifies the name of the VPC channel.
-               The channel name consists of 3 to 64 characters, starting with a letter.
-               Only letters, digits and underscores (_) are allowed.
-               Chinese characters must be in UTF-8 or Unicode format.
-        :param pulumi.Input[str] path: Specifies the destination path for health checks.
-               Required if `protocol` is *HTTP* or *HTTPS*.
-        :param pulumi.Input[int] port: Specifies the host port of the VPC channel.
-               The valid value is range from 1 to 65535.
+        :param pulumi.Input[str] name: Specifies the name of the VPC channel.  
+               The valid length is limited from `3` to `64`, only chinese and english letters, digits, hyphens (-), underscores (_)
+               and dots (.) are allowed.
+               The name must start with a chinese or english letter, and the Chinese characters must be in **UTF-8** or **Unicode**
+               format.
+        :param pulumi.Input[str] path: Specifies the destination path for health checks.  
+               Required if the `protocol` is **HTTP** or **HTTPS**.
+        :param pulumi.Input[int] port: Specifies the host port of the VPC channel.  
+               The valid value ranges from `1` to `65,535`.
         :param pulumi.Input[str] protocol: Specifies the protocol for performing health checks on backend servers in the VPC
                channel.
-               The valid values are *TCP*, *HTTP* and *HTTPS*, default to *TCP*.
-        :param pulumi.Input[str] region: Specifies the region in which to create the VPC channel resource.
-               If omitted, the provider-level region will be used.
-               Changing this will create a new VPC channel resource.
-        :param pulumi.Input[str] status: The status of VPC channel, supports *Normal* and *Abnormal*.
-        :param pulumi.Input[int] timeout: Specifies the timeout for determining whether a health check fails, in second.
-               The value must be less than the value of time_interval.
-               The valid value is range from 2 to 30, default to 5.
+               The valid values are **TCP**, **HTTP** and **HTTPS**, defaults to **TCP**.
+        :param pulumi.Input[str] region: Specifies the region where the VPC channel is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[str] status: The current status of the VPC channel, supports **Normal** and **Abnormal**.
+        :param pulumi.Input[int] timeout: Specifies the timeout for determining whether a health check fails, in second.  
+               The value must be less than the value of the time `interval`.
+               The valid value ranges from `2` to `30`, defaults to `5`.
         :param pulumi.Input[int] unhealthy_threshold: Specifies the unhealthy threshold, which refers to the number of consecutive
                failed checks required for a backend server to be considered unhealthy.
-               The valid value is range from 2 to 10, default to 5.
+               The valid value ranges from `2` to `10`, defaults to `5`.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _VpcChannelState.__new__(_VpcChannelState)
 
         __props__.__dict__["algorithm"] = algorithm
-        __props__.__dict__["create_time"] = create_time
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["healthy_threshold"] = healthy_threshold
         __props__.__dict__["http_code"] = http_code
         __props__.__dict__["instance_id"] = instance_id
@@ -887,18 +919,18 @@ class VpcChannel(pulumi.CustomResource):
     @pulumi.getter
     def algorithm(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the type of the backend service.
-        The valid types are *WRR*, *WLC*, *SH* and *URI hashing*, default to *WRR*.
+        Specifies the distribution algorithm.  
+        The valid types are **WRR**, **WLC**, **SH** and **URI hashing**, defaults to **WRR**.
         """
         return pulumi.get(self, "algorithm")
 
     @property
-    @pulumi.getter(name="createTime")
-    def create_time(self) -> pulumi.Output[str]:
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
         """
-        Time when the channel created, in UTC format.
+        The time when the VPC channel was created.
         """
-        return pulumi.get(self, "create_time")
+        return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter(name="healthyThreshold")
@@ -906,22 +938,29 @@ class VpcChannel(pulumi.CustomResource):
         """
         Specifies the healthy threshold, which refers to the number of consecutive
         successful checks required for a backend server to be considered healthy.
-        The valid value is range from 2 to 10, default to 2.
+        The valid value ranges from `2` to `10`, defaults to `2`.
         """
         return pulumi.get(self, "healthy_threshold")
 
     @property
     @pulumi.getter(name="httpCode")
     def http_code(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the response codes for determining a successful HTTP response.  
+        The valid value ranges from `100` to `599` and the valid formats are as follows:
+        + The multiple values, for example, **200,201,202**.
+        + The range, for example, **200-299**.
+        + Both multiple values and ranges, for example, **201,202,210-299**.
+        """
         return pulumi.get(self, "http_code")
 
     @property
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Output[str]:
         """
-        Specifies an ID of the APIG dedicated instance to which the APIG
-        vpc channel belongs to.
-        Changing this will create a new VPC channel resource.
+        Specifies the ID of the dedicated instance to which the VPC channel
+        belongs.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -929,8 +968,8 @@ class VpcChannel(pulumi.CustomResource):
     @pulumi.getter
     def interval(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the interval between consecutive checks, in second.
-        The valid value is range from 5 to 300, default to 10.
+        Specifies the interval between consecutive checks, in second.  
+        The valid value ranges from `5` to `300`, defaults to `10`.
         """
         return pulumi.get(self, "interval")
 
@@ -938,8 +977,8 @@ class VpcChannel(pulumi.CustomResource):
     @pulumi.getter(name="memberType")
     def member_type(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the type of the backend service.
-        The valid types are *ECS* and *EIP*, default to *ECS*.
+        Specifies the member type of the VPC channel.  
+        The valid types are **ECS** and **EIP**, defaults to **ECS**.
         """
         return pulumi.get(self, "member_type")
 
@@ -947,8 +986,7 @@ class VpcChannel(pulumi.CustomResource):
     @pulumi.getter
     def members(self) -> pulumi.Output[Sequence['outputs.VpcChannelMember']]:
         """
-        Specifies an array of one or more backend server IDs or IP addresses that bind the VPC
-        channel.
+        Specifies the configuration of the backend servers that bind the VPC channel.  
         The object structure is documented below.
         """
         return pulumi.get(self, "members")
@@ -957,10 +995,11 @@ class VpcChannel(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of the VPC channel.
-        The channel name consists of 3 to 64 characters, starting with a letter.
-        Only letters, digits and underscores (_) are allowed.
-        Chinese characters must be in UTF-8 or Unicode format.
+        Specifies the name of the VPC channel.  
+        The valid length is limited from `3` to `64`, only chinese and english letters, digits, hyphens (-), underscores (_)
+        and dots (.) are allowed.
+        The name must start with a chinese or english letter, and the Chinese characters must be in **UTF-8** or **Unicode**
+        format.
         """
         return pulumi.get(self, "name")
 
@@ -968,8 +1007,8 @@ class VpcChannel(pulumi.CustomResource):
     @pulumi.getter
     def path(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the destination path for health checks.
-        Required if `protocol` is *HTTP* or *HTTPS*.
+        Specifies the destination path for health checks.  
+        Required if the `protocol` is **HTTP** or **HTTPS**.
         """
         return pulumi.get(self, "path")
 
@@ -977,8 +1016,8 @@ class VpcChannel(pulumi.CustomResource):
     @pulumi.getter
     def port(self) -> pulumi.Output[int]:
         """
-        Specifies the host port of the VPC channel.
-        The valid value is range from 1 to 65535.
+        Specifies the host port of the VPC channel.  
+        The valid value ranges from `1` to `65,535`.
         """
         return pulumi.get(self, "port")
 
@@ -988,7 +1027,7 @@ class VpcChannel(pulumi.CustomResource):
         """
         Specifies the protocol for performing health checks on backend servers in the VPC
         channel.
-        The valid values are *TCP*, *HTTP* and *HTTPS*, default to *TCP*.
+        The valid values are **TCP**, **HTTP** and **HTTPS**, defaults to **TCP**.
         """
         return pulumi.get(self, "protocol")
 
@@ -996,9 +1035,8 @@ class VpcChannel(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        Specifies the region in which to create the VPC channel resource.
-        If omitted, the provider-level region will be used.
-        Changing this will create a new VPC channel resource.
+        Specifies the region where the VPC channel is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -1006,7 +1044,7 @@ class VpcChannel(pulumi.CustomResource):
     @pulumi.getter
     def status(self) -> pulumi.Output[str]:
         """
-        The status of VPC channel, supports *Normal* and *Abnormal*.
+        The current status of the VPC channel, supports **Normal** and **Abnormal**.
         """
         return pulumi.get(self, "status")
 
@@ -1014,9 +1052,9 @@ class VpcChannel(pulumi.CustomResource):
     @pulumi.getter
     def timeout(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the timeout for determining whether a health check fails, in second.
-        The value must be less than the value of time_interval.
-        The valid value is range from 2 to 30, default to 5.
+        Specifies the timeout for determining whether a health check fails, in second.  
+        The value must be less than the value of the time `interval`.
+        The valid value ranges from `2` to `30`, defaults to `5`.
         """
         return pulumi.get(self, "timeout")
 
@@ -1026,7 +1064,7 @@ class VpcChannel(pulumi.CustomResource):
         """
         Specifies the unhealthy threshold, which refers to the number of consecutive
         failed checks required for a backend server to be considered unhealthy.
-        The valid value is range from 2 to 10, default to 5.
+        The valid value ranges from `2` to `10`, defaults to `5`.
         """
         return pulumi.get(self, "unhealthy_threshold")
 

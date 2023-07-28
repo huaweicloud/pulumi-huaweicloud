@@ -47,7 +47,7 @@ import * as utilities from "../utilities";
  * GaussDB instance can be imported using the `id`, e.g.
  *
  * ```sh
- *  $ pulumi import huaweicloud:GaussDB/mysqlInstance:MysqlInstance instance_1 ee678f40-ce8e-4d0c-8221-38dead426f06
+ *  $ pulumi import huaweicloud:GaussDB/mysqlInstance:MysqlInstance instance_1 1a801c1e01e6458d8eed810912e29d0cin07
  * ```
  */
 export class MysqlInstance extends pulumi.CustomResource {
@@ -85,7 +85,7 @@ export class MysqlInstance extends pulumi.CustomResource {
     public readonly autoPay!: pulumi.Output<string | undefined>;
     /**
      * Specifies whether auto renew is enabled.
-     * Valid values are "true" and "false". Changing this will do nothing.
+     * Valid values are "true" and "false".
      */
     public readonly autoRenew!: pulumi.Output<string | undefined>;
     /**
@@ -194,19 +194,19 @@ export class MysqlInstance extends pulumi.CustomResource {
      */
     public /*out*/ readonly privateWriteIp!: pulumi.Output<string>;
     /**
-     * Indicates the address of the proxy.
+     * @deprecated use huaweicloud_gaussdb_mysql_proxy instead
      */
     public /*out*/ readonly proxyAddress!: pulumi.Output<string>;
     /**
-     * Specifies the flavor of the proxy.
+     * @deprecated use huaweicloud_gaussdb_mysql_proxy instead
      */
     public readonly proxyFlavor!: pulumi.Output<string>;
     /**
-     * Specifies the node count of the proxy.
+     * @deprecated use huaweicloud_gaussdb_mysql_proxy instead
      */
     public readonly proxyNodeNum!: pulumi.Output<number>;
     /**
-     * Indicates the port of the proxy.
+     * @deprecated use huaweicloud_gaussdb_mysql_proxy instead
      */
     public /*out*/ readonly proxyPort!: pulumi.Output<number>;
     /**
@@ -224,6 +224,10 @@ export class MysqlInstance extends pulumi.CustomResource {
      */
     public readonly securityGroupId!: pulumi.Output<string | undefined>;
     /**
+     * Specifies whether sql filter is enabled. The default value is `false`.
+     */
+    public readonly sqlFilterEnabled!: pulumi.Output<boolean>;
+    /**
      * Indicates the node status.
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
@@ -238,6 +242,9 @@ export class MysqlInstance extends pulumi.CustomResource {
      * creation.
      */
     public readonly tableNameCaseSensitivity!: pulumi.Output<boolean | undefined>;
+    /**
+     * Specifies the key/value pairs to associate with the GaussDB Mysql instance.
+     */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
      * Specifies the time zone. Defaults to "UTC+08:00". Changing this parameter
@@ -298,6 +305,7 @@ export class MysqlInstance extends pulumi.CustomResource {
             resourceInputs["readReplicas"] = state ? state.readReplicas : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["securityGroupId"] = state ? state.securityGroupId : undefined;
+            resourceInputs["sqlFilterEnabled"] = state ? state.sqlFilterEnabled : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["subnetId"] = state ? state.subnetId : undefined;
             resourceInputs["tableNameCaseSensitivity"] = state ? state.tableNameCaseSensitivity : undefined;
@@ -343,6 +351,7 @@ export class MysqlInstance extends pulumi.CustomResource {
             resourceInputs["readReplicas"] = args ? args.readReplicas : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["securityGroupId"] = args ? args.securityGroupId : undefined;
+            resourceInputs["sqlFilterEnabled"] = args ? args.sqlFilterEnabled : undefined;
             resourceInputs["subnetId"] = args ? args.subnetId : undefined;
             resourceInputs["tableNameCaseSensitivity"] = args ? args.tableNameCaseSensitivity : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
@@ -374,7 +383,7 @@ export interface MysqlInstanceState {
     autoPay?: pulumi.Input<string>;
     /**
      * Specifies whether auto renew is enabled.
-     * Valid values are "true" and "false". Changing this will do nothing.
+     * Valid values are "true" and "false".
      */
     autoRenew?: pulumi.Input<string>;
     /**
@@ -483,19 +492,19 @@ export interface MysqlInstanceState {
      */
     privateWriteIp?: pulumi.Input<string>;
     /**
-     * Indicates the address of the proxy.
+     * @deprecated use huaweicloud_gaussdb_mysql_proxy instead
      */
     proxyAddress?: pulumi.Input<string>;
     /**
-     * Specifies the flavor of the proxy.
+     * @deprecated use huaweicloud_gaussdb_mysql_proxy instead
      */
     proxyFlavor?: pulumi.Input<string>;
     /**
-     * Specifies the node count of the proxy.
+     * @deprecated use huaweicloud_gaussdb_mysql_proxy instead
      */
     proxyNodeNum?: pulumi.Input<number>;
     /**
-     * Indicates the port of the proxy.
+     * @deprecated use huaweicloud_gaussdb_mysql_proxy instead
      */
     proxyPort?: pulumi.Input<number>;
     /**
@@ -513,6 +522,10 @@ export interface MysqlInstanceState {
      */
     securityGroupId?: pulumi.Input<string>;
     /**
+     * Specifies whether sql filter is enabled. The default value is `false`.
+     */
+    sqlFilterEnabled?: pulumi.Input<boolean>;
+    /**
      * Indicates the node status.
      */
     status?: pulumi.Input<string>;
@@ -527,6 +540,9 @@ export interface MysqlInstanceState {
      * creation.
      */
     tableNameCaseSensitivity?: pulumi.Input<boolean>;
+    /**
+     * Specifies the key/value pairs to associate with the GaussDB Mysql instance.
+     */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Specifies the time zone. Defaults to "UTC+08:00". Changing this parameter
@@ -555,7 +571,7 @@ export interface MysqlInstanceArgs {
     autoPay?: pulumi.Input<string>;
     /**
      * Specifies whether auto renew is enabled.
-     * Valid values are "true" and "false". Changing this will do nothing.
+     * Valid values are "true" and "false".
      */
     autoRenew?: pulumi.Input<string>;
     /**
@@ -644,11 +660,11 @@ export interface MysqlInstanceArgs {
      */
     periodUnit?: pulumi.Input<string>;
     /**
-     * Specifies the flavor of the proxy.
+     * @deprecated use huaweicloud_gaussdb_mysql_proxy instead
      */
     proxyFlavor?: pulumi.Input<string>;
     /**
-     * Specifies the node count of the proxy.
+     * @deprecated use huaweicloud_gaussdb_mysql_proxy instead
      */
     proxyNodeNum?: pulumi.Input<number>;
     /**
@@ -666,6 +682,10 @@ export interface MysqlInstanceArgs {
      */
     securityGroupId?: pulumi.Input<string>;
     /**
+     * Specifies whether sql filter is enabled. The default value is `false`.
+     */
+    sqlFilterEnabled?: pulumi.Input<boolean>;
+    /**
      * Specifies the network ID of a subnet. Changing this parameter will create a
      * new resource.
      */
@@ -676,6 +696,9 @@ export interface MysqlInstanceArgs {
      * creation.
      */
     tableNameCaseSensitivity?: pulumi.Input<boolean>;
+    /**
+     * Specifies the key/value pairs to associate with the GaussDB Mysql instance.
+     */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Specifies the time zone. Defaults to "UTC+08:00". Changing this parameter

@@ -62,8 +62,9 @@ export class NotebookMountStorage extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies the local mount directory. Only the sub directory of `/data/`
-     * can be mounted. The format is : `/data/dir1/`. Changing this parameter will create a new resource.
+     * Specifies the local mount directory.
+     * Only the subdirectory of `/data/` can be mounted. The format is : `/data/dir1/`.
+     * Changing this parameter will create a new resource.
      */
     public readonly localMountDirectory!: pulumi.Output<string>;
     /**
@@ -144,8 +145,9 @@ export class NotebookMountStorage extends pulumi.CustomResource {
  */
 export interface NotebookMountStorageState {
     /**
-     * Specifies the local mount directory. Only the sub directory of `/data/`
-     * can be mounted. The format is : `/data/dir1/`. Changing this parameter will create a new resource.
+     * Specifies the local mount directory.
+     * Only the subdirectory of `/data/` can be mounted. The format is : `/data/dir1/`.
+     * Changing this parameter will create a new resource.
      */
     localMountDirectory?: pulumi.Input<string>;
     /**
@@ -183,8 +185,9 @@ export interface NotebookMountStorageState {
  */
 export interface NotebookMountStorageArgs {
     /**
-     * Specifies the local mount directory. Only the sub directory of `/data/`
-     * can be mounted. The format is : `/data/dir1/`. Changing this parameter will create a new resource.
+     * Specifies the local mount directory.
+     * Only the subdirectory of `/data/` can be mounted. The format is : `/data/dir1/`.
+     * Changing this parameter will create a new resource.
      */
     localMountDirectory: pulumi.Input<string>;
     /**

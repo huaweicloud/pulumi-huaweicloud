@@ -24,21 +24,21 @@ class SnatRuleArgs:
                  subnet_id: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a SnatRule resource.
-        :param pulumi.Input[str] floating_ip_id: Specifies the EIP ID this snat rule connects to.
-               Multiple EIPs are separated using commas (,). The number of EIP IDs cannot exceed 20.
-        :param pulumi.Input[str] nat_gateway_id: ID of the nat gateway this snat rule belongs to. Changing this creates
-               a new snat rule.
-        :param pulumi.Input[str] cidr: Specifies CIDR, which can be in the format of a network segment or a host IP
-               address. This parameter and `subnet_id` are alternative. Changing this creates a new snat rule.
-        :param pulumi.Input[str] description: Specifies the description of the snat rule.
-               The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
-        :param pulumi.Input[str] region: The region in which to create the snat rule resource. If omitted, the
-               provider-level region will be used. Changing this creates a new snat rule resource.
-        :param pulumi.Input[int] source_type: Specifies the scenario. The valid value is 0 (VPC scenario) and 1 (Direct
-               Connect scenario). Defaults to 0, only `cidr` can be specified over a Direct Connect connection. Changing this creates
-               a new snat rule.
-        :param pulumi.Input[str] subnet_id: ID of the subnet this snat rule connects to. This parameter and `cidr` are
-               alternative. Changing this creates a new snat rule.
+        :param pulumi.Input[str] floating_ip_id: Specifies the IDs of floating IPs connected by SNAT rule.  
+               Multiple floating IPs are separated using commas (,). The number of floating IP IDs cannot exceed `20`.
+        :param pulumi.Input[str] nat_gateway_id: Specifies the ID of the gateway to which the SNAT rule belongs.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] cidr: Specifies the CIDR block connected by SNAT rule (DC side).  
+               This parameter and `subnet_id` are alternative. Changing this will create a new resource.
+        :param pulumi.Input[str] description: Specifies the description of the SNAT rule.
+               The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
+        :param pulumi.Input[str] region: Specifies the region where the SNAT rule is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[int] source_type: Specifies the resource scenario.  
+               The valid values are **0** (VPC scenario) and **1** (Direct Connect scenario), and the default value is `0`.
+               Only `cidr` can be specified over a Direct Connect connection. Changing this will create a new resource.
+        :param pulumi.Input[str] subnet_id: Specifies the network IDs of subnet connected by SNAT rule (VPC side).  
+               This parameter and `cidr` are alternative. Changing this will create a new resource.
         """
         pulumi.set(__self__, "floating_ip_id", floating_ip_id)
         pulumi.set(__self__, "nat_gateway_id", nat_gateway_id)
@@ -47,8 +47,8 @@ class SnatRuleArgs:
         if description is not None:
             pulumi.set(__self__, "description", description)
         if network_id is not None:
-            warnings.warn("""use subnet_id instead""", DeprecationWarning)
-            pulumi.log.warn("""network_id is deprecated: use subnet_id instead""")
+            warnings.warn("""schema: Deprecated; Use 'subnet_id' instead.""", DeprecationWarning)
+            pulumi.log.warn("""network_id is deprecated: schema: Deprecated; Use 'subnet_id' instead.""")
         if network_id is not None:
             pulumi.set(__self__, "network_id", network_id)
         if region is not None:
@@ -62,8 +62,8 @@ class SnatRuleArgs:
     @pulumi.getter(name="floatingIpId")
     def floating_ip_id(self) -> pulumi.Input[str]:
         """
-        Specifies the EIP ID this snat rule connects to.
-        Multiple EIPs are separated using commas (,). The number of EIP IDs cannot exceed 20.
+        Specifies the IDs of floating IPs connected by SNAT rule.  
+        Multiple floating IPs are separated using commas (,). The number of floating IP IDs cannot exceed `20`.
         """
         return pulumi.get(self, "floating_ip_id")
 
@@ -75,8 +75,8 @@ class SnatRuleArgs:
     @pulumi.getter(name="natGatewayId")
     def nat_gateway_id(self) -> pulumi.Input[str]:
         """
-        ID of the nat gateway this snat rule belongs to. Changing this creates
-        a new snat rule.
+        Specifies the ID of the gateway to which the SNAT rule belongs.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "nat_gateway_id")
 
@@ -88,8 +88,8 @@ class SnatRuleArgs:
     @pulumi.getter
     def cidr(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies CIDR, which can be in the format of a network segment or a host IP
-        address. This parameter and `subnet_id` are alternative. Changing this creates a new snat rule.
+        Specifies the CIDR block connected by SNAT rule (DC side).  
+        This parameter and `subnet_id` are alternative. Changing this will create a new resource.
         """
         return pulumi.get(self, "cidr")
 
@@ -101,8 +101,8 @@ class SnatRuleArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of the snat rule.
-        The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
+        Specifies the description of the SNAT rule.
+        The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -123,8 +123,8 @@ class SnatRuleArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the snat rule resource. If omitted, the
-        provider-level region will be used. Changing this creates a new snat rule resource.
+        Specifies the region where the SNAT rule is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -136,9 +136,9 @@ class SnatRuleArgs:
     @pulumi.getter(name="sourceType")
     def source_type(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the scenario. The valid value is 0 (VPC scenario) and 1 (Direct
-        Connect scenario). Defaults to 0, only `cidr` can be specified over a Direct Connect connection. Changing this creates
-        a new snat rule.
+        Specifies the resource scenario.  
+        The valid values are **0** (VPC scenario) and **1** (Direct Connect scenario), and the default value is `0`.
+        Only `cidr` can be specified over a Direct Connect connection. Changing this will create a new resource.
         """
         return pulumi.get(self, "source_type")
 
@@ -150,8 +150,8 @@ class SnatRuleArgs:
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> Optional[pulumi.Input[str]]:
         """
-        ID of the subnet this snat rule connects to. This parameter and `cidr` are
-        alternative. Changing this creates a new snat rule.
+        Specifies the network IDs of subnet connected by SNAT rule (VPC side).  
+        This parameter and `cidr` are alternative. Changing this will create a new resource.
         """
         return pulumi.get(self, "subnet_id")
 
@@ -175,23 +175,23 @@ class _SnatRuleState:
                  subnet_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering SnatRule resources.
-        :param pulumi.Input[str] cidr: Specifies CIDR, which can be in the format of a network segment or a host IP
-               address. This parameter and `subnet_id` are alternative. Changing this creates a new snat rule.
-        :param pulumi.Input[str] description: Specifies the description of the snat rule.
-               The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
+        :param pulumi.Input[str] cidr: Specifies the CIDR block connected by SNAT rule (DC side).  
+               This parameter and `subnet_id` are alternative. Changing this will create a new resource.
+        :param pulumi.Input[str] description: Specifies the description of the SNAT rule.
+               The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
         :param pulumi.Input[str] floating_ip_address: The actual floating IP address.
-        :param pulumi.Input[str] floating_ip_id: Specifies the EIP ID this snat rule connects to.
-               Multiple EIPs are separated using commas (,). The number of EIP IDs cannot exceed 20.
-        :param pulumi.Input[str] nat_gateway_id: ID of the nat gateway this snat rule belongs to. Changing this creates
-               a new snat rule.
-        :param pulumi.Input[str] region: The region in which to create the snat rule resource. If omitted, the
-               provider-level region will be used. Changing this creates a new snat rule resource.
-        :param pulumi.Input[int] source_type: Specifies the scenario. The valid value is 0 (VPC scenario) and 1 (Direct
-               Connect scenario). Defaults to 0, only `cidr` can be specified over a Direct Connect connection. Changing this creates
-               a new snat rule.
-        :param pulumi.Input[str] status: The status of the snat rule.
-        :param pulumi.Input[str] subnet_id: ID of the subnet this snat rule connects to. This parameter and `cidr` are
-               alternative. Changing this creates a new snat rule.
+        :param pulumi.Input[str] floating_ip_id: Specifies the IDs of floating IPs connected by SNAT rule.  
+               Multiple floating IPs are separated using commas (,). The number of floating IP IDs cannot exceed `20`.
+        :param pulumi.Input[str] nat_gateway_id: Specifies the ID of the gateway to which the SNAT rule belongs.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] region: Specifies the region where the SNAT rule is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[int] source_type: Specifies the resource scenario.  
+               The valid values are **0** (VPC scenario) and **1** (Direct Connect scenario), and the default value is `0`.
+               Only `cidr` can be specified over a Direct Connect connection. Changing this will create a new resource.
+        :param pulumi.Input[str] status: The status of the SNAT rule.
+        :param pulumi.Input[str] subnet_id: Specifies the network IDs of subnet connected by SNAT rule (VPC side).  
+               This parameter and `cidr` are alternative. Changing this will create a new resource.
         """
         if cidr is not None:
             pulumi.set(__self__, "cidr", cidr)
@@ -204,8 +204,8 @@ class _SnatRuleState:
         if nat_gateway_id is not None:
             pulumi.set(__self__, "nat_gateway_id", nat_gateway_id)
         if network_id is not None:
-            warnings.warn("""use subnet_id instead""", DeprecationWarning)
-            pulumi.log.warn("""network_id is deprecated: use subnet_id instead""")
+            warnings.warn("""schema: Deprecated; Use 'subnet_id' instead.""", DeprecationWarning)
+            pulumi.log.warn("""network_id is deprecated: schema: Deprecated; Use 'subnet_id' instead.""")
         if network_id is not None:
             pulumi.set(__self__, "network_id", network_id)
         if region is not None:
@@ -221,8 +221,8 @@ class _SnatRuleState:
     @pulumi.getter
     def cidr(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies CIDR, which can be in the format of a network segment or a host IP
-        address. This parameter and `subnet_id` are alternative. Changing this creates a new snat rule.
+        Specifies the CIDR block connected by SNAT rule (DC side).  
+        This parameter and `subnet_id` are alternative. Changing this will create a new resource.
         """
         return pulumi.get(self, "cidr")
 
@@ -234,8 +234,8 @@ class _SnatRuleState:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of the snat rule.
-        The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
+        Specifies the description of the SNAT rule.
+        The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -259,8 +259,8 @@ class _SnatRuleState:
     @pulumi.getter(name="floatingIpId")
     def floating_ip_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the EIP ID this snat rule connects to.
-        Multiple EIPs are separated using commas (,). The number of EIP IDs cannot exceed 20.
+        Specifies the IDs of floating IPs connected by SNAT rule.  
+        Multiple floating IPs are separated using commas (,). The number of floating IP IDs cannot exceed `20`.
         """
         return pulumi.get(self, "floating_ip_id")
 
@@ -272,8 +272,8 @@ class _SnatRuleState:
     @pulumi.getter(name="natGatewayId")
     def nat_gateway_id(self) -> Optional[pulumi.Input[str]]:
         """
-        ID of the nat gateway this snat rule belongs to. Changing this creates
-        a new snat rule.
+        Specifies the ID of the gateway to which the SNAT rule belongs.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "nat_gateway_id")
 
@@ -294,8 +294,8 @@ class _SnatRuleState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the snat rule resource. If omitted, the
-        provider-level region will be used. Changing this creates a new snat rule resource.
+        Specifies the region where the SNAT rule is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -307,9 +307,9 @@ class _SnatRuleState:
     @pulumi.getter(name="sourceType")
     def source_type(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the scenario. The valid value is 0 (VPC scenario) and 1 (Direct
-        Connect scenario). Defaults to 0, only `cidr` can be specified over a Direct Connect connection. Changing this creates
-        a new snat rule.
+        Specifies the resource scenario.  
+        The valid values are **0** (VPC scenario) and **1** (Direct Connect scenario), and the default value is `0`.
+        Only `cidr` can be specified over a Direct Connect connection. Changing this will create a new resource.
         """
         return pulumi.get(self, "source_type")
 
@@ -321,7 +321,7 @@ class _SnatRuleState:
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
         """
-        The status of the snat rule.
+        The status of the SNAT rule.
         """
         return pulumi.get(self, "status")
 
@@ -333,8 +333,8 @@ class _SnatRuleState:
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> Optional[pulumi.Input[str]]:
         """
-        ID of the subnet this snat rule connects to. This parameter and `cidr` are
-        alternative. Changing this creates a new snat rule.
+        Specifies the network IDs of subnet connected by SNAT rule (VPC side).  
+        This parameter and `cidr` are alternative. Changing this will create a new resource.
         """
         return pulumi.get(self, "subnet_id")
 
@@ -358,7 +358,7 @@ class SnatRule(pulumi.CustomResource):
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages a SNAT rule resource within HuaweiCloud.
+        Manages an SNAT rule resource of the **public** NAT within HuaweiCloud.
 
         ## Example Usage
         ### SNAT rule in VPC scenario
@@ -367,49 +367,56 @@ class SnatRule(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        snat1 = huaweicloud.nat.SnatRule("snat1",
-            nat_gateway_id=var["natgw_id"],
-            floating_ip_id=var["publicip_id"],
-            subnet_id=var["subent_id"])
+        config = pulumi.Config()
+        gateway_id = config.require_object("gatewayId")
+        publicip_id = config.require_object("publicipId")
+        subent_id = config.require_object("subentId")
+        test = huaweicloud.nat.SnatRule("test",
+            nat_gateway_id=gateway_id,
+            floating_ip_id=publicip_id,
+            subnet_id=subent_id)
         ```
-        ### SNAT rule in Direct Connect scenario
+        ### SNAT rule in DC (Direct Connect) scenario
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        snat2 = huaweicloud.nat.SnatRule("snat2",
-            nat_gateway_id=var["natgw_id"],
-            floating_ip_id=var["publicip_id"],
+        config = pulumi.Config()
+        gateway_id = config.require_object("gatewayId")
+        publicip_id = config.require_object("publicipId")
+        test = huaweicloud.nat.SnatRule("test",
+            nat_gateway_id=gateway_id,
+            floating_ip_id=publicip_id,
             source_type=1,
             cidr="192.168.10.0/24")
         ```
 
         ## Import
 
-        SNAT rules can be imported using the following format
+        SNAT rules can be imported using their `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Nat/snatRule:SnatRule snat_1 9e0713cb-0a2f-484e-8c7d-daecbb61dbe4
+         $ pulumi import huaweicloud:Nat/snatRule:SnatRule test 9e0713cb-0a2f-484e-8c7d-daecbb61dbe4
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] cidr: Specifies CIDR, which can be in the format of a network segment or a host IP
-               address. This parameter and `subnet_id` are alternative. Changing this creates a new snat rule.
-        :param pulumi.Input[str] description: Specifies the description of the snat rule.
-               The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
-        :param pulumi.Input[str] floating_ip_id: Specifies the EIP ID this snat rule connects to.
-               Multiple EIPs are separated using commas (,). The number of EIP IDs cannot exceed 20.
-        :param pulumi.Input[str] nat_gateway_id: ID of the nat gateway this snat rule belongs to. Changing this creates
-               a new snat rule.
-        :param pulumi.Input[str] region: The region in which to create the snat rule resource. If omitted, the
-               provider-level region will be used. Changing this creates a new snat rule resource.
-        :param pulumi.Input[int] source_type: Specifies the scenario. The valid value is 0 (VPC scenario) and 1 (Direct
-               Connect scenario). Defaults to 0, only `cidr` can be specified over a Direct Connect connection. Changing this creates
-               a new snat rule.
-        :param pulumi.Input[str] subnet_id: ID of the subnet this snat rule connects to. This parameter and `cidr` are
-               alternative. Changing this creates a new snat rule.
+        :param pulumi.Input[str] cidr: Specifies the CIDR block connected by SNAT rule (DC side).  
+               This parameter and `subnet_id` are alternative. Changing this will create a new resource.
+        :param pulumi.Input[str] description: Specifies the description of the SNAT rule.
+               The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
+        :param pulumi.Input[str] floating_ip_id: Specifies the IDs of floating IPs connected by SNAT rule.  
+               Multiple floating IPs are separated using commas (,). The number of floating IP IDs cannot exceed `20`.
+        :param pulumi.Input[str] nat_gateway_id: Specifies the ID of the gateway to which the SNAT rule belongs.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] region: Specifies the region where the SNAT rule is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[int] source_type: Specifies the resource scenario.  
+               The valid values are **0** (VPC scenario) and **1** (Direct Connect scenario), and the default value is `0`.
+               Only `cidr` can be specified over a Direct Connect connection. Changing this will create a new resource.
+        :param pulumi.Input[str] subnet_id: Specifies the network IDs of subnet connected by SNAT rule (VPC side).  
+               This parameter and `cidr` are alternative. Changing this will create a new resource.
         """
         ...
     @overload
@@ -418,7 +425,7 @@ class SnatRule(pulumi.CustomResource):
                  args: SnatRuleArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a SNAT rule resource within HuaweiCloud.
+        Manages an SNAT rule resource of the **public** NAT within HuaweiCloud.
 
         ## Example Usage
         ### SNAT rule in VPC scenario
@@ -427,30 +434,37 @@ class SnatRule(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        snat1 = huaweicloud.nat.SnatRule("snat1",
-            nat_gateway_id=var["natgw_id"],
-            floating_ip_id=var["publicip_id"],
-            subnet_id=var["subent_id"])
+        config = pulumi.Config()
+        gateway_id = config.require_object("gatewayId")
+        publicip_id = config.require_object("publicipId")
+        subent_id = config.require_object("subentId")
+        test = huaweicloud.nat.SnatRule("test",
+            nat_gateway_id=gateway_id,
+            floating_ip_id=publicip_id,
+            subnet_id=subent_id)
         ```
-        ### SNAT rule in Direct Connect scenario
+        ### SNAT rule in DC (Direct Connect) scenario
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        snat2 = huaweicloud.nat.SnatRule("snat2",
-            nat_gateway_id=var["natgw_id"],
-            floating_ip_id=var["publicip_id"],
+        config = pulumi.Config()
+        gateway_id = config.require_object("gatewayId")
+        publicip_id = config.require_object("publicipId")
+        test = huaweicloud.nat.SnatRule("test",
+            nat_gateway_id=gateway_id,
+            floating_ip_id=publicip_id,
             source_type=1,
             cidr="192.168.10.0/24")
         ```
 
         ## Import
 
-        SNAT rules can be imported using the following format
+        SNAT rules can be imported using their `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Nat/snatRule:SnatRule snat_1 9e0713cb-0a2f-484e-8c7d-daecbb61dbe4
+         $ pulumi import huaweicloud:Nat/snatRule:SnatRule test 9e0713cb-0a2f-484e-8c7d-daecbb61dbe4
         ```
 
         :param str resource_name: The name of the resource.
@@ -494,8 +508,8 @@ class SnatRule(pulumi.CustomResource):
                 raise TypeError("Missing required property 'nat_gateway_id'")
             __props__.__dict__["nat_gateway_id"] = nat_gateway_id
             if network_id is not None and not opts.urn:
-                warnings.warn("""use subnet_id instead""", DeprecationWarning)
-                pulumi.log.warn("""network_id is deprecated: use subnet_id instead""")
+                warnings.warn("""schema: Deprecated; Use 'subnet_id' instead.""", DeprecationWarning)
+                pulumi.log.warn("""network_id is deprecated: schema: Deprecated; Use 'subnet_id' instead.""")
             __props__.__dict__["network_id"] = network_id
             __props__.__dict__["region"] = region
             __props__.__dict__["source_type"] = source_type
@@ -529,23 +543,23 @@ class SnatRule(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] cidr: Specifies CIDR, which can be in the format of a network segment or a host IP
-               address. This parameter and `subnet_id` are alternative. Changing this creates a new snat rule.
-        :param pulumi.Input[str] description: Specifies the description of the snat rule.
-               The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
+        :param pulumi.Input[str] cidr: Specifies the CIDR block connected by SNAT rule (DC side).  
+               This parameter and `subnet_id` are alternative. Changing this will create a new resource.
+        :param pulumi.Input[str] description: Specifies the description of the SNAT rule.
+               The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
         :param pulumi.Input[str] floating_ip_address: The actual floating IP address.
-        :param pulumi.Input[str] floating_ip_id: Specifies the EIP ID this snat rule connects to.
-               Multiple EIPs are separated using commas (,). The number of EIP IDs cannot exceed 20.
-        :param pulumi.Input[str] nat_gateway_id: ID of the nat gateway this snat rule belongs to. Changing this creates
-               a new snat rule.
-        :param pulumi.Input[str] region: The region in which to create the snat rule resource. If omitted, the
-               provider-level region will be used. Changing this creates a new snat rule resource.
-        :param pulumi.Input[int] source_type: Specifies the scenario. The valid value is 0 (VPC scenario) and 1 (Direct
-               Connect scenario). Defaults to 0, only `cidr` can be specified over a Direct Connect connection. Changing this creates
-               a new snat rule.
-        :param pulumi.Input[str] status: The status of the snat rule.
-        :param pulumi.Input[str] subnet_id: ID of the subnet this snat rule connects to. This parameter and `cidr` are
-               alternative. Changing this creates a new snat rule.
+        :param pulumi.Input[str] floating_ip_id: Specifies the IDs of floating IPs connected by SNAT rule.  
+               Multiple floating IPs are separated using commas (,). The number of floating IP IDs cannot exceed `20`.
+        :param pulumi.Input[str] nat_gateway_id: Specifies the ID of the gateway to which the SNAT rule belongs.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] region: Specifies the region where the SNAT rule is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[int] source_type: Specifies the resource scenario.  
+               The valid values are **0** (VPC scenario) and **1** (Direct Connect scenario), and the default value is `0`.
+               Only `cidr` can be specified over a Direct Connect connection. Changing this will create a new resource.
+        :param pulumi.Input[str] status: The status of the SNAT rule.
+        :param pulumi.Input[str] subnet_id: Specifies the network IDs of subnet connected by SNAT rule (VPC side).  
+               This parameter and `cidr` are alternative. Changing this will create a new resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -567,8 +581,8 @@ class SnatRule(pulumi.CustomResource):
     @pulumi.getter
     def cidr(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies CIDR, which can be in the format of a network segment or a host IP
-        address. This parameter and `subnet_id` are alternative. Changing this creates a new snat rule.
+        Specifies the CIDR block connected by SNAT rule (DC side).  
+        This parameter and `subnet_id` are alternative. Changing this will create a new resource.
         """
         return pulumi.get(self, "cidr")
 
@@ -576,8 +590,8 @@ class SnatRule(pulumi.CustomResource):
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the description of the snat rule.
-        The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
+        Specifies the description of the SNAT rule.
+        The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -593,8 +607,8 @@ class SnatRule(pulumi.CustomResource):
     @pulumi.getter(name="floatingIpId")
     def floating_ip_id(self) -> pulumi.Output[str]:
         """
-        Specifies the EIP ID this snat rule connects to.
-        Multiple EIPs are separated using commas (,). The number of EIP IDs cannot exceed 20.
+        Specifies the IDs of floating IPs connected by SNAT rule.  
+        Multiple floating IPs are separated using commas (,). The number of floating IP IDs cannot exceed `20`.
         """
         return pulumi.get(self, "floating_ip_id")
 
@@ -602,8 +616,8 @@ class SnatRule(pulumi.CustomResource):
     @pulumi.getter(name="natGatewayId")
     def nat_gateway_id(self) -> pulumi.Output[str]:
         """
-        ID of the nat gateway this snat rule belongs to. Changing this creates
-        a new snat rule.
+        Specifies the ID of the gateway to which the SNAT rule belongs.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "nat_gateway_id")
 
@@ -616,8 +630,8 @@ class SnatRule(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        The region in which to create the snat rule resource. If omitted, the
-        provider-level region will be used. Changing this creates a new snat rule resource.
+        Specifies the region where the SNAT rule is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -625,9 +639,9 @@ class SnatRule(pulumi.CustomResource):
     @pulumi.getter(name="sourceType")
     def source_type(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the scenario. The valid value is 0 (VPC scenario) and 1 (Direct
-        Connect scenario). Defaults to 0, only `cidr` can be specified over a Direct Connect connection. Changing this creates
-        a new snat rule.
+        Specifies the resource scenario.  
+        The valid values are **0** (VPC scenario) and **1** (Direct Connect scenario), and the default value is `0`.
+        Only `cidr` can be specified over a Direct Connect connection. Changing this will create a new resource.
         """
         return pulumi.get(self, "source_type")
 
@@ -635,7 +649,7 @@ class SnatRule(pulumi.CustomResource):
     @pulumi.getter
     def status(self) -> pulumi.Output[str]:
         """
-        The status of the snat rule.
+        The status of the SNAT rule.
         """
         return pulumi.get(self, "status")
 
@@ -643,8 +657,8 @@ class SnatRule(pulumi.CustomResource):
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> pulumi.Output[str]:
         """
-        ID of the subnet this snat rule connects to. This parameter and `cidr` are
-        alternative. Changing this creates a new snat rule.
+        Specifies the network IDs of subnet connected by SNAT rule (VPC side).  
+        This parameter and `cidr` are alternative. Changing this will create a new resource.
         """
         return pulumi.get(self, "subnet_id")
 

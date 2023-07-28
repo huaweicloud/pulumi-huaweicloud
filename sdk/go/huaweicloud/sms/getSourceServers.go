@@ -58,7 +58,8 @@ type GetSourceServersArgs struct {
 	// Specifies the IP address of the source server.
 	Ip *string `pulumi:"ip"`
 	// Specifies the name of the source server.
-	Name  *string `pulumi:"name"`
+	Name *string `pulumi:"name"`
+	// Specifies the status of the source server.
 	State *string `pulumi:"state"`
 }
 
@@ -72,7 +73,8 @@ type GetSourceServersResult struct {
 	Name *string `pulumi:"name"`
 	// An array of SMS source servers found. Structure is documented below.
 	Servers []GetSourceServersServer `pulumi:"servers"`
-	State   *string                  `pulumi:"state"`
+	// The status of the source server.
+	State *string `pulumi:"state"`
 }
 
 func GetSourceServersOutput(ctx *pulumi.Context, args GetSourceServersOutputArgs, opts ...pulumi.InvokeOption) GetSourceServersResultOutput {
@@ -95,7 +97,8 @@ type GetSourceServersOutputArgs struct {
 	// Specifies the IP address of the source server.
 	Ip pulumi.StringPtrInput `pulumi:"ip"`
 	// Specifies the name of the source server.
-	Name  pulumi.StringPtrInput `pulumi:"name"`
+	Name pulumi.StringPtrInput `pulumi:"name"`
+	// Specifies the status of the source server.
 	State pulumi.StringPtrInput `pulumi:"state"`
 }
 
@@ -138,6 +141,7 @@ func (o GetSourceServersResultOutput) Servers() GetSourceServersServerArrayOutpu
 	return o.ApplyT(func(v GetSourceServersResult) []GetSourceServersServer { return v.Servers }).(GetSourceServersServerArrayOutput)
 }
 
+// The status of the source server.
 func (o GetSourceServersResultOutput) State() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetSourceServersResult) *string { return v.State }).(pulumi.StringPtrOutput)
 }

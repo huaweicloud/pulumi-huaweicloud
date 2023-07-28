@@ -1263,11 +1263,11 @@ class ProductServiceArgs:
                  type: Optional[pulumi.Input[str]] = None):
         """
         :param pulumi.Input[str] id: Specifies the service ID. The ID contains a maximum of 64 characters. Only letters,
-               Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are allowed: `?'#().,&%@!`.
+               Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
         :param pulumi.Input[Sequence[pulumi.Input['ProductServiceCommandArgs']]] commands: Specifies the list of commands for the service.
                The commands structure is documented below.
         :param pulumi.Input[str] description: Specifies the description of the parameter. The description contains a maximum of
-               128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+               128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
                characters are allowed: `?'#().,&%@!`.
         :param pulumi.Input[Sequence[pulumi.Input['ProductServicePropertyArgs']]] properties: Specifies the list of properties for the service.
                The properties structure is documented below.
@@ -1289,7 +1289,7 @@ class ProductServiceArgs:
     def id(self) -> pulumi.Input[str]:
         """
         Specifies the service ID. The ID contains a maximum of 64 characters. Only letters,
-        Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are allowed: `?'#().,&%@!`.
+        Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "id")
 
@@ -1315,7 +1315,7 @@ class ProductServiceArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of the parameter. The description contains a maximum of
-        128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+        128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
         characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")
@@ -1359,7 +1359,7 @@ class ProductServiceCommandArgs:
                  responses: Optional[pulumi.Input[Sequence[pulumi.Input['ProductServiceCommandResponseArgs']]]] = None):
         """
         :param pulumi.Input[str] name: Specifies the name of the parameter. The name contains a maximum of 64 characters.
-               Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+               Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
         :param pulumi.Input[Sequence[pulumi.Input['ProductServiceCommandParaArgs']]] paras: Specifies the list of parameters for the command.
                The paras structure is documented below.
@@ -1377,7 +1377,7 @@ class ProductServiceCommandArgs:
     def name(self) -> pulumi.Input[str]:
         """
         Specifies the name of the parameter. The name contains a maximum of 64 characters.
-        Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+        Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
         allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "name")
@@ -1427,13 +1427,14 @@ class ProductServiceCommandParaArgs:
                  unit: Optional[pulumi.Input[str]] = None):
         """
         :param pulumi.Input[str] name: Specifies the name of the parameter. The name contains a maximum of 64 characters.
-               Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+               Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] type: Specifies the type of the parameter.
                The valid values are **int**, **decimal**, **string**, **DateTime**, **jsonObject** and **string list**.
         :param pulumi.Input[str] description: Specifies the description of the parameter. The description contains a maximum of
-               128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+               128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
                characters are allowed: `?'#().,&%@!`.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] enum_lists: Specifies the list of enumerated values of the parameter.
         :param pulumi.Input[str] max: Specifies the max value of the parameter when the `type` is **int** or **decimal**.
                Value range: -2147483647 ~ 2147483647. Defaults to **"65535"**.
         :param pulumi.Input[int] max_length: Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
@@ -1467,7 +1468,7 @@ class ProductServiceCommandParaArgs:
     def name(self) -> pulumi.Input[str]:
         """
         Specifies the name of the parameter. The name contains a maximum of 64 characters.
-        Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+        Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
         allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "name")
@@ -1494,7 +1495,7 @@ class ProductServiceCommandParaArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of the parameter. The description contains a maximum of
-        128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+        128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
         characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")
@@ -1506,6 +1507,9 @@ class ProductServiceCommandParaArgs:
     @property
     @pulumi.getter(name="enumLists")
     def enum_lists(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the list of enumerated values of the parameter.
+        """
         return pulumi.get(self, "enum_lists")
 
     @enum_lists.setter
@@ -1592,13 +1596,14 @@ class ProductServiceCommandResponseArgs:
                  unit: Optional[pulumi.Input[str]] = None):
         """
         :param pulumi.Input[str] name: Specifies the name of the parameter. The name contains a maximum of 64 characters.
-               Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+               Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] type: Specifies the type of the parameter.
                The valid values are **int**, **decimal**, **string**, **DateTime**, **jsonObject** and **string list**.
         :param pulumi.Input[str] description: Specifies the description of the parameter. The description contains a maximum of
-               128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+               128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
                characters are allowed: `?'#().,&%@!`.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] enum_lists: Specifies the list of enumerated values of the parameter.
         :param pulumi.Input[str] max: Specifies the max value of the parameter when the `type` is **int** or **decimal**.
                Value range: -2147483647 ~ 2147483647. Defaults to **"65535"**.
         :param pulumi.Input[int] max_length: Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
@@ -1632,7 +1637,7 @@ class ProductServiceCommandResponseArgs:
     def name(self) -> pulumi.Input[str]:
         """
         Specifies the name of the parameter. The name contains a maximum of 64 characters.
-        Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+        Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
         allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "name")
@@ -1659,7 +1664,7 @@ class ProductServiceCommandResponseArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of the parameter. The description contains a maximum of
-        128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+        128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
         characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")
@@ -1671,6 +1676,9 @@ class ProductServiceCommandResponseArgs:
     @property
     @pulumi.getter(name="enumLists")
     def enum_lists(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the list of enumerated values of the parameter.
+        """
         return pulumi.get(self, "enum_lists")
 
     @enum_lists.setter
@@ -1757,14 +1765,17 @@ class ProductServicePropertyArgs:
                  step: Optional[pulumi.Input[float]] = None,
                  unit: Optional[pulumi.Input[str]] = None):
         """
+        :param pulumi.Input[str] method: Specifies the access mode of the device property.
+               Options: **RW**, **W**, **R**.
         :param pulumi.Input[str] name: Specifies the name of the parameter. The name contains a maximum of 64 characters.
-               Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+               Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] type: Specifies the type of the parameter.
                The valid values are **int**, **decimal**, **string**, **DateTime**, **jsonObject** and **string list**.
         :param pulumi.Input[str] description: Specifies the description of the parameter. The description contains a maximum of
-               128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+               128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
                characters are allowed: `?'#().,&%@!`.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] enum_lists: Specifies the list of enumerated values of the parameter.
         :param pulumi.Input[str] max: Specifies the max value of the parameter when the `type` is **int** or **decimal**.
                Value range: -2147483647 ~ 2147483647. Defaults to **"65535"**.
         :param pulumi.Input[int] max_length: Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
@@ -1797,6 +1808,10 @@ class ProductServicePropertyArgs:
     @property
     @pulumi.getter
     def method(self) -> pulumi.Input[str]:
+        """
+        Specifies the access mode of the device property.
+        Options: **RW**, **W**, **R**.
+        """
         return pulumi.get(self, "method")
 
     @method.setter
@@ -1808,7 +1823,7 @@ class ProductServicePropertyArgs:
     def name(self) -> pulumi.Input[str]:
         """
         Specifies the name of the parameter. The name contains a maximum of 64 characters.
-        Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+        Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
         allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "name")
@@ -1835,7 +1850,7 @@ class ProductServicePropertyArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of the parameter. The description contains a maximum of
-        128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+        128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
         characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")
@@ -1847,6 +1862,9 @@ class ProductServicePropertyArgs:
     @property
     @pulumi.getter(name="enumLists")
     def enum_lists(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the list of enumerated values of the parameter.
+        """
         return pulumi.get(self, "enum_lists")
 
     @enum_lists.setter

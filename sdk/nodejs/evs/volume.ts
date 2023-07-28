@@ -96,14 +96,16 @@ export class Volume extends pulumi.CustomResource {
 
     /**
      * If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-     * the Device as the Instance sees it.
+     * the Device as the Instance sees it. The object structure is documented below.
      */
     public /*out*/ readonly attachments!: pulumi.Output<outputs.Evs.VolumeAttachment[]>;
+    /**
+     * @deprecated Deprecated
+     */
     public readonly autoPay!: pulumi.Output<string | undefined>;
     /**
      * Specifies whether auto renew is enabled.
      * Valid values are **true** and **false**.
-     * Changing this creates a new disk.
      */
     public readonly autoRenew!: pulumi.Output<string | undefined>;
     /**
@@ -129,6 +131,14 @@ export class Volume extends pulumi.CustomResource {
      * Changing this creates a new disk.
      */
     public readonly chargingMode!: pulumi.Output<string>;
+    /**
+     * Specifies the ID of the DSS storage pool accommodating the disk.
+     */
+    public readonly dedicatedStorageId!: pulumi.Output<string | undefined>;
+    /**
+     * The name of the DSS storage pool accommodating the disk.
+     */
+    public /*out*/ readonly dedicatedStorageName!: pulumi.Output<string>;
     /**
      * Specifies the disk description. The value can contain a maximum of 255 bytes.
      */
@@ -230,6 +240,8 @@ export class Volume extends pulumi.CustomResource {
             resourceInputs["backupId"] = state ? state.backupId : undefined;
             resourceInputs["cascade"] = state ? state.cascade : undefined;
             resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
+            resourceInputs["dedicatedStorageId"] = state ? state.dedicatedStorageId : undefined;
+            resourceInputs["dedicatedStorageName"] = state ? state.dedicatedStorageName : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["deviceType"] = state ? state.deviceType : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
@@ -259,6 +271,7 @@ export class Volume extends pulumi.CustomResource {
             resourceInputs["backupId"] = args ? args.backupId : undefined;
             resourceInputs["cascade"] = args ? args.cascade : undefined;
             resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
+            resourceInputs["dedicatedStorageId"] = args ? args.dedicatedStorageId : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["deviceType"] = args ? args.deviceType : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
@@ -274,6 +287,7 @@ export class Volume extends pulumi.CustomResource {
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["volumeType"] = args ? args.volumeType : undefined;
             resourceInputs["attachments"] = undefined /*out*/;
+            resourceInputs["dedicatedStorageName"] = undefined /*out*/;
             resourceInputs["wwn"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
@@ -287,14 +301,16 @@ export class Volume extends pulumi.CustomResource {
 export interface VolumeState {
     /**
      * If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-     * the Device as the Instance sees it.
+     * the Device as the Instance sees it. The object structure is documented below.
      */
     attachments?: pulumi.Input<pulumi.Input<inputs.Evs.VolumeAttachment>[]>;
+    /**
+     * @deprecated Deprecated
+     */
     autoPay?: pulumi.Input<string>;
     /**
      * Specifies whether auto renew is enabled.
      * Valid values are **true** and **false**.
-     * Changing this creates a new disk.
      */
     autoRenew?: pulumi.Input<string>;
     /**
@@ -320,6 +336,14 @@ export interface VolumeState {
      * Changing this creates a new disk.
      */
     chargingMode?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the DSS storage pool accommodating the disk.
+     */
+    dedicatedStorageId?: pulumi.Input<string>;
+    /**
+     * The name of the DSS storage pool accommodating the disk.
+     */
+    dedicatedStorageName?: pulumi.Input<string>;
     /**
      * Specifies the disk description. The value can contain a maximum of 255 bytes.
      */
@@ -406,11 +430,13 @@ export interface VolumeState {
  * The set of arguments for constructing a Volume resource.
  */
 export interface VolumeArgs {
+    /**
+     * @deprecated Deprecated
+     */
     autoPay?: pulumi.Input<string>;
     /**
      * Specifies whether auto renew is enabled.
      * Valid values are **true** and **false**.
-     * Changing this creates a new disk.
      */
     autoRenew?: pulumi.Input<string>;
     /**
@@ -436,6 +462,10 @@ export interface VolumeArgs {
      * Changing this creates a new disk.
      */
     chargingMode?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the DSS storage pool accommodating the disk.
+     */
+    dedicatedStorageId?: pulumi.Input<string>;
     /**
      * Specifies the disk description. The value can contain a maximum of 255 bytes.
      */

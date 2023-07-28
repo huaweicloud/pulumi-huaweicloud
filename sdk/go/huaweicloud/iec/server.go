@@ -177,8 +177,7 @@ type Server struct {
 	// this parameter creates a new IEC server resource.
 	KeyPair pulumi.StringPtrOutput `pulumi:"keyPair"`
 	// Specifies the IEC server name. This parameter can contain a maximum of 64
-	// characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-). Changing this parameter
-	// creates a new IEC server resource.
+	// characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-).
 	Name pulumi.StringOutput `pulumi:"name"`
 	// An array of one or more networks to attach to the IEC server. The object structure is documented below.
 	Nics ServerNicArrayOutput `pulumi:"nics"`
@@ -308,8 +307,7 @@ type serverState struct {
 	// this parameter creates a new IEC server resource.
 	KeyPair *string `pulumi:"keyPair"`
 	// Specifies the IEC server name. This parameter can contain a maximum of 64
-	// characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-). Changing this parameter
-	// creates a new IEC server resource.
+	// characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-).
 	Name *string `pulumi:"name"`
 	// An array of one or more networks to attach to the IEC server. The object structure is documented below.
 	Nics []ServerNic `pulumi:"nics"`
@@ -386,8 +384,7 @@ type ServerState struct {
 	// this parameter creates a new IEC server resource.
 	KeyPair pulumi.StringPtrInput
 	// Specifies the IEC server name. This parameter can contain a maximum of 64
-	// characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-). Changing this parameter
-	// creates a new IEC server resource.
+	// characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-).
 	Name pulumi.StringPtrInput
 	// An array of one or more networks to attach to the IEC server. The object structure is documented below.
 	Nics ServerNicArrayInput
@@ -460,8 +457,7 @@ type serverArgs struct {
 	// this parameter creates a new IEC server resource.
 	KeyPair *string `pulumi:"keyPair"`
 	// Specifies the IEC server name. This parameter can contain a maximum of 64
-	// characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-). Changing this parameter
-	// creates a new IEC server resource.
+	// characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-).
 	Name *string `pulumi:"name"`
 	// Specifies an array of one or more security group IDs to associate with
 	// the IEC server. Changing this parameter creates a new IEC server resource.
@@ -518,8 +514,7 @@ type ServerArgs struct {
 	// this parameter creates a new IEC server resource.
 	KeyPair pulumi.StringPtrInput
 	// Specifies the IEC server name. This parameter can contain a maximum of 64
-	// characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-). Changing this parameter
-	// creates a new IEC server resource.
+	// characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-).
 	Name pulumi.StringPtrInput
 	// Specifies an array of one or more security group IDs to associate with
 	// the IEC server. Changing this parameter creates a new IEC server resource.
@@ -708,8 +703,7 @@ func (o ServerOutput) KeyPair() pulumi.StringPtrOutput {
 }
 
 // Specifies the IEC server name. This parameter can contain a maximum of 64
-// characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-). Changing this parameter
-// creates a new IEC server resource.
+// characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-).
 func (o ServerOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Server) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }

@@ -51,11 +51,17 @@ class GetRouteTableResult:
     @property
     @pulumi.getter
     def default(self) -> bool:
+        """
+        Whether the route table is default or not.
+        """
         return pulumi.get(self, "default")
 
     @property
     @pulumi.getter
     def description(self) -> str:
+        """
+        The description about the route.
+        """
         return pulumi.get(self, "description")
 
     @property
@@ -76,11 +82,17 @@ class GetRouteTableResult:
     @property
     @pulumi.getter
     def routes(self) -> Sequence['outputs.GetRouteTableRouteResult']:
+        """
+        The route object list. The route object is documented below.
+        """
         return pulumi.get(self, "routes")
 
     @property
     @pulumi.getter
     def subnets(self) -> Sequence[str]:
+        """
+        An array of one or more subnets associating with the route table.
+        """
         return pulumi.get(self, "subnets")
 
     @property
@@ -127,11 +139,11 @@ def get_route_table(id: Optional[str] = None,
     ```
 
 
-    :param str id: - Specifies the ID of the route table.
-    :param str name: - Specifies the name of the route table.
+    :param str id: Specifies the ID of the route table.
+    :param str name: Specifies the name of the route table.
     :param str region: The region in which to query the vpc route table.
            If omitted, the provider-level region will be used.
-    :param str vpc_id: - Specifies the VPC ID where the route table resides.
+    :param str vpc_id: Specifies the VPC ID where the route table resides.
     """
     __args__ = dict()
     __args__['id'] = id
@@ -175,10 +187,10 @@ def get_route_table_output(id: Optional[pulumi.Input[Optional[str]]] = None,
     ```
 
 
-    :param str id: - Specifies the ID of the route table.
-    :param str name: - Specifies the name of the route table.
+    :param str id: Specifies the ID of the route table.
+    :param str name: Specifies the name of the route table.
     :param str region: The region in which to query the vpc route table.
            If omitted, the provider-level region will be used.
-    :param str vpc_id: - Specifies the VPC ID where the route table resides.
+    :param str vpc_id: Specifies the VPC ID where the route table resides.
     """
     ...

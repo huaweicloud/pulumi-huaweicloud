@@ -22,32 +22,18 @@ import (
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Waf"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Waf"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			certificate1, err := Waf.GetCertificate(ctx, &waf.GetCertificateArgs{
-//				Name: "certificate name",
+//			cfg := config.New(ctx, "")
+//			enterpriseProjectId := cfg.RequireObject("enterpriseProjectId")
+//			_, err := Waf.GetCertificate(ctx, &waf.GetCertificateArgs{
+//				Name:                "certificate name",
+//				EnterpriseProjectId: pulumi.StringRef(enterpriseProjectId),
 //			}, nil)
-//			if err != nil {
-//				return err
-//			}
-//			_, err = Waf.NewDomain(ctx, "domain1", &Waf.DomainArgs{
-//				Domain:          pulumi.String("www.domainname.com"),
-//				CertificateId:   pulumi.String(certificate1.Id),
-//				CertificateName: pulumi.String(certificate1.Name),
-//				KeepPolicy:      pulumi.Bool(false),
-//				Proxy:           pulumi.Bool(false),
-//				Servers: waf.DomainServerArray{
-//					&waf.DomainServerArgs{
-//						ClientProtocol: pulumi.String("HTTPS"),
-//						ServerProtocol: pulumi.String("HTTP"),
-//						Address:        pulumi.String("192.168.10.1"),
-//						Port:           pulumi.Int(8080),
-//					},
-//				},
-//			})
 //			if err != nil {
 //				return err
 //			}
@@ -68,6 +54,8 @@ func LookupCertificate(ctx *pulumi.Context, args *LookupCertificateArgs, opts ..
 
 // A collection of arguments for invoking getCertificate.
 type LookupCertificateArgs struct {
+	// The enterprise project ID of WAF certificate.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// The expire status of certificate. Defaults is `0`. The value can be:
 	// + `0`: not expire
 	// + `1`: has expired
@@ -82,6 +70,7 @@ type LookupCertificateArgs struct {
 
 // A collection of values returned by getCertificate.
 type LookupCertificateResult struct {
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Indicates the time when the certificate expires.
 	Expiration   string `pulumi:"expiration"`
 	ExpireStatus *int   `pulumi:"expireStatus"`
@@ -106,6 +95,8 @@ func LookupCertificateOutput(ctx *pulumi.Context, args LookupCertificateOutputAr
 
 // A collection of arguments for invoking getCertificate.
 type LookupCertificateOutputArgs struct {
+	// The enterprise project ID of WAF certificate.
+	EnterpriseProjectId pulumi.StringPtrInput `pulumi:"enterpriseProjectId"`
 	// The expire status of certificate. Defaults is `0`. The value can be:
 	// + `0`: not expire
 	// + `1`: has expired
@@ -135,6 +126,10 @@ func (o LookupCertificateResultOutput) ToLookupCertificateResultOutput() LookupC
 
 func (o LookupCertificateResultOutput) ToLookupCertificateResultOutputWithContext(ctx context.Context) LookupCertificateResultOutput {
 	return o
+}
+
+func (o LookupCertificateResultOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v LookupCertificateResult) *string { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
 
 // Indicates the time when the certificate expires.

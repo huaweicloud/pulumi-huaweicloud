@@ -69,10 +69,11 @@ type LookupVpcResult struct {
 	Cidr string `pulumi:"cidr"`
 	Id   string `pulumi:"id"`
 	// Indicates the mode of the IEC VPC. Possible values are *SYSTEM* and *CUSTOMER*.
-	Mode      string `pulumi:"mode"`
-	Name      string `pulumi:"name"`
-	Region    string `pulumi:"region"`
-	SubnetNum int    `pulumi:"subnetNum"`
+	Mode   string `pulumi:"mode"`
+	Name   string `pulumi:"name"`
+	Region string `pulumi:"region"`
+	// Indicates the number of subnets.
+	SubnetNum int `pulumi:"subnetNum"`
 }
 
 func LookupVpcOutput(ctx *pulumi.Context, args LookupVpcOutputArgs, opts ...pulumi.InvokeOption) LookupVpcResultOutput {
@@ -141,6 +142,7 @@ func (o LookupVpcResultOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupVpcResult) string { return v.Region }).(pulumi.StringOutput)
 }
 
+// Indicates the number of subnets.
 func (o LookupVpcResultOutput) SubnetNum() pulumi.IntOutput {
 	return o.ApplyT(func(v LookupVpcResult) int { return v.SubnetNum }).(pulumi.IntOutput)
 }

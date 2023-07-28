@@ -21,12 +21,14 @@ class EipArgs:
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Eip resource.
-        :param pulumi.Input[str] site_id: Specifies the ID of IEC sevice site. Changing this parameter creates a new
+        :param pulumi.Input[str] site_id: Specifies the ID of IEC service site. Changing this parameter creates a new
                resource.
         :param pulumi.Input[int] ip_version: The version of elastic IP address.
-        :param pulumi.Input[str] line_id: Specifies the line ID of IEC sevice site.
+        :param pulumi.Input[str] line_id: Specifies the line ID of IEC service site.
                Changing this parameter creates a new resource.
         :param pulumi.Input[str] port_id: Specifies the port ID which this eip will associate with.
+        :param pulumi.Input[str] region: The region in which to create the resource. If omitted, the
+               provider-level region will be used. Changing this creates a new resource.
         """
         pulumi.set(__self__, "site_id", site_id)
         if ip_version is not None:
@@ -42,7 +44,7 @@ class EipArgs:
     @pulumi.getter(name="siteId")
     def site_id(self) -> pulumi.Input[str]:
         """
-        Specifies the ID of IEC sevice site. Changing this parameter creates a new
+        Specifies the ID of IEC service site. Changing this parameter creates a new
         resource.
         """
         return pulumi.get(self, "site_id")
@@ -67,7 +69,7 @@ class EipArgs:
     @pulumi.getter(name="lineId")
     def line_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the line ID of IEC sevice site.
+        Specifies the line ID of IEC service site.
         Changing this parameter creates a new resource.
         """
         return pulumi.get(self, "line_id")
@@ -91,6 +93,10 @@ class EipArgs:
     @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
+        """
+        The region in which to create the resource. If omitted, the
+        provider-level region will be used. Changing this creates a new resource.
+        """
         return pulumi.get(self, "region")
 
     @region.setter
@@ -116,13 +122,19 @@ class _EipState:
                  status: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Eip resources.
+        :param pulumi.Input[str] bandwidth_id: The id of bandwidth.
+        :param pulumi.Input[str] bandwidth_name: The name of bandwidth.
+        :param pulumi.Input[str] bandwidth_share_type: Whether the bandwidth is shared or exclusive.
+        :param pulumi.Input[int] bandwidth_size: The size of bandwidth.
         :param pulumi.Input[int] ip_version: The version of elastic IP address.
-        :param pulumi.Input[str] line_id: Specifies the line ID of IEC sevice site.
+        :param pulumi.Input[str] line_id: Specifies the line ID of IEC service site.
                Changing this parameter creates a new resource.
         :param pulumi.Input[str] port_id: Specifies the port ID which this eip will associate with.
         :param pulumi.Input[str] private_ip: The address of private IP.
         :param pulumi.Input[str] public_ip: The address of elastic IP.
-        :param pulumi.Input[str] site_id: Specifies the ID of IEC sevice site. Changing this parameter creates a new
+        :param pulumi.Input[str] region: The region in which to create the resource. If omitted, the
+               provider-level region will be used. Changing this creates a new resource.
+        :param pulumi.Input[str] site_id: Specifies the ID of IEC service site. Changing this parameter creates a new
                resource.
         :param pulumi.Input[str] site_info: The located information of the IEC site. It contains area, province and city.
         :param pulumi.Input[str] status: The status of elastic IP.
@@ -157,6 +169,9 @@ class _EipState:
     @property
     @pulumi.getter(name="bandwidthId")
     def bandwidth_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The id of bandwidth.
+        """
         return pulumi.get(self, "bandwidth_id")
 
     @bandwidth_id.setter
@@ -166,6 +181,9 @@ class _EipState:
     @property
     @pulumi.getter(name="bandwidthName")
     def bandwidth_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        The name of bandwidth.
+        """
         return pulumi.get(self, "bandwidth_name")
 
     @bandwidth_name.setter
@@ -175,6 +193,9 @@ class _EipState:
     @property
     @pulumi.getter(name="bandwidthShareType")
     def bandwidth_share_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Whether the bandwidth is shared or exclusive.
+        """
         return pulumi.get(self, "bandwidth_share_type")
 
     @bandwidth_share_type.setter
@@ -184,6 +205,9 @@ class _EipState:
     @property
     @pulumi.getter(name="bandwidthSize")
     def bandwidth_size(self) -> Optional[pulumi.Input[int]]:
+        """
+        The size of bandwidth.
+        """
         return pulumi.get(self, "bandwidth_size")
 
     @bandwidth_size.setter
@@ -206,7 +230,7 @@ class _EipState:
     @pulumi.getter(name="lineId")
     def line_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the line ID of IEC sevice site.
+        Specifies the line ID of IEC service site.
         Changing this parameter creates a new resource.
         """
         return pulumi.get(self, "line_id")
@@ -254,6 +278,10 @@ class _EipState:
     @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
+        """
+        The region in which to create the resource. If omitted, the
+        provider-level region will be used. Changing this creates a new resource.
+        """
         return pulumi.get(self, "region")
 
     @region.setter
@@ -264,7 +292,7 @@ class _EipState:
     @pulumi.getter(name="siteId")
     def site_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ID of IEC sevice site. Changing this parameter creates a new
+        Specifies the ID of IEC service site. Changing this parameter creates a new
         resource.
         """
         return pulumi.get(self, "site_id")
@@ -333,10 +361,12 @@ class Eip(pulumi.CustomResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[int] ip_version: The version of elastic IP address.
-        :param pulumi.Input[str] line_id: Specifies the line ID of IEC sevice site.
+        :param pulumi.Input[str] line_id: Specifies the line ID of IEC service site.
                Changing this parameter creates a new resource.
         :param pulumi.Input[str] port_id: Specifies the port ID which this eip will associate with.
-        :param pulumi.Input[str] site_id: Specifies the ID of IEC sevice site. Changing this parameter creates a new
+        :param pulumi.Input[str] region: The region in which to create the resource. If omitted, the
+               provider-level region will be used. Changing this creates a new resource.
+        :param pulumi.Input[str] site_id: Specifies the ID of IEC service site. Changing this parameter creates a new
                resource.
         """
         ...
@@ -440,13 +470,19 @@ class Eip(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] bandwidth_id: The id of bandwidth.
+        :param pulumi.Input[str] bandwidth_name: The name of bandwidth.
+        :param pulumi.Input[str] bandwidth_share_type: Whether the bandwidth is shared or exclusive.
+        :param pulumi.Input[int] bandwidth_size: The size of bandwidth.
         :param pulumi.Input[int] ip_version: The version of elastic IP address.
-        :param pulumi.Input[str] line_id: Specifies the line ID of IEC sevice site.
+        :param pulumi.Input[str] line_id: Specifies the line ID of IEC service site.
                Changing this parameter creates a new resource.
         :param pulumi.Input[str] port_id: Specifies the port ID which this eip will associate with.
         :param pulumi.Input[str] private_ip: The address of private IP.
         :param pulumi.Input[str] public_ip: The address of elastic IP.
-        :param pulumi.Input[str] site_id: Specifies the ID of IEC sevice site. Changing this parameter creates a new
+        :param pulumi.Input[str] region: The region in which to create the resource. If omitted, the
+               provider-level region will be used. Changing this creates a new resource.
+        :param pulumi.Input[str] site_id: Specifies the ID of IEC service site. Changing this parameter creates a new
                resource.
         :param pulumi.Input[str] site_info: The located information of the IEC site. It contains area, province and city.
         :param pulumi.Input[str] status: The status of elastic IP.
@@ -473,21 +509,33 @@ class Eip(pulumi.CustomResource):
     @property
     @pulumi.getter(name="bandwidthId")
     def bandwidth_id(self) -> pulumi.Output[str]:
+        """
+        The id of bandwidth.
+        """
         return pulumi.get(self, "bandwidth_id")
 
     @property
     @pulumi.getter(name="bandwidthName")
     def bandwidth_name(self) -> pulumi.Output[str]:
+        """
+        The name of bandwidth.
+        """
         return pulumi.get(self, "bandwidth_name")
 
     @property
     @pulumi.getter(name="bandwidthShareType")
     def bandwidth_share_type(self) -> pulumi.Output[str]:
+        """
+        Whether the bandwidth is shared or exclusive.
+        """
         return pulumi.get(self, "bandwidth_share_type")
 
     @property
     @pulumi.getter(name="bandwidthSize")
     def bandwidth_size(self) -> pulumi.Output[int]:
+        """
+        The size of bandwidth.
+        """
         return pulumi.get(self, "bandwidth_size")
 
     @property
@@ -502,7 +550,7 @@ class Eip(pulumi.CustomResource):
     @pulumi.getter(name="lineId")
     def line_id(self) -> pulumi.Output[str]:
         """
-        Specifies the line ID of IEC sevice site.
+        Specifies the line ID of IEC service site.
         Changing this parameter creates a new resource.
         """
         return pulumi.get(self, "line_id")
@@ -534,13 +582,17 @@ class Eip(pulumi.CustomResource):
     @property
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
+        """
+        The region in which to create the resource. If omitted, the
+        provider-level region will be used. Changing this creates a new resource.
+        """
         return pulumi.get(self, "region")
 
     @property
     @pulumi.getter(name="siteId")
     def site_id(self) -> pulumi.Output[str]:
         """
-        Specifies the ID of IEC sevice site. Changing this parameter creates a new
+        Specifies the ID of IEC service site. Changing this parameter creates a new
         resource.
         """
         return pulumi.get(self, "site_id")

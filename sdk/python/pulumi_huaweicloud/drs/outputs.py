@@ -74,8 +74,8 @@ class JobDestinationDb(dict):
                Changing this parameter will create a new resource.
         :param str instance_id: Specifies the instance id of database when it is a RDS database.
                Changing this parameter will create a new resource.
-        :param str name: Specifies the job name. The name consists of 4 to 50 characters, starting with
-               a letter. Only letters, digits, underscores (\\_) and hyphens (-) are allowed.
+        :param str name: Specifies the name of database.
+               Changing this parameter will create a new resource.
         :param str region: Specifies the region which the database belongs when it is a RDS database.
                Changing this parameter will create a new resource.
         :param str ssl_cert_check_sum: Specifies the checksum of SSL certificate content.
@@ -171,8 +171,8 @@ class JobDestinationDb(dict):
     @pulumi.getter
     def name(self) -> Optional[str]:
         """
-        Specifies the job name. The name consists of 4 to 50 characters, starting with
-        a letter. Only letters, digits, underscores (\\_) and hyphens (-) are allowed.
+        Specifies the name of database.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
 
@@ -366,8 +366,8 @@ class JobSourceDb(dict):
                Changing this parameter will create a new resource.
         :param str instance_id: Specifies the instance id of database when it is a RDS database.
                Changing this parameter will create a new resource.
-        :param str name: Specifies the job name. The name consists of 4 to 50 characters, starting with
-               a letter. Only letters, digits, underscores (\\_) and hyphens (-) are allowed.
+        :param str name: Specifies the name of database.
+               Changing this parameter will create a new resource.
         :param str region: Specifies the region which the database belongs when it is a RDS database.
                Changing this parameter will create a new resource.
         :param str ssl_cert_check_sum: Specifies the checksum of SSL certificate content.
@@ -463,8 +463,8 @@ class JobSourceDb(dict):
     @pulumi.getter
     def name(self) -> Optional[str]:
         """
-        Specifies the job name. The name consists of 4 to 50 characters, starting with
-        a letter. Only letters, digits, underscores (\\_) and hyphens (-) are allowed.
+        Specifies the name of database.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
 

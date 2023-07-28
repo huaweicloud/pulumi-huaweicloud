@@ -32,11 +32,14 @@ class VpcSubnetArgs:
                subnet resource.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the iec **CUSTOMER**
                vpc to which the subnet belongs. Changing this parameter creates a new subnet resource.
-        :param pulumi.Input[bool] dhcp_enable: The status of subnet DHCP is enabled or not.
+        :param pulumi.Input[bool] dhcp_enable: Specifies the status of subnet DHCP is enabled or not.
+               Valid values are **true** and **false**, defaults to **true**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] dns_lists: Specifies the DNS server address list of a subnet. These DNS server address must be
                valid IP addresses.
         :param pulumi.Input[str] name: Specifies the name of the iec vpc subnet. The value is a string of 1 to 64 characters that
                can contain letters, digits, underscores(_), and hyphens(-).
+        :param pulumi.Input[str] region: The region in which to create the iec vpc subnet resource. If omitted, the
+               provider-level region will be used. Changing this creates a new resource.
         """
         pulumi.set(__self__, "cidr", cidr)
         pulumi.set(__self__, "gateway_ip", gateway_ip)
@@ -107,7 +110,8 @@ class VpcSubnetArgs:
     @pulumi.getter(name="dhcpEnable")
     def dhcp_enable(self) -> Optional[pulumi.Input[bool]]:
         """
-        The status of subnet DHCP is enabled or not.
+        Specifies the status of subnet DHCP is enabled or not.
+        Valid values are **true** and **false**, defaults to **true**.
         """
         return pulumi.get(self, "dhcp_enable")
 
@@ -144,6 +148,10 @@ class VpcSubnetArgs:
     @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
+        """
+        The region in which to create the iec vpc subnet resource. If omitted, the
+        provider-level region will be used. Changing this creates a new resource.
+        """
         return pulumi.get(self, "region")
 
     @region.setter
@@ -168,13 +176,16 @@ class _VpcSubnetState:
         Input properties used for looking up and filtering VpcSubnet resources.
         :param pulumi.Input[str] cidr: Specifies the network segment on which the subnet resides. The value must be in
                CIDR format and within the CIDR block of the iec vpc. Changing this parameter creates a new subnet resource.
-        :param pulumi.Input[bool] dhcp_enable: The status of subnet DHCP is enabled or not.
+        :param pulumi.Input[bool] dhcp_enable: Specifies the status of subnet DHCP is enabled or not.
+               Valid values are **true** and **false**, defaults to **true**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] dns_lists: Specifies the DNS server address list of a subnet. These DNS server address must be
                valid IP addresses.
         :param pulumi.Input[str] gateway_ip: Specifies the gateway of the subnet. The value must be a valid IP address
                and in the subnet segment. Changing this parameter creates a new subnet resource.
         :param pulumi.Input[str] name: Specifies the name of the iec vpc subnet. The value is a string of 1 to 64 characters that
                can contain letters, digits, underscores(_), and hyphens(-).
+        :param pulumi.Input[str] region: The region in which to create the iec vpc subnet resource. If omitted, the
+               provider-level region will be used. Changing this creates a new resource.
         :param pulumi.Input[str] site_id: Specifies the ID of the iec site. Changing this parameter creates a new
                subnet resource.
         :param pulumi.Input[str] site_info: The located information of the iec site. It contains area, province and city.
@@ -220,7 +231,8 @@ class _VpcSubnetState:
     @pulumi.getter(name="dhcpEnable")
     def dhcp_enable(self) -> Optional[pulumi.Input[bool]]:
         """
-        The status of subnet DHCP is enabled or not.
+        Specifies the status of subnet DHCP is enabled or not.
+        Valid values are **true** and **false**, defaults to **true**.
         """
         return pulumi.get(self, "dhcp_enable")
 
@@ -270,6 +282,10 @@ class _VpcSubnetState:
     @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
+        """
+        The region in which to create the iec vpc subnet resource. If omitted, the
+        provider-level region will be used. Changing this creates a new resource.
+        """
         return pulumi.get(self, "region")
 
     @region.setter
@@ -373,13 +389,16 @@ class VpcSubnet(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] cidr: Specifies the network segment on which the subnet resides. The value must be in
                CIDR format and within the CIDR block of the iec vpc. Changing this parameter creates a new subnet resource.
-        :param pulumi.Input[bool] dhcp_enable: The status of subnet DHCP is enabled or not.
+        :param pulumi.Input[bool] dhcp_enable: Specifies the status of subnet DHCP is enabled or not.
+               Valid values are **true** and **false**, defaults to **true**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] dns_lists: Specifies the DNS server address list of a subnet. These DNS server address must be
                valid IP addresses.
         :param pulumi.Input[str] gateway_ip: Specifies the gateway of the subnet. The value must be a valid IP address
                and in the subnet segment. Changing this parameter creates a new subnet resource.
         :param pulumi.Input[str] name: Specifies the name of the iec vpc subnet. The value is a string of 1 to 64 characters that
                can contain letters, digits, underscores(_), and hyphens(-).
+        :param pulumi.Input[str] region: The region in which to create the iec vpc subnet resource. If omitted, the
+               provider-level region will be used. Changing this creates a new resource.
         :param pulumi.Input[str] site_id: Specifies the ID of the iec site. Changing this parameter creates a new
                subnet resource.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the iec **CUSTOMER**
@@ -498,13 +517,16 @@ class VpcSubnet(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] cidr: Specifies the network segment on which the subnet resides. The value must be in
                CIDR format and within the CIDR block of the iec vpc. Changing this parameter creates a new subnet resource.
-        :param pulumi.Input[bool] dhcp_enable: The status of subnet DHCP is enabled or not.
+        :param pulumi.Input[bool] dhcp_enable: Specifies the status of subnet DHCP is enabled or not.
+               Valid values are **true** and **false**, defaults to **true**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] dns_lists: Specifies the DNS server address list of a subnet. These DNS server address must be
                valid IP addresses.
         :param pulumi.Input[str] gateway_ip: Specifies the gateway of the subnet. The value must be a valid IP address
                and in the subnet segment. Changing this parameter creates a new subnet resource.
         :param pulumi.Input[str] name: Specifies the name of the iec vpc subnet. The value is a string of 1 to 64 characters that
                can contain letters, digits, underscores(_), and hyphens(-).
+        :param pulumi.Input[str] region: The region in which to create the iec vpc subnet resource. If omitted, the
+               provider-level region will be used. Changing this creates a new resource.
         :param pulumi.Input[str] site_id: Specifies the ID of the iec site. Changing this parameter creates a new
                subnet resource.
         :param pulumi.Input[str] site_info: The located information of the iec site. It contains area, province and city.
@@ -541,7 +563,8 @@ class VpcSubnet(pulumi.CustomResource):
     @pulumi.getter(name="dhcpEnable")
     def dhcp_enable(self) -> pulumi.Output[Optional[bool]]:
         """
-        The status of subnet DHCP is enabled or not.
+        Specifies the status of subnet DHCP is enabled or not.
+        Valid values are **true** and **false**, defaults to **true**.
         """
         return pulumi.get(self, "dhcp_enable")
 
@@ -575,6 +598,10 @@ class VpcSubnet(pulumi.CustomResource):
     @property
     @pulumi.getter
     def region(self) -> pulumi.Output[Optional[str]]:
+        """
+        The region in which to create the iec vpc subnet resource. If omitted, the
+        provider-level region will be used. Changing this creates a new resource.
+        """
         return pulumi.get(self, "region")
 
     @property

@@ -25,12 +25,16 @@ class CertificateArgs:
         """
         The set of arguments for constructing a Certificate resource.
         :param pulumi.Input[str] certificate: The public encrypted key of the Certificate, PEM format.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] certificate_chain: The chain of the certificate.
                It can be extracted from the *server.crt* file in the Nginx directory,
                usually after the second paragraph is the certificate chain.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] private_key: The private encrypted key of the Certificate, PEM format.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: Human-readable name for the Certificate.
                Does not have to be unique. The value contains a maximum of 63 characters.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: The region in which to create the SCM certificate resource.
                If omitted, the provider-level region will be used.
                Changing this setting will push a new certificate.
@@ -51,6 +55,7 @@ class CertificateArgs:
     def certificate(self) -> pulumi.Input[str]:
         """
         The public encrypted key of the Certificate, PEM format.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "certificate")
 
@@ -65,6 +70,7 @@ class CertificateArgs:
         The chain of the certificate.
         It can be extracted from the *server.crt* file in the Nginx directory,
         usually after the second paragraph is the certificate chain.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "certificate_chain")
 
@@ -77,6 +83,7 @@ class CertificateArgs:
     def private_key(self) -> pulumi.Input[str]:
         """
         The private encrypted key of the Certificate, PEM format.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "private_key")
 
@@ -90,6 +97,7 @@ class CertificateArgs:
         """
         Human-readable name for the Certificate.
         Does not have to be unique. The value contains a maximum of 63 characters.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
 
@@ -145,16 +153,20 @@ class _CertificateState:
         :param pulumi.Input[Sequence[pulumi.Input['CertificateAuthentificationArgs']]] authentifications: (List) Domain ownership verification information.
                This is a list, each item of data is as follows:
         :param pulumi.Input[str] certificate: The public encrypted key of the Certificate, PEM format.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] certificate_chain: The chain of the certificate.
                It can be extracted from the *server.crt* file in the Nginx directory,
                usually after the second paragraph is the certificate chain.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] domain: Domain name mapping to the verification value
         :param pulumi.Input[int] domain_count: Number of domain names can be bound to a certificate.
         :param pulumi.Input[str] name: Human-readable name for the Certificate.
                Does not have to be unique. The value contains a maximum of 63 characters.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] not_after: Time when the certificate becomes invalid. If no valid value is obtained, this parameter is left blank.
         :param pulumi.Input[str] not_before: Time when the certificate takes effect. If no valid value is obtained, this parameter is left blank.
         :param pulumi.Input[str] private_key: The private encrypted key of the Certificate, PEM format.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] push_support: Whether a certificate can be pushed.
         :param pulumi.Input[str] region: The region in which to create the SCM certificate resource.
                If omitted, the provider-level region will be used.
@@ -207,6 +219,7 @@ class _CertificateState:
     def certificate(self) -> Optional[pulumi.Input[str]]:
         """
         The public encrypted key of the Certificate, PEM format.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "certificate")
 
@@ -221,6 +234,7 @@ class _CertificateState:
         The chain of the certificate.
         It can be extracted from the *server.crt* file in the Nginx directory,
         usually after the second paragraph is the certificate chain.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "certificate_chain")
 
@@ -258,6 +272,7 @@ class _CertificateState:
         """
         Human-readable name for the Certificate.
         Does not have to be unique. The value contains a maximum of 63 characters.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
 
@@ -294,6 +309,7 @@ class _CertificateState:
     def private_key(self) -> Optional[pulumi.Input[str]]:
         """
         The private encrypted key of the Certificate, PEM format.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "private_key")
 
@@ -443,12 +459,16 @@ class Certificate(pulumi.CustomResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] certificate: The public encrypted key of the Certificate, PEM format.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] certificate_chain: The chain of the certificate.
                It can be extracted from the *server.crt* file in the Nginx directory,
                usually after the second paragraph is the certificate chain.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: Human-readable name for the Certificate.
                Does not have to be unique. The value contains a maximum of 63 characters.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] private_key: The private encrypted key of the Certificate, PEM format.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: The region in which to create the SCM certificate resource.
                If omitted, the provider-level region will be used.
                Changing this setting will push a new certificate.
@@ -618,16 +638,20 @@ class Certificate(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['CertificateAuthentificationArgs']]]] authentifications: (List) Domain ownership verification information.
                This is a list, each item of data is as follows:
         :param pulumi.Input[str] certificate: The public encrypted key of the Certificate, PEM format.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] certificate_chain: The chain of the certificate.
                It can be extracted from the *server.crt* file in the Nginx directory,
                usually after the second paragraph is the certificate chain.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] domain: Domain name mapping to the verification value
         :param pulumi.Input[int] domain_count: Number of domain names can be bound to a certificate.
         :param pulumi.Input[str] name: Human-readable name for the Certificate.
                Does not have to be unique. The value contains a maximum of 63 characters.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] not_after: Time when the certificate becomes invalid. If no valid value is obtained, this parameter is left blank.
         :param pulumi.Input[str] not_before: Time when the certificate takes effect. If no valid value is obtained, this parameter is left blank.
         :param pulumi.Input[str] private_key: The private encrypted key of the Certificate, PEM format.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] push_support: Whether a certificate can be pushed.
         :param pulumi.Input[str] region: The region in which to create the SCM certificate resource.
                If omitted, the provider-level region will be used.
@@ -668,6 +692,7 @@ class Certificate(pulumi.CustomResource):
     def certificate(self) -> pulumi.Output[str]:
         """
         The public encrypted key of the Certificate, PEM format.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "certificate")
 
@@ -678,6 +703,7 @@ class Certificate(pulumi.CustomResource):
         The chain of the certificate.
         It can be extracted from the *server.crt* file in the Nginx directory,
         usually after the second paragraph is the certificate chain.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "certificate_chain")
 
@@ -703,6 +729,7 @@ class Certificate(pulumi.CustomResource):
         """
         Human-readable name for the Certificate.
         Does not have to be unique. The value contains a maximum of 63 characters.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
 
@@ -727,6 +754,7 @@ class Certificate(pulumi.CustomResource):
     def private_key(self) -> pulumi.Output[str]:
         """
         The private encrypted key of the Certificate, PEM format.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "private_key")
 

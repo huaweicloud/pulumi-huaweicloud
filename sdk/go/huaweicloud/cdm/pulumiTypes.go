@@ -697,9 +697,9 @@ func (o JobConfigPtrOutput) ThrottlingRecordDirtyData() pulumi.BoolPtrOutput {
 }
 
 type GetFlavorsFlavor struct {
-	// The id of the cdm flavor.
+	// The id of the CDM flavor.
 	Id string `pulumi:"id"`
-	// The name of the cdm flavor.
+	// The name of the CDM flavor.
 	Name string `pulumi:"name"`
 }
 
@@ -715,9 +715,9 @@ type GetFlavorsFlavorInput interface {
 }
 
 type GetFlavorsFlavorArgs struct {
-	// The id of the cdm flavor.
+	// The id of the CDM flavor.
 	Id pulumi.StringInput `pulumi:"id"`
-	// The name of the cdm flavor.
+	// The name of the CDM flavor.
 	Name pulumi.StringInput `pulumi:"name"`
 }
 
@@ -772,12 +772,12 @@ func (o GetFlavorsFlavorOutput) ToGetFlavorsFlavorOutputWithContext(ctx context.
 	return o
 }
 
-// The id of the cdm flavor.
+// The id of the CDM flavor.
 func (o GetFlavorsFlavorOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlavorsFlavor) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// The name of the cdm flavor.
+// The name of the CDM flavor.
 func (o GetFlavorsFlavorOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlavorsFlavor) string { return v.Name }).(pulumi.StringOutput)
 }

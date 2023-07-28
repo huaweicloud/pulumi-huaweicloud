@@ -116,7 +116,7 @@ type Instance struct {
 	// temporary credentials for BMS to access cloud services. Changing this creates a new instance.
 	AgencyName pulumi.StringPtrOutput `pulumi:"agencyName"`
 	// Specifies whether auto renew is enabled. Valid values are "true" and "
-	// false", defaults to *false*. Changing this creates a new instance.
+	// false", defaults to *false*.
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
 	// Specifies the availability zone in which to create the instance.
 	// Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?BMS)
@@ -183,8 +183,6 @@ type Instance struct {
 	// instance.
 	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
 	// The EIP address that is associted to the instance.
-	// * `nics/mac_address` - The MAC address of the nic.
-	// * `nics/port_id` - The port ID corresponding to the IP address.
 	PublicIp pulumi.StringOutput `pulumi:"publicIp"`
 	// Specifies the region in which to create the instance. If omitted, the
 	// provider-level region will be used. Changing this creates a new instance.
@@ -281,7 +279,7 @@ type instanceState struct {
 	// temporary credentials for BMS to access cloud services. Changing this creates a new instance.
 	AgencyName *string `pulumi:"agencyName"`
 	// Specifies whether auto renew is enabled. Valid values are "true" and "
-	// false", defaults to *false*. Changing this creates a new instance.
+	// false", defaults to *false*.
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the availability zone in which to create the instance.
 	// Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?BMS)
@@ -348,8 +346,6 @@ type instanceState struct {
 	// instance.
 	PeriodUnit *string `pulumi:"periodUnit"`
 	// The EIP address that is associted to the instance.
-	// * `nics/mac_address` - The MAC address of the nic.
-	// * `nics/port_id` - The port ID corresponding to the IP address.
 	PublicIp *string `pulumi:"publicIp"`
 	// Specifies the region in which to create the instance. If omitted, the
 	// provider-level region will be used. Changing this creates a new instance.
@@ -399,7 +395,7 @@ type InstanceState struct {
 	// temporary credentials for BMS to access cloud services. Changing this creates a new instance.
 	AgencyName pulumi.StringPtrInput
 	// Specifies whether auto renew is enabled. Valid values are "true" and "
-	// false", defaults to *false*. Changing this creates a new instance.
+	// false", defaults to *false*.
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the availability zone in which to create the instance.
 	// Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?BMS)
@@ -466,8 +462,6 @@ type InstanceState struct {
 	// instance.
 	PeriodUnit pulumi.StringPtrInput
 	// The EIP address that is associted to the instance.
-	// * `nics/mac_address` - The MAC address of the nic.
-	// * `nics/port_id` - The port ID corresponding to the IP address.
 	PublicIp pulumi.StringPtrInput
 	// Specifies the region in which to create the instance. If omitted, the
 	// provider-level region will be used. Changing this creates a new instance.
@@ -521,7 +515,7 @@ type instanceArgs struct {
 	// temporary credentials for BMS to access cloud services. Changing this creates a new instance.
 	AgencyName *string `pulumi:"agencyName"`
 	// Specifies whether auto renew is enabled. Valid values are "true" and "
-	// false", defaults to *false*. Changing this creates a new instance.
+	// false", defaults to *false*.
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the availability zone in which to create the instance.
 	// Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?BMS)
@@ -626,7 +620,7 @@ type InstanceArgs struct {
 	// temporary credentials for BMS to access cloud services. Changing this creates a new instance.
 	AgencyName pulumi.StringPtrInput
 	// Specifies whether auto renew is enabled. Valid values are "true" and "
-	// false", defaults to *false*. Changing this creates a new instance.
+	// false", defaults to *false*.
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the availability zone in which to create the instance.
 	// Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?BMS)
@@ -822,7 +816,7 @@ func (o InstanceOutput) AgencyName() pulumi.StringPtrOutput {
 }
 
 // Specifies whether auto renew is enabled. Valid values are "true" and "
-// false", defaults to *false*. Changing this creates a new instance.
+// false", defaults to *false*.
 func (o InstanceOutput) AutoRenew() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
 }
@@ -952,8 +946,6 @@ func (o InstanceOutput) PeriodUnit() pulumi.StringPtrOutput {
 }
 
 // The EIP address that is associted to the instance.
-// * `nics/mac_address` - The MAC address of the nic.
-// * `nics/port_id` - The port ID corresponding to the IP address.
 func (o InstanceOutput) PublicIp() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.PublicIp }).(pulumi.StringOutput)
 }

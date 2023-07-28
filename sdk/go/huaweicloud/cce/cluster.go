@@ -149,6 +149,7 @@ import (
 type Cluster struct {
 	pulumi.CustomResourceState
 
+	// schema: Internal
 	Annotations pulumi.StringMapOutput `pulumi:"annotations"`
 	// Specifies the CA root certificate provided in the
 	// **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
@@ -166,9 +167,9 @@ type Cluster struct {
 	// are **rbac** and **authenticating_proxy**. Defaults to **rbac**.
 	// Changing this parameter will create a new cluster resource.
 	AuthenticationMode pulumi.StringPtrOutput `pulumi:"authenticationMode"`
-	AutoPay            pulumi.StringPtrOutput `pulumi:"autoPay"`
-	// Specifies whether auto renew is enabled. Valid values are **true** and
-	// **false**. Changing this parameter will create a new cluster resource.
+	// Deprecated: Deprecated
+	AutoPay pulumi.StringPtrOutput `pulumi:"autoPay"`
+	// Specifies whether auto renew is enabled. Valid values are **true** and **false**.
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
 	// Deprecated: use charging_mode instead
 	BillingMode pulumi.IntOutput `pulumi:"billingMode"`
@@ -186,7 +187,9 @@ type Cluster struct {
 	// Specifies the cluster version, defaults to the latest supported
 	// version. Changing this parameter will create a new cluster resource.
 	ClusterVersion pulumi.StringOutput `pulumi:"clusterVersion"`
-	// Specifies the container network segment.
+	// Specifies the container network segments.
+	// In clusters of v1.21 and later, when the `containerNetworkType` is **vpc-router**, you can add multiple container
+	// segments, separated with comma (,). In other situations, only the first segment takes effect.
 	// Changing this parameter will create a new cluster resource.
 	ContainerNetworkCidr pulumi.StringOutput `pulumi:"containerNetworkCidr"`
 	// Specifies the container network type.
@@ -203,10 +206,12 @@ type Cluster struct {
 	// Specified whether to unbind associated SFS Turbo file systems when deleting the CCE
 	// cluster. valid values are **true**, **try** and **false**. Default is **false**.
 	DeleteEfs pulumi.StringPtrOutput `pulumi:"deleteEfs"`
+	// schema: Internal
 	DeleteEni pulumi.StringPtrOutput `pulumi:"deleteEni"`
 	// Specified whether to delete associated EVS disks when deleting the CCE cluster.
 	// valid values are **true**, **try** and **false**. Default is **false**.
 	DeleteEvs pulumi.StringPtrOutput `pulumi:"deleteEvs"`
+	// schema: Internal
 	DeleteNet pulumi.StringPtrOutput `pulumi:"deleteNet"`
 	// Specified whether to delete associated OBS buckets when deleting the CCE cluster.
 	// valid values are **true**, **try** and **false**. Default is **false**.
@@ -218,11 +223,13 @@ type Cluster struct {
 	Description pulumi.StringOutput `pulumi:"description"`
 	// Specifies the EIP address of the cluster.
 	Eip pulumi.StringPtrOutput `pulumi:"eip"`
-	// Specifies the ENI network segment. Specified when creating a CCE
-	// Turbo cluster. Changing this parameter will create a new cluster resource.
+	// schema: Internal
+	EnableDistributeManagement pulumi.BoolPtrOutput `pulumi:"enableDistributeManagement"`
+	// The ENI network segment. This value is valid when only one eniSubnetId is specified.
 	EniSubnetCidr pulumi.StringOutput `pulumi:"eniSubnetCidr"`
-	// Specifies the ENI subnet ID. Specified when creating a CCE Turbo
-	// cluster. Changing this parameter will create a new cluster resource.
+	// Specifies the **IPv4 subnet ID** of the subnet where the ENI resides.
+	// Specified when creating a CCE Turbo cluster. You can add multiple IPv4 subnet ID, separated with comma (,).
+	// Only adding subnets is allowed, removing subnets is not allowed.
 	EniSubnetId pulumi.StringOutput `pulumi:"eniSubnetId"`
 	// The enterprise project ID of the CCE cluster.
 	// Changing this parameter will create a new cluster resource.
@@ -243,14 +250,16 @@ type Cluster struct {
 	// Specifies whether to hibernate the CCE cluster. Defaults to **false**. After a cluster is
 	// hibernated, resources such as workloads cannot be created or managed in the cluster, and the cluster cannot be
 	// deleted.
-	Hibernate       pulumi.BoolPtrOutput `pulumi:"hibernate"`
-	HighwaySubnetId pulumi.StringOutput  `pulumi:"highwaySubnetId"`
+	Hibernate pulumi.BoolPtrOutput `pulumi:"hibernate"`
+	// schema: Internal
+	HighwaySubnetId pulumi.StringOutput `pulumi:"highwaySubnetId"`
 	// Raw Kubernetes config to be used by kubectl and other compatible tools.
 	KubeConfigRaw pulumi.StringOutput `pulumi:"kubeConfigRaw"`
 	// Specifies the service forwarding mode.
 	// Changing this parameter will create a new cluster resource. Two modes are available:
 	KubeProxyMode pulumi.StringPtrOutput `pulumi:"kubeProxyMode"`
-	Labels        pulumi.StringMapOutput `pulumi:"labels"`
+	// schema: Internal
+	Labels pulumi.StringMapOutput `pulumi:"labels"`
 	// Specifies the advanced configuration of master nodes.
 	// The object structure is documented below.
 	// This parameter and `multiAz` are alternative. Changing this parameter will create a new cluster resource.
@@ -274,7 +283,12 @@ type Cluster struct {
 	// Specifies the region in which to create the CCE cluster resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new cluster resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// Security group ID of the cluster.
+	// Specifies the default worker node security group ID of the cluster.
+	// If left empty, the system will automatically create a default worker node security group for you.
+	// The default worker node security group needs to allow access from certain ports to ensure normal communications.
+	// For details, see [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+	// If updated, the modified security group will only be applied to nodes newly created or accepted.
+	// For existing nodes, you need to manually modify the security group rules for them.
 	SecurityGroupId pulumi.StringOutput `pulumi:"securityGroupId"`
 	// Specifies the service network segment.
 	// Changing this parameter will create a new cluster resource.
@@ -334,6 +348,7 @@ func GetCluster(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Cluster resources.
 type clusterState struct {
+	// schema: Internal
 	Annotations map[string]string `pulumi:"annotations"`
 	// Specifies the CA root certificate provided in the
 	// **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
@@ -351,9 +366,9 @@ type clusterState struct {
 	// are **rbac** and **authenticating_proxy**. Defaults to **rbac**.
 	// Changing this parameter will create a new cluster resource.
 	AuthenticationMode *string `pulumi:"authenticationMode"`
-	AutoPay            *string `pulumi:"autoPay"`
-	// Specifies whether auto renew is enabled. Valid values are **true** and
-	// **false**. Changing this parameter will create a new cluster resource.
+	// Deprecated: Deprecated
+	AutoPay *string `pulumi:"autoPay"`
+	// Specifies whether auto renew is enabled. Valid values are **true** and **false**.
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Deprecated: use charging_mode instead
 	BillingMode *int `pulumi:"billingMode"`
@@ -371,7 +386,9 @@ type clusterState struct {
 	// Specifies the cluster version, defaults to the latest supported
 	// version. Changing this parameter will create a new cluster resource.
 	ClusterVersion *string `pulumi:"clusterVersion"`
-	// Specifies the container network segment.
+	// Specifies the container network segments.
+	// In clusters of v1.21 and later, when the `containerNetworkType` is **vpc-router**, you can add multiple container
+	// segments, separated with comma (,). In other situations, only the first segment takes effect.
 	// Changing this parameter will create a new cluster resource.
 	ContainerNetworkCidr *string `pulumi:"containerNetworkCidr"`
 	// Specifies the container network type.
@@ -388,10 +405,12 @@ type clusterState struct {
 	// Specified whether to unbind associated SFS Turbo file systems when deleting the CCE
 	// cluster. valid values are **true**, **try** and **false**. Default is **false**.
 	DeleteEfs *string `pulumi:"deleteEfs"`
+	// schema: Internal
 	DeleteEni *string `pulumi:"deleteEni"`
 	// Specified whether to delete associated EVS disks when deleting the CCE cluster.
 	// valid values are **true**, **try** and **false**. Default is **false**.
 	DeleteEvs *string `pulumi:"deleteEvs"`
+	// schema: Internal
 	DeleteNet *string `pulumi:"deleteNet"`
 	// Specified whether to delete associated OBS buckets when deleting the CCE cluster.
 	// valid values are **true**, **try** and **false**. Default is **false**.
@@ -403,11 +422,13 @@ type clusterState struct {
 	Description *string `pulumi:"description"`
 	// Specifies the EIP address of the cluster.
 	Eip *string `pulumi:"eip"`
-	// Specifies the ENI network segment. Specified when creating a CCE
-	// Turbo cluster. Changing this parameter will create a new cluster resource.
+	// schema: Internal
+	EnableDistributeManagement *bool `pulumi:"enableDistributeManagement"`
+	// The ENI network segment. This value is valid when only one eniSubnetId is specified.
 	EniSubnetCidr *string `pulumi:"eniSubnetCidr"`
-	// Specifies the ENI subnet ID. Specified when creating a CCE Turbo
-	// cluster. Changing this parameter will create a new cluster resource.
+	// Specifies the **IPv4 subnet ID** of the subnet where the ENI resides.
+	// Specified when creating a CCE Turbo cluster. You can add multiple IPv4 subnet ID, separated with comma (,).
+	// Only adding subnets is allowed, removing subnets is not allowed.
 	EniSubnetId *string `pulumi:"eniSubnetId"`
 	// The enterprise project ID of the CCE cluster.
 	// Changing this parameter will create a new cluster resource.
@@ -428,14 +449,16 @@ type clusterState struct {
 	// Specifies whether to hibernate the CCE cluster. Defaults to **false**. After a cluster is
 	// hibernated, resources such as workloads cannot be created or managed in the cluster, and the cluster cannot be
 	// deleted.
-	Hibernate       *bool   `pulumi:"hibernate"`
+	Hibernate *bool `pulumi:"hibernate"`
+	// schema: Internal
 	HighwaySubnetId *string `pulumi:"highwaySubnetId"`
 	// Raw Kubernetes config to be used by kubectl and other compatible tools.
 	KubeConfigRaw *string `pulumi:"kubeConfigRaw"`
 	// Specifies the service forwarding mode.
 	// Changing this parameter will create a new cluster resource. Two modes are available:
-	KubeProxyMode *string           `pulumi:"kubeProxyMode"`
-	Labels        map[string]string `pulumi:"labels"`
+	KubeProxyMode *string `pulumi:"kubeProxyMode"`
+	// schema: Internal
+	Labels map[string]string `pulumi:"labels"`
 	// Specifies the advanced configuration of master nodes.
 	// The object structure is documented below.
 	// This parameter and `multiAz` are alternative. Changing this parameter will create a new cluster resource.
@@ -459,7 +482,12 @@ type clusterState struct {
 	// Specifies the region in which to create the CCE cluster resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new cluster resource.
 	Region *string `pulumi:"region"`
-	// Security group ID of the cluster.
+	// Specifies the default worker node security group ID of the cluster.
+	// If left empty, the system will automatically create a default worker node security group for you.
+	// The default worker node security group needs to allow access from certain ports to ensure normal communications.
+	// For details, see [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+	// If updated, the modified security group will only be applied to nodes newly created or accepted.
+	// For existing nodes, you need to manually modify the security group rules for them.
 	SecurityGroupId *string `pulumi:"securityGroupId"`
 	// Specifies the service network segment.
 	// Changing this parameter will create a new cluster resource.
@@ -478,6 +506,7 @@ type clusterState struct {
 }
 
 type ClusterState struct {
+	// schema: Internal
 	Annotations pulumi.StringMapInput
 	// Specifies the CA root certificate provided in the
 	// **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
@@ -495,9 +524,9 @@ type ClusterState struct {
 	// are **rbac** and **authenticating_proxy**. Defaults to **rbac**.
 	// Changing this parameter will create a new cluster resource.
 	AuthenticationMode pulumi.StringPtrInput
-	AutoPay            pulumi.StringPtrInput
-	// Specifies whether auto renew is enabled. Valid values are **true** and
-	// **false**. Changing this parameter will create a new cluster resource.
+	// Deprecated: Deprecated
+	AutoPay pulumi.StringPtrInput
+	// Specifies whether auto renew is enabled. Valid values are **true** and **false**.
 	AutoRenew pulumi.StringPtrInput
 	// Deprecated: use charging_mode instead
 	BillingMode pulumi.IntPtrInput
@@ -515,7 +544,9 @@ type ClusterState struct {
 	// Specifies the cluster version, defaults to the latest supported
 	// version. Changing this parameter will create a new cluster resource.
 	ClusterVersion pulumi.StringPtrInput
-	// Specifies the container network segment.
+	// Specifies the container network segments.
+	// In clusters of v1.21 and later, when the `containerNetworkType` is **vpc-router**, you can add multiple container
+	// segments, separated with comma (,). In other situations, only the first segment takes effect.
 	// Changing this parameter will create a new cluster resource.
 	ContainerNetworkCidr pulumi.StringPtrInput
 	// Specifies the container network type.
@@ -532,10 +563,12 @@ type ClusterState struct {
 	// Specified whether to unbind associated SFS Turbo file systems when deleting the CCE
 	// cluster. valid values are **true**, **try** and **false**. Default is **false**.
 	DeleteEfs pulumi.StringPtrInput
+	// schema: Internal
 	DeleteEni pulumi.StringPtrInput
 	// Specified whether to delete associated EVS disks when deleting the CCE cluster.
 	// valid values are **true**, **try** and **false**. Default is **false**.
 	DeleteEvs pulumi.StringPtrInput
+	// schema: Internal
 	DeleteNet pulumi.StringPtrInput
 	// Specified whether to delete associated OBS buckets when deleting the CCE cluster.
 	// valid values are **true**, **try** and **false**. Default is **false**.
@@ -547,11 +580,13 @@ type ClusterState struct {
 	Description pulumi.StringPtrInput
 	// Specifies the EIP address of the cluster.
 	Eip pulumi.StringPtrInput
-	// Specifies the ENI network segment. Specified when creating a CCE
-	// Turbo cluster. Changing this parameter will create a new cluster resource.
+	// schema: Internal
+	EnableDistributeManagement pulumi.BoolPtrInput
+	// The ENI network segment. This value is valid when only one eniSubnetId is specified.
 	EniSubnetCidr pulumi.StringPtrInput
-	// Specifies the ENI subnet ID. Specified when creating a CCE Turbo
-	// cluster. Changing this parameter will create a new cluster resource.
+	// Specifies the **IPv4 subnet ID** of the subnet where the ENI resides.
+	// Specified when creating a CCE Turbo cluster. You can add multiple IPv4 subnet ID, separated with comma (,).
+	// Only adding subnets is allowed, removing subnets is not allowed.
 	EniSubnetId pulumi.StringPtrInput
 	// The enterprise project ID of the CCE cluster.
 	// Changing this parameter will create a new cluster resource.
@@ -572,14 +607,16 @@ type ClusterState struct {
 	// Specifies whether to hibernate the CCE cluster. Defaults to **false**. After a cluster is
 	// hibernated, resources such as workloads cannot be created or managed in the cluster, and the cluster cannot be
 	// deleted.
-	Hibernate       pulumi.BoolPtrInput
+	Hibernate pulumi.BoolPtrInput
+	// schema: Internal
 	HighwaySubnetId pulumi.StringPtrInput
 	// Raw Kubernetes config to be used by kubectl and other compatible tools.
 	KubeConfigRaw pulumi.StringPtrInput
 	// Specifies the service forwarding mode.
 	// Changing this parameter will create a new cluster resource. Two modes are available:
 	KubeProxyMode pulumi.StringPtrInput
-	Labels        pulumi.StringMapInput
+	// schema: Internal
+	Labels pulumi.StringMapInput
 	// Specifies the advanced configuration of master nodes.
 	// The object structure is documented below.
 	// This parameter and `multiAz` are alternative. Changing this parameter will create a new cluster resource.
@@ -603,7 +640,12 @@ type ClusterState struct {
 	// Specifies the region in which to create the CCE cluster resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new cluster resource.
 	Region pulumi.StringPtrInput
-	// Security group ID of the cluster.
+	// Specifies the default worker node security group ID of the cluster.
+	// If left empty, the system will automatically create a default worker node security group for you.
+	// The default worker node security group needs to allow access from certain ports to ensure normal communications.
+	// For details, see [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+	// If updated, the modified security group will only be applied to nodes newly created or accepted.
+	// For existing nodes, you need to manually modify the security group rules for them.
 	SecurityGroupId pulumi.StringPtrInput
 	// Specifies the service network segment.
 	// Changing this parameter will create a new cluster resource.
@@ -626,6 +668,7 @@ func (ClusterState) ElementType() reflect.Type {
 }
 
 type clusterArgs struct {
+	// schema: Internal
 	Annotations map[string]string `pulumi:"annotations"`
 	// Specifies the CA root certificate provided in the
 	// **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
@@ -643,9 +686,9 @@ type clusterArgs struct {
 	// are **rbac** and **authenticating_proxy**. Defaults to **rbac**.
 	// Changing this parameter will create a new cluster resource.
 	AuthenticationMode *string `pulumi:"authenticationMode"`
-	AutoPay            *string `pulumi:"autoPay"`
-	// Specifies whether auto renew is enabled. Valid values are **true** and
-	// **false**. Changing this parameter will create a new cluster resource.
+	// Deprecated: Deprecated
+	AutoPay *string `pulumi:"autoPay"`
+	// Specifies whether auto renew is enabled. Valid values are **true** and **false**.
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Deprecated: use charging_mode instead
 	BillingMode *int `pulumi:"billingMode"`
@@ -659,7 +702,9 @@ type clusterArgs struct {
 	// Specifies the cluster version, defaults to the latest supported
 	// version. Changing this parameter will create a new cluster resource.
 	ClusterVersion *string `pulumi:"clusterVersion"`
-	// Specifies the container network segment.
+	// Specifies the container network segments.
+	// In clusters of v1.21 and later, when the `containerNetworkType` is **vpc-router**, you can add multiple container
+	// segments, separated with comma (,). In other situations, only the first segment takes effect.
 	// Changing this parameter will create a new cluster resource.
 	ContainerNetworkCidr *string `pulumi:"containerNetworkCidr"`
 	// Specifies the container network type.
@@ -676,10 +721,12 @@ type clusterArgs struct {
 	// Specified whether to unbind associated SFS Turbo file systems when deleting the CCE
 	// cluster. valid values are **true**, **try** and **false**. Default is **false**.
 	DeleteEfs *string `pulumi:"deleteEfs"`
+	// schema: Internal
 	DeleteEni *string `pulumi:"deleteEni"`
 	// Specified whether to delete associated EVS disks when deleting the CCE cluster.
 	// valid values are **true**, **try** and **false**. Default is **false**.
 	DeleteEvs *string `pulumi:"deleteEvs"`
+	// schema: Internal
 	DeleteNet *string `pulumi:"deleteNet"`
 	// Specified whether to delete associated OBS buckets when deleting the CCE cluster.
 	// valid values are **true**, **try** and **false**. Default is **false**.
@@ -691,11 +738,13 @@ type clusterArgs struct {
 	Description *string `pulumi:"description"`
 	// Specifies the EIP address of the cluster.
 	Eip *string `pulumi:"eip"`
-	// Specifies the ENI network segment. Specified when creating a CCE
-	// Turbo cluster. Changing this parameter will create a new cluster resource.
+	// schema: Internal
+	EnableDistributeManagement *bool `pulumi:"enableDistributeManagement"`
+	// The ENI network segment. This value is valid when only one eniSubnetId is specified.
 	EniSubnetCidr *string `pulumi:"eniSubnetCidr"`
-	// Specifies the ENI subnet ID. Specified when creating a CCE Turbo
-	// cluster. Changing this parameter will create a new cluster resource.
+	// Specifies the **IPv4 subnet ID** of the subnet where the ENI resides.
+	// Specified when creating a CCE Turbo cluster. You can add multiple IPv4 subnet ID, separated with comma (,).
+	// Only adding subnets is allowed, removing subnets is not allowed.
 	EniSubnetId *string `pulumi:"eniSubnetId"`
 	// The enterprise project ID of the CCE cluster.
 	// Changing this parameter will create a new cluster resource.
@@ -716,12 +765,14 @@ type clusterArgs struct {
 	// Specifies whether to hibernate the CCE cluster. Defaults to **false**. After a cluster is
 	// hibernated, resources such as workloads cannot be created or managed in the cluster, and the cluster cannot be
 	// deleted.
-	Hibernate       *bool   `pulumi:"hibernate"`
+	Hibernate *bool `pulumi:"hibernate"`
+	// schema: Internal
 	HighwaySubnetId *string `pulumi:"highwaySubnetId"`
 	// Specifies the service forwarding mode.
 	// Changing this parameter will create a new cluster resource. Two modes are available:
-	KubeProxyMode *string           `pulumi:"kubeProxyMode"`
-	Labels        map[string]string `pulumi:"labels"`
+	KubeProxyMode *string `pulumi:"kubeProxyMode"`
+	// schema: Internal
+	Labels map[string]string `pulumi:"labels"`
 	// Specifies the advanced configuration of master nodes.
 	// The object structure is documented below.
 	// This parameter and `multiAz` are alternative. Changing this parameter will create a new cluster resource.
@@ -745,6 +796,13 @@ type clusterArgs struct {
 	// Specifies the region in which to create the CCE cluster resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new cluster resource.
 	Region *string `pulumi:"region"`
+	// Specifies the default worker node security group ID of the cluster.
+	// If left empty, the system will automatically create a default worker node security group for you.
+	// The default worker node security group needs to allow access from certain ports to ensure normal communications.
+	// For details, see [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+	// If updated, the modified security group will only be applied to nodes newly created or accepted.
+	// For existing nodes, you need to manually modify the security group rules for them.
+	SecurityGroupId *string `pulumi:"securityGroupId"`
 	// Specifies the service network segment.
 	// Changing this parameter will create a new cluster resource.
 	ServiceNetworkCidr *string `pulumi:"serviceNetworkCidr"`
@@ -761,6 +819,7 @@ type clusterArgs struct {
 
 // The set of arguments for constructing a Cluster resource.
 type ClusterArgs struct {
+	// schema: Internal
 	Annotations pulumi.StringMapInput
 	// Specifies the CA root certificate provided in the
 	// **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
@@ -778,9 +837,9 @@ type ClusterArgs struct {
 	// are **rbac** and **authenticating_proxy**. Defaults to **rbac**.
 	// Changing this parameter will create a new cluster resource.
 	AuthenticationMode pulumi.StringPtrInput
-	AutoPay            pulumi.StringPtrInput
-	// Specifies whether auto renew is enabled. Valid values are **true** and
-	// **false**. Changing this parameter will create a new cluster resource.
+	// Deprecated: Deprecated
+	AutoPay pulumi.StringPtrInput
+	// Specifies whether auto renew is enabled. Valid values are **true** and **false**.
 	AutoRenew pulumi.StringPtrInput
 	// Deprecated: use charging_mode instead
 	BillingMode pulumi.IntPtrInput
@@ -794,7 +853,9 @@ type ClusterArgs struct {
 	// Specifies the cluster version, defaults to the latest supported
 	// version. Changing this parameter will create a new cluster resource.
 	ClusterVersion pulumi.StringPtrInput
-	// Specifies the container network segment.
+	// Specifies the container network segments.
+	// In clusters of v1.21 and later, when the `containerNetworkType` is **vpc-router**, you can add multiple container
+	// segments, separated with comma (,). In other situations, only the first segment takes effect.
 	// Changing this parameter will create a new cluster resource.
 	ContainerNetworkCidr pulumi.StringPtrInput
 	// Specifies the container network type.
@@ -811,10 +872,12 @@ type ClusterArgs struct {
 	// Specified whether to unbind associated SFS Turbo file systems when deleting the CCE
 	// cluster. valid values are **true**, **try** and **false**. Default is **false**.
 	DeleteEfs pulumi.StringPtrInput
+	// schema: Internal
 	DeleteEni pulumi.StringPtrInput
 	// Specified whether to delete associated EVS disks when deleting the CCE cluster.
 	// valid values are **true**, **try** and **false**. Default is **false**.
 	DeleteEvs pulumi.StringPtrInput
+	// schema: Internal
 	DeleteNet pulumi.StringPtrInput
 	// Specified whether to delete associated OBS buckets when deleting the CCE cluster.
 	// valid values are **true**, **try** and **false**. Default is **false**.
@@ -826,11 +889,13 @@ type ClusterArgs struct {
 	Description pulumi.StringPtrInput
 	// Specifies the EIP address of the cluster.
 	Eip pulumi.StringPtrInput
-	// Specifies the ENI network segment. Specified when creating a CCE
-	// Turbo cluster. Changing this parameter will create a new cluster resource.
+	// schema: Internal
+	EnableDistributeManagement pulumi.BoolPtrInput
+	// The ENI network segment. This value is valid when only one eniSubnetId is specified.
 	EniSubnetCidr pulumi.StringPtrInput
-	// Specifies the ENI subnet ID. Specified when creating a CCE Turbo
-	// cluster. Changing this parameter will create a new cluster resource.
+	// Specifies the **IPv4 subnet ID** of the subnet where the ENI resides.
+	// Specified when creating a CCE Turbo cluster. You can add multiple IPv4 subnet ID, separated with comma (,).
+	// Only adding subnets is allowed, removing subnets is not allowed.
 	EniSubnetId pulumi.StringPtrInput
 	// The enterprise project ID of the CCE cluster.
 	// Changing this parameter will create a new cluster resource.
@@ -851,12 +916,14 @@ type ClusterArgs struct {
 	// Specifies whether to hibernate the CCE cluster. Defaults to **false**. After a cluster is
 	// hibernated, resources such as workloads cannot be created or managed in the cluster, and the cluster cannot be
 	// deleted.
-	Hibernate       pulumi.BoolPtrInput
+	Hibernate pulumi.BoolPtrInput
+	// schema: Internal
 	HighwaySubnetId pulumi.StringPtrInput
 	// Specifies the service forwarding mode.
 	// Changing this parameter will create a new cluster resource. Two modes are available:
 	KubeProxyMode pulumi.StringPtrInput
-	Labels        pulumi.StringMapInput
+	// schema: Internal
+	Labels pulumi.StringMapInput
 	// Specifies the advanced configuration of master nodes.
 	// The object structure is documented below.
 	// This parameter and `multiAz` are alternative. Changing this parameter will create a new cluster resource.
@@ -880,6 +947,13 @@ type ClusterArgs struct {
 	// Specifies the region in which to create the CCE cluster resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new cluster resource.
 	Region pulumi.StringPtrInput
+	// Specifies the default worker node security group ID of the cluster.
+	// If left empty, the system will automatically create a default worker node security group for you.
+	// The default worker node security group needs to allow access from certain ports to ensure normal communications.
+	// For details, see [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+	// If updated, the modified security group will only be applied to nodes newly created or accepted.
+	// For existing nodes, you need to manually modify the security group rules for them.
+	SecurityGroupId pulumi.StringPtrInput
 	// Specifies the service network segment.
 	// Changing this parameter will create a new cluster resource.
 	ServiceNetworkCidr pulumi.StringPtrInput
@@ -981,6 +1055,7 @@ func (o ClusterOutput) ToClusterOutputWithContext(ctx context.Context) ClusterOu
 	return o
 }
 
+// schema: Internal
 func (o ClusterOutput) Annotations() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringMapOutput { return v.Annotations }).(pulumi.StringMapOutput)
 }
@@ -1013,12 +1088,12 @@ func (o ClusterOutput) AuthenticationMode() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringPtrOutput { return v.AuthenticationMode }).(pulumi.StringPtrOutput)
 }
 
+// Deprecated: Deprecated
 func (o ClusterOutput) AutoPay() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringPtrOutput { return v.AutoPay }).(pulumi.StringPtrOutput)
 }
 
-// Specifies whether auto renew is enabled. Valid values are **true** and
-// **false**. Changing this parameter will create a new cluster resource.
+// Specifies whether auto renew is enabled. Valid values are **true** and **false**.
 func (o ClusterOutput) AutoRenew() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
 }
@@ -1057,7 +1132,9 @@ func (o ClusterOutput) ClusterVersion() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.ClusterVersion }).(pulumi.StringOutput)
 }
 
-// Specifies the container network segment.
+// Specifies the container network segments.
+// In clusters of v1.21 and later, when the `containerNetworkType` is **vpc-router**, you can add multiple container
+// segments, separated with comma (,). In other situations, only the first segment takes effect.
 // Changing this parameter will create a new cluster resource.
 func (o ClusterOutput) ContainerNetworkCidr() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.ContainerNetworkCidr }).(pulumi.StringOutput)
@@ -1086,6 +1163,7 @@ func (o ClusterOutput) DeleteEfs() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringPtrOutput { return v.DeleteEfs }).(pulumi.StringPtrOutput)
 }
 
+// schema: Internal
 func (o ClusterOutput) DeleteEni() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringPtrOutput { return v.DeleteEni }).(pulumi.StringPtrOutput)
 }
@@ -1096,6 +1174,7 @@ func (o ClusterOutput) DeleteEvs() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringPtrOutput { return v.DeleteEvs }).(pulumi.StringPtrOutput)
 }
 
+// schema: Internal
 func (o ClusterOutput) DeleteNet() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringPtrOutput { return v.DeleteNet }).(pulumi.StringPtrOutput)
 }
@@ -1122,14 +1201,19 @@ func (o ClusterOutput) Eip() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringPtrOutput { return v.Eip }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the ENI network segment. Specified when creating a CCE
-// Turbo cluster. Changing this parameter will create a new cluster resource.
+// schema: Internal
+func (o ClusterOutput) EnableDistributeManagement() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *Cluster) pulumi.BoolPtrOutput { return v.EnableDistributeManagement }).(pulumi.BoolPtrOutput)
+}
+
+// The ENI network segment. This value is valid when only one eniSubnetId is specified.
 func (o ClusterOutput) EniSubnetCidr() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.EniSubnetCidr }).(pulumi.StringOutput)
 }
 
-// Specifies the ENI subnet ID. Specified when creating a CCE Turbo
-// cluster. Changing this parameter will create a new cluster resource.
+// Specifies the **IPv4 subnet ID** of the subnet where the ENI resides.
+// Specified when creating a CCE Turbo cluster. You can add multiple IPv4 subnet ID, separated with comma (,).
+// Only adding subnets is allowed, removing subnets is not allowed.
 func (o ClusterOutput) EniSubnetId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.EniSubnetId }).(pulumi.StringOutput)
 }
@@ -1166,6 +1250,7 @@ func (o ClusterOutput) Hibernate() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.BoolPtrOutput { return v.Hibernate }).(pulumi.BoolPtrOutput)
 }
 
+// schema: Internal
 func (o ClusterOutput) HighwaySubnetId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.HighwaySubnetId }).(pulumi.StringOutput)
 }
@@ -1181,6 +1266,7 @@ func (o ClusterOutput) KubeProxyMode() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringPtrOutput { return v.KubeProxyMode }).(pulumi.StringPtrOutput)
 }
 
+// schema: Internal
 func (o ClusterOutput) Labels() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringMapOutput { return v.Labels }).(pulumi.StringMapOutput)
 }
@@ -1226,7 +1312,12 @@ func (o ClusterOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Security group ID of the cluster.
+// Specifies the default worker node security group ID of the cluster.
+// If left empty, the system will automatically create a default worker node security group for you.
+// The default worker node security group needs to allow access from certain ports to ensure normal communications.
+// For details, see [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+// If updated, the modified security group will only be applied to nodes newly created or accepted.
+// For existing nodes, you need to manually modify the security group rules for them.
 func (o ClusterOutput) SecurityGroupId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.SecurityGroupId }).(pulumi.StringOutput)
 }

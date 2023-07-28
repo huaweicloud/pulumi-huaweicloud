@@ -179,8 +179,7 @@ export class Server extends pulumi.CustomResource {
     public readonly keyPair!: pulumi.Output<string | undefined>;
     /**
      * Specifies the IEC server name. This parameter can contain a maximum of 64
-     * characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-). Changing this parameter
-     * creates a new IEC server resource.
+     * characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-).
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -408,8 +407,7 @@ export interface ServerState {
     keyPair?: pulumi.Input<string>;
     /**
      * Specifies the IEC server name. This parameter can contain a maximum of 64
-     * characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-). Changing this parameter
-     * creates a new IEC server resource.
+     * characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-).
      */
     name?: pulumi.Input<string>;
     /**
@@ -525,8 +523,7 @@ export interface ServerArgs {
     keyPair?: pulumi.Input<string>;
     /**
      * Specifies the IEC server name. This parameter can contain a maximum of 64
-     * characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-). Changing this parameter
-     * creates a new IEC server resource.
+     * characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-).
      */
     name?: pulumi.Input<string>;
     /**

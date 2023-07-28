@@ -924,10 +924,14 @@ func (o GetBandwidthsBandwidthArrayOutput) Index(i pulumi.IntInput) GetBandwidth
 }
 
 type GetEipsEip struct {
-	BandwidthId        string `pulumi:"bandwidthId"`
-	BandwidthName      string `pulumi:"bandwidthName"`
+	// The ID of bandwidth.
+	BandwidthId string `pulumi:"bandwidthId"`
+	// The name of bandwidth.
+	BandwidthName string `pulumi:"bandwidthName"`
+	// Whether the bandwidth is shared or exclusive.
 	BandwidthShareType string `pulumi:"bandwidthShareType"`
-	BandwidthSize      int    `pulumi:"bandwidthSize"`
+	// The size of bandwidth.
+	BandwidthSize int `pulumi:"bandwidthSize"`
 	// The ID of elastic IP.
 	Id string `pulumi:"id"`
 	// The version of elastic IP address.
@@ -954,10 +958,14 @@ type GetEipsEipInput interface {
 }
 
 type GetEipsEipArgs struct {
-	BandwidthId        pulumi.StringInput `pulumi:"bandwidthId"`
-	BandwidthName      pulumi.StringInput `pulumi:"bandwidthName"`
+	// The ID of bandwidth.
+	BandwidthId pulumi.StringInput `pulumi:"bandwidthId"`
+	// The name of bandwidth.
+	BandwidthName pulumi.StringInput `pulumi:"bandwidthName"`
+	// Whether the bandwidth is shared or exclusive.
 	BandwidthShareType pulumi.StringInput `pulumi:"bandwidthShareType"`
-	BandwidthSize      pulumi.IntInput    `pulumi:"bandwidthSize"`
+	// The size of bandwidth.
+	BandwidthSize pulumi.IntInput `pulumi:"bandwidthSize"`
 	// The ID of elastic IP.
 	Id pulumi.StringInput `pulumi:"id"`
 	// The version of elastic IP address.
@@ -1023,18 +1031,22 @@ func (o GetEipsEipOutput) ToGetEipsEipOutputWithContext(ctx context.Context) Get
 	return o
 }
 
+// The ID of bandwidth.
 func (o GetEipsEipOutput) BandwidthId() pulumi.StringOutput {
 	return o.ApplyT(func(v GetEipsEip) string { return v.BandwidthId }).(pulumi.StringOutput)
 }
 
+// The name of bandwidth.
 func (o GetEipsEipOutput) BandwidthName() pulumi.StringOutput {
 	return o.ApplyT(func(v GetEipsEip) string { return v.BandwidthName }).(pulumi.StringOutput)
 }
 
+// Whether the bandwidth is shared or exclusive.
 func (o GetEipsEipOutput) BandwidthShareType() pulumi.StringOutput {
 	return o.ApplyT(func(v GetEipsEip) string { return v.BandwidthShareType }).(pulumi.StringOutput)
 }
 
+// The size of bandwidth.
 func (o GetEipsEipOutput) BandwidthSize() pulumi.IntOutput {
 	return o.ApplyT(func(v GetEipsEip) int { return v.BandwidthSize }).(pulumi.IntOutput)
 }

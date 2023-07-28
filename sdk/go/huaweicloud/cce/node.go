@@ -22,38 +22,44 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud"
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cce"
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Dew"
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Ecs"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Cce"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Ecs"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			clusterId := cfg.RequireObject("clusterId")
+//			nodeName := cfg.RequireObject("nodeName")
+//			keypairName := cfg.RequireObject("keypairName")
 //			myaz, err := huaweicloud.GetAvailabilityZones(ctx, nil, nil)
 //			if err != nil {
 //				return err
 //			}
-//			mykp, err := Ecs.NewKeypair(ctx, "mykp", &Ecs.KeypairArgs{
+//			myflavors, err := Ecs.GetFlavors(ctx, &ecs.GetFlavorsArgs{
+//				AvailabilityZone: pulumi.StringRef(myaz.Names[0]),
+//				PerformanceType:  pulumi.StringRef("normal"),
+//				CpuCoreCount:     pulumi.IntRef(2),
+//				MemorySize:       pulumi.IntRef(4),
+//			}, nil)
+//			if err != nil {
+//				return err
+//			}
+//			mykp, err := Dew.NewKeypair(ctx, "mykp", &Dew.KeypairArgs{
 //				PublicKey: pulumi.String("ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAjpC1hwiOCCmKEWxJ4qzTTsJbKzndLo1BCz5PcwtUnflmU+gHJtWMZKpuEGVi29h0A/+ydKek1O18k10Ff+4tyFjiHDQAT9+OfgWf7+b1yK+qDip3X1C0UPMbwHlTfSGWLGZquwhvEFx9k3h/M+VtMvwR1lJ9LUyTAImnNjWG7TAIPmui30HvM2UiFEmqkr4ijq45MyX2+fLIePLRIFuu1p4whjHAQYufqyno3BS48icQb4p6iVEZPo4AE2o9oIyQvj2mx4dk5Y8CgSETOZTYDOR3rU2fZTRDRgPJDH9FWvQjF5tA0p3d9CoWWd2s6GKKbfoUIi8R/Db1BSPJwkqB jrp-hp-pc"),
 //			})
 //			if err != nil {
 //				return err
 //			}
-//			mycluster, err := Cce.NewCluster(ctx, "mycluster", &Cce.ClusterArgs{
-//				ClusterType:          pulumi.String("VirtualMachine"),
-//				FlavorId:             pulumi.String("cce.s1.small"),
-//				VpcId:                pulumi.Any(huaweicloud_vpc.Myvpc.Id),
-//				SubnetId:             pulumi.Any(huaweicloud_vpc_subnet.Mysubnet.Id),
-//				ContainerNetworkType: pulumi.String("overlay_l2"),
-//			})
-//			if err != nil {
-//				return err
-//			}
 //			_, err = Cce.NewNode(ctx, "node", &Cce.NodeArgs{
-//				ClusterId:        mycluster.ID(),
-//				FlavorId:         pulumi.String("s3.large.2"),
+//				ClusterId:        pulumi.Any(clusterId),
+//				FlavorId:         pulumi.String(myflavors.Ids[0]),
 //				AvailabilityZone: pulumi.String(myaz.Names[0]),
 //				KeyPair:          mykp.Name,
 //				RootVolume: &cce.NodeRootVolumeArgs{
@@ -83,19 +89,48 @@ import (
 //
 // import (
 //
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud"
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cce"
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Dew"
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Ecs"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Cce"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Ecs"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := Cce.NewNode(ctx, "mynode", &Cce.NodeArgs{
-//				ClusterId:        pulumi.Any(huaweicloud_cce_cluster.Mycluster.Id),
-//				FlavorId:         pulumi.String("s3.large.2"),
-//				AvailabilityZone: pulumi.Any(data.Huaweicloud_availability_zones.Myaz.Names[0]),
-//				KeyPair:          pulumi.Any(huaweicloud_compute_keypair.Mykp.Name),
+//			cfg := config.New(ctx, "")
+//			clusterId := cfg.RequireObject("clusterId")
+//			nodeName := cfg.RequireObject("nodeName")
+//			keypairName := cfg.RequireObject("keypairName")
+//			myaz, err := huaweicloud.GetAvailabilityZones(ctx, nil, nil)
+//			if err != nil {
+//				return err
+//			}
+//			_, err = Ecs.GetFlavors(ctx, &ecs.GetFlavorsArgs{
+//				AvailabilityZone: pulumi.StringRef(myaz.Names[0]),
+//				PerformanceType:  pulumi.StringRef("normal"),
+//				CpuCoreCount:     pulumi.IntRef(2),
+//				MemorySize:       pulumi.IntRef(4),
+//			}, nil)
+//			if err != nil {
+//				return err
+//			}
+//			mykp, err := Dew.NewKeypair(ctx, "mykp", &Dew.KeypairArgs{
+//				PublicKey: pulumi.String("ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAjpC1hwiOCCmKEWxJ4qzTTsJbKzndLo1BCz5PcwtUnflmU+gHJtWMZKpuEGVi29h0A/+ydKek1O18k10Ff+4tyFjiHDQAT9+OfgWf7+b1yK+qDip3X1C0UPMbwHlTfSGWLGZquwhvEFx9k3h/M+VtMvwR1lJ9LUyTAImnNjWG7TAIPmui30HvM2UiFEmqkr4ijq45MyX2+fLIePLRIFuu1p4whjHAQYufqyno3BS48icQb4p6iVEZPo4AE2o9oIyQvj2mx4dk5Y8CgSETOZTYDOR3rU2fZTRDRgPJDH9FWvQjF5tA0p3d9CoWWd2s6GKKbfoUIi8R/Db1BSPJwkqB jrp-hp-pc"),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			_, err = Cce.NewNode(ctx, "mynode", &Cce.NodeArgs{
+//				ClusterId:        pulumi.Any(clusterId),
+//				FlavorId:         pulumi.Any(data.Huaweicloud_compute_flavors.Myflavors.Ids[0]),
+//				AvailabilityZone: pulumi.String(myaz.Names[0]),
+//				KeyPair:          mykp.Name,
 //				RootVolume: &cce.NodeRootVolumeArgs{
 //					Size:       pulumi.Int(40),
 //					Volumetype: pulumi.String("SATA"),
@@ -127,16 +162,45 @@ import (
 //
 // import (
 //
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud"
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cce"
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Dew"
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Ecs"
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Vpc"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Cce"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Ecs"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Vpc"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			clusterId := cfg.RequireObject("clusterId")
+//			nodeName := cfg.RequireObject("nodeName")
+//			keypairName := cfg.RequireObject("keypairName")
+//			myaz, err := huaweicloud.GetAvailabilityZones(ctx, nil, nil)
+//			if err != nil {
+//				return err
+//			}
+//			_, err = Ecs.GetFlavors(ctx, &ecs.GetFlavorsArgs{
+//				AvailabilityZone: pulumi.StringRef(myaz.Names[0]),
+//				PerformanceType:  pulumi.StringRef("normal"),
+//				CpuCoreCount:     pulumi.IntRef(2),
+//				MemorySize:       pulumi.IntRef(4),
+//			}, nil)
+//			if err != nil {
+//				return err
+//			}
+//			mykp, err := Dew.NewKeypair(ctx, "mykp", &Dew.KeypairArgs{
+//				PublicKey: pulumi.String("ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAjpC1hwiOCCmKEWxJ4qzTTsJbKzndLo1BCz5PcwtUnflmU+gHJtWMZKpuEGVi29h0A/+ydKek1O18k10Ff+4tyFjiHDQAT9+OfgWf7+b1yK+qDip3X1C0UPMbwHlTfSGWLGZquwhvEFx9k3h/M+VtMvwR1lJ9LUyTAImnNjWG7TAIPmui30HvM2UiFEmqkr4ijq45MyX2+fLIePLRIFuu1p4whjHAQYufqyno3BS48icQb4p6iVEZPo4AE2o9oIyQvj2mx4dk5Y8CgSETOZTYDOR3rU2fZTRDRgPJDH9FWvQjF5tA0p3d9CoWWd2s6GKKbfoUIi8R/Db1BSPJwkqB jrp-hp-pc"),
+//			})
+//			if err != nil {
+//				return err
+//			}
 //			myeip, err := Vpc.NewEip(ctx, "myeip", &Vpc.EipArgs{
 //				Publicip: &vpc.EipPublicipArgs{
 //					Type: pulumi.String("5_bgp"),
@@ -152,10 +216,10 @@ import (
 //				return err
 //			}
 //			_, err = Cce.NewNode(ctx, "mynode", &Cce.NodeArgs{
-//				ClusterId:        pulumi.Any(huaweicloud_cce_cluster.Mycluster.Id),
-//				FlavorId:         pulumi.String("s3.large.2"),
-//				AvailabilityZone: pulumi.Any(data.Huaweicloud_availability_zones.Myaz.Names[0]),
-//				KeyPair:          pulumi.Any(huaweicloud_compute_keypair.Mykp.Name),
+//				ClusterId:        pulumi.Any(clusterId),
+//				FlavorId:         pulumi.Any(data.Huaweicloud_compute_flavors.Myflavors.Ids[0]),
+//				AvailabilityZone: pulumi.String(myaz.Names[0]),
+//				KeyPair:          mykp.Name,
 //				RootVolume: &cce.NodeRootVolumeArgs{
 //					Size:       pulumi.Int(40),
 //					Volumetype: pulumi.String("SATA"),
@@ -186,19 +250,56 @@ import (
 //
 //	"fmt"
 //
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud"
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cce"
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Dew"
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Ecs"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Cce"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Ecs"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := Cce.NewNode(ctx, "mynode", &Cce.NodeArgs{
-//				ClusterId:        pulumi.Any(huaweicloud_cce_cluster.Mycluster.Id),
-//				FlavorId:         pulumi.String("s3.large.2"),
-//				AvailabilityZone: pulumi.Any(data.Huaweicloud_availability_zones.Myaz.Names[0]),
-//				KeyPair:          pulumi.Any(huaweicloud_compute_keypair.Mykp.Name),
+//			cfg := config.New(ctx, "")
+//			clusterId := cfg.RequireObject("clusterId")
+//			nodeName := cfg.RequireObject("nodeName")
+//			keypairName := cfg.RequireObject("keypairName")
+//			kmsKeyName := cfg.RequireObject("kmsKeyName")
+//			myaz, err := huaweicloud.GetAvailabilityZones(ctx, nil, nil)
+//			if err != nil {
+//				return err
+//			}
+//			_, err = Ecs.GetFlavors(ctx, &ecs.GetFlavorsArgs{
+//				AvailabilityZone: pulumi.StringRef(myaz.Names[0]),
+//				PerformanceType:  pulumi.StringRef("normal"),
+//				CpuCoreCount:     pulumi.IntRef(2),
+//				MemorySize:       pulumi.IntRef(4),
+//			}, nil)
+//			if err != nil {
+//				return err
+//			}
+//			mykp, err := Dew.NewKeypair(ctx, "mykp", &Dew.KeypairArgs{
+//				PublicKey: pulumi.String("ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAjpC1hwiOCCmKEWxJ4qzTTsJbKzndLo1BCz5PcwtUnflmU+gHJtWMZKpuEGVi29h0A/+ydKek1O18k10Ff+4tyFjiHDQAT9+OfgWf7+b1yK+qDip3X1C0UPMbwHlTfSGWLGZquwhvEFx9k3h/M+VtMvwR1lJ9LUyTAImnNjWG7TAIPmui30HvM2UiFEmqkr4ijq45MyX2+fLIePLRIFuu1p4whjHAQYufqyno3BS48icQb4p6iVEZPo4AE2o9oIyQvj2mx4dk5Y8CgSETOZTYDOR3rU2fZTRDRgPJDH9FWvQjF5tA0p3d9CoWWd2s6GKKbfoUIi8R/Db1BSPJwkqB jrp-hp-pc"),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			mykey, err := Dew.NewKey(ctx, "mykey", &Dew.KeyArgs{
+//				KeyAlias:    pulumi.Any(kmsKeyName),
+//				PendingDays: pulumi.String("7"),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			_, err = Cce.NewNode(ctx, "mynode", &Cce.NodeArgs{
+//				ClusterId:        pulumi.Any(clusterId),
+//				FlavorId:         pulumi.Any(data.Huaweicloud_compute_flavors.Myflavors.Ids[0]),
+//				AvailabilityZone: pulumi.String(myaz.Names[0]),
+//				KeyPair:          mykp.Name,
 //				RootVolume: &cce.NodeRootVolumeArgs{
 //					Size:       pulumi.Int(40),
 //					Volumetype: pulumi.String("SSD"),
@@ -211,7 +312,7 @@ import (
 //					&cce.NodeDataVolumeArgs{
 //						Size:       pulumi.Int(100),
 //						Volumetype: pulumi.String("SSD"),
-//						KmsKeyId:   pulumi.Any(huaweicloud_kms_key.Mykey.Id),
+//						KmsKeyId:   mykey.ID(),
 //					},
 //				},
 //				Storage: &cce.NodeStorageArgs{
@@ -227,7 +328,7 @@ import (
 //							Type:                        pulumi.String("evs"),
 //							MatchLabelSize:              pulumi.String("100"),
 //							MatchLabelMetadataEncrypted: pulumi.String("1"),
-//							MatchLabelMetadataCmkid:     pulumi.Any(huaweicloud_kms_key.Mykey.Id),
+//							MatchLabelMetadataCmkid:     mykey.ID(),
 //							MatchLabelCount:             pulumi.String("1"),
 //						},
 //					},
@@ -245,9 +346,8 @@ import (
 //									LvmLvType: pulumi.String("linear"),
 //								},
 //								&cce.NodeStorageGroupVirtualSpaceArgs{
-//									Name:      pulumi.String("runtime"),
-//									Size:      pulumi.String(fmt.Sprintf("90%v", "%")),
-//									LvmLvType: pulumi.String("linear"),
+//									Name: pulumi.String("runtime"),
+//									Size: pulumi.String(fmt.Sprintf("90%v", "%")),
 //								},
 //							},
 //						},
@@ -279,7 +379,7 @@ import (
 //
 // ## Import
 //
-// CCE node can be imported using the cluster ID and node ID separated by a slash, e.g.
+// # CCE node can be imported using the cluster ID and node ID separated by a slash, e.g.bash
 //
 // ```sh
 //
@@ -287,7 +387,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `fixed_ip`, `eip_id`, `preinstall`, `postinstall`, `iptype`, `bandwidth_charge_mode`, `bandwidth_size`, `share_type`, `max_pods`, `extend_param`, `labels`, `taints` and arguments for pre-paid. It is generally recommended running `terraform plan` after importing a node. You can then decide if changes should be applied to the node, or the resource definition should be updated to align with the node. Also you can ignore changes as below. resource "huaweicloud_cce_node" "my_node" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `fixed_ip`, `eip_id`, `preinstall`, `postinstall`, `iptype`, `bandwidth_charge_mode`, `bandwidth_size`, `share_type`, `max_pods`, `extend_param`, `labels`, `taints` and arguments for pre-paid. It is generally recommended running `terraform plan` after importing a node. You can then decide if changes should be applied to the node, or the resource definition should be updated to align with the node. Also you can ignore changes as below. hcl resource "huaweicloud_cce_node" "my_node" {
 //
 //	...
 //
@@ -303,10 +403,11 @@ import (
 type Node struct {
 	pulumi.CustomResourceState
 
+	// schema: Internal
 	Annotations pulumi.StringMapOutput `pulumi:"annotations"`
-	AutoPay     pulumi.StringPtrOutput `pulumi:"autoPay"`
-	// Specifies whether auto renew is enabled. Valid values are "true" and "
-	// false". Changing this creates a new resource.
+	// Deprecated: Deprecated
+	AutoPay pulumi.StringPtrOutput `pulumi:"autoPay"`
+	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
 	// Specifies the name of the available partition (AZ). Changing this
 	// parameter will create a new resource.
@@ -330,7 +431,8 @@ type Node struct {
 	DataVolumes NodeDataVolumeArrayOutput `pulumi:"dataVolumes"`
 	// Specifies the ECS group ID. If specified, the node will be created under
 	// the cloud server group. Changing this parameter will create a new resource.
-	EcsGroupId         pulumi.StringPtrOutput `pulumi:"ecsGroupId"`
+	EcsGroupId pulumi.StringPtrOutput `pulumi:"ecsGroupId"`
+	// schema: Internal
 	EcsPerformanceType pulumi.StringPtrOutput `pulumi:"ecsPerformanceType"`
 	// Specifies the ID of the EIP.
 	// Changing this parameter will create a new resource.
@@ -355,10 +457,11 @@ type Node struct {
 	FlavorId pulumi.StringOutput `pulumi:"flavorId"`
 	// Specifies the elastic IP type.
 	// Changing this parameter will create a new resource.
-	Iptype  pulumi.StringPtrOutput `pulumi:"iptype"`
-	KeepEcs pulumi.BoolPtrOutput   `pulumi:"keepEcs"`
+	Iptype pulumi.StringPtrOutput `pulumi:"iptype"`
+	// schema: Internal
+	KeepEcs pulumi.BoolPtrOutput `pulumi:"keepEcs"`
 	// Specifies the key pair name when logging in to select the key pair mode.
-	// This parameter and `password` are alternative. Changing this parameter will create a new resource.
+	// This parameter and `password` are alternative.
 	KeyPair pulumi.StringPtrOutput `pulumi:"keyPair"`
 	// Specifies the tags of a Kubernetes node, key/value pair format.
 	// Changing this parameter will create a new resource.
@@ -376,9 +479,10 @@ type Node struct {
 	// + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
 	// + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
 	Os pulumi.StringOutput `pulumi:"os"`
+	// schema: Internal
+	Partition pulumi.StringPtrOutput `pulumi:"partition"`
 	// Specifies the root password when logging in to select the password mode.
 	// This parameter can be plain or salted and is alternative to `keyPair`.
-	// Changing this parameter will create a new resource.
 	Password pulumi.StringPtrOutput `pulumi:"password"`
 	// Specifies the charging period of the CCE node. If `periodUnit` is set to *month*
 	// , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This parameter is
@@ -395,10 +499,15 @@ type Node struct {
 	// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
 	Preinstall pulumi.StringPtrOutput `pulumi:"preinstall"`
 	// Private IP of the CCE node.
-	PrivateIp pulumi.StringOutput    `pulumi:"privateIp"`
+	PrivateIp pulumi.StringOutput `pulumi:"privateIp"`
+	// Specifies the private key of the in used `keyPair`. This parameter is mandatory
+	// when replacing or unbinding a keypair if the CCE node is in **Active** state.
+	PrivateKey pulumi.StringPtrOutput `pulumi:"privateKey"`
+	// schema: Internal
 	ProductId pulumi.StringPtrOutput `pulumi:"productId"`
 	// Public IP of the CCE node.
-	PublicIp  pulumi.StringOutput    `pulumi:"publicIp"`
+	PublicIp pulumi.StringOutput `pulumi:"publicIp"`
+	// schema: Internal
 	PublicKey pulumi.StringPtrOutput `pulumi:"publicKey"`
 	// Specifies the region in which to create the CCE node resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new CCE node resource.
@@ -414,7 +523,8 @@ type Node struct {
 	// Specifies the bandwidth sharing type.
 	// Changing this parameter will create a new resource.
 	Sharetype pulumi.StringPtrOutput `pulumi:"sharetype"`
-	Status    pulumi.StringOutput    `pulumi:"status"`
+	// The status of the CCE node.
+	Status pulumi.StringOutput `pulumi:"status"`
 	// Specifies the disk initialization management parameter.
 	// If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
 	// This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
@@ -474,10 +584,11 @@ func GetNode(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Node resources.
 type nodeState struct {
+	// schema: Internal
 	Annotations map[string]string `pulumi:"annotations"`
-	AutoPay     *string           `pulumi:"autoPay"`
-	// Specifies whether auto renew is enabled. Valid values are "true" and "
-	// false". Changing this creates a new resource.
+	// Deprecated: Deprecated
+	AutoPay *string `pulumi:"autoPay"`
+	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the name of the available partition (AZ). Changing this
 	// parameter will create a new resource.
@@ -501,7 +612,8 @@ type nodeState struct {
 	DataVolumes []NodeDataVolume `pulumi:"dataVolumes"`
 	// Specifies the ECS group ID. If specified, the node will be created under
 	// the cloud server group. Changing this parameter will create a new resource.
-	EcsGroupId         *string `pulumi:"ecsGroupId"`
+	EcsGroupId *string `pulumi:"ecsGroupId"`
+	// schema: Internal
 	EcsPerformanceType *string `pulumi:"ecsPerformanceType"`
 	// Specifies the ID of the EIP.
 	// Changing this parameter will create a new resource.
@@ -526,10 +638,11 @@ type nodeState struct {
 	FlavorId *string `pulumi:"flavorId"`
 	// Specifies the elastic IP type.
 	// Changing this parameter will create a new resource.
-	Iptype  *string `pulumi:"iptype"`
-	KeepEcs *bool   `pulumi:"keepEcs"`
+	Iptype *string `pulumi:"iptype"`
+	// schema: Internal
+	KeepEcs *bool `pulumi:"keepEcs"`
 	// Specifies the key pair name when logging in to select the key pair mode.
-	// This parameter and `password` are alternative. Changing this parameter will create a new resource.
+	// This parameter and `password` are alternative.
 	KeyPair *string `pulumi:"keyPair"`
 	// Specifies the tags of a Kubernetes node, key/value pair format.
 	// Changing this parameter will create a new resource.
@@ -547,9 +660,10 @@ type nodeState struct {
 	// + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
 	// + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
 	Os *string `pulumi:"os"`
+	// schema: Internal
+	Partition *string `pulumi:"partition"`
 	// Specifies the root password when logging in to select the password mode.
 	// This parameter can be plain or salted and is alternative to `keyPair`.
-	// Changing this parameter will create a new resource.
 	Password *string `pulumi:"password"`
 	// Specifies the charging period of the CCE node. If `periodUnit` is set to *month*
 	// , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This parameter is
@@ -567,9 +681,14 @@ type nodeState struct {
 	Preinstall *string `pulumi:"preinstall"`
 	// Private IP of the CCE node.
 	PrivateIp *string `pulumi:"privateIp"`
+	// Specifies the private key of the in used `keyPair`. This parameter is mandatory
+	// when replacing or unbinding a keypair if the CCE node is in **Active** state.
+	PrivateKey *string `pulumi:"privateKey"`
+	// schema: Internal
 	ProductId *string `pulumi:"productId"`
 	// Public IP of the CCE node.
-	PublicIp  *string `pulumi:"publicIp"`
+	PublicIp *string `pulumi:"publicIp"`
+	// schema: Internal
 	PublicKey *string `pulumi:"publicKey"`
 	// Specifies the region in which to create the CCE node resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new CCE node resource.
@@ -585,7 +704,8 @@ type nodeState struct {
 	// Specifies the bandwidth sharing type.
 	// Changing this parameter will create a new resource.
 	Sharetype *string `pulumi:"sharetype"`
-	Status    *string `pulumi:"status"`
+	// The status of the CCE node.
+	Status *string `pulumi:"status"`
 	// Specifies the disk initialization management parameter.
 	// If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
 	// This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
@@ -601,10 +721,11 @@ type nodeState struct {
 }
 
 type NodeState struct {
+	// schema: Internal
 	Annotations pulumi.StringMapInput
-	AutoPay     pulumi.StringPtrInput
-	// Specifies whether auto renew is enabled. Valid values are "true" and "
-	// false". Changing this creates a new resource.
+	// Deprecated: Deprecated
+	AutoPay pulumi.StringPtrInput
+	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the name of the available partition (AZ). Changing this
 	// parameter will create a new resource.
@@ -628,7 +749,8 @@ type NodeState struct {
 	DataVolumes NodeDataVolumeArrayInput
 	// Specifies the ECS group ID. If specified, the node will be created under
 	// the cloud server group. Changing this parameter will create a new resource.
-	EcsGroupId         pulumi.StringPtrInput
+	EcsGroupId pulumi.StringPtrInput
+	// schema: Internal
 	EcsPerformanceType pulumi.StringPtrInput
 	// Specifies the ID of the EIP.
 	// Changing this parameter will create a new resource.
@@ -653,10 +775,11 @@ type NodeState struct {
 	FlavorId pulumi.StringPtrInput
 	// Specifies the elastic IP type.
 	// Changing this parameter will create a new resource.
-	Iptype  pulumi.StringPtrInput
+	Iptype pulumi.StringPtrInput
+	// schema: Internal
 	KeepEcs pulumi.BoolPtrInput
 	// Specifies the key pair name when logging in to select the key pair mode.
-	// This parameter and `password` are alternative. Changing this parameter will create a new resource.
+	// This parameter and `password` are alternative.
 	KeyPair pulumi.StringPtrInput
 	// Specifies the tags of a Kubernetes node, key/value pair format.
 	// Changing this parameter will create a new resource.
@@ -674,9 +797,10 @@ type NodeState struct {
 	// + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
 	// + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
 	Os pulumi.StringPtrInput
+	// schema: Internal
+	Partition pulumi.StringPtrInput
 	// Specifies the root password when logging in to select the password mode.
 	// This parameter can be plain or salted and is alternative to `keyPair`.
-	// Changing this parameter will create a new resource.
 	Password pulumi.StringPtrInput
 	// Specifies the charging period of the CCE node. If `periodUnit` is set to *month*
 	// , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This parameter is
@@ -694,9 +818,14 @@ type NodeState struct {
 	Preinstall pulumi.StringPtrInput
 	// Private IP of the CCE node.
 	PrivateIp pulumi.StringPtrInput
+	// Specifies the private key of the in used `keyPair`. This parameter is mandatory
+	// when replacing or unbinding a keypair if the CCE node is in **Active** state.
+	PrivateKey pulumi.StringPtrInput
+	// schema: Internal
 	ProductId pulumi.StringPtrInput
 	// Public IP of the CCE node.
-	PublicIp  pulumi.StringPtrInput
+	PublicIp pulumi.StringPtrInput
+	// schema: Internal
 	PublicKey pulumi.StringPtrInput
 	// Specifies the region in which to create the CCE node resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new CCE node resource.
@@ -712,7 +841,8 @@ type NodeState struct {
 	// Specifies the bandwidth sharing type.
 	// Changing this parameter will create a new resource.
 	Sharetype pulumi.StringPtrInput
-	Status    pulumi.StringPtrInput
+	// The status of the CCE node.
+	Status pulumi.StringPtrInput
 	// Specifies the disk initialization management parameter.
 	// If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
 	// This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
@@ -732,10 +862,11 @@ func (NodeState) ElementType() reflect.Type {
 }
 
 type nodeArgs struct {
+	// schema: Internal
 	Annotations map[string]string `pulumi:"annotations"`
-	AutoPay     *string           `pulumi:"autoPay"`
-	// Specifies whether auto renew is enabled. Valid values are "true" and "
-	// false". Changing this creates a new resource.
+	// Deprecated: Deprecated
+	AutoPay *string `pulumi:"autoPay"`
+	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the name of the available partition (AZ). Changing this
 	// parameter will create a new resource.
@@ -759,7 +890,8 @@ type nodeArgs struct {
 	DataVolumes []NodeDataVolume `pulumi:"dataVolumes"`
 	// Specifies the ECS group ID. If specified, the node will be created under
 	// the cloud server group. Changing this parameter will create a new resource.
-	EcsGroupId         *string `pulumi:"ecsGroupId"`
+	EcsGroupId *string `pulumi:"ecsGroupId"`
+	// schema: Internal
 	EcsPerformanceType *string `pulumi:"ecsPerformanceType"`
 	// Specifies the ID of the EIP.
 	// Changing this parameter will create a new resource.
@@ -784,10 +916,11 @@ type nodeArgs struct {
 	FlavorId string `pulumi:"flavorId"`
 	// Specifies the elastic IP type.
 	// Changing this parameter will create a new resource.
-	Iptype  *string `pulumi:"iptype"`
-	KeepEcs *bool   `pulumi:"keepEcs"`
+	Iptype *string `pulumi:"iptype"`
+	// schema: Internal
+	KeepEcs *bool `pulumi:"keepEcs"`
 	// Specifies the key pair name when logging in to select the key pair mode.
-	// This parameter and `password` are alternative. Changing this parameter will create a new resource.
+	// This parameter and `password` are alternative.
 	KeyPair *string `pulumi:"keyPair"`
 	// Specifies the tags of a Kubernetes node, key/value pair format.
 	// Changing this parameter will create a new resource.
@@ -805,9 +938,10 @@ type nodeArgs struct {
 	// + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
 	// + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
 	Os *string `pulumi:"os"`
+	// schema: Internal
+	Partition *string `pulumi:"partition"`
 	// Specifies the root password when logging in to select the password mode.
 	// This parameter can be plain or salted and is alternative to `keyPair`.
-	// Changing this parameter will create a new resource.
 	Password *string `pulumi:"password"`
 	// Specifies the charging period of the CCE node. If `periodUnit` is set to *month*
 	// , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This parameter is
@@ -823,8 +957,13 @@ type nodeArgs struct {
 	// Specifies the script to be executed before installation.
 	// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
 	Preinstall *string `pulumi:"preinstall"`
-	ProductId  *string `pulumi:"productId"`
-	PublicKey  *string `pulumi:"publicKey"`
+	// Specifies the private key of the in used `keyPair`. This parameter is mandatory
+	// when replacing or unbinding a keypair if the CCE node is in **Active** state.
+	PrivateKey *string `pulumi:"privateKey"`
+	// schema: Internal
+	ProductId *string `pulumi:"productId"`
+	// schema: Internal
+	PublicKey *string `pulumi:"publicKey"`
 	// Specifies the region in which to create the CCE node resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new CCE node resource.
 	Region *string `pulumi:"region"`
@@ -853,10 +992,11 @@ type nodeArgs struct {
 
 // The set of arguments for constructing a Node resource.
 type NodeArgs struct {
+	// schema: Internal
 	Annotations pulumi.StringMapInput
-	AutoPay     pulumi.StringPtrInput
-	// Specifies whether auto renew is enabled. Valid values are "true" and "
-	// false". Changing this creates a new resource.
+	// Deprecated: Deprecated
+	AutoPay pulumi.StringPtrInput
+	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the name of the available partition (AZ). Changing this
 	// parameter will create a new resource.
@@ -880,7 +1020,8 @@ type NodeArgs struct {
 	DataVolumes NodeDataVolumeArrayInput
 	// Specifies the ECS group ID. If specified, the node will be created under
 	// the cloud server group. Changing this parameter will create a new resource.
-	EcsGroupId         pulumi.StringPtrInput
+	EcsGroupId pulumi.StringPtrInput
+	// schema: Internal
 	EcsPerformanceType pulumi.StringPtrInput
 	// Specifies the ID of the EIP.
 	// Changing this parameter will create a new resource.
@@ -905,10 +1046,11 @@ type NodeArgs struct {
 	FlavorId pulumi.StringInput
 	// Specifies the elastic IP type.
 	// Changing this parameter will create a new resource.
-	Iptype  pulumi.StringPtrInput
+	Iptype pulumi.StringPtrInput
+	// schema: Internal
 	KeepEcs pulumi.BoolPtrInput
 	// Specifies the key pair name when logging in to select the key pair mode.
-	// This parameter and `password` are alternative. Changing this parameter will create a new resource.
+	// This parameter and `password` are alternative.
 	KeyPair pulumi.StringPtrInput
 	// Specifies the tags of a Kubernetes node, key/value pair format.
 	// Changing this parameter will create a new resource.
@@ -926,9 +1068,10 @@ type NodeArgs struct {
 	// + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
 	// + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
 	Os pulumi.StringPtrInput
+	// schema: Internal
+	Partition pulumi.StringPtrInput
 	// Specifies the root password when logging in to select the password mode.
 	// This parameter can be plain or salted and is alternative to `keyPair`.
-	// Changing this parameter will create a new resource.
 	Password pulumi.StringPtrInput
 	// Specifies the charging period of the CCE node. If `periodUnit` is set to *month*
 	// , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This parameter is
@@ -944,8 +1087,13 @@ type NodeArgs struct {
 	// Specifies the script to be executed before installation.
 	// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
 	Preinstall pulumi.StringPtrInput
-	ProductId  pulumi.StringPtrInput
-	PublicKey  pulumi.StringPtrInput
+	// Specifies the private key of the in used `keyPair`. This parameter is mandatory
+	// when replacing or unbinding a keypair if the CCE node is in **Active** state.
+	PrivateKey pulumi.StringPtrInput
+	// schema: Internal
+	ProductId pulumi.StringPtrInput
+	// schema: Internal
+	PublicKey pulumi.StringPtrInput
 	// Specifies the region in which to create the CCE node resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new CCE node resource.
 	Region pulumi.StringPtrInput
@@ -1059,16 +1207,17 @@ func (o NodeOutput) ToNodeOutputWithContext(ctx context.Context) NodeOutput {
 	return o
 }
 
+// schema: Internal
 func (o NodeOutput) Annotations() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringMapOutput { return v.Annotations }).(pulumi.StringMapOutput)
 }
 
+// Deprecated: Deprecated
 func (o NodeOutput) AutoPay() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringPtrOutput { return v.AutoPay }).(pulumi.StringPtrOutput)
 }
 
-// Specifies whether auto renew is enabled. Valid values are "true" and "
-// false". Changing this creates a new resource.
+// Specifies whether auto renew is enabled. Valid values are "true" and "false".
 func (o NodeOutput) AutoRenew() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
 }
@@ -1120,6 +1269,7 @@ func (o NodeOutput) EcsGroupId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringPtrOutput { return v.EcsGroupId }).(pulumi.StringPtrOutput)
 }
 
+// schema: Internal
 func (o NodeOutput) EcsPerformanceType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringPtrOutput { return v.EcsPerformanceType }).(pulumi.StringPtrOutput)
 }
@@ -1169,12 +1319,13 @@ func (o NodeOutput) Iptype() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringPtrOutput { return v.Iptype }).(pulumi.StringPtrOutput)
 }
 
+// schema: Internal
 func (o NodeOutput) KeepEcs() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Node) pulumi.BoolPtrOutput { return v.KeepEcs }).(pulumi.BoolPtrOutput)
 }
 
 // Specifies the key pair name when logging in to select the key pair mode.
-// This parameter and `password` are alternative. Changing this parameter will create a new resource.
+// This parameter and `password` are alternative.
 func (o NodeOutput) KeyPair() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringPtrOutput { return v.KeyPair }).(pulumi.StringPtrOutput)
 }
@@ -1210,9 +1361,13 @@ func (o NodeOutput) Os() pulumi.StringOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringOutput { return v.Os }).(pulumi.StringOutput)
 }
 
+// schema: Internal
+func (o NodeOutput) Partition() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Node) pulumi.StringPtrOutput { return v.Partition }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the root password when logging in to select the password mode.
 // This parameter can be plain or salted and is alternative to `keyPair`.
-// Changing this parameter will create a new resource.
 func (o NodeOutput) Password() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringPtrOutput { return v.Password }).(pulumi.StringPtrOutput)
 }
@@ -1248,6 +1403,13 @@ func (o NodeOutput) PrivateIp() pulumi.StringOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringOutput { return v.PrivateIp }).(pulumi.StringOutput)
 }
 
+// Specifies the private key of the in used `keyPair`. This parameter is mandatory
+// when replacing or unbinding a keypair if the CCE node is in **Active** state.
+func (o NodeOutput) PrivateKey() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Node) pulumi.StringPtrOutput { return v.PrivateKey }).(pulumi.StringPtrOutput)
+}
+
+// schema: Internal
 func (o NodeOutput) ProductId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringPtrOutput { return v.ProductId }).(pulumi.StringPtrOutput)
 }
@@ -1257,6 +1419,7 @@ func (o NodeOutput) PublicIp() pulumi.StringOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringOutput { return v.PublicIp }).(pulumi.StringOutput)
 }
 
+// schema: Internal
 func (o NodeOutput) PublicKey() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringPtrOutput { return v.PublicKey }).(pulumi.StringPtrOutput)
 }
@@ -1290,6 +1453,7 @@ func (o NodeOutput) Sharetype() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringPtrOutput { return v.Sharetype }).(pulumi.StringPtrOutput)
 }
 
+// The status of the CCE node.
 func (o NodeOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
 }

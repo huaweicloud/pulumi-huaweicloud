@@ -249,7 +249,7 @@ class EipAssociate(pulumi.CustomResource):
 
         ## Import
 
-        This resource can be imported by specifying all three arguments, separated by a forward slash
+        This resource can be imported using the related `eip address` or `bandwidth_id`, `instance_id` and `fixed_ip`, separated by slashes, e.g.
 
         ```sh
          $ pulumi import huaweicloud:Ecs/eipAssociate:EipAssociate bind <eip address or bandwidth_id>/<instance_id>/<fixed_ip>
@@ -284,7 +284,7 @@ class EipAssociate(pulumi.CustomResource):
 
         ## Import
 
-        This resource can be imported by specifying all three arguments, separated by a forward slash
+        This resource can be imported using the related `eip address` or `bandwidth_id`, `instance_id` and `fixed_ip`, separated by slashes, e.g.
 
         ```sh
          $ pulumi import huaweicloud:Ecs/eipAssociate:EipAssociate bind <eip address or bandwidth_id>/<instance_id>/<fixed_ip>

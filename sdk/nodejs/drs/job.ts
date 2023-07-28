@@ -140,8 +140,8 @@ export class Job extends pulumi.CustomResource {
      */
     public readonly multiWrite!: pulumi.Output<boolean | undefined>;
     /**
-     * Specifies the job name. The name consists of 4 to 50 characters, starting with
-     * a letter. Only letters, digits, underscores (\_) and hyphens (-) are allowed.
+     * Specifies the name of database.
+     * Changing this parameter will create a new resource.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -363,8 +363,8 @@ export interface JobState {
      */
     multiWrite?: pulumi.Input<boolean>;
     /**
-     * Specifies the job name. The name consists of 4 to 50 characters, starting with
-     * a letter. Only letters, digits, underscores (\_) and hyphens (-) are allowed.
+     * Specifies the name of database.
+     * Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;
     /**
@@ -501,8 +501,8 @@ export interface JobArgs {
      */
     multiWrite?: pulumi.Input<boolean>;
     /**
-     * Specifies the job name. The name consists of 4 to 50 characters, starting with
-     * a letter. Only letters, digits, underscores (\_) and hyphens (-) are allowed.
+     * Specifies the name of database.
+     * Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;
     /**

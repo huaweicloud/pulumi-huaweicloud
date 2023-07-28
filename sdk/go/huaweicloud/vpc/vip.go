@@ -45,8 +45,6 @@ type Vip struct {
 	Region pulumi.StringOutput `pulumi:"region"`
 	// The VIP status.
 	Status pulumi.StringOutput `pulumi:"status"`
-	// The subnet ID in which to allocate IP address for this VIP.
-	//
 	// Deprecated: use ip_version instead
 	SubnetId pulumi.StringOutput `pulumi:"subnetId"`
 }
@@ -104,8 +102,6 @@ type vipState struct {
 	Region *string `pulumi:"region"`
 	// The VIP status.
 	Status *string `pulumi:"status"`
-	// The subnet ID in which to allocate IP address for this VIP.
-	//
 	// Deprecated: use ip_version instead
 	SubnetId *string `pulumi:"subnetId"`
 }
@@ -131,8 +127,6 @@ type VipState struct {
 	Region pulumi.StringPtrInput
 	// The VIP status.
 	Status pulumi.StringPtrInput
-	// The subnet ID in which to allocate IP address for this VIP.
-	//
 	// Deprecated: use ip_version instead
 	SubnetId pulumi.StringPtrInput
 }
@@ -156,8 +150,6 @@ type vipArgs struct {
 	// Specifies the region in which to create the VIP.
 	// If omitted, the provider-level region will be used. Changing this will create a new VIP resource.
 	Region *string `pulumi:"region"`
-	// The subnet ID in which to allocate IP address for this VIP.
-	//
 	// Deprecated: use ip_version instead
 	SubnetId *string `pulumi:"subnetId"`
 }
@@ -178,8 +170,6 @@ type VipArgs struct {
 	// Specifies the region in which to create the VIP.
 	// If omitted, the provider-level region will be used. Changing this will create a new VIP resource.
 	Region pulumi.StringPtrInput
-	// The subnet ID in which to allocate IP address for this VIP.
-	//
 	// Deprecated: use ip_version instead
 	SubnetId pulumi.StringPtrInput
 }
@@ -315,8 +305,6 @@ func (o VipOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *Vip) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
 }
 
-// The subnet ID in which to allocate IP address for this VIP.
-//
 // Deprecated: use ip_version instead
 func (o VipOutput) SubnetId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Vip) pulumi.StringOutput { return v.SubnetId }).(pulumi.StringOutput)

@@ -9,7 +9,6 @@ import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
 from . import outputs
-from ._inputs import *
 
 __all__ = [
     'GetVaultsResult',
@@ -73,7 +72,7 @@ class GetVaultsResult:
     @pulumi.getter(name="consistentLevel")
     def consistent_level(self) -> Optional[str]:
         """
-        The backup specifications.
+        The consistent level (specification) of the vault.
         """
         return pulumi.get(self, "consistent_level")
 
@@ -97,7 +96,7 @@ class GetVaultsResult:
     @pulumi.getter
     def name(self) -> Optional[str]:
         """
-        The CBR vault name.
+        The vault name.
         """
         return pulumi.get(self, "name")
 
@@ -105,7 +104,7 @@ class GetVaultsResult:
     @pulumi.getter(name="policyId")
     def policy_id(self) -> Optional[str]:
         """
-        The policy associated with the CBR vault.
+        The ID of the policy associated with the vault.
         """
         return pulumi.get(self, "policy_id")
 
@@ -113,7 +112,7 @@ class GetVaultsResult:
     @pulumi.getter(name="protectionType")
     def protection_type(self) -> Optional[str]:
         """
-        The protection type of the CBR vault.
+        The protection type of the vault.
         """
         return pulumi.get(self, "protection_type")
 
@@ -142,15 +141,15 @@ class GetVaultsResult:
     @pulumi.getter
     def type(self) -> Optional[str]:
         """
-        The object type of the CBR vault.
+        The object type of the vault.
         """
         return pulumi.get(self, "type")
 
     @property
     @pulumi.getter
-    def vaults(self) -> Optional[Sequence['outputs.GetVaultsVaultResult']]:
+    def vaults(self) -> Sequence['outputs.GetVaultsVaultResult']:
         """
-        List of CBR vault details. The object structure of each CBR vault is documented below.
+        List of vault details. The object structure of each vault is documented below.
         """
         return pulumi.get(self, "vaults")
 
@@ -185,7 +184,6 @@ def get_vaults(auto_expand_enabled: Optional[bool] = None,
                size: Optional[int] = None,
                status: Optional[str] = None,
                type: Optional[str] = None,
-               vaults: Optional[Sequence[pulumi.InputType['GetVaultsVaultArgs']]] = None,
                opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetVaultsResult:
     """
     Use this data source to get available CBR vaults within Huaweicloud.
@@ -202,27 +200,26 @@ def get_vaults(auto_expand_enabled: Optional[bool] = None,
 
 
     :param bool auto_expand_enabled: Specifies whether to enable automatic expansion of the backup protection
-           type vault. Default to **false**.
-    :param str consistent_level: Specifies the backup specifications.
+           type vault. Defaults to **false**.
+    :param str consistent_level: Specifies the consistent level (specification) of the vault.
            The valid values are as follows:
            + **[crash_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
            + **[app_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
-    :param str enterprise_project_id: Specifies a unique ID in UUID format of enterprise project.
-    :param str name: Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
+    :param str enterprise_project_id: Specifies the ID of the enterprise project to which the vault belongs.
+    :param str name: Specifies the vault name. This parameter can contain a maximum of 64
            characters, which may consist of letters, digits, underscores(_) and hyphens (-).
-    :param str policy_id: Specifies a policy to associate with the CBR vault.
+    :param str policy_id: Specifies the ID of the policy associated with the vault.
            The `policy_id` cannot be used with the vault of replicate protection type.
-    :param str protection_type: Specifies the protection type of the CBR vault.
+    :param str protection_type: Specifies the protection type of the vault.
            The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
-    :param str region: Specifies the region in which to query the CBR vaults.
+    :param str region: Specifies the region in which to query the vaults.
            If omitted, the provider-level region will be used.
     :param int size: Specifies the vault sapacity, in GB. The valid value range is `1` to `10,485,760`.
-    :param str status: Specifies the CBR vault status, including **available**, **lock**, **frozen** and **error**.
-    :param str type: Specifies the object type of the CBR vault. The vaild values are as follows:
+    :param str status: Specifies the vault status, including **available**, **lock**, **frozen** and **error**.
+    :param str type: Specifies the object type of the vault. The vaild values are as follows:
            + **server** (Cloud Servers)
            + **disk** (EVS Disks)
            + **turbo** (SFS Turbo file systems)
-    :param Sequence[pulumi.InputType['GetVaultsVaultArgs']] vaults: List of CBR vault details. The object structure of each CBR vault is documented below.
     """
     __args__ = dict()
     __args__['autoExpandEnabled'] = auto_expand_enabled
@@ -235,7 +232,6 @@ def get_vaults(auto_expand_enabled: Optional[bool] = None,
     __args__['size'] = size
     __args__['status'] = status
     __args__['type'] = type
-    __args__['vaults'] = vaults
     opts = pulumi.InvokeOptions.merge(_utilities.get_invoke_opts_defaults(), opts)
     __ret__ = pulumi.runtime.invoke('huaweicloud:Cbr/getVaults:getVaults', __args__, opts=opts, typ=GetVaultsResult).value
 
@@ -265,7 +261,6 @@ def get_vaults_output(auto_expand_enabled: Optional[pulumi.Input[Optional[bool]]
                       size: Optional[pulumi.Input[Optional[int]]] = None,
                       status: Optional[pulumi.Input[Optional[str]]] = None,
                       type: Optional[pulumi.Input[Optional[str]]] = None,
-                      vaults: Optional[pulumi.Input[Optional[Sequence[pulumi.InputType['GetVaultsVaultArgs']]]]] = None,
                       opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetVaultsResult]:
     """
     Use this data source to get available CBR vaults within Huaweicloud.
@@ -282,26 +277,25 @@ def get_vaults_output(auto_expand_enabled: Optional[pulumi.Input[Optional[bool]]
 
 
     :param bool auto_expand_enabled: Specifies whether to enable automatic expansion of the backup protection
-           type vault. Default to **false**.
-    :param str consistent_level: Specifies the backup specifications.
+           type vault. Defaults to **false**.
+    :param str consistent_level: Specifies the consistent level (specification) of the vault.
            The valid values are as follows:
            + **[crash_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
            + **[app_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
-    :param str enterprise_project_id: Specifies a unique ID in UUID format of enterprise project.
-    :param str name: Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
+    :param str enterprise_project_id: Specifies the ID of the enterprise project to which the vault belongs.
+    :param str name: Specifies the vault name. This parameter can contain a maximum of 64
            characters, which may consist of letters, digits, underscores(_) and hyphens (-).
-    :param str policy_id: Specifies a policy to associate with the CBR vault.
+    :param str policy_id: Specifies the ID of the policy associated with the vault.
            The `policy_id` cannot be used with the vault of replicate protection type.
-    :param str protection_type: Specifies the protection type of the CBR vault.
+    :param str protection_type: Specifies the protection type of the vault.
            The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
-    :param str region: Specifies the region in which to query the CBR vaults.
+    :param str region: Specifies the region in which to query the vaults.
            If omitted, the provider-level region will be used.
     :param int size: Specifies the vault sapacity, in GB. The valid value range is `1` to `10,485,760`.
-    :param str status: Specifies the CBR vault status, including **available**, **lock**, **frozen** and **error**.
-    :param str type: Specifies the object type of the CBR vault. The vaild values are as follows:
+    :param str status: Specifies the vault status, including **available**, **lock**, **frozen** and **error**.
+    :param str type: Specifies the object type of the vault. The vaild values are as follows:
            + **server** (Cloud Servers)
            + **disk** (EVS Disks)
            + **turbo** (SFS Turbo file systems)
-    :param Sequence[pulumi.InputType['GetVaultsVaultArgs']] vaults: List of CBR vault details. The object structure of each CBR vault is documented below.
     """
     ...

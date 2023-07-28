@@ -10,7 +10,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Use this data source to get the ID of an available Huaweicloud dcs maintainwindow.
+// Use this data source to get the ID of an available DCS maintainwindow.
 //
 // ## Example Usage
 //
@@ -50,16 +50,16 @@ func GetMaintainwindow(ctx *pulumi.Context, args *GetMaintainwindowArgs, opts ..
 
 // A collection of arguments for invoking getMaintainwindow.
 type GetMaintainwindowArgs struct {
-	// Indicates the time at which a maintenance time window starts.
+	// Specifies the time at which a maintenance time window starts.
 	Begin *string `pulumi:"begin"`
-	// Indicates whether a maintenance time window is set to the default time segment.
+	// Specifies whether a maintenance time window is set to the default time segment.
 	Default *bool `pulumi:"default"`
-	// Indicates the time at which a maintenance time window ends.
+	// Specifies the time at which a maintenance time window ends.
 	End *string `pulumi:"end"`
 	// The region in which to obtain the dcs maintainwindows. If omitted, the provider-level
 	// region will be used.
 	Region *string `pulumi:"region"`
-	// Indicates the sequential number of a maintenance time window.
+	// Specifies the sequential number of a maintenance time window.
 	Seq *int `pulumi:"seq"`
 }
 
@@ -89,16 +89,16 @@ func GetMaintainwindowOutput(ctx *pulumi.Context, args GetMaintainwindowOutputAr
 
 // A collection of arguments for invoking getMaintainwindow.
 type GetMaintainwindowOutputArgs struct {
-	// Indicates the time at which a maintenance time window starts.
+	// Specifies the time at which a maintenance time window starts.
 	Begin pulumi.StringPtrInput `pulumi:"begin"`
-	// Indicates whether a maintenance time window is set to the default time segment.
+	// Specifies whether a maintenance time window is set to the default time segment.
 	Default pulumi.BoolPtrInput `pulumi:"default"`
-	// Indicates the time at which a maintenance time window ends.
+	// Specifies the time at which a maintenance time window ends.
 	End pulumi.StringPtrInput `pulumi:"end"`
 	// The region in which to obtain the dcs maintainwindows. If omitted, the provider-level
 	// region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
-	// Indicates the sequential number of a maintenance time window.
+	// Specifies the sequential number of a maintenance time window.
 	Seq pulumi.IntPtrInput `pulumi:"seq"`
 }
 

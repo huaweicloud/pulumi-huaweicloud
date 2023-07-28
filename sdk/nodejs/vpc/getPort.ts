@@ -48,7 +48,7 @@ export function getPort(args?: GetPortArgs, opts?: pulumi.InvokeOptions): Promis
  */
 export interface GetPortArgs {
     /**
-     * The administrative state of the port.
+     * @deprecated this field is deprecated
      */
     adminStateUp?: boolean;
     /**
@@ -79,6 +79,9 @@ export interface GetPortArgs {
      * Specifies the ID of the port.
      */
     portId?: string;
+    /**
+     * @deprecated this field is deprecated
+     */
     projectId?: string;
     /**
      * Specifies the region in which to obtain the port. If omitted, the provider-level region
@@ -93,6 +96,9 @@ export interface GetPortArgs {
      * Specifies the status of the port.
      */
     status?: string;
+    /**
+     * @deprecated this field is deprecated
+     */
     tenantId?: string;
 }
 
@@ -101,9 +107,13 @@ export interface GetPortArgs {
  */
 export interface GetPortResult {
     /**
-     * The administrative state of the port.
+     * @deprecated this field is deprecated
      */
     readonly adminStateUp: boolean;
+    /**
+     * The collection of allowed IP addresses on the port.
+     */
+    readonly allAllowedIps: string[];
     /**
      * The collection of Fixed IP addresses on the port.
      */
@@ -132,10 +142,16 @@ export interface GetPortResult {
     readonly name: string;
     readonly networkId: string;
     readonly portId: string;
+    /**
+     * @deprecated this field is deprecated
+     */
     readonly projectId?: string;
     readonly region: string;
     readonly securityGroupIds?: string[];
     readonly status: string;
+    /**
+     * @deprecated this field is deprecated
+     */
     readonly tenantId?: string;
 }
 
@@ -148,7 +164,7 @@ export function getPortOutput(args?: GetPortOutputArgs, opts?: pulumi.InvokeOpti
  */
 export interface GetPortOutputArgs {
     /**
-     * The administrative state of the port.
+     * @deprecated this field is deprecated
      */
     adminStateUp?: pulumi.Input<boolean>;
     /**
@@ -179,6 +195,9 @@ export interface GetPortOutputArgs {
      * Specifies the ID of the port.
      */
     portId?: pulumi.Input<string>;
+    /**
+     * @deprecated this field is deprecated
+     */
     projectId?: pulumi.Input<string>;
     /**
      * Specifies the region in which to obtain the port. If omitted, the provider-level region
@@ -193,5 +212,8 @@ export interface GetPortOutputArgs {
      * Specifies the status of the port.
      */
     status?: pulumi.Input<string>;
+    /**
+     * @deprecated this field is deprecated
+     */
     tenantId?: pulumi.Input<string>;
 }

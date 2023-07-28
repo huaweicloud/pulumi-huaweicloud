@@ -43,8 +43,7 @@ class StudioInstanceArgs:
                Changing this creates a new instance.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this creates a new instance.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are `true` and `false`, defaults to `false`.
-               Changing this creates a new instance.
+               Valid values are `true` and `false`, defaults to `false`. Changing this parameter will create a new resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the instance.
                Changing this creates a new instance.
         :param pulumi.Input[str] name: Specifies the DataArts Studio instance name. Changing this creates a new instance.
@@ -167,8 +166,7 @@ class StudioInstanceArgs:
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies whether auto renew is enabled.
-        Valid values are `true` and `false`, defaults to `false`.
-        Changing this creates a new instance.
+        Valid values are `true` and `false`, defaults to `false`. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -250,8 +248,7 @@ class _StudioInstanceState:
         """
         Input properties used for looking up and filtering StudioInstance resources.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are `true` and `false`, defaults to `false`.
-               Changing this creates a new instance.
+               Valid values are `true` and `false`, defaults to `false`. Changing this parameter will create a new resource.
         :param pulumi.Input[str] availability_zone: Specifies the AZ name. Changing this creates a new instance.
         :param pulumi.Input[str] charging_mode: The charging mode. The value is `prePaid` indicates the yearly/monthly billing mode.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the instance.
@@ -316,8 +313,7 @@ class _StudioInstanceState:
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies whether auto renew is enabled.
-        Valid values are `true` and `false`, defaults to `false`.
-        Changing this creates a new instance.
+        Valid values are `true` and `false`, defaults to `false`. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -591,8 +587,7 @@ class StudioInstance(pulumi.CustomResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are `true` and `false`, defaults to `false`.
-               Changing this creates a new instance.
+               Valid values are `true` and `false`, defaults to `false`. Changing this parameter will create a new resource.
         :param pulumi.Input[str] availability_zone: Specifies the AZ name. Changing this creates a new instance.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the instance.
                Changing this creates a new instance.
@@ -775,8 +770,7 @@ class StudioInstance(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are `true` and `false`, defaults to `false`.
-               Changing this creates a new instance.
+               Valid values are `true` and `false`, defaults to `false`. Changing this parameter will create a new resource.
         :param pulumi.Input[str] availability_zone: Specifies the AZ name. Changing this creates a new instance.
         :param pulumi.Input[str] charging_mode: The charging mode. The value is `prePaid` indicates the yearly/monthly billing mode.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the instance.
@@ -830,8 +824,7 @@ class StudioInstance(pulumi.CustomResource):
     def auto_renew(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies whether auto renew is enabled.
-        Valid values are `true` and `false`, defaults to `false`.
-        Changing this creates a new instance.
+        Valid values are `true` and `false`, defaults to `false`. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "auto_renew")
 

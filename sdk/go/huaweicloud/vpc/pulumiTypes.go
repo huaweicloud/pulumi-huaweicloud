@@ -136,21 +136,22 @@ func (o BandwidthPublicipArrayOutput) Index(i pulumi.IntInput) BandwidthPublicip
 
 type EipBandwidth struct {
 	// Specifies whether the bandwidth is billed by traffic or by bandwidth
-	// size. The value can be *traffic* or *bandwidth*. Changing this creates a new resource.
+	// size. The value can be **traffic** or **bandwidth**. Changing this will create a new resource.
 	ChargeMode *string `pulumi:"chargeMode"`
-	// The shared bandwidth id. This parameter is mandatory when
-	// `shareType` is set to **WHOLE**. Changing this creates a new resource.
+	// The shared bandwidth ID.\
+	// This parameter is mandatory when `shareType` is set to **WHOLE**. Changing this will create a new resource.
 	Id *string `pulumi:"id"`
-	// The bandwidth name, which is a string of 1 to 64 characters that contain letters, digits,
-	// underscores (_), and hyphens (-). This parameter is mandatory when `shareType` is set to **PER**.
+	// Specifies the bandwidth name.\
+	// The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
+	// This parameter is mandatory when `shareType` is set to **PER**.
 	Name *string `pulumi:"name"`
-	// Whether the bandwidth is dedicated or shared. Changing this creates a new
-	// resource. Possible values are as follows:
+	// Specifies whether the bandwidth is dedicated or shared.\
+	// Changing this will create a new resource. Possible values are as follows:
 	// + **PER**: Dedicated bandwidth
 	// + **WHOLE**: Shared bandwidth
 	ShareType string `pulumi:"shareType"`
-	// The bandwidth size. The value ranges from 1 to 300 Mbit/s. This parameter is mandatory
-	// when `shareType` is set to **PER**.
+	// The bandwidth size.\
+	// The value ranges from `1` to `300` Mbit/s. This parameter is mandatory when `shareType` is set to **PER**.
 	Size *int `pulumi:"size"`
 }
 
@@ -167,21 +168,22 @@ type EipBandwidthInput interface {
 
 type EipBandwidthArgs struct {
 	// Specifies whether the bandwidth is billed by traffic or by bandwidth
-	// size. The value can be *traffic* or *bandwidth*. Changing this creates a new resource.
+	// size. The value can be **traffic** or **bandwidth**. Changing this will create a new resource.
 	ChargeMode pulumi.StringPtrInput `pulumi:"chargeMode"`
-	// The shared bandwidth id. This parameter is mandatory when
-	// `shareType` is set to **WHOLE**. Changing this creates a new resource.
+	// The shared bandwidth ID.\
+	// This parameter is mandatory when `shareType` is set to **WHOLE**. Changing this will create a new resource.
 	Id pulumi.StringPtrInput `pulumi:"id"`
-	// The bandwidth name, which is a string of 1 to 64 characters that contain letters, digits,
-	// underscores (_), and hyphens (-). This parameter is mandatory when `shareType` is set to **PER**.
+	// Specifies the bandwidth name.\
+	// The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
+	// This parameter is mandatory when `shareType` is set to **PER**.
 	Name pulumi.StringPtrInput `pulumi:"name"`
-	// Whether the bandwidth is dedicated or shared. Changing this creates a new
-	// resource. Possible values are as follows:
+	// Specifies whether the bandwidth is dedicated or shared.\
+	// Changing this will create a new resource. Possible values are as follows:
 	// + **PER**: Dedicated bandwidth
 	// + **WHOLE**: Shared bandwidth
 	ShareType pulumi.StringInput `pulumi:"shareType"`
-	// The bandwidth size. The value ranges from 1 to 300 Mbit/s. This parameter is mandatory
-	// when `shareType` is set to **PER**.
+	// The bandwidth size.\
+	// The value ranges from `1` to `300` Mbit/s. This parameter is mandatory when `shareType` is set to **PER**.
 	Size pulumi.IntPtrInput `pulumi:"size"`
 }
 
@@ -263,33 +265,34 @@ func (o EipBandwidthOutput) ToEipBandwidthPtrOutputWithContext(ctx context.Conte
 }
 
 // Specifies whether the bandwidth is billed by traffic or by bandwidth
-// size. The value can be *traffic* or *bandwidth*. Changing this creates a new resource.
+// size. The value can be **traffic** or **bandwidth**. Changing this will create a new resource.
 func (o EipBandwidthOutput) ChargeMode() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v EipBandwidth) *string { return v.ChargeMode }).(pulumi.StringPtrOutput)
 }
 
-// The shared bandwidth id. This parameter is mandatory when
-// `shareType` is set to **WHOLE**. Changing this creates a new resource.
+// The shared bandwidth ID.\
+// This parameter is mandatory when `shareType` is set to **WHOLE**. Changing this will create a new resource.
 func (o EipBandwidthOutput) Id() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v EipBandwidth) *string { return v.Id }).(pulumi.StringPtrOutput)
 }
 
-// The bandwidth name, which is a string of 1 to 64 characters that contain letters, digits,
-// underscores (_), and hyphens (-). This parameter is mandatory when `shareType` is set to **PER**.
+// Specifies the bandwidth name.\
+// The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
+// This parameter is mandatory when `shareType` is set to **PER**.
 func (o EipBandwidthOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v EipBandwidth) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
 
-// Whether the bandwidth is dedicated or shared. Changing this creates a new
-// resource. Possible values are as follows:
+// Specifies whether the bandwidth is dedicated or shared.\
+// Changing this will create a new resource. Possible values are as follows:
 // + **PER**: Dedicated bandwidth
 // + **WHOLE**: Shared bandwidth
 func (o EipBandwidthOutput) ShareType() pulumi.StringOutput {
 	return o.ApplyT(func(v EipBandwidth) string { return v.ShareType }).(pulumi.StringOutput)
 }
 
-// The bandwidth size. The value ranges from 1 to 300 Mbit/s. This parameter is mandatory
-// when `shareType` is set to **PER**.
+// The bandwidth size.\
+// The value ranges from `1` to `300` Mbit/s. This parameter is mandatory when `shareType` is set to **PER**.
 func (o EipBandwidthOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v EipBandwidth) *int { return v.Size }).(pulumi.IntPtrOutput)
 }
@@ -319,7 +322,7 @@ func (o EipBandwidthPtrOutput) Elem() EipBandwidthOutput {
 }
 
 // Specifies whether the bandwidth is billed by traffic or by bandwidth
-// size. The value can be *traffic* or *bandwidth*. Changing this creates a new resource.
+// size. The value can be **traffic** or **bandwidth**. Changing this will create a new resource.
 func (o EipBandwidthPtrOutput) ChargeMode() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *EipBandwidth) *string {
 		if v == nil {
@@ -329,8 +332,8 @@ func (o EipBandwidthPtrOutput) ChargeMode() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// The shared bandwidth id. This parameter is mandatory when
-// `shareType` is set to **WHOLE**. Changing this creates a new resource.
+// The shared bandwidth ID.\
+// This parameter is mandatory when `shareType` is set to **WHOLE**. Changing this will create a new resource.
 func (o EipBandwidthPtrOutput) Id() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *EipBandwidth) *string {
 		if v == nil {
@@ -340,8 +343,9 @@ func (o EipBandwidthPtrOutput) Id() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// The bandwidth name, which is a string of 1 to 64 characters that contain letters, digits,
-// underscores (_), and hyphens (-). This parameter is mandatory when `shareType` is set to **PER**.
+// Specifies the bandwidth name.\
+// The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
+// This parameter is mandatory when `shareType` is set to **PER**.
 func (o EipBandwidthPtrOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *EipBandwidth) *string {
 		if v == nil {
@@ -351,8 +355,8 @@ func (o EipBandwidthPtrOutput) Name() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Whether the bandwidth is dedicated or shared. Changing this creates a new
-// resource. Possible values are as follows:
+// Specifies whether the bandwidth is dedicated or shared.\
+// Changing this will create a new resource. Possible values are as follows:
 // + **PER**: Dedicated bandwidth
 // + **WHOLE**: Shared bandwidth
 func (o EipBandwidthPtrOutput) ShareType() pulumi.StringPtrOutput {
@@ -364,8 +368,8 @@ func (o EipBandwidthPtrOutput) ShareType() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// The bandwidth size. The value ranges from 1 to 300 Mbit/s. This parameter is mandatory
-// when `shareType` is set to **PER**.
+// The bandwidth size.\
+// The value ranges from `1` to `300` Mbit/s. This parameter is mandatory when `shareType` is set to **PER**.
 func (o EipBandwidthPtrOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *EipBandwidth) *int {
 		if v == nil {
@@ -376,16 +380,16 @@ func (o EipBandwidthPtrOutput) Size() pulumi.IntPtrOutput {
 }
 
 type EipPublicip struct {
-	// Specifies the EIP to be assigned. The value must be a valid **IPv4**
-	// address in the available IP address range. The system automatically assigns an EIP if you do not specify it.
-	// Changing this creates a new resource.
+	// Specifies the EIP address to be assigned.\
+	// The value must be a valid **IPv4** address in the available IP address range.
+	// The system automatically assigns an EIP if you do not specify it. Changing this will create a new resource.
 	IpAddress *string `pulumi:"ipAddress"`
-	// Specifies the IP version, either 4 (default) or 6.
+	// Specifies the IP version, either `4` (default) or `6`.
 	IpVersion *int `pulumi:"ipVersion"`
 	// The port ID which the EIP associated with.
 	PortId *string `pulumi:"portId"`
-	// Specifies the EIP type. Possible values are *5_bgp* (dynamic BGP)
-	// and *5_sbgp* (static BGP), the default value is *5_bgp*. Changing this creates a new resource.
+	// Specifies the EIP type. Possible values are **5_bgp** (dynamic BGP)
+	// and **5_sbgp** (static BGP), the default value is **5_bgp**. Changing this will create a new resource.
 	Type *string `pulumi:"type"`
 }
 
@@ -401,16 +405,16 @@ type EipPublicipInput interface {
 }
 
 type EipPublicipArgs struct {
-	// Specifies the EIP to be assigned. The value must be a valid **IPv4**
-	// address in the available IP address range. The system automatically assigns an EIP if you do not specify it.
-	// Changing this creates a new resource.
+	// Specifies the EIP address to be assigned.\
+	// The value must be a valid **IPv4** address in the available IP address range.
+	// The system automatically assigns an EIP if you do not specify it. Changing this will create a new resource.
 	IpAddress pulumi.StringPtrInput `pulumi:"ipAddress"`
-	// Specifies the IP version, either 4 (default) or 6.
+	// Specifies the IP version, either `4` (default) or `6`.
 	IpVersion pulumi.IntPtrInput `pulumi:"ipVersion"`
 	// The port ID which the EIP associated with.
 	PortId pulumi.StringPtrInput `pulumi:"portId"`
-	// Specifies the EIP type. Possible values are *5_bgp* (dynamic BGP)
-	// and *5_sbgp* (static BGP), the default value is *5_bgp*. Changing this creates a new resource.
+	// Specifies the EIP type. Possible values are **5_bgp** (dynamic BGP)
+	// and **5_sbgp** (static BGP), the default value is **5_bgp**. Changing this will create a new resource.
 	Type pulumi.StringPtrInput `pulumi:"type"`
 }
 
@@ -491,14 +495,14 @@ func (o EipPublicipOutput) ToEipPublicipPtrOutputWithContext(ctx context.Context
 	}).(EipPublicipPtrOutput)
 }
 
-// Specifies the EIP to be assigned. The value must be a valid **IPv4**
-// address in the available IP address range. The system automatically assigns an EIP if you do not specify it.
-// Changing this creates a new resource.
+// Specifies the EIP address to be assigned.\
+// The value must be a valid **IPv4** address in the available IP address range.
+// The system automatically assigns an EIP if you do not specify it. Changing this will create a new resource.
 func (o EipPublicipOutput) IpAddress() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v EipPublicip) *string { return v.IpAddress }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the IP version, either 4 (default) or 6.
+// Specifies the IP version, either `4` (default) or `6`.
 func (o EipPublicipOutput) IpVersion() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v EipPublicip) *int { return v.IpVersion }).(pulumi.IntPtrOutput)
 }
@@ -508,8 +512,8 @@ func (o EipPublicipOutput) PortId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v EipPublicip) *string { return v.PortId }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the EIP type. Possible values are *5_bgp* (dynamic BGP)
-// and *5_sbgp* (static BGP), the default value is *5_bgp*. Changing this creates a new resource.
+// Specifies the EIP type. Possible values are **5_bgp** (dynamic BGP)
+// and **5_sbgp** (static BGP), the default value is **5_bgp**. Changing this will create a new resource.
 func (o EipPublicipOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v EipPublicip) *string { return v.Type }).(pulumi.StringPtrOutput)
 }
@@ -538,9 +542,9 @@ func (o EipPublicipPtrOutput) Elem() EipPublicipOutput {
 	}).(EipPublicipOutput)
 }
 
-// Specifies the EIP to be assigned. The value must be a valid **IPv4**
-// address in the available IP address range. The system automatically assigns an EIP if you do not specify it.
-// Changing this creates a new resource.
+// Specifies the EIP address to be assigned.\
+// The value must be a valid **IPv4** address in the available IP address range.
+// The system automatically assigns an EIP if you do not specify it. Changing this will create a new resource.
 func (o EipPublicipPtrOutput) IpAddress() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *EipPublicip) *string {
 		if v == nil {
@@ -550,7 +554,7 @@ func (o EipPublicipPtrOutput) IpAddress() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the IP version, either 4 (default) or 6.
+// Specifies the IP version, either `4` (default) or `6`.
 func (o EipPublicipPtrOutput) IpVersion() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *EipPublicip) *int {
 		if v == nil {
@@ -570,8 +574,8 @@ func (o EipPublicipPtrOutput) PortId() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the EIP type. Possible values are *5_bgp* (dynamic BGP)
-// and *5_sbgp* (static BGP), the default value is *5_bgp*. Changing this creates a new resource.
+// Specifies the EIP type. Possible values are **5_bgp** (dynamic BGP)
+// and **5_sbgp** (static BGP), the default value is **5_bgp**. Changing this will create a new resource.
 func (o EipPublicipPtrOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *EipPublicip) *string {
 		if v == nil {
@@ -888,14 +892,14 @@ func (o PortFixedIpArrayOutput) Index(i pulumi.IntInput) PortFixedIpOutput {
 }
 
 type RouteTableRoute struct {
-	// - Specifies the supplementary information about the route.
-	//   The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
+	// Specifies the supplementary information about the route.
+	// The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
 	Description *string `pulumi:"description"`
-	// - Specifies the destination address in the CIDR notation format,
-	//   for example, 192.168.200.0/24. The destination of each route must be unique and cannot overlap
-	//   with any subnet in the VPC.
+	// Specifies the destination address in the CIDR notation format,
+	// for example, 192.168.200.0/24. The destination of each route must be unique and cannot overlap
+	// with any subnet in the VPC.
 	Destination string `pulumi:"destination"`
-	// - Specifies the next hop.
+	// Specifies the next hop.
 	// + If the route type is **ecs**, the value is an ECS instance ID in the VPC.
 	// + If the route type is **eni**, the value is the extension NIC of an ECS in the VPC.
 	// + If the route type is **vip**, the value is a virtual IP address.
@@ -905,8 +909,8 @@ type RouteTableRoute struct {
 	// + If the route type is **dc**, the value is a Direct Connect gateway ID.
 	// + If the route type is **cc**, the value is a Cloud Connection ID.
 	Nexthop string `pulumi:"nexthop"`
-	// - Specifies the route type. Currently, the value can be:
-	//   **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
+	// Specifies the route type. Currently, the value can be:
+	// **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
 	Type string `pulumi:"type"`
 }
 
@@ -922,14 +926,14 @@ type RouteTableRouteInput interface {
 }
 
 type RouteTableRouteArgs struct {
-	// - Specifies the supplementary information about the route.
-	//   The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
+	// Specifies the supplementary information about the route.
+	// The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
 	Description pulumi.StringPtrInput `pulumi:"description"`
-	// - Specifies the destination address in the CIDR notation format,
-	//   for example, 192.168.200.0/24. The destination of each route must be unique and cannot overlap
-	//   with any subnet in the VPC.
+	// Specifies the destination address in the CIDR notation format,
+	// for example, 192.168.200.0/24. The destination of each route must be unique and cannot overlap
+	// with any subnet in the VPC.
 	Destination pulumi.StringInput `pulumi:"destination"`
-	// - Specifies the next hop.
+	// Specifies the next hop.
 	// + If the route type is **ecs**, the value is an ECS instance ID in the VPC.
 	// + If the route type is **eni**, the value is the extension NIC of an ECS in the VPC.
 	// + If the route type is **vip**, the value is a virtual IP address.
@@ -939,8 +943,8 @@ type RouteTableRouteArgs struct {
 	// + If the route type is **dc**, the value is a Direct Connect gateway ID.
 	// + If the route type is **cc**, the value is a Cloud Connection ID.
 	Nexthop pulumi.StringInput `pulumi:"nexthop"`
-	// - Specifies the route type. Currently, the value can be:
-	//   **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
+	// Specifies the route type. Currently, the value can be:
+	// **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
 	Type pulumi.StringInput `pulumi:"type"`
 }
 
@@ -995,20 +999,20 @@ func (o RouteTableRouteOutput) ToRouteTableRouteOutputWithContext(ctx context.Co
 	return o
 }
 
-//   - Specifies the supplementary information about the route.
-//     The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
+// Specifies the supplementary information about the route.
+// The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
 func (o RouteTableRouteOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v RouteTableRoute) *string { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-//   - Specifies the destination address in the CIDR notation format,
-//     for example, 192.168.200.0/24. The destination of each route must be unique and cannot overlap
-//     with any subnet in the VPC.
+// Specifies the destination address in the CIDR notation format,
+// for example, 192.168.200.0/24. The destination of each route must be unique and cannot overlap
+// with any subnet in the VPC.
 func (o RouteTableRouteOutput) Destination() pulumi.StringOutput {
 	return o.ApplyT(func(v RouteTableRoute) string { return v.Destination }).(pulumi.StringOutput)
 }
 
-// - Specifies the next hop.
+// Specifies the next hop.
 // + If the route type is **ecs**, the value is an ECS instance ID in the VPC.
 // + If the route type is **eni**, the value is the extension NIC of an ECS in the VPC.
 // + If the route type is **vip**, the value is a virtual IP address.
@@ -1021,8 +1025,8 @@ func (o RouteTableRouteOutput) Nexthop() pulumi.StringOutput {
 	return o.ApplyT(func(v RouteTableRoute) string { return v.Nexthop }).(pulumi.StringOutput)
 }
 
-//   - Specifies the route type. Currently, the value can be:
-//     **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
+// Specifies the route type. Currently, the value can be:
+// **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
 func (o RouteTableRouteOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v RouteTableRoute) string { return v.Type }).(pulumi.StringOutput)
 }
@@ -1347,10 +1351,14 @@ func (o VpcRouteArrayOutput) Index(i pulumi.IntInput) VpcRouteOutput {
 }
 
 type GetRouteTableRoute struct {
+	// The description about the route.
 	Description string `pulumi:"description"`
+	// The destination address in the CIDR notation format
 	Destination string `pulumi:"destination"`
-	Nexthop     string `pulumi:"nexthop"`
-	Type        string `pulumi:"type"`
+	// The next hop.
+	Nexthop string `pulumi:"nexthop"`
+	// The route type.
+	Type string `pulumi:"type"`
 }
 
 // GetRouteTableRouteInput is an input type that accepts GetRouteTableRouteArgs and GetRouteTableRouteOutput values.
@@ -1365,10 +1373,14 @@ type GetRouteTableRouteInput interface {
 }
 
 type GetRouteTableRouteArgs struct {
+	// The description about the route.
 	Description pulumi.StringInput `pulumi:"description"`
+	// The destination address in the CIDR notation format
 	Destination pulumi.StringInput `pulumi:"destination"`
-	Nexthop     pulumi.StringInput `pulumi:"nexthop"`
-	Type        pulumi.StringInput `pulumi:"type"`
+	// The next hop.
+	Nexthop pulumi.StringInput `pulumi:"nexthop"`
+	// The route type.
+	Type pulumi.StringInput `pulumi:"type"`
 }
 
 func (GetRouteTableRouteArgs) ElementType() reflect.Type {
@@ -1422,18 +1434,22 @@ func (o GetRouteTableRouteOutput) ToGetRouteTableRouteOutputWithContext(ctx cont
 	return o
 }
 
+// The description about the route.
 func (o GetRouteTableRouteOutput) Description() pulumi.StringOutput {
 	return o.ApplyT(func(v GetRouteTableRoute) string { return v.Description }).(pulumi.StringOutput)
 }
 
+// The destination address in the CIDR notation format
 func (o GetRouteTableRouteOutput) Destination() pulumi.StringOutput {
 	return o.ApplyT(func(v GetRouteTableRoute) string { return v.Destination }).(pulumi.StringOutput)
 }
 
+// The next hop.
 func (o GetRouteTableRouteOutput) Nexthop() pulumi.StringOutput {
 	return o.ApplyT(func(v GetRouteTableRoute) string { return v.Nexthop }).(pulumi.StringOutput)
 }
 
+// The route type.
 func (o GetRouteTableRouteOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v GetRouteTableRoute) string { return v.Type }).(pulumi.StringOutput)
 }
@@ -1665,7 +1681,7 @@ type GetSecgroupsSecurityGroup struct {
 	Description string `pulumi:"description"`
 	// Specifies the enterprise project ID of the security group.
 	EnterpriseProjectId string `pulumi:"enterpriseProjectId"`
-	// The security group ID.
+	// Specifies the id of the desired security group.
 	Id string `pulumi:"id"`
 	// Specifies the name of the security group.
 	Name string `pulumi:"name"`
@@ -1692,7 +1708,7 @@ type GetSecgroupsSecurityGroupArgs struct {
 	Description pulumi.StringInput `pulumi:"description"`
 	// Specifies the enterprise project ID of the security group.
 	EnterpriseProjectId pulumi.StringInput `pulumi:"enterpriseProjectId"`
-	// The security group ID.
+	// Specifies the id of the desired security group.
 	Id pulumi.StringInput `pulumi:"id"`
 	// Specifies the name of the security group.
 	Name pulumi.StringInput `pulumi:"name"`
@@ -1767,7 +1783,7 @@ func (o GetSecgroupsSecurityGroupOutput) EnterpriseProjectId() pulumi.StringOutp
 	return o.ApplyT(func(v GetSecgroupsSecurityGroup) string { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
 
-// The security group ID.
+// Specifies the id of the desired security group.
 func (o GetSecgroupsSecurityGroupOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetSecgroupsSecurityGroup) string { return v.Id }).(pulumi.StringOutput)
 }

@@ -22,12 +22,6 @@ class Database_privilegeArgs:
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Database_privilege resource.
-        :param pulumi.Input[str] db_name: Specifies the database name. Changing this creates a new resource.
-        :param pulumi.Input[str] instance_id: Specifies the RDS instance ID. Changing this will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input['Database_privilegeUserArgs']]] users: Specifies the account that associated with the database. This parameter supports
-               a maximum of 50 elements. Structure is documented below. Changing this creates a new resource.
-        :param pulumi.Input[str] region: The region in which to create the RDS database privilege resource. If omitted,
-               the provider-level region will be used. Changing this creates a new resource.
         """
         pulumi.set(__self__, "db_name", db_name)
         pulumi.set(__self__, "instance_id", instance_id)
@@ -38,9 +32,6 @@ class Database_privilegeArgs:
     @property
     @pulumi.getter(name="dbName")
     def db_name(self) -> pulumi.Input[str]:
-        """
-        Specifies the database name. Changing this creates a new resource.
-        """
         return pulumi.get(self, "db_name")
 
     @db_name.setter
@@ -50,9 +41,6 @@ class Database_privilegeArgs:
     @property
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Input[str]:
-        """
-        Specifies the RDS instance ID. Changing this will create a new resource.
-        """
         return pulumi.get(self, "instance_id")
 
     @instance_id.setter
@@ -62,10 +50,6 @@ class Database_privilegeArgs:
     @property
     @pulumi.getter
     def users(self) -> pulumi.Input[Sequence[pulumi.Input['Database_privilegeUserArgs']]]:
-        """
-        Specifies the account that associated with the database. This parameter supports
-        a maximum of 50 elements. Structure is documented below. Changing this creates a new resource.
-        """
         return pulumi.get(self, "users")
 
     @users.setter
@@ -75,10 +59,6 @@ class Database_privilegeArgs:
     @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
-        """
-        The region in which to create the RDS database privilege resource. If omitted,
-        the provider-level region will be used. Changing this creates a new resource.
-        """
         return pulumi.get(self, "region")
 
     @region.setter
@@ -95,12 +75,6 @@ class _Database_privilegeState:
                  users: Optional[pulumi.Input[Sequence[pulumi.Input['Database_privilegeUserArgs']]]] = None):
         """
         Input properties used for looking up and filtering Database_privilege resources.
-        :param pulumi.Input[str] db_name: Specifies the database name. Changing this creates a new resource.
-        :param pulumi.Input[str] instance_id: Specifies the RDS instance ID. Changing this will create a new resource.
-        :param pulumi.Input[str] region: The region in which to create the RDS database privilege resource. If omitted,
-               the provider-level region will be used. Changing this creates a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input['Database_privilegeUserArgs']]] users: Specifies the account that associated with the database. This parameter supports
-               a maximum of 50 elements. Structure is documented below. Changing this creates a new resource.
         """
         if db_name is not None:
             pulumi.set(__self__, "db_name", db_name)
@@ -114,9 +88,6 @@ class _Database_privilegeState:
     @property
     @pulumi.getter(name="dbName")
     def db_name(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the database name. Changing this creates a new resource.
-        """
         return pulumi.get(self, "db_name")
 
     @db_name.setter
@@ -126,9 +97,6 @@ class _Database_privilegeState:
     @property
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the RDS instance ID. Changing this will create a new resource.
-        """
         return pulumi.get(self, "instance_id")
 
     @instance_id.setter
@@ -138,10 +106,6 @@ class _Database_privilegeState:
     @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
-        """
-        The region in which to create the RDS database privilege resource. If omitted,
-        the provider-level region will be used. Changing this creates a new resource.
-        """
         return pulumi.get(self, "region")
 
     @region.setter
@@ -151,10 +115,6 @@ class _Database_privilegeState:
     @property
     @pulumi.getter
     def users(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['Database_privilegeUserArgs']]]]:
-        """
-        Specifies the account that associated with the database. This parameter supports
-        a maximum of 50 elements. Structure is documented below. Changing this creates a new resource.
-        """
         return pulumi.get(self, "users")
 
     @users.setter
@@ -173,50 +133,9 @@ class Database_privilege(pulumi.CustomResource):
                  users: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['Database_privilegeUserArgs']]]]] = None,
                  __props__=None):
         """
-        Manages RDS Mysql database privilege resource within HuaweiCloud.
-
-        ## Example Usage
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        instance_id = config.require_object("instanceId")
-        db_name = config.require_object("dbName")
-        user_name1 = config.require_object("userName1")
-        user_name2 = config.require_object("userName2")
-        test = huaweicloud.rds.Database_privilege("test",
-            instance_id=instance_id,
-            db_name=db_name,
-            users=[
-                huaweicloud.rds.Database_privilegeUserArgs(
-                    name=user_name1,
-                    readonly=True,
-                ),
-                huaweicloud.rds.Database_privilegeUserArgs(
-                    name=user_name2,
-                    readonly=False,
-                ),
-            ])
-        ```
-
-        ## Import
-
-        RDS database privilege can be imported using the `instance id` and `database name`, e.g.
-
-        ```sh
-         $ pulumi import huaweicloud:Rds/database_privilege:Database_privilege test instance_id/database_name
-        ```
-
+        Create a Database_privilege resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] db_name: Specifies the database name. Changing this creates a new resource.
-        :param pulumi.Input[str] instance_id: Specifies the RDS instance ID. Changing this will create a new resource.
-        :param pulumi.Input[str] region: The region in which to create the RDS database privilege resource. If omitted,
-               the provider-level region will be used. Changing this creates a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['Database_privilegeUserArgs']]]] users: Specifies the account that associated with the database. This parameter supports
-               a maximum of 50 elements. Structure is documented below. Changing this creates a new resource.
         """
         ...
     @overload
@@ -225,42 +144,7 @@ class Database_privilege(pulumi.CustomResource):
                  args: Database_privilegeArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages RDS Mysql database privilege resource within HuaweiCloud.
-
-        ## Example Usage
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        instance_id = config.require_object("instanceId")
-        db_name = config.require_object("dbName")
-        user_name1 = config.require_object("userName1")
-        user_name2 = config.require_object("userName2")
-        test = huaweicloud.rds.Database_privilege("test",
-            instance_id=instance_id,
-            db_name=db_name,
-            users=[
-                huaweicloud.rds.Database_privilegeUserArgs(
-                    name=user_name1,
-                    readonly=True,
-                ),
-                huaweicloud.rds.Database_privilegeUserArgs(
-                    name=user_name2,
-                    readonly=False,
-                ),
-            ])
-        ```
-
-        ## Import
-
-        RDS database privilege can be imported using the `instance id` and `database name`, e.g.
-
-        ```sh
-         $ pulumi import huaweicloud:Rds/database_privilege:Database_privilege test instance_id/database_name
-        ```
-
+        Create a Database_privilege resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param Database_privilegeArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -320,12 +204,6 @@ class Database_privilege(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] db_name: Specifies the database name. Changing this creates a new resource.
-        :param pulumi.Input[str] instance_id: Specifies the RDS instance ID. Changing this will create a new resource.
-        :param pulumi.Input[str] region: The region in which to create the RDS database privilege resource. If omitted,
-               the provider-level region will be used. Changing this creates a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['Database_privilegeUserArgs']]]] users: Specifies the account that associated with the database. This parameter supports
-               a maximum of 50 elements. Structure is documented below. Changing this creates a new resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -340,34 +218,20 @@ class Database_privilege(pulumi.CustomResource):
     @property
     @pulumi.getter(name="dbName")
     def db_name(self) -> pulumi.Output[str]:
-        """
-        Specifies the database name. Changing this creates a new resource.
-        """
         return pulumi.get(self, "db_name")
 
     @property
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Output[str]:
-        """
-        Specifies the RDS instance ID. Changing this will create a new resource.
-        """
         return pulumi.get(self, "instance_id")
 
     @property
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
-        """
-        The region in which to create the RDS database privilege resource. If omitted,
-        the provider-level region will be used. Changing this creates a new resource.
-        """
         return pulumi.get(self, "region")
 
     @property
     @pulumi.getter
     def users(self) -> pulumi.Output[Sequence['outputs.Database_privilegeUser']]:
-        """
-        Specifies the account that associated with the database. This parameter supports
-        a maximum of 50 elements. Structure is documented below. Changing this creates a new resource.
-        """
         return pulumi.get(self, "users")
 

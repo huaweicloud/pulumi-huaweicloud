@@ -26,7 +26,7 @@ class DedicatedDomainServerArgs:
                  vpc_id: pulumi.Input[str]):
         """
         :param pulumi.Input[str] address: IP address or domain name of the web server that the client accesses. For
-               example, 192.168.1.1 or www.example.com. Changing this creates a new service.
+               example, `192.168.1.1` or `www.example.com`. Changing this creates a new service.
         :param pulumi.Input[str] client_protocol: Protocol type of the client. The options include `HTTP` and `HTTPS`.
                Changing this creates a new service.
         :param pulumi.Input[int] port: Port number used by the web server. The value ranges from 0 to 65535. Changing this
@@ -49,7 +49,7 @@ class DedicatedDomainServerArgs:
     def address(self) -> pulumi.Input[str]:
         """
         IP address or domain name of the web server that the client accesses. For
-        example, 192.168.1.1 or www.example.com. Changing this creates a new service.
+        example, `192.168.1.1` or `www.example.com`. Changing this creates a new service.
         """
         return pulumi.get(self, "address")
 
@@ -131,7 +131,7 @@ class DomainServerArgs:
                  server_protocol: pulumi.Input[str]):
         """
         :param pulumi.Input[str] address: IP address or domain name of the web server that the client accesses. For example,
-               192.168.1.1 or www.a.com.
+               `192.168.1.1` or `www.a.com`.
         :param pulumi.Input[str] client_protocol: Protocol type of the client. The options include `HTTP` and `HTTPS`.
         :param pulumi.Input[int] port: Port number used by the web server. The value ranges from 0 to 65535, for example, 8080.
         :param pulumi.Input[str] server_protocol: Protocol used by WAF to forward client requests to the server. The options
@@ -147,7 +147,7 @@ class DomainServerArgs:
     def address(self) -> pulumi.Input[str]:
         """
         IP address or domain name of the web server that the client accesses. For example,
-        192.168.1.1 or www.a.com.
+        `192.168.1.1` or `www.a.com`.
         """
         return pulumi.get(self, "address")
 

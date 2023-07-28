@@ -18,6 +18,7 @@ __all__ = [
     'BucketLifecycleRuleNoncurrentVersionTransition',
     'BucketLifecycleRuleTransition',
     'BucketLogging',
+    'BucketStorageInfo',
     'BucketWebsite',
     'GetBucketsBucketResult',
 ]
@@ -429,6 +430,54 @@ class BucketLogging(dict):
         To specify a key prefix for log objects.
         """
         return pulumi.get(self, "target_prefix")
+
+
+@pulumi.output_type
+class BucketStorageInfo(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "objectNumber":
+            suggest = "object_number"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in BucketStorageInfo. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        BucketStorageInfo.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        BucketStorageInfo.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 object_number: Optional[int] = None,
+                 size: Optional[int] = None):
+        """
+        :param int object_number: The number of objects stored in the bucket.
+        :param int size: The stored size of the bucket.
+        """
+        if object_number is not None:
+            pulumi.set(__self__, "object_number", object_number)
+        if size is not None:
+            pulumi.set(__self__, "size", size)
+
+    @property
+    @pulumi.getter(name="objectNumber")
+    def object_number(self) -> Optional[int]:
+        """
+        The number of objects stored in the bucket.
+        """
+        return pulumi.get(self, "object_number")
+
+    @property
+    @pulumi.getter
+    def size(self) -> Optional[int]:
+        """
+        The stored size of the bucket.
+        """
+        return pulumi.get(self, "size")
 
 
 @pulumi.output_type

@@ -43,11 +43,13 @@ class NodeArgs:
                  name: Optional[pulumi.Input[str]] = None,
                  order_id: Optional[pulumi.Input[str]] = None,
                  os: Optional[pulumi.Input[str]] = None,
+                 partition: Optional[pulumi.Input[str]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  postinstall: Optional[pulumi.Input[str]] = None,
                  preinstall: Optional[pulumi.Input[str]] = None,
+                 private_key: Optional[pulumi.Input[str]] = None,
                  product_id: Optional[pulumi.Input[str]] = None,
                  public_key: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -69,8 +71,8 @@ class NodeArgs:
                resource.
         :param pulumi.Input['NodeRootVolumeArgs'] root_volume: Specifies the configuration of the system disk.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "
-               false". Changing this creates a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] annotations: schema: Internal
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "false".
         :param pulumi.Input[str] bandwidth_charge_mode: Specifies the bandwidth billing type.
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] bandwidth_size: Specifies the bandwidth size.
@@ -79,6 +81,7 @@ class NodeArgs:
                and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
         :param pulumi.Input[str] ecs_group_id: Specifies the ECS group ID. If specified, the node will be created under
                the cloud server group. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] ecs_performance_type: schema: Internal
         :param pulumi.Input[str] eip_id: Specifies the ID of the EIP.
                Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_param: Specifies the extended parameter.
@@ -92,8 +95,9 @@ class NodeArgs:
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] iptype: Specifies the elastic IP type.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] keep_ecs: schema: Internal
         :param pulumi.Input[str] key_pair: Specifies the key pair name when logging in to select the key pair mode.
-               This parameter and `password` are alternative. Changing this parameter will create a new resource.
+               This parameter and `password` are alternative.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the tags of a Kubernetes node, key/value pair format.
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] max_pods: Specifies the maximum number of instances a node is allowed to create.
@@ -104,9 +108,9 @@ class NodeArgs:
                Changing this parameter will create a new resource.
                + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
                + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
+        :param pulumi.Input[str] partition: schema: Internal
         :param pulumi.Input[str] password: Specifies the root password when logging in to select the password mode.
                This parameter can be plain or salted and is alternative to `key_pair`.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[int] period: Specifies the charging period of the CCE node. If `period_unit` is set to *month*
                , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This parameter is
                mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
@@ -117,6 +121,10 @@ class NodeArgs:
                The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
         :param pulumi.Input[str] preinstall: Specifies the script to be executed before installation.
                The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] private_key: Specifies the private key of the in used `key_pair`. This parameter is mandatory
+               when replacing or unbinding a keypair if the CCE node is in **Active** state.
+        :param pulumi.Input[str] product_id: schema: Internal
+        :param pulumi.Input[str] public_key: schema: Internal
         :param pulumi.Input[str] region: Specifies the region in which to create the CCE node resource.
                If omitted, the provider-level region will be used. Changing this creates a new CCE node resource.
         :param pulumi.Input[str] runtime: Specifies the runtime of the CCE node. Valid values are *docker* and
@@ -139,6 +147,9 @@ class NodeArgs:
         pulumi.set(__self__, "root_volume", root_volume)
         if annotations is not None:
             pulumi.set(__self__, "annotations", annotations)
+        if auto_pay is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
         if auto_pay is not None:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
@@ -193,6 +204,8 @@ class NodeArgs:
             pulumi.set(__self__, "order_id", order_id)
         if os is not None:
             pulumi.set(__self__, "os", os)
+        if partition is not None:
+            pulumi.set(__self__, "partition", partition)
         if password is not None:
             pulumi.set(__self__, "password", password)
         if period is not None:
@@ -203,6 +216,8 @@ class NodeArgs:
             pulumi.set(__self__, "postinstall", postinstall)
         if preinstall is not None:
             pulumi.set(__self__, "preinstall", preinstall)
+        if private_key is not None:
+            pulumi.set(__self__, "private_key", private_key)
         if product_id is not None:
             pulumi.set(__self__, "product_id", product_id)
         if public_key is not None:
@@ -290,6 +305,9 @@ class NodeArgs:
     @property
     @pulumi.getter
     def annotations(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "annotations")
 
     @annotations.setter
@@ -309,8 +327,7 @@ class NodeArgs:
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies whether auto renew is enabled. Valid values are "true" and "
-        false". Changing this creates a new resource.
+        Specifies whether auto renew is enabled. Valid values are "true" and "false".
         """
         return pulumi.get(self, "auto_renew")
 
@@ -382,6 +399,9 @@ class NodeArgs:
     @property
     @pulumi.getter(name="ecsPerformanceType")
     def ecs_performance_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "ecs_performance_type")
 
     @ecs_performance_type.setter
@@ -466,6 +486,9 @@ class NodeArgs:
     @property
     @pulumi.getter(name="keepEcs")
     def keep_ecs(self) -> Optional[pulumi.Input[bool]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "keep_ecs")
 
     @keep_ecs.setter
@@ -477,7 +500,7 @@ class NodeArgs:
     def key_pair(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the key pair name when logging in to select the key pair mode.
-        This parameter and `password` are alternative. Changing this parameter will create a new resource.
+        This parameter and `password` are alternative.
         """
         return pulumi.get(self, "key_pair")
 
@@ -550,11 +573,22 @@ class NodeArgs:
 
     @property
     @pulumi.getter
+    def partition(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "partition")
+
+    @partition.setter
+    def partition(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "partition", value)
+
+    @property
+    @pulumi.getter
     def password(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the root password when logging in to select the password mode.
         This parameter can be plain or salted and is alternative to `key_pair`.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "password")
 
@@ -617,8 +651,24 @@ class NodeArgs:
         pulumi.set(self, "preinstall", value)
 
     @property
+    @pulumi.getter(name="privateKey")
+    def private_key(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the private key of the in used `key_pair`. This parameter is mandatory
+        when replacing or unbinding a keypair if the CCE node is in **Active** state.
+        """
+        return pulumi.get(self, "private_key")
+
+    @private_key.setter
+    def private_key(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_key", value)
+
+    @property
     @pulumi.getter(name="productId")
     def product_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "product_id")
 
     @product_id.setter
@@ -628,6 +678,9 @@ class NodeArgs:
     @property
     @pulumi.getter(name="publicKey")
     def public_key(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "public_key")
 
     @public_key.setter
@@ -755,12 +808,14 @@ class _NodeState:
                  name: Optional[pulumi.Input[str]] = None,
                  order_id: Optional[pulumi.Input[str]] = None,
                  os: Optional[pulumi.Input[str]] = None,
+                 partition: Optional[pulumi.Input[str]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  postinstall: Optional[pulumi.Input[str]] = None,
                  preinstall: Optional[pulumi.Input[str]] = None,
                  private_ip: Optional[pulumi.Input[str]] = None,
+                 private_key: Optional[pulumi.Input[str]] = None,
                  product_id: Optional[pulumi.Input[str]] = None,
                  public_ip: Optional[pulumi.Input[str]] = None,
                  public_key: Optional[pulumi.Input[str]] = None,
@@ -776,8 +831,8 @@ class _NodeState:
                  taints: Optional[pulumi.Input[Sequence[pulumi.Input['NodeTaintArgs']]]] = None):
         """
         Input properties used for looking up and filtering Node resources.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "
-               false". Changing this creates a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] annotations: schema: Internal
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "false".
         :param pulumi.Input[str] availability_zone: Specifies the name of the available partition (AZ). Changing this
                parameter will create a new resource.
         :param pulumi.Input[str] bandwidth_charge_mode: Specifies the bandwidth billing type.
@@ -792,6 +847,7 @@ class _NodeState:
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] ecs_group_id: Specifies the ECS group ID. If specified, the node will be created under
                the cloud server group. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] ecs_performance_type: schema: Internal
         :param pulumi.Input[str] eip_id: Specifies the ID of the EIP.
                Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_param: Specifies the extended parameter.
@@ -807,8 +863,9 @@ class _NodeState:
                resource.
         :param pulumi.Input[str] iptype: Specifies the elastic IP type.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] keep_ecs: schema: Internal
         :param pulumi.Input[str] key_pair: Specifies the key pair name when logging in to select the key pair mode.
-               This parameter and `password` are alternative. Changing this parameter will create a new resource.
+               This parameter and `password` are alternative.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the tags of a Kubernetes node, key/value pair format.
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] max_pods: Specifies the maximum number of instances a node is allowed to create.
@@ -819,9 +876,9 @@ class _NodeState:
                Changing this parameter will create a new resource.
                + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
                + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
+        :param pulumi.Input[str] partition: schema: Internal
         :param pulumi.Input[str] password: Specifies the root password when logging in to select the password mode.
                This parameter can be plain or salted and is alternative to `key_pair`.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[int] period: Specifies the charging period of the CCE node. If `period_unit` is set to *month*
                , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This parameter is
                mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
@@ -833,7 +890,11 @@ class _NodeState:
         :param pulumi.Input[str] preinstall: Specifies the script to be executed before installation.
                The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
         :param pulumi.Input[str] private_ip: Private IP of the CCE node.
+        :param pulumi.Input[str] private_key: Specifies the private key of the in used `key_pair`. This parameter is mandatory
+               when replacing or unbinding a keypair if the CCE node is in **Active** state.
+        :param pulumi.Input[str] product_id: schema: Internal
         :param pulumi.Input[str] public_ip: Public IP of the CCE node.
+        :param pulumi.Input[str] public_key: schema: Internal
         :param pulumi.Input[str] region: Specifies the region in which to create the CCE node resource.
                If omitted, the provider-level region will be used. Changing this creates a new CCE node resource.
         :param pulumi.Input['NodeRootVolumeArgs'] root_volume: Specifies the configuration of the system disk.
@@ -843,6 +904,7 @@ class _NodeState:
         :param pulumi.Input[str] server_id: ID of the ECS instance associated with the node.
         :param pulumi.Input[str] sharetype: Specifies the bandwidth sharing type.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] status: The status of the CCE node.
         :param pulumi.Input['NodeStorageArgs'] storage: Specifies the disk initialization management parameter.
                If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
                This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
@@ -854,6 +916,9 @@ class _NodeState:
         """
         if annotations is not None:
             pulumi.set(__self__, "annotations", annotations)
+        if auto_pay is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
         if auto_pay is not None:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
@@ -916,6 +981,8 @@ class _NodeState:
             pulumi.set(__self__, "order_id", order_id)
         if os is not None:
             pulumi.set(__self__, "os", os)
+        if partition is not None:
+            pulumi.set(__self__, "partition", partition)
         if password is not None:
             pulumi.set(__self__, "password", password)
         if period is not None:
@@ -928,6 +995,8 @@ class _NodeState:
             pulumi.set(__self__, "preinstall", preinstall)
         if private_ip is not None:
             pulumi.set(__self__, "private_ip", private_ip)
+        if private_key is not None:
+            pulumi.set(__self__, "private_key", private_key)
         if product_id is not None:
             pulumi.set(__self__, "product_id", product_id)
         if public_ip is not None:
@@ -958,6 +1027,9 @@ class _NodeState:
     @property
     @pulumi.getter
     def annotations(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "annotations")
 
     @annotations.setter
@@ -977,8 +1049,7 @@ class _NodeState:
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies whether auto renew is enabled. Valid values are "true" and "
-        false". Changing this creates a new resource.
+        Specifies whether auto renew is enabled. Valid values are "true" and "false".
         """
         return pulumi.get(self, "auto_renew")
 
@@ -1089,6 +1160,9 @@ class _NodeState:
     @property
     @pulumi.getter(name="ecsPerformanceType")
     def ecs_performance_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "ecs_performance_type")
 
     @ecs_performance_type.setter
@@ -1186,6 +1260,9 @@ class _NodeState:
     @property
     @pulumi.getter(name="keepEcs")
     def keep_ecs(self) -> Optional[pulumi.Input[bool]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "keep_ecs")
 
     @keep_ecs.setter
@@ -1197,7 +1274,7 @@ class _NodeState:
     def key_pair(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the key pair name when logging in to select the key pair mode.
-        This parameter and `password` are alternative. Changing this parameter will create a new resource.
+        This parameter and `password` are alternative.
         """
         return pulumi.get(self, "key_pair")
 
@@ -1270,11 +1347,22 @@ class _NodeState:
 
     @property
     @pulumi.getter
+    def partition(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "partition")
+
+    @partition.setter
+    def partition(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "partition", value)
+
+    @property
+    @pulumi.getter
     def password(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the root password when logging in to select the password mode.
         This parameter can be plain or salted and is alternative to `key_pair`.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "password")
 
@@ -1349,8 +1437,24 @@ class _NodeState:
         pulumi.set(self, "private_ip", value)
 
     @property
+    @pulumi.getter(name="privateKey")
+    def private_key(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the private key of the in used `key_pair`. This parameter is mandatory
+        when replacing or unbinding a keypair if the CCE node is in **Active** state.
+        """
+        return pulumi.get(self, "private_key")
+
+    @private_key.setter
+    def private_key(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_key", value)
+
+    @property
     @pulumi.getter(name="productId")
     def product_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "product_id")
 
     @product_id.setter
@@ -1372,6 +1476,9 @@ class _NodeState:
     @property
     @pulumi.getter(name="publicKey")
     def public_key(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "public_key")
 
     @public_key.setter
@@ -1445,6 +1552,9 @@ class _NodeState:
     @property
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
+        """
+        The status of the CCE node.
+        """
         return pulumi.get(self, "status")
 
     @status.setter
@@ -1535,11 +1645,13 @@ class Node(pulumi.CustomResource):
                  name: Optional[pulumi.Input[str]] = None,
                  order_id: Optional[pulumi.Input[str]] = None,
                  os: Optional[pulumi.Input[str]] = None,
+                 partition: Optional[pulumi.Input[str]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  postinstall: Optional[pulumi.Input[str]] = None,
                  preinstall: Optional[pulumi.Input[str]] = None,
+                 private_key: Optional[pulumi.Input[str]] = None,
                  product_id: Optional[pulumi.Input[str]] = None,
                  public_key: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -1560,17 +1672,19 @@ class Node(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        cluster_id = config.require_object("clusterId")
+        node_name = config.require_object("nodeName")
+        keypair_name = config.require_object("keypairName")
         myaz = huaweicloud.get_availability_zones()
-        mykp = huaweicloud.ecs.Keypair("mykp", public_key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAjpC1hwiOCCmKEWxJ4qzTTsJbKzndLo1BCz5PcwtUnflmU+gHJtWMZKpuEGVi29h0A/+ydKek1O18k10Ff+4tyFjiHDQAT9+OfgWf7+b1yK+qDip3X1C0UPMbwHlTfSGWLGZquwhvEFx9k3h/M+VtMvwR1lJ9LUyTAImnNjWG7TAIPmui30HvM2UiFEmqkr4ijq45MyX2+fLIePLRIFuu1p4whjHAQYufqyno3BS48icQb4p6iVEZPo4AE2o9oIyQvj2mx4dk5Y8CgSETOZTYDOR3rU2fZTRDRgPJDH9FWvQjF5tA0p3d9CoWWd2s6GKKbfoUIi8R/Db1BSPJwkqB jrp-hp-pc")
-        mycluster = huaweicloud.cce.Cluster("mycluster",
-            cluster_type="VirtualMachine",
-            flavor_id="cce.s1.small",
-            vpc_id=huaweicloud_vpc["myvpc"]["id"],
-            subnet_id=huaweicloud_vpc_subnet["mysubnet"]["id"],
-            container_network_type="overlay_l2")
+        myflavors = huaweicloud.Ecs.get_flavors(availability_zone=myaz.names[0],
+            performance_type="normal",
+            cpu_core_count=2,
+            memory_size=4)
+        mykp = huaweicloud.dew.Keypair("mykp", public_key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAjpC1hwiOCCmKEWxJ4qzTTsJbKzndLo1BCz5PcwtUnflmU+gHJtWMZKpuEGVi29h0A/+ydKek1O18k10Ff+4tyFjiHDQAT9+OfgWf7+b1yK+qDip3X1C0UPMbwHlTfSGWLGZquwhvEFx9k3h/M+VtMvwR1lJ9LUyTAImnNjWG7TAIPmui30HvM2UiFEmqkr4ijq45MyX2+fLIePLRIFuu1p4whjHAQYufqyno3BS48icQb4p6iVEZPo4AE2o9oIyQvj2mx4dk5Y8CgSETOZTYDOR3rU2fZTRDRgPJDH9FWvQjF5tA0p3d9CoWWd2s6GKKbfoUIi8R/Db1BSPJwkqB jrp-hp-pc")
         node = huaweicloud.cce.Node("node",
-            cluster_id=mycluster.id,
-            flavor_id="s3.large.2",
+            cluster_id=cluster_id,
+            flavor_id=myflavors.ids[0],
             availability_zone=myaz.names[0],
             key_pair=mykp.name,
             root_volume=huaweicloud.cce.NodeRootVolumeArgs(
@@ -1589,11 +1703,21 @@ class Node(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        cluster_id = config.require_object("clusterId")
+        node_name = config.require_object("nodeName")
+        keypair_name = config.require_object("keypairName")
+        myaz = huaweicloud.get_availability_zones()
+        test = huaweicloud.Ecs.get_flavors(availability_zone=myaz.names[0],
+            performance_type="normal",
+            cpu_core_count=2,
+            memory_size=4)
+        mykp = huaweicloud.dew.Keypair("mykp", public_key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAjpC1hwiOCCmKEWxJ4qzTTsJbKzndLo1BCz5PcwtUnflmU+gHJtWMZKpuEGVi29h0A/+ydKek1O18k10Ff+4tyFjiHDQAT9+OfgWf7+b1yK+qDip3X1C0UPMbwHlTfSGWLGZquwhvEFx9k3h/M+VtMvwR1lJ9LUyTAImnNjWG7TAIPmui30HvM2UiFEmqkr4ijq45MyX2+fLIePLRIFuu1p4whjHAQYufqyno3BS48icQb4p6iVEZPo4AE2o9oIyQvj2mx4dk5Y8CgSETOZTYDOR3rU2fZTRDRgPJDH9FWvQjF5tA0p3d9CoWWd2s6GKKbfoUIi8R/Db1BSPJwkqB jrp-hp-pc")
         mynode = huaweicloud.cce.Node("mynode",
-            cluster_id=huaweicloud_cce_cluster["mycluster"]["id"],
-            flavor_id="s3.large.2",
-            availability_zone=data["huaweicloud_availability_zones"]["myaz"]["names"],
-            key_pair=huaweicloud_compute_keypair["mykp"]["name"],
+            cluster_id=cluster_id,
+            flavor_id=data["huaweicloud_compute_flavors"]["myflavors"]["ids"],
+            availability_zone=myaz.names[0],
+            key_pair=mykp.name,
             root_volume=huaweicloud.cce.NodeRootVolumeArgs(
                 size=40,
                 volumetype="SATA",
@@ -1614,6 +1738,16 @@ class Node(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        cluster_id = config.require_object("clusterId")
+        node_name = config.require_object("nodeName")
+        keypair_name = config.require_object("keypairName")
+        myaz = huaweicloud.get_availability_zones()
+        test = huaweicloud.Ecs.get_flavors(availability_zone=myaz.names[0],
+            performance_type="normal",
+            cpu_core_count=2,
+            memory_size=4)
+        mykp = huaweicloud.dew.Keypair("mykp", public_key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAjpC1hwiOCCmKEWxJ4qzTTsJbKzndLo1BCz5PcwtUnflmU+gHJtWMZKpuEGVi29h0A/+ydKek1O18k10Ff+4tyFjiHDQAT9+OfgWf7+b1yK+qDip3X1C0UPMbwHlTfSGWLGZquwhvEFx9k3h/M+VtMvwR1lJ9LUyTAImnNjWG7TAIPmui30HvM2UiFEmqkr4ijq45MyX2+fLIePLRIFuu1p4whjHAQYufqyno3BS48icQb4p6iVEZPo4AE2o9oIyQvj2mx4dk5Y8CgSETOZTYDOR3rU2fZTRDRgPJDH9FWvQjF5tA0p3d9CoWWd2s6GKKbfoUIi8R/Db1BSPJwkqB jrp-hp-pc")
         myeip = huaweicloud.vpc.Eip("myeip",
             publicip=huaweicloud.vpc.EipPublicipArgs(
                 type="5_bgp",
@@ -1625,10 +1759,10 @@ class Node(pulumi.CustomResource):
                 charge_mode="traffic",
             ))
         mynode = huaweicloud.cce.Node("mynode",
-            cluster_id=huaweicloud_cce_cluster["mycluster"]["id"],
-            flavor_id="s3.large.2",
-            availability_zone=data["huaweicloud_availability_zones"]["myaz"]["names"],
-            key_pair=huaweicloud_compute_keypair["mykp"]["name"],
+            cluster_id=cluster_id,
+            flavor_id=data["huaweicloud_compute_flavors"]["myflavors"]["ids"],
+            availability_zone=myaz.names[0],
+            key_pair=mykp.name,
             root_volume=huaweicloud.cce.NodeRootVolumeArgs(
                 size=40,
                 volumetype="SATA",
@@ -1646,11 +1780,25 @@ class Node(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        cluster_id = config.require_object("clusterId")
+        node_name = config.require_object("nodeName")
+        keypair_name = config.require_object("keypairName")
+        kms_key_name = config.require_object("kmsKeyName")
+        myaz = huaweicloud.get_availability_zones()
+        test = huaweicloud.Ecs.get_flavors(availability_zone=myaz.names[0],
+            performance_type="normal",
+            cpu_core_count=2,
+            memory_size=4)
+        mykp = huaweicloud.dew.Keypair("mykp", public_key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAjpC1hwiOCCmKEWxJ4qzTTsJbKzndLo1BCz5PcwtUnflmU+gHJtWMZKpuEGVi29h0A/+ydKek1O18k10Ff+4tyFjiHDQAT9+OfgWf7+b1yK+qDip3X1C0UPMbwHlTfSGWLGZquwhvEFx9k3h/M+VtMvwR1lJ9LUyTAImnNjWG7TAIPmui30HvM2UiFEmqkr4ijq45MyX2+fLIePLRIFuu1p4whjHAQYufqyno3BS48icQb4p6iVEZPo4AE2o9oIyQvj2mx4dk5Y8CgSETOZTYDOR3rU2fZTRDRgPJDH9FWvQjF5tA0p3d9CoWWd2s6GKKbfoUIi8R/Db1BSPJwkqB jrp-hp-pc")
+        mykey = huaweicloud.dew.Key("mykey",
+            key_alias=kms_key_name,
+            pending_days="7")
         mynode = huaweicloud.cce.Node("mynode",
-            cluster_id=huaweicloud_cce_cluster["mycluster"]["id"],
-            flavor_id="s3.large.2",
-            availability_zone=data["huaweicloud_availability_zones"]["myaz"]["names"],
-            key_pair=huaweicloud_compute_keypair["mykp"]["name"],
+            cluster_id=cluster_id,
+            flavor_id=data["huaweicloud_compute_flavors"]["myflavors"]["ids"],
+            availability_zone=myaz.names[0],
+            key_pair=mykp.name,
             root_volume=huaweicloud.cce.NodeRootVolumeArgs(
                 size=40,
                 volumetype="SSD",
@@ -1663,7 +1811,7 @@ class Node(pulumi.CustomResource):
                 huaweicloud.cce.NodeDataVolumeArgs(
                     size=100,
                     volumetype="SSD",
-                    kms_key_id=huaweicloud_kms_key["mykey"]["id"],
+                    kms_key_id=mykey.id,
                 ),
             ],
             storage=huaweicloud.cce.NodeStorageArgs(
@@ -1679,7 +1827,7 @@ class Node(pulumi.CustomResource):
                         type="evs",
                         match_label_size="100",
                         match_label_metadata_encrypted="1",
-                        match_label_metadata_cmkid=huaweicloud_kms_key["mykey"]["id"],
+                        match_label_metadata_cmkid=mykey.id,
                         match_label_count="1",
                     ),
                 ],
@@ -1697,7 +1845,6 @@ class Node(pulumi.CustomResource):
                             huaweicloud.cce.NodeStorageGroupVirtualSpaceArgs(
                                 name="runtime",
                                 size="90%",
-                                lvm_lv_type="linear",
                             ),
                         ],
                     ),
@@ -1717,13 +1864,13 @@ class Node(pulumi.CustomResource):
 
         ## Import
 
-        CCE node can be imported using the cluster ID and node ID separated by a slash, e.g.
+        CCE node can be imported using the cluster ID and node ID separated by a slash, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:Cce/node:Node my_node 5c20fdad-7288-11eb-b817-0255ac10158b/e9287dff-7288-11eb-b817-0255ac10158b
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `fixed_ip`, `eip_id`, `preinstall`, `postinstall`, `iptype`, `bandwidth_charge_mode`, `bandwidth_size`, `share_type`, `max_pods`, `extend_param`, `labels`, `taints` and arguments for pre-paid. It is generally recommended running `terraform plan` after importing a node. You can then decide if changes should be applied to the node, or the resource definition should be updated to align with the node. Also you can ignore changes as below. resource "huaweicloud_cce_node" "my_node" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `fixed_ip`, `eip_id`, `preinstall`, `postinstall`, `iptype`, `bandwidth_charge_mode`, `bandwidth_size`, `share_type`, `max_pods`, `extend_param`, `labels`, `taints` and arguments for pre-paid. It is generally recommended running `terraform plan` after importing a node. You can then decide if changes should be applied to the node, or the resource definition should be updated to align with the node. Also you can ignore changes as below. hcl resource "huaweicloud_cce_node" "my_node" {
 
          ...
 
@@ -1739,8 +1886,8 @@ class Node(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "
-               false". Changing this creates a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] annotations: schema: Internal
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "false".
         :param pulumi.Input[str] availability_zone: Specifies the name of the available partition (AZ). Changing this
                parameter will create a new resource.
         :param pulumi.Input[str] bandwidth_charge_mode: Specifies the bandwidth billing type.
@@ -1755,6 +1902,7 @@ class Node(pulumi.CustomResource):
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] ecs_group_id: Specifies the ECS group ID. If specified, the node will be created under
                the cloud server group. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] ecs_performance_type: schema: Internal
         :param pulumi.Input[str] eip_id: Specifies the ID of the EIP.
                Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_param: Specifies the extended parameter.
@@ -1770,8 +1918,9 @@ class Node(pulumi.CustomResource):
                resource.
         :param pulumi.Input[str] iptype: Specifies the elastic IP type.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] keep_ecs: schema: Internal
         :param pulumi.Input[str] key_pair: Specifies the key pair name when logging in to select the key pair mode.
-               This parameter and `password` are alternative. Changing this parameter will create a new resource.
+               This parameter and `password` are alternative.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the tags of a Kubernetes node, key/value pair format.
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] max_pods: Specifies the maximum number of instances a node is allowed to create.
@@ -1782,9 +1931,9 @@ class Node(pulumi.CustomResource):
                Changing this parameter will create a new resource.
                + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
                + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
+        :param pulumi.Input[str] partition: schema: Internal
         :param pulumi.Input[str] password: Specifies the root password when logging in to select the password mode.
                This parameter can be plain or salted and is alternative to `key_pair`.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[int] period: Specifies the charging period of the CCE node. If `period_unit` is set to *month*
                , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This parameter is
                mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
@@ -1795,6 +1944,10 @@ class Node(pulumi.CustomResource):
                The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
         :param pulumi.Input[str] preinstall: Specifies the script to be executed before installation.
                The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] private_key: Specifies the private key of the in used `key_pair`. This parameter is mandatory
+               when replacing or unbinding a keypair if the CCE node is in **Active** state.
+        :param pulumi.Input[str] product_id: schema: Internal
+        :param pulumi.Input[str] public_key: schema: Internal
         :param pulumi.Input[str] region: Specifies the region in which to create the CCE node resource.
                If omitted, the provider-level region will be used. Changing this creates a new CCE node resource.
         :param pulumi.Input[pulumi.InputType['NodeRootVolumeArgs']] root_volume: Specifies the configuration of the system disk.
@@ -1827,17 +1980,19 @@ class Node(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        cluster_id = config.require_object("clusterId")
+        node_name = config.require_object("nodeName")
+        keypair_name = config.require_object("keypairName")
         myaz = huaweicloud.get_availability_zones()
-        mykp = huaweicloud.ecs.Keypair("mykp", public_key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAjpC1hwiOCCmKEWxJ4qzTTsJbKzndLo1BCz5PcwtUnflmU+gHJtWMZKpuEGVi29h0A/+ydKek1O18k10Ff+4tyFjiHDQAT9+OfgWf7+b1yK+qDip3X1C0UPMbwHlTfSGWLGZquwhvEFx9k3h/M+VtMvwR1lJ9LUyTAImnNjWG7TAIPmui30HvM2UiFEmqkr4ijq45MyX2+fLIePLRIFuu1p4whjHAQYufqyno3BS48icQb4p6iVEZPo4AE2o9oIyQvj2mx4dk5Y8CgSETOZTYDOR3rU2fZTRDRgPJDH9FWvQjF5tA0p3d9CoWWd2s6GKKbfoUIi8R/Db1BSPJwkqB jrp-hp-pc")
-        mycluster = huaweicloud.cce.Cluster("mycluster",
-            cluster_type="VirtualMachine",
-            flavor_id="cce.s1.small",
-            vpc_id=huaweicloud_vpc["myvpc"]["id"],
-            subnet_id=huaweicloud_vpc_subnet["mysubnet"]["id"],
-            container_network_type="overlay_l2")
+        myflavors = huaweicloud.Ecs.get_flavors(availability_zone=myaz.names[0],
+            performance_type="normal",
+            cpu_core_count=2,
+            memory_size=4)
+        mykp = huaweicloud.dew.Keypair("mykp", public_key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAjpC1hwiOCCmKEWxJ4qzTTsJbKzndLo1BCz5PcwtUnflmU+gHJtWMZKpuEGVi29h0A/+ydKek1O18k10Ff+4tyFjiHDQAT9+OfgWf7+b1yK+qDip3X1C0UPMbwHlTfSGWLGZquwhvEFx9k3h/M+VtMvwR1lJ9LUyTAImnNjWG7TAIPmui30HvM2UiFEmqkr4ijq45MyX2+fLIePLRIFuu1p4whjHAQYufqyno3BS48icQb4p6iVEZPo4AE2o9oIyQvj2mx4dk5Y8CgSETOZTYDOR3rU2fZTRDRgPJDH9FWvQjF5tA0p3d9CoWWd2s6GKKbfoUIi8R/Db1BSPJwkqB jrp-hp-pc")
         node = huaweicloud.cce.Node("node",
-            cluster_id=mycluster.id,
-            flavor_id="s3.large.2",
+            cluster_id=cluster_id,
+            flavor_id=myflavors.ids[0],
             availability_zone=myaz.names[0],
             key_pair=mykp.name,
             root_volume=huaweicloud.cce.NodeRootVolumeArgs(
@@ -1856,11 +2011,21 @@ class Node(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        cluster_id = config.require_object("clusterId")
+        node_name = config.require_object("nodeName")
+        keypair_name = config.require_object("keypairName")
+        myaz = huaweicloud.get_availability_zones()
+        test = huaweicloud.Ecs.get_flavors(availability_zone=myaz.names[0],
+            performance_type="normal",
+            cpu_core_count=2,
+            memory_size=4)
+        mykp = huaweicloud.dew.Keypair("mykp", public_key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAjpC1hwiOCCmKEWxJ4qzTTsJbKzndLo1BCz5PcwtUnflmU+gHJtWMZKpuEGVi29h0A/+ydKek1O18k10Ff+4tyFjiHDQAT9+OfgWf7+b1yK+qDip3X1C0UPMbwHlTfSGWLGZquwhvEFx9k3h/M+VtMvwR1lJ9LUyTAImnNjWG7TAIPmui30HvM2UiFEmqkr4ijq45MyX2+fLIePLRIFuu1p4whjHAQYufqyno3BS48icQb4p6iVEZPo4AE2o9oIyQvj2mx4dk5Y8CgSETOZTYDOR3rU2fZTRDRgPJDH9FWvQjF5tA0p3d9CoWWd2s6GKKbfoUIi8R/Db1BSPJwkqB jrp-hp-pc")
         mynode = huaweicloud.cce.Node("mynode",
-            cluster_id=huaweicloud_cce_cluster["mycluster"]["id"],
-            flavor_id="s3.large.2",
-            availability_zone=data["huaweicloud_availability_zones"]["myaz"]["names"],
-            key_pair=huaweicloud_compute_keypair["mykp"]["name"],
+            cluster_id=cluster_id,
+            flavor_id=data["huaweicloud_compute_flavors"]["myflavors"]["ids"],
+            availability_zone=myaz.names[0],
+            key_pair=mykp.name,
             root_volume=huaweicloud.cce.NodeRootVolumeArgs(
                 size=40,
                 volumetype="SATA",
@@ -1881,6 +2046,16 @@ class Node(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        cluster_id = config.require_object("clusterId")
+        node_name = config.require_object("nodeName")
+        keypair_name = config.require_object("keypairName")
+        myaz = huaweicloud.get_availability_zones()
+        test = huaweicloud.Ecs.get_flavors(availability_zone=myaz.names[0],
+            performance_type="normal",
+            cpu_core_count=2,
+            memory_size=4)
+        mykp = huaweicloud.dew.Keypair("mykp", public_key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAjpC1hwiOCCmKEWxJ4qzTTsJbKzndLo1BCz5PcwtUnflmU+gHJtWMZKpuEGVi29h0A/+ydKek1O18k10Ff+4tyFjiHDQAT9+OfgWf7+b1yK+qDip3X1C0UPMbwHlTfSGWLGZquwhvEFx9k3h/M+VtMvwR1lJ9LUyTAImnNjWG7TAIPmui30HvM2UiFEmqkr4ijq45MyX2+fLIePLRIFuu1p4whjHAQYufqyno3BS48icQb4p6iVEZPo4AE2o9oIyQvj2mx4dk5Y8CgSETOZTYDOR3rU2fZTRDRgPJDH9FWvQjF5tA0p3d9CoWWd2s6GKKbfoUIi8R/Db1BSPJwkqB jrp-hp-pc")
         myeip = huaweicloud.vpc.Eip("myeip",
             publicip=huaweicloud.vpc.EipPublicipArgs(
                 type="5_bgp",
@@ -1892,10 +2067,10 @@ class Node(pulumi.CustomResource):
                 charge_mode="traffic",
             ))
         mynode = huaweicloud.cce.Node("mynode",
-            cluster_id=huaweicloud_cce_cluster["mycluster"]["id"],
-            flavor_id="s3.large.2",
-            availability_zone=data["huaweicloud_availability_zones"]["myaz"]["names"],
-            key_pair=huaweicloud_compute_keypair["mykp"]["name"],
+            cluster_id=cluster_id,
+            flavor_id=data["huaweicloud_compute_flavors"]["myflavors"]["ids"],
+            availability_zone=myaz.names[0],
+            key_pair=mykp.name,
             root_volume=huaweicloud.cce.NodeRootVolumeArgs(
                 size=40,
                 volumetype="SATA",
@@ -1913,11 +2088,25 @@ class Node(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        cluster_id = config.require_object("clusterId")
+        node_name = config.require_object("nodeName")
+        keypair_name = config.require_object("keypairName")
+        kms_key_name = config.require_object("kmsKeyName")
+        myaz = huaweicloud.get_availability_zones()
+        test = huaweicloud.Ecs.get_flavors(availability_zone=myaz.names[0],
+            performance_type="normal",
+            cpu_core_count=2,
+            memory_size=4)
+        mykp = huaweicloud.dew.Keypair("mykp", public_key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAjpC1hwiOCCmKEWxJ4qzTTsJbKzndLo1BCz5PcwtUnflmU+gHJtWMZKpuEGVi29h0A/+ydKek1O18k10Ff+4tyFjiHDQAT9+OfgWf7+b1yK+qDip3X1C0UPMbwHlTfSGWLGZquwhvEFx9k3h/M+VtMvwR1lJ9LUyTAImnNjWG7TAIPmui30HvM2UiFEmqkr4ijq45MyX2+fLIePLRIFuu1p4whjHAQYufqyno3BS48icQb4p6iVEZPo4AE2o9oIyQvj2mx4dk5Y8CgSETOZTYDOR3rU2fZTRDRgPJDH9FWvQjF5tA0p3d9CoWWd2s6GKKbfoUIi8R/Db1BSPJwkqB jrp-hp-pc")
+        mykey = huaweicloud.dew.Key("mykey",
+            key_alias=kms_key_name,
+            pending_days="7")
         mynode = huaweicloud.cce.Node("mynode",
-            cluster_id=huaweicloud_cce_cluster["mycluster"]["id"],
-            flavor_id="s3.large.2",
-            availability_zone=data["huaweicloud_availability_zones"]["myaz"]["names"],
-            key_pair=huaweicloud_compute_keypair["mykp"]["name"],
+            cluster_id=cluster_id,
+            flavor_id=data["huaweicloud_compute_flavors"]["myflavors"]["ids"],
+            availability_zone=myaz.names[0],
+            key_pair=mykp.name,
             root_volume=huaweicloud.cce.NodeRootVolumeArgs(
                 size=40,
                 volumetype="SSD",
@@ -1930,7 +2119,7 @@ class Node(pulumi.CustomResource):
                 huaweicloud.cce.NodeDataVolumeArgs(
                     size=100,
                     volumetype="SSD",
-                    kms_key_id=huaweicloud_kms_key["mykey"]["id"],
+                    kms_key_id=mykey.id,
                 ),
             ],
             storage=huaweicloud.cce.NodeStorageArgs(
@@ -1946,7 +2135,7 @@ class Node(pulumi.CustomResource):
                         type="evs",
                         match_label_size="100",
                         match_label_metadata_encrypted="1",
-                        match_label_metadata_cmkid=huaweicloud_kms_key["mykey"]["id"],
+                        match_label_metadata_cmkid=mykey.id,
                         match_label_count="1",
                     ),
                 ],
@@ -1964,7 +2153,6 @@ class Node(pulumi.CustomResource):
                             huaweicloud.cce.NodeStorageGroupVirtualSpaceArgs(
                                 name="runtime",
                                 size="90%",
-                                lvm_lv_type="linear",
                             ),
                         ],
                     ),
@@ -1984,13 +2172,13 @@ class Node(pulumi.CustomResource):
 
         ## Import
 
-        CCE node can be imported using the cluster ID and node ID separated by a slash, e.g.
+        CCE node can be imported using the cluster ID and node ID separated by a slash, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:Cce/node:Node my_node 5c20fdad-7288-11eb-b817-0255ac10158b/e9287dff-7288-11eb-b817-0255ac10158b
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `fixed_ip`, `eip_id`, `preinstall`, `postinstall`, `iptype`, `bandwidth_charge_mode`, `bandwidth_size`, `share_type`, `max_pods`, `extend_param`, `labels`, `taints` and arguments for pre-paid. It is generally recommended running `terraform plan` after importing a node. You can then decide if changes should be applied to the node, or the resource definition should be updated to align with the node. Also you can ignore changes as below. resource "huaweicloud_cce_node" "my_node" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `fixed_ip`, `eip_id`, `preinstall`, `postinstall`, `iptype`, `bandwidth_charge_mode`, `bandwidth_size`, `share_type`, `max_pods`, `extend_param`, `labels`, `taints` and arguments for pre-paid. It is generally recommended running `terraform plan` after importing a node. You can then decide if changes should be applied to the node, or the resource definition should be updated to align with the node. Also you can ignore changes as below. hcl resource "huaweicloud_cce_node" "my_node" {
 
          ...
 
@@ -2045,11 +2233,13 @@ class Node(pulumi.CustomResource):
                  name: Optional[pulumi.Input[str]] = None,
                  order_id: Optional[pulumi.Input[str]] = None,
                  os: Optional[pulumi.Input[str]] = None,
+                 partition: Optional[pulumi.Input[str]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  postinstall: Optional[pulumi.Input[str]] = None,
                  preinstall: Optional[pulumi.Input[str]] = None,
+                 private_key: Optional[pulumi.Input[str]] = None,
                  product_id: Optional[pulumi.Input[str]] = None,
                  public_key: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -2070,6 +2260,9 @@ class Node(pulumi.CustomResource):
             __props__ = NodeArgs.__new__(NodeArgs)
 
             __props__.__dict__["annotations"] = annotations
+            if auto_pay is not None and not opts.urn:
+                warnings.warn("""Deprecated""", DeprecationWarning)
+                pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
             __props__.__dict__["auto_pay"] = auto_pay
             __props__.__dict__["auto_renew"] = auto_renew
             if availability_zone is None and not opts.urn:
@@ -2115,11 +2308,13 @@ class Node(pulumi.CustomResource):
                 pulumi.log.warn("""order_id is deprecated: will be removed after v1.26.0""")
             __props__.__dict__["order_id"] = order_id
             __props__.__dict__["os"] = os
+            __props__.__dict__["partition"] = partition
             __props__.__dict__["password"] = password
             __props__.__dict__["period"] = period
             __props__.__dict__["period_unit"] = period_unit
             __props__.__dict__["postinstall"] = postinstall
             __props__.__dict__["preinstall"] = preinstall
+            __props__.__dict__["private_key"] = private_key
             __props__.__dict__["product_id"] = product_id
             __props__.__dict__["public_key"] = public_key
             __props__.__dict__["region"] = region
@@ -2172,12 +2367,14 @@ class Node(pulumi.CustomResource):
             name: Optional[pulumi.Input[str]] = None,
             order_id: Optional[pulumi.Input[str]] = None,
             os: Optional[pulumi.Input[str]] = None,
+            partition: Optional[pulumi.Input[str]] = None,
             password: Optional[pulumi.Input[str]] = None,
             period: Optional[pulumi.Input[int]] = None,
             period_unit: Optional[pulumi.Input[str]] = None,
             postinstall: Optional[pulumi.Input[str]] = None,
             preinstall: Optional[pulumi.Input[str]] = None,
             private_ip: Optional[pulumi.Input[str]] = None,
+            private_key: Optional[pulumi.Input[str]] = None,
             product_id: Optional[pulumi.Input[str]] = None,
             public_ip: Optional[pulumi.Input[str]] = None,
             public_key: Optional[pulumi.Input[str]] = None,
@@ -2198,8 +2395,8 @@ class Node(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "
-               false". Changing this creates a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] annotations: schema: Internal
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "false".
         :param pulumi.Input[str] availability_zone: Specifies the name of the available partition (AZ). Changing this
                parameter will create a new resource.
         :param pulumi.Input[str] bandwidth_charge_mode: Specifies the bandwidth billing type.
@@ -2214,6 +2411,7 @@ class Node(pulumi.CustomResource):
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] ecs_group_id: Specifies the ECS group ID. If specified, the node will be created under
                the cloud server group. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] ecs_performance_type: schema: Internal
         :param pulumi.Input[str] eip_id: Specifies the ID of the EIP.
                Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_param: Specifies the extended parameter.
@@ -2229,8 +2427,9 @@ class Node(pulumi.CustomResource):
                resource.
         :param pulumi.Input[str] iptype: Specifies the elastic IP type.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] keep_ecs: schema: Internal
         :param pulumi.Input[str] key_pair: Specifies the key pair name when logging in to select the key pair mode.
-               This parameter and `password` are alternative. Changing this parameter will create a new resource.
+               This parameter and `password` are alternative.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the tags of a Kubernetes node, key/value pair format.
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] max_pods: Specifies the maximum number of instances a node is allowed to create.
@@ -2241,9 +2440,9 @@ class Node(pulumi.CustomResource):
                Changing this parameter will create a new resource.
                + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
                + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
+        :param pulumi.Input[str] partition: schema: Internal
         :param pulumi.Input[str] password: Specifies the root password when logging in to select the password mode.
                This parameter can be plain or salted and is alternative to `key_pair`.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[int] period: Specifies the charging period of the CCE node. If `period_unit` is set to *month*
                , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This parameter is
                mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
@@ -2255,7 +2454,11 @@ class Node(pulumi.CustomResource):
         :param pulumi.Input[str] preinstall: Specifies the script to be executed before installation.
                The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
         :param pulumi.Input[str] private_ip: Private IP of the CCE node.
+        :param pulumi.Input[str] private_key: Specifies the private key of the in used `key_pair`. This parameter is mandatory
+               when replacing or unbinding a keypair if the CCE node is in **Active** state.
+        :param pulumi.Input[str] product_id: schema: Internal
         :param pulumi.Input[str] public_ip: Public IP of the CCE node.
+        :param pulumi.Input[str] public_key: schema: Internal
         :param pulumi.Input[str] region: Specifies the region in which to create the CCE node resource.
                If omitted, the provider-level region will be used. Changing this creates a new CCE node resource.
         :param pulumi.Input[pulumi.InputType['NodeRootVolumeArgs']] root_volume: Specifies the configuration of the system disk.
@@ -2265,6 +2468,7 @@ class Node(pulumi.CustomResource):
         :param pulumi.Input[str] server_id: ID of the ECS instance associated with the node.
         :param pulumi.Input[str] sharetype: Specifies the bandwidth sharing type.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] status: The status of the CCE node.
         :param pulumi.Input[pulumi.InputType['NodeStorageArgs']] storage: Specifies the disk initialization management parameter.
                If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
                This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
@@ -2304,12 +2508,14 @@ class Node(pulumi.CustomResource):
         __props__.__dict__["name"] = name
         __props__.__dict__["order_id"] = order_id
         __props__.__dict__["os"] = os
+        __props__.__dict__["partition"] = partition
         __props__.__dict__["password"] = password
         __props__.__dict__["period"] = period
         __props__.__dict__["period_unit"] = period_unit
         __props__.__dict__["postinstall"] = postinstall
         __props__.__dict__["preinstall"] = preinstall
         __props__.__dict__["private_ip"] = private_ip
+        __props__.__dict__["private_key"] = private_key
         __props__.__dict__["product_id"] = product_id
         __props__.__dict__["public_ip"] = public_ip
         __props__.__dict__["public_key"] = public_key
@@ -2328,6 +2534,9 @@ class Node(pulumi.CustomResource):
     @property
     @pulumi.getter
     def annotations(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "annotations")
 
     @property
@@ -2339,8 +2548,7 @@ class Node(pulumi.CustomResource):
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies whether auto renew is enabled. Valid values are "true" and "
-        false". Changing this creates a new resource.
+        Specifies whether auto renew is enabled. Valid values are "true" and "false".
         """
         return pulumi.get(self, "auto_renew")
 
@@ -2415,6 +2623,9 @@ class Node(pulumi.CustomResource):
     @property
     @pulumi.getter(name="ecsPerformanceType")
     def ecs_performance_type(self) -> pulumi.Output[Optional[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "ecs_performance_type")
 
     @property
@@ -2480,6 +2691,9 @@ class Node(pulumi.CustomResource):
     @property
     @pulumi.getter(name="keepEcs")
     def keep_ecs(self) -> pulumi.Output[Optional[bool]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "keep_ecs")
 
     @property
@@ -2487,7 +2701,7 @@ class Node(pulumi.CustomResource):
     def key_pair(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the key pair name when logging in to select the key pair mode.
-        This parameter and `password` are alternative. Changing this parameter will create a new resource.
+        This parameter and `password` are alternative.
         """
         return pulumi.get(self, "key_pair")
 
@@ -2536,11 +2750,18 @@ class Node(pulumi.CustomResource):
 
     @property
     @pulumi.getter
+    def partition(self) -> pulumi.Output[Optional[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "partition")
+
+    @property
+    @pulumi.getter
     def password(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the root password when logging in to select the password mode.
         This parameter can be plain or salted and is alternative to `key_pair`.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "password")
 
@@ -2591,8 +2812,20 @@ class Node(pulumi.CustomResource):
         return pulumi.get(self, "private_ip")
 
     @property
+    @pulumi.getter(name="privateKey")
+    def private_key(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the private key of the in used `key_pair`. This parameter is mandatory
+        when replacing or unbinding a keypair if the CCE node is in **Active** state.
+        """
+        return pulumi.get(self, "private_key")
+
+    @property
     @pulumi.getter(name="productId")
     def product_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "product_id")
 
     @property
@@ -2606,6 +2839,9 @@ class Node(pulumi.CustomResource):
     @property
     @pulumi.getter(name="publicKey")
     def public_key(self) -> pulumi.Output[Optional[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "public_key")
 
     @property
@@ -2655,6 +2891,9 @@ class Node(pulumi.CustomResource):
     @property
     @pulumi.getter
     def status(self) -> pulumi.Output[str]:
+        """
+        The status of the CCE node.
+        """
         return pulumi.get(self, "status")
 
     @property

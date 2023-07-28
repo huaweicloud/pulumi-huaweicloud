@@ -22,7 +22,10 @@ class GetDedicatedInstancesResult:
     """
     A collection of values returned by getDedicatedInstances.
     """
-    def __init__(__self__, id=None, instances=None, name=None, region=None):
+    def __init__(__self__, enterprise_project_id=None, id=None, instances=None, name=None, region=None):
+        if enterprise_project_id and not isinstance(enterprise_project_id, str):
+            raise TypeError("Expected argument 'enterprise_project_id' to be a str")
+        pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if id and not isinstance(id, str):
             raise TypeError("Expected argument 'id' to be a str")
         pulumi.set(__self__, "id", id)
@@ -37,16 +40,24 @@ class GetDedicatedInstancesResult:
         pulumi.set(__self__, "region", region)
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[str]:
+        return pulumi.get(self, "enterprise_project_id")
+
+    @property
     @pulumi.getter
     def id(self) -> str:
         """
-        The id of WAF dedicated instance.
+        The ID of WAF dedicated instance.
         """
         return pulumi.get(self, "id")
 
     @property
     @pulumi.getter
     def instances(self) -> Sequence['outputs.GetDedicatedInstancesInstanceResult']:
+        """
+        An array of available WAF dedicated instances.
+        """
         return pulumi.get(self, "instances")
 
     @property
@@ -69,13 +80,15 @@ class AwaitableGetDedicatedInstancesResult(GetDedicatedInstancesResult):
         if False:
             yield self
         return GetDedicatedInstancesResult(
+            enterprise_project_id=self.enterprise_project_id,
             id=self.id,
             instances=self.instances,
             name=self.name,
             region=self.region)
 
 
-def get_dedicated_instances(id: Optional[str] = None,
+def get_dedicated_instances(enterprise_project_id: Optional[str] = None,
+                            id: Optional[str] = None,
                             name: Optional[str] = None,
                             region: Optional[str] = None,
                             opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetDedicatedInstancesResult:
@@ -94,12 +107,14 @@ def get_dedicated_instances(id: Optional[str] = None,
     ```
 
 
+    :param str enterprise_project_id: The enterprise project ID of WAF dedicated instance.
     :param str id: The id of WAF dedicated instance.
     :param str name: The name of WAF dedicated instance.
     :param str region: The region in which to query the WAF dedicated instance.
            If omitted, the provider-level region will be used.
     """
     __args__ = dict()
+    __args__['enterpriseProjectId'] = enterprise_project_id
     __args__['id'] = id
     __args__['name'] = name
     __args__['region'] = region
@@ -107,6 +122,7 @@ def get_dedicated_instances(id: Optional[str] = None,
     __ret__ = pulumi.runtime.invoke('huaweicloud:Waf/getDedicatedInstances:getDedicatedInstances', __args__, opts=opts, typ=GetDedicatedInstancesResult).value
 
     return AwaitableGetDedicatedInstancesResult(
+        enterprise_project_id=__ret__.enterprise_project_id,
         id=__ret__.id,
         instances=__ret__.instances,
         name=__ret__.name,
@@ -114,7 +130,8 @@ def get_dedicated_instances(id: Optional[str] = None,
 
 
 @_utilities.lift_output_func(get_dedicated_instances)
-def get_dedicated_instances_output(id: Optional[pulumi.Input[Optional[str]]] = None,
+def get_dedicated_instances_output(enterprise_project_id: Optional[pulumi.Input[Optional[str]]] = None,
+                                   id: Optional[pulumi.Input[Optional[str]]] = None,
                                    name: Optional[pulumi.Input[Optional[str]]] = None,
                                    region: Optional[pulumi.Input[Optional[str]]] = None,
                                    opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetDedicatedInstancesResult]:
@@ -133,6 +150,7 @@ def get_dedicated_instances_output(id: Optional[pulumi.Input[Optional[str]]] = N
     ```
 
 
+    :param str enterprise_project_id: The enterprise project ID of WAF dedicated instance.
     :param str id: The id of WAF dedicated instance.
     :param str name: The name of WAF dedicated instance.
     :param str region: The region in which to query the WAF dedicated instance.

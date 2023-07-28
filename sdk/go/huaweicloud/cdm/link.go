@@ -62,7 +62,7 @@ import (
 //
 // The link can be imported by `id`, It is composed of the ID of CDM cluster and the name of job, separated by a slash.
 //
-// For example,
+// # For example, bash
 //
 // ```sh
 //
@@ -70,7 +70,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password` and `secret_key`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_cdm_link" "test" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password` and `secret_key`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_cdm_link" "test" {
 //
 //	...
 //

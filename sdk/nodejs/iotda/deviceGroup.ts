@@ -74,7 +74,7 @@ export class DeviceGroup extends pulumi.CustomResource {
 
     /**
      * Specifies the description of device group. The description contains a maximum of 64
-     * characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters
+     * characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
      * are allowed: `?'#().,&%@!`.
      */
     public readonly description!: pulumi.Output<string | undefined>;
@@ -145,7 +145,7 @@ export class DeviceGroup extends pulumi.CustomResource {
 export interface DeviceGroupState {
     /**
      * Specifies the description of device group. The description contains a maximum of 64
-     * characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters
+     * characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
      * are allowed: `?'#().,&%@!`.
      */
     description?: pulumi.Input<string>;
@@ -181,7 +181,7 @@ export interface DeviceGroupState {
 export interface DeviceGroupArgs {
     /**
      * Specifies the description of device group. The description contains a maximum of 64
-     * characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters
+     * characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
      * are allowed: `?'#().,&%@!`.
      */
     description?: pulumi.Input<string>;

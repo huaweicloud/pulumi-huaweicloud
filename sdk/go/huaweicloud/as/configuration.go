@@ -11,7 +11,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages an AS Configuration resource within HuaweiCloud.
+// Manages an AS configuration resource within HuaweiCloud.
 //
 // ## Example Usage
 // ### Basic AS Configuration
@@ -21,29 +21,29 @@ import (
 //
 // import (
 //
-//	"io/ioutil"
-//
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/As"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/As"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
-//	func readFileOrPanic(path string) pulumi.StringPtrInput {
-//		data, err := ioutil.ReadFile(path)
-//		if err != nil {
-//			panic(err.Error())
-//		}
-//		return pulumi.String(string(data))
-//	}
-//
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			flavorId := cfg.RequireObject("flavorId")
+//			imageId := cfg.RequireObject("imageId")
+//			sshKey := cfg.RequireObject("sshKey")
+//			securityGroupId := cfg.RequireObject("securityGroupId")
 //			_, err := As.NewConfiguration(ctx, "myAsConfig", &As.ConfigurationArgs{
 //				ScalingConfigurationName: pulumi.String("my_as_config"),
 //				InstanceConfig: &as.ConfigurationInstanceConfigArgs{
-//					Flavor: pulumi.Any(_var.Flavor),
-//					Image:  pulumi.Any(_var.Image_id),
+//					Flavor:  pulumi.Any(flavorId),
+//					Image:   pulumi.Any(imageId),
+//					KeyName: pulumi.Any(sshKey),
+//					SecurityGroupIds: pulumi.StringArray{
+//						pulumi.Any(securityGroupId),
+//					},
 //					Disks: as.ConfigurationInstanceConfigDiskArray{
 //						&as.ConfigurationInstanceConfigDiskArgs{
 //							Size:       pulumi.Int(40),
@@ -51,8 +51,6 @@ import (
 //							DiskType:   pulumi.String("SYS"),
 //						},
 //					},
-//					KeyName:  pulumi.Any(_var.Keyname),
-//					UserData: readFileOrPanic("userdata.txt"),
 //				},
 //			})
 //			if err != nil {
@@ -70,29 +68,30 @@ import (
 //
 // import (
 //
-//	"io/ioutil"
-//
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/As"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/As"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
-//	func readFileOrPanic(path string) pulumi.StringPtrInput {
-//		data, err := ioutil.ReadFile(path)
-//		if err != nil {
-//			panic(err.Error())
-//		}
-//		return pulumi.String(string(data))
-//	}
-//
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			flavorId := cfg.RequireObject("flavorId")
+//			imageId := cfg.RequireObject("imageId")
+//			sshKey := cfg.RequireObject("sshKey")
+//			kmsId := cfg.RequireObject("kmsId")
+//			securityGroupId := cfg.RequireObject("securityGroupId")
 //			_, err := As.NewConfiguration(ctx, "myAsConfig", &As.ConfigurationArgs{
 //				ScalingConfigurationName: pulumi.String("my_as_config"),
 //				InstanceConfig: &as.ConfigurationInstanceConfigArgs{
-//					Flavor: pulumi.Any(_var.Flavor),
-//					Image:  pulumi.Any(_var.Image_id),
+//					Flavor:  pulumi.Any(flavorId),
+//					Image:   pulumi.Any(imageId),
+//					KeyName: pulumi.Any(sshKey),
+//					SecurityGroupIds: pulumi.StringArray{
+//						pulumi.Any(securityGroupId),
+//					},
 //					Disks: as.ConfigurationInstanceConfigDiskArray{
 //						&as.ConfigurationInstanceConfigDiskArgs{
 //							Size:       pulumi.Int(40),
@@ -103,11 +102,9 @@ import (
 //							Size:       pulumi.Int(100),
 //							VolumeType: pulumi.String("SSD"),
 //							DiskType:   pulumi.String("DATA"),
-//							KmsId:      pulumi.Any(_var.Kms_id),
+//							KmsId:      pulumi.Any(kmsId),
 //						},
 //					},
-//					KeyName:  pulumi.Any(_var.Keyname),
-//					UserData: readFileOrPanic("userdata.txt"),
 //				},
 //			})
 //			if err != nil {
@@ -130,6 +127,7 @@ import (
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/As"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/As"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
@@ -143,11 +141,21 @@ import (
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			flavorId := cfg.RequireObject("flavorId")
+//			imageId := cfg.RequireObject("imageId")
+//			sshKey := cfg.RequireObject("sshKey")
+//			securityGroupId := cfg.RequireObject("securityGroupId")
 //			_, err := As.NewConfiguration(ctx, "myAsConfig", &As.ConfigurationArgs{
 //				ScalingConfigurationName: pulumi.String("my_as_config"),
 //				InstanceConfig: &as.ConfigurationInstanceConfigArgs{
-//					Flavor: pulumi.Any(_var.Flavor),
-//					Image:  pulumi.Any(_var.Image_id),
+//					Flavor:  pulumi.Any(flavorId),
+//					Image:   pulumi.Any(imageId),
+//					KeyName: pulumi.Any(sshKey),
+//					SecurityGroupIds: pulumi.StringArray{
+//						pulumi.Any(securityGroupId),
+//					},
+//					UserData: readFileOrPanic("userdata.txt"),
 //					Disks: as.ConfigurationInstanceConfigDiskArray{
 //						&as.ConfigurationInstanceConfigDiskArgs{
 //							Size:       pulumi.Int(40),
@@ -155,8 +163,6 @@ import (
 //							DiskType:   pulumi.String("SYS"),
 //						},
 //					},
-//					KeyName:  pulumi.Any(_var.Keyname),
-//					UserData: readFileOrPanic("userdata.txt"),
 //					Metadata: pulumi.StringMap{
 //						"some_key": pulumi.String("some_value"),
 //					},
@@ -180,16 +186,24 @@ import (
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/As"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/As"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			instanceId := cfg.RequireObject("instanceId")
+//			sshKey := cfg.RequireObject("sshKey")
+//			securityGroupId := cfg.RequireObject("securityGroupId")
 //			_, err := As.NewConfiguration(ctx, "myAsConfig", &As.ConfigurationArgs{
 //				ScalingConfigurationName: pulumi.String("my_as_config"),
 //				InstanceConfig: &as.ConfigurationInstanceConfigArgs{
-//					InstanceId: pulumi.String("4579f2f5-cbe8-425a-8f32-53dcb9d9053a"),
-//					KeyName:    pulumi.Any(_var.Keyname),
+//					InstanceId: pulumi.Any(instanceId),
+//					KeyName:    pulumi.Any(sshKey),
+//					SecurityGroupIds: pulumi.StringArray{
+//						pulumi.Any(securityGroupId),
+//					},
 //				},
 //			})
 //			if err != nil {
@@ -200,6 +214,26 @@ import (
 //	}
 //
 // ```
+//
+// ## Import
+//
+// AS configurations can be imported by their `id`, e.g.
+//
+// ```sh
+//
+//	$ pulumi import huaweicloud:As/configuration:Configuration test 18518c8a-9d15-416b-8add-2ee874751d18
+//
+// ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to `instance_config.0.instance_id` is missing from the API response. You can ignore changes after importing an AS configuration as below. resource "huaweicloud_as_configuration" "test" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [ instance_config.0.instance_id ]
+//
+//	} }
 type Configuration struct {
 	pulumi.CustomResourceState
 
@@ -207,12 +241,14 @@ type Configuration struct {
 	// The object structure is documented below. Changing this will create a new resource.
 	InstanceConfig ConfigurationInstanceConfigOutput `pulumi:"instanceConfig"`
 	// Specifies the region in which to create the AS configuration.
-	// If omitted, the `region` argument of the provider is used. Changing this will create a new resource.
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Specifies the AS configuration name.
 	// The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
 	// Changing this will create a new resource.
 	ScalingConfigurationName pulumi.StringOutput `pulumi:"scalingConfigurationName"`
+	// The AS configuration status, the value can be **Bound** or **Unbound**.
+	Status pulumi.StringOutput `pulumi:"status"`
 }
 
 // NewConfiguration registers a new resource with the given unique name, arguments, and options.
@@ -255,12 +291,14 @@ type configurationState struct {
 	// The object structure is documented below. Changing this will create a new resource.
 	InstanceConfig *ConfigurationInstanceConfig `pulumi:"instanceConfig"`
 	// Specifies the region in which to create the AS configuration.
-	// If omitted, the `region` argument of the provider is used. Changing this will create a new resource.
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
 	// Specifies the AS configuration name.
 	// The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
 	// Changing this will create a new resource.
 	ScalingConfigurationName *string `pulumi:"scalingConfigurationName"`
+	// The AS configuration status, the value can be **Bound** or **Unbound**.
+	Status *string `pulumi:"status"`
 }
 
 type ConfigurationState struct {
@@ -268,12 +306,14 @@ type ConfigurationState struct {
 	// The object structure is documented below. Changing this will create a new resource.
 	InstanceConfig ConfigurationInstanceConfigPtrInput
 	// Specifies the region in which to create the AS configuration.
-	// If omitted, the `region` argument of the provider is used. Changing this will create a new resource.
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
 	// Specifies the AS configuration name.
 	// The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
 	// Changing this will create a new resource.
 	ScalingConfigurationName pulumi.StringPtrInput
+	// The AS configuration status, the value can be **Bound** or **Unbound**.
+	Status pulumi.StringPtrInput
 }
 
 func (ConfigurationState) ElementType() reflect.Type {
@@ -285,7 +325,7 @@ type configurationArgs struct {
 	// The object structure is documented below. Changing this will create a new resource.
 	InstanceConfig ConfigurationInstanceConfig `pulumi:"instanceConfig"`
 	// Specifies the region in which to create the AS configuration.
-	// If omitted, the `region` argument of the provider is used. Changing this will create a new resource.
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
 	// Specifies the AS configuration name.
 	// The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
@@ -299,7 +339,7 @@ type ConfigurationArgs struct {
 	// The object structure is documented below. Changing this will create a new resource.
 	InstanceConfig ConfigurationInstanceConfigInput
 	// Specifies the region in which to create the AS configuration.
-	// If omitted, the `region` argument of the provider is used. Changing this will create a new resource.
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
 	// Specifies the AS configuration name.
 	// The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
@@ -401,7 +441,7 @@ func (o ConfigurationOutput) InstanceConfig() ConfigurationInstanceConfigOutput 
 }
 
 // Specifies the region in which to create the AS configuration.
-// If omitted, the `region` argument of the provider is used. Changing this will create a new resource.
+// If omitted, the provider-level region will be used. Changing this will create a new resource.
 func (o ConfigurationOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Configuration) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
@@ -411,6 +451,11 @@ func (o ConfigurationOutput) Region() pulumi.StringOutput {
 // Changing this will create a new resource.
 func (o ConfigurationOutput) ScalingConfigurationName() pulumi.StringOutput {
 	return o.ApplyT(func(v *Configuration) pulumi.StringOutput { return v.ScalingConfigurationName }).(pulumi.StringOutput)
+}
+
+// The AS configuration status, the value can be **Bound** or **Unbound**.
+func (o ConfigurationOutput) Status() pulumi.StringOutput {
+	return o.ApplyT(func(v *Configuration) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
 }
 
 type ConfigurationArrayOutput struct{ *pulumi.OutputState }

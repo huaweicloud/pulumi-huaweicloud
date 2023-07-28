@@ -11,12 +11,62 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// Associate ELB instances to a WAF instance group.
+//
+// ## Example Usage
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Waf"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			groupId := cfg.RequireObject("groupId")
+//			elbInstanceId := cfg.RequireObject("elbInstanceId")
+//			_, err := Waf.NewInstanceGroupAssociate(ctx, "groupAssociate", &Waf.InstanceGroupAssociateArgs{
+//				GroupId: pulumi.Any(groupId),
+//				LoadBalancers: pulumi.StringArray{
+//					pulumi.Any(elbInstanceId),
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
+//
+// ## Import
+//
+// The instance group associate can be imported using the group ID, e.g.
+//
+// ```sh
+//
+//	$ pulumi import huaweicloud:Waf/instanceGroupAssociate:InstanceGroupAssociate group_associate 0be1e69d-1987-4d9c-9dc5-fc7eed592398
+//
+// ```
 type InstanceGroupAssociate struct {
 	pulumi.CustomResourceState
 
-	GroupId       pulumi.StringOutput      `pulumi:"groupId"`
+	// Specifies the ID of the WAF instance group.
+	// Changing this will create a new resource.
+	GroupId pulumi.StringOutput `pulumi:"groupId"`
+	// Specifies the IDs of the ELB instances bound to the WAF instance group.
+	// This is an array of ELB instance ids.
 	LoadBalancers pulumi.StringArrayOutput `pulumi:"loadBalancers"`
-	Region        pulumi.StringOutput      `pulumi:"region"`
+	// The region in which the WAF instance group created.
+	// If omitted, the provider-level region will be used. Changing this setting will create a new resource.
+	Region pulumi.StringOutput `pulumi:"region"`
 }
 
 // NewInstanceGroupAssociate registers a new resource with the given unique name, arguments, and options.
@@ -55,15 +105,27 @@ func GetInstanceGroupAssociate(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering InstanceGroupAssociate resources.
 type instanceGroupAssociateState struct {
-	GroupId       *string  `pulumi:"groupId"`
+	// Specifies the ID of the WAF instance group.
+	// Changing this will create a new resource.
+	GroupId *string `pulumi:"groupId"`
+	// Specifies the IDs of the ELB instances bound to the WAF instance group.
+	// This is an array of ELB instance ids.
 	LoadBalancers []string `pulumi:"loadBalancers"`
-	Region        *string  `pulumi:"region"`
+	// The region in which the WAF instance group created.
+	// If omitted, the provider-level region will be used. Changing this setting will create a new resource.
+	Region *string `pulumi:"region"`
 }
 
 type InstanceGroupAssociateState struct {
-	GroupId       pulumi.StringPtrInput
+	// Specifies the ID of the WAF instance group.
+	// Changing this will create a new resource.
+	GroupId pulumi.StringPtrInput
+	// Specifies the IDs of the ELB instances bound to the WAF instance group.
+	// This is an array of ELB instance ids.
 	LoadBalancers pulumi.StringArrayInput
-	Region        pulumi.StringPtrInput
+	// The region in which the WAF instance group created.
+	// If omitted, the provider-level region will be used. Changing this setting will create a new resource.
+	Region pulumi.StringPtrInput
 }
 
 func (InstanceGroupAssociateState) ElementType() reflect.Type {
@@ -71,16 +133,28 @@ func (InstanceGroupAssociateState) ElementType() reflect.Type {
 }
 
 type instanceGroupAssociateArgs struct {
-	GroupId       string   `pulumi:"groupId"`
+	// Specifies the ID of the WAF instance group.
+	// Changing this will create a new resource.
+	GroupId string `pulumi:"groupId"`
+	// Specifies the IDs of the ELB instances bound to the WAF instance group.
+	// This is an array of ELB instance ids.
 	LoadBalancers []string `pulumi:"loadBalancers"`
-	Region        *string  `pulumi:"region"`
+	// The region in which the WAF instance group created.
+	// If omitted, the provider-level region will be used. Changing this setting will create a new resource.
+	Region *string `pulumi:"region"`
 }
 
 // The set of arguments for constructing a InstanceGroupAssociate resource.
 type InstanceGroupAssociateArgs struct {
-	GroupId       pulumi.StringInput
+	// Specifies the ID of the WAF instance group.
+	// Changing this will create a new resource.
+	GroupId pulumi.StringInput
+	// Specifies the IDs of the ELB instances bound to the WAF instance group.
+	// This is an array of ELB instance ids.
 	LoadBalancers pulumi.StringArrayInput
-	Region        pulumi.StringPtrInput
+	// The region in which the WAF instance group created.
+	// If omitted, the provider-level region will be used. Changing this setting will create a new resource.
+	Region pulumi.StringPtrInput
 }
 
 func (InstanceGroupAssociateArgs) ElementType() reflect.Type {
@@ -170,14 +244,20 @@ func (o InstanceGroupAssociateOutput) ToInstanceGroupAssociateOutputWithContext(
 	return o
 }
 
+// Specifies the ID of the WAF instance group.
+// Changing this will create a new resource.
 func (o InstanceGroupAssociateOutput) GroupId() pulumi.StringOutput {
 	return o.ApplyT(func(v *InstanceGroupAssociate) pulumi.StringOutput { return v.GroupId }).(pulumi.StringOutput)
 }
 
+// Specifies the IDs of the ELB instances bound to the WAF instance group.
+// This is an array of ELB instance ids.
 func (o InstanceGroupAssociateOutput) LoadBalancers() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *InstanceGroupAssociate) pulumi.StringArrayOutput { return v.LoadBalancers }).(pulumi.StringArrayOutput)
 }
 
+// The region in which the WAF instance group created.
+// If omitted, the provider-level region will be used. Changing this setting will create a new resource.
 func (o InstanceGroupAssociateOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *InstanceGroupAssociate) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }

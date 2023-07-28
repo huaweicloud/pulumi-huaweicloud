@@ -68,7 +68,7 @@ export class NodeAttach extends pulumi.CustomResource {
      */
     public readonly clusterId!: pulumi.Output<string>;
     /**
-     * The data disks related configuration.
+     * The configurations of the data disk.
      */
     public /*out*/ readonly dataVolumes!: pulumi.Output<outputs.Cce.NodeAttachDataVolume[]>;
     /**
@@ -84,6 +84,9 @@ export class NodeAttach extends pulumi.CustomResource {
      * The flavor ID of the CCE node.
      */
     public /*out*/ readonly flavorId!: pulumi.Output<string>;
+    /**
+     * schema: Internal
+     */
     public readonly imageId!: pulumi.Output<string | undefined>;
     /**
      * Specifies the key pair name when logging in to select the key pair mode.
@@ -109,7 +112,13 @@ export class NodeAttach extends pulumi.CustomResource {
      * Specifies the Node Name.
      */
     public readonly name!: pulumi.Output<string>;
+    /**
+     * schema: Internal
+     */
     public readonly nicMultiQueue!: pulumi.Output<string | undefined>;
+    /**
+     * schema: Internal
+     */
     public readonly nicThreshold!: pulumi.Output<string | undefined>;
     /**
      * Specifies the operating System of the node. Changing this parameter will reset the node.
@@ -146,7 +155,7 @@ export class NodeAttach extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * The system disk related configuration.
+     * The configuration of the system disk.
      */
     public /*out*/ readonly rootVolumes!: pulumi.Output<outputs.Cce.NodeAttachRootVolume[]>;
     /**
@@ -282,7 +291,7 @@ export interface NodeAttachState {
      */
     clusterId?: pulumi.Input<string>;
     /**
-     * The data disks related configuration.
+     * The configurations of the data disk.
      */
     dataVolumes?: pulumi.Input<pulumi.Input<inputs.Cce.NodeAttachDataVolume>[]>;
     /**
@@ -298,6 +307,9 @@ export interface NodeAttachState {
      * The flavor ID of the CCE node.
      */
     flavorId?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
     imageId?: pulumi.Input<string>;
     /**
      * Specifies the key pair name when logging in to select the key pair mode.
@@ -323,7 +335,13 @@ export interface NodeAttachState {
      * Specifies the Node Name.
      */
     name?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
     nicMultiQueue?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
     nicThreshold?: pulumi.Input<string>;
     /**
      * Specifies the operating System of the node. Changing this parameter will reset the node.
@@ -360,7 +378,7 @@ export interface NodeAttachState {
      */
     region?: pulumi.Input<string>;
     /**
-     * The system disk related configuration.
+     * The configuration of the system disk.
      */
     rootVolumes?: pulumi.Input<pulumi.Input<inputs.Cce.NodeAttachRootVolume>[]>;
     /**
@@ -405,6 +423,9 @@ export interface NodeAttachArgs {
      * node in device mapper mode. Changing this parameter will create a new resource.
      */
     dockerBaseSize?: pulumi.Input<number>;
+    /**
+     * schema: Internal
+     */
     imageId?: pulumi.Input<string>;
     /**
      * Specifies the key pair name when logging in to select the key pair mode.
@@ -430,7 +451,13 @@ export interface NodeAttachArgs {
      * Specifies the Node Name.
      */
     name?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
     nicMultiQueue?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
     nicThreshold?: pulumi.Input<string>;
     /**
      * Specifies the operating System of the node. Changing this parameter will reset the node.

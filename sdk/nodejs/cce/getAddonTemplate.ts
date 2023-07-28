@@ -85,6 +85,9 @@ export interface GetAddonTemplateResult {
      * Whether the add-on template is a stable version.
      */
     readonly stable: boolean;
+    /**
+     * The cluster information.
+     */
     readonly supportVersions: outputs.Cce.GetAddonTemplateSupportVersion[];
     readonly version: string;
 }

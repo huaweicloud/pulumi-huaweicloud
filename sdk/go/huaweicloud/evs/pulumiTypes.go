@@ -11,9 +11,11 @@ import (
 )
 
 type VolumeAttachment struct {
+	// The device name.
 	Device *string `pulumi:"device"`
-	// A resource ID in UUID format.
-	Id         *string `pulumi:"id"`
+	// The ID of the attachment information.
+	Id *string `pulumi:"id"`
+	// The ID of the server to which the disk is attached.
 	InstanceId *string `pulumi:"instanceId"`
 }
 
@@ -29,9 +31,11 @@ type VolumeAttachmentInput interface {
 }
 
 type VolumeAttachmentArgs struct {
+	// The device name.
 	Device pulumi.StringPtrInput `pulumi:"device"`
-	// A resource ID in UUID format.
-	Id         pulumi.StringPtrInput `pulumi:"id"`
+	// The ID of the attachment information.
+	Id pulumi.StringPtrInput `pulumi:"id"`
+	// The ID of the server to which the disk is attached.
 	InstanceId pulumi.StringPtrInput `pulumi:"instanceId"`
 }
 
@@ -86,15 +90,17 @@ func (o VolumeAttachmentOutput) ToVolumeAttachmentOutputWithContext(ctx context.
 	return o
 }
 
+// The device name.
 func (o VolumeAttachmentOutput) Device() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v VolumeAttachment) *string { return v.Device }).(pulumi.StringPtrOutput)
 }
 
-// A resource ID in UUID format.
+// The ID of the attachment information.
 func (o VolumeAttachmentOutput) Id() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v VolumeAttachment) *string { return v.Id }).(pulumi.StringPtrOutput)
 }
 
+// The ID of the server to which the disk is attached.
 func (o VolumeAttachmentOutput) InstanceId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v VolumeAttachment) *string { return v.InstanceId }).(pulumi.StringPtrOutput)
 }

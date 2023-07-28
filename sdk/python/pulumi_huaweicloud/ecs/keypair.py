@@ -194,8 +194,6 @@ class Keypair(pulumi.CustomResource):
                  region: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages a keypair resource within HuaweiCloud.
-
         ## Example Usage
         ### Create a new keypair and export private key to current folder
 
@@ -243,8 +241,6 @@ class Keypair(pulumi.CustomResource):
                  args: Optional[KeypairArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a keypair resource within HuaweiCloud.
-
         ## Example Usage
         ### Create a new keypair and export private key to current folder
 

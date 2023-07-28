@@ -56,8 +56,6 @@ type GetEngineVersionsArgs struct {
 	// Specifies the RDS engine type.
 	// The valid values are **MySQL**, **PostgreSQL** and **SQLServer**, default to **MySQL**.
 	Type *string `pulumi:"type"`
-	// List of RDS versions. Structure is documented below.
-	Versions []GetEngineVersionsVersion `pulumi:"versions"`
 }
 
 // A collection of values returned by getEngineVersions.
@@ -91,8 +89,6 @@ type GetEngineVersionsOutputArgs struct {
 	// Specifies the RDS engine type.
 	// The valid values are **MySQL**, **PostgreSQL** and **SQLServer**, default to **MySQL**.
 	Type pulumi.StringPtrInput `pulumi:"type"`
-	// List of RDS versions. Structure is documented below.
-	Versions GetEngineVersionsVersionArrayInput `pulumi:"versions"`
 }
 
 func (GetEngineVersionsOutputArgs) ElementType() reflect.Type {

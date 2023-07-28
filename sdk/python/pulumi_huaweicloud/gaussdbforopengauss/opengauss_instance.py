@@ -70,7 +70,6 @@ class OpengaussInstanceArgs:
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] coordinator_num: Specifies the coordinator number. Values: 1~9. The default value is 3.
                The value must not be greater than twice value of `sharding_num`.
-               This parameter is valid only when the HA mode is set to **enterprise**.
         :param pulumi.Input['OpengaussInstanceDatastoreArgs'] datastore: Specifies the datastore information.
                The object structure is documented below.
                Changing this parameter will create a new resource.
@@ -96,14 +95,13 @@ class OpengaussInstanceArgs:
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[int] replica_num: The replica number. The valid values are **2** and **3**, defaults to **3**.
                Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
-               This parameter is valid only when the HA mode is set to **centralization_standard**.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID to which the instance belongs.
                If the `port` parameter is specified, please ensure that the TCP ports in the inbound rule of security group
                includes the `100` ports starting with the database port.
                (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
         :param pulumi.Input[int] sharding_num: Specifies the sharding number. The valid value is range form `1` to `9`.
-               The default value is 3. This parameter is valid only when the HA mode is set to **enterprise**.
+               The default value is 3.
         :param pulumi.Input[str] time_zone: Specifies the time zone. Defaults to **UTC+08:00**.
                Changing this parameter will create a new resource.
         """
@@ -302,7 +300,6 @@ class OpengaussInstanceArgs:
         """
         Specifies the coordinator number. Values: 1~9. The default value is 3.
         The value must not be greater than twice value of `sharding_num`.
-        This parameter is valid only when the HA mode is set to **enterprise**.
         """
         return pulumi.get(self, "coordinator_num")
 
@@ -427,7 +424,6 @@ class OpengaussInstanceArgs:
         """
         The replica number. The valid values are **2** and **3**, defaults to **3**.
         Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
-        This parameter is valid only when the HA mode is set to **centralization_standard**.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "replica_num")
@@ -456,7 +452,7 @@ class OpengaussInstanceArgs:
     def sharding_num(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the sharding number. The valid value is range form `1` to `9`.
-        The default value is 3. This parameter is valid only when the HA mode is set to **enterprise**.
+        The default value is 3.
         """
         return pulumi.get(self, "sharding_num")
 
@@ -530,7 +526,6 @@ class _OpengaussInstanceState:
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] coordinator_num: Specifies the coordinator number. Values: 1~9. The default value is 3.
                The value must not be greater than twice value of `sharding_num`.
-               This parameter is valid only when the HA mode is set to **enterprise**.
         :param pulumi.Input['OpengaussInstanceDatastoreArgs'] datastore: Specifies the datastore information.
                The object structure is documented below.
                Changing this parameter will create a new resource.
@@ -570,14 +565,13 @@ class _OpengaussInstanceState:
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[int] replica_num: The replica number. The valid values are **2** and **3**, defaults to **3**.
                Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
-               This parameter is valid only when the HA mode is set to **centralization_standard**.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID to which the instance belongs.
                If the `port` parameter is specified, please ensure that the TCP ports in the inbound rule of security group
                includes the `100` ports starting with the database port.
                (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
         :param pulumi.Input[int] sharding_num: Specifies the sharding number. The valid value is range form `1` to `9`.
-               The default value is 3. This parameter is valid only when the HA mode is set to **enterprise**.
+               The default value is 3.
         :param pulumi.Input[str] status: Indicates the node status.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of VPC subnet to which the instance belongs.
                Changing this parameter will create a new resource.
@@ -731,7 +725,6 @@ class _OpengaussInstanceState:
         """
         Specifies the coordinator number. Values: 1~9. The default value is 3.
         The value must not be greater than twice value of `sharding_num`.
-        This parameter is valid only when the HA mode is set to **enterprise**.
         """
         return pulumi.get(self, "coordinator_num")
 
@@ -969,7 +962,6 @@ class _OpengaussInstanceState:
         """
         The replica number. The valid values are **2** and **3**, defaults to **3**.
         Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
-        This parameter is valid only when the HA mode is set to **centralization_standard**.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "replica_num")
@@ -998,7 +990,7 @@ class _OpengaussInstanceState:
     def sharding_num(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the sharding number. The valid value is range form `1` to `9`.
-        The default value is 3. This parameter is valid only when the HA mode is set to **enterprise**.
+        The default value is 3.
         """
         return pulumi.get(self, "sharding_num")
 
@@ -1136,7 +1128,7 @@ class OpengaussInstance(pulumi.CustomResource):
         OpenGaussDB instance can be imported using the `id`, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:GaussDBforOpenGauss/opengaussInstance:OpengaussInstance test ee678f40-ce8e-4d0c-8221-38dead426f06
+         $ pulumi import huaweicloud:GaussDBforOpenGauss/opengaussInstance:OpengaussInstance test 1f2c4f48adea4ae684c8edd8818fa349in14
         ```
 
         :param str resource_name: The name of the resource.
@@ -1155,7 +1147,6 @@ class OpengaussInstance(pulumi.CustomResource):
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] coordinator_num: Specifies the coordinator number. Values: 1~9. The default value is 3.
                The value must not be greater than twice value of `sharding_num`.
-               This parameter is valid only when the HA mode is set to **enterprise**.
         :param pulumi.Input[pulumi.InputType['OpengaussInstanceDatastoreArgs']] datastore: Specifies the datastore information.
                The object structure is documented below.
                Changing this parameter will create a new resource.
@@ -1189,14 +1180,13 @@ class OpengaussInstance(pulumi.CustomResource):
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[int] replica_num: The replica number. The valid values are **2** and **3**, defaults to **3**.
                Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
-               This parameter is valid only when the HA mode is set to **centralization_standard**.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID to which the instance belongs.
                If the `port` parameter is specified, please ensure that the TCP ports in the inbound rule of security group
                includes the `100` ports starting with the database port.
                (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
         :param pulumi.Input[int] sharding_num: Specifies the sharding number. The valid value is range form `1` to `9`.
-               The default value is 3. This parameter is valid only when the HA mode is set to **enterprise**.
+               The default value is 3.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of VPC subnet to which the instance belongs.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] time_zone: Specifies the time zone. Defaults to **UTC+08:00**.
@@ -1222,7 +1212,7 @@ class OpengaussInstance(pulumi.CustomResource):
         OpenGaussDB instance can be imported using the `id`, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:GaussDBforOpenGauss/opengaussInstance:OpengaussInstance test ee678f40-ce8e-4d0c-8221-38dead426f06
+         $ pulumi import huaweicloud:GaussDBforOpenGauss/opengaussInstance:OpengaussInstance test 1f2c4f48adea4ae684c8edd8818fa349in14
         ```
 
         :param str resource_name: The name of the resource.
@@ -1384,7 +1374,6 @@ class OpengaussInstance(pulumi.CustomResource):
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] coordinator_num: Specifies the coordinator number. Values: 1~9. The default value is 3.
                The value must not be greater than twice value of `sharding_num`.
-               This parameter is valid only when the HA mode is set to **enterprise**.
         :param pulumi.Input[pulumi.InputType['OpengaussInstanceDatastoreArgs']] datastore: Specifies the datastore information.
                The object structure is documented below.
                Changing this parameter will create a new resource.
@@ -1424,14 +1413,13 @@ class OpengaussInstance(pulumi.CustomResource):
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[int] replica_num: The replica number. The valid values are **2** and **3**, defaults to **3**.
                Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
-               This parameter is valid only when the HA mode is set to **centralization_standard**.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID to which the instance belongs.
                If the `port` parameter is specified, please ensure that the TCP ports in the inbound rule of security group
                includes the `100` ports starting with the database port.
                (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
         :param pulumi.Input[int] sharding_num: Specifies the sharding number. The valid value is range form `1` to `9`.
-               The default value is 3. This parameter is valid only when the HA mode is set to **enterprise**.
+               The default value is 3.
         :param pulumi.Input[str] status: Indicates the node status.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of VPC subnet to which the instance belongs.
                Changing this parameter will create a new resource.
@@ -1537,7 +1525,6 @@ class OpengaussInstance(pulumi.CustomResource):
         """
         Specifies the coordinator number. Values: 1~9. The default value is 3.
         The value must not be greater than twice value of `sharding_num`.
-        This parameter is valid only when the HA mode is set to **enterprise**.
         """
         return pulumi.get(self, "coordinator_num")
 
@@ -1703,7 +1690,6 @@ class OpengaussInstance(pulumi.CustomResource):
         """
         The replica number. The valid values are **2** and **3**, defaults to **3**.
         Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
-        This parameter is valid only when the HA mode is set to **centralization_standard**.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "replica_num")
@@ -1724,7 +1710,7 @@ class OpengaussInstance(pulumi.CustomResource):
     def sharding_num(self) -> pulumi.Output[Optional[int]]:
         """
         Specifies the sharding number. The valid value is range form `1` to `9`.
-        The default value is 3. This parameter is valid only when the HA mode is set to **enterprise**.
+        The default value is 3.
         """
         return pulumi.get(self, "sharding_num")
 

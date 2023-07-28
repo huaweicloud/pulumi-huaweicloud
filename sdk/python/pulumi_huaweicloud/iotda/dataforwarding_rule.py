@@ -45,7 +45,7 @@ class DataforwardingRuleArgs:
         :param pulumi.Input[bool] enabled: Specifies whether to enable the data forwarding rule. Defaults to `false`.
                Can not enable without `targets`.
         :param pulumi.Input[str] name: Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
-               Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+               Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] region: Specifies the region to which the KAFKA belongs.
         :param pulumi.Input[str] select: Specifies the SQL SELECT statement which contains a maximum of 500 characters.
@@ -128,7 +128,7 @@ class DataforwardingRuleArgs:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
-        Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+        Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
         allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "name")
@@ -219,7 +219,7 @@ class _DataforwardingRuleState:
         :param pulumi.Input[bool] enabled: Specifies whether to enable the data forwarding rule. Defaults to `false`.
                Can not enable without `targets`.
         :param pulumi.Input[str] name: Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
-               Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+               Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] region: Specifies the region to which the KAFKA belongs.
         :param pulumi.Input[str] select: Specifies the SQL SELECT statement which contains a maximum of 500 characters.
@@ -292,7 +292,7 @@ class _DataforwardingRuleState:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
-        Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+        Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
         allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "name")
@@ -473,7 +473,7 @@ class DataforwardingRule(pulumi.CustomResource):
         :param pulumi.Input[bool] enabled: Specifies whether to enable the data forwarding rule. Defaults to `false`.
                Can not enable without `targets`.
         :param pulumi.Input[str] name: Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
-               Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+               Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] region: Specifies the region to which the KAFKA belongs.
         :param pulumi.Input[str] select: Specifies the SQL SELECT statement which contains a maximum of 500 characters.
@@ -640,7 +640,7 @@ class DataforwardingRule(pulumi.CustomResource):
         :param pulumi.Input[bool] enabled: Specifies whether to enable the data forwarding rule. Defaults to `false`.
                Can not enable without `targets`.
         :param pulumi.Input[str] name: Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
-               Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+               Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] region: Specifies the region to which the KAFKA belongs.
         :param pulumi.Input[str] select: Specifies the SQL SELECT statement which contains a maximum of 500 characters.
@@ -701,7 +701,7 @@ class DataforwardingRule(pulumi.CustomResource):
     def name(self) -> pulumi.Output[str]:
         """
         Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
-        Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+        Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
         allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "name")

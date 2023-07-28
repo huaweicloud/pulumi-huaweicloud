@@ -22,6 +22,7 @@ __all__ = [
     'DatabaseUserPrivilegeResource',
     'DatabaseUserRole',
     'InstanceBackupStrategy',
+    'InstanceConfiguration',
     'InstanceDatastore',
     'InstanceFlavor',
     'InstanceNode',
@@ -529,6 +530,45 @@ class InstanceBackupStrategy(dict):
 
 
 @pulumi.output_type
+class InstanceConfiguration(dict):
+    def __init__(__self__, *,
+                 id: str,
+                 type: str):
+        """
+        :param str id: Specifies the ID of the template.
+               Changing this creates a new instance.
+        :param str type: Specifies the node type. Valid value:
+               + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+               + For an Enhanced Edition cluster instance, the value is **shard**.
+               + For a Community Edition replica set instance, the value is **replica**.
+               + For a Community Edition single node instance, the value is **single**.
+        """
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "type", type)
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        Specifies the ID of the template.
+        Changing this creates a new instance.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        Specifies the node type. Valid value:
+        + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+        + For an Enhanced Edition cluster instance, the value is **shard**.
+        + For a Community Edition replica set instance, the value is **replica**.
+        + For a Community Edition single node instance, the value is **single**.
+        """
+        return pulumi.get(self, "type")
+
+
+@pulumi.output_type
 class InstanceDatastore(dict):
     @staticmethod
     def __key_warning(key: str):
@@ -553,14 +593,15 @@ class InstanceDatastore(dict):
                  storage_engine: Optional[str] = None):
         """
         :param str type: Specifies the node type. Valid value:
-               + For a Community Edition cluster instance, the value can be mongos, shard, or config.
-               + For an Enhanced Edition cluster instance, the value is shard.
-               + For a Community Edition replica set instance, the value is replica.
-               + For a Community Edition single node instance, the value is single.
+               + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+               + For an Enhanced Edition cluster instance, the value is **shard**.
+               + For a Community Edition replica set instance, the value is **replica**.
+               + For a Community Edition single node instance, the value is **single**.
         :param str version: Specifies the DB instance version. For the Community Edition, the valid
-               values are 3.2, 3.4, or 4.0. For the Enhanced Edition, only 3.4 is supported now.
-        :param str storage_engine: Specifies the storage engine of the DB instance. DDS Community Edition
-               supports wiredTiger engine, and the Enhanced Edition supports rocksDB engine.
+               values are `3.2`, `3.4`, `4.0`, `4.2`, or `4.4`.
+        :param str storage_engine: Specifies the storage engine of the DB instance.
+               If `version` is set to `3.2`, `3.4`, or `4.0`, the value is **wiredTiger**.
+               If `version` is set to `4.2`, or `4.4`, the value is **rocksDB**.
         """
         pulumi.set(__self__, "type", type)
         pulumi.set(__self__, "version", version)
@@ -572,10 +613,10 @@ class InstanceDatastore(dict):
     def type(self) -> str:
         """
         Specifies the node type. Valid value:
-        + For a Community Edition cluster instance, the value can be mongos, shard, or config.
-        + For an Enhanced Edition cluster instance, the value is shard.
-        + For a Community Edition replica set instance, the value is replica.
-        + For a Community Edition single node instance, the value is single.
+        + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+        + For an Enhanced Edition cluster instance, the value is **shard**.
+        + For a Community Edition replica set instance, the value is **replica**.
+        + For a Community Edition single node instance, the value is **single**.
         """
         return pulumi.get(self, "type")
 
@@ -584,7 +625,7 @@ class InstanceDatastore(dict):
     def version(self) -> str:
         """
         Specifies the DB instance version. For the Community Edition, the valid
-        values are 3.2, 3.4, or 4.0. For the Enhanced Edition, only 3.4 is supported now.
+        values are `3.2`, `3.4`, `4.0`, `4.2`, or `4.4`.
         """
         return pulumi.get(self, "version")
 
@@ -592,8 +633,9 @@ class InstanceDatastore(dict):
     @pulumi.getter(name="storageEngine")
     def storage_engine(self) -> Optional[str]:
         """
-        Specifies the storage engine of the DB instance. DDS Community Edition
-        supports wiredTiger engine, and the Enhanced Edition supports rocksDB engine.
+        Specifies the storage engine of the DB instance.
+        If `version` is set to `3.2`, `3.4`, or `4.0`, the value is **wiredTiger**.
+        If `version` is set to `4.2`, or `4.4`, the value is **rocksDB**.
         """
         return pulumi.get(self, "storage_engine")
 
@@ -638,14 +680,15 @@ class InstanceFlavor(dict):
                + dds.mongodb.s6.large.4.mongos and dds.mongodb.c3.large.4.config are not of the same specifications. This parameter
                can be updated when the value of `type` is mongos, shard, replica or single.
         :param str type: Specifies the node type. Valid value:
-               + For a Community Edition cluster instance, the value can be mongos, shard, or config.
-               + For an Enhanced Edition cluster instance, the value is shard.
-               + For a Community Edition replica set instance, the value is replica.
-               + For a Community Edition single node instance, the value is single.
+               + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+               + For an Enhanced Edition cluster instance, the value is **shard**.
+               + For a Community Edition replica set instance, the value is **replica**.
+               + For a Community Edition single node instance, the value is **single**.
         :param int size: Specifies the disk size. The value must be a multiple of 10. The unit is GB. This parameter
                is mandatory for nodes except mongos and invalid for mongos. This parameter can be updated when the value of `type` is
                shard, replica or single.
-        :param str storage: Specifies the disk type. Valid value: ULTRAHIGH which indicates the type SSD.
+        :param str storage: Specifies the disk type.
+               Valid value: **ULTRAHIGH** which indicates the type SSD.
         """
         pulumi.set(__self__, "num", num)
         pulumi.set(__self__, "spec_code", spec_code)
@@ -687,10 +730,10 @@ class InstanceFlavor(dict):
     def type(self) -> str:
         """
         Specifies the node type. Valid value:
-        + For a Community Edition cluster instance, the value can be mongos, shard, or config.
-        + For an Enhanced Edition cluster instance, the value is shard.
-        + For a Community Edition replica set instance, the value is replica.
-        + For a Community Edition single node instance, the value is single.
+        + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+        + For an Enhanced Edition cluster instance, the value is **shard**.
+        + For a Community Edition replica set instance, the value is **replica**.
+        + For a Community Edition single node instance, the value is **single**.
         """
         return pulumi.get(self, "type")
 
@@ -708,7 +751,8 @@ class InstanceFlavor(dict):
     @pulumi.getter
     def storage(self) -> Optional[str]:
         """
-        Specifies the disk type. Valid value: ULTRAHIGH which indicates the type SSD.
+        Specifies the disk type.
+        Valid value: **ULTRAHIGH** which indicates the type SSD.
         """
         return pulumi.get(self, "storage")
 
@@ -743,7 +787,8 @@ class InstanceNode(dict):
                  status: Optional[str] = None,
                  type: Optional[str] = None):
         """
-        :param str id: Indicates the node ID.
+        :param str id: Specifies the ID of the template.
+               Changing this creates a new instance.
         :param str name: Specifies the DB instance name. The DB instance name of the same type is unique in the
                same tenant.
         :param str private_ip: Indicates the private IP address of a node. This parameter is valid only for mongos nodes, replica set
@@ -753,10 +798,10 @@ class InstanceNode(dict):
         :param str role: Indicates the node role.
         :param str status: Indicates the node status.
         :param str type: Specifies the node type. Valid value:
-               + For a Community Edition cluster instance, the value can be mongos, shard, or config.
-               + For an Enhanced Edition cluster instance, the value is shard.
-               + For a Community Edition replica set instance, the value is replica.
-               + For a Community Edition single node instance, the value is single.
+               + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+               + For an Enhanced Edition cluster instance, the value is **shard**.
+               + For a Community Edition replica set instance, the value is **replica**.
+               + For a Community Edition single node instance, the value is **single**.
         """
         if id is not None:
             pulumi.set(__self__, "id", id)
@@ -777,7 +822,8 @@ class InstanceNode(dict):
     @pulumi.getter
     def id(self) -> Optional[str]:
         """
-        Indicates the node ID.
+        Specifies the ID of the template.
+        Changing this creates a new instance.
         """
         return pulumi.get(self, "id")
 
@@ -829,10 +875,10 @@ class InstanceNode(dict):
     def type(self) -> Optional[str]:
         """
         Specifies the node type. Valid value:
-        + For a Community Edition cluster instance, the value can be mongos, shard, or config.
-        + For an Enhanced Edition cluster instance, the value is shard.
-        + For a Community Edition replica set instance, the value is replica.
-        + For a Community Edition single node instance, the value is single.
+        + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+        + For an Enhanced Edition cluster instance, the value is **shard**.
+        + For a Community Edition replica set instance, the value is **replica**.
+        + For a Community Edition single node instance, the value is **single**.
         """
         return pulumi.get(self, "type")
 

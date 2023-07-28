@@ -6,10 +6,9 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Manages Cluster in the Data Warehouse Service.
+ * Manages a DWS cluster resource within HuaweiCloud.
  *
  * ## Example Usage
- * ### Dws Cluster Example
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -17,21 +16,23 @@ import * as utilities from "../utilities";
  *
  * const config = new pulumi.Config();
  * const availabilityZone = config.requireObject("availabilityZone");
- * const networkId = config.requireObject("networkId");
- * const vpcId = config.requireObject("vpcId");
+ * const dwsClusterName = config.requireObject("dwsClusterName");
+ * const dwsClusterVersion = config.requireObject("dwsClusterVersion");
  * const userName = config.requireObject("userName");
  * const userPwd = config.requireObject("userPwd");
- * const dwsClusterName = config.requireObject("dwsClusterName");
+ * const vpcId = config.requireObject("vpcId");
+ * const networkId = config.requireObject("networkId");
  * const secgroup = new huaweicloud.vpc.Secgroup("secgroup", {description: "terraform security group"});
  * const cluster = new huaweicloud.dws.Cluster("cluster", {
+ *     version: dwsClusterVersion,
  *     nodeType: "dws.m3.xlarge",
  *     numberOfNode: 3,
- *     networkId: networkId,
- *     vpcId: vpcId,
- *     securityGroupId: secgroup.id,
  *     availabilityZone: availabilityZone,
  *     userName: userName,
  *     userPwd: userPwd,
+ *     vpcId: vpcId,
+ *     networkId: networkId,
+ *     securityGroupId: secgroup.id,
  * });
  * ```
  *
@@ -43,7 +44,7 @@ import * as utilities from "../utilities";
  *  $ pulumi import huaweicloud:Dws/cluster:Cluster test 47ad727e-9dcc-4833-bde0-bb298607c719
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`user_pwd`, `number_of_cn`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. resource "huaweicloud_dws_cluster" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`user_pwd`, `number_of_cn`, `kms_key_id`, `volume`, `dss_pool_id`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. resource "huaweicloud_dws_cluster" "test" {
  *
  *  ...
  *
@@ -51,7 +52,7 @@ import * as utilities from "../utilities";
  *
  *  ignore_changes = [
  *
- *  user_pwd, number_of_cn,
+ *  user_pwd, number_of_cn, kms_key_id, volume, dss_pool_id
  *
  *  ]
  *
@@ -86,61 +87,89 @@ export class Cluster extends pulumi.CustomResource {
     }
 
     /**
-     * AZ in a cluster.
+     * The availability zone in which to create the cluster instance.
+     * Changing this parameter will create a new resource.
      */
     public readonly availabilityZone!: pulumi.Output<string>;
     /**
-     * Cluster creation time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ
+     * The creation time of the cluster.  
+     * Format: ISO8601: **YYYY-MM-DDThh:mm:ssZ**.
      */
     public /*out*/ readonly created!: pulumi.Output<string>;
     /**
-     * View the private network connection information about the cluster. Structure is documented below.
+     * Dedicated storage pool ID.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly dssPoolId!: pulumi.Output<string>;
+    /**
+     * Private network connection information about the cluster.
+     * The Endpoint structure is documented below.
      */
     public /*out*/ readonly endpoints!: pulumi.Output<outputs.Dws.ClusterEndpoint[]>;
     /**
-     * Specifies the enterprise project id of the dws cluster,
-     * Value 0 indicates the default enterprise project.
+     * The enterprise project ID.
      * Changing this parameter will create a new resource.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
+     * The number of latest manual snapshots that need to be
+     * retained when deleting the cluster.
+     */
+    public readonly keepLastManualSnapshot!: pulumi.Output<number | undefined>;
+    /**
+     * The KMS key ID.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly kmsKeyId!: pulumi.Output<string>;
+    /**
+     * Cluster maintenance window.
+     * The MaintainWindow structure is documented below.
+     */
+    public /*out*/ readonly maintainWindows!: pulumi.Output<outputs.Dws.ClusterMaintainWindow[]>;
+    /**
      * Cluster name, which must be unique and contains 4 to 64 characters, which
      * consist of letters, digits, hyphens(-), or underscores(_) only and must start with a letter.
+     * Changing this creates a new cluster resource.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Network ID, which is used for configuring cluster network.
+     * The subnet ID.
+     * Changing this parameter will create a new resource.
      */
     public readonly networkId!: pulumi.Output<string>;
     /**
-     * Node type.
+     * The flavor of the cluster.  
+     * [For details](https://support.huaweicloud.com/intl/en-us/productdesc-dws/dws_01_00018.html).
+     * Changing this parameter will create a new resource.
      */
     public readonly nodeType!: pulumi.Output<string>;
     /**
-     * Specifies the number of CN. If you use a large-scale cluster, deploy
-     * multiple CNs.
+     * The number of CN.  
+     * The value ranges from 2 to **number_of_node**, the maximum value is 20. Defaults to 3.
+     * Changing this parameter will create a new resource.
      */
     public readonly numberOfCn!: pulumi.Output<number | undefined>;
     /**
-     * Number of nodes in a cluster. The value ranges from 3 to 32. When expanding,
-     * add at least 3 nodes.
+     * Number of nodes in a cluster.  
+     * The value ranges from 3 to 32 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
      */
     public readonly numberOfNode!: pulumi.Output<number>;
     /**
-     * Service port of a cluster (8000 to 10000). The default value is 8000.
+     * Service port of a cluster (8000 to 10000). The default value is 8000.  
+     * Changing this parameter will create a new resource.
      */
-    public readonly port!: pulumi.Output<number>;
+    public readonly port!: pulumi.Output<number | undefined>;
     /**
-     * List of private network IP address.
+     * List of private network IP addresses.
      */
     public /*out*/ readonly privateIps!: pulumi.Output<string[]>;
     /**
-     * Public network connection information about the cluster. If the value is not specified, the
-     * public network connection information is not used by default Structure is documented below.
+     * Public network connection information about the cluster.
+     * The PublicEndpoint structure is documented below.
      */
     public /*out*/ readonly publicEndpoints!: pulumi.Output<outputs.Dws.ClusterPublicEndpoint[]>;
     /**
-     * A nested object resource Structure is documented below.
+     * The information about public IP.
      */
     public readonly publicIp!: pulumi.Output<outputs.Dws.ClusterPublicIp>;
     /**
@@ -148,61 +177,94 @@ export class Cluster extends pulumi.CustomResource {
      */
     public /*out*/ readonly recentEvent!: pulumi.Output<number>;
     /**
-     * The region in which to create the cluster resource. If omitted, the
-     * provider-level region will be used. Changing this creates a new cluster resource.
+     * Specifies the region in which to create the resource.
+     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * ID of a security group. The ID is used for configuring cluster
-     * network.
+     * The security group ID.
+     * Changing this parameter will create a new resource.
      */
     public readonly securityGroupId!: pulumi.Output<string>;
     /**
-     * Cluster status, which can be one of the following:  CREATING AVAILABLE UNAVAILABLE CREATION FAILED.
+     * The cluster status.  
+     * The valid values are **CREATING**, **AVAILABLE**, **ACTIVE**, **FAILED**, **CREATE_FAILED**,
+     * **DELETING**, **DELETE_FAILED**, **DELETED**, and **FROZEN**.
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
-     * Sub-status of clusters in the AVAILABLE state. The value can be one of the following:  NORMAL READONLY
-     * REDISTRIBUTING REDISTRIBUTION-FAILURE UNBALANCED UNBALANCED | READONLY DEGRADED DEGRADED | READONLY DEGRADED |
-     * UNBALANCED UNBALANCED | REDISTRIBUTING UNBALANCED | REDISTRIBUTION-FAILURE READONLY | REDISTRIBUTION-FAILURE
-     * UNBALANCED | READONLY | REDISTRIBUTION-FAILURE DEGRADED | REDISTRIBUTION-FAILURE DEGRADED | UNBALANCED |
-     * REDISTRIBUTION-FAILURE DEGRADED | UNBALANCED | READONLY | REDISTRIBUTION-FAILURE DEGRADED | UNBALANCED | READONLY
+     * Sub-status of clusters in the AVAILABLE state.  
+     * The value can be one of the following:
+     * + READONLY
+     * + REDISTRIBUTING
+     * + REDISTRIBUTION-FAILURE
+     * + UNBALANCED
+     * + UNBALANCED | READONLY
+     * + DEGRADED
+     * + DEGRADED | READONLY
+     * + DEGRADED | UNBALANCED
+     * + UNBALANCED | REDISTRIBUTING
+     * + UNBALANCED | REDISTRIBUTION-FAILURE
+     * + READONLY | REDISTRIBUTION-FAILURE
+     * + UNBALANCED | READONLY | REDISTRIBUTION-FAILURE
+     * + DEGRADED | REDISTRIBUTION-FAILURE
+     * + DEGRADED | UNBALANCED | REDISTRIBUTION-FAILURE
+     * + DEGRADED | UNBALANCED | READONLY | REDISTRIBUTION-FAILURE
+     * + DEGRADED | UNBALANCED | READONLY
      */
     public /*out*/ readonly subStatus!: pulumi.Output<string>;
     /**
-     * Specifies the key/value pairs to associate with the cluster.
+     * The key/value pairs to associate with the cluster.
+     * Changing this parameter will create a new resource.
      */
-    public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
+    public readonly tags!: pulumi.Output<{[key: string]: string}>;
     /**
-     * Cluster management task. The value can be one of the following:
-     * RESTORING SNAPSHOTTING GROWING REBOOTING SETTING_CONFIGURATION CONFIGURING_EXT_DATASOURCE DELETING_EXT_DATASOURCE
-     * REBOOT_FAILURE RESIZE_FAILURE
+     * Cluster management task.  
+     * The value can be one of the following:
+     * + UNFREEZING
+     * + FREEZING
+     * + RESTORING
+     * + SNAPSHOTTING
+     * + GROWING
+     * + REBOOTING
+     * + SETTING_CONFIGURATION
+     * + CONFIGURING_EXT_DATASOURCE
+     * + DELETING_EXT_DATASOURCE
+     * + REBOOT_FAILURE
+     * + RESIZE_FAILURE
      */
     public /*out*/ readonly taskStatus!: pulumi.Output<string>;
     /**
-     * Last modification time of a cluster. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ
+     * The updated time of the cluster.  
+     * Format: ISO8601: **YYYY-MM-DDThh:mm:ssZ**.
      */
     public /*out*/ readonly updated!: pulumi.Output<string>;
     /**
-     * Administrator username for logging in to a data warehouse cluster The
-     * administrator username must:  Consist of lowercase letters, digits, or underscores. Start with a lowercase letter or
-     * an underscore. Contain 1 to 63 characters. Cannot be a keyword of the DWS database.
+     * Administrator username for logging in to a data warehouse cluster.  
+     * The administrator username must: Consist of lowercase letters, digits, or underscores.
+     * Start with a lowercase letter or an underscore.
+     * Changing this parameter will create a new resource.
      */
     public readonly userName!: pulumi.Output<string>;
     /**
-     * Administrator password for logging in to a data warehouse cluster A password
-     * must conform to the following rules:  Contains 8 to 32 characters. Cannot be the same as the username or the username
-     * written in reverse order. Contains three types of the following:
-     * Lowercase letters Uppercase letters Digits Special characters
-     * ~!@#%^&*()-_=+|[{}];:,<.>/?
+     * Administrator password for logging in to a data warehouse cluster.
+     * A password contains 8 to 32 characters, which consist of letters, digits,
+     * and special characters(~!@#%^&*()-_=+|[{}];:,<.>/?).
+     * It cannot be the same as the username or the username written in reverse order.
      */
     public readonly userPwd!: pulumi.Output<string>;
     /**
-     * Data warehouse version.
+     * The cluster version.
+     * Changing this parameter will create a new resource.
      */
-    public /*out*/ readonly version!: pulumi.Output<string>;
+    public readonly version!: pulumi.Output<string>;
     /**
-     * VPC ID, which is used for configuring cluster network.
+     * The information about the volume.
+     */
+    public readonly volume!: pulumi.Output<outputs.Dws.ClusterVolume>;
+    /**
+     * The VPC ID.
+     * Changing this parameter will create a new resource.
      */
     public readonly vpcId!: pulumi.Output<string>;
 
@@ -221,8 +283,12 @@ export class Cluster extends pulumi.CustomResource {
             const state = argsOrState as ClusterState | undefined;
             resourceInputs["availabilityZone"] = state ? state.availabilityZone : undefined;
             resourceInputs["created"] = state ? state.created : undefined;
+            resourceInputs["dssPoolId"] = state ? state.dssPoolId : undefined;
             resourceInputs["endpoints"] = state ? state.endpoints : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
+            resourceInputs["keepLastManualSnapshot"] = state ? state.keepLastManualSnapshot : undefined;
+            resourceInputs["kmsKeyId"] = state ? state.kmsKeyId : undefined;
+            resourceInputs["maintainWindows"] = state ? state.maintainWindows : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["networkId"] = state ? state.networkId : undefined;
             resourceInputs["nodeType"] = state ? state.nodeType : undefined;
@@ -243,9 +309,13 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["userName"] = state ? state.userName : undefined;
             resourceInputs["userPwd"] = state ? state.userPwd : undefined;
             resourceInputs["version"] = state ? state.version : undefined;
+            resourceInputs["volume"] = state ? state.volume : undefined;
             resourceInputs["vpcId"] = state ? state.vpcId : undefined;
         } else {
             const args = argsOrState as ClusterArgs | undefined;
+            if ((!args || args.availabilityZone === undefined) && !opts.urn) {
+                throw new Error("Missing required property 'availabilityZone'");
+            }
             if ((!args || args.networkId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'networkId'");
             }
@@ -268,7 +338,10 @@ export class Cluster extends pulumi.CustomResource {
                 throw new Error("Missing required property 'vpcId'");
             }
             resourceInputs["availabilityZone"] = args ? args.availabilityZone : undefined;
+            resourceInputs["dssPoolId"] = args ? args.dssPoolId : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
+            resourceInputs["keepLastManualSnapshot"] = args ? args.keepLastManualSnapshot : undefined;
+            resourceInputs["kmsKeyId"] = args ? args.kmsKeyId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["networkId"] = args ? args.networkId : undefined;
             resourceInputs["nodeType"] = args ? args.nodeType : undefined;
@@ -281,9 +354,12 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["userName"] = args ? args.userName : undefined;
             resourceInputs["userPwd"] = args ? args.userPwd : undefined;
+            resourceInputs["version"] = args ? args.version : undefined;
+            resourceInputs["volume"] = args ? args.volume : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
             resourceInputs["created"] = undefined /*out*/;
             resourceInputs["endpoints"] = undefined /*out*/;
+            resourceInputs["maintainWindows"] = undefined /*out*/;
             resourceInputs["privateIps"] = undefined /*out*/;
             resourceInputs["publicEndpoints"] = undefined /*out*/;
             resourceInputs["recentEvent"] = undefined /*out*/;
@@ -291,7 +367,6 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["subStatus"] = undefined /*out*/;
             resourceInputs["taskStatus"] = undefined /*out*/;
             resourceInputs["updated"] = undefined /*out*/;
-            resourceInputs["version"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Cluster.__pulumiType, name, resourceInputs, opts);
@@ -303,61 +378,89 @@ export class Cluster extends pulumi.CustomResource {
  */
 export interface ClusterState {
     /**
-     * AZ in a cluster.
+     * The availability zone in which to create the cluster instance.
+     * Changing this parameter will create a new resource.
      */
     availabilityZone?: pulumi.Input<string>;
     /**
-     * Cluster creation time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ
+     * The creation time of the cluster.  
+     * Format: ISO8601: **YYYY-MM-DDThh:mm:ssZ**.
      */
     created?: pulumi.Input<string>;
     /**
-     * View the private network connection information about the cluster. Structure is documented below.
+     * Dedicated storage pool ID.
+     * Changing this parameter will create a new resource.
+     */
+    dssPoolId?: pulumi.Input<string>;
+    /**
+     * Private network connection information about the cluster.
+     * The Endpoint structure is documented below.
      */
     endpoints?: pulumi.Input<pulumi.Input<inputs.Dws.ClusterEndpoint>[]>;
     /**
-     * Specifies the enterprise project id of the dws cluster,
-     * Value 0 indicates the default enterprise project.
+     * The enterprise project ID.
      * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
+     * The number of latest manual snapshots that need to be
+     * retained when deleting the cluster.
+     */
+    keepLastManualSnapshot?: pulumi.Input<number>;
+    /**
+     * The KMS key ID.
+     * Changing this parameter will create a new resource.
+     */
+    kmsKeyId?: pulumi.Input<string>;
+    /**
+     * Cluster maintenance window.
+     * The MaintainWindow structure is documented below.
+     */
+    maintainWindows?: pulumi.Input<pulumi.Input<inputs.Dws.ClusterMaintainWindow>[]>;
+    /**
      * Cluster name, which must be unique and contains 4 to 64 characters, which
      * consist of letters, digits, hyphens(-), or underscores(_) only and must start with a letter.
+     * Changing this creates a new cluster resource.
      */
     name?: pulumi.Input<string>;
     /**
-     * Network ID, which is used for configuring cluster network.
+     * The subnet ID.
+     * Changing this parameter will create a new resource.
      */
     networkId?: pulumi.Input<string>;
     /**
-     * Node type.
+     * The flavor of the cluster.  
+     * [For details](https://support.huaweicloud.com/intl/en-us/productdesc-dws/dws_01_00018.html).
+     * Changing this parameter will create a new resource.
      */
     nodeType?: pulumi.Input<string>;
     /**
-     * Specifies the number of CN. If you use a large-scale cluster, deploy
-     * multiple CNs.
+     * The number of CN.  
+     * The value ranges from 2 to **number_of_node**, the maximum value is 20. Defaults to 3.
+     * Changing this parameter will create a new resource.
      */
     numberOfCn?: pulumi.Input<number>;
     /**
-     * Number of nodes in a cluster. The value ranges from 3 to 32. When expanding,
-     * add at least 3 nodes.
+     * Number of nodes in a cluster.  
+     * The value ranges from 3 to 32 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
      */
     numberOfNode?: pulumi.Input<number>;
     /**
-     * Service port of a cluster (8000 to 10000). The default value is 8000.
+     * Service port of a cluster (8000 to 10000). The default value is 8000.  
+     * Changing this parameter will create a new resource.
      */
     port?: pulumi.Input<number>;
     /**
-     * List of private network IP address.
+     * List of private network IP addresses.
      */
     privateIps?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * Public network connection information about the cluster. If the value is not specified, the
-     * public network connection information is not used by default Structure is documented below.
+     * Public network connection information about the cluster.
+     * The PublicEndpoint structure is documented below.
      */
     publicEndpoints?: pulumi.Input<pulumi.Input<inputs.Dws.ClusterPublicEndpoint>[]>;
     /**
-     * A nested object resource Structure is documented below.
+     * The information about public IP.
      */
     publicIp?: pulumi.Input<inputs.Dws.ClusterPublicIp>;
     /**
@@ -365,61 +468,94 @@ export interface ClusterState {
      */
     recentEvent?: pulumi.Input<number>;
     /**
-     * The region in which to create the cluster resource. If omitted, the
-     * provider-level region will be used. Changing this creates a new cluster resource.
+     * Specifies the region in which to create the resource.
+     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * ID of a security group. The ID is used for configuring cluster
-     * network.
+     * The security group ID.
+     * Changing this parameter will create a new resource.
      */
     securityGroupId?: pulumi.Input<string>;
     /**
-     * Cluster status, which can be one of the following:  CREATING AVAILABLE UNAVAILABLE CREATION FAILED.
+     * The cluster status.  
+     * The valid values are **CREATING**, **AVAILABLE**, **ACTIVE**, **FAILED**, **CREATE_FAILED**,
+     * **DELETING**, **DELETE_FAILED**, **DELETED**, and **FROZEN**.
      */
     status?: pulumi.Input<string>;
     /**
-     * Sub-status of clusters in the AVAILABLE state. The value can be one of the following:  NORMAL READONLY
-     * REDISTRIBUTING REDISTRIBUTION-FAILURE UNBALANCED UNBALANCED | READONLY DEGRADED DEGRADED | READONLY DEGRADED |
-     * UNBALANCED UNBALANCED | REDISTRIBUTING UNBALANCED | REDISTRIBUTION-FAILURE READONLY | REDISTRIBUTION-FAILURE
-     * UNBALANCED | READONLY | REDISTRIBUTION-FAILURE DEGRADED | REDISTRIBUTION-FAILURE DEGRADED | UNBALANCED |
-     * REDISTRIBUTION-FAILURE DEGRADED | UNBALANCED | READONLY | REDISTRIBUTION-FAILURE DEGRADED | UNBALANCED | READONLY
+     * Sub-status of clusters in the AVAILABLE state.  
+     * The value can be one of the following:
+     * + READONLY
+     * + REDISTRIBUTING
+     * + REDISTRIBUTION-FAILURE
+     * + UNBALANCED
+     * + UNBALANCED | READONLY
+     * + DEGRADED
+     * + DEGRADED | READONLY
+     * + DEGRADED | UNBALANCED
+     * + UNBALANCED | REDISTRIBUTING
+     * + UNBALANCED | REDISTRIBUTION-FAILURE
+     * + READONLY | REDISTRIBUTION-FAILURE
+     * + UNBALANCED | READONLY | REDISTRIBUTION-FAILURE
+     * + DEGRADED | REDISTRIBUTION-FAILURE
+     * + DEGRADED | UNBALANCED | REDISTRIBUTION-FAILURE
+     * + DEGRADED | UNBALANCED | READONLY | REDISTRIBUTION-FAILURE
+     * + DEGRADED | UNBALANCED | READONLY
      */
     subStatus?: pulumi.Input<string>;
     /**
-     * Specifies the key/value pairs to associate with the cluster.
+     * The key/value pairs to associate with the cluster.
+     * Changing this parameter will create a new resource.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Cluster management task. The value can be one of the following:
-     * RESTORING SNAPSHOTTING GROWING REBOOTING SETTING_CONFIGURATION CONFIGURING_EXT_DATASOURCE DELETING_EXT_DATASOURCE
-     * REBOOT_FAILURE RESIZE_FAILURE
+     * Cluster management task.  
+     * The value can be one of the following:
+     * + UNFREEZING
+     * + FREEZING
+     * + RESTORING
+     * + SNAPSHOTTING
+     * + GROWING
+     * + REBOOTING
+     * + SETTING_CONFIGURATION
+     * + CONFIGURING_EXT_DATASOURCE
+     * + DELETING_EXT_DATASOURCE
+     * + REBOOT_FAILURE
+     * + RESIZE_FAILURE
      */
     taskStatus?: pulumi.Input<string>;
     /**
-     * Last modification time of a cluster. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ
+     * The updated time of the cluster.  
+     * Format: ISO8601: **YYYY-MM-DDThh:mm:ssZ**.
      */
     updated?: pulumi.Input<string>;
     /**
-     * Administrator username for logging in to a data warehouse cluster The
-     * administrator username must:  Consist of lowercase letters, digits, or underscores. Start with a lowercase letter or
-     * an underscore. Contain 1 to 63 characters. Cannot be a keyword of the DWS database.
+     * Administrator username for logging in to a data warehouse cluster.  
+     * The administrator username must: Consist of lowercase letters, digits, or underscores.
+     * Start with a lowercase letter or an underscore.
+     * Changing this parameter will create a new resource.
      */
     userName?: pulumi.Input<string>;
     /**
-     * Administrator password for logging in to a data warehouse cluster A password
-     * must conform to the following rules:  Contains 8 to 32 characters. Cannot be the same as the username or the username
-     * written in reverse order. Contains three types of the following:
-     * Lowercase letters Uppercase letters Digits Special characters
-     * ~!@#%^&*()-_=+|[{}];:,<.>/?
+     * Administrator password for logging in to a data warehouse cluster.
+     * A password contains 8 to 32 characters, which consist of letters, digits,
+     * and special characters(~!@#%^&*()-_=+|[{}];:,<.>/?).
+     * It cannot be the same as the username or the username written in reverse order.
      */
     userPwd?: pulumi.Input<string>;
     /**
-     * Data warehouse version.
+     * The cluster version.
+     * Changing this parameter will create a new resource.
      */
     version?: pulumi.Input<string>;
     /**
-     * VPC ID, which is used for configuring cluster network.
+     * The information about the volume.
+     */
+    volume?: pulumi.Input<inputs.Dws.ClusterVolume>;
+    /**
+     * The VPC ID.
+     * Changing this parameter will create a new resource.
      */
     vpcId?: pulumi.Input<string>;
 }
@@ -429,76 +565,108 @@ export interface ClusterState {
  */
 export interface ClusterArgs {
     /**
-     * AZ in a cluster.
+     * The availability zone in which to create the cluster instance.
+     * Changing this parameter will create a new resource.
      */
-    availabilityZone?: pulumi.Input<string>;
+    availabilityZone: pulumi.Input<string>;
     /**
-     * Specifies the enterprise project id of the dws cluster,
-     * Value 0 indicates the default enterprise project.
+     * Dedicated storage pool ID.
+     * Changing this parameter will create a new resource.
+     */
+    dssPoolId?: pulumi.Input<string>;
+    /**
+     * The enterprise project ID.
      * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
+     * The number of latest manual snapshots that need to be
+     * retained when deleting the cluster.
+     */
+    keepLastManualSnapshot?: pulumi.Input<number>;
+    /**
+     * The KMS key ID.
+     * Changing this parameter will create a new resource.
+     */
+    kmsKeyId?: pulumi.Input<string>;
+    /**
      * Cluster name, which must be unique and contains 4 to 64 characters, which
      * consist of letters, digits, hyphens(-), or underscores(_) only and must start with a letter.
+     * Changing this creates a new cluster resource.
      */
     name?: pulumi.Input<string>;
     /**
-     * Network ID, which is used for configuring cluster network.
+     * The subnet ID.
+     * Changing this parameter will create a new resource.
      */
     networkId: pulumi.Input<string>;
     /**
-     * Node type.
+     * The flavor of the cluster.  
+     * [For details](https://support.huaweicloud.com/intl/en-us/productdesc-dws/dws_01_00018.html).
+     * Changing this parameter will create a new resource.
      */
     nodeType: pulumi.Input<string>;
     /**
-     * Specifies the number of CN. If you use a large-scale cluster, deploy
-     * multiple CNs.
+     * The number of CN.  
+     * The value ranges from 2 to **number_of_node**, the maximum value is 20. Defaults to 3.
+     * Changing this parameter will create a new resource.
      */
     numberOfCn?: pulumi.Input<number>;
     /**
-     * Number of nodes in a cluster. The value ranges from 3 to 32. When expanding,
-     * add at least 3 nodes.
+     * Number of nodes in a cluster.  
+     * The value ranges from 3 to 32 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
      */
     numberOfNode: pulumi.Input<number>;
     /**
-     * Service port of a cluster (8000 to 10000). The default value is 8000.
+     * Service port of a cluster (8000 to 10000). The default value is 8000.  
+     * Changing this parameter will create a new resource.
      */
     port?: pulumi.Input<number>;
     /**
-     * A nested object resource Structure is documented below.
+     * The information about public IP.
      */
     publicIp?: pulumi.Input<inputs.Dws.ClusterPublicIp>;
     /**
-     * The region in which to create the cluster resource. If omitted, the
-     * provider-level region will be used. Changing this creates a new cluster resource.
+     * Specifies the region in which to create the resource.
+     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * ID of a security group. The ID is used for configuring cluster
-     * network.
+     * The security group ID.
+     * Changing this parameter will create a new resource.
      */
     securityGroupId: pulumi.Input<string>;
     /**
-     * Specifies the key/value pairs to associate with the cluster.
+     * The key/value pairs to associate with the cluster.
+     * Changing this parameter will create a new resource.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Administrator username for logging in to a data warehouse cluster The
-     * administrator username must:  Consist of lowercase letters, digits, or underscores. Start with a lowercase letter or
-     * an underscore. Contain 1 to 63 characters. Cannot be a keyword of the DWS database.
+     * Administrator username for logging in to a data warehouse cluster.  
+     * The administrator username must: Consist of lowercase letters, digits, or underscores.
+     * Start with a lowercase letter or an underscore.
+     * Changing this parameter will create a new resource.
      */
     userName: pulumi.Input<string>;
     /**
-     * Administrator password for logging in to a data warehouse cluster A password
-     * must conform to the following rules:  Contains 8 to 32 characters. Cannot be the same as the username or the username
-     * written in reverse order. Contains three types of the following:
-     * Lowercase letters Uppercase letters Digits Special characters
-     * ~!@#%^&*()-_=+|[{}];:,<.>/?
+     * Administrator password for logging in to a data warehouse cluster.
+     * A password contains 8 to 32 characters, which consist of letters, digits,
+     * and special characters(~!@#%^&*()-_=+|[{}];:,<.>/?).
+     * It cannot be the same as the username or the username written in reverse order.
      */
     userPwd: pulumi.Input<string>;
     /**
-     * VPC ID, which is used for configuring cluster network.
+     * The cluster version.
+     * Changing this parameter will create a new resource.
+     */
+    version?: pulumi.Input<string>;
+    /**
+     * The information about the volume.
+     */
+    volume?: pulumi.Input<inputs.Dws.ClusterVolume>;
+    /**
+     * The VPC ID.
+     * Changing this parameter will create a new resource.
      */
     vpcId: pulumi.Input<string>;
 }

@@ -20,10 +20,11 @@ import * as utilities from "../utilities";
  * const config = new pulumi.Config();
  * const certificatedId = config.requireObject("certificatedId");
  * const vpcId = config.requireObject("vpcId");
- * const dedicatedEngineId = config.requireObject("dedicatedEngineId");
+ * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
  * const domain1 = new huaweicloud.waf.DedicatedDomain("domain1", {
  *     domain: "www.example.com",
- *     certificateId: huaweicloud_waf_certificate.certificate_1.id,
+ *     certificateId: certificatedId,
+ *     enterpriseProjectId: enterpriseProjectId,
  *     servers: [{
  *         clientProtocol: "HTTPS",
  *         serverProtocol: "HTTP",
@@ -37,10 +38,16 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Dedicated mode domain can be imported using the `id`, e.g.
+ * There are two ways to import WAF dedicated domain state. * Using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Waf/dedicatedDomain:DedicatedDomain domain_1 69e9a86becb4424298cc6bdeacbf69d5
+ *  $ pulumi import huaweicloud:Waf/dedicatedDomain:DedicatedDomain test <id>
+ * ```
+ *
+ *  * Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:Waf/dedicatedDomain:DedicatedDomain test <id>/<enterprise_project_id>
  * ```
  */
 export class DedicatedDomain extends pulumi.CustomResource {
@@ -88,21 +95,40 @@ export class DedicatedDomain extends pulumi.CustomResource {
      * The name of the certificate used by the domain name.
      */
     public /*out*/ readonly certificateName!: pulumi.Output<string>;
-    public /*out*/ readonly cipher!: pulumi.Output<string>;
+    /**
+     * Specifies the cipher suite of domain. The options include `cipher1`, `cipher2`,
+     * `cipher3`, `cipher4`, `cipherDefault`.
+     */
+    public readonly cipher!: pulumi.Output<string>;
     /**
      * The compliance certifications of the domain, values are:
      */
     public /*out*/ readonly complianceCertification!: pulumi.Output<{[key: string]: boolean}>;
     /**
-     * Specifies the domain name to be protected. For example, www.example.com or
-     * *.example.com. Changing this creates a new domain.
+     * Specifies the protected domain name or IP address (port allowed). For example,
+     * `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
      */
     public readonly domain!: pulumi.Output<string>;
+    /**
+     * Specifies the enterprise project ID of WAF dedicated domain.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
     /**
      * Specifies whether to retain the policy when deleting a domain name.
      * Defaults to `true`.
      */
     public readonly keepPolicy!: pulumi.Output<boolean | undefined>;
+    /**
+     * Specifies the status of the PCI 3DS compliance certification check. The options
+     * include `true` and `false`. This parameter must be used together with tls and cipher.
+     */
+    public readonly pci3ds!: pulumi.Output<boolean>;
+    /**
+     * Specifies the status of the PCI DSS compliance certification check. The options
+     * include `true` and `false`. This parameter must be used together with tls and cipher.
+     */
+    public readonly pciDss!: pulumi.Output<boolean>;
     /**
      * Specifies the policy ID associated with the domain. If not specified, a new policy
      * will be created automatically.
@@ -132,9 +158,10 @@ export class DedicatedDomain extends pulumi.CustomResource {
      */
     public readonly servers!: pulumi.Output<outputs.Waf.DedicatedDomainServer[]>;
     /**
-     * The TLS configuration of domain.
+     * Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
+     * `TLS v1.2`.
      */
-    public /*out*/ readonly tls!: pulumi.Output<string>;
+    public readonly tls!: pulumi.Output<string>;
     /**
      * The traffic identifier of domain. Valid values are:
      */
@@ -160,7 +187,10 @@ export class DedicatedDomain extends pulumi.CustomResource {
             resourceInputs["cipher"] = state ? state.cipher : undefined;
             resourceInputs["complianceCertification"] = state ? state.complianceCertification : undefined;
             resourceInputs["domain"] = state ? state.domain : undefined;
+            resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["keepPolicy"] = state ? state.keepPolicy : undefined;
+            resourceInputs["pci3ds"] = state ? state.pci3ds : undefined;
+            resourceInputs["pciDss"] = state ? state.pciDss : undefined;
             resourceInputs["policyId"] = state ? state.policyId : undefined;
             resourceInputs["protectStatus"] = state ? state.protectStatus : undefined;
             resourceInputs["protocol"] = state ? state.protocol : undefined;
@@ -178,20 +208,23 @@ export class DedicatedDomain extends pulumi.CustomResource {
                 throw new Error("Missing required property 'servers'");
             }
             resourceInputs["certificateId"] = args ? args.certificateId : undefined;
+            resourceInputs["cipher"] = args ? args.cipher : undefined;
             resourceInputs["domain"] = args ? args.domain : undefined;
+            resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["keepPolicy"] = args ? args.keepPolicy : undefined;
+            resourceInputs["pci3ds"] = args ? args.pci3ds : undefined;
+            resourceInputs["pciDss"] = args ? args.pciDss : undefined;
             resourceInputs["policyId"] = args ? args.policyId : undefined;
             resourceInputs["protectStatus"] = args ? args.protectStatus : undefined;
             resourceInputs["proxy"] = args ? args.proxy : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["servers"] = args ? args.servers : undefined;
+            resourceInputs["tls"] = args ? args.tls : undefined;
             resourceInputs["accessStatus"] = undefined /*out*/;
             resourceInputs["alarmPage"] = undefined /*out*/;
             resourceInputs["certificateName"] = undefined /*out*/;
-            resourceInputs["cipher"] = undefined /*out*/;
             resourceInputs["complianceCertification"] = undefined /*out*/;
             resourceInputs["protocol"] = undefined /*out*/;
-            resourceInputs["tls"] = undefined /*out*/;
             resourceInputs["trafficIdentifier"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
@@ -220,21 +253,40 @@ export interface DedicatedDomainState {
      * The name of the certificate used by the domain name.
      */
     certificateName?: pulumi.Input<string>;
+    /**
+     * Specifies the cipher suite of domain. The options include `cipher1`, `cipher2`,
+     * `cipher3`, `cipher4`, `cipherDefault`.
+     */
     cipher?: pulumi.Input<string>;
     /**
      * The compliance certifications of the domain, values are:
      */
     complianceCertification?: pulumi.Input<{[key: string]: pulumi.Input<boolean>}>;
     /**
-     * Specifies the domain name to be protected. For example, www.example.com or
-     * *.example.com. Changing this creates a new domain.
+     * Specifies the protected domain name or IP address (port allowed). For example,
+     * `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
      */
     domain?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID of WAF dedicated domain.
+     * Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Specifies whether to retain the policy when deleting a domain name.
      * Defaults to `true`.
      */
     keepPolicy?: pulumi.Input<boolean>;
+    /**
+     * Specifies the status of the PCI 3DS compliance certification check. The options
+     * include `true` and `false`. This parameter must be used together with tls and cipher.
+     */
+    pci3ds?: pulumi.Input<boolean>;
+    /**
+     * Specifies the status of the PCI DSS compliance certification check. The options
+     * include `true` and `false`. This parameter must be used together with tls and cipher.
+     */
+    pciDss?: pulumi.Input<boolean>;
     /**
      * Specifies the policy ID associated with the domain. If not specified, a new policy
      * will be created automatically.
@@ -264,7 +316,8 @@ export interface DedicatedDomainState {
      */
     servers?: pulumi.Input<pulumi.Input<inputs.Waf.DedicatedDomainServer>[]>;
     /**
-     * The TLS configuration of domain.
+     * Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
+     * `TLS v1.2`.
      */
     tls?: pulumi.Input<string>;
     /**
@@ -283,15 +336,35 @@ export interface DedicatedDomainArgs {
      */
     certificateId?: pulumi.Input<string>;
     /**
-     * Specifies the domain name to be protected. For example, www.example.com or
-     * *.example.com. Changing this creates a new domain.
+     * Specifies the cipher suite of domain. The options include `cipher1`, `cipher2`,
+     * `cipher3`, `cipher4`, `cipherDefault`.
+     */
+    cipher?: pulumi.Input<string>;
+    /**
+     * Specifies the protected domain name or IP address (port allowed). For example,
+     * `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
      */
     domain: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID of WAF dedicated domain.
+     * Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Specifies whether to retain the policy when deleting a domain name.
      * Defaults to `true`.
      */
     keepPolicy?: pulumi.Input<boolean>;
+    /**
+     * Specifies the status of the PCI 3DS compliance certification check. The options
+     * include `true` and `false`. This parameter must be used together with tls and cipher.
+     */
+    pci3ds?: pulumi.Input<boolean>;
+    /**
+     * Specifies the status of the PCI DSS compliance certification check. The options
+     * include `true` and `false`. This parameter must be used together with tls and cipher.
+     */
+    pciDss?: pulumi.Input<boolean>;
     /**
      * Specifies the policy ID associated with the domain. If not specified, a new policy
      * will be created automatically.
@@ -316,4 +389,9 @@ export interface DedicatedDomainArgs {
      * The object structure is documented below.
      */
     servers: pulumi.Input<pulumi.Input<inputs.Waf.DedicatedDomainServer>[]>;
+    /**
+     * Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
+     * `TLS v1.2`.
+     */
+    tls?: pulumi.Input<string>;
 }

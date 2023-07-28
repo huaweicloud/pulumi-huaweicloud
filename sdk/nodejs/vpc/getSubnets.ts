@@ -8,6 +8,22 @@ import * as utilities from "../utilities";
 /**
  * Use this data source to get a list of VPC subnet.
  *
+ * ## Example Usage
+ *
+ * An example filter by name and tag
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as huaweicloud from "@pulumi/huaweicloud";
+ *
+ * const subnet = huaweicloud.Vpc.getSubnets({
+ *     name: _var.subnet_name,
+ *     tags: {
+ *         foo: "bar",
+ *     },
+ * });
+ * export const subnetVpcIds = [subnet.then(subnet => subnet.subnets)].map(__item => __item?.vpcId);
+ * ```
  * ## **Attributes Reference**
  *
  * The following attributes are exported:

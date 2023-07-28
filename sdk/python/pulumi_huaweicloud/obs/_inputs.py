@@ -17,6 +17,7 @@ __all__ = [
     'BucketLifecycleRuleNoncurrentVersionTransitionArgs',
     'BucketLifecycleRuleTransitionArgs',
     'BucketLoggingArgs',
+    'BucketStorageInfoArgs',
     'BucketWebsiteArgs',
 ]
 
@@ -410,6 +411,45 @@ class BucketLoggingArgs:
     @target_prefix.setter
     def target_prefix(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "target_prefix", value)
+
+
+@pulumi.input_type
+class BucketStorageInfoArgs:
+    def __init__(__self__, *,
+                 object_number: Optional[pulumi.Input[int]] = None,
+                 size: Optional[pulumi.Input[int]] = None):
+        """
+        :param pulumi.Input[int] object_number: The number of objects stored in the bucket.
+        :param pulumi.Input[int] size: The stored size of the bucket.
+        """
+        if object_number is not None:
+            pulumi.set(__self__, "object_number", object_number)
+        if size is not None:
+            pulumi.set(__self__, "size", size)
+
+    @property
+    @pulumi.getter(name="objectNumber")
+    def object_number(self) -> Optional[pulumi.Input[int]]:
+        """
+        The number of objects stored in the bucket.
+        """
+        return pulumi.get(self, "object_number")
+
+    @object_number.setter
+    def object_number(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "object_number", value)
+
+    @property
+    @pulumi.getter
+    def size(self) -> Optional[pulumi.Input[int]]:
+        """
+        The stored size of the bucket.
+        """
+        return pulumi.get(self, "size")
+
+    @size.setter
+    def size(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "size", value)
 
 
 @pulumi.input_type

@@ -70,7 +70,7 @@ export class Application extends pulumi.CustomResource {
     public /*out*/ readonly componentIds!: pulumi.Output<string[]>;
     /**
      * Specifies the application description.
-     * The description can contian a maximum of `128` characters.
+     * The description can contain a maximum of `128` characters.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
@@ -137,7 +137,7 @@ export interface ApplicationState {
     componentIds?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the application description.
-     * The description can contian a maximum of `128` characters.
+     * The description can contain a maximum of `128` characters.
      */
     description?: pulumi.Input<string>;
     /**
@@ -168,7 +168,7 @@ export interface ApplicationState {
 export interface ApplicationArgs {
     /**
      * Specifies the application description.
-     * The description can contian a maximum of `128` characters.
+     * The description can contain a maximum of `128` characters.
      */
     description?: pulumi.Input<string>;
     /**

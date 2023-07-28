@@ -67,6 +67,8 @@ class InstanceNicArgs:
                a new instance.
         :param pulumi.Input[str] ip_address: Specifies a fixed IPv4 address to be used on this network. Changing this
                creates a new instance.
+        :param pulumi.Input[str] mac_address: The MAC address of the nic.
+        :param pulumi.Input[str] port_id: The port ID corresponding to the IP address.
         """
         pulumi.set(__self__, "subnet_id", subnet_id)
         if ip_address is not None:
@@ -105,6 +107,9 @@ class InstanceNicArgs:
     @property
     @pulumi.getter(name="macAddress")
     def mac_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        The MAC address of the nic.
+        """
         return pulumi.get(self, "mac_address")
 
     @mac_address.setter
@@ -114,6 +119,9 @@ class InstanceNicArgs:
     @property
     @pulumi.getter(name="portId")
     def port_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The port ID corresponding to the IP address.
+        """
         return pulumi.get(self, "port_id")
 
     @port_id.setter

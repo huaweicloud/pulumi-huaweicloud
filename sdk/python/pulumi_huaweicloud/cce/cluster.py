@@ -41,6 +41,7 @@ class ClusterArgs:
                  delete_sfs: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  eip: Optional[pulumi.Input[str]] = None,
+                 enable_distribute_management: Optional[pulumi.Input[bool]] = None,
                  eni_subnet_cidr: Optional[pulumi.Input[str]] = None,
                  eni_subnet_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -55,6 +56,7 @@ class ClusterArgs:
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 security_group_id: Optional[pulumi.Input[str]] = None,
                  service_network_cidr: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
@@ -79,6 +81,7 @@ class ClusterArgs:
                configured with a *DNS address*. Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC used to create the node.
                Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] annotations: schema: Internal
         :param pulumi.Input[str] authenticating_proxy_ca: Specifies the CA root certificate provided in the
                **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
                Changing this parameter will create a new cluster resource.
@@ -91,8 +94,7 @@ class ClusterArgs:
         :param pulumi.Input[str] authentication_mode: Specifies the authentication mode of the cluster, possible values
                are **rbac** and **authenticating_proxy**. Defaults to **rbac**.
                Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are **true** and
-               **false**. Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are **true** and **false**.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the CCE cluster.
                Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
                Changing this parameter will create a new cluster resource.
@@ -100,24 +102,29 @@ class ClusterArgs:
                **ARM64**. Defaults to **VirtualMachine**. Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] cluster_version: Specifies the cluster version, defaults to the latest supported
                version. Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] container_network_cidr: Specifies the container network segment.
+        :param pulumi.Input[str] container_network_cidr: Specifies the container network segments.
+               In clusters of v1.21 and later, when the `container_network_type` is **vpc-router**, you can add multiple container
+               segments, separated with comma (,). In other situations, only the first segment takes effect.
                Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] delete_all: Specified whether to delete all associated storage resources when deleting the CCE
                cluster. valid values are **true**, **try** and **false**. Default is **false**.
         :param pulumi.Input[str] delete_efs: Specified whether to unbind associated SFS Turbo file systems when deleting the CCE
                cluster. valid values are **true**, **try** and **false**. Default is **false**.
+        :param pulumi.Input[str] delete_eni: schema: Internal
         :param pulumi.Input[str] delete_evs: Specified whether to delete associated EVS disks when deleting the CCE cluster.
                valid values are **true**, **try** and **false**. Default is **false**.
+        :param pulumi.Input[str] delete_net: schema: Internal
         :param pulumi.Input[str] delete_obs: Specified whether to delete associated OBS buckets when deleting the CCE cluster.
                valid values are **true**, **try** and **false**. Default is **false**.
         :param pulumi.Input[str] delete_sfs: Specified whether to delete associated SFS file systems when deleting the CCE
                cluster. valid values are **true**, **try** and **false**. Default is **false**.
         :param pulumi.Input[str] description: Specifies the cluster description.
         :param pulumi.Input[str] eip: Specifies the EIP address of the cluster.
-        :param pulumi.Input[str] eni_subnet_cidr: Specifies the ENI network segment. Specified when creating a CCE
-               Turbo cluster. Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] eni_subnet_id: Specifies the ENI subnet ID. Specified when creating a CCE Turbo
-               cluster. Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[bool] enable_distribute_management: schema: Internal
+        :param pulumi.Input[str] eni_subnet_cidr: The ENI network segment. This value is valid when only one eni_subnet_id is specified.
+        :param pulumi.Input[str] eni_subnet_id: Specifies the **IPv4 subnet ID** of the subnet where the ENI resides.
+               Specified when creating a CCE Turbo cluster. You can add multiple IPv4 subnet ID, separated with comma (,).
+               Only adding subnets is allowed, removing subnets is not allowed.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of the CCE cluster.
                Changing this parameter will create a new cluster resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_param: Specifies the extended parameter.
@@ -125,8 +132,10 @@ class ClusterArgs:
         :param pulumi.Input[bool] hibernate: Specifies whether to hibernate the CCE cluster. Defaults to **false**. After a cluster is
                hibernated, resources such as workloads cannot be created or managed in the cluster, and the cluster cannot be
                deleted.
+        :param pulumi.Input[str] highway_subnet_id: schema: Internal
         :param pulumi.Input[str] kube_proxy_mode: Specifies the service forwarding mode.
                Changing this parameter will create a new cluster resource. Two modes are available:
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: schema: Internal
         :param pulumi.Input[Sequence[pulumi.Input['ClusterMasterArgs']]] masters: Specifies the advanced configuration of master nodes.
                The object structure is documented below.
                This parameter and `multi_az` are alternative. Changing this parameter will create a new cluster resource.
@@ -144,6 +153,12 @@ class ClusterArgs:
                Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the CCE cluster resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] security_group_id: Specifies the default worker node security group ID of the cluster.
+               If left empty, the system will automatically create a default worker node security group for you.
+               The default worker node security group needs to allow access from certain ports to ensure normal communications.
+               For details, see [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+               If updated, the modified security group will only be applied to nodes newly created or accepted.
+               For existing nodes, you need to manually modify the security group rules for them.
         :param pulumi.Input[str] service_network_cidr: Specifies the service network segment.
                Changing this parameter will create a new cluster resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the tags of the CCE cluster, key/value pair format.
@@ -163,6 +178,9 @@ class ClusterArgs:
             pulumi.set(__self__, "authenticating_proxy_private_key", authenticating_proxy_private_key)
         if authentication_mode is not None:
             pulumi.set(__self__, "authentication_mode", authentication_mode)
+        if auto_pay is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
         if auto_pay is not None:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
@@ -198,6 +216,8 @@ class ClusterArgs:
             pulumi.set(__self__, "description", description)
         if eip is not None:
             pulumi.set(__self__, "eip", eip)
+        if enable_distribute_management is not None:
+            pulumi.set(__self__, "enable_distribute_management", enable_distribute_management)
         if eni_subnet_cidr is not None:
             pulumi.set(__self__, "eni_subnet_cidr", eni_subnet_cidr)
         if eni_subnet_id is not None:
@@ -226,6 +246,8 @@ class ClusterArgs:
             pulumi.set(__self__, "period_unit", period_unit)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if security_group_id is not None:
+            pulumi.set(__self__, "security_group_id", security_group_id)
         if service_network_cidr is not None:
             pulumi.set(__self__, "service_network_cidr", service_network_cidr)
         if tags is not None:
@@ -298,6 +320,9 @@ class ClusterArgs:
     @property
     @pulumi.getter
     def annotations(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "annotations")
 
     @annotations.setter
@@ -373,8 +398,7 @@ class ClusterArgs:
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies whether auto renew is enabled. Valid values are **true** and
-        **false**. Changing this parameter will create a new cluster resource.
+        Specifies whether auto renew is enabled. Valid values are **true** and **false**.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -435,7 +459,9 @@ class ClusterArgs:
     @pulumi.getter(name="containerNetworkCidr")
     def container_network_cidr(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the container network segment.
+        Specifies the container network segments.
+        In clusters of v1.21 and later, when the `container_network_type` is **vpc-router**, you can add multiple container
+        segments, separated with comma (,). In other situations, only the first segment takes effect.
         Changing this parameter will create a new cluster resource.
         """
         return pulumi.get(self, "container_network_cidr")
@@ -473,6 +499,9 @@ class ClusterArgs:
     @property
     @pulumi.getter(name="deleteEni")
     def delete_eni(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "delete_eni")
 
     @delete_eni.setter
@@ -495,6 +524,9 @@ class ClusterArgs:
     @property
     @pulumi.getter(name="deleteNet")
     def delete_net(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "delete_net")
 
     @delete_net.setter
@@ -552,11 +584,22 @@ class ClusterArgs:
         pulumi.set(self, "eip", value)
 
     @property
+    @pulumi.getter(name="enableDistributeManagement")
+    def enable_distribute_management(self) -> Optional[pulumi.Input[bool]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "enable_distribute_management")
+
+    @enable_distribute_management.setter
+    def enable_distribute_management(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_distribute_management", value)
+
+    @property
     @pulumi.getter(name="eniSubnetCidr")
     def eni_subnet_cidr(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ENI network segment. Specified when creating a CCE
-        Turbo cluster. Changing this parameter will create a new cluster resource.
+        The ENI network segment. This value is valid when only one eni_subnet_id is specified.
         """
         return pulumi.get(self, "eni_subnet_cidr")
 
@@ -568,8 +611,9 @@ class ClusterArgs:
     @pulumi.getter(name="eniSubnetId")
     def eni_subnet_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ENI subnet ID. Specified when creating a CCE Turbo
-        cluster. Changing this parameter will create a new cluster resource.
+        Specifies the **IPv4 subnet ID** of the subnet where the ENI resides.
+        Specified when creating a CCE Turbo cluster. You can add multiple IPv4 subnet ID, separated with comma (,).
+        Only adding subnets is allowed, removing subnets is not allowed.
         """
         return pulumi.get(self, "eni_subnet_id")
 
@@ -620,6 +664,9 @@ class ClusterArgs:
     @property
     @pulumi.getter(name="highwaySubnetId")
     def highway_subnet_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "highway_subnet_id")
 
     @highway_subnet_id.setter
@@ -642,785 +689,9 @@ class ClusterArgs:
     @property
     @pulumi.getter
     def labels(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
-        return pulumi.get(self, "labels")
-
-    @labels.setter
-    def labels(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
-        pulumi.set(self, "labels", value)
-
-    @property
-    @pulumi.getter
-    def masters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ClusterMasterArgs']]]]:
         """
-        Specifies the advanced configuration of master nodes.
-        The object structure is documented below.
-        This parameter and `multi_az` are alternative. Changing this parameter will create a new cluster resource.
+        schema: Internal
         """
-        return pulumi.get(self, "masters")
-
-    @masters.setter
-    def masters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterMasterArgs']]]]):
-        pulumi.set(self, "masters", value)
-
-    @property
-    @pulumi.getter(name="multiAz")
-    def multi_az(self) -> Optional[pulumi.Input[bool]]:
-        """
-        Specifies whether to enable multiple AZs for the cluster, only when using HA
-        flavors. Changing this parameter will create a new cluster resource. This parameter and `masters` are alternative.
-        """
-        return pulumi.get(self, "multi_az")
-
-    @multi_az.setter
-    def multi_az(self, value: Optional[pulumi.Input[bool]]):
-        pulumi.set(self, "multi_az", value)
-
-    @property
-    @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the cluster name.
-        Changing this parameter will create a new cluster resource.
-        """
-        return pulumi.get(self, "name")
-
-    @name.setter
-    def name(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "name", value)
-
-    @property
-    @pulumi.getter
-    def period(self) -> Optional[pulumi.Input[int]]:
-        """
-        Specifies the charging period of the CCE cluster.
-        If `period_unit` is set to **month**, the value ranges from 1 to 9.
-        If `period_unit` is set to **year**, the value ranges from 1 to 3.
-        This parameter is mandatory if `charging_mode` is set to **prePaid**.
-        Changing this parameter will create a new cluster resource.
-        """
-        return pulumi.get(self, "period")
-
-    @period.setter
-    def period(self, value: Optional[pulumi.Input[int]]):
-        pulumi.set(self, "period", value)
-
-    @property
-    @pulumi.getter(name="periodUnit")
-    def period_unit(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the charging period unit of the CCE cluster.
-        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
-        Changing this parameter will create a new cluster resource.
-        """
-        return pulumi.get(self, "period_unit")
-
-    @period_unit.setter
-    def period_unit(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "period_unit", value)
-
-    @property
-    @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the region in which to create the CCE cluster resource.
-        If omitted, the provider-level region will be used. Changing this parameter will create a new cluster resource.
-        """
-        return pulumi.get(self, "region")
-
-    @region.setter
-    def region(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "region", value)
-
-    @property
-    @pulumi.getter(name="serviceNetworkCidr")
-    def service_network_cidr(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the service network segment.
-        Changing this parameter will create a new cluster resource.
-        """
-        return pulumi.get(self, "service_network_cidr")
-
-    @service_network_cidr.setter
-    def service_network_cidr(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "service_network_cidr", value)
-
-    @property
-    @pulumi.getter
-    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
-        """
-        Specifies the tags of the CCE cluster, key/value pair format.
-        Changing this parameter will create a new cluster resource.
-        """
-        return pulumi.get(self, "tags")
-
-    @tags.setter
-    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
-        pulumi.set(self, "tags", value)
-
-
-@pulumi.input_type
-class _ClusterState:
-    def __init__(__self__, *,
-                 annotations: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
-                 authenticating_proxy_ca: Optional[pulumi.Input[str]] = None,
-                 authenticating_proxy_cert: Optional[pulumi.Input[str]] = None,
-                 authenticating_proxy_private_key: Optional[pulumi.Input[str]] = None,
-                 authentication_mode: Optional[pulumi.Input[str]] = None,
-                 auto_pay: Optional[pulumi.Input[str]] = None,
-                 auto_renew: Optional[pulumi.Input[str]] = None,
-                 billing_mode: Optional[pulumi.Input[int]] = None,
-                 certificate_clusters: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterCertificateClusterArgs']]]] = None,
-                 certificate_users: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterCertificateUserArgs']]]] = None,
-                 charging_mode: Optional[pulumi.Input[str]] = None,
-                 cluster_type: Optional[pulumi.Input[str]] = None,
-                 cluster_version: Optional[pulumi.Input[str]] = None,
-                 container_network_cidr: Optional[pulumi.Input[str]] = None,
-                 container_network_type: Optional[pulumi.Input[str]] = None,
-                 delete_all: Optional[pulumi.Input[str]] = None,
-                 delete_efs: Optional[pulumi.Input[str]] = None,
-                 delete_eni: Optional[pulumi.Input[str]] = None,
-                 delete_evs: Optional[pulumi.Input[str]] = None,
-                 delete_net: Optional[pulumi.Input[str]] = None,
-                 delete_obs: Optional[pulumi.Input[str]] = None,
-                 delete_sfs: Optional[pulumi.Input[str]] = None,
-                 description: Optional[pulumi.Input[str]] = None,
-                 eip: Optional[pulumi.Input[str]] = None,
-                 eni_subnet_cidr: Optional[pulumi.Input[str]] = None,
-                 eni_subnet_id: Optional[pulumi.Input[str]] = None,
-                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
-                 extend_param: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
-                 flavor_id: Optional[pulumi.Input[str]] = None,
-                 hibernate: Optional[pulumi.Input[bool]] = None,
-                 highway_subnet_id: Optional[pulumi.Input[str]] = None,
-                 kube_config_raw: Optional[pulumi.Input[str]] = None,
-                 kube_proxy_mode: Optional[pulumi.Input[str]] = None,
-                 labels: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
-                 masters: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterMasterArgs']]]] = None,
-                 multi_az: Optional[pulumi.Input[bool]] = None,
-                 name: Optional[pulumi.Input[str]] = None,
-                 period: Optional[pulumi.Input[int]] = None,
-                 period_unit: Optional[pulumi.Input[str]] = None,
-                 region: Optional[pulumi.Input[str]] = None,
-                 security_group_id: Optional[pulumi.Input[str]] = None,
-                 service_network_cidr: Optional[pulumi.Input[str]] = None,
-                 status: Optional[pulumi.Input[str]] = None,
-                 subnet_id: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
-                 vpc_id: Optional[pulumi.Input[str]] = None):
-        """
-        Input properties used for looking up and filtering Cluster resources.
-        :param pulumi.Input[str] authenticating_proxy_ca: Specifies the CA root certificate provided in the
-               **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
-               Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] authenticating_proxy_cert: Specifies the Client certificate provided in the
-               **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
-               Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] authenticating_proxy_private_key: Specifies the private key of the client certificate
-               provided in the **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
-               Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] authentication_mode: Specifies the authentication mode of the cluster, possible values
-               are **rbac** and **authenticating_proxy**. Defaults to **rbac**.
-               Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are **true** and
-               **false**. Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[Sequence[pulumi.Input['ClusterCertificateClusterArgs']]] certificate_clusters: The certificate clusters. Structure is documented below.
-        :param pulumi.Input[Sequence[pulumi.Input['ClusterCertificateUserArgs']]] certificate_users: The certificate users. Structure is documented below.
-        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the CCE cluster.
-               Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
-               Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] cluster_type: Specifies the cluster Type, possible values are **VirtualMachine** and
-               **ARM64**. Defaults to **VirtualMachine**. Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] cluster_version: Specifies the cluster version, defaults to the latest supported
-               version. Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] container_network_cidr: Specifies the container network segment.
-               Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] container_network_type: Specifies the container network type.
-               Changing this parameter will create a new cluster resource. Possible values:
-               + **overlay_l2**: An overlay_l2 network built for containers by using Open vSwitch(OVS).
-               + **vpc-router**: An vpc-router network built for containers by using ipvlan and custom VPC routes.
-               + **eni**: A Yangtse network built for CCE Turbo cluster. The container network deeply integrates the native ENI
-               capability of VPC, uses the VPC CIDR block to allocate container addresses, and supports direct connections between
-               ELB and containers to provide high performance.
-        :param pulumi.Input[str] delete_all: Specified whether to delete all associated storage resources when deleting the CCE
-               cluster. valid values are **true**, **try** and **false**. Default is **false**.
-        :param pulumi.Input[str] delete_efs: Specified whether to unbind associated SFS Turbo file systems when deleting the CCE
-               cluster. valid values are **true**, **try** and **false**. Default is **false**.
-        :param pulumi.Input[str] delete_evs: Specified whether to delete associated EVS disks when deleting the CCE cluster.
-               valid values are **true**, **try** and **false**. Default is **false**.
-        :param pulumi.Input[str] delete_obs: Specified whether to delete associated OBS buckets when deleting the CCE cluster.
-               valid values are **true**, **try** and **false**. Default is **false**.
-        :param pulumi.Input[str] delete_sfs: Specified whether to delete associated SFS file systems when deleting the CCE
-               cluster. valid values are **true**, **try** and **false**. Default is **false**.
-        :param pulumi.Input[str] description: Specifies the cluster description.
-        :param pulumi.Input[str] eip: Specifies the EIP address of the cluster.
-        :param pulumi.Input[str] eni_subnet_cidr: Specifies the ENI network segment. Specified when creating a CCE
-               Turbo cluster. Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] eni_subnet_id: Specifies the ENI subnet ID. Specified when creating a CCE Turbo
-               cluster. Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of the CCE cluster.
-               Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_param: Specifies the extended parameter.
-               Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] flavor_id: Specifies the cluster specifications.
-               Changing this parameter will create a new cluster resource.
-               Possible values:
-               + **cce.s1.small**: small-scale single cluster (up to 50 nodes).
-               + **cce.s1.medium**: medium-scale single cluster (up to 200 nodes).
-               + **cce.s2.small**: small-scale HA cluster (up to 50 nodes).
-               + **cce.s2.medium**: medium-scale HA cluster (up to 200 nodes).
-               + **cce.s2.large**: large-scale HA cluster (up to 1000 nodes).
-               + **cce.s2.xlarge**: large-scale HA cluster (up to 2000 nodes).
-        :param pulumi.Input[bool] hibernate: Specifies whether to hibernate the CCE cluster. Defaults to **false**. After a cluster is
-               hibernated, resources such as workloads cannot be created or managed in the cluster, and the cluster cannot be
-               deleted.
-        :param pulumi.Input[str] kube_config_raw: Raw Kubernetes config to be used by kubectl and other compatible tools.
-        :param pulumi.Input[str] kube_proxy_mode: Specifies the service forwarding mode.
-               Changing this parameter will create a new cluster resource. Two modes are available:
-        :param pulumi.Input[Sequence[pulumi.Input['ClusterMasterArgs']]] masters: Specifies the advanced configuration of master nodes.
-               The object structure is documented below.
-               This parameter and `multi_az` are alternative. Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[bool] multi_az: Specifies whether to enable multiple AZs for the cluster, only when using HA
-               flavors. Changing this parameter will create a new cluster resource. This parameter and `masters` are alternative.
-        :param pulumi.Input[str] name: Specifies the cluster name.
-               Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[int] period: Specifies the charging period of the CCE cluster.
-               If `period_unit` is set to **month**, the value ranges from 1 to 9.
-               If `period_unit` is set to **year**, the value ranges from 1 to 3.
-               This parameter is mandatory if `charging_mode` is set to **prePaid**.
-               Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the CCE cluster.
-               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
-               Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] region: Specifies the region in which to create the CCE cluster resource.
-               If omitted, the provider-level region will be used. Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] security_group_id: Security group ID of the cluster.
-        :param pulumi.Input[str] service_network_cidr: Specifies the service network segment.
-               Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] status: Cluster status information.
-        :param pulumi.Input[str] subnet_id: Specifies the ID of the subnet used to create the node which should be
-               configured with a *DNS address*. Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the tags of the CCE cluster, key/value pair format.
-               Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC used to create the node.
-               Changing this parameter will create a new cluster resource.
-        """
-        if annotations is not None:
-            pulumi.set(__self__, "annotations", annotations)
-        if authenticating_proxy_ca is not None:
-            pulumi.set(__self__, "authenticating_proxy_ca", authenticating_proxy_ca)
-        if authenticating_proxy_cert is not None:
-            pulumi.set(__self__, "authenticating_proxy_cert", authenticating_proxy_cert)
-        if authenticating_proxy_private_key is not None:
-            pulumi.set(__self__, "authenticating_proxy_private_key", authenticating_proxy_private_key)
-        if authentication_mode is not None:
-            pulumi.set(__self__, "authentication_mode", authentication_mode)
-        if auto_pay is not None:
-            pulumi.set(__self__, "auto_pay", auto_pay)
-        if auto_renew is not None:
-            pulumi.set(__self__, "auto_renew", auto_renew)
-        if billing_mode is not None:
-            warnings.warn("""use charging_mode instead""", DeprecationWarning)
-            pulumi.log.warn("""billing_mode is deprecated: use charging_mode instead""")
-        if billing_mode is not None:
-            pulumi.set(__self__, "billing_mode", billing_mode)
-        if certificate_clusters is not None:
-            pulumi.set(__self__, "certificate_clusters", certificate_clusters)
-        if certificate_users is not None:
-            pulumi.set(__self__, "certificate_users", certificate_users)
-        if charging_mode is not None:
-            pulumi.set(__self__, "charging_mode", charging_mode)
-        if cluster_type is not None:
-            pulumi.set(__self__, "cluster_type", cluster_type)
-        if cluster_version is not None:
-            pulumi.set(__self__, "cluster_version", cluster_version)
-        if container_network_cidr is not None:
-            pulumi.set(__self__, "container_network_cidr", container_network_cidr)
-        if container_network_type is not None:
-            pulumi.set(__self__, "container_network_type", container_network_type)
-        if delete_all is not None:
-            pulumi.set(__self__, "delete_all", delete_all)
-        if delete_efs is not None:
-            pulumi.set(__self__, "delete_efs", delete_efs)
-        if delete_eni is not None:
-            pulumi.set(__self__, "delete_eni", delete_eni)
-        if delete_evs is not None:
-            pulumi.set(__self__, "delete_evs", delete_evs)
-        if delete_net is not None:
-            pulumi.set(__self__, "delete_net", delete_net)
-        if delete_obs is not None:
-            pulumi.set(__self__, "delete_obs", delete_obs)
-        if delete_sfs is not None:
-            pulumi.set(__self__, "delete_sfs", delete_sfs)
-        if description is not None:
-            pulumi.set(__self__, "description", description)
-        if eip is not None:
-            pulumi.set(__self__, "eip", eip)
-        if eni_subnet_cidr is not None:
-            pulumi.set(__self__, "eni_subnet_cidr", eni_subnet_cidr)
-        if eni_subnet_id is not None:
-            pulumi.set(__self__, "eni_subnet_id", eni_subnet_id)
-        if enterprise_project_id is not None:
-            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
-        if extend_param is not None:
-            pulumi.set(__self__, "extend_param", extend_param)
-        if flavor_id is not None:
-            pulumi.set(__self__, "flavor_id", flavor_id)
-        if hibernate is not None:
-            pulumi.set(__self__, "hibernate", hibernate)
-        if highway_subnet_id is not None:
-            pulumi.set(__self__, "highway_subnet_id", highway_subnet_id)
-        if kube_config_raw is not None:
-            pulumi.set(__self__, "kube_config_raw", kube_config_raw)
-        if kube_proxy_mode is not None:
-            pulumi.set(__self__, "kube_proxy_mode", kube_proxy_mode)
-        if labels is not None:
-            pulumi.set(__self__, "labels", labels)
-        if masters is not None:
-            pulumi.set(__self__, "masters", masters)
-        if multi_az is not None:
-            pulumi.set(__self__, "multi_az", multi_az)
-        if name is not None:
-            pulumi.set(__self__, "name", name)
-        if period is not None:
-            pulumi.set(__self__, "period", period)
-        if period_unit is not None:
-            pulumi.set(__self__, "period_unit", period_unit)
-        if region is not None:
-            pulumi.set(__self__, "region", region)
-        if security_group_id is not None:
-            pulumi.set(__self__, "security_group_id", security_group_id)
-        if service_network_cidr is not None:
-            pulumi.set(__self__, "service_network_cidr", service_network_cidr)
-        if status is not None:
-            pulumi.set(__self__, "status", status)
-        if subnet_id is not None:
-            pulumi.set(__self__, "subnet_id", subnet_id)
-        if tags is not None:
-            pulumi.set(__self__, "tags", tags)
-        if vpc_id is not None:
-            pulumi.set(__self__, "vpc_id", vpc_id)
-
-    @property
-    @pulumi.getter
-    def annotations(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
-        return pulumi.get(self, "annotations")
-
-    @annotations.setter
-    def annotations(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
-        pulumi.set(self, "annotations", value)
-
-    @property
-    @pulumi.getter(name="authenticatingProxyCa")
-    def authenticating_proxy_ca(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the CA root certificate provided in the
-        **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
-        Changing this parameter will create a new cluster resource.
-        """
-        return pulumi.get(self, "authenticating_proxy_ca")
-
-    @authenticating_proxy_ca.setter
-    def authenticating_proxy_ca(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "authenticating_proxy_ca", value)
-
-    @property
-    @pulumi.getter(name="authenticatingProxyCert")
-    def authenticating_proxy_cert(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the Client certificate provided in the
-        **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
-        Changing this parameter will create a new cluster resource.
-        """
-        return pulumi.get(self, "authenticating_proxy_cert")
-
-    @authenticating_proxy_cert.setter
-    def authenticating_proxy_cert(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "authenticating_proxy_cert", value)
-
-    @property
-    @pulumi.getter(name="authenticatingProxyPrivateKey")
-    def authenticating_proxy_private_key(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the private key of the client certificate
-        provided in the **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
-        Changing this parameter will create a new cluster resource.
-        """
-        return pulumi.get(self, "authenticating_proxy_private_key")
-
-    @authenticating_proxy_private_key.setter
-    def authenticating_proxy_private_key(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "authenticating_proxy_private_key", value)
-
-    @property
-    @pulumi.getter(name="authenticationMode")
-    def authentication_mode(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the authentication mode of the cluster, possible values
-        are **rbac** and **authenticating_proxy**. Defaults to **rbac**.
-        Changing this parameter will create a new cluster resource.
-        """
-        return pulumi.get(self, "authentication_mode")
-
-    @authentication_mode.setter
-    def authentication_mode(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "authentication_mode", value)
-
-    @property
-    @pulumi.getter(name="autoPay")
-    def auto_pay(self) -> Optional[pulumi.Input[str]]:
-        return pulumi.get(self, "auto_pay")
-
-    @auto_pay.setter
-    def auto_pay(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "auto_pay", value)
-
-    @property
-    @pulumi.getter(name="autoRenew")
-    def auto_renew(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies whether auto renew is enabled. Valid values are **true** and
-        **false**. Changing this parameter will create a new cluster resource.
-        """
-        return pulumi.get(self, "auto_renew")
-
-    @auto_renew.setter
-    def auto_renew(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "auto_renew", value)
-
-    @property
-    @pulumi.getter(name="billingMode")
-    def billing_mode(self) -> Optional[pulumi.Input[int]]:
-        return pulumi.get(self, "billing_mode")
-
-    @billing_mode.setter
-    def billing_mode(self, value: Optional[pulumi.Input[int]]):
-        pulumi.set(self, "billing_mode", value)
-
-    @property
-    @pulumi.getter(name="certificateClusters")
-    def certificate_clusters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ClusterCertificateClusterArgs']]]]:
-        """
-        The certificate clusters. Structure is documented below.
-        """
-        return pulumi.get(self, "certificate_clusters")
-
-    @certificate_clusters.setter
-    def certificate_clusters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterCertificateClusterArgs']]]]):
-        pulumi.set(self, "certificate_clusters", value)
-
-    @property
-    @pulumi.getter(name="certificateUsers")
-    def certificate_users(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ClusterCertificateUserArgs']]]]:
-        """
-        The certificate users. Structure is documented below.
-        """
-        return pulumi.get(self, "certificate_users")
-
-    @certificate_users.setter
-    def certificate_users(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterCertificateUserArgs']]]]):
-        pulumi.set(self, "certificate_users", value)
-
-    @property
-    @pulumi.getter(name="chargingMode")
-    def charging_mode(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the charging mode of the CCE cluster.
-        Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
-        Changing this parameter will create a new cluster resource.
-        """
-        return pulumi.get(self, "charging_mode")
-
-    @charging_mode.setter
-    def charging_mode(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "charging_mode", value)
-
-    @property
-    @pulumi.getter(name="clusterType")
-    def cluster_type(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the cluster Type, possible values are **VirtualMachine** and
-        **ARM64**. Defaults to **VirtualMachine**. Changing this parameter will create a new cluster resource.
-        """
-        return pulumi.get(self, "cluster_type")
-
-    @cluster_type.setter
-    def cluster_type(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "cluster_type", value)
-
-    @property
-    @pulumi.getter(name="clusterVersion")
-    def cluster_version(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the cluster version, defaults to the latest supported
-        version. Changing this parameter will create a new cluster resource.
-        """
-        return pulumi.get(self, "cluster_version")
-
-    @cluster_version.setter
-    def cluster_version(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "cluster_version", value)
-
-    @property
-    @pulumi.getter(name="containerNetworkCidr")
-    def container_network_cidr(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the container network segment.
-        Changing this parameter will create a new cluster resource.
-        """
-        return pulumi.get(self, "container_network_cidr")
-
-    @container_network_cidr.setter
-    def container_network_cidr(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "container_network_cidr", value)
-
-    @property
-    @pulumi.getter(name="containerNetworkType")
-    def container_network_type(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the container network type.
-        Changing this parameter will create a new cluster resource. Possible values:
-        + **overlay_l2**: An overlay_l2 network built for containers by using Open vSwitch(OVS).
-        + **vpc-router**: An vpc-router network built for containers by using ipvlan and custom VPC routes.
-        + **eni**: A Yangtse network built for CCE Turbo cluster. The container network deeply integrates the native ENI
-        capability of VPC, uses the VPC CIDR block to allocate container addresses, and supports direct connections between
-        ELB and containers to provide high performance.
-        """
-        return pulumi.get(self, "container_network_type")
-
-    @container_network_type.setter
-    def container_network_type(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "container_network_type", value)
-
-    @property
-    @pulumi.getter(name="deleteAll")
-    def delete_all(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specified whether to delete all associated storage resources when deleting the CCE
-        cluster. valid values are **true**, **try** and **false**. Default is **false**.
-        """
-        return pulumi.get(self, "delete_all")
-
-    @delete_all.setter
-    def delete_all(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "delete_all", value)
-
-    @property
-    @pulumi.getter(name="deleteEfs")
-    def delete_efs(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specified whether to unbind associated SFS Turbo file systems when deleting the CCE
-        cluster. valid values are **true**, **try** and **false**. Default is **false**.
-        """
-        return pulumi.get(self, "delete_efs")
-
-    @delete_efs.setter
-    def delete_efs(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "delete_efs", value)
-
-    @property
-    @pulumi.getter(name="deleteEni")
-    def delete_eni(self) -> Optional[pulumi.Input[str]]:
-        return pulumi.get(self, "delete_eni")
-
-    @delete_eni.setter
-    def delete_eni(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "delete_eni", value)
-
-    @property
-    @pulumi.getter(name="deleteEvs")
-    def delete_evs(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specified whether to delete associated EVS disks when deleting the CCE cluster.
-        valid values are **true**, **try** and **false**. Default is **false**.
-        """
-        return pulumi.get(self, "delete_evs")
-
-    @delete_evs.setter
-    def delete_evs(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "delete_evs", value)
-
-    @property
-    @pulumi.getter(name="deleteNet")
-    def delete_net(self) -> Optional[pulumi.Input[str]]:
-        return pulumi.get(self, "delete_net")
-
-    @delete_net.setter
-    def delete_net(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "delete_net", value)
-
-    @property
-    @pulumi.getter(name="deleteObs")
-    def delete_obs(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specified whether to delete associated OBS buckets when deleting the CCE cluster.
-        valid values are **true**, **try** and **false**. Default is **false**.
-        """
-        return pulumi.get(self, "delete_obs")
-
-    @delete_obs.setter
-    def delete_obs(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "delete_obs", value)
-
-    @property
-    @pulumi.getter(name="deleteSfs")
-    def delete_sfs(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specified whether to delete associated SFS file systems when deleting the CCE
-        cluster. valid values are **true**, **try** and **false**. Default is **false**.
-        """
-        return pulumi.get(self, "delete_sfs")
-
-    @delete_sfs.setter
-    def delete_sfs(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "delete_sfs", value)
-
-    @property
-    @pulumi.getter
-    def description(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the cluster description.
-        """
-        return pulumi.get(self, "description")
-
-    @description.setter
-    def description(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "description", value)
-
-    @property
-    @pulumi.getter
-    def eip(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the EIP address of the cluster.
-        """
-        return pulumi.get(self, "eip")
-
-    @eip.setter
-    def eip(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "eip", value)
-
-    @property
-    @pulumi.getter(name="eniSubnetCidr")
-    def eni_subnet_cidr(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the ENI network segment. Specified when creating a CCE
-        Turbo cluster. Changing this parameter will create a new cluster resource.
-        """
-        return pulumi.get(self, "eni_subnet_cidr")
-
-    @eni_subnet_cidr.setter
-    def eni_subnet_cidr(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "eni_subnet_cidr", value)
-
-    @property
-    @pulumi.getter(name="eniSubnetId")
-    def eni_subnet_id(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the ENI subnet ID. Specified when creating a CCE Turbo
-        cluster. Changing this parameter will create a new cluster resource.
-        """
-        return pulumi.get(self, "eni_subnet_id")
-
-    @eni_subnet_id.setter
-    def eni_subnet_id(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "eni_subnet_id", value)
-
-    @property
-    @pulumi.getter(name="enterpriseProjectId")
-    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
-        """
-        The enterprise project ID of the CCE cluster.
-        Changing this parameter will create a new cluster resource.
-        """
-        return pulumi.get(self, "enterprise_project_id")
-
-    @enterprise_project_id.setter
-    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "enterprise_project_id", value)
-
-    @property
-    @pulumi.getter(name="extendParam")
-    def extend_param(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
-        """
-        Specifies the extended parameter.
-        Changing this parameter will create a new cluster resource.
-        """
-        return pulumi.get(self, "extend_param")
-
-    @extend_param.setter
-    def extend_param(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
-        pulumi.set(self, "extend_param", value)
-
-    @property
-    @pulumi.getter(name="flavorId")
-    def flavor_id(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the cluster specifications.
-        Changing this parameter will create a new cluster resource.
-        Possible values:
-        + **cce.s1.small**: small-scale single cluster (up to 50 nodes).
-        + **cce.s1.medium**: medium-scale single cluster (up to 200 nodes).
-        + **cce.s2.small**: small-scale HA cluster (up to 50 nodes).
-        + **cce.s2.medium**: medium-scale HA cluster (up to 200 nodes).
-        + **cce.s2.large**: large-scale HA cluster (up to 1000 nodes).
-        + **cce.s2.xlarge**: large-scale HA cluster (up to 2000 nodes).
-        """
-        return pulumi.get(self, "flavor_id")
-
-    @flavor_id.setter
-    def flavor_id(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "flavor_id", value)
-
-    @property
-    @pulumi.getter
-    def hibernate(self) -> Optional[pulumi.Input[bool]]:
-        """
-        Specifies whether to hibernate the CCE cluster. Defaults to **false**. After a cluster is
-        hibernated, resources such as workloads cannot be created or managed in the cluster, and the cluster cannot be
-        deleted.
-        """
-        return pulumi.get(self, "hibernate")
-
-    @hibernate.setter
-    def hibernate(self, value: Optional[pulumi.Input[bool]]):
-        pulumi.set(self, "hibernate", value)
-
-    @property
-    @pulumi.getter(name="highwaySubnetId")
-    def highway_subnet_id(self) -> Optional[pulumi.Input[str]]:
-        return pulumi.get(self, "highway_subnet_id")
-
-    @highway_subnet_id.setter
-    def highway_subnet_id(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "highway_subnet_id", value)
-
-    @property
-    @pulumi.getter(name="kubeConfigRaw")
-    def kube_config_raw(self) -> Optional[pulumi.Input[str]]:
-        """
-        Raw Kubernetes config to be used by kubectl and other compatible tools.
-        """
-        return pulumi.get(self, "kube_config_raw")
-
-    @kube_config_raw.setter
-    def kube_config_raw(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "kube_config_raw", value)
-
-    @property
-    @pulumi.getter(name="kubeProxyMode")
-    def kube_proxy_mode(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the service forwarding mode.
-        Changing this parameter will create a new cluster resource. Two modes are available:
-        """
-        return pulumi.get(self, "kube_proxy_mode")
-
-    @kube_proxy_mode.setter
-    def kube_proxy_mode(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "kube_proxy_mode", value)
-
-    @property
-    @pulumi.getter
-    def labels(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         return pulumi.get(self, "labels")
 
     @labels.setter
@@ -1514,7 +785,854 @@ class _ClusterState:
     @pulumi.getter(name="securityGroupId")
     def security_group_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Security group ID of the cluster.
+        Specifies the default worker node security group ID of the cluster.
+        If left empty, the system will automatically create a default worker node security group for you.
+        The default worker node security group needs to allow access from certain ports to ensure normal communications.
+        For details, see [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+        If updated, the modified security group will only be applied to nodes newly created or accepted.
+        For existing nodes, you need to manually modify the security group rules for them.
+        """
+        return pulumi.get(self, "security_group_id")
+
+    @security_group_id.setter
+    def security_group_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "security_group_id", value)
+
+    @property
+    @pulumi.getter(name="serviceNetworkCidr")
+    def service_network_cidr(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the service network segment.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "service_network_cidr")
+
+    @service_network_cidr.setter
+    def service_network_cidr(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "service_network_cidr", value)
+
+    @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the tags of the CCE cluster, key/value pair format.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
+
+
+@pulumi.input_type
+class _ClusterState:
+    def __init__(__self__, *,
+                 annotations: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 authenticating_proxy_ca: Optional[pulumi.Input[str]] = None,
+                 authenticating_proxy_cert: Optional[pulumi.Input[str]] = None,
+                 authenticating_proxy_private_key: Optional[pulumi.Input[str]] = None,
+                 authentication_mode: Optional[pulumi.Input[str]] = None,
+                 auto_pay: Optional[pulumi.Input[str]] = None,
+                 auto_renew: Optional[pulumi.Input[str]] = None,
+                 billing_mode: Optional[pulumi.Input[int]] = None,
+                 certificate_clusters: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterCertificateClusterArgs']]]] = None,
+                 certificate_users: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterCertificateUserArgs']]]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
+                 cluster_type: Optional[pulumi.Input[str]] = None,
+                 cluster_version: Optional[pulumi.Input[str]] = None,
+                 container_network_cidr: Optional[pulumi.Input[str]] = None,
+                 container_network_type: Optional[pulumi.Input[str]] = None,
+                 delete_all: Optional[pulumi.Input[str]] = None,
+                 delete_efs: Optional[pulumi.Input[str]] = None,
+                 delete_eni: Optional[pulumi.Input[str]] = None,
+                 delete_evs: Optional[pulumi.Input[str]] = None,
+                 delete_net: Optional[pulumi.Input[str]] = None,
+                 delete_obs: Optional[pulumi.Input[str]] = None,
+                 delete_sfs: Optional[pulumi.Input[str]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
+                 eip: Optional[pulumi.Input[str]] = None,
+                 enable_distribute_management: Optional[pulumi.Input[bool]] = None,
+                 eni_subnet_cidr: Optional[pulumi.Input[str]] = None,
+                 eni_subnet_id: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 extend_param: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 flavor_id: Optional[pulumi.Input[str]] = None,
+                 hibernate: Optional[pulumi.Input[bool]] = None,
+                 highway_subnet_id: Optional[pulumi.Input[str]] = None,
+                 kube_config_raw: Optional[pulumi.Input[str]] = None,
+                 kube_proxy_mode: Optional[pulumi.Input[str]] = None,
+                 labels: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 masters: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterMasterArgs']]]] = None,
+                 multi_az: Optional[pulumi.Input[bool]] = None,
+                 name: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
+                 region: Optional[pulumi.Input[str]] = None,
+                 security_group_id: Optional[pulumi.Input[str]] = None,
+                 service_network_cidr: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[str]] = None,
+                 subnet_id: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 vpc_id: Optional[pulumi.Input[str]] = None):
+        """
+        Input properties used for looking up and filtering Cluster resources.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] annotations: schema: Internal
+        :param pulumi.Input[str] authenticating_proxy_ca: Specifies the CA root certificate provided in the
+               **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
+               Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] authenticating_proxy_cert: Specifies the Client certificate provided in the
+               **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
+               Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] authenticating_proxy_private_key: Specifies the private key of the client certificate
+               provided in the **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
+               Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] authentication_mode: Specifies the authentication mode of the cluster, possible values
+               are **rbac** and **authenticating_proxy**. Defaults to **rbac**.
+               Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are **true** and **false**.
+        :param pulumi.Input[Sequence[pulumi.Input['ClusterCertificateClusterArgs']]] certificate_clusters: The certificate clusters. Structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input['ClusterCertificateUserArgs']]] certificate_users: The certificate users. Structure is documented below.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the CCE cluster.
+               Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+               Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] cluster_type: Specifies the cluster Type, possible values are **VirtualMachine** and
+               **ARM64**. Defaults to **VirtualMachine**. Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] cluster_version: Specifies the cluster version, defaults to the latest supported
+               version. Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] container_network_cidr: Specifies the container network segments.
+               In clusters of v1.21 and later, when the `container_network_type` is **vpc-router**, you can add multiple container
+               segments, separated with comma (,). In other situations, only the first segment takes effect.
+               Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] container_network_type: Specifies the container network type.
+               Changing this parameter will create a new cluster resource. Possible values:
+               + **overlay_l2**: An overlay_l2 network built for containers by using Open vSwitch(OVS).
+               + **vpc-router**: An vpc-router network built for containers by using ipvlan and custom VPC routes.
+               + **eni**: A Yangtse network built for CCE Turbo cluster. The container network deeply integrates the native ENI
+               capability of VPC, uses the VPC CIDR block to allocate container addresses, and supports direct connections between
+               ELB and containers to provide high performance.
+        :param pulumi.Input[str] delete_all: Specified whether to delete all associated storage resources when deleting the CCE
+               cluster. valid values are **true**, **try** and **false**. Default is **false**.
+        :param pulumi.Input[str] delete_efs: Specified whether to unbind associated SFS Turbo file systems when deleting the CCE
+               cluster. valid values are **true**, **try** and **false**. Default is **false**.
+        :param pulumi.Input[str] delete_eni: schema: Internal
+        :param pulumi.Input[str] delete_evs: Specified whether to delete associated EVS disks when deleting the CCE cluster.
+               valid values are **true**, **try** and **false**. Default is **false**.
+        :param pulumi.Input[str] delete_net: schema: Internal
+        :param pulumi.Input[str] delete_obs: Specified whether to delete associated OBS buckets when deleting the CCE cluster.
+               valid values are **true**, **try** and **false**. Default is **false**.
+        :param pulumi.Input[str] delete_sfs: Specified whether to delete associated SFS file systems when deleting the CCE
+               cluster. valid values are **true**, **try** and **false**. Default is **false**.
+        :param pulumi.Input[str] description: Specifies the cluster description.
+        :param pulumi.Input[str] eip: Specifies the EIP address of the cluster.
+        :param pulumi.Input[bool] enable_distribute_management: schema: Internal
+        :param pulumi.Input[str] eni_subnet_cidr: The ENI network segment. This value is valid when only one eni_subnet_id is specified.
+        :param pulumi.Input[str] eni_subnet_id: Specifies the **IPv4 subnet ID** of the subnet where the ENI resides.
+               Specified when creating a CCE Turbo cluster. You can add multiple IPv4 subnet ID, separated with comma (,).
+               Only adding subnets is allowed, removing subnets is not allowed.
+        :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of the CCE cluster.
+               Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_param: Specifies the extended parameter.
+               Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] flavor_id: Specifies the cluster specifications.
+               Changing this parameter will create a new cluster resource.
+               Possible values:
+               + **cce.s1.small**: small-scale single cluster (up to 50 nodes).
+               + **cce.s1.medium**: medium-scale single cluster (up to 200 nodes).
+               + **cce.s2.small**: small-scale HA cluster (up to 50 nodes).
+               + **cce.s2.medium**: medium-scale HA cluster (up to 200 nodes).
+               + **cce.s2.large**: large-scale HA cluster (up to 1000 nodes).
+               + **cce.s2.xlarge**: large-scale HA cluster (up to 2000 nodes).
+        :param pulumi.Input[bool] hibernate: Specifies whether to hibernate the CCE cluster. Defaults to **false**. After a cluster is
+               hibernated, resources such as workloads cannot be created or managed in the cluster, and the cluster cannot be
+               deleted.
+        :param pulumi.Input[str] highway_subnet_id: schema: Internal
+        :param pulumi.Input[str] kube_config_raw: Raw Kubernetes config to be used by kubectl and other compatible tools.
+        :param pulumi.Input[str] kube_proxy_mode: Specifies the service forwarding mode.
+               Changing this parameter will create a new cluster resource. Two modes are available:
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: schema: Internal
+        :param pulumi.Input[Sequence[pulumi.Input['ClusterMasterArgs']]] masters: Specifies the advanced configuration of master nodes.
+               The object structure is documented below.
+               This parameter and `multi_az` are alternative. Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[bool] multi_az: Specifies whether to enable multiple AZs for the cluster, only when using HA
+               flavors. Changing this parameter will create a new cluster resource. This parameter and `masters` are alternative.
+        :param pulumi.Input[str] name: Specifies the cluster name.
+               Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[int] period: Specifies the charging period of the CCE cluster.
+               If `period_unit` is set to **month**, the value ranges from 1 to 9.
+               If `period_unit` is set to **year**, the value ranges from 1 to 3.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the CCE cluster.
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] region: Specifies the region in which to create the CCE cluster resource.
+               If omitted, the provider-level region will be used. Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] security_group_id: Specifies the default worker node security group ID of the cluster.
+               If left empty, the system will automatically create a default worker node security group for you.
+               The default worker node security group needs to allow access from certain ports to ensure normal communications.
+               For details, see [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+               If updated, the modified security group will only be applied to nodes newly created or accepted.
+               For existing nodes, you need to manually modify the security group rules for them.
+        :param pulumi.Input[str] service_network_cidr: Specifies the service network segment.
+               Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] status: Cluster status information.
+        :param pulumi.Input[str] subnet_id: Specifies the ID of the subnet used to create the node which should be
+               configured with a *DNS address*. Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the tags of the CCE cluster, key/value pair format.
+               Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC used to create the node.
+               Changing this parameter will create a new cluster resource.
+        """
+        if annotations is not None:
+            pulumi.set(__self__, "annotations", annotations)
+        if authenticating_proxy_ca is not None:
+            pulumi.set(__self__, "authenticating_proxy_ca", authenticating_proxy_ca)
+        if authenticating_proxy_cert is not None:
+            pulumi.set(__self__, "authenticating_proxy_cert", authenticating_proxy_cert)
+        if authenticating_proxy_private_key is not None:
+            pulumi.set(__self__, "authenticating_proxy_private_key", authenticating_proxy_private_key)
+        if authentication_mode is not None:
+            pulumi.set(__self__, "authentication_mode", authentication_mode)
+        if auto_pay is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
+        if auto_pay is not None:
+            pulumi.set(__self__, "auto_pay", auto_pay)
+        if auto_renew is not None:
+            pulumi.set(__self__, "auto_renew", auto_renew)
+        if billing_mode is not None:
+            warnings.warn("""use charging_mode instead""", DeprecationWarning)
+            pulumi.log.warn("""billing_mode is deprecated: use charging_mode instead""")
+        if billing_mode is not None:
+            pulumi.set(__self__, "billing_mode", billing_mode)
+        if certificate_clusters is not None:
+            pulumi.set(__self__, "certificate_clusters", certificate_clusters)
+        if certificate_users is not None:
+            pulumi.set(__self__, "certificate_users", certificate_users)
+        if charging_mode is not None:
+            pulumi.set(__self__, "charging_mode", charging_mode)
+        if cluster_type is not None:
+            pulumi.set(__self__, "cluster_type", cluster_type)
+        if cluster_version is not None:
+            pulumi.set(__self__, "cluster_version", cluster_version)
+        if container_network_cidr is not None:
+            pulumi.set(__self__, "container_network_cidr", container_network_cidr)
+        if container_network_type is not None:
+            pulumi.set(__self__, "container_network_type", container_network_type)
+        if delete_all is not None:
+            pulumi.set(__self__, "delete_all", delete_all)
+        if delete_efs is not None:
+            pulumi.set(__self__, "delete_efs", delete_efs)
+        if delete_eni is not None:
+            pulumi.set(__self__, "delete_eni", delete_eni)
+        if delete_evs is not None:
+            pulumi.set(__self__, "delete_evs", delete_evs)
+        if delete_net is not None:
+            pulumi.set(__self__, "delete_net", delete_net)
+        if delete_obs is not None:
+            pulumi.set(__self__, "delete_obs", delete_obs)
+        if delete_sfs is not None:
+            pulumi.set(__self__, "delete_sfs", delete_sfs)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
+        if eip is not None:
+            pulumi.set(__self__, "eip", eip)
+        if enable_distribute_management is not None:
+            pulumi.set(__self__, "enable_distribute_management", enable_distribute_management)
+        if eni_subnet_cidr is not None:
+            pulumi.set(__self__, "eni_subnet_cidr", eni_subnet_cidr)
+        if eni_subnet_id is not None:
+            pulumi.set(__self__, "eni_subnet_id", eni_subnet_id)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if extend_param is not None:
+            pulumi.set(__self__, "extend_param", extend_param)
+        if flavor_id is not None:
+            pulumi.set(__self__, "flavor_id", flavor_id)
+        if hibernate is not None:
+            pulumi.set(__self__, "hibernate", hibernate)
+        if highway_subnet_id is not None:
+            pulumi.set(__self__, "highway_subnet_id", highway_subnet_id)
+        if kube_config_raw is not None:
+            pulumi.set(__self__, "kube_config_raw", kube_config_raw)
+        if kube_proxy_mode is not None:
+            pulumi.set(__self__, "kube_proxy_mode", kube_proxy_mode)
+        if labels is not None:
+            pulumi.set(__self__, "labels", labels)
+        if masters is not None:
+            pulumi.set(__self__, "masters", masters)
+        if multi_az is not None:
+            pulumi.set(__self__, "multi_az", multi_az)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if period is not None:
+            pulumi.set(__self__, "period", period)
+        if period_unit is not None:
+            pulumi.set(__self__, "period_unit", period_unit)
+        if region is not None:
+            pulumi.set(__self__, "region", region)
+        if security_group_id is not None:
+            pulumi.set(__self__, "security_group_id", security_group_id)
+        if service_network_cidr is not None:
+            pulumi.set(__self__, "service_network_cidr", service_network_cidr)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
+        if subnet_id is not None:
+            pulumi.set(__self__, "subnet_id", subnet_id)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
+        if vpc_id is not None:
+            pulumi.set(__self__, "vpc_id", vpc_id)
+
+    @property
+    @pulumi.getter
+    def annotations(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "annotations")
+
+    @annotations.setter
+    def annotations(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "annotations", value)
+
+    @property
+    @pulumi.getter(name="authenticatingProxyCa")
+    def authenticating_proxy_ca(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the CA root certificate provided in the
+        **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "authenticating_proxy_ca")
+
+    @authenticating_proxy_ca.setter
+    def authenticating_proxy_ca(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "authenticating_proxy_ca", value)
+
+    @property
+    @pulumi.getter(name="authenticatingProxyCert")
+    def authenticating_proxy_cert(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the Client certificate provided in the
+        **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "authenticating_proxy_cert")
+
+    @authenticating_proxy_cert.setter
+    def authenticating_proxy_cert(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "authenticating_proxy_cert", value)
+
+    @property
+    @pulumi.getter(name="authenticatingProxyPrivateKey")
+    def authenticating_proxy_private_key(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the private key of the client certificate
+        provided in the **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "authenticating_proxy_private_key")
+
+    @authenticating_proxy_private_key.setter
+    def authenticating_proxy_private_key(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "authenticating_proxy_private_key", value)
+
+    @property
+    @pulumi.getter(name="authenticationMode")
+    def authentication_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the authentication mode of the cluster, possible values
+        are **rbac** and **authenticating_proxy**. Defaults to **rbac**.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "authentication_mode")
+
+    @authentication_mode.setter
+    def authentication_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "authentication_mode", value)
+
+    @property
+    @pulumi.getter(name="autoPay")
+    def auto_pay(self) -> Optional[pulumi.Input[str]]:
+        return pulumi.get(self, "auto_pay")
+
+    @auto_pay.setter
+    def auto_pay(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "auto_pay", value)
+
+    @property
+    @pulumi.getter(name="autoRenew")
+    def auto_renew(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether auto renew is enabled. Valid values are **true** and **false**.
+        """
+        return pulumi.get(self, "auto_renew")
+
+    @auto_renew.setter
+    def auto_renew(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "auto_renew", value)
+
+    @property
+    @pulumi.getter(name="billingMode")
+    def billing_mode(self) -> Optional[pulumi.Input[int]]:
+        return pulumi.get(self, "billing_mode")
+
+    @billing_mode.setter
+    def billing_mode(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "billing_mode", value)
+
+    @property
+    @pulumi.getter(name="certificateClusters")
+    def certificate_clusters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ClusterCertificateClusterArgs']]]]:
+        """
+        The certificate clusters. Structure is documented below.
+        """
+        return pulumi.get(self, "certificate_clusters")
+
+    @certificate_clusters.setter
+    def certificate_clusters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterCertificateClusterArgs']]]]):
+        pulumi.set(self, "certificate_clusters", value)
+
+    @property
+    @pulumi.getter(name="certificateUsers")
+    def certificate_users(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ClusterCertificateUserArgs']]]]:
+        """
+        The certificate users. Structure is documented below.
+        """
+        return pulumi.get(self, "certificate_users")
+
+    @certificate_users.setter
+    def certificate_users(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterCertificateUserArgs']]]]):
+        pulumi.set(self, "certificate_users", value)
+
+    @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging mode of the CCE cluster.
+        Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @charging_mode.setter
+    def charging_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "charging_mode", value)
+
+    @property
+    @pulumi.getter(name="clusterType")
+    def cluster_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the cluster Type, possible values are **VirtualMachine** and
+        **ARM64**. Defaults to **VirtualMachine**. Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "cluster_type")
+
+    @cluster_type.setter
+    def cluster_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "cluster_type", value)
+
+    @property
+    @pulumi.getter(name="clusterVersion")
+    def cluster_version(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the cluster version, defaults to the latest supported
+        version. Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "cluster_version")
+
+    @cluster_version.setter
+    def cluster_version(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "cluster_version", value)
+
+    @property
+    @pulumi.getter(name="containerNetworkCidr")
+    def container_network_cidr(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the container network segments.
+        In clusters of v1.21 and later, when the `container_network_type` is **vpc-router**, you can add multiple container
+        segments, separated with comma (,). In other situations, only the first segment takes effect.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "container_network_cidr")
+
+    @container_network_cidr.setter
+    def container_network_cidr(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "container_network_cidr", value)
+
+    @property
+    @pulumi.getter(name="containerNetworkType")
+    def container_network_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the container network type.
+        Changing this parameter will create a new cluster resource. Possible values:
+        + **overlay_l2**: An overlay_l2 network built for containers by using Open vSwitch(OVS).
+        + **vpc-router**: An vpc-router network built for containers by using ipvlan and custom VPC routes.
+        + **eni**: A Yangtse network built for CCE Turbo cluster. The container network deeply integrates the native ENI
+        capability of VPC, uses the VPC CIDR block to allocate container addresses, and supports direct connections between
+        ELB and containers to provide high performance.
+        """
+        return pulumi.get(self, "container_network_type")
+
+    @container_network_type.setter
+    def container_network_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "container_network_type", value)
+
+    @property
+    @pulumi.getter(name="deleteAll")
+    def delete_all(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specified whether to delete all associated storage resources when deleting the CCE
+        cluster. valid values are **true**, **try** and **false**. Default is **false**.
+        """
+        return pulumi.get(self, "delete_all")
+
+    @delete_all.setter
+    def delete_all(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "delete_all", value)
+
+    @property
+    @pulumi.getter(name="deleteEfs")
+    def delete_efs(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specified whether to unbind associated SFS Turbo file systems when deleting the CCE
+        cluster. valid values are **true**, **try** and **false**. Default is **false**.
+        """
+        return pulumi.get(self, "delete_efs")
+
+    @delete_efs.setter
+    def delete_efs(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "delete_efs", value)
+
+    @property
+    @pulumi.getter(name="deleteEni")
+    def delete_eni(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "delete_eni")
+
+    @delete_eni.setter
+    def delete_eni(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "delete_eni", value)
+
+    @property
+    @pulumi.getter(name="deleteEvs")
+    def delete_evs(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specified whether to delete associated EVS disks when deleting the CCE cluster.
+        valid values are **true**, **try** and **false**. Default is **false**.
+        """
+        return pulumi.get(self, "delete_evs")
+
+    @delete_evs.setter
+    def delete_evs(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "delete_evs", value)
+
+    @property
+    @pulumi.getter(name="deleteNet")
+    def delete_net(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "delete_net")
+
+    @delete_net.setter
+    def delete_net(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "delete_net", value)
+
+    @property
+    @pulumi.getter(name="deleteObs")
+    def delete_obs(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specified whether to delete associated OBS buckets when deleting the CCE cluster.
+        valid values are **true**, **try** and **false**. Default is **false**.
+        """
+        return pulumi.get(self, "delete_obs")
+
+    @delete_obs.setter
+    def delete_obs(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "delete_obs", value)
+
+    @property
+    @pulumi.getter(name="deleteSfs")
+    def delete_sfs(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specified whether to delete associated SFS file systems when deleting the CCE
+        cluster. valid values are **true**, **try** and **false**. Default is **false**.
+        """
+        return pulumi.get(self, "delete_sfs")
+
+    @delete_sfs.setter
+    def delete_sfs(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "delete_sfs", value)
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the cluster description.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter
+    def eip(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the EIP address of the cluster.
+        """
+        return pulumi.get(self, "eip")
+
+    @eip.setter
+    def eip(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "eip", value)
+
+    @property
+    @pulumi.getter(name="enableDistributeManagement")
+    def enable_distribute_management(self) -> Optional[pulumi.Input[bool]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "enable_distribute_management")
+
+    @enable_distribute_management.setter
+    def enable_distribute_management(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_distribute_management", value)
+
+    @property
+    @pulumi.getter(name="eniSubnetCidr")
+    def eni_subnet_cidr(self) -> Optional[pulumi.Input[str]]:
+        """
+        The ENI network segment. This value is valid when only one eni_subnet_id is specified.
+        """
+        return pulumi.get(self, "eni_subnet_cidr")
+
+    @eni_subnet_cidr.setter
+    def eni_subnet_cidr(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "eni_subnet_cidr", value)
+
+    @property
+    @pulumi.getter(name="eniSubnetId")
+    def eni_subnet_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the **IPv4 subnet ID** of the subnet where the ENI resides.
+        Specified when creating a CCE Turbo cluster. You can add multiple IPv4 subnet ID, separated with comma (,).
+        Only adding subnets is allowed, removing subnets is not allowed.
+        """
+        return pulumi.get(self, "eni_subnet_id")
+
+    @eni_subnet_id.setter
+    def eni_subnet_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "eni_subnet_id", value)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The enterprise project ID of the CCE cluster.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
+    @pulumi.getter(name="extendParam")
+    def extend_param(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the extended parameter.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "extend_param")
+
+    @extend_param.setter
+    def extend_param(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "extend_param", value)
+
+    @property
+    @pulumi.getter(name="flavorId")
+    def flavor_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the cluster specifications.
+        Changing this parameter will create a new cluster resource.
+        Possible values:
+        + **cce.s1.small**: small-scale single cluster (up to 50 nodes).
+        + **cce.s1.medium**: medium-scale single cluster (up to 200 nodes).
+        + **cce.s2.small**: small-scale HA cluster (up to 50 nodes).
+        + **cce.s2.medium**: medium-scale HA cluster (up to 200 nodes).
+        + **cce.s2.large**: large-scale HA cluster (up to 1000 nodes).
+        + **cce.s2.xlarge**: large-scale HA cluster (up to 2000 nodes).
+        """
+        return pulumi.get(self, "flavor_id")
+
+    @flavor_id.setter
+    def flavor_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "flavor_id", value)
+
+    @property
+    @pulumi.getter
+    def hibernate(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to hibernate the CCE cluster. Defaults to **false**. After a cluster is
+        hibernated, resources such as workloads cannot be created or managed in the cluster, and the cluster cannot be
+        deleted.
+        """
+        return pulumi.get(self, "hibernate")
+
+    @hibernate.setter
+    def hibernate(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "hibernate", value)
+
+    @property
+    @pulumi.getter(name="highwaySubnetId")
+    def highway_subnet_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "highway_subnet_id")
+
+    @highway_subnet_id.setter
+    def highway_subnet_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "highway_subnet_id", value)
+
+    @property
+    @pulumi.getter(name="kubeConfigRaw")
+    def kube_config_raw(self) -> Optional[pulumi.Input[str]]:
+        """
+        Raw Kubernetes config to be used by kubectl and other compatible tools.
+        """
+        return pulumi.get(self, "kube_config_raw")
+
+    @kube_config_raw.setter
+    def kube_config_raw(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "kube_config_raw", value)
+
+    @property
+    @pulumi.getter(name="kubeProxyMode")
+    def kube_proxy_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the service forwarding mode.
+        Changing this parameter will create a new cluster resource. Two modes are available:
+        """
+        return pulumi.get(self, "kube_proxy_mode")
+
+    @kube_proxy_mode.setter
+    def kube_proxy_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "kube_proxy_mode", value)
+
+    @property
+    @pulumi.getter
+    def labels(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "labels")
+
+    @labels.setter
+    def labels(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "labels", value)
+
+    @property
+    @pulumi.getter
+    def masters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ClusterMasterArgs']]]]:
+        """
+        Specifies the advanced configuration of master nodes.
+        The object structure is documented below.
+        This parameter and `multi_az` are alternative. Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "masters")
+
+    @masters.setter
+    def masters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterMasterArgs']]]]):
+        pulumi.set(self, "masters", value)
+
+    @property
+    @pulumi.getter(name="multiAz")
+    def multi_az(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable multiple AZs for the cluster, only when using HA
+        flavors. Changing this parameter will create a new cluster resource. This parameter and `masters` are alternative.
+        """
+        return pulumi.get(self, "multi_az")
+
+    @multi_az.setter
+    def multi_az(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "multi_az", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the cluster name.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def period(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the charging period of the CCE cluster.
+        If `period_unit` is set to **month**, the value ranges from 1 to 9.
+        If `period_unit` is set to **year**, the value ranges from 1 to 3.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "period")
+
+    @period.setter
+    def period(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "period", value)
+
+    @property
+    @pulumi.getter(name="periodUnit")
+    def period_unit(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging period unit of the CCE cluster.
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "period_unit")
+
+    @period_unit.setter
+    def period_unit(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "period_unit", value)
+
+    @property
+    @pulumi.getter
+    def region(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the region in which to create the CCE cluster resource.
+        If omitted, the provider-level region will be used. Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "region")
+
+    @region.setter
+    def region(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter(name="securityGroupId")
+    def security_group_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the default worker node security group ID of the cluster.
+        If left empty, the system will automatically create a default worker node security group for you.
+        The default worker node security group needs to allow access from certain ports to ensure normal communications.
+        For details, see [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+        If updated, the modified security group will only be applied to nodes newly created or accepted.
+        For existing nodes, you need to manually modify the security group rules for them.
         """
         return pulumi.get(self, "security_group_id")
 
@@ -1614,6 +1732,7 @@ class Cluster(pulumi.CustomResource):
                  delete_sfs: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  eip: Optional[pulumi.Input[str]] = None,
+                 enable_distribute_management: Optional[pulumi.Input[bool]] = None,
                  eni_subnet_cidr: Optional[pulumi.Input[str]] = None,
                  eni_subnet_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -1629,6 +1748,7 @@ class Cluster(pulumi.CustomResource):
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 security_group_id: Optional[pulumi.Input[str]] = None,
                  service_network_cidr: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -1714,6 +1834,7 @@ class Cluster(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] annotations: schema: Internal
         :param pulumi.Input[str] authenticating_proxy_ca: Specifies the CA root certificate provided in the
                **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
                Changing this parameter will create a new cluster resource.
@@ -1726,8 +1847,7 @@ class Cluster(pulumi.CustomResource):
         :param pulumi.Input[str] authentication_mode: Specifies the authentication mode of the cluster, possible values
                are **rbac** and **authenticating_proxy**. Defaults to **rbac**.
                Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are **true** and
-               **false**. Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are **true** and **false**.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the CCE cluster.
                Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
                Changing this parameter will create a new cluster resource.
@@ -1735,7 +1855,9 @@ class Cluster(pulumi.CustomResource):
                **ARM64**. Defaults to **VirtualMachine**. Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] cluster_version: Specifies the cluster version, defaults to the latest supported
                version. Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] container_network_cidr: Specifies the container network segment.
+        :param pulumi.Input[str] container_network_cidr: Specifies the container network segments.
+               In clusters of v1.21 and later, when the `container_network_type` is **vpc-router**, you can add multiple container
+               segments, separated with comma (,). In other situations, only the first segment takes effect.
                Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] container_network_type: Specifies the container network type.
                Changing this parameter will create a new cluster resource. Possible values:
@@ -1748,18 +1870,21 @@ class Cluster(pulumi.CustomResource):
                cluster. valid values are **true**, **try** and **false**. Default is **false**.
         :param pulumi.Input[str] delete_efs: Specified whether to unbind associated SFS Turbo file systems when deleting the CCE
                cluster. valid values are **true**, **try** and **false**. Default is **false**.
+        :param pulumi.Input[str] delete_eni: schema: Internal
         :param pulumi.Input[str] delete_evs: Specified whether to delete associated EVS disks when deleting the CCE cluster.
                valid values are **true**, **try** and **false**. Default is **false**.
+        :param pulumi.Input[str] delete_net: schema: Internal
         :param pulumi.Input[str] delete_obs: Specified whether to delete associated OBS buckets when deleting the CCE cluster.
                valid values are **true**, **try** and **false**. Default is **false**.
         :param pulumi.Input[str] delete_sfs: Specified whether to delete associated SFS file systems when deleting the CCE
                cluster. valid values are **true**, **try** and **false**. Default is **false**.
         :param pulumi.Input[str] description: Specifies the cluster description.
         :param pulumi.Input[str] eip: Specifies the EIP address of the cluster.
-        :param pulumi.Input[str] eni_subnet_cidr: Specifies the ENI network segment. Specified when creating a CCE
-               Turbo cluster. Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] eni_subnet_id: Specifies the ENI subnet ID. Specified when creating a CCE Turbo
-               cluster. Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[bool] enable_distribute_management: schema: Internal
+        :param pulumi.Input[str] eni_subnet_cidr: The ENI network segment. This value is valid when only one eni_subnet_id is specified.
+        :param pulumi.Input[str] eni_subnet_id: Specifies the **IPv4 subnet ID** of the subnet where the ENI resides.
+               Specified when creating a CCE Turbo cluster. You can add multiple IPv4 subnet ID, separated with comma (,).
+               Only adding subnets is allowed, removing subnets is not allowed.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of the CCE cluster.
                Changing this parameter will create a new cluster resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_param: Specifies the extended parameter.
@@ -1776,8 +1901,10 @@ class Cluster(pulumi.CustomResource):
         :param pulumi.Input[bool] hibernate: Specifies whether to hibernate the CCE cluster. Defaults to **false**. After a cluster is
                hibernated, resources such as workloads cannot be created or managed in the cluster, and the cluster cannot be
                deleted.
+        :param pulumi.Input[str] highway_subnet_id: schema: Internal
         :param pulumi.Input[str] kube_proxy_mode: Specifies the service forwarding mode.
                Changing this parameter will create a new cluster resource. Two modes are available:
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: schema: Internal
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterMasterArgs']]]] masters: Specifies the advanced configuration of master nodes.
                The object structure is documented below.
                This parameter and `multi_az` are alternative. Changing this parameter will create a new cluster resource.
@@ -1795,6 +1922,12 @@ class Cluster(pulumi.CustomResource):
                Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the CCE cluster resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] security_group_id: Specifies the default worker node security group ID of the cluster.
+               If left empty, the system will automatically create a default worker node security group for you.
+               The default worker node security group needs to allow access from certain ports to ensure normal communications.
+               For details, see [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+               If updated, the modified security group will only be applied to nodes newly created or accepted.
+               For existing nodes, you need to manually modify the security group rules for them.
         :param pulumi.Input[str] service_network_cidr: Specifies the service network segment.
                Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] subnet_id: Specifies the ID of the subnet used to create the node which should be
@@ -1925,6 +2058,7 @@ class Cluster(pulumi.CustomResource):
                  delete_sfs: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  eip: Optional[pulumi.Input[str]] = None,
+                 enable_distribute_management: Optional[pulumi.Input[bool]] = None,
                  eni_subnet_cidr: Optional[pulumi.Input[str]] = None,
                  eni_subnet_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -1940,6 +2074,7 @@ class Cluster(pulumi.CustomResource):
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 security_group_id: Optional[pulumi.Input[str]] = None,
                  service_network_cidr: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -1958,6 +2093,9 @@ class Cluster(pulumi.CustomResource):
             __props__.__dict__["authenticating_proxy_cert"] = authenticating_proxy_cert
             __props__.__dict__["authenticating_proxy_private_key"] = authenticating_proxy_private_key
             __props__.__dict__["authentication_mode"] = authentication_mode
+            if auto_pay is not None and not opts.urn:
+                warnings.warn("""Deprecated""", DeprecationWarning)
+                pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
             __props__.__dict__["auto_pay"] = auto_pay
             __props__.__dict__["auto_renew"] = auto_renew
             if billing_mode is not None and not opts.urn:
@@ -1980,6 +2118,7 @@ class Cluster(pulumi.CustomResource):
             __props__.__dict__["delete_sfs"] = delete_sfs
             __props__.__dict__["description"] = description
             __props__.__dict__["eip"] = eip
+            __props__.__dict__["enable_distribute_management"] = enable_distribute_management
             __props__.__dict__["eni_subnet_cidr"] = eni_subnet_cidr
             __props__.__dict__["eni_subnet_id"] = eni_subnet_id
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
@@ -1997,6 +2136,7 @@ class Cluster(pulumi.CustomResource):
             __props__.__dict__["period"] = period
             __props__.__dict__["period_unit"] = period_unit
             __props__.__dict__["region"] = region
+            __props__.__dict__["security_group_id"] = security_group_id
             __props__.__dict__["service_network_cidr"] = service_network_cidr
             if subnet_id is None and not opts.urn:
                 raise TypeError("Missing required property 'subnet_id'")
@@ -2008,7 +2148,6 @@ class Cluster(pulumi.CustomResource):
             __props__.__dict__["certificate_clusters"] = None
             __props__.__dict__["certificate_users"] = None
             __props__.__dict__["kube_config_raw"] = None
-            __props__.__dict__["security_group_id"] = None
             __props__.__dict__["status"] = None
         super(Cluster, __self__).__init__(
             'huaweicloud:Cce/cluster:Cluster',
@@ -2044,6 +2183,7 @@ class Cluster(pulumi.CustomResource):
             delete_sfs: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
             eip: Optional[pulumi.Input[str]] = None,
+            enable_distribute_management: Optional[pulumi.Input[bool]] = None,
             eni_subnet_cidr: Optional[pulumi.Input[str]] = None,
             eni_subnet_id: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -2073,6 +2213,7 @@ class Cluster(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] annotations: schema: Internal
         :param pulumi.Input[str] authenticating_proxy_ca: Specifies the CA root certificate provided in the
                **authenticating_proxy** mode. The input value can be a Base64 encoded string or not.
                Changing this parameter will create a new cluster resource.
@@ -2085,8 +2226,7 @@ class Cluster(pulumi.CustomResource):
         :param pulumi.Input[str] authentication_mode: Specifies the authentication mode of the cluster, possible values
                are **rbac** and **authenticating_proxy**. Defaults to **rbac**.
                Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are **true** and
-               **false**. Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are **true** and **false**.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterCertificateClusterArgs']]]] certificate_clusters: The certificate clusters. Structure is documented below.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterCertificateUserArgs']]]] certificate_users: The certificate users. Structure is documented below.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the CCE cluster.
@@ -2096,7 +2236,9 @@ class Cluster(pulumi.CustomResource):
                **ARM64**. Defaults to **VirtualMachine**. Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] cluster_version: Specifies the cluster version, defaults to the latest supported
                version. Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] container_network_cidr: Specifies the container network segment.
+        :param pulumi.Input[str] container_network_cidr: Specifies the container network segments.
+               In clusters of v1.21 and later, when the `container_network_type` is **vpc-router**, you can add multiple container
+               segments, separated with comma (,). In other situations, only the first segment takes effect.
                Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] container_network_type: Specifies the container network type.
                Changing this parameter will create a new cluster resource. Possible values:
@@ -2109,18 +2251,21 @@ class Cluster(pulumi.CustomResource):
                cluster. valid values are **true**, **try** and **false**. Default is **false**.
         :param pulumi.Input[str] delete_efs: Specified whether to unbind associated SFS Turbo file systems when deleting the CCE
                cluster. valid values are **true**, **try** and **false**. Default is **false**.
+        :param pulumi.Input[str] delete_eni: schema: Internal
         :param pulumi.Input[str] delete_evs: Specified whether to delete associated EVS disks when deleting the CCE cluster.
                valid values are **true**, **try** and **false**. Default is **false**.
+        :param pulumi.Input[str] delete_net: schema: Internal
         :param pulumi.Input[str] delete_obs: Specified whether to delete associated OBS buckets when deleting the CCE cluster.
                valid values are **true**, **try** and **false**. Default is **false**.
         :param pulumi.Input[str] delete_sfs: Specified whether to delete associated SFS file systems when deleting the CCE
                cluster. valid values are **true**, **try** and **false**. Default is **false**.
         :param pulumi.Input[str] description: Specifies the cluster description.
         :param pulumi.Input[str] eip: Specifies the EIP address of the cluster.
-        :param pulumi.Input[str] eni_subnet_cidr: Specifies the ENI network segment. Specified when creating a CCE
-               Turbo cluster. Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] eni_subnet_id: Specifies the ENI subnet ID. Specified when creating a CCE Turbo
-               cluster. Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[bool] enable_distribute_management: schema: Internal
+        :param pulumi.Input[str] eni_subnet_cidr: The ENI network segment. This value is valid when only one eni_subnet_id is specified.
+        :param pulumi.Input[str] eni_subnet_id: Specifies the **IPv4 subnet ID** of the subnet where the ENI resides.
+               Specified when creating a CCE Turbo cluster. You can add multiple IPv4 subnet ID, separated with comma (,).
+               Only adding subnets is allowed, removing subnets is not allowed.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of the CCE cluster.
                Changing this parameter will create a new cluster resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_param: Specifies the extended parameter.
@@ -2137,9 +2282,11 @@ class Cluster(pulumi.CustomResource):
         :param pulumi.Input[bool] hibernate: Specifies whether to hibernate the CCE cluster. Defaults to **false**. After a cluster is
                hibernated, resources such as workloads cannot be created or managed in the cluster, and the cluster cannot be
                deleted.
+        :param pulumi.Input[str] highway_subnet_id: schema: Internal
         :param pulumi.Input[str] kube_config_raw: Raw Kubernetes config to be used by kubectl and other compatible tools.
         :param pulumi.Input[str] kube_proxy_mode: Specifies the service forwarding mode.
                Changing this parameter will create a new cluster resource. Two modes are available:
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: schema: Internal
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterMasterArgs']]]] masters: Specifies the advanced configuration of master nodes.
                The object structure is documented below.
                This parameter and `multi_az` are alternative. Changing this parameter will create a new cluster resource.
@@ -2157,7 +2304,12 @@ class Cluster(pulumi.CustomResource):
                Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the CCE cluster resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new cluster resource.
-        :param pulumi.Input[str] security_group_id: Security group ID of the cluster.
+        :param pulumi.Input[str] security_group_id: Specifies the default worker node security group ID of the cluster.
+               If left empty, the system will automatically create a default worker node security group for you.
+               The default worker node security group needs to allow access from certain ports to ensure normal communications.
+               For details, see [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+               If updated, the modified security group will only be applied to nodes newly created or accepted.
+               For existing nodes, you need to manually modify the security group rules for them.
         :param pulumi.Input[str] service_network_cidr: Specifies the service network segment.
                Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] status: Cluster status information.
@@ -2196,6 +2348,7 @@ class Cluster(pulumi.CustomResource):
         __props__.__dict__["delete_sfs"] = delete_sfs
         __props__.__dict__["description"] = description
         __props__.__dict__["eip"] = eip
+        __props__.__dict__["enable_distribute_management"] = enable_distribute_management
         __props__.__dict__["eni_subnet_cidr"] = eni_subnet_cidr
         __props__.__dict__["eni_subnet_id"] = eni_subnet_id
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
@@ -2223,6 +2376,9 @@ class Cluster(pulumi.CustomResource):
     @property
     @pulumi.getter
     def annotations(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "annotations")
 
     @property
@@ -2274,8 +2430,7 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies whether auto renew is enabled. Valid values are **true** and
-        **false**. Changing this parameter will create a new cluster resource.
+        Specifies whether auto renew is enabled. Valid values are **true** and **false**.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -2332,7 +2487,9 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter(name="containerNetworkCidr")
     def container_network_cidr(self) -> pulumi.Output[str]:
         """
-        Specifies the container network segment.
+        Specifies the container network segments.
+        In clusters of v1.21 and later, when the `container_network_type` is **vpc-router**, you can add multiple container
+        segments, separated with comma (,). In other situations, only the first segment takes effect.
         Changing this parameter will create a new cluster resource.
         """
         return pulumi.get(self, "container_network_cidr")
@@ -2372,6 +2529,9 @@ class Cluster(pulumi.CustomResource):
     @property
     @pulumi.getter(name="deleteEni")
     def delete_eni(self) -> pulumi.Output[Optional[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "delete_eni")
 
     @property
@@ -2386,6 +2546,9 @@ class Cluster(pulumi.CustomResource):
     @property
     @pulumi.getter(name="deleteNet")
     def delete_net(self) -> pulumi.Output[Optional[str]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "delete_net")
 
     @property
@@ -2423,11 +2586,18 @@ class Cluster(pulumi.CustomResource):
         return pulumi.get(self, "eip")
 
     @property
+    @pulumi.getter(name="enableDistributeManagement")
+    def enable_distribute_management(self) -> pulumi.Output[Optional[bool]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "enable_distribute_management")
+
+    @property
     @pulumi.getter(name="eniSubnetCidr")
     def eni_subnet_cidr(self) -> pulumi.Output[str]:
         """
-        Specifies the ENI network segment. Specified when creating a CCE
-        Turbo cluster. Changing this parameter will create a new cluster resource.
+        The ENI network segment. This value is valid when only one eni_subnet_id is specified.
         """
         return pulumi.get(self, "eni_subnet_cidr")
 
@@ -2435,8 +2605,9 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter(name="eniSubnetId")
     def eni_subnet_id(self) -> pulumi.Output[str]:
         """
-        Specifies the ENI subnet ID. Specified when creating a CCE Turbo
-        cluster. Changing this parameter will create a new cluster resource.
+        Specifies the **IPv4 subnet ID** of the subnet where the ENI resides.
+        Specified when creating a CCE Turbo cluster. You can add multiple IPv4 subnet ID, separated with comma (,).
+        Only adding subnets is allowed, removing subnets is not allowed.
         """
         return pulumi.get(self, "eni_subnet_id")
 
@@ -2487,6 +2658,9 @@ class Cluster(pulumi.CustomResource):
     @property
     @pulumi.getter(name="highwaySubnetId")
     def highway_subnet_id(self) -> pulumi.Output[str]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "highway_subnet_id")
 
     @property
@@ -2509,6 +2683,9 @@ class Cluster(pulumi.CustomResource):
     @property
     @pulumi.getter
     def labels(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
+        """
+        schema: Internal
+        """
         return pulumi.get(self, "labels")
 
     @property
@@ -2574,7 +2751,12 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter(name="securityGroupId")
     def security_group_id(self) -> pulumi.Output[str]:
         """
-        Security group ID of the cluster.
+        Specifies the default worker node security group ID of the cluster.
+        If left empty, the system will automatically create a default worker node security group for you.
+        The default worker node security group needs to allow access from certain ports to ensure normal communications.
+        For details, see [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+        If updated, the modified security group will only be applied to nodes newly created or accepted.
+        For existing nodes, you need to manually modify the security group rules for them.
         """
         return pulumi.get(self, "security_group_id")
 

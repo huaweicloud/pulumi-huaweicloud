@@ -624,7 +624,7 @@ class NetworkInstance(pulumi.CustomResource):
 
     @property
     @pulumi.getter
-    def description(self) -> pulumi.Output[str]:
+    def description(self) -> pulumi.Output[Optional[str]]:
         """
         The description about the network instance.  
         The description can contain a maximum of 255 characters.

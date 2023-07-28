@@ -35,7 +35,7 @@ class DeviceArgs:
         :param pulumi.Input[str] space_id: Specifies the resource space ID which the device belongs to.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] description: Specifies the description of device. The description contains a maximum of 2048
-               characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters
+               characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
                are allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] device_id: Specifies the device ID, which contains 4 to 256 characters.
                Only letters, digits, hyphens (-) and underscore (_) are allowed. If omitted, the platform will automatically allocate
@@ -48,7 +48,7 @@ class DeviceArgs:
                The child device is not directly connected to the platform. If omitted, it means to create a device directly connected
                to the platform, the `device_id` of the device is the same as the `gateway_id`.
         :param pulumi.Input[str] name: Specifies the device name, which contains 4 to 256 characters. Only letters,
-               Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+               Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] region: Specifies the region in which to create the IoTDA device resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] secret: Specifies a secret for identity authentication, which contains 8 to 32 characters.
@@ -121,7 +121,7 @@ class DeviceArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of device. The description contains a maximum of 2048
-        characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters
+        characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
         are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")
@@ -189,7 +189,7 @@ class DeviceArgs:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the device name, which contains 4 to 256 characters. Only letters,
-        Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+        Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "name")
 
@@ -260,7 +260,7 @@ class _DeviceState:
                + **SECRET**: Use a secret for identity authentication.
                + **CERTIFICATES**: Use an x.509 certificate for identity authentication.
         :param pulumi.Input[str] description: Specifies the description of device. The description contains a maximum of 2048
-               characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters
+               characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
                are allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] device_id: Specifies the device ID, which contains 4 to 256 characters.
                Only letters, digits, hyphens (-) and underscore (_) are allowed. If omitted, the platform will automatically allocate
@@ -273,7 +273,7 @@ class _DeviceState:
                The child device is not directly connected to the platform. If omitted, it means to create a device directly connected
                to the platform, the `device_id` of the device is the same as the `gateway_id`.
         :param pulumi.Input[str] name: Specifies the device name, which contains 4 to 256 characters. Only letters,
-               Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+               Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] node_id: Specifies the node ID, which contains 4 to 256 characters.
                The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
         :param pulumi.Input[str] node_type: The node type of device. The options are as follows:
@@ -341,7 +341,7 @@ class _DeviceState:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of device. The description contains a maximum of 2048
-        characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters
+        characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
         are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")
@@ -409,7 +409,7 @@ class _DeviceState:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the device name, which contains 4 to 256 characters. Only letters,
-        Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+        Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "name")
 
@@ -581,7 +581,7 @@ class Device(pulumi.CustomResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: Specifies the description of device. The description contains a maximum of 2048
-               characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters
+               characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
                are allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] device_id: Specifies the device ID, which contains 4 to 256 characters.
                Only letters, digits, hyphens (-) and underscore (_) are allowed. If omitted, the platform will automatically allocate
@@ -594,7 +594,7 @@ class Device(pulumi.CustomResource):
                The child device is not directly connected to the platform. If omitted, it means to create a device directly connected
                to the platform, the `device_id` of the device is the same as the `gateway_id`.
         :param pulumi.Input[str] name: Specifies the device name, which contains 4 to 256 characters. Only letters,
-               Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+               Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] node_id: Specifies the node ID, which contains 4 to 256 characters.
                The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
         :param pulumi.Input[str] product_id: Specifies the product ID which the device belongs to.
@@ -744,7 +744,7 @@ class Device(pulumi.CustomResource):
                + **SECRET**: Use a secret for identity authentication.
                + **CERTIFICATES**: Use an x.509 certificate for identity authentication.
         :param pulumi.Input[str] description: Specifies the description of device. The description contains a maximum of 2048
-               characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters
+               characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
                are allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] device_id: Specifies the device ID, which contains 4 to 256 characters.
                Only letters, digits, hyphens (-) and underscore (_) are allowed. If omitted, the platform will automatically allocate
@@ -757,7 +757,7 @@ class Device(pulumi.CustomResource):
                The child device is not directly connected to the platform. If omitted, it means to create a device directly connected
                to the platform, the `device_id` of the device is the same as the `gateway_id`.
         :param pulumi.Input[str] name: Specifies the device name, which contains 4 to 256 characters. Only letters,
-               Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+               Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] node_id: Specifies the node ID, which contains 4 to 256 characters.
                The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
         :param pulumi.Input[str] node_type: The node type of device. The options are as follows:
@@ -811,7 +811,7 @@ class Device(pulumi.CustomResource):
     def description(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the description of device. The description contains a maximum of 2048
-        characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters
+        characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
         are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")
@@ -859,7 +859,7 @@ class Device(pulumi.CustomResource):
     def name(self) -> pulumi.Output[str]:
         """
         Specifies the device name, which contains 4 to 256 characters. Only letters,
-        Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+        Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "name")
 

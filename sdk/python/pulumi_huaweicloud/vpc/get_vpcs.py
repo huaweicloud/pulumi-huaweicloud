@@ -137,6 +137,23 @@ def get_vpcs(cidr: Optional[str] = None,
     """
     Use this data source to get a list of VPC.
 
+    ## Example Usage
+
+    An example filter by name and tag
+
+    ```python
+    import pulumi
+    import pulumi_huaweicloud as huaweicloud
+
+    config = pulumi.Config()
+    vpc_name = config.require_object("vpcName")
+    vpc = huaweicloud.Vpc.get_vpcs(name=vpc_name,
+        tags={
+            "foo": "bar",
+        })
+    pulumi.export("vpcIds", [__item.id for __item in [vpc.vpcs]])
+    ```
+
 
     :param str cidr: Specifies the cidr block of the desired VPC.
     :param str enterprise_project_id: Specifies the enterprise project ID which the desired VPC belongs to.
@@ -181,6 +198,23 @@ def get_vpcs_output(cidr: Optional[pulumi.Input[Optional[str]]] = None,
                     opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetVpcsResult]:
     """
     Use this data source to get a list of VPC.
+
+    ## Example Usage
+
+    An example filter by name and tag
+
+    ```python
+    import pulumi
+    import pulumi_huaweicloud as huaweicloud
+
+    config = pulumi.Config()
+    vpc_name = config.require_object("vpcName")
+    vpc = huaweicloud.Vpc.get_vpcs(name=vpc_name,
+        tags={
+            "foo": "bar",
+        })
+    pulumi.export("vpcIds", [__item.id for __item in [vpc.vpcs]])
+    ```
 
 
     :param str cidr: Specifies the cidr block of the desired VPC.

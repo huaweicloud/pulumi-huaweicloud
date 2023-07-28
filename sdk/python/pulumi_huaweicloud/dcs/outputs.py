@@ -59,6 +59,7 @@ class InstanceBackupPolicy(dict):
         :param str period_type: Interval at which backup is performed. Default value is `weekly`.
                Currently, only weekly backup is supported.
         :param int save_days: Retention time. Unit: day, the value ranges from 1 to 7.
+               This parameter is required if the backup_type is **auto**.
         """
         pulumi.set(__self__, "backup_ats", backup_ats)
         pulumi.set(__self__, "begin_at", begin_at)
@@ -111,6 +112,7 @@ class InstanceBackupPolicy(dict):
     def save_days(self) -> Optional[int]:
         """
         Retention time. Unit: day, the value ranges from 1 to 7.
+        This parameter is required if the backup_type is **auto**.
         """
         return pulumi.get(self, "save_days")
 
@@ -181,10 +183,10 @@ class GetFlavorsFlavorResult(dict):
         :param Sequence[str] available_zones: An array of available zones where the cache specification can be used.
         :param str cache_mode: The mode of a cache engine. The valid values are as follows:
         :param float capacity: The total memory of the cache, in GB.
-               + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values:
+               + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values:
                `0.125`, `0.25`, `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
-               Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-               `1024`.
+               Cluster instance specifications support `4`,`8`,`16`,`24`, `32`, `48`, `64`, `96`, `128`, `192`,
+               `256`, `384`, `512`, `768` and `1024`.
                + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
                Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
                + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -228,10 +230,10 @@ class GetFlavorsFlavorResult(dict):
     def capacity(self) -> float:
         """
         The total memory of the cache, in GB.
-        + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values:
+        + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values:
         `0.125`, `0.25`, `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
-        Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-        `1024`.
+        Cluster instance specifications support `4`,`8`,`16`,`24`, `32`, `48`, `64`, `96`, `128`, `192`,
+        `256`, `384`, `512`, `768` and `1024`.
         + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
         Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
         + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.

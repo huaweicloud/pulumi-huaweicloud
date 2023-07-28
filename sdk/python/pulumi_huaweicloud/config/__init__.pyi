@@ -112,6 +112,11 @@ region: Optional[str]
 The HuaweiCloud region to connect to.
 """
 
+regional: Optional[bool]
+"""
+Whether the service endpoints are regional
+"""
+
 secretKey: Optional[str]
 """
 The secret key of the HuaweiCloud to use.

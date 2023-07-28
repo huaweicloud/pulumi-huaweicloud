@@ -11,7 +11,9 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages a Vip associate resource within HuaweiCloud.
+// Using this resource, one or more NICs (to which the ECS instance belongs) can be bound to the VIP.
+//
+// > A VIP can only have one resource.
 //
 // ## Example Usage
 //
@@ -21,31 +23,19 @@ import (
 // import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Vpc"
-//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Vpc"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			mynet, err := Vpc.GetSubnet(ctx, &vpc.GetSubnetArgs{
-//				Name: pulumi.StringRef("subnet-default"),
-//			}, nil)
-//			if err != nil {
-//				return err
-//			}
-//			myvip, err := Vpc.NewVip(ctx, "myvip", &Vpc.VipArgs{
-//				NetworkId: pulumi.String(mynet.Id),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			_, err = Vpc.NewVipAssociate(ctx, "vipAssociated", &Vpc.VipAssociateArgs{
-//				VipId: myvip.ID(),
-//				PortIds: pulumi.StringArray{
-//					pulumi.Any(_var.Port_1),
-//					pulumi.Any(_var.Port_2),
-//				},
+//			cfg := config.New(ctx, "")
+//			vipId := cfg.RequireObject("vipId")
+//			nicPortIds := cfg.Require("nicPortIds")
+//			_, err := Vpc.NewVipAssociate(ctx, "vipAssociated", &Vpc.VipAssociateArgs{
+//				VipId:   pulumi.Any(vipId),
+//				PortIds: nicPortIds,
 //			})
 //			if err != nil {
 //				return err

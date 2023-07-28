@@ -123,7 +123,7 @@ type ApplicationEnvironmentVariable struct {
 	// Specifies the variable name. The name can contain `1` to `64` characters, only letters,
 	// digits, underscores (_), hyphens (-) and dots (.) are allowed. The name cannot start with a digit or dot.
 	Name string `pulumi:"name"`
-	// Specifies the variable value. The value can contian a maximum of `2,048` characters.
+	// Specifies the variable value. The value can contain a maximum of `2,048` characters.
 	Value string `pulumi:"value"`
 }
 
@@ -142,7 +142,7 @@ type ApplicationEnvironmentVariableArgs struct {
 	// Specifies the variable name. The name can contain `1` to `64` characters, only letters,
 	// digits, underscores (_), hyphens (-) and dots (.) are allowed. The name cannot start with a digit or dot.
 	Name pulumi.StringInput `pulumi:"name"`
-	// Specifies the variable value. The value can contian a maximum of `2,048` characters.
+	// Specifies the variable value. The value can contain a maximum of `2,048` characters.
 	Value pulumi.StringInput `pulumi:"value"`
 }
 
@@ -203,7 +203,7 @@ func (o ApplicationEnvironmentVariableOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v ApplicationEnvironmentVariable) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the variable value. The value can contian a maximum of `2,048` characters.
+// Specifies the variable value. The value can contain a maximum of `2,048` characters.
 func (o ApplicationEnvironmentVariableOutput) Value() pulumi.StringOutput {
 	return o.ApplyT(func(v ApplicationEnvironmentVariable) string { return v.Value }).(pulumi.StringOutput)
 }
@@ -231,6 +231,10 @@ func (o ApplicationEnvironmentVariableArrayOutput) Index(i pulumi.IntInput) Appl
 type ComponentBuilder struct {
 	// Specifies the cluster ID.
 	ClusterId string `pulumi:"clusterId"`
+	// Specifies the cluster Name.
+	ClusterName *string `pulumi:"clusterName"`
+	// Specifies the cluster type.
+	ClusterType *string `pulumi:"clusterType"`
 	// Specifies the build command. If omitted, the default command will be used.
 	// + About the  default command or script: build.sh in the root directory will be preferentially executed.
 	//   If build.sh does not exist, the code will be compiled using the common method of the selected language,
@@ -238,11 +242,15 @@ type ComponentBuilder struct {
 	// + About the custom command: Commands will be customized using the selected language.
 	//   Alternatively, the default command or script will be used after build.sh is modified.
 	Cmd *string `pulumi:"cmd"`
+	// Specifies the file path for dockerfile.
+	DockerfilePath *string `pulumi:"dockerfilePath"`
 	// Specifies the filter labels for CCE nodes.
 	NodeLabel map[string]string `pulumi:"nodeLabel"`
 	// Specifies the organization name.
 	// The organization is usually **domain name**. You can find out in the organization management of SWR.
 	Organization string `pulumi:"organization"`
+	// Specifies whether to use the public cluster.
+	UsePublicCluster *bool `pulumi:"usePublicCluster"`
 }
 
 // ComponentBuilderInput is an input type that accepts ComponentBuilderArgs and ComponentBuilderOutput values.
@@ -259,6 +267,10 @@ type ComponentBuilderInput interface {
 type ComponentBuilderArgs struct {
 	// Specifies the cluster ID.
 	ClusterId pulumi.StringInput `pulumi:"clusterId"`
+	// Specifies the cluster Name.
+	ClusterName pulumi.StringPtrInput `pulumi:"clusterName"`
+	// Specifies the cluster type.
+	ClusterType pulumi.StringPtrInput `pulumi:"clusterType"`
 	// Specifies the build command. If omitted, the default command will be used.
 	// + About the  default command or script: build.sh in the root directory will be preferentially executed.
 	//   If build.sh does not exist, the code will be compiled using the common method of the selected language,
@@ -266,11 +278,15 @@ type ComponentBuilderArgs struct {
 	// + About the custom command: Commands will be customized using the selected language.
 	//   Alternatively, the default command or script will be used after build.sh is modified.
 	Cmd pulumi.StringPtrInput `pulumi:"cmd"`
+	// Specifies the file path for dockerfile.
+	DockerfilePath pulumi.StringPtrInput `pulumi:"dockerfilePath"`
 	// Specifies the filter labels for CCE nodes.
 	NodeLabel pulumi.StringMapInput `pulumi:"nodeLabel"`
 	// Specifies the organization name.
 	// The organization is usually **domain name**. You can find out in the organization management of SWR.
 	Organization pulumi.StringInput `pulumi:"organization"`
+	// Specifies whether to use the public cluster.
+	UsePublicCluster pulumi.BoolPtrInput `pulumi:"usePublicCluster"`
 }
 
 func (ComponentBuilderArgs) ElementType() reflect.Type {
@@ -355,6 +371,16 @@ func (o ComponentBuilderOutput) ClusterId() pulumi.StringOutput {
 	return o.ApplyT(func(v ComponentBuilder) string { return v.ClusterId }).(pulumi.StringOutput)
 }
 
+// Specifies the cluster Name.
+func (o ComponentBuilderOutput) ClusterName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ComponentBuilder) *string { return v.ClusterName }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the cluster type.
+func (o ComponentBuilderOutput) ClusterType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ComponentBuilder) *string { return v.ClusterType }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the build command. If omitted, the default command will be used.
 //   - About the  default command or script: build.sh in the root directory will be preferentially executed.
 //     If build.sh does not exist, the code will be compiled using the common method of the selected language,
@@ -363,6 +389,11 @@ func (o ComponentBuilderOutput) ClusterId() pulumi.StringOutput {
 //     Alternatively, the default command or script will be used after build.sh is modified.
 func (o ComponentBuilderOutput) Cmd() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ComponentBuilder) *string { return v.Cmd }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the file path for dockerfile.
+func (o ComponentBuilderOutput) DockerfilePath() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ComponentBuilder) *string { return v.DockerfilePath }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the filter labels for CCE nodes.
@@ -374,6 +405,11 @@ func (o ComponentBuilderOutput) NodeLabel() pulumi.StringMapOutput {
 // The organization is usually **domain name**. You can find out in the organization management of SWR.
 func (o ComponentBuilderOutput) Organization() pulumi.StringOutput {
 	return o.ApplyT(func(v ComponentBuilder) string { return v.Organization }).(pulumi.StringOutput)
+}
+
+// Specifies whether to use the public cluster.
+func (o ComponentBuilderOutput) UsePublicCluster() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v ComponentBuilder) *bool { return v.UsePublicCluster }).(pulumi.BoolPtrOutput)
 }
 
 type ComponentBuilderPtrOutput struct{ *pulumi.OutputState }
@@ -410,6 +446,26 @@ func (o ComponentBuilderPtrOutput) ClusterId() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
+// Specifies the cluster Name.
+func (o ComponentBuilderPtrOutput) ClusterName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ComponentBuilder) *string {
+		if v == nil {
+			return nil
+		}
+		return v.ClusterName
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the cluster type.
+func (o ComponentBuilderPtrOutput) ClusterType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ComponentBuilder) *string {
+		if v == nil {
+			return nil
+		}
+		return v.ClusterType
+	}).(pulumi.StringPtrOutput)
+}
+
 // Specifies the build command. If omitted, the default command will be used.
 //   - About the  default command or script: build.sh in the root directory will be preferentially executed.
 //     If build.sh does not exist, the code will be compiled using the common method of the selected language,
@@ -422,6 +478,16 @@ func (o ComponentBuilderPtrOutput) Cmd() pulumi.StringPtrOutput {
 			return nil
 		}
 		return v.Cmd
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the file path for dockerfile.
+func (o ComponentBuilderPtrOutput) DockerfilePath() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ComponentBuilder) *string {
+		if v == nil {
+			return nil
+		}
+		return v.DockerfilePath
 	}).(pulumi.StringPtrOutput)
 }
 
@@ -446,11 +512,21 @@ func (o ComponentBuilderPtrOutput) Organization() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
+// Specifies whether to use the public cluster.
+func (o ComponentBuilderPtrOutput) UsePublicCluster() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *ComponentBuilder) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.UsePublicCluster
+	}).(pulumi.BoolPtrOutput)
+}
+
 type ComponentInstanceArtifact struct {
 	// Specifies the authentication mode.
 	// The valid values are **iam** and **none**. Defaults to **iam**.
 	AuthType *string `pulumi:"authType"`
-	// Specifies the name of a configuration item or secret.
+	// Specifies the configuration item.
 	Name string `pulumi:"name"`
 	// Specifies the properties of the OBS object.
 	// This parameter is available only `storage` is **obs**.
@@ -489,7 +565,7 @@ type ComponentInstanceArtifactArgs struct {
 	// Specifies the authentication mode.
 	// The valid values are **iam** and **none**. Defaults to **iam**.
 	AuthType pulumi.StringPtrInput `pulumi:"authType"`
-	// Specifies the name of a configuration item or secret.
+	// Specifies the configuration item.
 	Name pulumi.StringInput `pulumi:"name"`
 	// Specifies the properties of the OBS object.
 	// This parameter is available only `storage` is **obs**.
@@ -570,7 +646,7 @@ func (o ComponentInstanceArtifactOutput) AuthType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ComponentInstanceArtifact) *string { return v.AuthType }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the name of a configuration item or secret.
+// Specifies the configuration item.
 func (o ComponentInstanceArtifactOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v ComponentInstanceArtifact) string { return v.Name }).(pulumi.StringOutput)
 }
@@ -1101,7 +1177,7 @@ func (o ComponentInstanceConfigurationPtrOutput) Strategy() ComponentInstanceCon
 }
 
 type ComponentInstanceConfigurationEnvVariable struct {
-	// Specifies the name of a configuration item or secret.
+	// Specifies the configuration item.
 	Name string `pulumi:"name"`
 	// Specifies the variable value.
 	Value string `pulumi:"value"`
@@ -1119,7 +1195,7 @@ type ComponentInstanceConfigurationEnvVariableInput interface {
 }
 
 type ComponentInstanceConfigurationEnvVariableArgs struct {
-	// Specifies the name of a configuration item or secret.
+	// Specifies the configuration item.
 	Name pulumi.StringInput `pulumi:"name"`
 	// Specifies the variable value.
 	Value pulumi.StringInput `pulumi:"value"`
@@ -1176,7 +1252,7 @@ func (o ComponentInstanceConfigurationEnvVariableOutput) ToComponentInstanceConf
 	return o
 }
 
-// Specifies the name of a configuration item or secret.
+// Specifies the configuration item.
 func (o ComponentInstanceConfigurationEnvVariableOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v ComponentInstanceConfigurationEnvVariable) string { return v.Name }).(pulumi.StringOutput)
 }
@@ -1732,12 +1808,12 @@ func (o ComponentInstanceConfigurationLifecyclePostStartPtrOutput) Type() pulumi
 type ComponentInstanceConfigurationLifecyclePostStartParameters struct {
 	// Specifies the command list.
 	Commands []string `pulumi:"commands"`
-	// Specifies the custom IP address. The defualt address is pod IP address.
+	// Specifies the custom IP address. The default address is pod IP address.
 	Host *string `pulumi:"host"`
 	// Specifies the request path.
-	Path string `pulumi:"path"`
+	Path *string `pulumi:"path"`
 	// Specifies the listening port of the application component process.
-	Port int `pulumi:"port"`
+	Port *int `pulumi:"port"`
 }
 
 // ComponentInstanceConfigurationLifecyclePostStartParametersInput is an input type that accepts ComponentInstanceConfigurationLifecyclePostStartParametersArgs and ComponentInstanceConfigurationLifecyclePostStartParametersOutput values.
@@ -1754,12 +1830,12 @@ type ComponentInstanceConfigurationLifecyclePostStartParametersInput interface {
 type ComponentInstanceConfigurationLifecyclePostStartParametersArgs struct {
 	// Specifies the command list.
 	Commands pulumi.StringArrayInput `pulumi:"commands"`
-	// Specifies the custom IP address. The defualt address is pod IP address.
+	// Specifies the custom IP address. The default address is pod IP address.
 	Host pulumi.StringPtrInput `pulumi:"host"`
 	// Specifies the request path.
-	Path pulumi.StringInput `pulumi:"path"`
+	Path pulumi.StringPtrInput `pulumi:"path"`
 	// Specifies the listening port of the application component process.
-	Port pulumi.IntInput `pulumi:"port"`
+	Port pulumi.IntPtrInput `pulumi:"port"`
 }
 
 func (ComponentInstanceConfigurationLifecyclePostStartParametersArgs) ElementType() reflect.Type {
@@ -1844,19 +1920,19 @@ func (o ComponentInstanceConfigurationLifecyclePostStartParametersOutput) Comman
 	return o.ApplyT(func(v ComponentInstanceConfigurationLifecyclePostStartParameters) []string { return v.Commands }).(pulumi.StringArrayOutput)
 }
 
-// Specifies the custom IP address. The defualt address is pod IP address.
+// Specifies the custom IP address. The default address is pod IP address.
 func (o ComponentInstanceConfigurationLifecyclePostStartParametersOutput) Host() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ComponentInstanceConfigurationLifecyclePostStartParameters) *string { return v.Host }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the request path.
-func (o ComponentInstanceConfigurationLifecyclePostStartParametersOutput) Path() pulumi.StringOutput {
-	return o.ApplyT(func(v ComponentInstanceConfigurationLifecyclePostStartParameters) string { return v.Path }).(pulumi.StringOutput)
+func (o ComponentInstanceConfigurationLifecyclePostStartParametersOutput) Path() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ComponentInstanceConfigurationLifecyclePostStartParameters) *string { return v.Path }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the listening port of the application component process.
-func (o ComponentInstanceConfigurationLifecyclePostStartParametersOutput) Port() pulumi.IntOutput {
-	return o.ApplyT(func(v ComponentInstanceConfigurationLifecyclePostStartParameters) int { return v.Port }).(pulumi.IntOutput)
+func (o ComponentInstanceConfigurationLifecyclePostStartParametersOutput) Port() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v ComponentInstanceConfigurationLifecyclePostStartParameters) *int { return v.Port }).(pulumi.IntPtrOutput)
 }
 
 type ComponentInstanceConfigurationLifecyclePostStartParametersPtrOutput struct{ *pulumi.OutputState }
@@ -1893,7 +1969,7 @@ func (o ComponentInstanceConfigurationLifecyclePostStartParametersPtrOutput) Com
 	}).(pulumi.StringArrayOutput)
 }
 
-// Specifies the custom IP address. The defualt address is pod IP address.
+// Specifies the custom IP address. The default address is pod IP address.
 func (o ComponentInstanceConfigurationLifecyclePostStartParametersPtrOutput) Host() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ComponentInstanceConfigurationLifecyclePostStartParameters) *string {
 		if v == nil {
@@ -1909,7 +1985,7 @@ func (o ComponentInstanceConfigurationLifecyclePostStartParametersPtrOutput) Pat
 		if v == nil {
 			return nil
 		}
-		return &v.Path
+		return v.Path
 	}).(pulumi.StringPtrOutput)
 }
 
@@ -1919,7 +1995,7 @@ func (o ComponentInstanceConfigurationLifecyclePostStartParametersPtrOutput) Por
 		if v == nil {
 			return nil
 		}
-		return &v.Port
+		return v.Port
 	}).(pulumi.IntPtrOutput)
 }
 
@@ -2100,12 +2176,12 @@ func (o ComponentInstanceConfigurationLifecyclePreStopPtrOutput) Type() pulumi.S
 type ComponentInstanceConfigurationLifecyclePreStopParameters struct {
 	// Specifies the command list.
 	Commands []string `pulumi:"commands"`
-	// Specifies the custom IP address. The defualt address is pod IP address.
+	// Specifies the custom IP address. The default address is pod IP address.
 	Host *string `pulumi:"host"`
 	// Specifies the request path.
-	Path string `pulumi:"path"`
+	Path *string `pulumi:"path"`
 	// Specifies the listening port of the application component process.
-	Port int `pulumi:"port"`
+	Port *int `pulumi:"port"`
 }
 
 // ComponentInstanceConfigurationLifecyclePreStopParametersInput is an input type that accepts ComponentInstanceConfigurationLifecyclePreStopParametersArgs and ComponentInstanceConfigurationLifecyclePreStopParametersOutput values.
@@ -2122,12 +2198,12 @@ type ComponentInstanceConfigurationLifecyclePreStopParametersInput interface {
 type ComponentInstanceConfigurationLifecyclePreStopParametersArgs struct {
 	// Specifies the command list.
 	Commands pulumi.StringArrayInput `pulumi:"commands"`
-	// Specifies the custom IP address. The defualt address is pod IP address.
+	// Specifies the custom IP address. The default address is pod IP address.
 	Host pulumi.StringPtrInput `pulumi:"host"`
 	// Specifies the request path.
-	Path pulumi.StringInput `pulumi:"path"`
+	Path pulumi.StringPtrInput `pulumi:"path"`
 	// Specifies the listening port of the application component process.
-	Port pulumi.IntInput `pulumi:"port"`
+	Port pulumi.IntPtrInput `pulumi:"port"`
 }
 
 func (ComponentInstanceConfigurationLifecyclePreStopParametersArgs) ElementType() reflect.Type {
@@ -2212,19 +2288,19 @@ func (o ComponentInstanceConfigurationLifecyclePreStopParametersOutput) Commands
 	return o.ApplyT(func(v ComponentInstanceConfigurationLifecyclePreStopParameters) []string { return v.Commands }).(pulumi.StringArrayOutput)
 }
 
-// Specifies the custom IP address. The defualt address is pod IP address.
+// Specifies the custom IP address. The default address is pod IP address.
 func (o ComponentInstanceConfigurationLifecyclePreStopParametersOutput) Host() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ComponentInstanceConfigurationLifecyclePreStopParameters) *string { return v.Host }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the request path.
-func (o ComponentInstanceConfigurationLifecyclePreStopParametersOutput) Path() pulumi.StringOutput {
-	return o.ApplyT(func(v ComponentInstanceConfigurationLifecyclePreStopParameters) string { return v.Path }).(pulumi.StringOutput)
+func (o ComponentInstanceConfigurationLifecyclePreStopParametersOutput) Path() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ComponentInstanceConfigurationLifecyclePreStopParameters) *string { return v.Path }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the listening port of the application component process.
-func (o ComponentInstanceConfigurationLifecyclePreStopParametersOutput) Port() pulumi.IntOutput {
-	return o.ApplyT(func(v ComponentInstanceConfigurationLifecyclePreStopParameters) int { return v.Port }).(pulumi.IntOutput)
+func (o ComponentInstanceConfigurationLifecyclePreStopParametersOutput) Port() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v ComponentInstanceConfigurationLifecyclePreStopParameters) *int { return v.Port }).(pulumi.IntPtrOutput)
 }
 
 type ComponentInstanceConfigurationLifecyclePreStopParametersPtrOutput struct{ *pulumi.OutputState }
@@ -2261,7 +2337,7 @@ func (o ComponentInstanceConfigurationLifecyclePreStopParametersPtrOutput) Comma
 	}).(pulumi.StringArrayOutput)
 }
 
-// Specifies the custom IP address. The defualt address is pod IP address.
+// Specifies the custom IP address. The default address is pod IP address.
 func (o ComponentInstanceConfigurationLifecyclePreStopParametersPtrOutput) Host() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ComponentInstanceConfigurationLifecyclePreStopParameters) *string {
 		if v == nil {
@@ -2277,7 +2353,7 @@ func (o ComponentInstanceConfigurationLifecyclePreStopParametersPtrOutput) Path(
 		if v == nil {
 			return nil
 		}
-		return &v.Path
+		return v.Path
 	}).(pulumi.StringPtrOutput)
 }
 
@@ -2287,7 +2363,7 @@ func (o ComponentInstanceConfigurationLifecyclePreStopParametersPtrOutput) Port(
 		if v == nil {
 			return nil
 		}
-		return &v.Port
+		return v.Port
 	}).(pulumi.IntPtrOutput)
 }
 
@@ -3110,7 +3186,7 @@ func (o ComponentInstanceConfigurationProbeLivenessCommandParamPtrOutput) Comman
 }
 
 type ComponentInstanceConfigurationProbeLivenessHttpParam struct {
-	// Specifies the custom IP address. The defualt address is pod IP address.
+	// Specifies the custom IP address. The default address is pod IP address.
 	Host *string `pulumi:"host"`
 	// Specifies the request path.
 	Path string `pulumi:"path"`
@@ -3132,7 +3208,7 @@ type ComponentInstanceConfigurationProbeLivenessHttpParamInput interface {
 }
 
 type ComponentInstanceConfigurationProbeLivenessHttpParamArgs struct {
-	// Specifies the custom IP address. The defualt address is pod IP address.
+	// Specifies the custom IP address. The default address is pod IP address.
 	Host pulumi.StringPtrInput `pulumi:"host"`
 	// Specifies the request path.
 	Path pulumi.StringInput `pulumi:"path"`
@@ -3219,7 +3295,7 @@ func (o ComponentInstanceConfigurationProbeLivenessHttpParamOutput) ToComponentI
 	}).(ComponentInstanceConfigurationProbeLivenessHttpParamPtrOutput)
 }
 
-// Specifies the custom IP address. The defualt address is pod IP address.
+// Specifies the custom IP address. The default address is pod IP address.
 func (o ComponentInstanceConfigurationProbeLivenessHttpParamOutput) Host() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ComponentInstanceConfigurationProbeLivenessHttpParam) *string { return v.Host }).(pulumi.StringPtrOutput)
 }
@@ -3263,7 +3339,7 @@ func (o ComponentInstanceConfigurationProbeLivenessHttpParamPtrOutput) Elem() Co
 	}).(ComponentInstanceConfigurationProbeLivenessHttpParamOutput)
 }
 
-// Specifies the custom IP address. The defualt address is pod IP address.
+// Specifies the custom IP address. The default address is pod IP address.
 func (o ComponentInstanceConfigurationProbeLivenessHttpParamPtrOutput) Host() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ComponentInstanceConfigurationProbeLivenessHttpParam) *string {
 		if v == nil {
@@ -3840,7 +3916,7 @@ func (o ComponentInstanceConfigurationProbeReadinessCommandParamPtrOutput) Comma
 }
 
 type ComponentInstanceConfigurationProbeReadinessHttpParam struct {
-	// Specifies the custom IP address. The defualt address is pod IP address.
+	// Specifies the custom IP address. The default address is pod IP address.
 	Host *string `pulumi:"host"`
 	// Specifies the request path.
 	Path string `pulumi:"path"`
@@ -3862,7 +3938,7 @@ type ComponentInstanceConfigurationProbeReadinessHttpParamInput interface {
 }
 
 type ComponentInstanceConfigurationProbeReadinessHttpParamArgs struct {
-	// Specifies the custom IP address. The defualt address is pod IP address.
+	// Specifies the custom IP address. The default address is pod IP address.
 	Host pulumi.StringPtrInput `pulumi:"host"`
 	// Specifies the request path.
 	Path pulumi.StringInput `pulumi:"path"`
@@ -3949,7 +4025,7 @@ func (o ComponentInstanceConfigurationProbeReadinessHttpParamOutput) ToComponent
 	}).(ComponentInstanceConfigurationProbeReadinessHttpParamPtrOutput)
 }
 
-// Specifies the custom IP address. The defualt address is pod IP address.
+// Specifies the custom IP address. The default address is pod IP address.
 func (o ComponentInstanceConfigurationProbeReadinessHttpParamOutput) Host() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ComponentInstanceConfigurationProbeReadinessHttpParam) *string { return v.Host }).(pulumi.StringPtrOutput)
 }
@@ -3993,7 +4069,7 @@ func (o ComponentInstanceConfigurationProbeReadinessHttpParamPtrOutput) Elem() C
 	}).(ComponentInstanceConfigurationProbeReadinessHttpParamOutput)
 }
 
-// Specifies the custom IP address. The defualt address is pod IP address.
+// Specifies the custom IP address. The default address is pod IP address.
 func (o ComponentInstanceConfigurationProbeReadinessHttpParamPtrOutput) Host() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ComponentInstanceConfigurationProbeReadinessHttpParam) *string {
 		if v == nil {
@@ -4949,10 +5025,12 @@ func (o ComponentInstanceConfigurationStorageMountArrayOutput) Index(i pulumi.In
 type ComponentInstanceConfigurationStorageParameter struct {
 	// Specifies the PVC name.
 	ClaimName *string `pulumi:"claimName"`
-	// Specifies the name of a configuration item or secret.
+	// Specifies the configuration item.
 	Name *string `pulumi:"name"`
 	// Specifies the request path.
 	Path *string `pulumi:"path"`
+	// Specifies the Secret name. Required if the storage `type` is **Secret**.
+	SecretName *string `pulumi:"secretName"`
 }
 
 // ComponentInstanceConfigurationStorageParameterInput is an input type that accepts ComponentInstanceConfigurationStorageParameterArgs and ComponentInstanceConfigurationStorageParameterOutput values.
@@ -4969,10 +5047,12 @@ type ComponentInstanceConfigurationStorageParameterInput interface {
 type ComponentInstanceConfigurationStorageParameterArgs struct {
 	// Specifies the PVC name.
 	ClaimName pulumi.StringPtrInput `pulumi:"claimName"`
-	// Specifies the name of a configuration item or secret.
+	// Specifies the configuration item.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Specifies the request path.
 	Path pulumi.StringPtrInput `pulumi:"path"`
+	// Specifies the Secret name. Required if the storage `type` is **Secret**.
+	SecretName pulumi.StringPtrInput `pulumi:"secretName"`
 }
 
 func (ComponentInstanceConfigurationStorageParameterArgs) ElementType() reflect.Type {
@@ -5006,7 +5086,7 @@ func (o ComponentInstanceConfigurationStorageParameterOutput) ClaimName() pulumi
 	return o.ApplyT(func(v ComponentInstanceConfigurationStorageParameter) *string { return v.ClaimName }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the name of a configuration item or secret.
+// Specifies the configuration item.
 func (o ComponentInstanceConfigurationStorageParameterOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ComponentInstanceConfigurationStorageParameter) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
@@ -5014,6 +5094,11 @@ func (o ComponentInstanceConfigurationStorageParameterOutput) Name() pulumi.Stri
 // Specifies the request path.
 func (o ComponentInstanceConfigurationStorageParameterOutput) Path() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ComponentInstanceConfigurationStorageParameter) *string { return v.Path }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the Secret name. Required if the storage `type` is **Secret**.
+func (o ComponentInstanceConfigurationStorageParameterOutput) SecretName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ComponentInstanceConfigurationStorageParameter) *string { return v.SecretName }).(pulumi.StringPtrOutput)
 }
 
 type ComponentInstanceConfigurationStrategy struct {
@@ -5162,7 +5247,7 @@ func (o ComponentInstanceConfigurationStrategyPtrOutput) Upgrade() pulumi.String
 }
 
 type ComponentInstanceExternalAccess struct {
-	// Specifies the access address. For example: www.example.com.
+	// Specifies the access address. For example: `www.example.com`.
 	Address *string `pulumi:"address"`
 	// Specifies the listening port of the application component process.
 	Port *int `pulumi:"port"`
@@ -5182,7 +5267,7 @@ type ComponentInstanceExternalAccessInput interface {
 }
 
 type ComponentInstanceExternalAccessArgs struct {
-	// Specifies the access address. For example: www.example.com.
+	// Specifies the access address. For example: `www.example.com`.
 	Address pulumi.StringPtrInput `pulumi:"address"`
 	// Specifies the listening port of the application component process.
 	Port pulumi.IntPtrInput `pulumi:"port"`
@@ -5241,7 +5326,7 @@ func (o ComponentInstanceExternalAccessOutput) ToComponentInstanceExternalAccess
 	return o
 }
 
-// Specifies the access address. For example: www.example.com.
+// Specifies the access address. For example: `www.example.com`.
 func (o ComponentInstanceExternalAccessOutput) Address() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ComponentInstanceExternalAccess) *string { return v.Address }).(pulumi.StringPtrOutput)
 }
@@ -5425,6 +5510,9 @@ type ComponentSource struct {
 	// Specifies the authorization name.
 	// This parameter and `storageType` are alternative.
 	Authorization *string `pulumi:"authorization"`
+	// Specifies the component builder's properties.
+	// The object structure is documented below.
+	Properties *ComponentSourceProperties `pulumi:"properties"`
 	// Specifies the namespace name.
 	RepoNamespace *string `pulumi:"repoNamespace"`
 	// Specifies the name of the branch of the code repository.
@@ -5455,6 +5543,9 @@ type ComponentSourceArgs struct {
 	// Specifies the authorization name.
 	// This parameter and `storageType` are alternative.
 	Authorization pulumi.StringPtrInput `pulumi:"authorization"`
+	// Specifies the component builder's properties.
+	// The object structure is documented below.
+	Properties ComponentSourcePropertiesPtrInput `pulumi:"properties"`
 	// Specifies the namespace name.
 	RepoNamespace pulumi.StringPtrInput `pulumi:"repoNamespace"`
 	// Specifies the name of the branch of the code repository.
@@ -5553,6 +5644,12 @@ func (o ComponentSourceOutput) Authorization() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ComponentSource) *string { return v.Authorization }).(pulumi.StringPtrOutput)
 }
 
+// Specifies the component builder's properties.
+// The object structure is documented below.
+func (o ComponentSourceOutput) Properties() ComponentSourcePropertiesPtrOutput {
+	return o.ApplyT(func(v ComponentSource) *ComponentSourceProperties { return v.Properties }).(ComponentSourcePropertiesPtrOutput)
+}
+
 // Specifies the namespace name.
 func (o ComponentSourceOutput) RepoNamespace() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ComponentSource) *string { return v.RepoNamespace }).(pulumi.StringPtrOutput)
@@ -5616,6 +5713,17 @@ func (o ComponentSourcePtrOutput) Authorization() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
+// Specifies the component builder's properties.
+// The object structure is documented below.
+func (o ComponentSourcePtrOutput) Properties() ComponentSourcePropertiesPtrOutput {
+	return o.ApplyT(func(v *ComponentSource) *ComponentSourceProperties {
+		if v == nil {
+			return nil
+		}
+		return v.Properties
+	}).(ComponentSourcePropertiesPtrOutput)
+}
+
 // Specifies the namespace name.
 func (o ComponentSourcePtrOutput) RepoNamespace() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ComponentSource) *string {
@@ -5666,6 +5774,181 @@ func (o ComponentSourcePtrOutput) Url() pulumi.StringPtrOutput {
 			return nil
 		}
 		return &v.Url
+	}).(pulumi.StringPtrOutput)
+}
+
+type ComponentSourceProperties struct {
+	// Specifies the bucket name of obs.
+	Bucket *string `pulumi:"bucket"`
+	// Specifies the endpoint of obs.
+	Endpoint *string `pulumi:"endpoint"`
+	// Specifies the key of obs.
+	Key *string `pulumi:"key"`
+}
+
+// ComponentSourcePropertiesInput is an input type that accepts ComponentSourcePropertiesArgs and ComponentSourcePropertiesOutput values.
+// You can construct a concrete instance of `ComponentSourcePropertiesInput` via:
+//
+//	ComponentSourcePropertiesArgs{...}
+type ComponentSourcePropertiesInput interface {
+	pulumi.Input
+
+	ToComponentSourcePropertiesOutput() ComponentSourcePropertiesOutput
+	ToComponentSourcePropertiesOutputWithContext(context.Context) ComponentSourcePropertiesOutput
+}
+
+type ComponentSourcePropertiesArgs struct {
+	// Specifies the bucket name of obs.
+	Bucket pulumi.StringPtrInput `pulumi:"bucket"`
+	// Specifies the endpoint of obs.
+	Endpoint pulumi.StringPtrInput `pulumi:"endpoint"`
+	// Specifies the key of obs.
+	Key pulumi.StringPtrInput `pulumi:"key"`
+}
+
+func (ComponentSourcePropertiesArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ComponentSourceProperties)(nil)).Elem()
+}
+
+func (i ComponentSourcePropertiesArgs) ToComponentSourcePropertiesOutput() ComponentSourcePropertiesOutput {
+	return i.ToComponentSourcePropertiesOutputWithContext(context.Background())
+}
+
+func (i ComponentSourcePropertiesArgs) ToComponentSourcePropertiesOutputWithContext(ctx context.Context) ComponentSourcePropertiesOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ComponentSourcePropertiesOutput)
+}
+
+func (i ComponentSourcePropertiesArgs) ToComponentSourcePropertiesPtrOutput() ComponentSourcePropertiesPtrOutput {
+	return i.ToComponentSourcePropertiesPtrOutputWithContext(context.Background())
+}
+
+func (i ComponentSourcePropertiesArgs) ToComponentSourcePropertiesPtrOutputWithContext(ctx context.Context) ComponentSourcePropertiesPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ComponentSourcePropertiesOutput).ToComponentSourcePropertiesPtrOutputWithContext(ctx)
+}
+
+// ComponentSourcePropertiesPtrInput is an input type that accepts ComponentSourcePropertiesArgs, ComponentSourcePropertiesPtr and ComponentSourcePropertiesPtrOutput values.
+// You can construct a concrete instance of `ComponentSourcePropertiesPtrInput` via:
+//
+//	        ComponentSourcePropertiesArgs{...}
+//
+//	or:
+//
+//	        nil
+type ComponentSourcePropertiesPtrInput interface {
+	pulumi.Input
+
+	ToComponentSourcePropertiesPtrOutput() ComponentSourcePropertiesPtrOutput
+	ToComponentSourcePropertiesPtrOutputWithContext(context.Context) ComponentSourcePropertiesPtrOutput
+}
+
+type componentSourcePropertiesPtrType ComponentSourcePropertiesArgs
+
+func ComponentSourcePropertiesPtr(v *ComponentSourcePropertiesArgs) ComponentSourcePropertiesPtrInput {
+	return (*componentSourcePropertiesPtrType)(v)
+}
+
+func (*componentSourcePropertiesPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**ComponentSourceProperties)(nil)).Elem()
+}
+
+func (i *componentSourcePropertiesPtrType) ToComponentSourcePropertiesPtrOutput() ComponentSourcePropertiesPtrOutput {
+	return i.ToComponentSourcePropertiesPtrOutputWithContext(context.Background())
+}
+
+func (i *componentSourcePropertiesPtrType) ToComponentSourcePropertiesPtrOutputWithContext(ctx context.Context) ComponentSourcePropertiesPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ComponentSourcePropertiesPtrOutput)
+}
+
+type ComponentSourcePropertiesOutput struct{ *pulumi.OutputState }
+
+func (ComponentSourcePropertiesOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ComponentSourceProperties)(nil)).Elem()
+}
+
+func (o ComponentSourcePropertiesOutput) ToComponentSourcePropertiesOutput() ComponentSourcePropertiesOutput {
+	return o
+}
+
+func (o ComponentSourcePropertiesOutput) ToComponentSourcePropertiesOutputWithContext(ctx context.Context) ComponentSourcePropertiesOutput {
+	return o
+}
+
+func (o ComponentSourcePropertiesOutput) ToComponentSourcePropertiesPtrOutput() ComponentSourcePropertiesPtrOutput {
+	return o.ToComponentSourcePropertiesPtrOutputWithContext(context.Background())
+}
+
+func (o ComponentSourcePropertiesOutput) ToComponentSourcePropertiesPtrOutputWithContext(ctx context.Context) ComponentSourcePropertiesPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v ComponentSourceProperties) *ComponentSourceProperties {
+		return &v
+	}).(ComponentSourcePropertiesPtrOutput)
+}
+
+// Specifies the bucket name of obs.
+func (o ComponentSourcePropertiesOutput) Bucket() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ComponentSourceProperties) *string { return v.Bucket }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the endpoint of obs.
+func (o ComponentSourcePropertiesOutput) Endpoint() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ComponentSourceProperties) *string { return v.Endpoint }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the key of obs.
+func (o ComponentSourcePropertiesOutput) Key() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ComponentSourceProperties) *string { return v.Key }).(pulumi.StringPtrOutput)
+}
+
+type ComponentSourcePropertiesPtrOutput struct{ *pulumi.OutputState }
+
+func (ComponentSourcePropertiesPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**ComponentSourceProperties)(nil)).Elem()
+}
+
+func (o ComponentSourcePropertiesPtrOutput) ToComponentSourcePropertiesPtrOutput() ComponentSourcePropertiesPtrOutput {
+	return o
+}
+
+func (o ComponentSourcePropertiesPtrOutput) ToComponentSourcePropertiesPtrOutputWithContext(ctx context.Context) ComponentSourcePropertiesPtrOutput {
+	return o
+}
+
+func (o ComponentSourcePropertiesPtrOutput) Elem() ComponentSourcePropertiesOutput {
+	return o.ApplyT(func(v *ComponentSourceProperties) ComponentSourceProperties {
+		if v != nil {
+			return *v
+		}
+		var ret ComponentSourceProperties
+		return ret
+	}).(ComponentSourcePropertiesOutput)
+}
+
+// Specifies the bucket name of obs.
+func (o ComponentSourcePropertiesPtrOutput) Bucket() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ComponentSourceProperties) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Bucket
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the endpoint of obs.
+func (o ComponentSourcePropertiesPtrOutput) Endpoint() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ComponentSourceProperties) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Endpoint
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the key of obs.
+func (o ComponentSourcePropertiesPtrOutput) Key() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ComponentSourceProperties) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Key
 	}).(pulumi.StringPtrOutput)
 }
 
@@ -6085,6 +6368,8 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*ComponentInstanceReferResourceArrayInput)(nil)).Elem(), ComponentInstanceReferResourceArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ComponentSourceInput)(nil)).Elem(), ComponentSourceArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ComponentSourcePtrInput)(nil)).Elem(), ComponentSourceArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ComponentSourcePropertiesInput)(nil)).Elem(), ComponentSourcePropertiesArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ComponentSourcePropertiesPtrInput)(nil)).Elem(), ComponentSourcePropertiesArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*EnvironmentBasicResourceInput)(nil)).Elem(), EnvironmentBasicResourceArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*EnvironmentBasicResourceArrayInput)(nil)).Elem(), EnvironmentBasicResourceArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*EnvironmentOptionalResourceInput)(nil)).Elem(), EnvironmentOptionalResourceArgs{})
@@ -6158,6 +6443,8 @@ func init() {
 	pulumi.RegisterOutputType(ComponentInstanceReferResourceArrayOutput{})
 	pulumi.RegisterOutputType(ComponentSourceOutput{})
 	pulumi.RegisterOutputType(ComponentSourcePtrOutput{})
+	pulumi.RegisterOutputType(ComponentSourcePropertiesOutput{})
+	pulumi.RegisterOutputType(ComponentSourcePropertiesPtrOutput{})
 	pulumi.RegisterOutputType(EnvironmentBasicResourceOutput{})
 	pulumi.RegisterOutputType(EnvironmentBasicResourceArrayOutput{})
 	pulumi.RegisterOutputType(EnvironmentOptionalResourceOutput{})

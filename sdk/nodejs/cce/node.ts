@@ -15,18 +15,21 @@ import * as utilities from "../utilities";
  * import * as huaweicloud from "@pulumi/huaweicloud";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
+ * const config = new pulumi.Config();
+ * const clusterId = config.requireObject("clusterId");
+ * const nodeName = config.requireObject("nodeName");
+ * const keypairName = config.requireObject("keypairName");
  * const myaz = huaweicloud.getAvailabilityZones({});
- * const mykp = new huaweicloud.ecs.Keypair("mykp", {publicKey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAjpC1hwiOCCmKEWxJ4qzTTsJbKzndLo1BCz5PcwtUnflmU+gHJtWMZKpuEGVi29h0A/+ydKek1O18k10Ff+4tyFjiHDQAT9+OfgWf7+b1yK+qDip3X1C0UPMbwHlTfSGWLGZquwhvEFx9k3h/M+VtMvwR1lJ9LUyTAImnNjWG7TAIPmui30HvM2UiFEmqkr4ijq45MyX2+fLIePLRIFuu1p4whjHAQYufqyno3BS48icQb4p6iVEZPo4AE2o9oIyQvj2mx4dk5Y8CgSETOZTYDOR3rU2fZTRDRgPJDH9FWvQjF5tA0p3d9CoWWd2s6GKKbfoUIi8R/Db1BSPJwkqB jrp-hp-pc"});
- * const mycluster = new huaweicloud.cce.Cluster("mycluster", {
- *     clusterType: "VirtualMachine",
- *     flavorId: "cce.s1.small",
- *     vpcId: huaweicloud_vpc.myvpc.id,
- *     subnetId: huaweicloud_vpc_subnet.mysubnet.id,
- *     containerNetworkType: "overlay_l2",
- * });
+ * const myflavors = myaz.then(myaz => huaweicloud.Ecs.getFlavors({
+ *     availabilityZone: myaz.names?[0],
+ *     performanceType: "normal",
+ *     cpuCoreCount: 2,
+ *     memorySize: 4,
+ * }));
+ * const mykp = new huaweicloud.dew.Keypair("mykp", {publicKey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAjpC1hwiOCCmKEWxJ4qzTTsJbKzndLo1BCz5PcwtUnflmU+gHJtWMZKpuEGVi29h0A/+ydKek1O18k10Ff+4tyFjiHDQAT9+OfgWf7+b1yK+qDip3X1C0UPMbwHlTfSGWLGZquwhvEFx9k3h/M+VtMvwR1lJ9LUyTAImnNjWG7TAIPmui30HvM2UiFEmqkr4ijq45MyX2+fLIePLRIFuu1p4whjHAQYufqyno3BS48icQb4p6iVEZPo4AE2o9oIyQvj2mx4dk5Y8CgSETOZTYDOR3rU2fZTRDRgPJDH9FWvQjF5tA0p3d9CoWWd2s6GKKbfoUIi8R/Db1BSPJwkqB jrp-hp-pc"});
  * const node = new huaweicloud.cce.Node("node", {
- *     clusterId: mycluster.id,
- *     flavorId: "s3.large.2",
+ *     clusterId: clusterId,
+ *     flavorId: myflavors.then(myflavors => myflavors.ids?[0]),
  *     availabilityZone: myaz.then(myaz => myaz.names?[0]),
  *     keyPair: mykp.name,
  *     rootVolume: {
@@ -44,13 +47,26 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
+ * import * as huaweicloud from "@pulumi/huaweicloud";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
+ * const config = new pulumi.Config();
+ * const clusterId = config.requireObject("clusterId");
+ * const nodeName = config.requireObject("nodeName");
+ * const keypairName = config.requireObject("keypairName");
+ * const myaz = huaweicloud.getAvailabilityZones({});
+ * const test = myaz.then(myaz => huaweicloud.Ecs.getFlavors({
+ *     availabilityZone: myaz.names?[0],
+ *     performanceType: "normal",
+ *     cpuCoreCount: 2,
+ *     memorySize: 4,
+ * }));
+ * const mykp = new huaweicloud.dew.Keypair("mykp", {publicKey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAjpC1hwiOCCmKEWxJ4qzTTsJbKzndLo1BCz5PcwtUnflmU+gHJtWMZKpuEGVi29h0A/+ydKek1O18k10Ff+4tyFjiHDQAT9+OfgWf7+b1yK+qDip3X1C0UPMbwHlTfSGWLGZquwhvEFx9k3h/M+VtMvwR1lJ9LUyTAImnNjWG7TAIPmui30HvM2UiFEmqkr4ijq45MyX2+fLIePLRIFuu1p4whjHAQYufqyno3BS48icQb4p6iVEZPo4AE2o9oIyQvj2mx4dk5Y8CgSETOZTYDOR3rU2fZTRDRgPJDH9FWvQjF5tA0p3d9CoWWd2s6GKKbfoUIi8R/Db1BSPJwkqB jrp-hp-pc"});
  * const mynode = new huaweicloud.cce.Node("mynode", {
- *     clusterId: huaweicloud_cce_cluster.mycluster.id,
- *     flavorId: "s3.large.2",
- *     availabilityZone: data.huaweicloud_availability_zones.myaz.names[0],
- *     keyPair: huaweicloud_compute_keypair.mykp.name,
+ *     clusterId: clusterId,
+ *     flavorId: data.huaweicloud_compute_flavors.myflavors.ids[0],
+ *     availabilityZone: myaz.then(myaz => myaz.names?[0]),
+ *     keyPair: mykp.name,
  *     rootVolume: {
  *         size: 40,
  *         volumetype: "SATA",
@@ -70,8 +86,21 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
+ * import * as huaweicloud from "@pulumi/huaweicloud";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
+ * const config = new pulumi.Config();
+ * const clusterId = config.requireObject("clusterId");
+ * const nodeName = config.requireObject("nodeName");
+ * const keypairName = config.requireObject("keypairName");
+ * const myaz = huaweicloud.getAvailabilityZones({});
+ * const test = myaz.then(myaz => huaweicloud.Ecs.getFlavors({
+ *     availabilityZone: myaz.names?[0],
+ *     performanceType: "normal",
+ *     cpuCoreCount: 2,
+ *     memorySize: 4,
+ * }));
+ * const mykp = new huaweicloud.dew.Keypair("mykp", {publicKey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAjpC1hwiOCCmKEWxJ4qzTTsJbKzndLo1BCz5PcwtUnflmU+gHJtWMZKpuEGVi29h0A/+ydKek1O18k10Ff+4tyFjiHDQAT9+OfgWf7+b1yK+qDip3X1C0UPMbwHlTfSGWLGZquwhvEFx9k3h/M+VtMvwR1lJ9LUyTAImnNjWG7TAIPmui30HvM2UiFEmqkr4ijq45MyX2+fLIePLRIFuu1p4whjHAQYufqyno3BS48icQb4p6iVEZPo4AE2o9oIyQvj2mx4dk5Y8CgSETOZTYDOR3rU2fZTRDRgPJDH9FWvQjF5tA0p3d9CoWWd2s6GKKbfoUIi8R/Db1BSPJwkqB jrp-hp-pc"});
  * const myeip = new huaweicloud.vpc.Eip("myeip", {
  *     publicip: {
  *         type: "5_bgp",
@@ -84,10 +113,10 @@ import * as utilities from "../utilities";
  *     },
  * });
  * const mynode = new huaweicloud.cce.Node("mynode", {
- *     clusterId: huaweicloud_cce_cluster.mycluster.id,
- *     flavorId: "s3.large.2",
- *     availabilityZone: data.huaweicloud_availability_zones.myaz.names[0],
- *     keyPair: huaweicloud_compute_keypair.mykp.name,
+ *     clusterId: clusterId,
+ *     flavorId: data.huaweicloud_compute_flavors.myflavors.ids[0],
+ *     availabilityZone: myaz.then(myaz => myaz.names?[0]),
+ *     keyPair: mykp.name,
  *     rootVolume: {
  *         size: 40,
  *         volumetype: "SATA",
@@ -104,13 +133,31 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
+ * import * as huaweicloud from "@pulumi/huaweicloud";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
+ * const config = new pulumi.Config();
+ * const clusterId = config.requireObject("clusterId");
+ * const nodeName = config.requireObject("nodeName");
+ * const keypairName = config.requireObject("keypairName");
+ * const kmsKeyName = config.requireObject("kmsKeyName");
+ * const myaz = huaweicloud.getAvailabilityZones({});
+ * const test = myaz.then(myaz => huaweicloud.Ecs.getFlavors({
+ *     availabilityZone: myaz.names?[0],
+ *     performanceType: "normal",
+ *     cpuCoreCount: 2,
+ *     memorySize: 4,
+ * }));
+ * const mykp = new huaweicloud.dew.Keypair("mykp", {publicKey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAjpC1hwiOCCmKEWxJ4qzTTsJbKzndLo1BCz5PcwtUnflmU+gHJtWMZKpuEGVi29h0A/+ydKek1O18k10Ff+4tyFjiHDQAT9+OfgWf7+b1yK+qDip3X1C0UPMbwHlTfSGWLGZquwhvEFx9k3h/M+VtMvwR1lJ9LUyTAImnNjWG7TAIPmui30HvM2UiFEmqkr4ijq45MyX2+fLIePLRIFuu1p4whjHAQYufqyno3BS48icQb4p6iVEZPo4AE2o9oIyQvj2mx4dk5Y8CgSETOZTYDOR3rU2fZTRDRgPJDH9FWvQjF5tA0p3d9CoWWd2s6GKKbfoUIi8R/Db1BSPJwkqB jrp-hp-pc"});
+ * const mykey = new huaweicloud.dew.Key("mykey", {
+ *     keyAlias: kmsKeyName,
+ *     pendingDays: "7",
+ * });
  * const mynode = new huaweicloud.cce.Node("mynode", {
- *     clusterId: huaweicloud_cce_cluster.mycluster.id,
- *     flavorId: "s3.large.2",
- *     availabilityZone: data.huaweicloud_availability_zones.myaz.names[0],
- *     keyPair: huaweicloud_compute_keypair.mykp.name,
+ *     clusterId: clusterId,
+ *     flavorId: data.huaweicloud_compute_flavors.myflavors.ids[0],
+ *     availabilityZone: myaz.then(myaz => myaz.names?[0]),
+ *     keyPair: mykp.name,
  *     rootVolume: {
  *         size: 40,
  *         volumetype: "SSD",
@@ -123,7 +170,7 @@ import * as utilities from "../utilities";
  *         {
  *             size: 100,
  *             volumetype: "SSD",
- *             kmsKeyId: huaweicloud_kms_key.mykey.id,
+ *             kmsKeyId: mykey.id,
  *         },
  *     ],
  *     storage: {
@@ -139,7 +186,7 @@ import * as utilities from "../utilities";
  *                 type: "evs",
  *                 matchLabelSize: "100",
  *                 matchLabelMetadataEncrypted: "1",
- *                 matchLabelMetadataCmkid: huaweicloud_kms_key.mykey.id,
+ *                 matchLabelMetadataCmkid: mykey.id,
  *                 matchLabelCount: "1",
  *             },
  *         ],
@@ -157,7 +204,6 @@ import * as utilities from "../utilities";
  *                     {
  *                         name: "runtime",
  *                         size: `90%`,
- *                         lvmLvType: "linear",
  *                     },
  *                 ],
  *             },
@@ -178,13 +224,13 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * CCE node can be imported using the cluster ID and node ID separated by a slash, e.g.
+ * CCE node can be imported using the cluster ID and node ID separated by a slash, e.g.bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Cce/node:Node my_node 5c20fdad-7288-11eb-b817-0255ac10158b/e9287dff-7288-11eb-b817-0255ac10158b
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `fixed_ip`, `eip_id`, `preinstall`, `postinstall`, `iptype`, `bandwidth_charge_mode`, `bandwidth_size`, `share_type`, `max_pods`, `extend_param`, `labels`, `taints` and arguments for pre-paid. It is generally recommended running `terraform plan` after importing a node. You can then decide if changes should be applied to the node, or the resource definition should be updated to align with the node. Also you can ignore changes as below. resource "huaweicloud_cce_node" "my_node" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `fixed_ip`, `eip_id`, `preinstall`, `postinstall`, `iptype`, `bandwidth_charge_mode`, `bandwidth_size`, `share_type`, `max_pods`, `extend_param`, `labels`, `taints` and arguments for pre-paid. It is generally recommended running `terraform plan` after importing a node. You can then decide if changes should be applied to the node, or the resource definition should be updated to align with the node. Also you can ignore changes as below. hcl resource "huaweicloud_cce_node" "my_node" {
  *
  *  ...
  *
@@ -226,11 +272,16 @@ export class Node extends pulumi.CustomResource {
         return obj['__pulumiType'] === Node.__pulumiType;
     }
 
+    /**
+     * schema: Internal
+     */
     public readonly annotations!: pulumi.Output<{[key: string]: string} | undefined>;
+    /**
+     * @deprecated Deprecated
+     */
     public readonly autoPay!: pulumi.Output<string | undefined>;
     /**
-     * Specifies whether auto renew is enabled. Valid values are "true" and "
-     * false". Changing this creates a new resource.
+     * Specifies whether auto renew is enabled. Valid values are "true" and "false".
      */
     public readonly autoRenew!: pulumi.Output<string | undefined>;
     /**
@@ -272,6 +323,9 @@ export class Node extends pulumi.CustomResource {
      * the cloud server group. Changing this parameter will create a new resource.
      */
     public readonly ecsGroupId!: pulumi.Output<string | undefined>;
+    /**
+     * schema: Internal
+     */
     public readonly ecsPerformanceType!: pulumi.Output<string | undefined>;
     /**
      * Specifies the ID of the EIP.
@@ -311,10 +365,13 @@ export class Node extends pulumi.CustomResource {
      * Changing this parameter will create a new resource.
      */
     public readonly iptype!: pulumi.Output<string | undefined>;
+    /**
+     * schema: Internal
+     */
     public readonly keepEcs!: pulumi.Output<boolean | undefined>;
     /**
      * Specifies the key pair name when logging in to select the key pair mode.
-     * This parameter and `password` are alternative. Changing this parameter will create a new resource.
+     * This parameter and `password` are alternative.
      */
     public readonly keyPair!: pulumi.Output<string | undefined>;
     /**
@@ -344,9 +401,12 @@ export class Node extends pulumi.CustomResource {
      */
     public readonly os!: pulumi.Output<string>;
     /**
+     * schema: Internal
+     */
+    public readonly partition!: pulumi.Output<string | undefined>;
+    /**
      * Specifies the root password when logging in to select the password mode.
      * This parameter can be plain or salted and is alternative to `keyPair`.
-     * Changing this parameter will create a new resource.
      */
     public readonly password!: pulumi.Output<string | undefined>;
     /**
@@ -375,11 +435,22 @@ export class Node extends pulumi.CustomResource {
      * Private IP of the CCE node.
      */
     public /*out*/ readonly privateIp!: pulumi.Output<string>;
+    /**
+     * Specifies the private key of the in used `keyPair`. This parameter is mandatory
+     * when replacing or unbinding a keypair if the CCE node is in **Active** state.
+     */
+    public readonly privateKey!: pulumi.Output<string | undefined>;
+    /**
+     * schema: Internal
+     */
     public readonly productId!: pulumi.Output<string | undefined>;
     /**
      * Public IP of the CCE node.
      */
     public /*out*/ readonly publicIp!: pulumi.Output<string>;
+    /**
+     * schema: Internal
+     */
     public readonly publicKey!: pulumi.Output<string | undefined>;
     /**
      * Specifies the region in which to create the CCE node resource.
@@ -405,6 +476,9 @@ export class Node extends pulumi.CustomResource {
      * Changing this parameter will create a new resource.
      */
     public readonly sharetype!: pulumi.Output<string | undefined>;
+    /**
+     * The status of the CCE node.
+     */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
      * Specifies the disk initialization management parameter.
@@ -466,12 +540,14 @@ export class Node extends pulumi.CustomResource {
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["orderId"] = state ? state.orderId : undefined;
             resourceInputs["os"] = state ? state.os : undefined;
+            resourceInputs["partition"] = state ? state.partition : undefined;
             resourceInputs["password"] = state ? state.password : undefined;
             resourceInputs["period"] = state ? state.period : undefined;
             resourceInputs["periodUnit"] = state ? state.periodUnit : undefined;
             resourceInputs["postinstall"] = state ? state.postinstall : undefined;
             resourceInputs["preinstall"] = state ? state.preinstall : undefined;
             resourceInputs["privateIp"] = state ? state.privateIp : undefined;
+            resourceInputs["privateKey"] = state ? state.privateKey : undefined;
             resourceInputs["productId"] = state ? state.productId : undefined;
             resourceInputs["publicIp"] = state ? state.publicIp : undefined;
             resourceInputs["publicKey"] = state ? state.publicKey : undefined;
@@ -528,11 +604,13 @@ export class Node extends pulumi.CustomResource {
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["orderId"] = args ? args.orderId : undefined;
             resourceInputs["os"] = args ? args.os : undefined;
+            resourceInputs["partition"] = args ? args.partition : undefined;
             resourceInputs["password"] = args ? args.password : undefined;
             resourceInputs["period"] = args ? args.period : undefined;
             resourceInputs["periodUnit"] = args ? args.periodUnit : undefined;
             resourceInputs["postinstall"] = args ? args.postinstall : undefined;
             resourceInputs["preinstall"] = args ? args.preinstall : undefined;
+            resourceInputs["privateKey"] = args ? args.privateKey : undefined;
             resourceInputs["productId"] = args ? args.productId : undefined;
             resourceInputs["publicKey"] = args ? args.publicKey : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
@@ -557,11 +635,16 @@ export class Node extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Node resources.
  */
 export interface NodeState {
+    /**
+     * schema: Internal
+     */
     annotations?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * @deprecated Deprecated
+     */
     autoPay?: pulumi.Input<string>;
     /**
-     * Specifies whether auto renew is enabled. Valid values are "true" and "
-     * false". Changing this creates a new resource.
+     * Specifies whether auto renew is enabled. Valid values are "true" and "false".
      */
     autoRenew?: pulumi.Input<string>;
     /**
@@ -603,6 +686,9 @@ export interface NodeState {
      * the cloud server group. Changing this parameter will create a new resource.
      */
     ecsGroupId?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
     ecsPerformanceType?: pulumi.Input<string>;
     /**
      * Specifies the ID of the EIP.
@@ -642,10 +728,13 @@ export interface NodeState {
      * Changing this parameter will create a new resource.
      */
     iptype?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
     keepEcs?: pulumi.Input<boolean>;
     /**
      * Specifies the key pair name when logging in to select the key pair mode.
-     * This parameter and `password` are alternative. Changing this parameter will create a new resource.
+     * This parameter and `password` are alternative.
      */
     keyPair?: pulumi.Input<string>;
     /**
@@ -675,9 +764,12 @@ export interface NodeState {
      */
     os?: pulumi.Input<string>;
     /**
+     * schema: Internal
+     */
+    partition?: pulumi.Input<string>;
+    /**
      * Specifies the root password when logging in to select the password mode.
      * This parameter can be plain or salted and is alternative to `keyPair`.
-     * Changing this parameter will create a new resource.
      */
     password?: pulumi.Input<string>;
     /**
@@ -706,11 +798,22 @@ export interface NodeState {
      * Private IP of the CCE node.
      */
     privateIp?: pulumi.Input<string>;
+    /**
+     * Specifies the private key of the in used `keyPair`. This parameter is mandatory
+     * when replacing or unbinding a keypair if the CCE node is in **Active** state.
+     */
+    privateKey?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
     productId?: pulumi.Input<string>;
     /**
      * Public IP of the CCE node.
      */
     publicIp?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
     publicKey?: pulumi.Input<string>;
     /**
      * Specifies the region in which to create the CCE node resource.
@@ -736,6 +839,9 @@ export interface NodeState {
      * Changing this parameter will create a new resource.
      */
     sharetype?: pulumi.Input<string>;
+    /**
+     * The status of the CCE node.
+     */
     status?: pulumi.Input<string>;
     /**
      * Specifies the disk initialization management parameter.
@@ -763,11 +869,16 @@ export interface NodeState {
  * The set of arguments for constructing a Node resource.
  */
 export interface NodeArgs {
+    /**
+     * schema: Internal
+     */
     annotations?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * @deprecated Deprecated
+     */
     autoPay?: pulumi.Input<string>;
     /**
-     * Specifies whether auto renew is enabled. Valid values are "true" and "
-     * false". Changing this creates a new resource.
+     * Specifies whether auto renew is enabled. Valid values are "true" and "false".
      */
     autoRenew?: pulumi.Input<string>;
     /**
@@ -809,6 +920,9 @@ export interface NodeArgs {
      * the cloud server group. Changing this parameter will create a new resource.
      */
     ecsGroupId?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
     ecsPerformanceType?: pulumi.Input<string>;
     /**
      * Specifies the ID of the EIP.
@@ -848,10 +962,13 @@ export interface NodeArgs {
      * Changing this parameter will create a new resource.
      */
     iptype?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
     keepEcs?: pulumi.Input<boolean>;
     /**
      * Specifies the key pair name when logging in to select the key pair mode.
-     * This parameter and `password` are alternative. Changing this parameter will create a new resource.
+     * This parameter and `password` are alternative.
      */
     keyPair?: pulumi.Input<string>;
     /**
@@ -881,9 +998,12 @@ export interface NodeArgs {
      */
     os?: pulumi.Input<string>;
     /**
+     * schema: Internal
+     */
+    partition?: pulumi.Input<string>;
+    /**
      * Specifies the root password when logging in to select the password mode.
      * This parameter can be plain or salted and is alternative to `keyPair`.
-     * Changing this parameter will create a new resource.
      */
     password?: pulumi.Input<string>;
     /**
@@ -908,7 +1028,18 @@ export interface NodeArgs {
      * The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
      */
     preinstall?: pulumi.Input<string>;
+    /**
+     * Specifies the private key of the in used `keyPair`. This parameter is mandatory
+     * when replacing or unbinding a keypair if the CCE node is in **Active** state.
+     */
+    privateKey?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
     productId?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
     publicKey?: pulumi.Input<string>;
     /**
      * Specifies the region in which to create the CCE node resource.

@@ -16,8 +16,10 @@ import * as utilities from "../utilities";
  *
  * const config = new pulumi.Config();
  * const policyName = config.requireObject("policyName");
+ * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
  * const policies = huaweicloud.Waf.getPolicies({
  *     name: policyName,
+ *     enterpriseProjectId: enterpriseProjectId,
  * });
  * ```
  */
@@ -29,6 +31,7 @@ export function getPolicies(args?: GetPoliciesArgs, opts?: pulumi.InvokeOptions)
 
     opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
     return pulumi.runtime.invoke("huaweicloud:Waf/getPolicies:getPolicies", {
+        "enterpriseProjectId": args.enterpriseProjectId,
         "name": args.name,
         "region": args.region,
     }, opts);
@@ -38,6 +41,10 @@ export function getPolicies(args?: GetPoliciesArgs, opts?: pulumi.InvokeOptions)
  * A collection of arguments for invoking getPolicies.
  */
 export interface GetPoliciesArgs {
+    /**
+     * Specifies the enterprise project ID of WAF policies.
+     */
+    enterpriseProjectId?: string;
     /**
      * Policy name used for matching. The value is case sensitive and supports fuzzy matching.
      */
@@ -53,6 +60,7 @@ export interface GetPoliciesArgs {
  * A collection of values returned by getPolicies.
  */
 export interface GetPoliciesResult {
+    readonly enterpriseProjectId?: string;
     /**
      * The provider-assigned unique ID for this managed resource.
      */
@@ -76,6 +84,10 @@ export function getPoliciesOutput(args?: GetPoliciesOutputArgs, opts?: pulumi.In
  * A collection of arguments for invoking getPolicies.
  */
 export interface GetPoliciesOutputArgs {
+    /**
+     * Specifies the enterprise project ID of WAF policies.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Policy name used for matching. The value is case sensitive and supports fuzzy matching.
      */

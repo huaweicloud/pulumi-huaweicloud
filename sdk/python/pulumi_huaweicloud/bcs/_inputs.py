@@ -87,6 +87,8 @@ class InstanceChannelArgs:
                  org_names: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None):
         """
         :param pulumi.Input[str] name: Specifies the name of the channel. Changing this creates a new instance.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] org_names: Specifies the name of the peer organization. Changing this creates a new
+               instance.
         """
         pulumi.set(__self__, "name", name)
         if org_names is not None:
@@ -107,6 +109,10 @@ class InstanceChannelArgs:
     @property
     @pulumi.getter(name="orgNames")
     def org_names(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the name of the peer organization. Changing this creates a new
+        instance.
+        """
         return pulumi.get(self, "org_names")
 
     @org_names.setter
@@ -122,7 +128,7 @@ class InstanceCouchdbArgs:
         """
         :param pulumi.Input[str] password: Specifies the password of the couch datebase. The password consists of 8 to
                26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-               charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+               characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
         :param pulumi.Input[str] user_name: Specifies the user name of the couch datebase. Changing this creates a new
                instance.
         """
@@ -135,7 +141,7 @@ class InstanceCouchdbArgs:
         """
         Specifies the password of the couch datebase. The password consists of 8 to
         26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-        charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+        characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
         """
         return pulumi.get(self, "password")
 
@@ -345,27 +351,29 @@ class InstancePeerOrgArgs:
 @pulumi.input_type
 class InstancePeerOrgAddressArgs:
     def __init__(__self__, *,
-                 domain_port: pulumi.Input[str],
-                 ip_port: pulumi.Input[str]):
-        pulumi.set(__self__, "domain_port", domain_port)
-        pulumi.set(__self__, "ip_port", ip_port)
+                 domain_port: Optional[pulumi.Input[str]] = None,
+                 ip_port: Optional[pulumi.Input[str]] = None):
+        if domain_port is not None:
+            pulumi.set(__self__, "domain_port", domain_port)
+        if ip_port is not None:
+            pulumi.set(__self__, "ip_port", ip_port)
 
     @property
     @pulumi.getter(name="domainPort")
-    def domain_port(self) -> pulumi.Input[str]:
+    def domain_port(self) -> Optional[pulumi.Input[str]]:
         return pulumi.get(self, "domain_port")
 
     @domain_port.setter
-    def domain_port(self, value: pulumi.Input[str]):
+    def domain_port(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "domain_port", value)
 
     @property
     @pulumi.getter(name="ipPort")
-    def ip_port(self) -> pulumi.Input[str]:
+    def ip_port(self) -> Optional[pulumi.Input[str]]:
         return pulumi.get(self, "ip_port")
 
     @ip_port.setter
-    def ip_port(self, value: pulumi.Input[str]):
+    def ip_port(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "ip_port", value)
 
 

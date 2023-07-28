@@ -53,6 +53,8 @@ func GetDedicatedInstances(ctx *pulumi.Context, args *GetDedicatedInstancesArgs,
 
 // A collection of arguments for invoking getDedicatedInstances.
 type GetDedicatedInstancesArgs struct {
+	// The enterprise project ID of WAF dedicated instance.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// The id of WAF dedicated instance.
 	Id *string `pulumi:"id"`
 	// The name of WAF dedicated instance.
@@ -64,8 +66,10 @@ type GetDedicatedInstancesArgs struct {
 
 // A collection of values returned by getDedicatedInstances.
 type GetDedicatedInstancesResult struct {
-	// The id of WAF dedicated instance.
-	Id        string                          `pulumi:"id"`
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// The ID of WAF dedicated instance.
+	Id string `pulumi:"id"`
+	// An array of available WAF dedicated instances.
 	Instances []GetDedicatedInstancesInstance `pulumi:"instances"`
 	// The name of WAF dedicated instance.
 	Name   *string `pulumi:"name"`
@@ -87,6 +91,8 @@ func GetDedicatedInstancesOutput(ctx *pulumi.Context, args GetDedicatedInstances
 
 // A collection of arguments for invoking getDedicatedInstances.
 type GetDedicatedInstancesOutputArgs struct {
+	// The enterprise project ID of WAF dedicated instance.
+	EnterpriseProjectId pulumi.StringPtrInput `pulumi:"enterpriseProjectId"`
 	// The id of WAF dedicated instance.
 	Id pulumi.StringPtrInput `pulumi:"id"`
 	// The name of WAF dedicated instance.
@@ -115,11 +121,16 @@ func (o GetDedicatedInstancesResultOutput) ToGetDedicatedInstancesResultOutputWi
 	return o
 }
 
-// The id of WAF dedicated instance.
+func (o GetDedicatedInstancesResultOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v GetDedicatedInstancesResult) *string { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
+}
+
+// The ID of WAF dedicated instance.
 func (o GetDedicatedInstancesResultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDedicatedInstancesResult) string { return v.Id }).(pulumi.StringOutput)
 }
 
+// An array of available WAF dedicated instances.
 func (o GetDedicatedInstancesResultOutput) Instances() GetDedicatedInstancesInstanceArrayOutput {
 	return o.ApplyT(func(v GetDedicatedInstancesResult) []GetDedicatedInstancesInstance { return v.Instances }).(GetDedicatedInstancesInstanceArrayOutput)
 }

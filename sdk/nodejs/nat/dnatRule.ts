@@ -5,7 +5,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Manages a DNAT rule resource within HuaweiCloud.
+ * Manages a DNAT rule resource of the **public** NAT within HuaweiCloud.
  *
  * ## Example Usage
  * ### DNAT rule in Direct Connect scenario
@@ -14,22 +14,25 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const dnat2 = new huaweicloud.nat.DnatRule("dnat2", {
- *     natGatewayId: _var.natgw_id,
- *     floatingIpId: _var.publicip_id,
+ * const config = new pulumi.Config();
+ * const gatewayId = config.requireObject("gatewayId");
+ * const publicipId = config.requireObject("publicipId");
+ * const test = new huaweicloud.nat.DnatRule("test", {
+ *     natGatewayId: gatewayId,
+ *     floatingIpId: publicipId,
  *     privateIp: "10.0.0.12",
- *     protocol: "tcp",
- *     internalServicePort: 80,
- *     externalServicePort: 8080,
+ *     protocol: "any",
+ *     internalServicePort: 0,
+ *     externalServicePort: 0,
  * });
  * ```
  *
  * ## Import
  *
- * DNAT rules can be imported using the following format
+ * DNAT rules can be imported using their `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Nat/dnatRule:DnatRule dnat_1 f4f783a7-b908-4215-b018-724960e5df4a
+ *  $ pulumi import huaweicloud:Nat/dnatRule:DnatRule test f4f783a7-b908-4215-b018-724960e5df4a
  * ```
  */
 export class DnatRule extends pulumi.CustomResource {
@@ -61,62 +64,78 @@ export class DnatRule extends pulumi.CustomResource {
     }
 
     /**
-     * Dnat rule creation time.
+     * The creation time of the DNAT rule.
      */
     public /*out*/ readonly createdAt!: pulumi.Output<string>;
     /**
-     * Specifies the description of the dnat rule.
-     * The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
-     * Changing this creates a new dnat rule.
+     * Specifies the description of the DNAT rule.  
+     * The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
      */
-    public readonly description!: pulumi.Output<string>;
+    public readonly description!: pulumi.Output<string | undefined>;
     /**
      * Specifies port used by ECSs or BMSs to provide services for
-     * external systems. Changing this creates a new dnat rule.
+     * external systems.
+     * Exactly one of `externalServicePort` and `externalServicePortRange` must be set.
+     * Required if `internalServicePort` is set.
      */
-    public readonly externalServicePort!: pulumi.Output<number>;
+    public readonly externalServicePort!: pulumi.Output<number | undefined>;
+    /**
+     * Specifies port range used by ECSs or BMSs to provide
+     * services for external systems.
+     * This parameter and `internalServicePortRange` are mapped **1:1** in sequence(, ranges must have the same length).
+     * The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+     * Required if `internalServicePortRange` is set.
+     */
+    public readonly externalServicePortRange!: pulumi.Output<string | undefined>;
     /**
      * The actual floating IP address.
      */
     public /*out*/ readonly floatingIpAddress!: pulumi.Output<string>;
     /**
-     * Specifies the ID of the floating IP address. Changing this creates a
-     * new dnat rule.
+     * Specifies the ID of the floating IP address.
      */
     public readonly floatingIpId!: pulumi.Output<string>;
     /**
-     * Specifies port used by ECSs or BMSs to provide services for
-     * external systems. Changing this creates a new dnat rule.
+     * Specifies port used by Floating IP provide services for external
+     * systems.
+     * Exactly one of `internalServicePort` and `internalServicePortRange` must be set.
      */
-    public readonly internalServicePort!: pulumi.Output<number>;
+    public readonly internalServicePort!: pulumi.Output<number | undefined>;
     /**
-     * ID of the nat gateway this dnat rule belongs to. Changing this creates
-     * a new dnat rule.
+     * Specifies port range used by Floating IP provide services
+     * for external systems.
+     * This parameter and `externalServicePortRange` are mapped **1:1** in sequence(, ranges must have the same length).
+     * The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+     */
+    public readonly internalServicePortRange!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the ID of the NAT gateway to which the DNAT rule belongs.  
+     * Changing this will create a new resource.
      */
     public readonly natGatewayId!: pulumi.Output<string>;
     /**
-     * Specifies the port ID of network. This parameter is mandatory in VPC
-     * scenario. Use huaweicloud.Vpc.Port to get the port if just know a fixed IP
-     * addresses on the port. Changing this creates a new dnat rule.
+     * Specifies the port ID of network. This parameter is mandatory in VPC scenario.  
+     * Use huaweicloud.Vpc.Port to get the port if just know a fixed IP addresses
+     * on the port.
      */
     public readonly portId!: pulumi.Output<string | undefined>;
     /**
      * Specifies the private IP address of a user. This parameter is mandatory in
-     * Direct Connect scenario. Changing this creates a new dnat rule.
+     * Direct Connect scenario.
      */
     public readonly privateIp!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the protocol type. Currently, TCP, UDP, and ANY are supported.
-     * Changing this creates a new dnat rule.
+     * Specifies the protocol type.  
+     * The valid values are **tcp**, **udp**, and **any**.
      */
     public readonly protocol!: pulumi.Output<string>;
     /**
-     * The region in which to create the dnat rule resource. If omitted, the
-     * provider-level region will be used. Changing this creates a new dnat rule.
+     * Specifies the region where the DNAT rule is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Dnat rule status.
+     * The current status of the DNAT rule.
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
 
@@ -136,9 +155,11 @@ export class DnatRule extends pulumi.CustomResource {
             resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["externalServicePort"] = state ? state.externalServicePort : undefined;
+            resourceInputs["externalServicePortRange"] = state ? state.externalServicePortRange : undefined;
             resourceInputs["floatingIpAddress"] = state ? state.floatingIpAddress : undefined;
             resourceInputs["floatingIpId"] = state ? state.floatingIpId : undefined;
             resourceInputs["internalServicePort"] = state ? state.internalServicePort : undefined;
+            resourceInputs["internalServicePortRange"] = state ? state.internalServicePortRange : undefined;
             resourceInputs["natGatewayId"] = state ? state.natGatewayId : undefined;
             resourceInputs["portId"] = state ? state.portId : undefined;
             resourceInputs["privateIp"] = state ? state.privateIp : undefined;
@@ -147,14 +168,8 @@ export class DnatRule extends pulumi.CustomResource {
             resourceInputs["status"] = state ? state.status : undefined;
         } else {
             const args = argsOrState as DnatRuleArgs | undefined;
-            if ((!args || args.externalServicePort === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'externalServicePort'");
-            }
             if ((!args || args.floatingIpId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'floatingIpId'");
-            }
-            if ((!args || args.internalServicePort === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'internalServicePort'");
             }
             if ((!args || args.natGatewayId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'natGatewayId'");
@@ -164,8 +179,10 @@ export class DnatRule extends pulumi.CustomResource {
             }
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["externalServicePort"] = args ? args.externalServicePort : undefined;
+            resourceInputs["externalServicePortRange"] = args ? args.externalServicePortRange : undefined;
             resourceInputs["floatingIpId"] = args ? args.floatingIpId : undefined;
             resourceInputs["internalServicePort"] = args ? args.internalServicePort : undefined;
+            resourceInputs["internalServicePortRange"] = args ? args.internalServicePortRange : undefined;
             resourceInputs["natGatewayId"] = args ? args.natGatewayId : undefined;
             resourceInputs["portId"] = args ? args.portId : undefined;
             resourceInputs["privateIp"] = args ? args.privateIp : undefined;
@@ -185,62 +202,78 @@ export class DnatRule extends pulumi.CustomResource {
  */
 export interface DnatRuleState {
     /**
-     * Dnat rule creation time.
+     * The creation time of the DNAT rule.
      */
     createdAt?: pulumi.Input<string>;
     /**
-     * Specifies the description of the dnat rule.
-     * The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
-     * Changing this creates a new dnat rule.
+     * Specifies the description of the DNAT rule.  
+     * The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
      */
     description?: pulumi.Input<string>;
     /**
      * Specifies port used by ECSs or BMSs to provide services for
-     * external systems. Changing this creates a new dnat rule.
+     * external systems.
+     * Exactly one of `externalServicePort` and `externalServicePortRange` must be set.
+     * Required if `internalServicePort` is set.
      */
     externalServicePort?: pulumi.Input<number>;
+    /**
+     * Specifies port range used by ECSs or BMSs to provide
+     * services for external systems.
+     * This parameter and `internalServicePortRange` are mapped **1:1** in sequence(, ranges must have the same length).
+     * The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+     * Required if `internalServicePortRange` is set.
+     */
+    externalServicePortRange?: pulumi.Input<string>;
     /**
      * The actual floating IP address.
      */
     floatingIpAddress?: pulumi.Input<string>;
     /**
-     * Specifies the ID of the floating IP address. Changing this creates a
-     * new dnat rule.
+     * Specifies the ID of the floating IP address.
      */
     floatingIpId?: pulumi.Input<string>;
     /**
-     * Specifies port used by ECSs or BMSs to provide services for
-     * external systems. Changing this creates a new dnat rule.
+     * Specifies port used by Floating IP provide services for external
+     * systems.
+     * Exactly one of `internalServicePort` and `internalServicePortRange` must be set.
      */
     internalServicePort?: pulumi.Input<number>;
     /**
-     * ID of the nat gateway this dnat rule belongs to. Changing this creates
-     * a new dnat rule.
+     * Specifies port range used by Floating IP provide services
+     * for external systems.
+     * This parameter and `externalServicePortRange` are mapped **1:1** in sequence(, ranges must have the same length).
+     * The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+     */
+    internalServicePortRange?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the NAT gateway to which the DNAT rule belongs.  
+     * Changing this will create a new resource.
      */
     natGatewayId?: pulumi.Input<string>;
     /**
-     * Specifies the port ID of network. This parameter is mandatory in VPC
-     * scenario. Use huaweicloud.Vpc.Port to get the port if just know a fixed IP
-     * addresses on the port. Changing this creates a new dnat rule.
+     * Specifies the port ID of network. This parameter is mandatory in VPC scenario.  
+     * Use huaweicloud.Vpc.Port to get the port if just know a fixed IP addresses
+     * on the port.
      */
     portId?: pulumi.Input<string>;
     /**
      * Specifies the private IP address of a user. This parameter is mandatory in
-     * Direct Connect scenario. Changing this creates a new dnat rule.
+     * Direct Connect scenario.
      */
     privateIp?: pulumi.Input<string>;
     /**
-     * Specifies the protocol type. Currently, TCP, UDP, and ANY are supported.
-     * Changing this creates a new dnat rule.
+     * Specifies the protocol type.  
+     * The valid values are **tcp**, **udp**, and **any**.
      */
     protocol?: pulumi.Input<string>;
     /**
-     * The region in which to create the dnat rule resource. If omitted, the
-     * provider-level region will be used. Changing this creates a new dnat rule.
+     * Specifies the region where the DNAT rule is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Dnat rule status.
+     * The current status of the DNAT rule.
      */
     status?: pulumi.Input<string>;
 }
@@ -250,50 +283,66 @@ export interface DnatRuleState {
  */
 export interface DnatRuleArgs {
     /**
-     * Specifies the description of the dnat rule.
-     * The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
-     * Changing this creates a new dnat rule.
+     * Specifies the description of the DNAT rule.  
+     * The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
      */
     description?: pulumi.Input<string>;
     /**
      * Specifies port used by ECSs or BMSs to provide services for
-     * external systems. Changing this creates a new dnat rule.
+     * external systems.
+     * Exactly one of `externalServicePort` and `externalServicePortRange` must be set.
+     * Required if `internalServicePort` is set.
      */
-    externalServicePort: pulumi.Input<number>;
+    externalServicePort?: pulumi.Input<number>;
     /**
-     * Specifies the ID of the floating IP address. Changing this creates a
-     * new dnat rule.
+     * Specifies port range used by ECSs or BMSs to provide
+     * services for external systems.
+     * This parameter and `internalServicePortRange` are mapped **1:1** in sequence(, ranges must have the same length).
+     * The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+     * Required if `internalServicePortRange` is set.
+     */
+    externalServicePortRange?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the floating IP address.
      */
     floatingIpId: pulumi.Input<string>;
     /**
-     * Specifies port used by ECSs or BMSs to provide services for
-     * external systems. Changing this creates a new dnat rule.
+     * Specifies port used by Floating IP provide services for external
+     * systems.
+     * Exactly one of `internalServicePort` and `internalServicePortRange` must be set.
      */
-    internalServicePort: pulumi.Input<number>;
+    internalServicePort?: pulumi.Input<number>;
     /**
-     * ID of the nat gateway this dnat rule belongs to. Changing this creates
-     * a new dnat rule.
+     * Specifies port range used by Floating IP provide services
+     * for external systems.
+     * This parameter and `externalServicePortRange` are mapped **1:1** in sequence(, ranges must have the same length).
+     * The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+     */
+    internalServicePortRange?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the NAT gateway to which the DNAT rule belongs.  
+     * Changing this will create a new resource.
      */
     natGatewayId: pulumi.Input<string>;
     /**
-     * Specifies the port ID of network. This parameter is mandatory in VPC
-     * scenario. Use huaweicloud.Vpc.Port to get the port if just know a fixed IP
-     * addresses on the port. Changing this creates a new dnat rule.
+     * Specifies the port ID of network. This parameter is mandatory in VPC scenario.  
+     * Use huaweicloud.Vpc.Port to get the port if just know a fixed IP addresses
+     * on the port.
      */
     portId?: pulumi.Input<string>;
     /**
      * Specifies the private IP address of a user. This parameter is mandatory in
-     * Direct Connect scenario. Changing this creates a new dnat rule.
+     * Direct Connect scenario.
      */
     privateIp?: pulumi.Input<string>;
     /**
-     * Specifies the protocol type. Currently, TCP, UDP, and ANY are supported.
-     * Changing this creates a new dnat rule.
+     * Specifies the protocol type.  
+     * The valid values are **tcp**, **udp**, and **any**.
      */
     protocol: pulumi.Input<string>;
     /**
-     * The region in which to create the dnat rule resource. If omitted, the
-     * provider-level region will be used. Changing this creates a new dnat rule.
+     * Specifies the region where the DNAT rule is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
 }

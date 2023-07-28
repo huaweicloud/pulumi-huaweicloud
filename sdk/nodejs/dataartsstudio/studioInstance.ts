@@ -89,8 +89,7 @@ export class StudioInstance extends pulumi.CustomResource {
 
     /**
      * Specifies whether auto renew is enabled.
-     * Valid values are `true` and `false`, defaults to `false`.
-     * Changing this creates a new instance.
+     * Valid values are `true` and `false`, defaults to `false`. Changing this parameter will create a new resource.
      */
     public readonly autoRenew!: pulumi.Output<string | undefined>;
     /**
@@ -244,8 +243,7 @@ export class StudioInstance extends pulumi.CustomResource {
 export interface StudioInstanceState {
     /**
      * Specifies whether auto renew is enabled.
-     * Valid values are `true` and `false`, defaults to `false`.
-     * Changing this creates a new instance.
+     * Valid values are `true` and `false`, defaults to `false`. Changing this parameter will create a new resource.
      */
     autoRenew?: pulumi.Input<string>;
     /**
@@ -326,8 +324,7 @@ export interface StudioInstanceState {
 export interface StudioInstanceArgs {
     /**
      * Specifies whether auto renew is enabled.
-     * Valid values are `true` and `false`, defaults to `false`.
-     * Changing this creates a new instance.
+     * Valid values are `true` and `false`, defaults to `false`. Changing this parameter will create a new resource.
      */
     autoRenew?: pulumi.Input<string>;
     /**

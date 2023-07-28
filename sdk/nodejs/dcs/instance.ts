@@ -9,7 +9,7 @@ import * as utilities from "../utilities";
  * Manages a DCS instance within HuaweiCloud.
  *
  * !> **WARNING:** DCS for Memcached is about to become unavailable and is no longer sold in some regions.
- * You can use DCS for Redis 4.0 or 5.0 instead. It is not possible to create Memcached instances through this resource.
+ * You can use DCS for Redis 4.0, 5.0 or 6.0 instead. It is not possible to create Memcached instances through this resource.
  * You can use this resource to manage Memcached instances that exist in HuaweiCloud.
  *
  * ## Example Usage
@@ -95,7 +95,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * DCS instance can be imported using the `id`, e.g.
+ * DCS instance can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Dcs/instance:Instance instance_1 80e373f9-872e-4046-aae9-ccd9ddc55511
@@ -150,11 +150,13 @@ export class Instance extends pulumi.CustomResource {
      * hyphens (-). Changing this creates a new instance.
      */
     public readonly accessUser!: pulumi.Output<string>;
+    /**
+     * @deprecated Deprecated
+     */
     public readonly autoPay!: pulumi.Output<string | undefined>;
     /**
      * Specifies whether auto renew is enabled.
      * Valid values are `true` and `false`, defaults to `false`.
-     * Changing this creates a new instance.
      */
     public readonly autoRenew!: pulumi.Output<string | undefined>;
     /**
@@ -197,10 +199,10 @@ export class Instance extends pulumi.CustomResource {
     public readonly beginAt!: pulumi.Output<string | undefined>;
     /**
      * Specifies the cache capacity. Unit: GB.
-     * + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`, `0.5`, `1`, `2`,
-     * `4`, `8`, `16`, `32` and `64`.
-     * Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-     * `1024`.
+     * + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
+     * `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
+     * Cluster instance specifications support `4`,`8`,`16`, `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`,
+     * `384`, `512`, `768` and `1024`.
      * + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
      * Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
      * + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -215,6 +217,12 @@ export class Instance extends pulumi.CustomResource {
      * Changing this creates a new instance.
      */
     public readonly chargingMode!: pulumi.Output<string>;
+    /**
+     * Specifies the ID of the replica to delete. This parameter is mandatory when
+     * you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
+     * at a time.
+     */
+    public readonly deletedNodes!: pulumi.Output<string | undefined>;
     /**
      * Specifies the description of an instance.
      * It is a string that contains a maximum of 1024 characters.
@@ -231,7 +239,7 @@ export class Instance extends pulumi.CustomResource {
     public readonly engine!: pulumi.Output<string>;
     /**
      * Specifies the version of a cache engine.
-     * It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, or 5.0.
+     * It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
      * Changing this creates a new instance.
      */
     public readonly engineVersion!: pulumi.Output<string | undefined>;
@@ -302,13 +310,11 @@ export class Instance extends pulumi.CustomResource {
     public /*out*/ readonly orderId!: pulumi.Output<string>;
     /**
      * Specifies the password of a DCS instance.
-     * Changing this creates a new instance.
      * The password of a DCS instance must meet the following complexity requirements:
      * + Must be a string of 8 to 32 bits in length.
      * + Must contain three combinations of the following four characters: Lower case letters, uppercase letter, digital,
      * Special characters include (`~!@#$^&*()-_=+\\|{}:,<.>/?).
      * + The new password cannot be the same as the old password.
-     * Redis instance defaults to 6379. Memcached instance does not use this argument.
      */
     public readonly password!: pulumi.Output<string | undefined>;
     /**
@@ -334,6 +340,7 @@ export class Instance extends pulumi.CustomResource {
     public readonly periodUnit!: pulumi.Output<string | undefined>;
     /**
      * Port customization, which is supported only by Redis 4.0 and Redis 5.0 instances.
+     * Redis instance defaults to 6379. Memcached instance does not use this argument.
      */
     public readonly port!: pulumi.Output<number>;
     /**
@@ -356,11 +363,17 @@ export class Instance extends pulumi.CustomResource {
     /**
      * Critical command renaming, which is supported only by Redis 4.0 and
      * Redis 5.0 instances but not by Redis 3.0 instance.
-     * The valid commands that can be renamed are: *command*, *keys*, *flushdb*, *flushall* and *hgetall*.
+     * The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
      */
     public readonly renameCommands!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
+     * Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
+     * parameter is not set, the system randomly deletes unnecessary shards.
+     */
+    public readonly reservedIps!: pulumi.Output<string[] | undefined>;
+    /**
      * Retention time. Unit: day, the value ranges from 1 to 7.
+     * This parameter is required if the backupType is **auto**.
      *
      * @deprecated Deprecated, please use `backup_policy` instead
      */
@@ -400,6 +413,11 @@ export class Instance extends pulumi.CustomResource {
      * The key/value pairs to associate with the dcs instance.
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
+    /**
+     * The Parameter Template ID.
+     * Changing this creates a new instance resource.
+     */
+    public readonly templateId!: pulumi.Output<string | undefined>;
     /**
      * Size of the used memory. Unit: MB.
      */
@@ -456,6 +474,7 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["beginAt"] = state ? state.beginAt : undefined;
             resourceInputs["capacity"] = state ? state.capacity : undefined;
             resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
+            resourceInputs["deletedNodes"] = state ? state.deletedNodes : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["domainName"] = state ? state.domainName : undefined;
             resourceInputs["engine"] = state ? state.engine : undefined;
@@ -479,6 +498,7 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["productId"] = state ? state.productId : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["renameCommands"] = state ? state.renameCommands : undefined;
+            resourceInputs["reservedIps"] = state ? state.reservedIps : undefined;
             resourceInputs["saveDays"] = state ? state.saveDays : undefined;
             resourceInputs["securityGroupId"] = state ? state.securityGroupId : undefined;
             resourceInputs["securityGroupName"] = state ? state.securityGroupName : undefined;
@@ -486,6 +506,7 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["subnetId"] = state ? state.subnetId : undefined;
             resourceInputs["subnetName"] = state ? state.subnetName : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
+            resourceInputs["templateId"] = state ? state.templateId : undefined;
             resourceInputs["usedMemory"] = state ? state.usedMemory : undefined;
             resourceInputs["userId"] = state ? state.userId : undefined;
             resourceInputs["userName"] = state ? state.userName : undefined;
@@ -518,6 +539,7 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["beginAt"] = args ? args.beginAt : undefined;
             resourceInputs["capacity"] = args ? args.capacity : undefined;
             resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
+            resourceInputs["deletedNodes"] = args ? args.deletedNodes : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["engine"] = args ? args.engine : undefined;
             resourceInputs["engineVersion"] = args ? args.engineVersion : undefined;
@@ -536,10 +558,12 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["productId"] = args ? args.productId : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["renameCommands"] = args ? args.renameCommands : undefined;
+            resourceInputs["reservedIps"] = args ? args.reservedIps : undefined;
             resourceInputs["saveDays"] = args ? args.saveDays : undefined;
             resourceInputs["securityGroupId"] = args ? args.securityGroupId : undefined;
             resourceInputs["subnetId"] = args ? args.subnetId : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
+            resourceInputs["templateId"] = args ? args.templateId : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
             resourceInputs["whitelistEnable"] = args ? args.whitelistEnable : undefined;
             resourceInputs["whitelists"] = args ? args.whitelists : undefined;
@@ -572,11 +596,13 @@ export interface InstanceState {
      * hyphens (-). Changing this creates a new instance.
      */
     accessUser?: pulumi.Input<string>;
+    /**
+     * @deprecated Deprecated
+     */
     autoPay?: pulumi.Input<string>;
     /**
      * Specifies whether auto renew is enabled.
      * Valid values are `true` and `false`, defaults to `false`.
-     * Changing this creates a new instance.
      */
     autoRenew?: pulumi.Input<string>;
     /**
@@ -619,10 +645,10 @@ export interface InstanceState {
     beginAt?: pulumi.Input<string>;
     /**
      * Specifies the cache capacity. Unit: GB.
-     * + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`, `0.5`, `1`, `2`,
-     * `4`, `8`, `16`, `32` and `64`.
-     * Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-     * `1024`.
+     * + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
+     * `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
+     * Cluster instance specifications support `4`,`8`,`16`, `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`,
+     * `384`, `512`, `768` and `1024`.
      * + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
      * Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
      * + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -637,6 +663,12 @@ export interface InstanceState {
      * Changing this creates a new instance.
      */
     chargingMode?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the replica to delete. This parameter is mandatory when
+     * you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
+     * at a time.
+     */
+    deletedNodes?: pulumi.Input<string>;
     /**
      * Specifies the description of an instance.
      * It is a string that contains a maximum of 1024 characters.
@@ -653,7 +685,7 @@ export interface InstanceState {
     engine?: pulumi.Input<string>;
     /**
      * Specifies the version of a cache engine.
-     * It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, or 5.0.
+     * It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
      * Changing this creates a new instance.
      */
     engineVersion?: pulumi.Input<string>;
@@ -724,13 +756,11 @@ export interface InstanceState {
     orderId?: pulumi.Input<string>;
     /**
      * Specifies the password of a DCS instance.
-     * Changing this creates a new instance.
      * The password of a DCS instance must meet the following complexity requirements:
      * + Must be a string of 8 to 32 bits in length.
      * + Must contain three combinations of the following four characters: Lower case letters, uppercase letter, digital,
      * Special characters include (`~!@#$^&*()-_=+\\|{}:,<.>/?).
      * + The new password cannot be the same as the old password.
-     * Redis instance defaults to 6379. Memcached instance does not use this argument.
      */
     password?: pulumi.Input<string>;
     /**
@@ -756,6 +786,7 @@ export interface InstanceState {
     periodUnit?: pulumi.Input<string>;
     /**
      * Port customization, which is supported only by Redis 4.0 and Redis 5.0 instances.
+     * Redis instance defaults to 6379. Memcached instance does not use this argument.
      */
     port?: pulumi.Input<number>;
     /**
@@ -778,11 +809,17 @@ export interface InstanceState {
     /**
      * Critical command renaming, which is supported only by Redis 4.0 and
      * Redis 5.0 instances but not by Redis 3.0 instance.
-     * The valid commands that can be renamed are: *command*, *keys*, *flushdb*, *flushall* and *hgetall*.
+     * The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
      */
     renameCommands?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
+     * Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
+     * parameter is not set, the system randomly deletes unnecessary shards.
+     */
+    reservedIps?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
      * Retention time. Unit: day, the value ranges from 1 to 7.
+     * This parameter is required if the backupType is **auto**.
      *
      * @deprecated Deprecated, please use `backup_policy` instead
      */
@@ -822,6 +859,11 @@ export interface InstanceState {
      * The key/value pairs to associate with the dcs instance.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * The Parameter Template ID.
+     * Changing this creates a new instance resource.
+     */
+    templateId?: pulumi.Input<string>;
     /**
      * Size of the used memory. Unit: MB.
      */
@@ -866,11 +908,13 @@ export interface InstanceArgs {
      * hyphens (-). Changing this creates a new instance.
      */
     accessUser?: pulumi.Input<string>;
+    /**
+     * @deprecated Deprecated
+     */
     autoPay?: pulumi.Input<string>;
     /**
      * Specifies whether auto renew is enabled.
      * Valid values are `true` and `false`, defaults to `false`.
-     * Changing this creates a new instance.
      */
     autoRenew?: pulumi.Input<string>;
     /**
@@ -913,10 +957,10 @@ export interface InstanceArgs {
     beginAt?: pulumi.Input<string>;
     /**
      * Specifies the cache capacity. Unit: GB.
-     * + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`, `0.5`, `1`, `2`,
-     * `4`, `8`, `16`, `32` and `64`.
-     * Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-     * `1024`.
+     * + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
+     * `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
+     * Cluster instance specifications support `4`,`8`,`16`, `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`,
+     * `384`, `512`, `768` and `1024`.
      * + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
      * Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
      * + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -932,6 +976,12 @@ export interface InstanceArgs {
      */
     chargingMode?: pulumi.Input<string>;
     /**
+     * Specifies the ID of the replica to delete. This parameter is mandatory when
+     * you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
+     * at a time.
+     */
+    deletedNodes?: pulumi.Input<string>;
+    /**
      * Specifies the description of an instance.
      * It is a string that contains a maximum of 1024 characters.
      */
@@ -943,7 +993,7 @@ export interface InstanceArgs {
     engine: pulumi.Input<string>;
     /**
      * Specifies the version of a cache engine.
-     * It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, or 5.0.
+     * It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
      * Changing this creates a new instance.
      */
     engineVersion?: pulumi.Input<string>;
@@ -998,13 +1048,11 @@ export interface InstanceArgs {
     name?: pulumi.Input<string>;
     /**
      * Specifies the password of a DCS instance.
-     * Changing this creates a new instance.
      * The password of a DCS instance must meet the following complexity requirements:
      * + Must be a string of 8 to 32 bits in length.
      * + Must contain three combinations of the following four characters: Lower case letters, uppercase letter, digital,
      * Special characters include (`~!@#$^&*()-_=+\\|{}:,<.>/?).
      * + The new password cannot be the same as the old password.
-     * Redis instance defaults to 6379. Memcached instance does not use this argument.
      */
     password?: pulumi.Input<string>;
     /**
@@ -1030,6 +1078,7 @@ export interface InstanceArgs {
     periodUnit?: pulumi.Input<string>;
     /**
      * Port customization, which is supported only by Redis 4.0 and Redis 5.0 instances.
+     * Redis instance defaults to 6379. Memcached instance does not use this argument.
      */
     port?: pulumi.Input<number>;
     /**
@@ -1052,11 +1101,17 @@ export interface InstanceArgs {
     /**
      * Critical command renaming, which is supported only by Redis 4.0 and
      * Redis 5.0 instances but not by Redis 3.0 instance.
-     * The valid commands that can be renamed are: *command*, *keys*, *flushdb*, *flushall* and *hgetall*.
+     * The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
      */
     renameCommands?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
+     * Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
+     * parameter is not set, the system randomly deletes unnecessary shards.
+     */
+    reservedIps?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
      * Retention time. Unit: day, the value ranges from 1 to 7.
+     * This parameter is required if the backupType is **auto**.
      *
      * @deprecated Deprecated, please use `backup_policy` instead
      */
@@ -1075,6 +1130,11 @@ export interface InstanceArgs {
      * The key/value pairs to associate with the dcs instance.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * The Parameter Template ID.
+     * Changing this creates a new instance resource.
+     */
+    templateId?: pulumi.Input<string>;
     /**
      * The ID of VPC which the instance belongs to.
      * Changing this creates a new instance resource.

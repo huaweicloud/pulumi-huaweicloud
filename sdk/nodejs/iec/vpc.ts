@@ -80,6 +80,9 @@ export class Vpc extends pulumi.CustomResource {
      * region will be used. Changing this creates a new resource.
      */
     public readonly region!: pulumi.Output<string | undefined>;
+    /**
+     * Indicates the number of subnets.
+     */
     public /*out*/ readonly subnetNum!: pulumi.Output<number>;
 
     /**
@@ -141,6 +144,9 @@ export interface VpcState {
      * region will be used. Changing this creates a new resource.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Indicates the number of subnets.
+     */
     subnetNum?: pulumi.Input<number>;
 }
 

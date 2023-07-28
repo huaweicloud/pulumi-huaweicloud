@@ -14,9 +14,12 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as huaweicloud from "@pulumi/huaweicloud";
  *
- * const reftables = pulumi.output(huaweicloud.Waf.getReferenceTables({
+ * const config = new pulumi.Config();
+ * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
+ * const reftables = huaweicloud.Waf.getReferenceTables({
  *     name: "reference_table_name",
- * }));
+ *     enterpriseProjectId: enterpriseProjectId,
+ * });
  * ```
  */
 export function getReferenceTables(args?: GetReferenceTablesArgs, opts?: pulumi.InvokeOptions): Promise<GetReferenceTablesResult> {
@@ -27,6 +30,7 @@ export function getReferenceTables(args?: GetReferenceTablesArgs, opts?: pulumi.
 
     opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
     return pulumi.runtime.invoke("huaweicloud:Waf/getReferenceTables:getReferenceTables", {
+        "enterpriseProjectId": args.enterpriseProjectId,
         "name": args.name,
         "region": args.region,
     }, opts);
@@ -36,6 +40,10 @@ export function getReferenceTables(args?: GetReferenceTablesArgs, opts?: pulumi.
  * A collection of arguments for invoking getReferenceTables.
  */
 export interface GetReferenceTablesArgs {
+    /**
+     * Specifies the enterprise project ID of WAF reference tables.
+     */
+    enterpriseProjectId?: string;
     /**
      * The name of the reference table. The value is case sensitive and matches exactly.
      */
@@ -51,6 +59,7 @@ export interface GetReferenceTablesArgs {
  * A collection of values returned by getReferenceTables.
  */
 export interface GetReferenceTablesResult {
+    readonly enterpriseProjectId?: string;
     /**
      * The provider-assigned unique ID for this managed resource.
      */
@@ -74,6 +83,10 @@ export function getReferenceTablesOutput(args?: GetReferenceTablesOutputArgs, op
  * A collection of arguments for invoking getReferenceTables.
  */
 export interface GetReferenceTablesOutputArgs {
+    /**
+     * Specifies the enterprise project ID of WAF reference tables.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * The name of the reference table. The value is case sensitive and matches exactly.
      */

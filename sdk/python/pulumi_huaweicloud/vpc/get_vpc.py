@@ -148,6 +148,7 @@ def get_vpc(cidr: Optional[str] = None,
 
 
     :param str cidr: Specifies the cidr block of the desired VPC.
+    :param str enterprise_project_id: Specifies the enterprise project ID which the desired VPC belongs to.
     :param str id: Specifies the id of the VPC to retrieve.
     :param str name: Specifies an unique name for the VPC. The value is a string of no more than 64 characters
            and can contain digits, letters, underscores (_), and hyphens (-).
@@ -201,6 +202,7 @@ def get_vpc_output(cidr: Optional[pulumi.Input[Optional[str]]] = None,
 
 
     :param str cidr: Specifies the cidr block of the desired VPC.
+    :param str enterprise_project_id: Specifies the enterprise project ID which the desired VPC belongs to.
     :param str id: Specifies the id of the VPC to retrieve.
     :param str name: Specifies an unique name for the VPC. The value is a string of no more than 64 characters
            and can contain digits, letters, underscores (_), and hyphens (-).

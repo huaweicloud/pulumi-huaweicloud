@@ -31,7 +31,6 @@ class VipArgs:
         :param pulumi.Input[str] name: Specifies a unique name for the VIP.
         :param pulumi.Input[str] region: Specifies the region in which to create the VIP.
                If omitted, the provider-level region will be used. Changing this will create a new VIP resource.
-        :param pulumi.Input[str] subnet_id: The subnet ID in which to allocate IP address for this VIP.
         """
         pulumi.set(__self__, "network_id", network_id)
         if ip_address is not None:
@@ -115,9 +114,6 @@ class VipArgs:
     @property
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> Optional[pulumi.Input[str]]:
-        """
-        The subnet ID in which to allocate IP address for this VIP.
-        """
         return pulumi.get(self, "subnet_id")
 
     @subnet_id.setter
@@ -151,7 +147,6 @@ class _VipState:
         :param pulumi.Input[str] region: Specifies the region in which to create the VIP.
                If omitted, the provider-level region will be used. Changing this will create a new VIP resource.
         :param pulumi.Input[str] status: The VIP status.
-        :param pulumi.Input[str] subnet_id: The subnet ID in which to allocate IP address for this VIP.
         """
         if device_owner is not None:
             pulumi.set(__self__, "device_owner", device_owner)
@@ -278,9 +273,6 @@ class _VipState:
     @property
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> Optional[pulumi.Input[str]]:
-        """
-        The subnet ID in which to allocate IP address for this VIP.
-        """
         return pulumi.get(self, "subnet_id")
 
     @subnet_id.setter
@@ -322,7 +314,6 @@ class Vip(pulumi.CustomResource):
                Changing this will create a new VIP resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the VIP.
                If omitted, the provider-level region will be used. Changing this will create a new VIP resource.
-        :param pulumi.Input[str] subnet_id: The subnet ID in which to allocate IP address for this VIP.
         """
         ...
     @overload
@@ -423,7 +414,6 @@ class Vip(pulumi.CustomResource):
         :param pulumi.Input[str] region: Specifies the region in which to create the VIP.
                If omitted, the provider-level region will be used. Changing this will create a new VIP resource.
         :param pulumi.Input[str] status: The VIP status.
-        :param pulumi.Input[str] subnet_id: The subnet ID in which to allocate IP address for this VIP.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -511,8 +501,5 @@ class Vip(pulumi.CustomResource):
     @property
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> pulumi.Output[str]:
-        """
-        The subnet ID in which to allocate IP address for this VIP.
-        """
         return pulumi.get(self, "subnet_id")
 

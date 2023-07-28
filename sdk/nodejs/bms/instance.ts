@@ -104,7 +104,7 @@ export class Instance extends pulumi.CustomResource {
     public readonly agencyName!: pulumi.Output<string | undefined>;
     /**
      * Specifies whether auto renew is enabled. Valid values are "true" and "
-     * false", defaults to *false*. Changing this creates a new instance.
+     * false", defaults to *false*.
      */
     public readonly autoRenew!: pulumi.Output<string | undefined>;
     /**
@@ -213,8 +213,6 @@ export class Instance extends pulumi.CustomResource {
     public readonly periodUnit!: pulumi.Output<string | undefined>;
     /**
      * The EIP address that is associted to the instance.
-     * * `nics/mac_address` - The MAC address of the nic.
-     * * `nics/port_id` - The port ID corresponding to the IP address.
      */
     public /*out*/ readonly publicIp!: pulumi.Output<string>;
     /**
@@ -399,7 +397,7 @@ export interface InstanceState {
     agencyName?: pulumi.Input<string>;
     /**
      * Specifies whether auto renew is enabled. Valid values are "true" and "
-     * false", defaults to *false*. Changing this creates a new instance.
+     * false", defaults to *false*.
      */
     autoRenew?: pulumi.Input<string>;
     /**
@@ -508,8 +506,6 @@ export interface InstanceState {
     periodUnit?: pulumi.Input<string>;
     /**
      * The EIP address that is associted to the instance.
-     * * `nics/mac_address` - The MAC address of the nic.
-     * * `nics/port_id` - The port ID corresponding to the IP address.
      */
     publicIp?: pulumi.Input<string>;
     /**
@@ -588,7 +584,7 @@ export interface InstanceArgs {
     agencyName?: pulumi.Input<string>;
     /**
      * Specifies whether auto renew is enabled. Valid values are "true" and "
-     * false", defaults to *false*. Changing this creates a new instance.
+     * false", defaults to *false*.
      */
     autoRenew?: pulumi.Input<string>;
     /**

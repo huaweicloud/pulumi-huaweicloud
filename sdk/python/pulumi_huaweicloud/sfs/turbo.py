@@ -19,13 +19,20 @@ class TurboArgs:
                  size: pulumi.Input[int],
                  subnet_id: pulumi.Input[str],
                  vpc_id: pulumi.Input[str],
+                 auto_renew: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  crypt_key_id: Optional[pulumi.Input[str]] = None,
+                 dedicated_flavor: Optional[pulumi.Input[str]] = None,
+                 dedicated_storage_id: Optional[pulumi.Input[str]] = None,
                  enhanced: Optional[pulumi.Input[bool]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  share_proto: Optional[pulumi.Input[str]] = None,
-                 share_type: Optional[pulumi.Input[str]] = None):
+                 share_type: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Turbo resource.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone where the file system is located.
@@ -37,40 +44,71 @@ class TurboArgs:
         :param pulumi.Input[str] subnet_id: Specifies the network ID of the subnet. Changing this will create a new
                resource.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this will create a new resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.  
+               The valid values are **true** and **false**.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the SFS Turbo.
+               Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+               Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] crypt_key_id: Specifies the ID of a KMS key to encrypt the file system. Changing this
                will create a new resource.
+        :param pulumi.Input[str] dedicated_flavor: Specifies the VM flavor used for creating a dedicated file system.
+        :param pulumi.Input[str] dedicated_storage_id: Specifies the ID of the dedicated distributed storage used
+               when creating a dedicated file system.
         :param pulumi.Input[bool] enhanced: Specifies whether the file system is enhanced or not. Changing this will
                create a new resource.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the file system. Changing this
                will create a new resource.
         :param pulumi.Input[str] name: Specifies the name of an SFS Turbo file system. The value contains 4 to 64
                characters and must start with a letter. Changing this will create a new resource.
+        :param pulumi.Input[int] period: Specifies the charging period of the SFS Turbo.
+               If `period_unit` is set to **month**, the value ranges from `1` to `11`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the SFS Turbo.
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] region: The region in which to create the SFS Turbo resource. If omitted, the
                provider-level region will be used. Changing this creates a new SFS Turbo resource.
         :param pulumi.Input[str] share_proto: Specifies the protocol for sharing file systems. The valid value is NFS.
                Changing this will create a new resource.
         :param pulumi.Input[str] share_type: Specifies the file system type. The valid values are STANDARD and
                PERFORMANCE Changing this will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the SFS Turbo.
         """
         pulumi.set(__self__, "availability_zone", availability_zone)
         pulumi.set(__self__, "security_group_id", security_group_id)
         pulumi.set(__self__, "size", size)
         pulumi.set(__self__, "subnet_id", subnet_id)
         pulumi.set(__self__, "vpc_id", vpc_id)
+        if auto_renew is not None:
+            pulumi.set(__self__, "auto_renew", auto_renew)
+        if charging_mode is not None:
+            pulumi.set(__self__, "charging_mode", charging_mode)
         if crypt_key_id is not None:
             pulumi.set(__self__, "crypt_key_id", crypt_key_id)
+        if dedicated_flavor is not None:
+            pulumi.set(__self__, "dedicated_flavor", dedicated_flavor)
+        if dedicated_storage_id is not None:
+            pulumi.set(__self__, "dedicated_storage_id", dedicated_storage_id)
         if enhanced is not None:
             pulumi.set(__self__, "enhanced", enhanced)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if period is not None:
+            pulumi.set(__self__, "period", period)
+        if period_unit is not None:
+            pulumi.set(__self__, "period_unit", period_unit)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if share_proto is not None:
             pulumi.set(__self__, "share_proto", share_proto)
         if share_type is not None:
             pulumi.set(__self__, "share_type", share_type)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
 
     @property
     @pulumi.getter(name="availabilityZone")
@@ -137,6 +175,33 @@ class TurboArgs:
         pulumi.set(self, "vpc_id", value)
 
     @property
+    @pulumi.getter(name="autoRenew")
+    def auto_renew(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether auto renew is enabled.  
+        The valid values are **true** and **false**.
+        """
+        return pulumi.get(self, "auto_renew")
+
+    @auto_renew.setter
+    def auto_renew(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "auto_renew", value)
+
+    @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging mode of the SFS Turbo.
+        Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @charging_mode.setter
+    def charging_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "charging_mode", value)
+
+    @property
     @pulumi.getter(name="cryptKeyId")
     def crypt_key_id(self) -> Optional[pulumi.Input[str]]:
         """
@@ -148,6 +213,31 @@ class TurboArgs:
     @crypt_key_id.setter
     def crypt_key_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "crypt_key_id", value)
+
+    @property
+    @pulumi.getter(name="dedicatedFlavor")
+    def dedicated_flavor(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the VM flavor used for creating a dedicated file system.
+        """
+        return pulumi.get(self, "dedicated_flavor")
+
+    @dedicated_flavor.setter
+    def dedicated_flavor(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "dedicated_flavor", value)
+
+    @property
+    @pulumi.getter(name="dedicatedStorageId")
+    def dedicated_storage_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the dedicated distributed storage used
+        when creating a dedicated file system.
+        """
+        return pulumi.get(self, "dedicated_storage_id")
+
+    @dedicated_storage_id.setter
+    def dedicated_storage_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "dedicated_storage_id", value)
 
     @property
     @pulumi.getter
@@ -190,6 +280,36 @@ class TurboArgs:
 
     @property
     @pulumi.getter
+    def period(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the charging period of the SFS Turbo.
+        If `period_unit` is set to **month**, the value ranges from `1` to `11`.
+        If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "period")
+
+    @period.setter
+    def period(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "period", value)
+
+    @property
+    @pulumi.getter(name="periodUnit")
+    def period_unit(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging period unit of the SFS Turbo.
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "period_unit")
+
+    @period_unit.setter
+    def period_unit(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "period_unit", value)
+
+    @property
+    @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
         The region in which to create the SFS Turbo resource. If omitted, the
@@ -227,17 +347,35 @@ class TurboArgs:
     def share_type(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "share_type", value)
 
+    @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the SFS Turbo.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
+
 
 @pulumi.input_type
 class _TurboState:
     def __init__(__self__, *,
+                 auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
                  available_capacity: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  crypt_key_id: Optional[pulumi.Input[str]] = None,
+                 dedicated_flavor: Optional[pulumi.Input[str]] = None,
+                 dedicated_storage_id: Optional[pulumi.Input[str]] = None,
                  enhanced: Optional[pulumi.Input[bool]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  export_location: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
                  share_proto: Optional[pulumi.Input[str]] = None,
@@ -245,15 +383,24 @@ class _TurboState:
                  size: Optional[pulumi.Input[int]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  version: Optional[pulumi.Input[str]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Turbo resources.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.  
+               The valid values are **true** and **false**.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone where the file system is located.
                Changing this will create a new resource.
         :param pulumi.Input[str] available_capacity: The available capacity of the SFS Turbo file system in the unit of GB.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the SFS Turbo.
+               Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+               Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] crypt_key_id: Specifies the ID of a KMS key to encrypt the file system. Changing this
                will create a new resource.
+        :param pulumi.Input[str] dedicated_flavor: Specifies the VM flavor used for creating a dedicated file system.
+        :param pulumi.Input[str] dedicated_storage_id: Specifies the ID of the dedicated distributed storage used
+               when creating a dedicated file system.
         :param pulumi.Input[bool] enhanced: Specifies whether the file system is enhanced or not. Changing this will
                create a new resource.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the file system. Changing this
@@ -261,6 +408,14 @@ class _TurboState:
         :param pulumi.Input[str] export_location: Tthe mount point of the SFS Turbo file system.
         :param pulumi.Input[str] name: Specifies the name of an SFS Turbo file system. The value contains 4 to 64
                characters and must start with a letter. Changing this will create a new resource.
+        :param pulumi.Input[int] period: Specifies the charging period of the SFS Turbo.
+               If `period_unit` is set to **month**, the value ranges from `1` to `11`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the SFS Turbo.
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] region: The region in which to create the SFS Turbo resource. If omitted, the
                provider-level region will be used. Changing this creates a new SFS Turbo resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID. Changing this will create a new
@@ -274,15 +429,24 @@ class _TurboState:
         :param pulumi.Input[str] status: The status of the SFS Turbo file system.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of the subnet. Changing this will create a new
                resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the SFS Turbo.
         :param pulumi.Input[str] version: The version ID of the SFS Turbo file system.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this will create a new resource.
         """
+        if auto_renew is not None:
+            pulumi.set(__self__, "auto_renew", auto_renew)
         if availability_zone is not None:
             pulumi.set(__self__, "availability_zone", availability_zone)
         if available_capacity is not None:
             pulumi.set(__self__, "available_capacity", available_capacity)
+        if charging_mode is not None:
+            pulumi.set(__self__, "charging_mode", charging_mode)
         if crypt_key_id is not None:
             pulumi.set(__self__, "crypt_key_id", crypt_key_id)
+        if dedicated_flavor is not None:
+            pulumi.set(__self__, "dedicated_flavor", dedicated_flavor)
+        if dedicated_storage_id is not None:
+            pulumi.set(__self__, "dedicated_storage_id", dedicated_storage_id)
         if enhanced is not None:
             pulumi.set(__self__, "enhanced", enhanced)
         if enterprise_project_id is not None:
@@ -291,6 +455,10 @@ class _TurboState:
             pulumi.set(__self__, "export_location", export_location)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if period is not None:
+            pulumi.set(__self__, "period", period)
+        if period_unit is not None:
+            pulumi.set(__self__, "period_unit", period_unit)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if security_group_id is not None:
@@ -305,10 +473,25 @@ class _TurboState:
             pulumi.set(__self__, "status", status)
         if subnet_id is not None:
             pulumi.set(__self__, "subnet_id", subnet_id)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
         if version is not None:
             pulumi.set(__self__, "version", version)
         if vpc_id is not None:
             pulumi.set(__self__, "vpc_id", vpc_id)
+
+    @property
+    @pulumi.getter(name="autoRenew")
+    def auto_renew(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether auto renew is enabled.  
+        The valid values are **true** and **false**.
+        """
+        return pulumi.get(self, "auto_renew")
+
+    @auto_renew.setter
+    def auto_renew(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "auto_renew", value)
 
     @property
     @pulumi.getter(name="availabilityZone")
@@ -336,6 +519,20 @@ class _TurboState:
         pulumi.set(self, "available_capacity", value)
 
     @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging mode of the SFS Turbo.
+        Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @charging_mode.setter
+    def charging_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "charging_mode", value)
+
+    @property
     @pulumi.getter(name="cryptKeyId")
     def crypt_key_id(self) -> Optional[pulumi.Input[str]]:
         """
@@ -347,6 +544,31 @@ class _TurboState:
     @crypt_key_id.setter
     def crypt_key_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "crypt_key_id", value)
+
+    @property
+    @pulumi.getter(name="dedicatedFlavor")
+    def dedicated_flavor(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the VM flavor used for creating a dedicated file system.
+        """
+        return pulumi.get(self, "dedicated_flavor")
+
+    @dedicated_flavor.setter
+    def dedicated_flavor(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "dedicated_flavor", value)
+
+    @property
+    @pulumi.getter(name="dedicatedStorageId")
+    def dedicated_storage_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the dedicated distributed storage used
+        when creating a dedicated file system.
+        """
+        return pulumi.get(self, "dedicated_storage_id")
+
+    @dedicated_storage_id.setter
+    def dedicated_storage_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "dedicated_storage_id", value)
 
     @property
     @pulumi.getter
@@ -398,6 +620,36 @@ class _TurboState:
     @name.setter
     def name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def period(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the charging period of the SFS Turbo.
+        If `period_unit` is set to **month**, the value ranges from `1` to `11`.
+        If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "period")
+
+    @period.setter
+    def period(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "period", value)
+
+    @property
+    @pulumi.getter(name="periodUnit")
+    def period_unit(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging period unit of the SFS Turbo.
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "period_unit")
+
+    @period_unit.setter
+    def period_unit(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "period_unit", value)
 
     @property
     @pulumi.getter
@@ -491,6 +743,18 @@ class _TurboState:
 
     @property
     @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the SFS Turbo.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
+
+    @property
+    @pulumi.getter
     def version(self) -> Optional[pulumi.Input[str]]:
         """
         The version ID of the SFS Turbo file system.
@@ -519,17 +783,24 @@ class Turbo(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  crypt_key_id: Optional[pulumi.Input[str]] = None,
+                 dedicated_flavor: Optional[pulumi.Input[str]] = None,
+                 dedicated_storage_id: Optional[pulumi.Input[str]] = None,
                  enhanced: Optional[pulumi.Input[bool]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
                  share_proto: Optional[pulumi.Input[str]] = None,
                  share_type: Optional[pulumi.Input[str]] = None,
                  size: Optional[pulumi.Input[int]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
@@ -552,7 +823,11 @@ class Turbo(pulumi.CustomResource):
             vpc_id=vpc_id,
             subnet_id=subnet_id,
             security_group_id=secgroup_id,
-            availability_zone=test_az)
+            availability_zone=test_az,
+            tags={
+                "foo": "bar",
+                "key": "value",
+            })
         ```
 
         ## Import
@@ -563,18 +838,48 @@ class Turbo(pulumi.CustomResource):
          $ pulumi import huaweicloud:Sfs/turbo:Turbo huaweicloud_sfs_turbo 1e3d5306-24c9-4316-9185-70e9787d71ab
         ```
 
+         Note that the imported state may not be identical to your resource definition, due to payment attributes missing from the API response. The missing attributes include`charging_mode`, `period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing an instance. You can ignore changes as below. hcl resource "huaweicloud_sfs_turbo" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         charging_mode, period_unit, period, auto_renew,
+
+         ]
+
+         } }
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.  
+               The valid values are **true** and **false**.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone where the file system is located.
                Changing this will create a new resource.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the SFS Turbo.
+               Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+               Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] crypt_key_id: Specifies the ID of a KMS key to encrypt the file system. Changing this
                will create a new resource.
+        :param pulumi.Input[str] dedicated_flavor: Specifies the VM flavor used for creating a dedicated file system.
+        :param pulumi.Input[str] dedicated_storage_id: Specifies the ID of the dedicated distributed storage used
+               when creating a dedicated file system.
         :param pulumi.Input[bool] enhanced: Specifies whether the file system is enhanced or not. Changing this will
                create a new resource.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the file system. Changing this
                will create a new resource.
         :param pulumi.Input[str] name: Specifies the name of an SFS Turbo file system. The value contains 4 to 64
                characters and must start with a letter. Changing this will create a new resource.
+        :param pulumi.Input[int] period: Specifies the charging period of the SFS Turbo.
+               If `period_unit` is set to **month**, the value ranges from `1` to `11`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the SFS Turbo.
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] region: The region in which to create the SFS Turbo resource. If omitted, the
                provider-level region will be used. Changing this creates a new SFS Turbo resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID. Changing this will create a new
@@ -587,6 +892,7 @@ class Turbo(pulumi.CustomResource):
                and must be large than 10240 for an enhanced file system.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of the subnet. Changing this will create a new
                resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the SFS Turbo.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this will create a new resource.
         """
         ...
@@ -615,7 +921,11 @@ class Turbo(pulumi.CustomResource):
             vpc_id=vpc_id,
             subnet_id=subnet_id,
             security_group_id=secgroup_id,
-            availability_zone=test_az)
+            availability_zone=test_az,
+            tags={
+                "foo": "bar",
+                "key": "value",
+            })
         ```
 
         ## Import
@@ -625,6 +935,20 @@ class Turbo(pulumi.CustomResource):
         ```sh
          $ pulumi import huaweicloud:Sfs/turbo:Turbo huaweicloud_sfs_turbo 1e3d5306-24c9-4316-9185-70e9787d71ab
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to payment attributes missing from the API response. The missing attributes include`charging_mode`, `period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing an instance. You can ignore changes as below. hcl resource "huaweicloud_sfs_turbo" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         charging_mode, period_unit, period, auto_renew,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param TurboArgs args: The arguments to use to populate this resource's properties.
@@ -641,17 +965,24 @@ class Turbo(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  crypt_key_id: Optional[pulumi.Input[str]] = None,
+                 dedicated_flavor: Optional[pulumi.Input[str]] = None,
+                 dedicated_storage_id: Optional[pulumi.Input[str]] = None,
                  enhanced: Optional[pulumi.Input[bool]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
                  share_proto: Optional[pulumi.Input[str]] = None,
                  share_type: Optional[pulumi.Input[str]] = None,
                  size: Optional[pulumi.Input[int]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
@@ -662,13 +993,19 @@ class Turbo(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = TurboArgs.__new__(TurboArgs)
 
+            __props__.__dict__["auto_renew"] = auto_renew
             if availability_zone is None and not opts.urn:
                 raise TypeError("Missing required property 'availability_zone'")
             __props__.__dict__["availability_zone"] = availability_zone
+            __props__.__dict__["charging_mode"] = charging_mode
             __props__.__dict__["crypt_key_id"] = crypt_key_id
+            __props__.__dict__["dedicated_flavor"] = dedicated_flavor
+            __props__.__dict__["dedicated_storage_id"] = dedicated_storage_id
             __props__.__dict__["enhanced"] = enhanced
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["name"] = name
+            __props__.__dict__["period"] = period
+            __props__.__dict__["period_unit"] = period_unit
             __props__.__dict__["region"] = region
             if security_group_id is None and not opts.urn:
                 raise TypeError("Missing required property 'security_group_id'")
@@ -681,6 +1018,7 @@ class Turbo(pulumi.CustomResource):
             if subnet_id is None and not opts.urn:
                 raise TypeError("Missing required property 'subnet_id'")
             __props__.__dict__["subnet_id"] = subnet_id
+            __props__.__dict__["tags"] = tags
             if vpc_id is None and not opts.urn:
                 raise TypeError("Missing required property 'vpc_id'")
             __props__.__dict__["vpc_id"] = vpc_id
@@ -698,13 +1036,19 @@ class Turbo(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            auto_renew: Optional[pulumi.Input[str]] = None,
             availability_zone: Optional[pulumi.Input[str]] = None,
             available_capacity: Optional[pulumi.Input[str]] = None,
+            charging_mode: Optional[pulumi.Input[str]] = None,
             crypt_key_id: Optional[pulumi.Input[str]] = None,
+            dedicated_flavor: Optional[pulumi.Input[str]] = None,
+            dedicated_storage_id: Optional[pulumi.Input[str]] = None,
             enhanced: Optional[pulumi.Input[bool]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             export_location: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
+            period: Optional[pulumi.Input[int]] = None,
+            period_unit: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             security_group_id: Optional[pulumi.Input[str]] = None,
             share_proto: Optional[pulumi.Input[str]] = None,
@@ -712,6 +1056,7 @@ class Turbo(pulumi.CustomResource):
             size: Optional[pulumi.Input[int]] = None,
             status: Optional[pulumi.Input[str]] = None,
             subnet_id: Optional[pulumi.Input[str]] = None,
+            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             version: Optional[pulumi.Input[str]] = None,
             vpc_id: Optional[pulumi.Input[str]] = None) -> 'Turbo':
         """
@@ -721,11 +1066,19 @@ class Turbo(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.  
+               The valid values are **true** and **false**.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone where the file system is located.
                Changing this will create a new resource.
         :param pulumi.Input[str] available_capacity: The available capacity of the SFS Turbo file system in the unit of GB.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the SFS Turbo.
+               Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+               Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] crypt_key_id: Specifies the ID of a KMS key to encrypt the file system. Changing this
                will create a new resource.
+        :param pulumi.Input[str] dedicated_flavor: Specifies the VM flavor used for creating a dedicated file system.
+        :param pulumi.Input[str] dedicated_storage_id: Specifies the ID of the dedicated distributed storage used
+               when creating a dedicated file system.
         :param pulumi.Input[bool] enhanced: Specifies whether the file system is enhanced or not. Changing this will
                create a new resource.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the file system. Changing this
@@ -733,6 +1086,14 @@ class Turbo(pulumi.CustomResource):
         :param pulumi.Input[str] export_location: Tthe mount point of the SFS Turbo file system.
         :param pulumi.Input[str] name: Specifies the name of an SFS Turbo file system. The value contains 4 to 64
                characters and must start with a letter. Changing this will create a new resource.
+        :param pulumi.Input[int] period: Specifies the charging period of the SFS Turbo.
+               If `period_unit` is set to **month**, the value ranges from `1` to `11`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this parameter will create a new cluster resource.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the SFS Turbo.
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] region: The region in which to create the SFS Turbo resource. If omitted, the
                provider-level region will be used. Changing this creates a new SFS Turbo resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID. Changing this will create a new
@@ -746,6 +1107,7 @@ class Turbo(pulumi.CustomResource):
         :param pulumi.Input[str] status: The status of the SFS Turbo file system.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of the subnet. Changing this will create a new
                resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the SFS Turbo.
         :param pulumi.Input[str] version: The version ID of the SFS Turbo file system.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this will create a new resource.
         """
@@ -753,13 +1115,19 @@ class Turbo(pulumi.CustomResource):
 
         __props__ = _TurboState.__new__(_TurboState)
 
+        __props__.__dict__["auto_renew"] = auto_renew
         __props__.__dict__["availability_zone"] = availability_zone
         __props__.__dict__["available_capacity"] = available_capacity
+        __props__.__dict__["charging_mode"] = charging_mode
         __props__.__dict__["crypt_key_id"] = crypt_key_id
+        __props__.__dict__["dedicated_flavor"] = dedicated_flavor
+        __props__.__dict__["dedicated_storage_id"] = dedicated_storage_id
         __props__.__dict__["enhanced"] = enhanced
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["export_location"] = export_location
         __props__.__dict__["name"] = name
+        __props__.__dict__["period"] = period
+        __props__.__dict__["period_unit"] = period_unit
         __props__.__dict__["region"] = region
         __props__.__dict__["security_group_id"] = security_group_id
         __props__.__dict__["share_proto"] = share_proto
@@ -767,9 +1135,19 @@ class Turbo(pulumi.CustomResource):
         __props__.__dict__["size"] = size
         __props__.__dict__["status"] = status
         __props__.__dict__["subnet_id"] = subnet_id
+        __props__.__dict__["tags"] = tags
         __props__.__dict__["version"] = version
         __props__.__dict__["vpc_id"] = vpc_id
         return Turbo(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter(name="autoRenew")
+    def auto_renew(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies whether auto renew is enabled.  
+        The valid values are **true** and **false**.
+        """
+        return pulumi.get(self, "auto_renew")
 
     @property
     @pulumi.getter(name="availabilityZone")
@@ -789,6 +1167,16 @@ class Turbo(pulumi.CustomResource):
         return pulumi.get(self, "available_capacity")
 
     @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> pulumi.Output[str]:
+        """
+        Specifies the charging mode of the SFS Turbo.
+        Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @property
     @pulumi.getter(name="cryptKeyId")
     def crypt_key_id(self) -> pulumi.Output[Optional[str]]:
         """
@@ -796,6 +1184,23 @@ class Turbo(pulumi.CustomResource):
         will create a new resource.
         """
         return pulumi.get(self, "crypt_key_id")
+
+    @property
+    @pulumi.getter(name="dedicatedFlavor")
+    def dedicated_flavor(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the VM flavor used for creating a dedicated file system.
+        """
+        return pulumi.get(self, "dedicated_flavor")
+
+    @property
+    @pulumi.getter(name="dedicatedStorageId")
+    def dedicated_storage_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the ID of the dedicated distributed storage used
+        when creating a dedicated file system.
+        """
+        return pulumi.get(self, "dedicated_storage_id")
 
     @property
     @pulumi.getter
@@ -831,6 +1236,28 @@ class Turbo(pulumi.CustomResource):
         characters and must start with a letter. Changing this will create a new resource.
         """
         return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def period(self) -> pulumi.Output[Optional[int]]:
+        """
+        Specifies the charging period of the SFS Turbo.
+        If `period_unit` is set to **month**, the value ranges from `1` to `11`.
+        If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "period")
+
+    @property
+    @pulumi.getter(name="periodUnit")
+    def period_unit(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the charging period unit of the SFS Turbo.
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "period_unit")
 
     @property
     @pulumi.getter
@@ -893,6 +1320,14 @@ class Turbo(pulumi.CustomResource):
         resource.
         """
         return pulumi.get(self, "subnet_id")
+
+    @property
+    @pulumi.getter
+    def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
+        """
+        Specifies the key/value pairs to associate with the SFS Turbo.
+        """
+        return pulumi.get(self, "tags")
 
     @property
     @pulumi.getter

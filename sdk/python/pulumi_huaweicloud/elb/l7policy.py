@@ -33,7 +33,6 @@ class L7policyArgs:
                HTTPS listener specified by `redirect_listener_id`.
         :param pulumi.Input[str] listener_id: Specifies the ID of the listener for which the forwarding policy is added.
                Changing this creates a new L7 Policy.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the L7 Policy. This value can only be true (UP).
         :param pulumi.Input[str] description: Human-readable description for the L7 Policy.
         :param pulumi.Input[str] name: Human-readable name for the L7 Policy. Does not have to be unique.
         :param pulumi.Input[int] position: The position of this policy on the listener. Positions start at 1.
@@ -105,9 +104,6 @@ class L7policyArgs:
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> Optional[pulumi.Input[bool]]:
-        """
-        The administrative state of the L7 Policy. This value can only be true (UP).
-        """
         return pulumi.get(self, "admin_state_up")
 
     @admin_state_up.setter
@@ -226,7 +222,6 @@ class _L7policyState:
                + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirect_pool_id`.
                + **REDIRECT_TO_LISTENER**: Requests are redirected from the HTTP listener specified by `listener_id` to the
                HTTPS listener specified by `redirect_listener_id`.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the L7 Policy. This value can only be true (UP).
         :param pulumi.Input[str] description: Human-readable description for the L7 Policy.
         :param pulumi.Input[str] listener_id: Specifies the ID of the listener for which the forwarding policy is added.
                Changing this creates a new L7 Policy.
@@ -289,9 +284,6 @@ class _L7policyState:
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> Optional[pulumi.Input[bool]]:
-        """
-        The administrative state of the L7 Policy. This value can only be true (UP).
-        """
         return pulumi.get(self, "admin_state_up")
 
     @admin_state_up.setter
@@ -460,7 +452,6 @@ class L7policy(pulumi.CustomResource):
                + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirect_pool_id`.
                + **REDIRECT_TO_LISTENER**: Requests are redirected from the HTTP listener specified by `listener_id` to the
                HTTPS listener specified by `redirect_listener_id`.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the L7 Policy. This value can only be true (UP).
         :param pulumi.Input[str] description: Human-readable description for the L7 Policy.
         :param pulumi.Input[str] listener_id: Specifies the ID of the listener for which the forwarding policy is added.
                Changing this creates a new L7 Policy.
@@ -603,7 +594,6 @@ class L7policy(pulumi.CustomResource):
                + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirect_pool_id`.
                + **REDIRECT_TO_LISTENER**: Requests are redirected from the HTTP listener specified by `listener_id` to the
                HTTPS listener specified by `redirect_listener_id`.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the L7 Policy. This value can only be true (UP).
         :param pulumi.Input[str] description: Human-readable description for the L7 Policy.
         :param pulumi.Input[str] listener_id: Specifies the ID of the listener for which the forwarding policy is added.
                Changing this creates a new L7 Policy.
@@ -654,9 +644,6 @@ class L7policy(pulumi.CustomResource):
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> pulumi.Output[Optional[bool]]:
-        """
-        The administrative state of the L7 Policy. This value can only be true (UP).
-        """
         return pulumi.get(self, "admin_state_up")
 
     @property

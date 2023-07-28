@@ -27,12 +27,16 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Waf"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			enterpriseProjectId := cfg.RequireObject("enterpriseProjectId")
 //			_, err := Waf.NewCertificate(ctx, "certificate1", &Waf.CertificateArgs{
+//				EnterpriseProjectId: pulumi.Any(enterpriseProjectId),
 //				Certificate: pulumi.String(fmt.Sprintf(`-----BEGIN CERTIFICATE-----
 //
 // MIIFmQl5dh2QUAeo39TIKtadgAgh4zHx09kSgayS9Wph9LEqq7MA+2042L3J9aOa
@@ -40,7 +44,6 @@ import (
 // ...
 // +HhDvD/VeOHytX3RAs2GeTOtxyAV5XpKY5r+PkyUqPJj04t3d0Fopi0gNtLpMF=
 // -----END CERTIFICATE-----
-//
 // `)),
 //
 //	PrivateKey: pulumi.String(fmt.Sprintf(`-----BEGIN PRIVATE KEY-----
@@ -51,7 +54,6 @@ import (
 // he8Y4IWS6wY7bCkjCWDcRQJMEhg76fsO3txE+FiYruq9RUWhiF1myv4Q6W+CyBFC
 // 1qoJFlcDyqSMo5iHq3HLjs
 // -----END PRIVATE KEY-----
-//
 // `)),
 //
 //			})
@@ -66,11 +68,19 @@ import (
 //
 // ## Import
 //
-// Certificates can be imported using the `id`, e.g.
+// There are two ways to import WAF certificate state. * Using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Waf/certificate:Certificate certificate_2 3ebd3201238d41f9bfc3623b61435954
+//	$ pulumi import huaweicloud:Waf/certificate:Certificate test <id>
+//
+// ```
+//
+//   - Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+//
+// ```sh
+//
+//	$ pulumi import huaweicloud:Waf/certificate:Certificate test <id>/<enterprise_project_id>
 //
 // ```
 //
@@ -93,6 +103,9 @@ type Certificate struct {
 	// Specifies the certificate content. Changing this creates a new
 	// certificate.
 	Certificate pulumi.StringOutput `pulumi:"certificate"`
+	// Specifies the enterprise project ID of WAF certificate.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
 	// Indicates the time when the certificate expires.
 	Expiration pulumi.StringOutput `pulumi:"expiration"`
 	// Specifies the certificate name. The maximum length is 256 characters. Only digits,
@@ -144,6 +157,9 @@ type certificateState struct {
 	// Specifies the certificate content. Changing this creates a new
 	// certificate.
 	Certificate *string `pulumi:"certificate"`
+	// Specifies the enterprise project ID of WAF certificate.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Indicates the time when the certificate expires.
 	Expiration *string `pulumi:"expiration"`
 	// Specifies the certificate name. The maximum length is 256 characters. Only digits,
@@ -160,6 +176,9 @@ type CertificateState struct {
 	// Specifies the certificate content. Changing this creates a new
 	// certificate.
 	Certificate pulumi.StringPtrInput
+	// Specifies the enterprise project ID of WAF certificate.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// Indicates the time when the certificate expires.
 	Expiration pulumi.StringPtrInput
 	// Specifies the certificate name. The maximum length is 256 characters. Only digits,
@@ -180,6 +199,9 @@ type certificateArgs struct {
 	// Specifies the certificate content. Changing this creates a new
 	// certificate.
 	Certificate string `pulumi:"certificate"`
+	// Specifies the enterprise project ID of WAF certificate.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the certificate name. The maximum length is 256 characters. Only digits,
 	// letters, underscores(`_`), and hyphens(`-`) are allowed.
 	Name *string `pulumi:"name"`
@@ -195,6 +217,9 @@ type CertificateArgs struct {
 	// Specifies the certificate content. Changing this creates a new
 	// certificate.
 	Certificate pulumi.StringInput
+	// Specifies the enterprise project ID of WAF certificate.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the certificate name. The maximum length is 256 characters. Only digits,
 	// letters, underscores(`_`), and hyphens(`-`) are allowed.
 	Name pulumi.StringPtrInput
@@ -296,6 +321,12 @@ func (o CertificateOutput) ToCertificateOutputWithContext(ctx context.Context) C
 // certificate.
 func (o CertificateOutput) Certificate() pulumi.StringOutput {
 	return o.ApplyT(func(v *Certificate) pulumi.StringOutput { return v.Certificate }).(pulumi.StringOutput)
+}
+
+// Specifies the enterprise project ID of WAF certificate.
+// Changing this parameter will create a new resource.
+func (o CertificateOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Certificate) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
 
 // Indicates the time when the certificate expires.

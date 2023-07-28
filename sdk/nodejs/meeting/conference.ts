@@ -178,7 +178,7 @@ export class Conference extends pulumi.CustomResource {
     public /*out*/ readonly audienceJoinUri!: pulumi.Output<string>;
     /**
      * Specifies the auxiliary streaming address, the maximum length is 255 characters.
-     * Only availabe if `recordType` is **2** or **3**.
+     * Only available if `recordType` is **2** or **3**.
      */
     public readonly auxAddress!: pulumi.Output<string>;
     /**
@@ -203,7 +203,7 @@ export class Conference extends pulumi.CustomResource {
     public readonly configuration!: pulumi.Output<outputs.Meeting.ConferenceConfiguration | undefined>;
     /**
      * Specifies the corporation ID.
-     * Required if the application is used in multiple enterprises. Only availabe if `appId` is set.
+     * Required if the application is used in multiple enterprises. Only available if `appId` is set.
      * Changing this parameter will create a new resource.
      */
     public readonly corpId!: pulumi.Output<string>;
@@ -241,6 +241,10 @@ export class Conference extends pulumi.CustomResource {
      * + **1**: Record.
      */
     public readonly isRecordAuxStream!: pulumi.Output<number>;
+    /**
+     * The meeting password.
+     * The joinPassword structure is documented below.
+     */
     public /*out*/ readonly joinPasswords!: pulumi.Output<outputs.Meeting.ConferenceJoinPassword[]>;
     /**
      * Specifies the default language of the conference, the default value is defined by the
@@ -252,7 +256,7 @@ export class Conference extends pulumi.CustomResource {
     public readonly language!: pulumi.Output<string>;
     /**
      * Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-     * Only availabe if `recordType` is **2** or **3**.
+     * Only available if `recordType` is **2** or **3**.
      */
     public readonly liveAddress!: pulumi.Output<string>;
     /**
@@ -455,7 +459,7 @@ export interface ConferenceState {
     audienceJoinUri?: pulumi.Input<string>;
     /**
      * Specifies the auxiliary streaming address, the maximum length is 255 characters.
-     * Only availabe if `recordType` is **2** or **3**.
+     * Only available if `recordType` is **2** or **3**.
      */
     auxAddress?: pulumi.Input<string>;
     /**
@@ -480,7 +484,7 @@ export interface ConferenceState {
     configuration?: pulumi.Input<inputs.Meeting.ConferenceConfiguration>;
     /**
      * Specifies the corporation ID.
-     * Required if the application is used in multiple enterprises. Only availabe if `appId` is set.
+     * Required if the application is used in multiple enterprises. Only available if `appId` is set.
      * Changing this parameter will create a new resource.
      */
     corpId?: pulumi.Input<string>;
@@ -518,6 +522,10 @@ export interface ConferenceState {
      * + **1**: Record.
      */
     isRecordAuxStream?: pulumi.Input<number>;
+    /**
+     * The meeting password.
+     * The joinPassword structure is documented below.
+     */
     joinPasswords?: pulumi.Input<pulumi.Input<inputs.Meeting.ConferenceJoinPassword>[]>;
     /**
      * Specifies the default language of the conference, the default value is defined by the
@@ -529,7 +537,7 @@ export interface ConferenceState {
     language?: pulumi.Input<string>;
     /**
      * Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-     * Only availabe if `recordType` is **2** or **3**.
+     * Only available if `recordType` is **2** or **3**.
      */
     liveAddress?: pulumi.Input<string>;
     /**
@@ -629,7 +637,7 @@ export interface ConferenceArgs {
     appKey?: pulumi.Input<string>;
     /**
      * Specifies the auxiliary streaming address, the maximum length is 255 characters.
-     * Only availabe if `recordType` is **2** or **3**.
+     * Only available if `recordType` is **2** or **3**.
      */
     auxAddress?: pulumi.Input<string>;
     /**
@@ -639,7 +647,7 @@ export interface ConferenceArgs {
     configuration?: pulumi.Input<inputs.Meeting.ConferenceConfiguration>;
     /**
      * Specifies the corporation ID.
-     * Required if the application is used in multiple enterprises. Only availabe if `appId` is set.
+     * Required if the application is used in multiple enterprises. Only available if `appId` is set.
      * Changing this parameter will create a new resource.
      */
     corpId?: pulumi.Input<string>;
@@ -683,7 +691,7 @@ export interface ConferenceArgs {
     language?: pulumi.Input<string>;
     /**
      * Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-     * Only availabe if `recordType` is **2** or **3**.
+     * Only available if `recordType` is **2** or **3**.
      */
     liveAddress?: pulumi.Input<string>;
     /**

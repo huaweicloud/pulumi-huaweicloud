@@ -23,6 +23,7 @@ class VaultArgs:
                  auto_expand: Optional[pulumi.Input[bool]] = None,
                  auto_pay: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
+                 backup_name_prefix: Optional[pulumi.Input[str]] = None,
                  bind_rules: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  consistent_level: Optional[pulumi.Input[str]] = None,
@@ -30,6 +31,7 @@ class VaultArgs:
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
+                 policies: Optional[pulumi.Input[Sequence[pulumi.Input['VaultPolicyArgs']]]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  resources: Optional[pulumi.Input[Sequence[pulumi.Input['VaultResourceArgs']]]] = None,
@@ -49,18 +51,20 @@ class VaultArgs:
         :param pulumi.Input[bool] auto_expand: Specifies to enable auto capacity expansion for the backup protection type vault.
                Defaults to **false**.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are **true** and **false**. Defaults to **false**. Changing this will create a new vault.
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] backup_name_prefix: Specifies the backup name prefix.
+               Changing this will create a new vault.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] bind_rules: Specifies the tags to filter resources for automatic association with **auto_bind**.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the vault.
                The valid values are as follows:
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
-        :param pulumi.Input[str] consistent_level: Specifies the backup specifications.
+        :param pulumi.Input[str] consistent_level: Specifies the consistent level (specification) of the vault.
                The valid values are as follows:
                + **[crash_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
                + **[app_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
-        :param pulumi.Input[str] enterprise_project_id: Specifies a unique ID in UUID format of enterprise project.
-               Changing this will create a new vault.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project to which the vault
+               belongs. Changing this will create a new vault.
         :param pulumi.Input[str] name: Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
                characters, which may consist of letters, digits, underscores(_) and hyphens (-).
         :param pulumi.Input[int] period: Specifies the charging period of the vault.
@@ -71,8 +75,9 @@ class VaultArgs:
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the vault.
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
                Changing this will create a new vault.
-        :param pulumi.Input[str] policy_id: Specifies a policy to associate with the CBR vault.
-               `policy_id` cannot be used with the vault of replicate protection type.
+        :param pulumi.Input[Sequence[pulumi.Input['VaultPolicyArgs']]] policies: Specifies the policy details to associate with the CBR vault.
+               The object structure is documented below.
+        :param pulumi.Input[str] policy_id: schema:Deprecated; Using parameter 'policy' instead.
         :param pulumi.Input[str] region: Specifies the region in which to create the CBR vault. If omitted, the
                provider-level region will be used. Changing this will create a new vault.
         :param pulumi.Input[Sequence[pulumi.Input['VaultResourceArgs']]] resources: Specifies an array of one or more resources to attach to the CBR vault.
@@ -87,9 +92,14 @@ class VaultArgs:
         if auto_expand is not None:
             pulumi.set(__self__, "auto_expand", auto_expand)
         if auto_pay is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
+        if auto_pay is not None:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
             pulumi.set(__self__, "auto_renew", auto_renew)
+        if backup_name_prefix is not None:
+            pulumi.set(__self__, "backup_name_prefix", backup_name_prefix)
         if bind_rules is not None:
             pulumi.set(__self__, "bind_rules", bind_rules)
         if charging_mode is not None:
@@ -104,6 +114,8 @@ class VaultArgs:
             pulumi.set(__self__, "period", period)
         if period_unit is not None:
             pulumi.set(__self__, "period_unit", period_unit)
+        if policies is not None:
+            pulumi.set(__self__, "policies", policies)
         if policy_id is not None:
             pulumi.set(__self__, "policy_id", policy_id)
         if region is not None:
@@ -194,13 +206,26 @@ class VaultArgs:
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies whether auto renew is enabled.
-        Valid values are **true** and **false**. Defaults to **false**. Changing this will create a new vault.
+        Valid values are **true** and **false**. Defaults to **false**.
         """
         return pulumi.get(self, "auto_renew")
 
     @auto_renew.setter
     def auto_renew(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "auto_renew", value)
+
+    @property
+    @pulumi.getter(name="backupNamePrefix")
+    def backup_name_prefix(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the backup name prefix.
+        Changing this will create a new vault.
+        """
+        return pulumi.get(self, "backup_name_prefix")
+
+    @backup_name_prefix.setter
+    def backup_name_prefix(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "backup_name_prefix", value)
 
     @property
     @pulumi.getter(name="bindRules")
@@ -233,7 +258,7 @@ class VaultArgs:
     @pulumi.getter(name="consistentLevel")
     def consistent_level(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the backup specifications.
+        Specifies the consistent level (specification) of the vault.
         The valid values are as follows:
         + **[crash_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
         + **[app_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
@@ -248,8 +273,8 @@ class VaultArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies a unique ID in UUID format of enterprise project.
-        Changing this will create a new vault.
+        Specifies the ID of the enterprise project to which the vault
+        belongs. Changing this will create a new vault.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -301,11 +326,23 @@ class VaultArgs:
         pulumi.set(self, "period_unit", value)
 
     @property
+    @pulumi.getter
+    def policies(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['VaultPolicyArgs']]]]:
+        """
+        Specifies the policy details to associate with the CBR vault.
+        The object structure is documented below.
+        """
+        return pulumi.get(self, "policies")
+
+    @policies.setter
+    def policies(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['VaultPolicyArgs']]]]):
+        pulumi.set(self, "policies", value)
+
+    @property
     @pulumi.getter(name="policyId")
     def policy_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies a policy to associate with the CBR vault.
-        `policy_id` cannot be used with the vault of replicate protection type.
+        schema:Deprecated; Using parameter 'policy' instead.
         """
         return pulumi.get(self, "policy_id")
 
@@ -360,6 +397,7 @@ class _VaultState:
                  auto_expand: Optional[pulumi.Input[bool]] = None,
                  auto_pay: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
+                 backup_name_prefix: Optional[pulumi.Input[str]] = None,
                  bind_rules: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  consistent_level: Optional[pulumi.Input[str]] = None,
@@ -367,6 +405,7 @@ class _VaultState:
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
+                 policies: Optional[pulumi.Input[Sequence[pulumi.Input['VaultPolicyArgs']]]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  protection_type: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -385,18 +424,20 @@ class _VaultState:
         :param pulumi.Input[bool] auto_expand: Specifies to enable auto capacity expansion for the backup protection type vault.
                Defaults to **false**.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are **true** and **false**. Defaults to **false**. Changing this will create a new vault.
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] backup_name_prefix: Specifies the backup name prefix.
+               Changing this will create a new vault.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] bind_rules: Specifies the tags to filter resources for automatic association with **auto_bind**.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the vault.
                The valid values are as follows:
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
-        :param pulumi.Input[str] consistent_level: Specifies the backup specifications.
+        :param pulumi.Input[str] consistent_level: Specifies the consistent level (specification) of the vault.
                The valid values are as follows:
                + **[crash_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
                + **[app_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
-        :param pulumi.Input[str] enterprise_project_id: Specifies a unique ID in UUID format of enterprise project.
-               Changing this will create a new vault.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project to which the vault
+               belongs. Changing this will create a new vault.
         :param pulumi.Input[str] name: Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
                characters, which may consist of letters, digits, underscores(_) and hyphens (-).
         :param pulumi.Input[int] period: Specifies the charging period of the vault.
@@ -407,8 +448,9 @@ class _VaultState:
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the vault.
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
                Changing this will create a new vault.
-        :param pulumi.Input[str] policy_id: Specifies a policy to associate with the CBR vault.
-               `policy_id` cannot be used with the vault of replicate protection type.
+        :param pulumi.Input[Sequence[pulumi.Input['VaultPolicyArgs']]] policies: Specifies the policy details to associate with the CBR vault.
+               The object structure is documented below.
+        :param pulumi.Input[str] policy_id: schema:Deprecated; Using parameter 'policy' instead.
         :param pulumi.Input[str] protection_type: Specifies the protection type of the CBR vault.
                The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
                Changing this will create a new vault.
@@ -435,9 +477,14 @@ class _VaultState:
         if auto_expand is not None:
             pulumi.set(__self__, "auto_expand", auto_expand)
         if auto_pay is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
+        if auto_pay is not None:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
             pulumi.set(__self__, "auto_renew", auto_renew)
+        if backup_name_prefix is not None:
+            pulumi.set(__self__, "backup_name_prefix", backup_name_prefix)
         if bind_rules is not None:
             pulumi.set(__self__, "bind_rules", bind_rules)
         if charging_mode is not None:
@@ -452,6 +499,8 @@ class _VaultState:
             pulumi.set(__self__, "period", period)
         if period_unit is not None:
             pulumi.set(__self__, "period_unit", period_unit)
+        if policies is not None:
+            pulumi.set(__self__, "policies", policies)
         if policy_id is not None:
             pulumi.set(__self__, "policy_id", policy_id)
         if protection_type is not None:
@@ -526,13 +575,26 @@ class _VaultState:
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies whether auto renew is enabled.
-        Valid values are **true** and **false**. Defaults to **false**. Changing this will create a new vault.
+        Valid values are **true** and **false**. Defaults to **false**.
         """
         return pulumi.get(self, "auto_renew")
 
     @auto_renew.setter
     def auto_renew(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "auto_renew", value)
+
+    @property
+    @pulumi.getter(name="backupNamePrefix")
+    def backup_name_prefix(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the backup name prefix.
+        Changing this will create a new vault.
+        """
+        return pulumi.get(self, "backup_name_prefix")
+
+    @backup_name_prefix.setter
+    def backup_name_prefix(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "backup_name_prefix", value)
 
     @property
     @pulumi.getter(name="bindRules")
@@ -565,7 +627,7 @@ class _VaultState:
     @pulumi.getter(name="consistentLevel")
     def consistent_level(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the backup specifications.
+        Specifies the consistent level (specification) of the vault.
         The valid values are as follows:
         + **[crash_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
         + **[app_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
@@ -580,8 +642,8 @@ class _VaultState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies a unique ID in UUID format of enterprise project.
-        Changing this will create a new vault.
+        Specifies the ID of the enterprise project to which the vault
+        belongs. Changing this will create a new vault.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -633,11 +695,23 @@ class _VaultState:
         pulumi.set(self, "period_unit", value)
 
     @property
+    @pulumi.getter
+    def policies(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['VaultPolicyArgs']]]]:
+        """
+        Specifies the policy details to associate with the CBR vault.
+        The object structure is documented below.
+        """
+        return pulumi.get(self, "policies")
+
+    @policies.setter
+    def policies(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['VaultPolicyArgs']]]]):
+        pulumi.set(self, "policies", value)
+
+    @property
     @pulumi.getter(name="policyId")
     def policy_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies a policy to associate with the CBR vault.
-        `policy_id` cannot be used with the vault of replicate protection type.
+        schema:Deprecated; Using parameter 'policy' instead.
         """
         return pulumi.get(self, "policy_id")
 
@@ -783,6 +857,7 @@ class Vault(pulumi.CustomResource):
                  auto_expand: Optional[pulumi.Input[bool]] = None,
                  auto_pay: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
+                 backup_name_prefix: Optional[pulumi.Input[str]] = None,
                  bind_rules: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  consistent_level: Optional[pulumi.Input[str]] = None,
@@ -790,6 +865,7 @@ class Vault(pulumi.CustomResource):
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
+                 policies: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['VaultPolicyArgs']]]]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  protection_type: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -802,6 +878,29 @@ class Vault(pulumi.CustomResource):
         Manages a CBR Vault resource within Huaweicloud.
 
         ## Example Usage
+        ### Create a server type vault
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        vault_name = config.require_object("vaultName")
+        ecs_instance_id = config.require_object("ecsInstanceId")
+        attached_volume_ids = config.require_object("attachedVolumeIds")
+        test = huaweicloud.cbr.Vault("test",
+            type="server",
+            protection_type="backup",
+            consistent_level="crash_consistent",
+            size=100,
+            resources=[huaweicloud.cbr.VaultResourceArgs(
+                server_id=ecs_instance_id,
+                excludes=attached_volume_ids,
+            )],
+            tags={
+                "foo": "bar",
+            })
+        ```
         ### Create a disk type vault
 
         ```python
@@ -810,14 +909,14 @@ class Vault(pulumi.CustomResource):
 
         config = pulumi.Config()
         vault_name = config.require_object("vaultName")
-        evs_volume_id = config.require_object("evsVolumeId")
+        evs_volume_ids = config.require_object("evsVolumeIds")
         test = huaweicloud.cbr.Vault("test",
             type="disk",
             protection_type="backup",
             size=50,
             auto_expand=True,
             resources=[huaweicloud.cbr.VaultResourceArgs(
-                includes=[evs_volume_id],
+                includes=evs_volume_ids,
             )],
             tags={
                 "foo": "bar",
@@ -831,13 +930,13 @@ class Vault(pulumi.CustomResource):
 
         config = pulumi.Config()
         vault_name = config.require_object("vaultName")
-        sfs_turbo_id = config.require_object("sfsTurboId")
+        sfs_turbo_ids = config.require_object("sfsTurboIds")
         test = huaweicloud.cbr.Vault("test",
             type="turbo",
             protection_type="backup",
             size=1000,
             resources=[huaweicloud.cbr.VaultResourceArgs(
-                includes=[sfs_turbo_id],
+                includes=sfs_turbo_ids,
             )],
             tags={
                 "foo": "bar",
@@ -885,18 +984,20 @@ class Vault(pulumi.CustomResource):
         :param pulumi.Input[bool] auto_expand: Specifies to enable auto capacity expansion for the backup protection type vault.
                Defaults to **false**.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are **true** and **false**. Defaults to **false**. Changing this will create a new vault.
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] backup_name_prefix: Specifies the backup name prefix.
+               Changing this will create a new vault.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] bind_rules: Specifies the tags to filter resources for automatic association with **auto_bind**.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the vault.
                The valid values are as follows:
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
-        :param pulumi.Input[str] consistent_level: Specifies the backup specifications.
+        :param pulumi.Input[str] consistent_level: Specifies the consistent level (specification) of the vault.
                The valid values are as follows:
                + **[crash_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
                + **[app_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
-        :param pulumi.Input[str] enterprise_project_id: Specifies a unique ID in UUID format of enterprise project.
-               Changing this will create a new vault.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project to which the vault
+               belongs. Changing this will create a new vault.
         :param pulumi.Input[str] name: Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
                characters, which may consist of letters, digits, underscores(_) and hyphens (-).
         :param pulumi.Input[int] period: Specifies the charging period of the vault.
@@ -907,8 +1008,9 @@ class Vault(pulumi.CustomResource):
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the vault.
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
                Changing this will create a new vault.
-        :param pulumi.Input[str] policy_id: Specifies a policy to associate with the CBR vault.
-               `policy_id` cannot be used with the vault of replicate protection type.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['VaultPolicyArgs']]]] policies: Specifies the policy details to associate with the CBR vault.
+               The object structure is documented below.
+        :param pulumi.Input[str] policy_id: schema:Deprecated; Using parameter 'policy' instead.
         :param pulumi.Input[str] protection_type: Specifies the protection type of the CBR vault.
                The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
                Changing this will create a new vault.
@@ -934,6 +1036,29 @@ class Vault(pulumi.CustomResource):
         Manages a CBR Vault resource within Huaweicloud.
 
         ## Example Usage
+        ### Create a server type vault
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        vault_name = config.require_object("vaultName")
+        ecs_instance_id = config.require_object("ecsInstanceId")
+        attached_volume_ids = config.require_object("attachedVolumeIds")
+        test = huaweicloud.cbr.Vault("test",
+            type="server",
+            protection_type="backup",
+            consistent_level="crash_consistent",
+            size=100,
+            resources=[huaweicloud.cbr.VaultResourceArgs(
+                server_id=ecs_instance_id,
+                excludes=attached_volume_ids,
+            )],
+            tags={
+                "foo": "bar",
+            })
+        ```
         ### Create a disk type vault
 
         ```python
@@ -942,14 +1067,14 @@ class Vault(pulumi.CustomResource):
 
         config = pulumi.Config()
         vault_name = config.require_object("vaultName")
-        evs_volume_id = config.require_object("evsVolumeId")
+        evs_volume_ids = config.require_object("evsVolumeIds")
         test = huaweicloud.cbr.Vault("test",
             type="disk",
             protection_type="backup",
             size=50,
             auto_expand=True,
             resources=[huaweicloud.cbr.VaultResourceArgs(
-                includes=[evs_volume_id],
+                includes=evs_volume_ids,
             )],
             tags={
                 "foo": "bar",
@@ -963,13 +1088,13 @@ class Vault(pulumi.CustomResource):
 
         config = pulumi.Config()
         vault_name = config.require_object("vaultName")
-        sfs_turbo_id = config.require_object("sfsTurboId")
+        sfs_turbo_ids = config.require_object("sfsTurboIds")
         test = huaweicloud.cbr.Vault("test",
             type="turbo",
             protection_type="backup",
             size=1000,
             resources=[huaweicloud.cbr.VaultResourceArgs(
-                includes=[sfs_turbo_id],
+                includes=sfs_turbo_ids,
             )],
             tags={
                 "foo": "bar",
@@ -1030,6 +1155,7 @@ class Vault(pulumi.CustomResource):
                  auto_expand: Optional[pulumi.Input[bool]] = None,
                  auto_pay: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
+                 backup_name_prefix: Optional[pulumi.Input[str]] = None,
                  bind_rules: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  consistent_level: Optional[pulumi.Input[str]] = None,
@@ -1037,6 +1163,7 @@ class Vault(pulumi.CustomResource):
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
+                 policies: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['VaultPolicyArgs']]]]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  protection_type: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -1055,8 +1182,12 @@ class Vault(pulumi.CustomResource):
 
             __props__.__dict__["auto_bind"] = auto_bind
             __props__.__dict__["auto_expand"] = auto_expand
+            if auto_pay is not None and not opts.urn:
+                warnings.warn("""Deprecated""", DeprecationWarning)
+                pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
             __props__.__dict__["auto_pay"] = auto_pay
             __props__.__dict__["auto_renew"] = auto_renew
+            __props__.__dict__["backup_name_prefix"] = backup_name_prefix
             __props__.__dict__["bind_rules"] = bind_rules
             __props__.__dict__["charging_mode"] = charging_mode
             __props__.__dict__["consistent_level"] = consistent_level
@@ -1064,6 +1195,7 @@ class Vault(pulumi.CustomResource):
             __props__.__dict__["name"] = name
             __props__.__dict__["period"] = period
             __props__.__dict__["period_unit"] = period_unit
+            __props__.__dict__["policies"] = policies
             __props__.__dict__["policy_id"] = policy_id
             if protection_type is None and not opts.urn:
                 raise TypeError("Missing required property 'protection_type'")
@@ -1097,6 +1229,7 @@ class Vault(pulumi.CustomResource):
             auto_expand: Optional[pulumi.Input[bool]] = None,
             auto_pay: Optional[pulumi.Input[str]] = None,
             auto_renew: Optional[pulumi.Input[str]] = None,
+            backup_name_prefix: Optional[pulumi.Input[str]] = None,
             bind_rules: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             charging_mode: Optional[pulumi.Input[str]] = None,
             consistent_level: Optional[pulumi.Input[str]] = None,
@@ -1104,6 +1237,7 @@ class Vault(pulumi.CustomResource):
             name: Optional[pulumi.Input[str]] = None,
             period: Optional[pulumi.Input[int]] = None,
             period_unit: Optional[pulumi.Input[str]] = None,
+            policies: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['VaultPolicyArgs']]]]] = None,
             policy_id: Optional[pulumi.Input[str]] = None,
             protection_type: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
@@ -1127,18 +1261,20 @@ class Vault(pulumi.CustomResource):
         :param pulumi.Input[bool] auto_expand: Specifies to enable auto capacity expansion for the backup protection type vault.
                Defaults to **false**.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are **true** and **false**. Defaults to **false**. Changing this will create a new vault.
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] backup_name_prefix: Specifies the backup name prefix.
+               Changing this will create a new vault.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] bind_rules: Specifies the tags to filter resources for automatic association with **auto_bind**.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the vault.
                The valid values are as follows:
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
-        :param pulumi.Input[str] consistent_level: Specifies the backup specifications.
+        :param pulumi.Input[str] consistent_level: Specifies the consistent level (specification) of the vault.
                The valid values are as follows:
                + **[crash_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
                + **[app_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
-        :param pulumi.Input[str] enterprise_project_id: Specifies a unique ID in UUID format of enterprise project.
-               Changing this will create a new vault.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project to which the vault
+               belongs. Changing this will create a new vault.
         :param pulumi.Input[str] name: Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
                characters, which may consist of letters, digits, underscores(_) and hyphens (-).
         :param pulumi.Input[int] period: Specifies the charging period of the vault.
@@ -1149,8 +1285,9 @@ class Vault(pulumi.CustomResource):
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the vault.
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
                Changing this will create a new vault.
-        :param pulumi.Input[str] policy_id: Specifies a policy to associate with the CBR vault.
-               `policy_id` cannot be used with the vault of replicate protection type.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['VaultPolicyArgs']]]] policies: Specifies the policy details to associate with the CBR vault.
+               The object structure is documented below.
+        :param pulumi.Input[str] policy_id: schema:Deprecated; Using parameter 'policy' instead.
         :param pulumi.Input[str] protection_type: Specifies the protection type of the CBR vault.
                The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
                Changing this will create a new vault.
@@ -1179,6 +1316,7 @@ class Vault(pulumi.CustomResource):
         __props__.__dict__["auto_expand"] = auto_expand
         __props__.__dict__["auto_pay"] = auto_pay
         __props__.__dict__["auto_renew"] = auto_renew
+        __props__.__dict__["backup_name_prefix"] = backup_name_prefix
         __props__.__dict__["bind_rules"] = bind_rules
         __props__.__dict__["charging_mode"] = charging_mode
         __props__.__dict__["consistent_level"] = consistent_level
@@ -1186,6 +1324,7 @@ class Vault(pulumi.CustomResource):
         __props__.__dict__["name"] = name
         __props__.__dict__["period"] = period
         __props__.__dict__["period_unit"] = period_unit
+        __props__.__dict__["policies"] = policies
         __props__.__dict__["policy_id"] = policy_id
         __props__.__dict__["protection_type"] = protection_type
         __props__.__dict__["region"] = region
@@ -1234,9 +1373,18 @@ class Vault(pulumi.CustomResource):
     def auto_renew(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies whether auto renew is enabled.
-        Valid values are **true** and **false**. Defaults to **false**. Changing this will create a new vault.
+        Valid values are **true** and **false**. Defaults to **false**.
         """
         return pulumi.get(self, "auto_renew")
+
+    @property
+    @pulumi.getter(name="backupNamePrefix")
+    def backup_name_prefix(self) -> pulumi.Output[str]:
+        """
+        Specifies the backup name prefix.
+        Changing this will create a new vault.
+        """
+        return pulumi.get(self, "backup_name_prefix")
 
     @property
     @pulumi.getter(name="bindRules")
@@ -1261,7 +1409,7 @@ class Vault(pulumi.CustomResource):
     @pulumi.getter(name="consistentLevel")
     def consistent_level(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the backup specifications.
+        Specifies the consistent level (specification) of the vault.
         The valid values are as follows:
         + **[crash_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
         + **[app_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
@@ -1272,8 +1420,8 @@ class Vault(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        Specifies a unique ID in UUID format of enterprise project.
-        Changing this will create a new vault.
+        Specifies the ID of the enterprise project to which the vault
+        belongs. Changing this will create a new vault.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -1309,11 +1457,19 @@ class Vault(pulumi.CustomResource):
         return pulumi.get(self, "period_unit")
 
     @property
+    @pulumi.getter
+    def policies(self) -> pulumi.Output[Sequence['outputs.VaultPolicy']]:
+        """
+        Specifies the policy details to associate with the CBR vault.
+        The object structure is documented below.
+        """
+        return pulumi.get(self, "policies")
+
+    @property
     @pulumi.getter(name="policyId")
     def policy_id(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies a policy to associate with the CBR vault.
-        `policy_id` cannot be used with the vault of replicate protection type.
+        schema:Deprecated; Using parameter 'policy' instead.
         """
         return pulumi.get(self, "policy_id")
 

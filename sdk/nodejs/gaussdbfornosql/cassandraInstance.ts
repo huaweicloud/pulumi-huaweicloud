@@ -55,7 +55,7 @@ import * as utilities from "../utilities";
  * GaussDB Cassandra instance can be imported using the `id`, e.g.
  *
  * ```sh
- *  $ pulumi import huaweicloud:GaussDBforNoSQL/cassandraInstance:CassandraInstance instance_1 2e045d8b-b226-4aa2-91b9-7e76357655c06
+ *  $ pulumi import huaweicloud:GaussDBforNoSQL/cassandraInstance:CassandraInstance instance_1 749112383d5342e9acb6c7825801b452in06
  * ```
  */
 export class CassandraInstance extends pulumi.CustomResource {
@@ -88,12 +88,13 @@ export class CassandraInstance extends pulumi.CustomResource {
 
     /**
      * Specifies whether auto renew is enabled.
-     * Valid values are "true" and "false". Changing this will do nothing.
+     * Valid values are "true" and "false".
      */
     public readonly autoRenew!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the AZ name. Changing this parameter will create a new
-     * resource.
+     * Specifies the AZ name. For a three-AZ deployment instance,
+     * use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+     * Changing this parameter will create a new resource.
      */
     public readonly availabilityZone!: pulumi.Output<string>;
     /**
@@ -143,6 +144,14 @@ export class CassandraInstance extends pulumi.CustomResource {
      * existed.
      */
     public readonly forceImport!: pulumi.Output<boolean | undefined>;
+    /**
+     * Indicates the LB IP address of the db.
+     */
+    public /*out*/ readonly lbIpAddress!: pulumi.Output<string>;
+    /**
+     * Indicates the LB port of the db.
+     */
+    public /*out*/ readonly lbPort!: pulumi.Output<string>;
     /**
      * Indicates the instance type.
      */
@@ -253,6 +262,8 @@ export class CassandraInstance extends pulumi.CustomResource {
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["flavor"] = state ? state.flavor : undefined;
             resourceInputs["forceImport"] = state ? state.forceImport : undefined;
+            resourceInputs["lbIpAddress"] = state ? state.lbIpAddress : undefined;
+            resourceInputs["lbPort"] = state ? state.lbPort : undefined;
             resourceInputs["mode"] = state ? state.mode : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["nodeNum"] = state ? state.nodeNum : undefined;
@@ -314,6 +325,8 @@ export class CassandraInstance extends pulumi.CustomResource {
             resourceInputs["volumeSize"] = args ? args.volumeSize : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
             resourceInputs["dbUserName"] = undefined /*out*/;
+            resourceInputs["lbIpAddress"] = undefined /*out*/;
+            resourceInputs["lbPort"] = undefined /*out*/;
             resourceInputs["mode"] = undefined /*out*/;
             resourceInputs["nodes"] = undefined /*out*/;
             resourceInputs["port"] = undefined /*out*/;
@@ -331,12 +344,13 @@ export class CassandraInstance extends pulumi.CustomResource {
 export interface CassandraInstanceState {
     /**
      * Specifies whether auto renew is enabled.
-     * Valid values are "true" and "false". Changing this will do nothing.
+     * Valid values are "true" and "false".
      */
     autoRenew?: pulumi.Input<string>;
     /**
-     * Specifies the AZ name. Changing this parameter will create a new
-     * resource.
+     * Specifies the AZ name. For a three-AZ deployment instance,
+     * use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+     * Changing this parameter will create a new resource.
      */
     availabilityZone?: pulumi.Input<string>;
     /**
@@ -386,6 +400,14 @@ export interface CassandraInstanceState {
      * existed.
      */
     forceImport?: pulumi.Input<boolean>;
+    /**
+     * Indicates the LB IP address of the db.
+     */
+    lbIpAddress?: pulumi.Input<string>;
+    /**
+     * Indicates the LB port of the db.
+     */
+    lbPort?: pulumi.Input<string>;
     /**
      * Indicates the instance type.
      */
@@ -478,12 +500,13 @@ export interface CassandraInstanceState {
 export interface CassandraInstanceArgs {
     /**
      * Specifies whether auto renew is enabled.
-     * Valid values are "true" and "false". Changing this will do nothing.
+     * Valid values are "true" and "false".
      */
     autoRenew?: pulumi.Input<string>;
     /**
-     * Specifies the AZ name. Changing this parameter will create a new
-     * resource.
+     * Specifies the AZ name. For a three-AZ deployment instance,
+     * use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+     * Changing this parameter will create a new resource.
      */
     availabilityZone: pulumi.Input<string>;
     /**

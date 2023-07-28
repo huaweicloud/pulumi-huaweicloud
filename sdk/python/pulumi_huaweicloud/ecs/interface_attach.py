@@ -19,6 +19,7 @@ class InterfaceAttachArgs:
                  network_id: Optional[pulumi.Input[str]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  source_dest_check: Optional[pulumi.Input[bool]] = None):
         """
         The set of arguments for constructing a InterfaceAttach resource.
@@ -31,6 +32,8 @@ class InterfaceAttachArgs:
                This option and `network_id` are mutually exclusive.
         :param pulumi.Input[str] region: The region in which to create the network interface attache resource. If
                omitted, the provider-level region will be used. Changing this creates a new network interface attache resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: Specifies the list of security group IDs bound to the specified port.  
+               Defaults to the default security group.
         :param pulumi.Input[bool] source_dest_check: Specifies whether the ECS processes only traffic that is destined specifically
                for it. This function is enabled by default but should be disabled if the ECS functions as a SNAT server or has a
                virtual IP address bound to it.
@@ -44,6 +47,8 @@ class InterfaceAttachArgs:
             pulumi.set(__self__, "port_id", port_id)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if security_group_ids is not None:
+            pulumi.set(__self__, "security_group_ids", security_group_ids)
         if source_dest_check is not None:
             pulumi.set(__self__, "source_dest_check", source_dest_check)
 
@@ -112,6 +117,19 @@ class InterfaceAttachArgs:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="securityGroupIds")
+    def security_group_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the list of security group IDs bound to the specified port.  
+        Defaults to the default security group.
+        """
+        return pulumi.get(self, "security_group_ids")
+
+    @security_group_ids.setter
+    def security_group_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "security_group_ids", value)
+
+    @property
     @pulumi.getter(name="sourceDestCheck")
     def source_dest_check(self) -> Optional[pulumi.Input[bool]]:
         """
@@ -135,6 +153,7 @@ class _InterfaceAttachState:
                  network_id: Optional[pulumi.Input[str]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  source_dest_check: Optional[pulumi.Input[bool]] = None):
         """
         Input properties used for looking up and filtering InterfaceAttach resources.
@@ -148,6 +167,8 @@ class _InterfaceAttachState:
                This option and `network_id` are mutually exclusive.
         :param pulumi.Input[str] region: The region in which to create the network interface attache resource. If
                omitted, the provider-level region will be used. Changing this creates a new network interface attache resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: Specifies the list of security group IDs bound to the specified port.  
+               Defaults to the default security group.
         :param pulumi.Input[bool] source_dest_check: Specifies whether the ECS processes only traffic that is destined specifically
                for it. This function is enabled by default but should be disabled if the ECS functions as a SNAT server or has a
                virtual IP address bound to it.
@@ -164,6 +185,8 @@ class _InterfaceAttachState:
             pulumi.set(__self__, "port_id", port_id)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if security_group_ids is not None:
+            pulumi.set(__self__, "security_group_ids", security_group_ids)
         if source_dest_check is not None:
             pulumi.set(__self__, "source_dest_check", source_dest_check)
 
@@ -244,6 +267,19 @@ class _InterfaceAttachState:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="securityGroupIds")
+    def security_group_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the list of security group IDs bound to the specified port.  
+        Defaults to the default security group.
+        """
+        return pulumi.get(self, "security_group_ids")
+
+    @security_group_ids.setter
+    def security_group_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "security_group_ids", value)
+
+    @property
     @pulumi.getter(name="sourceDestCheck")
     def source_dest_check(self) -> Optional[pulumi.Input[bool]]:
         """
@@ -268,58 +304,27 @@ class InterfaceAttach(pulumi.CustomResource):
                  network_id: Optional[pulumi.Input[str]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  source_dest_check: Optional[pulumi.Input[bool]] = None,
                  __props__=None):
         """
         Attaches a Network Interface to an Instance.
 
         ## Example Usage
-        ### Basic Attachment
+        ### Attach a port (under the specified network) to the ECS instance and generate a random IP address
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
         config = pulumi.Config()
-        security_group_id = config.require_object("securityGroupId")
-        mynet = huaweicloud.Vpc.get_subnet(name="subnet-default")
-        myinstance = huaweicloud.ecs.Instance("myinstance",
-            image_id="ad091b52-742f-469e-8f3c-fd81cadf0743",
-            flavor_id="s6.small.1",
-            key_pair="my_key_pair_name",
-            security_group_ids=[security_group_id],
-            availability_zone="cn-north-4a",
-            networks=[huaweicloud.ecs.InstanceNetworkArgs(
-                uuid="55534eaa-533a-419d-9b40-ec427ea7195a",
-            )])
-        attached = huaweicloud.ecs.InterfaceAttach("attached",
-            instance_id=myinstance.id,
-            network_id=mynet.id)
+        instance_id = config.require_object("instanceId")
+        network_id = config.require_object("networkId")
+        test = huaweicloud.ecs.InterfaceAttach("test",
+            instance_id=instance_id,
+            network_id=network_id)
         ```
-        ### Attachment Specifying a Fixed IP
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        security_group_id = config.require_object("securityGroupId")
-        mynet = huaweicloud.Vpc.get_subnet(name="subnet-default")
-        myinstance = huaweicloud.ecs.Instance("myinstance",
-            image_id="ad091b52-742f-469e-8f3c-fd81cadf0743",
-            flavor_id="s6.small.1",
-            key_pair="my_key_pair_name",
-            security_group_ids=[security_group_id],
-            availability_zone="cn-north-4a",
-            networks=[huaweicloud.ecs.InstanceNetworkArgs(
-                uuid="55534eaa-533a-419d-9b40-ec427ea7195a",
-            )])
-        attached = huaweicloud.ecs.InterfaceAttach("attached",
-            instance_id=myinstance.id,
-            network_id=mynet.id,
-            fixed_ip="10.0.10.10")
-        ```
-        ### Attachment Using an Existing Port
+        ### Attach a custom port to the ECS instance
 
         ```python
         import pulumi
@@ -363,6 +368,8 @@ class InterfaceAttach(pulumi.CustomResource):
                This option and `network_id` are mutually exclusive.
         :param pulumi.Input[str] region: The region in which to create the network interface attache resource. If
                omitted, the provider-level region will be used. Changing this creates a new network interface attache resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: Specifies the list of security group IDs bound to the specified port.  
+               Defaults to the default security group.
         :param pulumi.Input[bool] source_dest_check: Specifies whether the ECS processes only traffic that is destined specifically
                for it. This function is enabled by default but should be disabled if the ECS functions as a SNAT server or has a
                virtual IP address bound to it.
@@ -377,52 +384,20 @@ class InterfaceAttach(pulumi.CustomResource):
         Attaches a Network Interface to an Instance.
 
         ## Example Usage
-        ### Basic Attachment
+        ### Attach a port (under the specified network) to the ECS instance and generate a random IP address
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
         config = pulumi.Config()
-        security_group_id = config.require_object("securityGroupId")
-        mynet = huaweicloud.Vpc.get_subnet(name="subnet-default")
-        myinstance = huaweicloud.ecs.Instance("myinstance",
-            image_id="ad091b52-742f-469e-8f3c-fd81cadf0743",
-            flavor_id="s6.small.1",
-            key_pair="my_key_pair_name",
-            security_group_ids=[security_group_id],
-            availability_zone="cn-north-4a",
-            networks=[huaweicloud.ecs.InstanceNetworkArgs(
-                uuid="55534eaa-533a-419d-9b40-ec427ea7195a",
-            )])
-        attached = huaweicloud.ecs.InterfaceAttach("attached",
-            instance_id=myinstance.id,
-            network_id=mynet.id)
+        instance_id = config.require_object("instanceId")
+        network_id = config.require_object("networkId")
+        test = huaweicloud.ecs.InterfaceAttach("test",
+            instance_id=instance_id,
+            network_id=network_id)
         ```
-        ### Attachment Specifying a Fixed IP
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        security_group_id = config.require_object("securityGroupId")
-        mynet = huaweicloud.Vpc.get_subnet(name="subnet-default")
-        myinstance = huaweicloud.ecs.Instance("myinstance",
-            image_id="ad091b52-742f-469e-8f3c-fd81cadf0743",
-            flavor_id="s6.small.1",
-            key_pair="my_key_pair_name",
-            security_group_ids=[security_group_id],
-            availability_zone="cn-north-4a",
-            networks=[huaweicloud.ecs.InstanceNetworkArgs(
-                uuid="55534eaa-533a-419d-9b40-ec427ea7195a",
-            )])
-        attached = huaweicloud.ecs.InterfaceAttach("attached",
-            instance_id=myinstance.id,
-            network_id=mynet.id,
-            fixed_ip="10.0.10.10")
-        ```
-        ### Attachment Using an Existing Port
+        ### Attach a custom port to the ECS instance
 
         ```python
         import pulumi
@@ -475,6 +450,7 @@ class InterfaceAttach(pulumi.CustomResource):
                  network_id: Optional[pulumi.Input[str]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  source_dest_check: Optional[pulumi.Input[bool]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
@@ -492,6 +468,7 @@ class InterfaceAttach(pulumi.CustomResource):
             __props__.__dict__["network_id"] = network_id
             __props__.__dict__["port_id"] = port_id
             __props__.__dict__["region"] = region
+            __props__.__dict__["security_group_ids"] = security_group_ids
             __props__.__dict__["source_dest_check"] = source_dest_check
             __props__.__dict__["mac"] = None
         super(InterfaceAttach, __self__).__init__(
@@ -510,6 +487,7 @@ class InterfaceAttach(pulumi.CustomResource):
             network_id: Optional[pulumi.Input[str]] = None,
             port_id: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
+            security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             source_dest_check: Optional[pulumi.Input[bool]] = None) -> 'InterfaceAttach':
         """
         Get an existing InterfaceAttach resource's state with the given name, id, and optional extra
@@ -528,6 +506,8 @@ class InterfaceAttach(pulumi.CustomResource):
                This option and `network_id` are mutually exclusive.
         :param pulumi.Input[str] region: The region in which to create the network interface attache resource. If
                omitted, the provider-level region will be used. Changing this creates a new network interface attache resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: Specifies the list of security group IDs bound to the specified port.  
+               Defaults to the default security group.
         :param pulumi.Input[bool] source_dest_check: Specifies whether the ECS processes only traffic that is destined specifically
                for it. This function is enabled by default but should be disabled if the ECS functions as a SNAT server or has a
                virtual IP address bound to it.
@@ -542,6 +522,7 @@ class InterfaceAttach(pulumi.CustomResource):
         __props__.__dict__["network_id"] = network_id
         __props__.__dict__["port_id"] = port_id
         __props__.__dict__["region"] = region
+        __props__.__dict__["security_group_ids"] = security_group_ids
         __props__.__dict__["source_dest_check"] = source_dest_check
         return InterfaceAttach(resource_name, opts=opts, __props__=__props__)
 
@@ -596,6 +577,15 @@ class InterfaceAttach(pulumi.CustomResource):
         omitted, the provider-level region will be used. Changing this creates a new network interface attache resource.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter(name="securityGroupIds")
+    def security_group_ids(self) -> pulumi.Output[Sequence[str]]:
+        """
+        Specifies the list of security group IDs bound to the specified port.  
+        Defaults to the default security group.
+        """
+        return pulumi.get(self, "security_group_ids")
 
     @property
     @pulumi.getter(name="sourceDestCheck")

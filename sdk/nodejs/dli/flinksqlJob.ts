@@ -169,6 +169,9 @@ export class FlinksqlJob extends pulumi.CustomResource {
      * three parts: source, query, and sink. Length range: 1024x1024 characters.
      */
     public readonly sql!: pulumi.Output<string | undefined>;
+    /**
+     * The Job status.
+     */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
      * Specifies the key/value pairs to associate with the resource.
@@ -386,6 +389,9 @@ export interface FlinksqlJobState {
      * three parts: source, query, and sink. Length range: 1024x1024 characters.
      */
     sql?: pulumi.Input<string>;
+    /**
+     * The Job status.
+     */
     status?: pulumi.Input<string>;
     /**
      * Specifies the key/value pairs to associate with the resource.

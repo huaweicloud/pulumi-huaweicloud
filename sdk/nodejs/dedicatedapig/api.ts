@@ -51,7 +51,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * APIs can be imported using their `name` and ID of the APIG dedicated instance to which the API belongs, separated by a slash, e.g.
+ * APIs can be imported using their `name` and the related dedicated instance IDs, separated by a slash, e.g.
  *
  * ```sh
  *  $ pulumi import huaweicloud:DedicatedApig/api:Api test <instance_id>/<name>
@@ -96,31 +96,33 @@ export class Api extends pulumi.CustomResource {
     public readonly backendParams!: pulumi.Output<outputs.DedicatedApig.ApiBackendParam[] | undefined>;
     /**
      * Specifies the description of the API request body, which can be an example
-     * request body, media type or parameters. The request body does not exceed 20,480 characters. Chinese characters must be
-     * in UTF-8 or Unicode format.
+     * request body, media type or parameters.
+     * The request body does not exceed `20,480` characters.
      */
     public readonly bodyDescription!: pulumi.Output<string | undefined>;
     /**
-     * Specifies whether CORS is supported, default to false.
+     * Specifies whether CORS is supported, defaults to **false**.
      */
     public readonly cors!: pulumi.Output<boolean | undefined>;
     /**
-     * Specifies the description of the constant or system parameter, which contain a
-     * maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+     * Specifies the description of the constant or system parameter.  
+     * The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the example response for a successful request. Ensure that the
-     * response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
+     * Specifies the example response for a failure request.  
+     * The response contains a maximum of `20,480` characters.
      */
     public readonly failureResponse!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the function graph backend details. The object
-     * structure is documented below. Changing this will create a new API resource.
+     * Specifies the function graph backend details.  
+     * The object structure is documented below.
+     * Changing this will create a new API resource.
      */
     public readonly funcGraph!: pulumi.Output<outputs.DedicatedApig.ApiFuncGraph>;
     /**
-     * Specifies the Mock policy backends. The maximum of the policy is 5.
+     * Specifies the Mock policy backends.  
+     * The maximum blocks of the policy is 5.
      * The object structure is documented below.
      */
     public readonly funcGraphPolicies!: pulumi.Output<outputs.DedicatedApig.ApiFuncGraphPolicy[] | undefined>;
@@ -134,56 +136,57 @@ export class Api extends pulumi.CustomResource {
      */
     public readonly instanceId!: pulumi.Output<string>;
     /**
-     * Specifies the route matching mode. The valid value are **Exact** and **Prefix**,
-     * default to **Exact**.
+     * Specifies the route matching mode.  
+     * The valid values are **Exact** and **Prefix**, defaults to **Exact**.
      */
     public readonly matching!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the mock backend details. The object structure is documented
-     * below. Changing this will create a new API resource.
+     * Specifies the mock backend details.  
+     * The object structure is documented below.
+     * Changing this will create a new API resource.
      */
     public readonly mock!: pulumi.Output<outputs.DedicatedApig.ApiMock>;
     /**
-     * Specifies the Mock policy backends. The maximum of the policy is 5.
+     * Specifies the Mock policy backends.  
+     * The maximum blocks of the policy is 5.
      * The object structure is documented below.
      */
     public readonly mockPolicies!: pulumi.Output<outputs.DedicatedApig.ApiMockPolicy[] | undefined>;
     /**
-     * Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-     * a letter. Only letters, digits, and underscores (_) are allowed.
+     * Specifies the backend policy name.  
+     * The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Specifies the region in which to create the API resource. If omitted, the
-     * provider-level region will be used. Changing this will create a new API resource.
+     * Specifies the region where the API is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new API resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Time when the API is registered, in UTC format.
+     * The registered time of the API.
      */
-    public /*out*/ readonly registerTime!: pulumi.Output<string>;
+    public /*out*/ readonly registeredAt!: pulumi.Output<string>;
     /**
-     * Specifies the backend request method of the API. The valid types are **GET**,
-     * **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+     * Specifies the backend request method of the API.  
+     * The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
      */
     public readonly requestMethod!: pulumi.Output<string>;
     /**
-     * Specifies an array of one or more request parameters of the front-end. The maximum
-     * of request parameters is 50. The object structure is documented below.
+     * Specifies the configurations of the front-end parameters.  
+     * The object structure is documented below.
      */
     public readonly requestParams!: pulumi.Output<outputs.DedicatedApig.ApiRequestParam[] | undefined>;
     /**
-     * Specifies the request address, which can contain a maximum of 512 characters
-     * request parameters enclosed with brackets ({}).
-     * + The address can contain special characters, such as asterisks (), percent signs (%), hyphens (-), and
+     * Specifies the request address, which can contain a maximum of `512` characters,
+     * the request parameters enclosed with brackets ({}).
+     * + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-), and
      * underscores (_) and must comply with URI specifications.
-     * + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
-     * Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
+     * + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
      */
     public readonly requestPath!: pulumi.Output<string>;
     /**
      * Specifies the backend request protocol. The valid values are **HTTP** and
-     * **HTTPS**, default to **HTTPS**.
+     * **HTTPS**, defaults to **HTTPS**.
      */
     public readonly requestProtocol!: pulumi.Output<string>;
     /**
@@ -191,36 +194,37 @@ export class Api extends pulumi.CustomResource {
      */
     public readonly responseId!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the security authentication mode. The valid values are
-     * **NONE**, **APP** and **IAM**, default to **NONE**.
+     * Specifies the security authentication mode of the API request.  
+     * The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
      */
     public readonly securityAuthentication!: pulumi.Output<string | undefined>;
     /**
-     * Specifies whether AppCode authentication is enabled. The applicaiton code
-     * must located in the header when `simpleAuthentication` is true.
+     * Specifies whether the authentication of the application code is enabled.  
+     * The application code must located in the header when `simpleAuthentication` is true.
      */
     public readonly simpleAuthentication!: pulumi.Output<boolean>;
     /**
-     * Specifies the example response for a successful request. Ensure that the
-     * response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
+     * Specifies the example response for a successful request.  
+     * The response contains a maximum of `20,480` characters.
      */
     public readonly successResponse!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the condition type of the backend policy. The valid values are **Equal**,
-     * **Enumerated** and **Matching**, default to **Equal**.
+     * Specifies the condition type of the backend policy.  
+     * The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
      */
     public readonly type!: pulumi.Output<string>;
     /**
-     * Time when the API was last modified, in UTC format.
+     * The latest update time of the API.
      */
-    public /*out*/ readonly updateTime!: pulumi.Output<string>;
+    public /*out*/ readonly updatedAt!: pulumi.Output<string>;
     /**
-     * Specifies the web backend details. The object structure is documented
-     * below. Changing this will create a new API resource.
+     * Specifies the web backend details.  
+     * The object structure is documented below. Changing this will create a new API resource.
      */
     public readonly web!: pulumi.Output<outputs.DedicatedApig.ApiWeb>;
     /**
-     * Specifies the example response for a failed request. The maximum of the policy is 5.
+     * Specifies the example response for a failed request.  
+     * The maximum blocks of the policy is 5.
      * The object structure is documented below.
      */
     public readonly webPolicies!: pulumi.Output<outputs.DedicatedApig.ApiWebPolicy[] | undefined>;
@@ -253,7 +257,7 @@ export class Api extends pulumi.CustomResource {
             resourceInputs["mockPolicies"] = state ? state.mockPolicies : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
-            resourceInputs["registerTime"] = state ? state.registerTime : undefined;
+            resourceInputs["registeredAt"] = state ? state.registeredAt : undefined;
             resourceInputs["requestMethod"] = state ? state.requestMethod : undefined;
             resourceInputs["requestParams"] = state ? state.requestParams : undefined;
             resourceInputs["requestPath"] = state ? state.requestPath : undefined;
@@ -263,7 +267,7 @@ export class Api extends pulumi.CustomResource {
             resourceInputs["simpleAuthentication"] = state ? state.simpleAuthentication : undefined;
             resourceInputs["successResponse"] = state ? state.successResponse : undefined;
             resourceInputs["type"] = state ? state.type : undefined;
-            resourceInputs["updateTime"] = state ? state.updateTime : undefined;
+            resourceInputs["updatedAt"] = state ? state.updatedAt : undefined;
             resourceInputs["web"] = state ? state.web : undefined;
             resourceInputs["webPolicies"] = state ? state.webPolicies : undefined;
         } else {
@@ -312,8 +316,8 @@ export class Api extends pulumi.CustomResource {
             resourceInputs["type"] = args ? args.type : undefined;
             resourceInputs["web"] = args ? args.web : undefined;
             resourceInputs["webPolicies"] = args ? args.webPolicies : undefined;
-            resourceInputs["registerTime"] = undefined /*out*/;
-            resourceInputs["updateTime"] = undefined /*out*/;
+            resourceInputs["registeredAt"] = undefined /*out*/;
+            resourceInputs["updatedAt"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Api.__pulumiType, name, resourceInputs, opts);
@@ -335,31 +339,33 @@ export interface ApiState {
     backendParams?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ApiBackendParam>[]>;
     /**
      * Specifies the description of the API request body, which can be an example
-     * request body, media type or parameters. The request body does not exceed 20,480 characters. Chinese characters must be
-     * in UTF-8 or Unicode format.
+     * request body, media type or parameters.
+     * The request body does not exceed `20,480` characters.
      */
     bodyDescription?: pulumi.Input<string>;
     /**
-     * Specifies whether CORS is supported, default to false.
+     * Specifies whether CORS is supported, defaults to **false**.
      */
     cors?: pulumi.Input<boolean>;
     /**
-     * Specifies the description of the constant or system parameter, which contain a
-     * maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+     * Specifies the description of the constant or system parameter.  
+     * The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the example response for a successful request. Ensure that the
-     * response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
+     * Specifies the example response for a failure request.  
+     * The response contains a maximum of `20,480` characters.
      */
     failureResponse?: pulumi.Input<string>;
     /**
-     * Specifies the function graph backend details. The object
-     * structure is documented below. Changing this will create a new API resource.
+     * Specifies the function graph backend details.  
+     * The object structure is documented below.
+     * Changing this will create a new API resource.
      */
     funcGraph?: pulumi.Input<inputs.DedicatedApig.ApiFuncGraph>;
     /**
-     * Specifies the Mock policy backends. The maximum of the policy is 5.
+     * Specifies the Mock policy backends.  
+     * The maximum blocks of the policy is 5.
      * The object structure is documented below.
      */
     funcGraphPolicies?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ApiFuncGraphPolicy>[]>;
@@ -373,56 +379,57 @@ export interface ApiState {
      */
     instanceId?: pulumi.Input<string>;
     /**
-     * Specifies the route matching mode. The valid value are **Exact** and **Prefix**,
-     * default to **Exact**.
+     * Specifies the route matching mode.  
+     * The valid values are **Exact** and **Prefix**, defaults to **Exact**.
      */
     matching?: pulumi.Input<string>;
     /**
-     * Specifies the mock backend details. The object structure is documented
-     * below. Changing this will create a new API resource.
+     * Specifies the mock backend details.  
+     * The object structure is documented below.
+     * Changing this will create a new API resource.
      */
     mock?: pulumi.Input<inputs.DedicatedApig.ApiMock>;
     /**
-     * Specifies the Mock policy backends. The maximum of the policy is 5.
+     * Specifies the Mock policy backends.  
+     * The maximum blocks of the policy is 5.
      * The object structure is documented below.
      */
     mockPolicies?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ApiMockPolicy>[]>;
     /**
-     * Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-     * a letter. Only letters, digits, and underscores (_) are allowed.
+     * Specifies the backend policy name.  
+     * The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to create the API resource. If omitted, the
-     * provider-level region will be used. Changing this will create a new API resource.
+     * Specifies the region where the API is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new API resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Time when the API is registered, in UTC format.
+     * The registered time of the API.
      */
-    registerTime?: pulumi.Input<string>;
+    registeredAt?: pulumi.Input<string>;
     /**
-     * Specifies the backend request method of the API. The valid types are **GET**,
-     * **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+     * Specifies the backend request method of the API.  
+     * The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
      */
     requestMethod?: pulumi.Input<string>;
     /**
-     * Specifies an array of one or more request parameters of the front-end. The maximum
-     * of request parameters is 50. The object structure is documented below.
+     * Specifies the configurations of the front-end parameters.  
+     * The object structure is documented below.
      */
     requestParams?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ApiRequestParam>[]>;
     /**
-     * Specifies the request address, which can contain a maximum of 512 characters
-     * request parameters enclosed with brackets ({}).
-     * + The address can contain special characters, such as asterisks (), percent signs (%), hyphens (-), and
+     * Specifies the request address, which can contain a maximum of `512` characters,
+     * the request parameters enclosed with brackets ({}).
+     * + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-), and
      * underscores (_) and must comply with URI specifications.
-     * + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
-     * Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
+     * + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
      */
     requestPath?: pulumi.Input<string>;
     /**
      * Specifies the backend request protocol. The valid values are **HTTP** and
-     * **HTTPS**, default to **HTTPS**.
+     * **HTTPS**, defaults to **HTTPS**.
      */
     requestProtocol?: pulumi.Input<string>;
     /**
@@ -430,36 +437,37 @@ export interface ApiState {
      */
     responseId?: pulumi.Input<string>;
     /**
-     * Specifies the security authentication mode. The valid values are
-     * **NONE**, **APP** and **IAM**, default to **NONE**.
+     * Specifies the security authentication mode of the API request.  
+     * The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
      */
     securityAuthentication?: pulumi.Input<string>;
     /**
-     * Specifies whether AppCode authentication is enabled. The applicaiton code
-     * must located in the header when `simpleAuthentication` is true.
+     * Specifies whether the authentication of the application code is enabled.  
+     * The application code must located in the header when `simpleAuthentication` is true.
      */
     simpleAuthentication?: pulumi.Input<boolean>;
     /**
-     * Specifies the example response for a successful request. Ensure that the
-     * response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
+     * Specifies the example response for a successful request.  
+     * The response contains a maximum of `20,480` characters.
      */
     successResponse?: pulumi.Input<string>;
     /**
-     * Specifies the condition type of the backend policy. The valid values are **Equal**,
-     * **Enumerated** and **Matching**, default to **Equal**.
+     * Specifies the condition type of the backend policy.  
+     * The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
      */
     type?: pulumi.Input<string>;
     /**
-     * Time when the API was last modified, in UTC format.
+     * The latest update time of the API.
      */
-    updateTime?: pulumi.Input<string>;
+    updatedAt?: pulumi.Input<string>;
     /**
-     * Specifies the web backend details. The object structure is documented
-     * below. Changing this will create a new API resource.
+     * Specifies the web backend details.  
+     * The object structure is documented below. Changing this will create a new API resource.
      */
     web?: pulumi.Input<inputs.DedicatedApig.ApiWeb>;
     /**
-     * Specifies the example response for a failed request. The maximum of the policy is 5.
+     * Specifies the example response for a failed request.  
+     * The maximum blocks of the policy is 5.
      * The object structure is documented below.
      */
     webPolicies?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ApiWebPolicy>[]>;
@@ -480,31 +488,33 @@ export interface ApiArgs {
     backendParams?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ApiBackendParam>[]>;
     /**
      * Specifies the description of the API request body, which can be an example
-     * request body, media type or parameters. The request body does not exceed 20,480 characters. Chinese characters must be
-     * in UTF-8 or Unicode format.
+     * request body, media type or parameters.
+     * The request body does not exceed `20,480` characters.
      */
     bodyDescription?: pulumi.Input<string>;
     /**
-     * Specifies whether CORS is supported, default to false.
+     * Specifies whether CORS is supported, defaults to **false**.
      */
     cors?: pulumi.Input<boolean>;
     /**
-     * Specifies the description of the constant or system parameter, which contain a
-     * maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+     * Specifies the description of the constant or system parameter.  
+     * The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the example response for a successful request. Ensure that the
-     * response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
+     * Specifies the example response for a failure request.  
+     * The response contains a maximum of `20,480` characters.
      */
     failureResponse?: pulumi.Input<string>;
     /**
-     * Specifies the function graph backend details. The object
-     * structure is documented below. Changing this will create a new API resource.
+     * Specifies the function graph backend details.  
+     * The object structure is documented below.
+     * Changing this will create a new API resource.
      */
     funcGraph?: pulumi.Input<inputs.DedicatedApig.ApiFuncGraph>;
     /**
-     * Specifies the Mock policy backends. The maximum of the policy is 5.
+     * Specifies the Mock policy backends.  
+     * The maximum blocks of the policy is 5.
      * The object structure is documented below.
      */
     funcGraphPolicies?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ApiFuncGraphPolicy>[]>;
@@ -518,52 +528,53 @@ export interface ApiArgs {
      */
     instanceId: pulumi.Input<string>;
     /**
-     * Specifies the route matching mode. The valid value are **Exact** and **Prefix**,
-     * default to **Exact**.
+     * Specifies the route matching mode.  
+     * The valid values are **Exact** and **Prefix**, defaults to **Exact**.
      */
     matching?: pulumi.Input<string>;
     /**
-     * Specifies the mock backend details. The object structure is documented
-     * below. Changing this will create a new API resource.
+     * Specifies the mock backend details.  
+     * The object structure is documented below.
+     * Changing this will create a new API resource.
      */
     mock?: pulumi.Input<inputs.DedicatedApig.ApiMock>;
     /**
-     * Specifies the Mock policy backends. The maximum of the policy is 5.
+     * Specifies the Mock policy backends.  
+     * The maximum blocks of the policy is 5.
      * The object structure is documented below.
      */
     mockPolicies?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ApiMockPolicy>[]>;
     /**
-     * Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-     * a letter. Only letters, digits, and underscores (_) are allowed.
+     * Specifies the backend policy name.  
+     * The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to create the API resource. If omitted, the
-     * provider-level region will be used. Changing this will create a new API resource.
+     * Specifies the region where the API is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new API resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the backend request method of the API. The valid types are **GET**,
-     * **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+     * Specifies the backend request method of the API.  
+     * The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
      */
     requestMethod: pulumi.Input<string>;
     /**
-     * Specifies an array of one or more request parameters of the front-end. The maximum
-     * of request parameters is 50. The object structure is documented below.
+     * Specifies the configurations of the front-end parameters.  
+     * The object structure is documented below.
      */
     requestParams?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ApiRequestParam>[]>;
     /**
-     * Specifies the request address, which can contain a maximum of 512 characters
-     * request parameters enclosed with brackets ({}).
-     * + The address can contain special characters, such as asterisks (), percent signs (%), hyphens (-), and
+     * Specifies the request address, which can contain a maximum of `512` characters,
+     * the request parameters enclosed with brackets ({}).
+     * + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-), and
      * underscores (_) and must comply with URI specifications.
-     * + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
-     * Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
+     * + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
      */
     requestPath: pulumi.Input<string>;
     /**
      * Specifies the backend request protocol. The valid values are **HTTP** and
-     * **HTTPS**, default to **HTTPS**.
+     * **HTTPS**, defaults to **HTTPS**.
      */
     requestProtocol: pulumi.Input<string>;
     /**
@@ -571,32 +582,33 @@ export interface ApiArgs {
      */
     responseId?: pulumi.Input<string>;
     /**
-     * Specifies the security authentication mode. The valid values are
-     * **NONE**, **APP** and **IAM**, default to **NONE**.
+     * Specifies the security authentication mode of the API request.  
+     * The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
      */
     securityAuthentication?: pulumi.Input<string>;
     /**
-     * Specifies whether AppCode authentication is enabled. The applicaiton code
-     * must located in the header when `simpleAuthentication` is true.
+     * Specifies whether the authentication of the application code is enabled.  
+     * The application code must located in the header when `simpleAuthentication` is true.
      */
     simpleAuthentication?: pulumi.Input<boolean>;
     /**
-     * Specifies the example response for a successful request. Ensure that the
-     * response does not exceed 20,480 characters. Chinese characters must be in UTF-8 or Unicode format.
+     * Specifies the example response for a successful request.  
+     * The response contains a maximum of `20,480` characters.
      */
     successResponse?: pulumi.Input<string>;
     /**
-     * Specifies the condition type of the backend policy. The valid values are **Equal**,
-     * **Enumerated** and **Matching**, default to **Equal**.
+     * Specifies the condition type of the backend policy.  
+     * The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
      */
     type: pulumi.Input<string>;
     /**
-     * Specifies the web backend details. The object structure is documented
-     * below. Changing this will create a new API resource.
+     * Specifies the web backend details.  
+     * The object structure is documented below. Changing this will create a new API resource.
      */
     web?: pulumi.Input<inputs.DedicatedApig.ApiWeb>;
     /**
-     * Specifies the example response for a failed request. The maximum of the policy is 5.
+     * Specifies the example response for a failed request.  
+     * The maximum blocks of the policy is 5.
      * The object structure is documented below.
      */
     webPolicies?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ApiWebPolicy>[]>;

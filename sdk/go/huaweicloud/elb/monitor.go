@@ -116,7 +116,6 @@ import (
 type Monitor struct {
 	pulumi.CustomResourceState
 
-	// The administrative state of the monitor.
 	AdminStateUp pulumi.BoolPtrOutput `pulumi:"adminStateUp"`
 	// Specifies the maximum time between health checks in the unit of second. The value ranges
 	// from 1 to 50.
@@ -200,7 +199,6 @@ func GetMonitor(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Monitor resources.
 type monitorState struct {
-	// The administrative state of the monitor.
 	AdminStateUp *bool `pulumi:"adminStateUp"`
 	// Specifies the maximum time between health checks in the unit of second. The value ranges
 	// from 1 to 50.
@@ -240,7 +238,6 @@ type monitorState struct {
 }
 
 type MonitorState struct {
-	// The administrative state of the monitor.
 	AdminStateUp pulumi.BoolPtrInput
 	// Specifies the maximum time between health checks in the unit of second. The value ranges
 	// from 1 to 50.
@@ -284,7 +281,6 @@ func (MonitorState) ElementType() reflect.Type {
 }
 
 type monitorArgs struct {
-	// The administrative state of the monitor.
 	AdminStateUp *bool `pulumi:"adminStateUp"`
 	// Specifies the maximum time between health checks in the unit of second. The value ranges
 	// from 1 to 50.
@@ -325,7 +321,6 @@ type monitorArgs struct {
 
 // The set of arguments for constructing a Monitor resource.
 type MonitorArgs struct {
-	// The administrative state of the monitor.
 	AdminStateUp pulumi.BoolPtrInput
 	// Specifies the maximum time between health checks in the unit of second. The value ranges
 	// from 1 to 50.
@@ -451,7 +446,6 @@ func (o MonitorOutput) ToMonitorOutputWithContext(ctx context.Context) MonitorOu
 	return o
 }
 
-// The administrative state of the monitor.
 func (o MonitorOutput) AdminStateUp() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Monitor) pulumi.BoolPtrOutput { return v.AdminStateUp }).(pulumi.BoolPtrOutput)
 }

@@ -55,16 +55,13 @@ class GetFlavorsResult:
     @property
     @pulumi.getter
     def region(self) -> str:
-        """
-        The region in which to obtain the CDM flavors. If omitted, the provider-level region will be used.
-        """
         return pulumi.get(self, "region")
 
     @property
     @pulumi.getter
     def version(self) -> str:
         """
-        The version of the flavor.
+        The version of the CDM cluster.
         """
         return pulumi.get(self, "version")
 
@@ -84,7 +81,7 @@ class AwaitableGetFlavorsResult(GetFlavorsResult):
 def get_flavors(region: Optional[str] = None,
                 opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetFlavorsResult:
     """
-    Use this data source to get available Huaweicloud cdm flavors.
+    Use this data source to get available HuaweiCloud CDM flavors.
 
     ## Example Usage
 
@@ -96,7 +93,8 @@ def get_flavors(region: Optional[str] = None,
     ```
 
 
-    :param str region: The region in which to obtain the CDM flavors. If omitted, the provider-level region will be used.
+    :param str region: The region in which to obtain the CDM flavors.
+           If omitted, the provider-level region will be used.
     """
     __args__ = dict()
     __args__['region'] = region
@@ -114,7 +112,7 @@ def get_flavors(region: Optional[str] = None,
 def get_flavors_output(region: Optional[pulumi.Input[Optional[str]]] = None,
                        opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetFlavorsResult]:
     """
-    Use this data source to get available Huaweicloud cdm flavors.
+    Use this data source to get available HuaweiCloud CDM flavors.
 
     ## Example Usage
 
@@ -126,6 +124,7 @@ def get_flavors_output(region: Optional[pulumi.Input[Optional[str]]] = None,
     ```
 
 
-    :param str region: The region in which to obtain the CDM flavors. If omitted, the provider-level region will be used.
+    :param str region: The region in which to obtain the CDM flavors.
+           If omitted, the provider-level region will be used.
     """
     ...

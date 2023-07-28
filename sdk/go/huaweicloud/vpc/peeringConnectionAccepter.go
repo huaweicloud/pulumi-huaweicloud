@@ -14,8 +14,10 @@ import (
 type PeeringConnectionAccepter struct {
 	pulumi.CustomResourceState
 
-	// - Whether or not to accept the peering request. Defaults to `false`.
+	// Whether or not to accept the peering request. Defaults to `false`.
 	Accept pulumi.BoolPtrOutput `pulumi:"accept"`
+	// The description of the VPC peering connection.
+	Description pulumi.StringOutput `pulumi:"description"`
 	// The VPC peering connection name.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// The Tenant Id of the accepter tenant.
@@ -29,8 +31,8 @@ type PeeringConnectionAccepter struct {
 	Status pulumi.StringOutput `pulumi:"status"`
 	// The ID of requester VPC involved in a VPC peering connection.
 	VpcId pulumi.StringOutput `pulumi:"vpcId"`
-	// - The VPC Peering Connection ID to manage. Changing this
-	//   creates a new VPC peering connection accepter.
+	// The VPC Peering Connection ID to manage. Changing this
+	// creates a new VPC peering connection accepter.
 	VpcPeeringConnectionId pulumi.StringOutput `pulumi:"vpcPeeringConnectionId"`
 }
 
@@ -67,8 +69,10 @@ func GetPeeringConnectionAccepter(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering PeeringConnectionAccepter resources.
 type peeringConnectionAccepterState struct {
-	// - Whether or not to accept the peering request. Defaults to `false`.
+	// Whether or not to accept the peering request. Defaults to `false`.
 	Accept *bool `pulumi:"accept"`
+	// The description of the VPC peering connection.
+	Description *string `pulumi:"description"`
 	// The VPC peering connection name.
 	Name *string `pulumi:"name"`
 	// The Tenant Id of the accepter tenant.
@@ -82,14 +86,16 @@ type peeringConnectionAccepterState struct {
 	Status *string `pulumi:"status"`
 	// The ID of requester VPC involved in a VPC peering connection.
 	VpcId *string `pulumi:"vpcId"`
-	// - The VPC Peering Connection ID to manage. Changing this
-	//   creates a new VPC peering connection accepter.
+	// The VPC Peering Connection ID to manage. Changing this
+	// creates a new VPC peering connection accepter.
 	VpcPeeringConnectionId *string `pulumi:"vpcPeeringConnectionId"`
 }
 
 type PeeringConnectionAccepterState struct {
-	// - Whether or not to accept the peering request. Defaults to `false`.
+	// Whether or not to accept the peering request. Defaults to `false`.
 	Accept pulumi.BoolPtrInput
+	// The description of the VPC peering connection.
+	Description pulumi.StringPtrInput
 	// The VPC peering connection name.
 	Name pulumi.StringPtrInput
 	// The Tenant Id of the accepter tenant.
@@ -103,8 +109,8 @@ type PeeringConnectionAccepterState struct {
 	Status pulumi.StringPtrInput
 	// The ID of requester VPC involved in a VPC peering connection.
 	VpcId pulumi.StringPtrInput
-	// - The VPC Peering Connection ID to manage. Changing this
-	//   creates a new VPC peering connection accepter.
+	// The VPC Peering Connection ID to manage. Changing this
+	// creates a new VPC peering connection accepter.
 	VpcPeeringConnectionId pulumi.StringPtrInput
 }
 
@@ -113,25 +119,25 @@ func (PeeringConnectionAccepterState) ElementType() reflect.Type {
 }
 
 type peeringConnectionAccepterArgs struct {
-	// - Whether or not to accept the peering request. Defaults to `false`.
+	// Whether or not to accept the peering request. Defaults to `false`.
 	Accept *bool `pulumi:"accept"`
 	// The region in which to create the vpc peering connection accepter. If omitted,
 	// the provider-level region will be used. Changing this creates a new VPC peering connection accepter resource.
 	Region *string `pulumi:"region"`
-	// - The VPC Peering Connection ID to manage. Changing this
-	//   creates a new VPC peering connection accepter.
+	// The VPC Peering Connection ID to manage. Changing this
+	// creates a new VPC peering connection accepter.
 	VpcPeeringConnectionId string `pulumi:"vpcPeeringConnectionId"`
 }
 
 // The set of arguments for constructing a PeeringConnectionAccepter resource.
 type PeeringConnectionAccepterArgs struct {
-	// - Whether or not to accept the peering request. Defaults to `false`.
+	// Whether or not to accept the peering request. Defaults to `false`.
 	Accept pulumi.BoolPtrInput
 	// The region in which to create the vpc peering connection accepter. If omitted,
 	// the provider-level region will be used. Changing this creates a new VPC peering connection accepter resource.
 	Region pulumi.StringPtrInput
-	// - The VPC Peering Connection ID to manage. Changing this
-	//   creates a new VPC peering connection accepter.
+	// The VPC Peering Connection ID to manage. Changing this
+	// creates a new VPC peering connection accepter.
 	VpcPeeringConnectionId pulumi.StringInput
 }
 
@@ -222,9 +228,14 @@ func (o PeeringConnectionAccepterOutput) ToPeeringConnectionAccepterOutputWithCo
 	return o
 }
 
-// - Whether or not to accept the peering request. Defaults to `false`.
+// Whether or not to accept the peering request. Defaults to `false`.
 func (o PeeringConnectionAccepterOutput) Accept() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *PeeringConnectionAccepter) pulumi.BoolPtrOutput { return v.Accept }).(pulumi.BoolPtrOutput)
+}
+
+// The description of the VPC peering connection.
+func (o PeeringConnectionAccepterOutput) Description() pulumi.StringOutput {
+	return o.ApplyT(func(v *PeeringConnectionAccepter) pulumi.StringOutput { return v.Description }).(pulumi.StringOutput)
 }
 
 // The VPC peering connection name.
@@ -258,8 +269,8 @@ func (o PeeringConnectionAccepterOutput) VpcId() pulumi.StringOutput {
 	return o.ApplyT(func(v *PeeringConnectionAccepter) pulumi.StringOutput { return v.VpcId }).(pulumi.StringOutput)
 }
 
-//   - The VPC Peering Connection ID to manage. Changing this
-//     creates a new VPC peering connection accepter.
+// The VPC Peering Connection ID to manage. Changing this
+// creates a new VPC peering connection accepter.
 func (o PeeringConnectionAccepterOutput) VpcPeeringConnectionId() pulumi.StringOutput {
 	return o.ApplyT(func(v *PeeringConnectionAccepter) pulumi.StringOutput { return v.VpcPeeringConnectionId }).(pulumi.StringOutput)
 }

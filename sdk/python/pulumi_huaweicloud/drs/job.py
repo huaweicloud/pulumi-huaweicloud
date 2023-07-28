@@ -84,8 +84,8 @@ class JobArgs:
         :param pulumi.Input[bool] multi_write: Specifies whether to enable multi write. It is mandatory when `type`
                is `cloudDataGuard`. When the disaster recovery type is dual-active disaster recovery, set `multi_write` to `true`,
                otherwise to `false`. The default value is `false`. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the job name. The name consists of 4 to 50 characters, starting with
-               a letter. Only letters, digits, underscores (\\_) and hyphens (-) are allowed.
+        :param pulumi.Input[str] name: Specifies the name of database.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] net_type: Specifies the network type.
                Changing this parameter will create a new resource. The options are as follows:
                + **eip**: suitable for migration from an on-premises or other cloud database to a destination cloud database.
@@ -340,8 +340,8 @@ class JobArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the job name. The name consists of 4 to 50 characters, starting with
-        a letter. Only letters, digits, underscores (\\_) and hyphens (-) are allowed.
+        Specifies the name of database.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
 
@@ -476,8 +476,8 @@ class _JobState:
         :param pulumi.Input[bool] multi_write: Specifies whether to enable multi write. It is mandatory when `type`
                is `cloudDataGuard`. When the disaster recovery type is dual-active disaster recovery, set `multi_write` to `true`,
                otherwise to `false`. The default value is `false`. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the job name. The name consists of 4 to 50 characters, starting with
-               a letter. Only letters, digits, underscores (\\_) and hyphens (-) are allowed.
+        :param pulumi.Input[str] name: Specifies the name of database.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] net_type: Specifies the network type.
                Changing this parameter will create a new resource. The options are as follows:
                + **eip**: suitable for migration from an on-premises or other cloud database to a destination cloud database.
@@ -738,8 +738,8 @@ class _JobState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the job name. The name consists of 4 to 50 characters, starting with
-        a letter. Only letters, digits, underscores (\\_) and hyphens (-) are allowed.
+        Specifies the name of database.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
 
@@ -965,8 +965,8 @@ class Job(pulumi.CustomResource):
         :param pulumi.Input[bool] multi_write: Specifies whether to enable multi write. It is mandatory when `type`
                is `cloudDataGuard`. When the disaster recovery type is dual-active disaster recovery, set `multi_write` to `true`,
                otherwise to `false`. The default value is `false`. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the job name. The name consists of 4 to 50 characters, starting with
-               a letter. Only letters, digits, underscores (\\_) and hyphens (-) are allowed.
+        :param pulumi.Input[str] name: Specifies the name of database.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] net_type: Specifies the network type.
                Changing this parameter will create a new resource. The options are as follows:
                + **eip**: suitable for migration from an on-premises or other cloud database to a destination cloud database.
@@ -1179,8 +1179,8 @@ class Job(pulumi.CustomResource):
         :param pulumi.Input[bool] multi_write: Specifies whether to enable multi write. It is mandatory when `type`
                is `cloudDataGuard`. When the disaster recovery type is dual-active disaster recovery, set `multi_write` to `true`,
                otherwise to `false`. The default value is `false`. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the job name. The name consists of 4 to 50 characters, starting with
-               a letter. Only letters, digits, underscores (\\_) and hyphens (-) are allowed.
+        :param pulumi.Input[str] name: Specifies the name of database.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] net_type: Specifies the network type.
                Changing this parameter will create a new resource. The options are as follows:
                + **eip**: suitable for migration from an on-premises or other cloud database to a destination cloud database.
@@ -1371,8 +1371,8 @@ class Job(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the job name. The name consists of 4 to 50 characters, starting with
-        a letter. Only letters, digits, underscores (\\_) and hyphens (-) are allowed.
+        Specifies the name of database.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
 

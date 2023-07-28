@@ -30,8 +30,10 @@ import (
 //		pulumi.Run(func(ctx *pulumi.Context) error {
 //			cfg := config.New(ctx, "")
 //			policyName := cfg.RequireObject("policyName")
+//			enterpriseProjectId := cfg.RequireObject("enterpriseProjectId")
 //			_, err := Waf.GetPolicies(ctx, &waf.GetPoliciesArgs{
-//				Name: pulumi.StringRef(policyName),
+//				Name:                pulumi.StringRef(policyName),
+//				EnterpriseProjectId: pulumi.StringRef(enterpriseProjectId),
 //			}, nil)
 //			if err != nil {
 //				return err
@@ -53,6 +55,8 @@ func GetPolicies(ctx *pulumi.Context, args *GetPoliciesArgs, opts ...pulumi.Invo
 
 // A collection of arguments for invoking getPolicies.
 type GetPoliciesArgs struct {
+	// Specifies the enterprise project ID of WAF policies.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Policy name used for matching. The value is case sensitive and supports fuzzy matching.
 	Name *string `pulumi:"name"`
 	// The region in which to obtain the WAF policies. If omitted, the provider-level region
@@ -62,6 +66,7 @@ type GetPoliciesArgs struct {
 
 // A collection of values returned by getPolicies.
 type GetPoliciesResult struct {
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// The provider-assigned unique ID for this managed resource.
 	Id string `pulumi:"id"`
 	// The WAF policy name.
@@ -86,6 +91,8 @@ func GetPoliciesOutput(ctx *pulumi.Context, args GetPoliciesOutputArgs, opts ...
 
 // A collection of arguments for invoking getPolicies.
 type GetPoliciesOutputArgs struct {
+	// Specifies the enterprise project ID of WAF policies.
+	EnterpriseProjectId pulumi.StringPtrInput `pulumi:"enterpriseProjectId"`
 	// Policy name used for matching. The value is case sensitive and supports fuzzy matching.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// The region in which to obtain the WAF policies. If omitted, the provider-level region
@@ -110,6 +117,10 @@ func (o GetPoliciesResultOutput) ToGetPoliciesResultOutput() GetPoliciesResultOu
 
 func (o GetPoliciesResultOutput) ToGetPoliciesResultOutputWithContext(ctx context.Context) GetPoliciesResultOutput {
 	return o
+}
+
+func (o GetPoliciesResultOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v GetPoliciesResult) *string { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
 
 // The provider-assigned unique ID for this managed resource.

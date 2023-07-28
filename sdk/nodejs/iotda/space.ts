@@ -63,7 +63,7 @@ export class Space extends pulumi.CustomResource {
     public /*out*/ readonly isDefault!: pulumi.Output<boolean>;
     /**
      * Specifies the space name. The name contains a maximum of 64 characters.
-     * Only letters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+     * Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
      * Changing this parameter will create a new resource.
      */
     public readonly name!: pulumi.Output<string>;
@@ -111,7 +111,7 @@ export interface SpaceState {
     isDefault?: pulumi.Input<boolean>;
     /**
      * Specifies the space name. The name contains a maximum of 64 characters.
-     * Only letters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+     * Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
      * Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;
@@ -128,7 +128,7 @@ export interface SpaceState {
 export interface SpaceArgs {
     /**
      * Specifies the space name. The name contains a maximum of 64 characters.
-     * Only letters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+     * Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
      * Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;

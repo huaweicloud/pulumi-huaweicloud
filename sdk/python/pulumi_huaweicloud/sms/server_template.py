@@ -42,7 +42,7 @@ class ServerTemplateArgs:
                If omitted or set to ["autoCreate"], a new subnet will be created automatically during migration.
         :param pulumi.Input[str] target_server_name: Specifies the name of the target server. Defaults to the template name.
         :param pulumi.Input[str] volume_type: Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-               **GPSSD** and **ESSD**, defaults to **SAS**.
+               defaults to **SAS**.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC which the target server belongs to.
                If omitted or set to "autoCreate", a new VPC will be created automatically during migration.
         """
@@ -186,7 +186,7 @@ class ServerTemplateArgs:
     def volume_type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-        **GPSSD** and **ESSD**, defaults to **SAS**.
+        defaults to **SAS**.
         """
         return pulumi.get(self, "volume_type")
 
@@ -240,7 +240,7 @@ class _ServerTemplateState:
                If omitted or set to ["autoCreate"], a new subnet will be created automatically during migration.
         :param pulumi.Input[str] target_server_name: Specifies the name of the target server. Defaults to the template name.
         :param pulumi.Input[str] volume_type: Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-               **GPSSD** and **ESSD**, defaults to **SAS**.
+               defaults to **SAS**.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC which the target server belongs to.
                If omitted or set to "autoCreate", a new VPC will be created automatically during migration.
         :param pulumi.Input[str] vpc_name: The name of the VPC which the target server belongs to.
@@ -388,7 +388,7 @@ class _ServerTemplateState:
     def volume_type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-        **GPSSD** and **ESSD**, defaults to **SAS**.
+        defaults to **SAS**.
         """
         return pulumi.get(self, "volume_type")
 
@@ -495,7 +495,7 @@ class ServerTemplate(pulumi.CustomResource):
                If omitted or set to ["autoCreate"], a new subnet will be created automatically during migration.
         :param pulumi.Input[str] target_server_name: Specifies the name of the target server. Defaults to the template name.
         :param pulumi.Input[str] volume_type: Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-               **GPSSD** and **ESSD**, defaults to **SAS**.
+               defaults to **SAS**.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC which the target server belongs to.
                If omitted or set to "autoCreate", a new VPC will be created automatically during migration.
         """
@@ -637,7 +637,7 @@ class ServerTemplate(pulumi.CustomResource):
                If omitted or set to ["autoCreate"], a new subnet will be created automatically during migration.
         :param pulumi.Input[str] target_server_name: Specifies the name of the target server. Defaults to the template name.
         :param pulumi.Input[str] volume_type: Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-               **GPSSD** and **ESSD**, defaults to **SAS**.
+               defaults to **SAS**.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC which the target server belongs to.
                If omitted or set to "autoCreate", a new VPC will be created automatically during migration.
         :param pulumi.Input[str] vpc_name: The name of the VPC which the target server belongs to.
@@ -742,7 +742,7 @@ class ServerTemplate(pulumi.CustomResource):
     def volume_type(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-        **GPSSD** and **ESSD**, defaults to **SAS**.
+        defaults to **SAS**.
         """
         return pulumi.get(self, "volume_type")
 

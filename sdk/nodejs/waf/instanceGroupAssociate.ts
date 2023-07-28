@@ -4,6 +4,32 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
+/**
+ * Associate ELB instances to a WAF instance group.
+ *
+ * ## Example Usage
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const groupId = config.requireObject("groupId");
+ * const elbInstanceId = config.requireObject("elbInstanceId");
+ * const groupAssociate = new huaweicloud.waf.InstanceGroupAssociate("groupAssociate", {
+ *     groupId: groupId,
+ *     loadBalancers: [elbInstanceId],
+ * });
+ * ```
+ *
+ * ## Import
+ *
+ * The instance group associate can be imported using the group ID, e.g.
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:Waf/instanceGroupAssociate:InstanceGroupAssociate group_associate 0be1e69d-1987-4d9c-9dc5-fc7eed592398
+ * ```
+ */
 export class InstanceGroupAssociate extends pulumi.CustomResource {
     /**
      * Get an existing InstanceGroupAssociate resource's state with the given name, ID, and optional extra
@@ -32,8 +58,20 @@ export class InstanceGroupAssociate extends pulumi.CustomResource {
         return obj['__pulumiType'] === InstanceGroupAssociate.__pulumiType;
     }
 
+    /**
+     * Specifies the ID of the WAF instance group.
+     * Changing this will create a new resource.
+     */
     public readonly groupId!: pulumi.Output<string>;
+    /**
+     * Specifies the IDs of the ELB instances bound to the WAF instance group.
+     * This is an array of ELB instance ids.
+     */
     public readonly loadBalancers!: pulumi.Output<string[]>;
+    /**
+     * The region in which the WAF instance group created.
+     * If omitted, the provider-level region will be used. Changing this setting will create a new resource.
+     */
     public readonly region!: pulumi.Output<string>;
 
     /**
@@ -73,8 +111,20 @@ export class InstanceGroupAssociate extends pulumi.CustomResource {
  * Input properties used for looking up and filtering InstanceGroupAssociate resources.
  */
 export interface InstanceGroupAssociateState {
+    /**
+     * Specifies the ID of the WAF instance group.
+     * Changing this will create a new resource.
+     */
     groupId?: pulumi.Input<string>;
+    /**
+     * Specifies the IDs of the ELB instances bound to the WAF instance group.
+     * This is an array of ELB instance ids.
+     */
     loadBalancers?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * The region in which the WAF instance group created.
+     * If omitted, the provider-level region will be used. Changing this setting will create a new resource.
+     */
     region?: pulumi.Input<string>;
 }
 
@@ -82,7 +132,19 @@ export interface InstanceGroupAssociateState {
  * The set of arguments for constructing a InstanceGroupAssociate resource.
  */
 export interface InstanceGroupAssociateArgs {
+    /**
+     * Specifies the ID of the WAF instance group.
+     * Changing this will create a new resource.
+     */
     groupId: pulumi.Input<string>;
+    /**
+     * Specifies the IDs of the ELB instances bound to the WAF instance group.
+     * This is an array of ELB instance ids.
+     */
     loadBalancers: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * The region in which the WAF instance group created.
+     * If omitted, the provider-level region will be used. Changing this setting will create a new resource.
+     */
     region?: pulumi.Input<string>;
 }

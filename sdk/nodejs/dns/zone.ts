@@ -116,10 +116,6 @@ export class Zone extends pulumi.CustomResource {
      */
     public readonly ttl!: pulumi.Output<number | undefined>;
     /**
-     * Map of additional options. Changing this creates a new DNS zone.
-     */
-    public readonly valueSpecs!: pulumi.Output<{[key: string]: string} | undefined>;
-    /**
      * The type of zone. Can either be `public` or `private`. Changing this
      * creates a new DNS zone.
      */
@@ -147,7 +143,6 @@ export class Zone extends pulumi.CustomResource {
             resourceInputs["routers"] = state ? state.routers : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["ttl"] = state ? state.ttl : undefined;
-            resourceInputs["valueSpecs"] = state ? state.valueSpecs : undefined;
             resourceInputs["zoneType"] = state ? state.zoneType : undefined;
         } else {
             const args = argsOrState as ZoneArgs | undefined;
@@ -159,7 +154,6 @@ export class Zone extends pulumi.CustomResource {
             resourceInputs["routers"] = args ? args.routers : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["ttl"] = args ? args.ttl : undefined;
-            resourceInputs["valueSpecs"] = args ? args.valueSpecs : undefined;
             resourceInputs["zoneType"] = args ? args.zoneType : undefined;
             resourceInputs["masters"] = undefined /*out*/;
         }
@@ -213,10 +207,6 @@ export interface ZoneState {
      */
     ttl?: pulumi.Input<number>;
     /**
-     * Map of additional options. Changing this creates a new DNS zone.
-     */
-    valueSpecs?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
-    /**
      * The type of zone. Can either be `public` or `private`. Changing this
      * creates a new DNS zone.
      */
@@ -263,10 +253,6 @@ export interface ZoneArgs {
      * The time to live (TTL) of the zone.
      */
     ttl?: pulumi.Input<number>;
-    /**
-     * Map of additional options. Changing this creates a new DNS zone.
-     */
-    valueSpecs?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * The type of zone. Can either be `public` or `private`. Changing this
      * creates a new DNS zone.

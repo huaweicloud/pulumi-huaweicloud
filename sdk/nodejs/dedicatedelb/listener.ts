@@ -49,6 +49,11 @@ export class Listener extends pulumi.CustomResource {
      */
     public readonly accessPolicy!: pulumi.Output<string | undefined>;
     /**
+     * Specifies whether to enable advanced forwarding.
+     * If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
+     */
+    public readonly advancedForwardingEnabled!: pulumi.Output<boolean>;
+    /**
      * Specifies the ID of the CA certificate used by the listener. This parameter is
      * valid when protocol is set to *HTTPS*.
      */
@@ -150,6 +155,7 @@ export class Listener extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as ListenerState | undefined;
             resourceInputs["accessPolicy"] = state ? state.accessPolicy : undefined;
+            resourceInputs["advancedForwardingEnabled"] = state ? state.advancedForwardingEnabled : undefined;
             resourceInputs["caCertificate"] = state ? state.caCertificate : undefined;
             resourceInputs["defaultPoolId"] = state ? state.defaultPoolId : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
@@ -180,6 +186,7 @@ export class Listener extends pulumi.CustomResource {
                 throw new Error("Missing required property 'protocolPort'");
             }
             resourceInputs["accessPolicy"] = args ? args.accessPolicy : undefined;
+            resourceInputs["advancedForwardingEnabled"] = args ? args.advancedForwardingEnabled : undefined;
             resourceInputs["caCertificate"] = args ? args.caCertificate : undefined;
             resourceInputs["defaultPoolId"] = args ? args.defaultPoolId : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
@@ -213,6 +220,11 @@ export interface ListenerState {
      * *black*.
      */
     accessPolicy?: pulumi.Input<string>;
+    /**
+     * Specifies whether to enable advanced forwarding.
+     * If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
+     */
+    advancedForwardingEnabled?: pulumi.Input<boolean>;
     /**
      * Specifies the ID of the CA certificate used by the listener. This parameter is
      * valid when protocol is set to *HTTPS*.
@@ -311,6 +323,11 @@ export interface ListenerArgs {
      * *black*.
      */
     accessPolicy?: pulumi.Input<string>;
+    /**
+     * Specifies whether to enable advanced forwarding.
+     * If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
+     */
+    advancedForwardingEnabled?: pulumi.Input<boolean>;
     /**
      * Specifies the ID of the CA certificate used by the listener. This parameter is
      * valid when protocol is set to *HTTPS*.

@@ -26,10 +26,10 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * APIG Applications can be imported using their `id` and ID of the APIG dedicated instance to which the application belongs, separated by a slash, e.g.
+ * Applications can be imported using their `id` and the ID of the related dedicated instance, separated by a slash, e.g.
  *
  * ```sh
- *  $ pulumi import huaweicloud:DedicatedApig/application:Application test <instance id>/<id>
+ *  $ pulumi import huaweicloud:DedicatedApig/application:Application test <instance_id>/<id>
  * ```
  */
 export class Application extends pulumi.CustomResource {
@@ -61,10 +61,11 @@ export class Application extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies an array of one or more application codes which the APIG application belongs
-     * to. Up to five application codes can be created. The code consists of 64 to 180 characters, starting with a letter,
-     * digit, plus sign (+) or slash (/). Only letters, digits and following special special characters are allowed: !@#$%+-_
-     * /=
+     * Specifies an array of one or more application codes that the application has.  
+     * Up to five application codes can be created.
+     * The valid length of each application code is limited from can contain `64` to `180`.
+     * The application code must start with a letter, digit, plus sign (+) or slash (/).
+     * Only letters, digits and following special special characters are allowed: `!@#$%+-_/=`.
      */
     public readonly appCodes!: pulumi.Output<string[] | undefined>;
     /**
@@ -76,40 +77,41 @@ export class Application extends pulumi.CustomResource {
      */
     public /*out*/ readonly appSecret!: pulumi.Output<string>;
     /**
-     * Specifies the description about the APIG application. The description contain a
-     * maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-     * Unicode format.
+     * Specifies the application description.  
+     * The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
      */
-    public readonly description!: pulumi.Output<string | undefined>;
+    public readonly description!: pulumi.Output<string>;
     /**
-     * Specifies an ID of the APIG dedicated instance to which the APIG
-     * application belongs to. Changing this will create a new APIG application resource.
+     * Specifies the ID of the dedicated instance to which the application
+     * belongs.
+     * Changing this will create a new resource.
      */
     public readonly instanceId!: pulumi.Output<string>;
     /**
-     * Specifies the name of the API application. The API group name consists of 3 to 64
-     * characters, starting with a letter. Only letters, digits and underscores (_) are allowed. Chinese characters must be
-     * in UTF-8 or Unicode format.
+     * Specifies the application name.  
+     * The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+     * are allowed.
+     * The name must start with a Chinese or English letter.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Specifies the region in which to create the APIG application resource. If
-     * omitted, the provider-level region will be used. Changing this will create a new APIG application resource.
+     * Specifies the region where the application is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Registration time, in RFC-3339 format.
+     * the registration time.
      */
-    public /*out*/ readonly registraionTime!: pulumi.Output<string>;
+    public /*out*/ readonly registrationTime!: pulumi.Output<string>;
     /**
-     * Specifies the secret action to be done for the APIG application. The valid action
-     * is *RESET*.
+     * Specifies the secret action to be done for the application.  
+     * The valid action is **RESET**.
      */
     public readonly secretAction!: pulumi.Output<string | undefined>;
     /**
-     * Time when the API group was last modified, in RFC-3339 format.
+     * The latest update time of the application.
      */
-    public /*out*/ readonly updateTime!: pulumi.Output<string>;
+    public /*out*/ readonly updatedAt!: pulumi.Output<string>;
 
     /**
      * Create a Application resource with the given unique name, arguments, and options.
@@ -131,9 +133,9 @@ export class Application extends pulumi.CustomResource {
             resourceInputs["instanceId"] = state ? state.instanceId : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
-            resourceInputs["registraionTime"] = state ? state.registraionTime : undefined;
+            resourceInputs["registrationTime"] = state ? state.registrationTime : undefined;
             resourceInputs["secretAction"] = state ? state.secretAction : undefined;
-            resourceInputs["updateTime"] = state ? state.updateTime : undefined;
+            resourceInputs["updatedAt"] = state ? state.updatedAt : undefined;
         } else {
             const args = argsOrState as ApplicationArgs | undefined;
             if ((!args || args.instanceId === undefined) && !opts.urn) {
@@ -147,8 +149,8 @@ export class Application extends pulumi.CustomResource {
             resourceInputs["secretAction"] = args ? args.secretAction : undefined;
             resourceInputs["appKey"] = undefined /*out*/;
             resourceInputs["appSecret"] = undefined /*out*/;
-            resourceInputs["registraionTime"] = undefined /*out*/;
-            resourceInputs["updateTime"] = undefined /*out*/;
+            resourceInputs["registrationTime"] = undefined /*out*/;
+            resourceInputs["updatedAt"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Application.__pulumiType, name, resourceInputs, opts);
@@ -160,10 +162,11 @@ export class Application extends pulumi.CustomResource {
  */
 export interface ApplicationState {
     /**
-     * Specifies an array of one or more application codes which the APIG application belongs
-     * to. Up to five application codes can be created. The code consists of 64 to 180 characters, starting with a letter,
-     * digit, plus sign (+) or slash (/). Only letters, digits and following special special characters are allowed: !@#$%+-_
-     * /=
+     * Specifies an array of one or more application codes that the application has.  
+     * Up to five application codes can be created.
+     * The valid length of each application code is limited from can contain `64` to `180`.
+     * The application code must start with a letter, digit, plus sign (+) or slash (/).
+     * Only letters, digits and following special special characters are allowed: `!@#$%+-_/=`.
      */
     appCodes?: pulumi.Input<pulumi.Input<string>[]>;
     /**
@@ -175,40 +178,41 @@ export interface ApplicationState {
      */
     appSecret?: pulumi.Input<string>;
     /**
-     * Specifies the description about the APIG application. The description contain a
-     * maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-     * Unicode format.
+     * Specifies the application description.  
+     * The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies an ID of the APIG dedicated instance to which the APIG
-     * application belongs to. Changing this will create a new APIG application resource.
+     * Specifies the ID of the dedicated instance to which the application
+     * belongs.
+     * Changing this will create a new resource.
      */
     instanceId?: pulumi.Input<string>;
     /**
-     * Specifies the name of the API application. The API group name consists of 3 to 64
-     * characters, starting with a letter. Only letters, digits and underscores (_) are allowed. Chinese characters must be
-     * in UTF-8 or Unicode format.
+     * Specifies the application name.  
+     * The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+     * are allowed.
+     * The name must start with a Chinese or English letter.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to create the APIG application resource. If
-     * omitted, the provider-level region will be used. Changing this will create a new APIG application resource.
+     * Specifies the region where the application is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Registration time, in RFC-3339 format.
+     * the registration time.
      */
-    registraionTime?: pulumi.Input<string>;
+    registrationTime?: pulumi.Input<string>;
     /**
-     * Specifies the secret action to be done for the APIG application. The valid action
-     * is *RESET*.
+     * Specifies the secret action to be done for the application.  
+     * The valid action is **RESET**.
      */
     secretAction?: pulumi.Input<string>;
     /**
-     * Time when the API group was last modified, in RFC-3339 format.
+     * The latest update time of the application.
      */
-    updateTime?: pulumi.Input<string>;
+    updatedAt?: pulumi.Input<string>;
 }
 
 /**
@@ -216,37 +220,39 @@ export interface ApplicationState {
  */
 export interface ApplicationArgs {
     /**
-     * Specifies an array of one or more application codes which the APIG application belongs
-     * to. Up to five application codes can be created. The code consists of 64 to 180 characters, starting with a letter,
-     * digit, plus sign (+) or slash (/). Only letters, digits and following special special characters are allowed: !@#$%+-_
-     * /=
+     * Specifies an array of one or more application codes that the application has.  
+     * Up to five application codes can be created.
+     * The valid length of each application code is limited from can contain `64` to `180`.
+     * The application code must start with a letter, digit, plus sign (+) or slash (/).
+     * Only letters, digits and following special special characters are allowed: `!@#$%+-_/=`.
      */
     appCodes?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * Specifies the description about the APIG application. The description contain a
-     * maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-     * Unicode format.
+     * Specifies the application description.  
+     * The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies an ID of the APIG dedicated instance to which the APIG
-     * application belongs to. Changing this will create a new APIG application resource.
+     * Specifies the ID of the dedicated instance to which the application
+     * belongs.
+     * Changing this will create a new resource.
      */
     instanceId: pulumi.Input<string>;
     /**
-     * Specifies the name of the API application. The API group name consists of 3 to 64
-     * characters, starting with a letter. Only letters, digits and underscores (_) are allowed. Chinese characters must be
-     * in UTF-8 or Unicode format.
+     * Specifies the application name.  
+     * The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+     * are allowed.
+     * The name must start with a Chinese or English letter.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to create the APIG application resource. If
-     * omitted, the provider-level region will be used. Changing this will create a new APIG application resource.
+     * Specifies the region where the application is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the secret action to be done for the APIG application. The valid action
-     * is *RESET*.
+     * Specifies the secret action to be done for the application.  
+     * The valid action is **RESET**.
      */
     secretAction?: pulumi.Input<string>;
 }

@@ -21,10 +21,13 @@ class GetImageResult:
     """
     A collection of values returned by getImage.
     """
-    def __init__(__self__, architecture=None, checksum=None, container_format=None, created_at=None, disk_format=None, enterprise_project_id=None, file=None, id=None, image_type=None, metadata=None, min_disk_gb=None, min_ram_mb=None, most_recent=None, name=None, name_regex=None, os=None, os_version=None, owner=None, protected=None, region=None, schema=None, size_bytes=None, size_max=None, size_min=None, sort_direction=None, sort_key=None, status=None, tag=None, updated_at=None, visibility=None):
+    def __init__(__self__, architecture=None, backup_id=None, checksum=None, container_format=None, created_at=None, disk_format=None, enterprise_project_id=None, file=None, flavor_id=None, id=None, image_type=None, metadata=None, min_disk_gb=None, min_ram_mb=None, most_recent=None, name=None, name_regex=None, os=None, os_version=None, owner=None, protected=None, region=None, schema=None, size_bytes=None, size_max=None, size_min=None, sort_direction=None, sort_key=None, status=None, tag=None, updated_at=None, visibility=None):
         if architecture and not isinstance(architecture, str):
             raise TypeError("Expected argument 'architecture' to be a str")
         pulumi.set(__self__, "architecture", architecture)
+        if backup_id and not isinstance(backup_id, str):
+            raise TypeError("Expected argument 'backup_id' to be a str")
+        pulumi.set(__self__, "backup_id", backup_id)
         if checksum and not isinstance(checksum, str):
             raise TypeError("Expected argument 'checksum' to be a str")
         pulumi.set(__self__, "checksum", checksum)
@@ -43,6 +46,9 @@ class GetImageResult:
         if file and not isinstance(file, str):
             raise TypeError("Expected argument 'file' to be a str")
         pulumi.set(__self__, "file", file)
+        if flavor_id and not isinstance(flavor_id, str):
+            raise TypeError("Expected argument 'flavor_id' to be a str")
+        pulumi.set(__self__, "flavor_id", flavor_id)
         if id and not isinstance(id, str):
             raise TypeError("Expected argument 'id' to be a str")
         pulumi.set(__self__, "id", id)
@@ -127,6 +133,14 @@ class GetImageResult:
         return pulumi.get(self, "architecture")
 
     @property
+    @pulumi.getter(name="backupId")
+    def backup_id(self) -> str:
+        """
+        The backup ID of the whole image in the CBR vault.
+        """
+        return pulumi.get(self, "backup_id")
+
+    @property
     @pulumi.getter
     def checksum(self) -> str:
         """
@@ -171,6 +185,11 @@ class GetImageResult:
         it.
         """
         return pulumi.get(self, "file")
+
+    @property
+    @pulumi.getter(name="flavorId")
+    def flavor_id(self) -> str:
+        return pulumi.get(self, "flavor_id")
 
     @property
     @pulumi.getter
@@ -305,6 +324,9 @@ class GetImageResult:
     @property
     @pulumi.getter(name="updatedAt")
     def updated_at(self) -> str:
+        """
+        The date when the image was last updated.
+        """
         return pulumi.get(self, "updated_at")
 
     @property
@@ -320,12 +342,14 @@ class AwaitableGetImageResult(GetImageResult):
             yield self
         return GetImageResult(
             architecture=self.architecture,
+            backup_id=self.backup_id,
             checksum=self.checksum,
             container_format=self.container_format,
             created_at=self.created_at,
             disk_format=self.disk_format,
             enterprise_project_id=self.enterprise_project_id,
             file=self.file,
+            flavor_id=self.flavor_id,
             id=self.id,
             image_type=self.image_type,
             metadata=self.metadata,
@@ -353,6 +377,7 @@ class AwaitableGetImageResult(GetImageResult):
 
 def get_image(architecture: Optional[str] = None,
               enterprise_project_id: Optional[str] = None,
+              flavor_id: Optional[str] = None,
               image_type: Optional[str] = None,
               most_recent: Optional[bool] = None,
               name: Optional[str] = None,
@@ -398,6 +423,8 @@ def get_image(architecture: Optional[str] = None,
 
     :param str architecture: Specifies the image architecture type. The value can be **x86** and **arm**.
     :param str enterprise_project_id: Specifies the enterprise project ID of the image.
+    :param str flavor_id: Specifies the ECS flavor ID used to filter out available images.
+           You can specify only one flavor ID and only ECS flavor ID is valid, BMS flavor is not supported.
     :param str image_type: Specifies the environment where the image is used. For a BMS image, the value is **Ironic**.
     :param bool most_recent: If more than one result is returned, use the latest updated image.
     :param str name: The name of the image. Cannot be used simultaneously with `name_regex`.
@@ -415,11 +442,12 @@ def get_image(architecture: Optional[str] = None,
            "name", "container_format", "disk_format", "status", "id" or "size". Defaults to `name`.
     :param str tag: Search for images with a specific tag in "Key=Value" format.
     :param str visibility: The visibility of the image. Must be one of
-           **public**, **private** or **shared**.
+           **public**, **private**, **market** or **shared**.
     """
     __args__ = dict()
     __args__['architecture'] = architecture
     __args__['enterpriseProjectId'] = enterprise_project_id
+    __args__['flavorId'] = flavor_id
     __args__['imageType'] = image_type
     __args__['mostRecent'] = most_recent
     __args__['name'] = name
@@ -439,12 +467,14 @@ def get_image(architecture: Optional[str] = None,
 
     return AwaitableGetImageResult(
         architecture=__ret__.architecture,
+        backup_id=__ret__.backup_id,
         checksum=__ret__.checksum,
         container_format=__ret__.container_format,
         created_at=__ret__.created_at,
         disk_format=__ret__.disk_format,
         enterprise_project_id=__ret__.enterprise_project_id,
         file=__ret__.file,
+        flavor_id=__ret__.flavor_id,
         id=__ret__.id,
         image_type=__ret__.image_type,
         metadata=__ret__.metadata,
@@ -473,6 +503,7 @@ def get_image(architecture: Optional[str] = None,
 @_utilities.lift_output_func(get_image)
 def get_image_output(architecture: Optional[pulumi.Input[Optional[str]]] = None,
                      enterprise_project_id: Optional[pulumi.Input[Optional[str]]] = None,
+                     flavor_id: Optional[pulumi.Input[Optional[str]]] = None,
                      image_type: Optional[pulumi.Input[Optional[str]]] = None,
                      most_recent: Optional[pulumi.Input[Optional[bool]]] = None,
                      name: Optional[pulumi.Input[Optional[str]]] = None,
@@ -518,6 +549,8 @@ def get_image_output(architecture: Optional[pulumi.Input[Optional[str]]] = None,
 
     :param str architecture: Specifies the image architecture type. The value can be **x86** and **arm**.
     :param str enterprise_project_id: Specifies the enterprise project ID of the image.
+    :param str flavor_id: Specifies the ECS flavor ID used to filter out available images.
+           You can specify only one flavor ID and only ECS flavor ID is valid, BMS flavor is not supported.
     :param str image_type: Specifies the environment where the image is used. For a BMS image, the value is **Ironic**.
     :param bool most_recent: If more than one result is returned, use the latest updated image.
     :param str name: The name of the image. Cannot be used simultaneously with `name_regex`.
@@ -535,6 +568,6 @@ def get_image_output(architecture: Optional[pulumi.Input[Optional[str]]] = None,
            "name", "container_format", "disk_format", "status", "id" or "size". Defaults to `name`.
     :param str tag: Search for images with a specific tag in "Key=Value" format.
     :param str visibility: The visibility of the image. Must be one of
-           **public**, **private** or **shared**.
+           **public**, **private**, **market** or **shared**.
     """
     ...

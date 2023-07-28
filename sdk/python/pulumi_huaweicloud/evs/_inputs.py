@@ -20,7 +20,9 @@ class VolumeAttachmentArgs:
                  id: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[str] id: A resource ID in UUID format.
+        :param pulumi.Input[str] device: The device name.
+        :param pulumi.Input[str] id: The ID of the attachment information.
+        :param pulumi.Input[str] instance_id: The ID of the server to which the disk is attached.
         """
         if device is not None:
             pulumi.set(__self__, "device", device)
@@ -32,6 +34,9 @@ class VolumeAttachmentArgs:
     @property
     @pulumi.getter
     def device(self) -> Optional[pulumi.Input[str]]:
+        """
+        The device name.
+        """
         return pulumi.get(self, "device")
 
     @device.setter
@@ -42,7 +47,7 @@ class VolumeAttachmentArgs:
     @pulumi.getter
     def id(self) -> Optional[pulumi.Input[str]]:
         """
-        A resource ID in UUID format.
+        The ID of the attachment information.
         """
         return pulumi.get(self, "id")
 
@@ -53,6 +58,9 @@ class VolumeAttachmentArgs:
     @property
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The ID of the server to which the disk is attached.
+        """
         return pulumi.get(self, "instance_id")
 
     @instance_id.setter

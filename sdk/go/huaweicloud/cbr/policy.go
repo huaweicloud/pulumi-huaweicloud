@@ -24,10 +24,24 @@ import (
 //	$ pulumi import huaweicloud:Cbr/policy:Policy test 4d2c2939-774f-42ef-ab15-e5b126b11ace
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attribute is`enable_acceleration`. It is generally recommended running `terraform plan` after importing a policy. You can then decide if changes should be applied to the policy, or the resource definition should be updated to align with the policy. Also you can ignore changes as below. resource "huaweicloud_cbr_policy" "test" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [
+//
+//	enable_acceleration,
+//
+//	]
+//
+//	} }
 type Policy struct {
 	pulumi.CustomResourceState
 
-	// Specifies the scheduling rule for the CBR policy backup execution.
+	// Specifies the scheduling rule for the policy backup execution.
 	// The object structure is documented below.
 	BackupCycle PolicyBackupCycleOutput `pulumi:"backupCycle"`
 	// Specifies the maximum number of retained backups. The value ranges from `2` to
@@ -39,24 +53,29 @@ type Policy struct {
 	// Specifies the name of the replication destination region, which is mandatory
 	// for cross-region replication. Required if `protectionType` is **replication**.
 	DestinationRegion pulumi.StringPtrOutput `pulumi:"destinationRegion"`
-	// Specifies whether to enable the CBR policy. Default to **true**.
+	// Specifies whether to enable the acceleration function to shorten
+	// the replication time for cross-region.
+	// Changing this will create a new policy.
+	EnableAcceleration pulumi.BoolPtrOutput `pulumi:"enableAcceleration"`
+	// Specifies whether to enable the policy. Default to **true**.
 	Enabled pulumi.BoolPtrOutput `pulumi:"enabled"`
 	// Specifies the long-term retention rules, which is an advanced options of
 	// the `backupQuantity`. The object structure is documented below.
 	LongTermRetention PolicyLongTermRetentionPtrOutput `pulumi:"longTermRetention"`
-	// Specifies a unique name of the CBR policy. This parameter can contain a maximum of 64
-	// characters, which may consist of chinese charactors, letters, digits, underscores(_) and hyphens (-).
+	// Specifies the policy name.\
+	// This parameter can contain a maximum of 64
+	// characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
 	Name pulumi.StringOutput `pulumi:"name"`
-	// Specifies the region in which to create the CBR policy. If omitted, the
+	// Specifies the region where the policy is located. If omitted, the
 	// provider-level region will be used. Changing this will create a new policy.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Specifies the duration (in days) for retained backups. The value ranges from `2` to
 	// `99,999`.
 	TimePeriod pulumi.IntPtrOutput `pulumi:"timePeriod"`
-	// Specifies the UTC time zone, e.g.: `UTC+08:00`.
-	// Only avaiable if `longTermRetention` is set.
+	// Specifies the UTC time zone, e.g. `UTC+08:00`.
+	// Only available if `longTermRetention` is set.
 	TimeZone pulumi.StringOutput `pulumi:"timeZone"`
-	// Specifies the protection type of the CBR policy.
+	// Specifies the protection type of the policy.
 	// Valid values are **backup** and **replication**.
 	// Changing this will create a new policy.
 	Type pulumi.StringOutput `pulumi:"type"`
@@ -98,7 +117,7 @@ func GetPolicy(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Policy resources.
 type policyState struct {
-	// Specifies the scheduling rule for the CBR policy backup execution.
+	// Specifies the scheduling rule for the policy backup execution.
 	// The object structure is documented below.
 	BackupCycle *PolicyBackupCycle `pulumi:"backupCycle"`
 	// Specifies the maximum number of retained backups. The value ranges from `2` to
@@ -110,31 +129,36 @@ type policyState struct {
 	// Specifies the name of the replication destination region, which is mandatory
 	// for cross-region replication. Required if `protectionType` is **replication**.
 	DestinationRegion *string `pulumi:"destinationRegion"`
-	// Specifies whether to enable the CBR policy. Default to **true**.
+	// Specifies whether to enable the acceleration function to shorten
+	// the replication time for cross-region.
+	// Changing this will create a new policy.
+	EnableAcceleration *bool `pulumi:"enableAcceleration"`
+	// Specifies whether to enable the policy. Default to **true**.
 	Enabled *bool `pulumi:"enabled"`
 	// Specifies the long-term retention rules, which is an advanced options of
 	// the `backupQuantity`. The object structure is documented below.
 	LongTermRetention *PolicyLongTermRetention `pulumi:"longTermRetention"`
-	// Specifies a unique name of the CBR policy. This parameter can contain a maximum of 64
-	// characters, which may consist of chinese charactors, letters, digits, underscores(_) and hyphens (-).
+	// Specifies the policy name.\
+	// This parameter can contain a maximum of 64
+	// characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
 	Name *string `pulumi:"name"`
-	// Specifies the region in which to create the CBR policy. If omitted, the
+	// Specifies the region where the policy is located. If omitted, the
 	// provider-level region will be used. Changing this will create a new policy.
 	Region *string `pulumi:"region"`
 	// Specifies the duration (in days) for retained backups. The value ranges from `2` to
 	// `99,999`.
 	TimePeriod *int `pulumi:"timePeriod"`
-	// Specifies the UTC time zone, e.g.: `UTC+08:00`.
-	// Only avaiable if `longTermRetention` is set.
+	// Specifies the UTC time zone, e.g. `UTC+08:00`.
+	// Only available if `longTermRetention` is set.
 	TimeZone *string `pulumi:"timeZone"`
-	// Specifies the protection type of the CBR policy.
+	// Specifies the protection type of the policy.
 	// Valid values are **backup** and **replication**.
 	// Changing this will create a new policy.
 	Type *string `pulumi:"type"`
 }
 
 type PolicyState struct {
-	// Specifies the scheduling rule for the CBR policy backup execution.
+	// Specifies the scheduling rule for the policy backup execution.
 	// The object structure is documented below.
 	BackupCycle PolicyBackupCyclePtrInput
 	// Specifies the maximum number of retained backups. The value ranges from `2` to
@@ -146,24 +170,29 @@ type PolicyState struct {
 	// Specifies the name of the replication destination region, which is mandatory
 	// for cross-region replication. Required if `protectionType` is **replication**.
 	DestinationRegion pulumi.StringPtrInput
-	// Specifies whether to enable the CBR policy. Default to **true**.
+	// Specifies whether to enable the acceleration function to shorten
+	// the replication time for cross-region.
+	// Changing this will create a new policy.
+	EnableAcceleration pulumi.BoolPtrInput
+	// Specifies whether to enable the policy. Default to **true**.
 	Enabled pulumi.BoolPtrInput
 	// Specifies the long-term retention rules, which is an advanced options of
 	// the `backupQuantity`. The object structure is documented below.
 	LongTermRetention PolicyLongTermRetentionPtrInput
-	// Specifies a unique name of the CBR policy. This parameter can contain a maximum of 64
-	// characters, which may consist of chinese charactors, letters, digits, underscores(_) and hyphens (-).
+	// Specifies the policy name.\
+	// This parameter can contain a maximum of 64
+	// characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
 	Name pulumi.StringPtrInput
-	// Specifies the region in which to create the CBR policy. If omitted, the
+	// Specifies the region where the policy is located. If omitted, the
 	// provider-level region will be used. Changing this will create a new policy.
 	Region pulumi.StringPtrInput
 	// Specifies the duration (in days) for retained backups. The value ranges from `2` to
 	// `99,999`.
 	TimePeriod pulumi.IntPtrInput
-	// Specifies the UTC time zone, e.g.: `UTC+08:00`.
-	// Only avaiable if `longTermRetention` is set.
+	// Specifies the UTC time zone, e.g. `UTC+08:00`.
+	// Only available if `longTermRetention` is set.
 	TimeZone pulumi.StringPtrInput
-	// Specifies the protection type of the CBR policy.
+	// Specifies the protection type of the policy.
 	// Valid values are **backup** and **replication**.
 	// Changing this will create a new policy.
 	Type pulumi.StringPtrInput
@@ -174,7 +203,7 @@ func (PolicyState) ElementType() reflect.Type {
 }
 
 type policyArgs struct {
-	// Specifies the scheduling rule for the CBR policy backup execution.
+	// Specifies the scheduling rule for the policy backup execution.
 	// The object structure is documented below.
 	BackupCycle PolicyBackupCycle `pulumi:"backupCycle"`
 	// Specifies the maximum number of retained backups. The value ranges from `2` to
@@ -186,24 +215,29 @@ type policyArgs struct {
 	// Specifies the name of the replication destination region, which is mandatory
 	// for cross-region replication. Required if `protectionType` is **replication**.
 	DestinationRegion *string `pulumi:"destinationRegion"`
-	// Specifies whether to enable the CBR policy. Default to **true**.
+	// Specifies whether to enable the acceleration function to shorten
+	// the replication time for cross-region.
+	// Changing this will create a new policy.
+	EnableAcceleration *bool `pulumi:"enableAcceleration"`
+	// Specifies whether to enable the policy. Default to **true**.
 	Enabled *bool `pulumi:"enabled"`
 	// Specifies the long-term retention rules, which is an advanced options of
 	// the `backupQuantity`. The object structure is documented below.
 	LongTermRetention *PolicyLongTermRetention `pulumi:"longTermRetention"`
-	// Specifies a unique name of the CBR policy. This parameter can contain a maximum of 64
-	// characters, which may consist of chinese charactors, letters, digits, underscores(_) and hyphens (-).
+	// Specifies the policy name.\
+	// This parameter can contain a maximum of 64
+	// characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
 	Name *string `pulumi:"name"`
-	// Specifies the region in which to create the CBR policy. If omitted, the
+	// Specifies the region where the policy is located. If omitted, the
 	// provider-level region will be used. Changing this will create a new policy.
 	Region *string `pulumi:"region"`
 	// Specifies the duration (in days) for retained backups. The value ranges from `2` to
 	// `99,999`.
 	TimePeriod *int `pulumi:"timePeriod"`
-	// Specifies the UTC time zone, e.g.: `UTC+08:00`.
-	// Only avaiable if `longTermRetention` is set.
+	// Specifies the UTC time zone, e.g. `UTC+08:00`.
+	// Only available if `longTermRetention` is set.
 	TimeZone *string `pulumi:"timeZone"`
-	// Specifies the protection type of the CBR policy.
+	// Specifies the protection type of the policy.
 	// Valid values are **backup** and **replication**.
 	// Changing this will create a new policy.
 	Type string `pulumi:"type"`
@@ -211,7 +245,7 @@ type policyArgs struct {
 
 // The set of arguments for constructing a Policy resource.
 type PolicyArgs struct {
-	// Specifies the scheduling rule for the CBR policy backup execution.
+	// Specifies the scheduling rule for the policy backup execution.
 	// The object structure is documented below.
 	BackupCycle PolicyBackupCycleInput
 	// Specifies the maximum number of retained backups. The value ranges from `2` to
@@ -223,24 +257,29 @@ type PolicyArgs struct {
 	// Specifies the name of the replication destination region, which is mandatory
 	// for cross-region replication. Required if `protectionType` is **replication**.
 	DestinationRegion pulumi.StringPtrInput
-	// Specifies whether to enable the CBR policy. Default to **true**.
+	// Specifies whether to enable the acceleration function to shorten
+	// the replication time for cross-region.
+	// Changing this will create a new policy.
+	EnableAcceleration pulumi.BoolPtrInput
+	// Specifies whether to enable the policy. Default to **true**.
 	Enabled pulumi.BoolPtrInput
 	// Specifies the long-term retention rules, which is an advanced options of
 	// the `backupQuantity`. The object structure is documented below.
 	LongTermRetention PolicyLongTermRetentionPtrInput
-	// Specifies a unique name of the CBR policy. This parameter can contain a maximum of 64
-	// characters, which may consist of chinese charactors, letters, digits, underscores(_) and hyphens (-).
+	// Specifies the policy name.\
+	// This parameter can contain a maximum of 64
+	// characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
 	Name pulumi.StringPtrInput
-	// Specifies the region in which to create the CBR policy. If omitted, the
+	// Specifies the region where the policy is located. If omitted, the
 	// provider-level region will be used. Changing this will create a new policy.
 	Region pulumi.StringPtrInput
 	// Specifies the duration (in days) for retained backups. The value ranges from `2` to
 	// `99,999`.
 	TimePeriod pulumi.IntPtrInput
-	// Specifies the UTC time zone, e.g.: `UTC+08:00`.
-	// Only avaiable if `longTermRetention` is set.
+	// Specifies the UTC time zone, e.g. `UTC+08:00`.
+	// Only available if `longTermRetention` is set.
 	TimeZone pulumi.StringPtrInput
-	// Specifies the protection type of the CBR policy.
+	// Specifies the protection type of the policy.
 	// Valid values are **backup** and **replication**.
 	// Changing this will create a new policy.
 	Type pulumi.StringInput
@@ -333,7 +372,7 @@ func (o PolicyOutput) ToPolicyOutputWithContext(ctx context.Context) PolicyOutpu
 	return o
 }
 
-// Specifies the scheduling rule for the CBR policy backup execution.
+// Specifies the scheduling rule for the policy backup execution.
 // The object structure is documented below.
 func (o PolicyOutput) BackupCycle() PolicyBackupCycleOutput {
 	return o.ApplyT(func(v *Policy) PolicyBackupCycleOutput { return v.BackupCycle }).(PolicyBackupCycleOutput)
@@ -357,7 +396,14 @@ func (o PolicyOutput) DestinationRegion() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Policy) pulumi.StringPtrOutput { return v.DestinationRegion }).(pulumi.StringPtrOutput)
 }
 
-// Specifies whether to enable the CBR policy. Default to **true**.
+// Specifies whether to enable the acceleration function to shorten
+// the replication time for cross-region.
+// Changing this will create a new policy.
+func (o PolicyOutput) EnableAcceleration() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *Policy) pulumi.BoolPtrOutput { return v.EnableAcceleration }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether to enable the policy. Default to **true**.
 func (o PolicyOutput) Enabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Policy) pulumi.BoolPtrOutput { return v.Enabled }).(pulumi.BoolPtrOutput)
 }
@@ -368,13 +414,14 @@ func (o PolicyOutput) LongTermRetention() PolicyLongTermRetentionPtrOutput {
 	return o.ApplyT(func(v *Policy) PolicyLongTermRetentionPtrOutput { return v.LongTermRetention }).(PolicyLongTermRetentionPtrOutput)
 }
 
-// Specifies a unique name of the CBR policy. This parameter can contain a maximum of 64
-// characters, which may consist of chinese charactors, letters, digits, underscores(_) and hyphens (-).
+// Specifies the policy name.\
+// This parameter can contain a maximum of 64
+// characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
 func (o PolicyOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Policy) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the region in which to create the CBR policy. If omitted, the
+// Specifies the region where the policy is located. If omitted, the
 // provider-level region will be used. Changing this will create a new policy.
 func (o PolicyOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Policy) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
@@ -386,13 +433,13 @@ func (o PolicyOutput) TimePeriod() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *Policy) pulumi.IntPtrOutput { return v.TimePeriod }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the UTC time zone, e.g.: `UTC+08:00`.
-// Only avaiable if `longTermRetention` is set.
+// Specifies the UTC time zone, e.g. `UTC+08:00`.
+// Only available if `longTermRetention` is set.
 func (o PolicyOutput) TimeZone() pulumi.StringOutput {
 	return o.ApplyT(func(v *Policy) pulumi.StringOutput { return v.TimeZone }).(pulumi.StringOutput)
 }
 
-// Specifies the protection type of the CBR policy.
+// Specifies the protection type of the policy.
 // Valid values are **backup** and **replication**.
 // Changing this will create a new policy.
 func (o PolicyOutput) Type() pulumi.StringOutput {

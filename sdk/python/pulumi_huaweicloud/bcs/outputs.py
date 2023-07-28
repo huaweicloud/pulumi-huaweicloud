@@ -114,6 +114,8 @@ class InstanceChannel(dict):
                  org_names: Optional[Sequence[str]] = None):
         """
         :param str name: Specifies the name of the channel. Changing this creates a new instance.
+        :param Sequence[str] org_names: Specifies the name of the peer organization. Changing this creates a new
+               instance.
         """
         pulumi.set(__self__, "name", name)
         if org_names is not None:
@@ -130,6 +132,10 @@ class InstanceChannel(dict):
     @property
     @pulumi.getter(name="orgNames")
     def org_names(self) -> Optional[Sequence[str]]:
+        """
+        Specifies the name of the peer organization. Changing this creates a new
+        instance.
+        """
         return pulumi.get(self, "org_names")
 
 
@@ -158,7 +164,7 @@ class InstanceCouchdb(dict):
         """
         :param str password: Specifies the password of the couch datebase. The password consists of 8 to
                26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-               charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+               characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
         :param str user_name: Specifies the user name of the couch datebase. Changing this creates a new
                instance.
         """
@@ -171,7 +177,7 @@ class InstanceCouchdb(dict):
         """
         Specifies the password of the couch datebase. The password consists of 8 to
         26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-        charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+        characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
         """
         return pulumi.get(self, "password")
 
@@ -392,19 +398,21 @@ class InstancePeerOrgAddress(dict):
         return super().get(key, default)
 
     def __init__(__self__, *,
-                 domain_port: str,
-                 ip_port: str):
-        pulumi.set(__self__, "domain_port", domain_port)
-        pulumi.set(__self__, "ip_port", ip_port)
+                 domain_port: Optional[str] = None,
+                 ip_port: Optional[str] = None):
+        if domain_port is not None:
+            pulumi.set(__self__, "domain_port", domain_port)
+        if ip_port is not None:
+            pulumi.set(__self__, "ip_port", ip_port)
 
     @property
     @pulumi.getter(name="domainPort")
-    def domain_port(self) -> str:
+    def domain_port(self) -> Optional[str]:
         return pulumi.get(self, "domain_port")
 
     @property
     @pulumi.getter(name="ipPort")
-    def ip_port(self) -> str:
+    def ip_port(self) -> Optional[str]:
         return pulumi.get(self, "ip_port")
 
 

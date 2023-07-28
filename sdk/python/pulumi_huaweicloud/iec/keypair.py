@@ -24,6 +24,8 @@ class KeypairArgs:
                a new keypair resource.
         :param pulumi.Input[str] public_key: Specifies a pregenerated OpenSSH-formatted public key. Changing this
                parameter creates a new keypair resource.
+        :param pulumi.Input[str] region: The region in which to create the keypair resource. If omitted, the
+               provider-level region will be used. Changing this creates a new resource.
         """
         if name is not None:
             pulumi.set(__self__, "name", name)
@@ -62,6 +64,10 @@ class KeypairArgs:
     @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
+        """
+        The region in which to create the keypair resource. If omitted, the
+        provider-level region will be used. Changing this creates a new resource.
+        """
         return pulumi.get(self, "region")
 
     @region.setter
@@ -84,6 +90,8 @@ class _KeypairState:
                a new keypair resource.
         :param pulumi.Input[str] public_key: Specifies a pregenerated OpenSSH-formatted public key. Changing this
                parameter creates a new keypair resource.
+        :param pulumi.Input[str] region: The region in which to create the keypair resource. If omitted, the
+               provider-level region will be used. Changing this creates a new resource.
         """
         if fingerprint is not None:
             pulumi.set(__self__, "fingerprint", fingerprint)
@@ -136,6 +144,10 @@ class _KeypairState:
     @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
+        """
+        The region in which to create the keypair resource. If omitted, the
+        provider-level region will be used. Changing this creates a new resource.
+        """
         return pulumi.get(self, "region")
 
     @region.setter
@@ -179,6 +191,8 @@ class Keypair(pulumi.CustomResource):
                a new keypair resource.
         :param pulumi.Input[str] public_key: Specifies a pregenerated OpenSSH-formatted public key. Changing this
                parameter creates a new keypair resource.
+        :param pulumi.Input[str] region: The region in which to create the keypair resource. If omitted, the
+               provider-level region will be used. Changing this creates a new resource.
         """
         ...
     @overload
@@ -264,6 +278,8 @@ class Keypair(pulumi.CustomResource):
                a new keypair resource.
         :param pulumi.Input[str] public_key: Specifies a pregenerated OpenSSH-formatted public key. Changing this
                parameter creates a new keypair resource.
+        :param pulumi.Input[str] region: The region in which to create the keypair resource. If omitted, the
+               provider-level region will be used. Changing this creates a new resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -305,5 +321,9 @@ class Keypair(pulumi.CustomResource):
     @property
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
+        """
+        The region in which to create the keypair resource. If omitted, the
+        provider-level region will be used. Changing this creates a new resource.
+        """
         return pulumi.get(self, "region")
 

@@ -56,16 +56,23 @@ class IpgroupIpListArgs:
 class PoolPersistenceArgs:
     def __init__(__self__, *,
                  type: pulumi.Input[str],
-                 cookie_name: Optional[pulumi.Input[str]] = None):
+                 cookie_name: Optional[pulumi.Input[str]] = None,
+                 timeout: Optional[pulumi.Input[int]] = None):
         """
         :param pulumi.Input[str] type: The type of persistence mode. The current specification supports SOURCE_IP,
                HTTP_COOKIE, and APP_COOKIE.
         :param pulumi.Input[str] cookie_name: The name of the cookie if persistence mode is set appropriately. Required
                if `type = APP_COOKIE`.
+        :param pulumi.Input[int] timeout: Specifies the sticky session timeout duration in minutes. This parameter is
+               invalid when type is set to APP_COOKIE. The value range varies depending on the protocol of the backend server group:
+               + When the protocol of the backend server group is TCP or UDP, the value ranges from 1 to 60.
+               + When the protocol of the backend server group is HTTP or HTTPS, the value ranges from 1 to 1440.
         """
         pulumi.set(__self__, "type", type)
         if cookie_name is not None:
             pulumi.set(__self__, "cookie_name", cookie_name)
+        if timeout is not None:
+            pulumi.set(__self__, "timeout", timeout)
 
     @property
     @pulumi.getter
@@ -92,5 +99,20 @@ class PoolPersistenceArgs:
     @cookie_name.setter
     def cookie_name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "cookie_name", value)
+
+    @property
+    @pulumi.getter
+    def timeout(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the sticky session timeout duration in minutes. This parameter is
+        invalid when type is set to APP_COOKIE. The value range varies depending on the protocol of the backend server group:
+        + When the protocol of the backend server group is TCP or UDP, the value ranges from 1 to 60.
+        + When the protocol of the backend server group is HTTP or HTTPS, the value ranges from 1 to 1440.
+        """
+        return pulumi.get(self, "timeout")
+
+    @timeout.setter
+    def timeout(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "timeout", value)
 
 

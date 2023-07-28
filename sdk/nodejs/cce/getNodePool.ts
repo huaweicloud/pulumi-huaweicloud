@@ -35,7 +35,6 @@ export function getNodePool(args: GetNodePoolArgs, opts?: pulumi.InvokeOptions):
         "nodePoolId": args.nodePoolId,
         "region": args.region,
         "status": args.status,
-        "tags": args.tags,
     }, opts);
 }
 
@@ -64,10 +63,6 @@ export interface GetNodePoolArgs {
      * Specifies the state of the node pool.
      */
     status?: string;
-    /**
-     * Tags of a VM node, key/value pair format.
-     */
-    tags?: {[key: string]: string};
 }
 
 /**
@@ -154,7 +149,7 @@ export interface GetNodePoolResult {
     /**
      * Tags of a VM node, key/value pair format.
      */
-    readonly tags?: {[key: string]: string};
+    readonly tags: {[key: string]: string};
     /**
      * Node Pool type.
      */
@@ -190,8 +185,4 @@ export interface GetNodePoolOutputArgs {
      * Specifies the state of the node pool.
      */
     status?: pulumi.Input<string>;
-    /**
-     * Tags of a VM node, key/value pair format.
-     */
-    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }

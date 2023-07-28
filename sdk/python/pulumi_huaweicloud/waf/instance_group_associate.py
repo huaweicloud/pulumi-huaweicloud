@@ -19,6 +19,12 @@ class InstanceGroupAssociateArgs:
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a InstanceGroupAssociate resource.
+        :param pulumi.Input[str] group_id: Specifies the ID of the WAF instance group.
+               Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] load_balancers: Specifies the IDs of the ELB instances bound to the WAF instance group.
+               This is an array of ELB instance ids.
+        :param pulumi.Input[str] region: The region in which the WAF instance group created.
+               If omitted, the provider-level region will be used. Changing this setting will create a new resource.
         """
         pulumi.set(__self__, "group_id", group_id)
         pulumi.set(__self__, "load_balancers", load_balancers)
@@ -28,6 +34,10 @@ class InstanceGroupAssociateArgs:
     @property
     @pulumi.getter(name="groupId")
     def group_id(self) -> pulumi.Input[str]:
+        """
+        Specifies the ID of the WAF instance group.
+        Changing this will create a new resource.
+        """
         return pulumi.get(self, "group_id")
 
     @group_id.setter
@@ -37,6 +47,10 @@ class InstanceGroupAssociateArgs:
     @property
     @pulumi.getter(name="loadBalancers")
     def load_balancers(self) -> pulumi.Input[Sequence[pulumi.Input[str]]]:
+        """
+        Specifies the IDs of the ELB instances bound to the WAF instance group.
+        This is an array of ELB instance ids.
+        """
         return pulumi.get(self, "load_balancers")
 
     @load_balancers.setter
@@ -46,6 +60,10 @@ class InstanceGroupAssociateArgs:
     @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
+        """
+        The region in which the WAF instance group created.
+        If omitted, the provider-level region will be used. Changing this setting will create a new resource.
+        """
         return pulumi.get(self, "region")
 
     @region.setter
@@ -61,6 +79,12 @@ class _InstanceGroupAssociateState:
                  region: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering InstanceGroupAssociate resources.
+        :param pulumi.Input[str] group_id: Specifies the ID of the WAF instance group.
+               Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] load_balancers: Specifies the IDs of the ELB instances bound to the WAF instance group.
+               This is an array of ELB instance ids.
+        :param pulumi.Input[str] region: The region in which the WAF instance group created.
+               If omitted, the provider-level region will be used. Changing this setting will create a new resource.
         """
         if group_id is not None:
             pulumi.set(__self__, "group_id", group_id)
@@ -72,6 +96,10 @@ class _InstanceGroupAssociateState:
     @property
     @pulumi.getter(name="groupId")
     def group_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the WAF instance group.
+        Changing this will create a new resource.
+        """
         return pulumi.get(self, "group_id")
 
     @group_id.setter
@@ -81,6 +109,10 @@ class _InstanceGroupAssociateState:
     @property
     @pulumi.getter(name="loadBalancers")
     def load_balancers(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the IDs of the ELB instances bound to the WAF instance group.
+        This is an array of ELB instance ids.
+        """
         return pulumi.get(self, "load_balancers")
 
     @load_balancers.setter
@@ -90,6 +122,10 @@ class _InstanceGroupAssociateState:
     @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
+        """
+        The region in which the WAF instance group created.
+        If omitted, the provider-level region will be used. Changing this setting will create a new resource.
+        """
         return pulumi.get(self, "region")
 
     @region.setter
@@ -107,9 +143,38 @@ class InstanceGroupAssociate(pulumi.CustomResource):
                  region: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Create a InstanceGroupAssociate resource with the given unique name, props, and options.
+        Associate ELB instances to a WAF instance group.
+
+        ## Example Usage
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        group_id = config.require_object("groupId")
+        elb_instance_id = config.require_object("elbInstanceId")
+        group_associate = huaweicloud.waf.InstanceGroupAssociate("groupAssociate",
+            group_id=group_id,
+            load_balancers=[elb_instance_id])
+        ```
+
+        ## Import
+
+        The instance group associate can be imported using the group ID, e.g.
+
+        ```sh
+         $ pulumi import huaweicloud:Waf/instanceGroupAssociate:InstanceGroupAssociate group_associate 0be1e69d-1987-4d9c-9dc5-fc7eed592398
+        ```
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] group_id: Specifies the ID of the WAF instance group.
+               Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] load_balancers: Specifies the IDs of the ELB instances bound to the WAF instance group.
+               This is an array of ELB instance ids.
+        :param pulumi.Input[str] region: The region in which the WAF instance group created.
+               If omitted, the provider-level region will be used. Changing this setting will create a new resource.
         """
         ...
     @overload
@@ -118,7 +183,30 @@ class InstanceGroupAssociate(pulumi.CustomResource):
                  args: InstanceGroupAssociateArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Create a InstanceGroupAssociate resource with the given unique name, props, and options.
+        Associate ELB instances to a WAF instance group.
+
+        ## Example Usage
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        group_id = config.require_object("groupId")
+        elb_instance_id = config.require_object("elbInstanceId")
+        group_associate = huaweicloud.waf.InstanceGroupAssociate("groupAssociate",
+            group_id=group_id,
+            load_balancers=[elb_instance_id])
+        ```
+
+        ## Import
+
+        The instance group associate can be imported using the group ID, e.g.
+
+        ```sh
+         $ pulumi import huaweicloud:Waf/instanceGroupAssociate:InstanceGroupAssociate group_associate 0be1e69d-1987-4d9c-9dc5-fc7eed592398
+        ```
+
         :param str resource_name: The name of the resource.
         :param InstanceGroupAssociateArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -173,6 +261,12 @@ class InstanceGroupAssociate(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] group_id: Specifies the ID of the WAF instance group.
+               Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] load_balancers: Specifies the IDs of the ELB instances bound to the WAF instance group.
+               This is an array of ELB instance ids.
+        :param pulumi.Input[str] region: The region in which the WAF instance group created.
+               If omitted, the provider-level region will be used. Changing this setting will create a new resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -186,15 +280,27 @@ class InstanceGroupAssociate(pulumi.CustomResource):
     @property
     @pulumi.getter(name="groupId")
     def group_id(self) -> pulumi.Output[str]:
+        """
+        Specifies the ID of the WAF instance group.
+        Changing this will create a new resource.
+        """
         return pulumi.get(self, "group_id")
 
     @property
     @pulumi.getter(name="loadBalancers")
     def load_balancers(self) -> pulumi.Output[Sequence[str]]:
+        """
+        Specifies the IDs of the ELB instances bound to the WAF instance group.
+        This is an array of ELB instance ids.
+        """
         return pulumi.get(self, "load_balancers")
 
     @property
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
+        """
+        The region in which the WAF instance group created.
+        If omitted, the provider-level region will be used. Changing this setting will create a new resource.
+        """
         return pulumi.get(self, "region")
 

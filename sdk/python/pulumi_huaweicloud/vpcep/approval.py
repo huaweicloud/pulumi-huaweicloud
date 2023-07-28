@@ -21,9 +21,9 @@ class ApprovalArgs:
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Approval resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] endpoints: - Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] endpoints: Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
                service. The VPC endpoints will be rejected when the resource was destroyed.
-        :param pulumi.Input[str] service_id: - Specifies the ID of the VPC endpoint service. Changing this creates a new
+        :param pulumi.Input[str] service_id: Specifies the ID of the VPC endpoint service. Changing this creates a new
                resource.
         :param pulumi.Input[str] region: The region in which to obtain the VPC endpoint service. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
@@ -37,7 +37,7 @@ class ApprovalArgs:
     @pulumi.getter
     def endpoints(self) -> pulumi.Input[Sequence[pulumi.Input[str]]]:
         """
-        - Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
+        Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
         service. The VPC endpoints will be rejected when the resource was destroyed.
         """
         return pulumi.get(self, "endpoints")
@@ -50,7 +50,7 @@ class ApprovalArgs:
     @pulumi.getter(name="serviceId")
     def service_id(self) -> pulumi.Input[str]:
         """
-        - Specifies the ID of the VPC endpoint service. Changing this creates a new
+        Specifies the ID of the VPC endpoint service. Changing this creates a new
         resource.
         """
         return pulumi.get(self, "service_id")
@@ -83,11 +83,11 @@ class _ApprovalState:
         """
         Input properties used for looking up and filtering Approval resources.
         :param pulumi.Input[Sequence[pulumi.Input['ApprovalConnectionArgs']]] connections: An array of VPC endpoints connect to the VPC endpoint service. Structure is documented below.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] endpoints: - Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] endpoints: Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
                service. The VPC endpoints will be rejected when the resource was destroyed.
         :param pulumi.Input[str] region: The region in which to obtain the VPC endpoint service. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
-        :param pulumi.Input[str] service_id: - Specifies the ID of the VPC endpoint service. Changing this creates a new
+        :param pulumi.Input[str] service_id: Specifies the ID of the VPC endpoint service. Changing this creates a new
                resource.
         """
         if connections is not None:
@@ -115,7 +115,7 @@ class _ApprovalState:
     @pulumi.getter
     def endpoints(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        - Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
+        Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
         service. The VPC endpoints will be rejected when the resource was destroyed.
         """
         return pulumi.get(self, "endpoints")
@@ -141,7 +141,7 @@ class _ApprovalState:
     @pulumi.getter(name="serviceId")
     def service_id(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the ID of the VPC endpoint service. Changing this creates a new
+        Specifies the ID of the VPC endpoint service. Changing this creates a new
         resource.
         """
         return pulumi.get(self, "service_id")
@@ -193,13 +193,21 @@ class Approval(pulumi.CustomResource):
             endpoints=[demo_endpoint.id])
         ```
 
+        ## Import
+
+        VPC endpoint approval can be imported using the `id`, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Vpcep/approval:Approval test <id>
+        ```
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] endpoints: - Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] endpoints: Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
                service. The VPC endpoints will be rejected when the resource was destroyed.
         :param pulumi.Input[str] region: The region in which to obtain the VPC endpoint service. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
-        :param pulumi.Input[str] service_id: - Specifies the ID of the VPC endpoint service. Changing this creates a new
+        :param pulumi.Input[str] service_id: Specifies the ID of the VPC endpoint service. Changing this creates a new
                resource.
         """
         ...
@@ -239,6 +247,14 @@ class Approval(pulumi.CustomResource):
         approval = huaweicloud.vpcep.Approval("approval",
             service_id=demo_service.id,
             endpoints=[demo_endpoint.id])
+        ```
+
+        ## Import
+
+        VPC endpoint approval can be imported using the `id`, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Vpcep/approval:Approval test <id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -298,11 +314,11 @@ class Approval(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApprovalConnectionArgs']]]] connections: An array of VPC endpoints connect to the VPC endpoint service. Structure is documented below.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] endpoints: - Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] endpoints: Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
                service. The VPC endpoints will be rejected when the resource was destroyed.
         :param pulumi.Input[str] region: The region in which to obtain the VPC endpoint service. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
-        :param pulumi.Input[str] service_id: - Specifies the ID of the VPC endpoint service. Changing this creates a new
+        :param pulumi.Input[str] service_id: Specifies the ID of the VPC endpoint service. Changing this creates a new
                resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -327,7 +343,7 @@ class Approval(pulumi.CustomResource):
     @pulumi.getter
     def endpoints(self) -> pulumi.Output[Sequence[str]]:
         """
-        - Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
+        Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
         service. The VPC endpoints will be rejected when the resource was destroyed.
         """
         return pulumi.get(self, "endpoints")
@@ -345,7 +361,7 @@ class Approval(pulumi.CustomResource):
     @pulumi.getter(name="serviceId")
     def service_id(self) -> pulumi.Output[str]:
         """
-        - Specifies the ID of the VPC endpoint service. Changing this creates a new
+        Specifies the ID of the VPC endpoint service. Changing this creates a new
         resource.
         """
         return pulumi.get(self, "service_id")

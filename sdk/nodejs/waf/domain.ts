@@ -17,7 +17,10 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
+ * const config = new pulumi.Config();
+ * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
  * const certificate1 = new huaweicloud.waf.Certificate("certificate1", {
+ *     enterpriseProjectId: enterpriseProjectId,
  *     certificate: `-----BEGIN CERTIFICATE-----
  * MIIFmQl5dh2QUAeo39TIKtadgAgh4zHx09kSgayS9Wph9LEqq7MA+2042L3J9aOa
  * DAYDVR0TAQH/BAIwADAdBgNVHQ4EFgQUR+SosWwALt6PkP0J9iOIxA6RW8gVsLwq
@@ -39,6 +42,7 @@ import * as utilities from "../utilities";
  *     certificateId: certificate1.id,
  *     certificateName: certificate1.name,
  *     proxy: true,
+ *     enterpriseProjectId: enterpriseProjectId,
  *     servers: [{
  *         clientProtocol: "HTTPS",
  *         serverProtocol: "HTTP",
@@ -50,10 +54,16 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Domains can be imported using the `id`, e.g.
+ * There are two ways to import WAF domain state. * Using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Waf/domain:Domain domain_2 7902bd9e01104cb794dcb668f235e0c5
+ *  $ pulumi import huaweicloud:Waf/domain:Domain test <id>
+ * ```
+ *
+ *  * Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:Waf/domain:Domain test <id>/<enterprise_project_id>
  * ```
  */
 export class Domain extends pulumi.CustomResource {
@@ -100,10 +110,20 @@ export class Domain extends pulumi.CustomResource {
      */
     public readonly certificateName!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the domain name to be protected. For example, www.example.com or
-     * *.example.com. Changing this creates a new domain.
+     * Specifies the charging mode of the domain. Valid values are *prePaid*
+     * and *postPaid*, defaults to *prePaid*. Changing this creates a new instance.
+     */
+    public readonly chargingMode!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the domain name to be protected. For example, `www.example.com` or
+     * `*.example.com`. Changing this creates a new domain.
      */
     public readonly domain!: pulumi.Output<string>;
+    /**
+     * Specifies the enterprise project ID of WAF domain.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
     /**
      * Specifies whether to retain the policy when deleting a domain name.
      * Defaults to true.
@@ -152,7 +172,9 @@ export class Domain extends pulumi.CustomResource {
             resourceInputs["accessStatus"] = state ? state.accessStatus : undefined;
             resourceInputs["certificateId"] = state ? state.certificateId : undefined;
             resourceInputs["certificateName"] = state ? state.certificateName : undefined;
+            resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
             resourceInputs["domain"] = state ? state.domain : undefined;
+            resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["keepPolicy"] = state ? state.keepPolicy : undefined;
             resourceInputs["policyId"] = state ? state.policyId : undefined;
             resourceInputs["protectStatus"] = state ? state.protectStatus : undefined;
@@ -170,7 +192,9 @@ export class Domain extends pulumi.CustomResource {
             }
             resourceInputs["certificateId"] = args ? args.certificateId : undefined;
             resourceInputs["certificateName"] = args ? args.certificateName : undefined;
+            resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
             resourceInputs["domain"] = args ? args.domain : undefined;
+            resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["keepPolicy"] = args ? args.keepPolicy : undefined;
             resourceInputs["policyId"] = args ? args.policyId : undefined;
             resourceInputs["proxy"] = args ? args.proxy : undefined;
@@ -205,10 +229,20 @@ export interface DomainState {
      */
     certificateName?: pulumi.Input<string>;
     /**
-     * Specifies the domain name to be protected. For example, www.example.com or
-     * *.example.com. Changing this creates a new domain.
+     * Specifies the charging mode of the domain. Valid values are *prePaid*
+     * and *postPaid*, defaults to *prePaid*. Changing this creates a new instance.
+     */
+    chargingMode?: pulumi.Input<string>;
+    /**
+     * Specifies the domain name to be protected. For example, `www.example.com` or
+     * `*.example.com`. Changing this creates a new domain.
      */
     domain?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID of WAF domain.
+     * Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Specifies whether to retain the policy when deleting a domain name.
      * Defaults to true.
@@ -257,10 +291,20 @@ export interface DomainArgs {
      */
     certificateName?: pulumi.Input<string>;
     /**
-     * Specifies the domain name to be protected. For example, www.example.com or
-     * *.example.com. Changing this creates a new domain.
+     * Specifies the charging mode of the domain. Valid values are *prePaid*
+     * and *postPaid*, defaults to *prePaid*. Changing this creates a new instance.
+     */
+    chargingMode?: pulumi.Input<string>;
+    /**
+     * Specifies the domain name to be protected. For example, `www.example.com` or
+     * `*.example.com`. Changing this creates a new domain.
      */
     domain: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID of WAF domain.
+     * Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Specifies whether to retain the policy when deleting a domain name.
      * Defaults to true.

@@ -238,6 +238,7 @@ class _NetworkAclRuleState:
         :param pulumi.Input[bool] enabled: Specifies the Enabled status for the iec network ACL rule. The default value is true.
         :param pulumi.Input[int] ip_version: The version of elastic IP address. IEC services only support IPv4(4) now.
         :param pulumi.Input[str] network_acl_id: Specifies a unique id for the iec network ACL.
+        :param pulumi.Input[str] policy_id: The ID of the firewall policy for the iec network ACL.
         :param pulumi.Input[str] protocol: Specifies the protocol supported by the iec network ACL rule. Valid values are: *tcp*
                , *udp*, *icmp* and *any*.
         :param pulumi.Input[str] source_ip_address: Specifies the source IP address that the traffic is allowed from. The default
@@ -374,6 +375,9 @@ class _NetworkAclRuleState:
     @property
     @pulumi.getter(name="policyId")
     def policy_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The ID of the firewall policy for the iec network ACL.
+        """
         return pulumi.get(self, "policy_id")
 
     @policy_id.setter
@@ -600,6 +604,7 @@ class NetworkAclRule(pulumi.CustomResource):
         :param pulumi.Input[bool] enabled: Specifies the Enabled status for the iec network ACL rule. The default value is true.
         :param pulumi.Input[int] ip_version: The version of elastic IP address. IEC services only support IPv4(4) now.
         :param pulumi.Input[str] network_acl_id: Specifies a unique id for the iec network ACL.
+        :param pulumi.Input[str] policy_id: The ID of the firewall policy for the iec network ACL.
         :param pulumi.Input[str] protocol: Specifies the protocol supported by the iec network ACL rule. Valid values are: *tcp*
                , *udp*, *icmp* and *any*.
         :param pulumi.Input[str] source_ip_address: Specifies the source IP address that the traffic is allowed from. The default
@@ -697,6 +702,9 @@ class NetworkAclRule(pulumi.CustomResource):
     @property
     @pulumi.getter(name="policyId")
     def policy_id(self) -> pulumi.Output[str]:
+        """
+        The ID of the firewall policy for the iec network ACL.
+        """
         return pulumi.get(self, "policy_id")
 
     @property

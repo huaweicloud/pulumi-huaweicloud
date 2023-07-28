@@ -47,30 +47,36 @@ import (
 //
 // ## Import
 //
-// Environments can be imported using their `id` and the ID of the APIG instance to which the environment belongs, separated by a slash, e.g.
+// Environments can be imported using their `name` and the ID of the related dedicated instance, separated by a slash, e.g.
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:DedicatedApig/environment:Environment test <instance ID>/<id>
+//	$ pulumi import huaweicloud:DedicatedApig/environment:Environment test &ltinstance_id&gt/&ltname&gt
 //
 // ```
 type Environment struct {
 	pulumi.CustomResourceState
 
-	// Time when the APIG environment was created, in RFC-3339 format.
+	// schema: Deprecated; The time when the environment was created.
+	//
+	// Deprecated: Use 'created_at' instead
 	CreateTime pulumi.StringOutput `pulumi:"createTime"`
-	// Specifies the description about the API environment. The description contain a
-	// maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-	// Unicode format.
+	// The time when the environment was created.
+	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
+	// Specifies the environment description.\
+	// The value can contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
+	// Chinese characters must be in **UTF-8** or **Unicode** format.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
-	// Specifies an ID of the APIG dedicated instance to which the API
-	// environment belongs to. Changing this will create a new APIG environment resource.
+	// Specifies the ID of the dedicated instance to which the environment
+	// belongs.
+	// Changing this will create a new resource.
 	InstanceId pulumi.StringOutput `pulumi:"instanceId"`
-	// Specifies the name of the API environment. The API environment name consists of 3 to 64
-	// characters, starting with a letter. Only letters, digits and underscores (_) are allowed.
+	// Specifies the environment name.\
+	// The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+	// The name must start with a letter.
 	Name pulumi.StringOutput `pulumi:"name"`
-	// Specifies the region in which to create the APIG environment resource. If
-	// omitted, the provider-level region will be used. Changing this will create a new APIG environment resource.
+	// Specifies the region where the dedicated instance is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
 }
 
@@ -107,38 +113,50 @@ func GetEnvironment(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Environment resources.
 type environmentState struct {
-	// Time when the APIG environment was created, in RFC-3339 format.
+	// schema: Deprecated; The time when the environment was created.
+	//
+	// Deprecated: Use 'created_at' instead
 	CreateTime *string `pulumi:"createTime"`
-	// Specifies the description about the API environment. The description contain a
-	// maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-	// Unicode format.
+	// The time when the environment was created.
+	CreatedAt *string `pulumi:"createdAt"`
+	// Specifies the environment description.\
+	// The value can contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
+	// Chinese characters must be in **UTF-8** or **Unicode** format.
 	Description *string `pulumi:"description"`
-	// Specifies an ID of the APIG dedicated instance to which the API
-	// environment belongs to. Changing this will create a new APIG environment resource.
+	// Specifies the ID of the dedicated instance to which the environment
+	// belongs.
+	// Changing this will create a new resource.
 	InstanceId *string `pulumi:"instanceId"`
-	// Specifies the name of the API environment. The API environment name consists of 3 to 64
-	// characters, starting with a letter. Only letters, digits and underscores (_) are allowed.
+	// Specifies the environment name.\
+	// The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+	// The name must start with a letter.
 	Name *string `pulumi:"name"`
-	// Specifies the region in which to create the APIG environment resource. If
-	// omitted, the provider-level region will be used. Changing this will create a new APIG environment resource.
+	// Specifies the region where the dedicated instance is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
 }
 
 type EnvironmentState struct {
-	// Time when the APIG environment was created, in RFC-3339 format.
+	// schema: Deprecated; The time when the environment was created.
+	//
+	// Deprecated: Use 'created_at' instead
 	CreateTime pulumi.StringPtrInput
-	// Specifies the description about the API environment. The description contain a
-	// maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-	// Unicode format.
+	// The time when the environment was created.
+	CreatedAt pulumi.StringPtrInput
+	// Specifies the environment description.\
+	// The value can contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
+	// Chinese characters must be in **UTF-8** or **Unicode** format.
 	Description pulumi.StringPtrInput
-	// Specifies an ID of the APIG dedicated instance to which the API
-	// environment belongs to. Changing this will create a new APIG environment resource.
+	// Specifies the ID of the dedicated instance to which the environment
+	// belongs.
+	// Changing this will create a new resource.
 	InstanceId pulumi.StringPtrInput
-	// Specifies the name of the API environment. The API environment name consists of 3 to 64
-	// characters, starting with a letter. Only letters, digits and underscores (_) are allowed.
+	// Specifies the environment name.\
+	// The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+	// The name must start with a letter.
 	Name pulumi.StringPtrInput
-	// Specifies the region in which to create the APIG environment resource. If
-	// omitted, the provider-level region will be used. Changing this will create a new APIG environment resource.
+	// Specifies the region where the dedicated instance is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
 }
 
@@ -147,35 +165,39 @@ func (EnvironmentState) ElementType() reflect.Type {
 }
 
 type environmentArgs struct {
-	// Specifies the description about the API environment. The description contain a
-	// maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-	// Unicode format.
+	// Specifies the environment description.\
+	// The value can contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
+	// Chinese characters must be in **UTF-8** or **Unicode** format.
 	Description *string `pulumi:"description"`
-	// Specifies an ID of the APIG dedicated instance to which the API
-	// environment belongs to. Changing this will create a new APIG environment resource.
+	// Specifies the ID of the dedicated instance to which the environment
+	// belongs.
+	// Changing this will create a new resource.
 	InstanceId string `pulumi:"instanceId"`
-	// Specifies the name of the API environment. The API environment name consists of 3 to 64
-	// characters, starting with a letter. Only letters, digits and underscores (_) are allowed.
+	// Specifies the environment name.\
+	// The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+	// The name must start with a letter.
 	Name *string `pulumi:"name"`
-	// Specifies the region in which to create the APIG environment resource. If
-	// omitted, the provider-level region will be used. Changing this will create a new APIG environment resource.
+	// Specifies the region where the dedicated instance is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
 }
 
 // The set of arguments for constructing a Environment resource.
 type EnvironmentArgs struct {
-	// Specifies the description about the API environment. The description contain a
-	// maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-	// Unicode format.
+	// Specifies the environment description.\
+	// The value can contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
+	// Chinese characters must be in **UTF-8** or **Unicode** format.
 	Description pulumi.StringPtrInput
-	// Specifies an ID of the APIG dedicated instance to which the API
-	// environment belongs to. Changing this will create a new APIG environment resource.
+	// Specifies the ID of the dedicated instance to which the environment
+	// belongs.
+	// Changing this will create a new resource.
 	InstanceId pulumi.StringInput
-	// Specifies the name of the API environment. The API environment name consists of 3 to 64
-	// characters, starting with a letter. Only letters, digits and underscores (_) are allowed.
+	// Specifies the environment name.\
+	// The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+	// The name must start with a letter.
 	Name pulumi.StringPtrInput
-	// Specifies the region in which to create the APIG environment resource. If
-	// omitted, the provider-level region will be used. Changing this will create a new APIG environment resource.
+	// Specifies the region where the dedicated instance is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
 }
 
@@ -266,32 +288,41 @@ func (o EnvironmentOutput) ToEnvironmentOutputWithContext(ctx context.Context) E
 	return o
 }
 
-// Time when the APIG environment was created, in RFC-3339 format.
+// schema: Deprecated; The time when the environment was created.
+//
+// Deprecated: Use 'created_at' instead
 func (o EnvironmentOutput) CreateTime() pulumi.StringOutput {
 	return o.ApplyT(func(v *Environment) pulumi.StringOutput { return v.CreateTime }).(pulumi.StringOutput)
 }
 
-// Specifies the description about the API environment. The description contain a
-// maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-// Unicode format.
+// The time when the environment was created.
+func (o EnvironmentOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Environment) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
+}
+
+// Specifies the environment description.\
+// The value can contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
+// Chinese characters must be in **UTF-8** or **Unicode** format.
 func (o EnvironmentOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Environment) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies an ID of the APIG dedicated instance to which the API
-// environment belongs to. Changing this will create a new APIG environment resource.
+// Specifies the ID of the dedicated instance to which the environment
+// belongs.
+// Changing this will create a new resource.
 func (o EnvironmentOutput) InstanceId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Environment) pulumi.StringOutput { return v.InstanceId }).(pulumi.StringOutput)
 }
 
-// Specifies the name of the API environment. The API environment name consists of 3 to 64
-// characters, starting with a letter. Only letters, digits and underscores (_) are allowed.
+// Specifies the environment name.\
+// The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+// The name must start with a letter.
 func (o EnvironmentOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Environment) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the region in which to create the APIG environment resource. If
-// omitted, the provider-level region will be used. Changing this will create a new APIG environment resource.
+// Specifies the region where the dedicated instance is located.\
+// If omitted, the provider-level region will be used. Changing this will create a new resource.
 func (o EnvironmentOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Environment) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }

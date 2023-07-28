@@ -172,10 +172,12 @@ type Certificate struct {
 	// This is a list, each item of data is as follows:
 	Authentifications CertificateAuthentificationArrayOutput `pulumi:"authentifications"`
 	// The public encrypted key of the Certificate, PEM format.
+	// Changing this parameter will create a new resource.
 	Certificate pulumi.StringOutput `pulumi:"certificate"`
 	// The chain of the certificate.
 	// It can be extracted from the *server.crt* file in the Nginx directory,
 	// usually after the second paragraph is the certificate chain.
+	// Changing this parameter will create a new resource.
 	CertificateChain pulumi.StringOutput `pulumi:"certificateChain"`
 	// Domain name mapping to the verification value
 	Domain pulumi.StringOutput `pulumi:"domain"`
@@ -183,12 +185,14 @@ type Certificate struct {
 	DomainCount pulumi.IntOutput `pulumi:"domainCount"`
 	// Human-readable name for the Certificate.
 	// Does not have to be unique. The value contains a maximum of 63 characters.
+	// Changing this parameter will create a new resource.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Time when the certificate becomes invalid. If no valid value is obtained, this parameter is left blank.
 	NotAfter pulumi.StringOutput `pulumi:"notAfter"`
 	// Time when the certificate takes effect. If no valid value is obtained, this parameter is left blank.
 	NotBefore pulumi.StringOutput `pulumi:"notBefore"`
 	// The private encrypted key of the Certificate, PEM format.
+	// Changing this parameter will create a new resource.
 	PrivateKey pulumi.StringOutput `pulumi:"privateKey"`
 	// Whether a certificate can be pushed.
 	PushSupport pulumi.StringOutput `pulumi:"pushSupport"`
@@ -245,10 +249,12 @@ type certificateState struct {
 	// This is a list, each item of data is as follows:
 	Authentifications []CertificateAuthentification `pulumi:"authentifications"`
 	// The public encrypted key of the Certificate, PEM format.
+	// Changing this parameter will create a new resource.
 	Certificate *string `pulumi:"certificate"`
 	// The chain of the certificate.
 	// It can be extracted from the *server.crt* file in the Nginx directory,
 	// usually after the second paragraph is the certificate chain.
+	// Changing this parameter will create a new resource.
 	CertificateChain *string `pulumi:"certificateChain"`
 	// Domain name mapping to the verification value
 	Domain *string `pulumi:"domain"`
@@ -256,12 +262,14 @@ type certificateState struct {
 	DomainCount *int `pulumi:"domainCount"`
 	// Human-readable name for the Certificate.
 	// Does not have to be unique. The value contains a maximum of 63 characters.
+	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
 	// Time when the certificate becomes invalid. If no valid value is obtained, this parameter is left blank.
 	NotAfter *string `pulumi:"notAfter"`
 	// Time when the certificate takes effect. If no valid value is obtained, this parameter is left blank.
 	NotBefore *string `pulumi:"notBefore"`
 	// The private encrypted key of the Certificate, PEM format.
+	// Changing this parameter will create a new resource.
 	PrivateKey *string `pulumi:"privateKey"`
 	// Whether a certificate can be pushed.
 	PushSupport *string `pulumi:"pushSupport"`
@@ -280,10 +288,12 @@ type CertificateState struct {
 	// This is a list, each item of data is as follows:
 	Authentifications CertificateAuthentificationArrayInput
 	// The public encrypted key of the Certificate, PEM format.
+	// Changing this parameter will create a new resource.
 	Certificate pulumi.StringPtrInput
 	// The chain of the certificate.
 	// It can be extracted from the *server.crt* file in the Nginx directory,
 	// usually after the second paragraph is the certificate chain.
+	// Changing this parameter will create a new resource.
 	CertificateChain pulumi.StringPtrInput
 	// Domain name mapping to the verification value
 	Domain pulumi.StringPtrInput
@@ -291,12 +301,14 @@ type CertificateState struct {
 	DomainCount pulumi.IntPtrInput
 	// Human-readable name for the Certificate.
 	// Does not have to be unique. The value contains a maximum of 63 characters.
+	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
 	// Time when the certificate becomes invalid. If no valid value is obtained, this parameter is left blank.
 	NotAfter pulumi.StringPtrInput
 	// Time when the certificate takes effect. If no valid value is obtained, this parameter is left blank.
 	NotBefore pulumi.StringPtrInput
 	// The private encrypted key of the Certificate, PEM format.
+	// Changing this parameter will create a new resource.
 	PrivateKey pulumi.StringPtrInput
 	// Whether a certificate can be pushed.
 	PushSupport pulumi.StringPtrInput
@@ -316,15 +328,19 @@ func (CertificateState) ElementType() reflect.Type {
 
 type certificateArgs struct {
 	// The public encrypted key of the Certificate, PEM format.
+	// Changing this parameter will create a new resource.
 	Certificate string `pulumi:"certificate"`
 	// The chain of the certificate.
 	// It can be extracted from the *server.crt* file in the Nginx directory,
 	// usually after the second paragraph is the certificate chain.
+	// Changing this parameter will create a new resource.
 	CertificateChain string `pulumi:"certificateChain"`
 	// Human-readable name for the Certificate.
 	// Does not have to be unique. The value contains a maximum of 63 characters.
+	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
 	// The private encrypted key of the Certificate, PEM format.
+	// Changing this parameter will create a new resource.
 	PrivateKey string `pulumi:"privateKey"`
 	// The region in which to create the SCM certificate resource.
 	// If omitted, the provider-level region will be used.
@@ -337,15 +353,19 @@ type certificateArgs struct {
 // The set of arguments for constructing a Certificate resource.
 type CertificateArgs struct {
 	// The public encrypted key of the Certificate, PEM format.
+	// Changing this parameter will create a new resource.
 	Certificate pulumi.StringInput
 	// The chain of the certificate.
 	// It can be extracted from the *server.crt* file in the Nginx directory,
 	// usually after the second paragraph is the certificate chain.
+	// Changing this parameter will create a new resource.
 	CertificateChain pulumi.StringInput
 	// Human-readable name for the Certificate.
 	// Does not have to be unique. The value contains a maximum of 63 characters.
+	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
 	// The private encrypted key of the Certificate, PEM format.
+	// Changing this parameter will create a new resource.
 	PrivateKey pulumi.StringInput
 	// The region in which to create the SCM certificate resource.
 	// If omitted, the provider-level region will be used.
@@ -449,6 +469,7 @@ func (o CertificateOutput) Authentifications() CertificateAuthentificationArrayO
 }
 
 // The public encrypted key of the Certificate, PEM format.
+// Changing this parameter will create a new resource.
 func (o CertificateOutput) Certificate() pulumi.StringOutput {
 	return o.ApplyT(func(v *Certificate) pulumi.StringOutput { return v.Certificate }).(pulumi.StringOutput)
 }
@@ -456,6 +477,7 @@ func (o CertificateOutput) Certificate() pulumi.StringOutput {
 // The chain of the certificate.
 // It can be extracted from the *server.crt* file in the Nginx directory,
 // usually after the second paragraph is the certificate chain.
+// Changing this parameter will create a new resource.
 func (o CertificateOutput) CertificateChain() pulumi.StringOutput {
 	return o.ApplyT(func(v *Certificate) pulumi.StringOutput { return v.CertificateChain }).(pulumi.StringOutput)
 }
@@ -472,6 +494,7 @@ func (o CertificateOutput) DomainCount() pulumi.IntOutput {
 
 // Human-readable name for the Certificate.
 // Does not have to be unique. The value contains a maximum of 63 characters.
+// Changing this parameter will create a new resource.
 func (o CertificateOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Certificate) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
@@ -487,6 +510,7 @@ func (o CertificateOutput) NotBefore() pulumi.StringOutput {
 }
 
 // The private encrypted key of the Certificate, PEM format.
+// Changing this parameter will create a new resource.
 func (o CertificateOutput) PrivateKey() pulumi.StringOutput {
 	return o.ApplyT(func(v *Certificate) pulumi.StringOutput { return v.PrivateKey }).(pulumi.StringOutput)
 }

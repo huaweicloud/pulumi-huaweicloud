@@ -59,7 +59,7 @@ import * as utilities from "../utilities";
  *  $ pulumi import huaweicloud:Obs/bucketObject:BucketObject object bucket/key
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`encryption`, `source`, `acl` and `sse_kms_key_id`. It is generally recommended running `terraform plan` after importing an object. You can then decide if changes should be applied to the object, or the resource definition should be updated to align with the object. Also you can ignore changes as below. resource "huaweicloud_obs_bucket_object" "object" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`encryption`, `source`, `acl` and `kms_key_id`. It is generally recommended running `terraform plan` after importing an object. You can then decide if changes should be applied to the object, or the resource definition should be updated to align with the object. Also you can ignore changes as below. resource "huaweicloud_obs_bucket_object" "object" {
  *
  *  ...
  *
@@ -67,7 +67,7 @@ import * as utilities from "../utilities";
  *
  *  ignore_changes = [
  *
- *  encryption, source, acl, sse_kms_key_id,
+ *  encryption, source, acl, kms_key_id,
  *
  *  ]
  *
@@ -131,6 +131,9 @@ export class BucketObject extends pulumi.CustomResource {
      * The name of the object once it is in the bucket.
      */
     public readonly key!: pulumi.Output<string>;
+    /**
+     * The ID of the kms key. If omitted, the default master key will be used.
+     */
     public readonly kmsKeyId!: pulumi.Output<string | undefined>;
     /**
      * The region in which to create the OBS bucket object resource. If omitted, the
@@ -241,6 +244,9 @@ export interface BucketObjectState {
      * The name of the object once it is in the bucket.
      */
     key?: pulumi.Input<string>;
+    /**
+     * The ID of the kms key. If omitted, the default master key will be used.
+     */
     kmsKeyId?: pulumi.Input<string>;
     /**
      * The region in which to create the OBS bucket object resource. If omitted, the
@@ -299,6 +305,9 @@ export interface BucketObjectArgs {
      * The name of the object once it is in the bucket.
      */
     key: pulumi.Input<string>;
+    /**
+     * The ID of the kms key. If omitted, the default master key will be used.
+     */
     kmsKeyId?: pulumi.Input<string>;
     /**
      * The region in which to create the OBS bucket object resource. If omitted, the

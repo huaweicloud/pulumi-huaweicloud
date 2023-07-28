@@ -12,13 +12,15 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const lb1 = new huaweicloud.Elb.Loadbalancer("lb_1", {
+ * const config = new pulumi.Config();
+ * const ipv4SubnetId = config.requireObject("ipv4SubnetId");
+ * const lb1 = new huaweicloud.elb.Loadbalancer("lb1", {
+ *     vipSubnetId: ipv4SubnetId,
  *     tags: {
  *         key: "value",
  *     },
- *     vipSubnetId: "d9415786-5f1a-428b-b35f-2f1523e146d2",
  * });
  * ```
  * ### Loadbalancer With EIP
@@ -27,7 +29,9 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const lb1 = new huaweicloud.elb.Loadbalancer("lb1", {vipSubnetId: "d9415786-5f1a-428b-b35f-2f1523e146d2"});
+ * const config = new pulumi.Config();
+ * const ipv4SubnetId = config.requireObject("ipv4SubnetId");
+ * const lb1 = new huaweicloud.elb.Loadbalancer("lb1", {vipSubnetId: ipv4_subnet_id});
  * const eip1 = new huaweicloud.vpc.EipAssociate("eip1", {
  *     publicIp: "1.2.3.4",
  *     portId: lb1.vipPortId,
@@ -70,10 +74,6 @@ export class Loadbalancer extends pulumi.CustomResource {
         return obj['__pulumiType'] === Loadbalancer.__pulumiType;
     }
 
-    /**
-     * The administrative state of the loadbalancer. A valid value is true (UP) or
-     * false (DOWN).
-     */
     public readonly adminStateUp!: pulumi.Output<boolean | undefined>;
     /**
      * Human-readable description for the loadbalancer.
@@ -84,17 +84,30 @@ export class Loadbalancer extends pulumi.CustomResource {
      * creates a new loadbalancer.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
+    /**
+     * schema: Deprecated
+     */
     public readonly flavor!: pulumi.Output<string | undefined>;
+    /**
+     * schema: Deprecated
+     */
     public readonly loadbalancerProvider!: pulumi.Output<string>;
     /**
      * Human-readable name for the loadbalancer. Does not have to be unique.
      */
     public readonly name!: pulumi.Output<string>;
     /**
+     * The EIP address that is associated to the Load Balancer instance.
+     */
+    public /*out*/ readonly publicIp!: pulumi.Output<string>;
+    /**
      * The region in which to create the loadbalancer resource. If omitted, the
      * provider-level region will be used. Changing this creates a new loadbalancer.
      */
     public readonly region!: pulumi.Output<string>;
+    /**
+     * schema: Deprecated
+     */
     public readonly securityGroupIds!: pulumi.Output<string[]>;
     /**
      * The key/value pairs to associate with the loadbalancer.
@@ -114,9 +127,8 @@ export class Loadbalancer extends pulumi.CustomResource {
      */
     public /*out*/ readonly vipPortId!: pulumi.Output<string>;
     /**
-     * The network on which to allocate the loadbalancer's address. A tenant
-     * can only create Loadbalancers on networks authorized by policy (e.g. networks that belong to them or networks that are
-     * shared). Changing this creates a new loadbalancer.
+     * The **IPv4 subnet ID** of the subnet where the load balancer works.
+     * Changing this creates a new loadbalancer.
      */
     public readonly vipSubnetId!: pulumi.Output<string>;
 
@@ -139,6 +151,7 @@ export class Loadbalancer extends pulumi.CustomResource {
             resourceInputs["flavor"] = state ? state.flavor : undefined;
             resourceInputs["loadbalancerProvider"] = state ? state.loadbalancerProvider : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
+            resourceInputs["publicIp"] = state ? state.publicIp : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["securityGroupIds"] = state ? state.securityGroupIds : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
@@ -163,6 +176,7 @@ export class Loadbalancer extends pulumi.CustomResource {
             resourceInputs["tenantId"] = args ? args.tenantId : undefined;
             resourceInputs["vipAddress"] = args ? args.vipAddress : undefined;
             resourceInputs["vipSubnetId"] = args ? args.vipSubnetId : undefined;
+            resourceInputs["publicIp"] = undefined /*out*/;
             resourceInputs["vipPortId"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
@@ -174,10 +188,6 @@ export class Loadbalancer extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Loadbalancer resources.
  */
 export interface LoadbalancerState {
-    /**
-     * The administrative state of the loadbalancer. A valid value is true (UP) or
-     * false (DOWN).
-     */
     adminStateUp?: pulumi.Input<boolean>;
     /**
      * Human-readable description for the loadbalancer.
@@ -188,17 +198,30 @@ export interface LoadbalancerState {
      * creates a new loadbalancer.
      */
     enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * schema: Deprecated
+     */
     flavor?: pulumi.Input<string>;
+    /**
+     * schema: Deprecated
+     */
     loadbalancerProvider?: pulumi.Input<string>;
     /**
      * Human-readable name for the loadbalancer. Does not have to be unique.
      */
     name?: pulumi.Input<string>;
     /**
+     * The EIP address that is associated to the Load Balancer instance.
+     */
+    publicIp?: pulumi.Input<string>;
+    /**
      * The region in which to create the loadbalancer resource. If omitted, the
      * provider-level region will be used. Changing this creates a new loadbalancer.
      */
     region?: pulumi.Input<string>;
+    /**
+     * schema: Deprecated
+     */
     securityGroupIds?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * The key/value pairs to associate with the loadbalancer.
@@ -218,9 +241,8 @@ export interface LoadbalancerState {
      */
     vipPortId?: pulumi.Input<string>;
     /**
-     * The network on which to allocate the loadbalancer's address. A tenant
-     * can only create Loadbalancers on networks authorized by policy (e.g. networks that belong to them or networks that are
-     * shared). Changing this creates a new loadbalancer.
+     * The **IPv4 subnet ID** of the subnet where the load balancer works.
+     * Changing this creates a new loadbalancer.
      */
     vipSubnetId?: pulumi.Input<string>;
 }
@@ -229,10 +251,6 @@ export interface LoadbalancerState {
  * The set of arguments for constructing a Loadbalancer resource.
  */
 export interface LoadbalancerArgs {
-    /**
-     * The administrative state of the loadbalancer. A valid value is true (UP) or
-     * false (DOWN).
-     */
     adminStateUp?: pulumi.Input<boolean>;
     /**
      * Human-readable description for the loadbalancer.
@@ -243,7 +261,13 @@ export interface LoadbalancerArgs {
      * creates a new loadbalancer.
      */
     enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * schema: Deprecated
+     */
     flavor?: pulumi.Input<string>;
+    /**
+     * schema: Deprecated
+     */
     loadbalancerProvider?: pulumi.Input<string>;
     /**
      * Human-readable name for the loadbalancer. Does not have to be unique.
@@ -254,6 +278,9 @@ export interface LoadbalancerArgs {
      * provider-level region will be used. Changing this creates a new loadbalancer.
      */
     region?: pulumi.Input<string>;
+    /**
+     * schema: Deprecated
+     */
     securityGroupIds?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * The key/value pairs to associate with the loadbalancer.
@@ -269,9 +296,8 @@ export interface LoadbalancerArgs {
      */
     vipAddress?: pulumi.Input<string>;
     /**
-     * The network on which to allocate the loadbalancer's address. A tenant
-     * can only create Loadbalancers on networks authorized by policy (e.g. networks that belong to them or networks that are
-     * shared). Changing this creates a new loadbalancer.
+     * The **IPv4 subnet ID** of the subnet where the load balancer works.
+     * Changing this creates a new loadbalancer.
      */
     vipSubnetId: pulumi.Input<string>;
 }

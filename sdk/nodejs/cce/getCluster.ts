@@ -116,7 +116,8 @@ export interface GetClusterResult {
      */
     readonly eniSubnetCidr: string;
     /**
-     * ENI subnet ID. Specified when creating a CCE Turbo cluster.
+     * The **IPv4 subnet ID** of the subnet where the ENI resides.
+     * Specified when creating a CCE Turbo cluster.
      */
     readonly eniSubnetId: string;
     /**

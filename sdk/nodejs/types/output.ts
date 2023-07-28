@@ -176,16 +176,30 @@ export namespace As {
 
     export interface ConfigurationInstanceConfig {
         /**
+         * Specifies whether the bandwidth is billed by traffic or by bandwidth
+         * size. The value can be **traffic** or **bandwidth**. Changing this creates a new resource.
+         */
+        chargingMode?: string;
+        /**
          * Specifies the disk group information. System disks are mandatory and
          * data disks are optional. The object structure is documented below.
          * Changing this will create a new resource.
          */
         disks: outputs.As.ConfigurationInstanceConfigDisk[];
         /**
+         * Specifies the ECS group ID. Changing this will create a new resource.
+         */
+        ecsGroupId: string;
+        /**
          * Specifies the ECS flavor name. A maximum of 10 flavors can be selected.
          * Use a comma (,) to separate multiple flavor names. Changing this will create a new resource.
          */
         flavor: string;
+        /**
+         * Specifies the priority policy used when there are multiple flavors
+         * and instances to be created using an AS configuration. The value can be `PICK_FIRST` and `COST_FIRST`.
+         */
+        flavorPriorityPolicy: string;
         /**
          * Specifies the ECS image ID. Changing this will create a new resource.
          */
@@ -219,6 +233,11 @@ export namespace As {
          * Changing this will create a new resource.
          */
         publicIp: outputs.As.ConfigurationInstanceConfigPublicIp;
+        /**
+         * Specifies an array of one or more security group IDs.
+         * Changing this will create a new resource.
+         */
+        securityGroupIds: string[];
         /**
          * Specifies the user data to provide when launching the instance.
          * The file content must be encoded with Base64. Changing this will create a new resource.
@@ -255,6 +274,10 @@ export namespace As {
     }
 
     export interface ConfigurationInstanceConfigPersonality {
+        /**
+         * Specifies the content of the injected file, which must be encoded with base64.
+         * Changing this creates a new resource.
+         */
         content: string;
         /**
          * Specifies the path of the injected file. Changing this creates a new resource.
@@ -322,25 +345,38 @@ export namespace As {
 
     export interface GroupNetwork {
         /**
-         * The UUID of the security group.
+         * Specifies the ID of the security group.
          */
         id: string;
+        /**
+         * Specifies the ID of the shared bandwidth of an IPv6 address.
+         */
+        ipv6BandwidthId?: string;
+        /**
+         * Specifies whether to support IPv6 addresses. The default value is `false`.
+         */
+        ipv6Enable?: boolean;
+        /**
+         * Specifies whether processesing only traffic that is destined specifically
+         * for it. Defaults to true.
+         */
+        sourceDestCheck?: boolean;
     }
 
     export interface GroupSecurityGroup {
         /**
-         * The UUID of the security group.
+         * Specifies the ID of the security group.
          */
         id: string;
     }
 
     export interface PolicyScalingPolicyAction {
         /**
-         * The number of instances to be operated. The default number is 1.
+         * Specifies the number of instances to be operated. The default number is 1.
          */
         instanceNumber?: number;
         /**
-         * The operation to be performed. The options include `ADD` (default), `REMOVE`,
+         * Specifies the operation to be performed. The options include `ADD` (default), `REMOVE`,
          * and `SET`.
          */
         operation: string;
@@ -348,31 +384,31 @@ export namespace As {
 
     export interface PolicyScheduledPolicy {
         /**
-         * The end time of the scaling action triggered periodically. The time format complies
+         * Specifies the end time of the scaling action triggered periodically. The time format complies
          * with UTC. This argument is mandatory when `scalingPolicyType`
          * is set to `RECURRENCE`. The time format is YYYY-MM-DDThh:mmZ.
          */
         endTime: string;
         /**
-         * The time when the scaling action is triggered.
-         * + If `scalingPolicyType` is set to `SCHEDULED`, the time format is YYYY-MM-DDThh:mmZ.
-         * + If `scalingPolicyType` is set to `RECURRENCE`, the time format is hh:mm.
+         * Specifies the time when the scaling action is triggered.
+         * + If `scalingPolicyType` is set to `SCHEDULED`, the time format is **YYYY-MM-DDThh:mmZ**.
+         * + If `scalingPolicyType` is set to `RECURRENCE`, the time format is **hh:mm**.
          */
         launchTime: string;
         /**
-         * The periodic triggering type. This argument is mandatory when
+         * Specifies the periodic triggering type. This argument is mandatory when
          * `scalingPolicyType` is set to `RECURRENCE`. The options include `Daily`, `Weekly`, and `Monthly`.
          */
         recurrenceType: string;
         /**
-         * The frequency at which scaling actions are triggered.
+         * Specifies the frequency at which scaling actions are triggered.
          */
         recurrenceValue: string;
         /**
-         * The start time of the scaling action triggered periodically. The time format
+         * Specifies the start time of the scaling action triggered periodically. The time format
          * complies with UTC. The current time is used by default. The time format is YYYY-MM-DDThh:mmZ.
          */
-        startTime?: string;
+        startTime: string;
     }
 
 }
@@ -401,6 +437,10 @@ export namespace Bcs {
          * Specifies the name of the channel. Changing this creates a new instance.
          */
         name: string;
+        /**
+         * Specifies the name of the peer organization. Changing this creates a new
+         * instance.
+         */
         orgNames: string[];
     }
 
@@ -408,7 +448,7 @@ export namespace Bcs {
         /**
          * Specifies the password of the couch datebase. The password consists of 8 to
          * 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-         * charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+         * characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
          */
         password: string;
         /**
@@ -547,7 +587,13 @@ export namespace Bms {
          * creates a new instance.
          */
         ipAddress: string;
+        /**
+         * The MAC address of the nic.
+         */
         macAddress: string;
+        /**
+         * The port ID corresponding to the IP address.
+         */
         portId: string;
         /**
          * Specifies the ID of subnet to attach to the instance. Changing this creates
@@ -566,18 +612,18 @@ export namespace Cbr {
         allocated: number;
         /**
          * Specifies whether to enable automatic expansion of the backup protection
-         * type vault. Default to **false**.
+         * type vault. Defaults to **false**.
          */
         autoExpandEnabled: boolean;
         /**
-         * Specifies the backup specifications.
+         * Specifies the consistent level (specification) of the vault.
          * The valid values are as follows:
          * + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
          * + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
          */
         consistentLevel: string;
         /**
-         * Specifies a unique ID in UUID format of enterprise project.
+         * Specifies the ID of the enterprise project to which the vault belongs.
          */
         enterpriseProjectId: string;
         /**
@@ -585,22 +631,22 @@ export namespace Cbr {
          */
         id: string;
         /**
-         * Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
+         * Specifies the vault name. This parameter can contain a maximum of 64
          * characters, which may consist of letters, digits, underscores(_) and hyphens (-).
          */
         name: string;
         /**
-         * Specifies a policy to associate with the CBR vault.
+         * Specifies the ID of the policy associated with the vault.
          * The `policyId` cannot be used with the vault of replicate protection type.
          */
         policyId: string;
         /**
-         * Specifies the protection type of the CBR vault.
+         * Specifies the protection type of the vault.
          * The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
          */
         protectionType: string;
         /**
-         * An array of one or more resources to attach to the CBR vault.
+         * The array of one or more resources to attach to the vault.
          * The object structure is documented below.
          */
         resources: outputs.Cbr.GetVaultsVaultResource[];
@@ -613,7 +659,7 @@ export namespace Cbr {
          */
         specCode: string;
         /**
-         * Specifies the CBR vault status, including **available**, **lock**, **frozen** and **error**.
+         * Specifies the vault status, including **available**, **lock**, **frozen** and **error**.
          */
         status: string;
         /**
@@ -621,11 +667,11 @@ export namespace Cbr {
          */
         storage: string;
         /**
-         * The key/value pairs to associate with the CBR vault.
+         * The key/value pairs to associate with the vault.
          */
         tags: {[key: string]: string};
         /**
-         * Specifies the object type of the CBR vault. The vaild values are as follows:
+         * Specifies the object type of the vault. The vaild values are as follows:
          * + **server** (Cloud Servers)
          * + **disk** (EVS Disks)
          * + **turbo** (SFS Turbo file systems)
@@ -639,11 +685,11 @@ export namespace Cbr {
 
     export interface GetVaultsVaultResource {
         /**
-         * An array of disk IDs which will be excluded in the backup.
+         * The array of disk IDs which will be excluded in the backup.
          */
         excludes: string[];
         /**
-         * An array of disk or SFS file system IDs which will be included in the backup.
+         * The array of disk or SFS file system IDs which will be included in the backup.
          */
         includes: string[];
         /**
@@ -678,6 +724,12 @@ export namespace Cbr {
          */
         daily?: number;
         /**
+         * Specifies how often (after how many incremental backups) a full backup is
+         * performed. The valid value ranges from `-1` to `100`.
+         * If `-1` is specified, full backup will not be performed.
+         */
+        fullBackupInterval?: number;
+        /**
          * - Specifies the latest backup of each month is saved in the long term.
          */
         monthly?: number;
@@ -689,6 +741,18 @@ export namespace Cbr {
          * - Specifies the latest backup of each year is saved in the long term.
          */
         yearly?: number;
+    }
+
+    export interface VaultPolicy {
+        /**
+         * Specifies the ID of destination vault to which the replication policy
+         * will associated.
+         */
+        destinationVaultId?: string;
+        /**
+         * Specifies the policy ID.
+         */
+        id: string;
     }
 
     export interface VaultResource {
@@ -716,36 +780,30 @@ export namespace Cce {
          * Specifies the key/value pairs vary depending on the add-on.
          * Only supports non-nested structure and only supports string type elements.
          * This is an alternative to `basicJson`, but it is not recommended.
-         * Changing this parameter will create a new resource.
          */
         basic?: {[key: string]: string};
         /**
          * Specifies the json string vary depending on the add-on.
-         * Changing this parameter will create a new resource.
          */
         basicJson?: string;
         /**
          * Specifies the key/value pairs vary depending on the add-on.
          * Only supports non-nested structure and only supports string type elements.
          * This is an alternative to `customJson`, but it is not recommended.
-         * Changing this parameter will create a new resource.
          */
         custom?: {[key: string]: string};
         /**
          * Specifies the json string vary depending on the add-on.
-         * Changing this parameter will create a new resource.
          */
         customJson?: string;
         /**
          * Specifies the key/value pairs vary depending on the add-on.
          * Only supports non-nested structure and only supports string type elements.
          * This is an alternative to `flavorJson`, but it is not recommended.
-         * Changing this parameter will create a new resource.
          */
         flavor?: {[key: string]: string};
         /**
          * Specifies the json string vary depending on the add-on.
-         * Changing this parameter will create a new resource.
          */
         flavorJson?: string;
     }
@@ -791,7 +849,13 @@ export namespace Cce {
     }
 
     export interface GetAddonTemplateSupportVersion {
+        /**
+         * The cluster (Bare Metal) version that the add-on template supported.
+         */
         bareMetals: string[];
+        /**
+         * The cluster (Virtual Machine) version that the add-on template supported.
+         */
         virtualMachines: string[];
     }
 
@@ -891,7 +955,7 @@ export namespace Cce {
          */
         eniSubnetCidr: string;
         /**
-         * The ENI subnet ID.
+         * The **IPv4 subnet ID** of the subnet where the ENI resides.
          */
         eniSubnetId: string;
         /**
@@ -911,7 +975,7 @@ export namespace Cce {
          */
         kubeConfigRaw: string;
         /**
-         * The advanced configuration of master nodes.
+         * The advanced configuration of master nodes. Structure is documented below.
          */
         masters: outputs.Cce.GetClustersClusterMaster[];
         /**
@@ -984,6 +1048,9 @@ export namespace Cce {
     }
 
     export interface GetClustersClusterMaster {
+        /**
+         * The availability zone (AZ) of the master node.
+         */
         availabilityZone: string;
     }
 
@@ -1145,19 +1212,50 @@ export namespace Cce {
     }
 
     export interface NodeAttachDataVolume {
+        /**
+         * @deprecated use extend_params instead
+         */
         extendParam: string;
+        /**
+         * The disk expansion parameters.
+         */
         extendParams: {[key: string]: string};
         hwPassthrough: boolean;
+        /**
+         * The ID of a KMS key. This is used to encrypt the volume.
+         */
         kmsKeyId: string;
+        /**
+         * The disk size in GB.
+         */
         size: number;
+        /**
+         * The disk type.
+         */
         volumetype: string;
     }
 
     export interface NodeAttachRootVolume {
+        /**
+         * @deprecated use extend_params instead
+         */
         extendParam: string;
+        /**
+         * The disk expansion parameters.
+         */
         extendParams: {[key: string]: string};
         hwPassthrough: boolean;
+        /**
+         * The ID of a KMS key. This is used to encrypt the volume.
+         */
+        kmsKeyId: string;
+        /**
+         * The disk size in GB.
+         */
         size: number;
+        /**
+         * The disk type.
+         */
         volumetype: string;
     }
 
@@ -1243,7 +1341,9 @@ export namespace Cce {
          */
         kmsKeyId: string;
         /**
-         * Specifies the disk size in GB. Changing this parameter will create a new resource.
+         * Specifies the size of a virtual space. Only an integer percentage is supported.
+         * Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+         * Changing this parameter will create a new resource.
          */
         size: number;
         /**
@@ -1272,13 +1372,130 @@ export namespace Cce {
         extendParams?: {[key: string]: string};
         hwPassthrough?: boolean;
         /**
-         * Specifies the disk size in GB. Changing this parameter will create a new resource.
+         * Specifies the KMS key ID. This is used to encrypt the volume.
+         * Changing this parameter will create a new resource.
+         */
+        kmsKeyId: string;
+        /**
+         * Specifies the size of a virtual space. Only an integer percentage is supported.
+         * Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+         * Changing this parameter will create a new resource.
          */
         size: number;
         /**
          * Specifies the disk type. Changing this parameter will create a new resource.
          */
         volumetype: string;
+    }
+
+    export interface NodePoolStorage {
+        /**
+         * Specifies the storage group consists of multiple storage devices.
+         * This is used to divide storage space. Structure is documented below.
+         * Changing this parameter will create a new resource.
+         */
+        groups: outputs.Cce.NodePoolStorageGroup[];
+        /**
+         * Specifies the disk selection.
+         * Matched disks are managed according to match labels and storage type. Structure is documented below.
+         * Changing this parameter will create a new resource.
+         */
+        selectors: outputs.Cce.NodePoolStorageSelector[];
+    }
+
+    export interface NodePoolStorageGroup {
+        /**
+         * Specifies the whether the storage space is for **kubernetes** and
+         * **runtime** components. Only one group can be set to true. The default value is **false**.
+         * Changing this parameter will create a new resource.
+         */
+        cceManaged: boolean;
+        /**
+         * Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+         * and **user** are supported. Changing this parameter will create a new resource.
+         */
+        name: string;
+        /**
+         * Specifies the list of names of seletors to match.
+         * This parameter corresponds to name in `selectors`. A group can match multiple selectors,
+         * but a selector can match only one group. Changing this parameter will create a new resource.
+         */
+        selectorNames: string[];
+        /**
+         * Specifies the detailed management of space configuration in a group.
+         * Changing this parameter will create a new resource.
+         */
+        virtualSpaces: outputs.Cce.NodePoolStorageGroupVirtualSpace[];
+    }
+
+    export interface NodePoolStorageGroupVirtualSpace {
+        /**
+         * Specifies the LVM write mode, values can be **linear** and **striped**.
+         * This parameter takes effect only in **kubernetes** and **user** configuration. Changing this parameter will create
+         * a new resource.
+         */
+        lvmLvType: string;
+        /**
+         * Specifies the absolute path to which the disk is attached.
+         * This parameter takes effect only in **user** configuration. Changing this parameter will create a new resource.
+         */
+        lvmPath: string;
+        /**
+         * Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+         * and **user** are supported. Changing this parameter will create a new resource.
+         */
+        name: string;
+        /**
+         * Specifies the LVM write mode, values can be **linear** and **striped**.
+         * This parameter takes effect only in **runtime** configuration. Changing this parameter will create a new resource.
+         */
+        runtimeLvType: string;
+        /**
+         * Specifies the size of a virtual space. Only an integer percentage is supported.
+         * Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+         * Changing this parameter will create a new resource.
+         */
+        size: string;
+    }
+
+    export interface NodePoolStorageSelector {
+        /**
+         * Specifies the number of disks to be selected. If omitted,
+         * all disks of this type are selected. Changing this parameter will create a new resource.
+         */
+        matchLabelCount: string;
+        /**
+         * Specifies the cstomer master key ID of an encrypted
+         * disk. Changing this parameter will create a new resource.
+         */
+        matchLabelMetadataCmkid: string;
+        /**
+         * Specifies the disk encryption identifier.
+         * Values can be: **0** indicates that the disk is not encrypted and **1** indicates that the disk is encrypted.
+         * If omitted, whether the disk is encrypted is not limited. Changing this parameter will create a new resource.
+         */
+        matchLabelMetadataEncrypted: string;
+        /**
+         * Specifies the matched disk size. If omitted,
+         * the disk size is not limited. Example: 100. Changing this parameter will create a new resource.
+         */
+        matchLabelSize: string;
+        /**
+         * Specifies the EVS disk type. Currently,
+         * **SSD**, **GPSSD**, and **SAS** are supported. If omitted, the disk type is not limited.
+         * Changing this parameter will create a new resource.
+         */
+        matchLabelVolumeType: string;
+        /**
+         * Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+         * and **user** are supported. Changing this parameter will create a new resource.
+         */
+        name: string;
+        /**
+         * Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
+         * The default value is **evs**. Changing this parameter will create a new resource.
+         */
+        type?: string;
     }
 
     export interface NodePoolTaint {
@@ -1318,6 +1535,11 @@ export namespace Cce {
          */
         extendParams: {[key: string]: string};
         hwPassthrough?: boolean;
+        /**
+         * Specifies the ID of a KMS key. This is used to encrypt the volume.
+         * Changing this parameter will create a new resource.
+         */
+        kmsKeyId: string;
         /**
          * Specifies the size of a virtual space. Only an integer percentage is supported.
          * Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
@@ -1408,7 +1630,7 @@ export namespace Cce {
          */
         matchLabelCount?: string;
         /**
-         * Specifies the cstomer master key ID of an encrypted
+         * Specifies the customer master key ID of an encrypted
          * disk. Changing this parameter will create a new resource.
          */
         matchLabelMetadataCmkid?: string;
@@ -1596,11 +1818,11 @@ export namespace Cdm {
 
     export interface GetFlavorsFlavor {
         /**
-         * The id of the cdm flavor.
+         * The id of the CDM flavor.
          */
         id: string;
         /**
-         * The name of the cdm flavor.
+         * The name of the CDM flavor.
          */
         name: string;
     }
@@ -1992,13 +2214,19 @@ export namespace Cse {
          */
         notificationLists: string[];
         /**
-         * specifies the type of action triggered by an alarm. the value is notification.
+         * Specifies the type of action triggered by an alarm. the value is notification.
          * notification: indicates that a notification will be sent to the user.
          */
         type: string;
     }
 
     export interface AlarmruleCondition {
+        /**
+         * Specifies the alarm severity of the condition. The value can be 1, 2, 3 or 4,
+         * which indicates *critical*, *major*, *minor*, and *informational*, respectively.
+         * The default value is 2.
+         */
+        alarmLevel: number;
         /**
          * Specifies the comparison condition of alarm thresholds. The value can be >,
          * =, <, >=, or <=.
@@ -2013,13 +2241,19 @@ export namespace Cse {
          */
         filter: string;
         /**
+         * Specifies the metric name of the condition. The value can be a string of
+         * 1 to 64 characters that must start with a letter and contain only letters, digits, and underscores (_).
+         * For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
+         */
+        metricName: string;
+        /**
          * Specifies the alarm checking period in seconds. The value can be 0, 1, 300, 1200, 3600, 14400,
          * and 86400.
          */
         period: number;
         /**
          * Specifies the interval for triggering an alarm if the alarm persists.
-         * Changing this creates a new resource. Possible values are as follows:
+         * Possible values are as follows:
          * + **0**: Cloud Eye triggers the alarm only once;
          * + **300**: Cloud Eye triggers the alarm every 5 minutes;
          * + **600**: Cloud Eye triggers the alarm every 10 minutes;
@@ -2033,13 +2267,13 @@ export namespace Cse {
          */
         suppressDuration?: number;
         /**
-         * Specifies the data unit. Changing this creates a new resource.
+         * Specifies the data unit.
          * For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
          */
         unit?: string;
         /**
          * Specifies the alarm threshold. The value ranges from 0 to Number of
-         * 1.7976931348623157e+308.
+         * 1.7976931348623157e+108.
          */
         value: number;
     }
@@ -2051,7 +2285,7 @@ export namespace Cse {
          */
         notificationLists: string[];
         /**
-         * specifies the type of action triggered by an alarm. the value is notification.
+         * Specifies the type of action triggered by an alarm. the value is notification.
          * notification: indicates that a notification will be sent to the user.
          */
         type: string;
@@ -2060,13 +2294,11 @@ export namespace Cse {
     export interface AlarmruleMetric {
         /**
          * Specifies the list of metric dimensions. The structure is described below.
-         * Changing this creates a new resource.
          */
-        dimensions?: outputs.Cse.AlarmruleMetricDimension[];
+        dimensions: outputs.Cse.AlarmruleMetricDimension[];
         /**
-         * Specifies the metric name. The value can be a string of 1 to 64
-         * characters that must start with a letter and contain only letters, digits, and underscores (_).
-         * Changing this creates a new resource.
+         * Specifies the metric name of the condition. The value can be a string of
+         * 1 to 64 characters that must start with a letter and contain only letters, digits, and underscores (_).
          * For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
          */
         metricName: string;
@@ -2083,14 +2315,13 @@ export namespace Cse {
         /**
          * Specifies the dimension name. The value can be a string of 1 to 32 characters
          * that must start with a letter and contain only letters, digits, underscores (_), and hyphens (-).
-         * Changing this creates a new resource.
          */
         name: string;
         /**
          * Specifies the alarm threshold. The value ranges from 0 to Number of
-         * 1.7976931348623157e+308.
+         * 1.7976931348623157e+108.
          */
-        value: string;
+        value?: string;
     }
 
     export interface AlarmruleOkAction {
@@ -2100,10 +2331,30 @@ export namespace Cse {
          */
         notificationLists: string[];
         /**
-         * specifies the type of action triggered by an alarm. the value is notification.
+         * Specifies the type of action triggered by an alarm. the value is notification.
          * notification: indicates that a notification will be sent to the user.
          */
         type: string;
+    }
+
+    export interface AlarmruleResource {
+        /**
+         * Specifies the list of metric dimensions. The structure is described below.
+         */
+        dimensions: outputs.Cse.AlarmruleResourceDimension[];
+    }
+
+    export interface AlarmruleResourceDimension {
+        /**
+         * Specifies the dimension name. The value can be a string of 1 to 32 characters
+         * that must start with a letter and contain only letters, digits, underscores (_), and hyphens (-).
+         */
+        name: string;
+        /**
+         * Specifies the alarm threshold. The value ranges from 0 to Number of
+         * 1.7976931348623157e+108.
+         */
+        value: string;
     }
 
     export interface MicroserviceEngineConfigCenterAddress {
@@ -2215,10 +2466,8 @@ export namespace Css {
         flavor: string;
         /**
          * Specifies the number of cluster instances.
-         * + When it is `essNodeConfig`, The value range is 1 to 200.
          * + When it is `masterNodeConfig`, The value range is 3 to 10.
          * + When it is `clientNodeConfig`, The value range is 1 to 32.
-         * + When it is `coldNodeConfig`, The value range is 1 to 32.
          */
         instanceNumber: number;
         /**
@@ -2231,12 +2480,14 @@ export namespace Css {
     export interface ClusterClientNodeConfigVolume {
         /**
          * Specifies the volume size in GB, which must be a multiple of 10.
+         * Changing this parameter will create a new resource.
          */
         size: number;
         /**
-         * Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-         * HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-         * parameter will create a new resource.
+         * Specifies the volume type. Value options are as follows:
+         * + **COMMON**: Common I/O. The SATA disk is used.
+         * + **HIGH**: High I/O. The SAS disk is used.
+         * + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
          */
         volumeType: string;
     }
@@ -2251,10 +2502,8 @@ export namespace Css {
         flavor: string;
         /**
          * Specifies the number of cluster instances.
-         * + When it is `essNodeConfig`, The value range is 1 to 200.
          * + When it is `masterNodeConfig`, The value range is 3 to 10.
          * + When it is `clientNodeConfig`, The value range is 1 to 32.
-         * + When it is `coldNodeConfig`, The value range is 1 to 32.
          */
         instanceNumber: number;
         /**
@@ -2267,12 +2516,14 @@ export namespace Css {
     export interface ClusterColdNodeConfigVolume {
         /**
          * Specifies the volume size in GB, which must be a multiple of 10.
+         * Changing this parameter will create a new resource.
          */
         size: number;
         /**
-         * Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-         * HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-         * parameter will create a new resource.
+         * Specifies the volume type. Value options are as follows:
+         * + **COMMON**: Common I/O. The SATA disk is used.
+         * + **HIGH**: High I/O. The SAS disk is used.
+         * + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
          */
         volumeType: string;
     }
@@ -2287,10 +2538,8 @@ export namespace Css {
         flavor: string;
         /**
          * Specifies the number of cluster instances.
-         * + When it is `essNodeConfig`, The value range is 1 to 200.
          * + When it is `masterNodeConfig`, The value range is 3 to 10.
          * + When it is `clientNodeConfig`, The value range is 1 to 32.
-         * + When it is `coldNodeConfig`, The value range is 1 to 32.
          */
         instanceNumber: number;
         /**
@@ -2303,12 +2552,14 @@ export namespace Css {
     export interface ClusterEssNodeConfigVolume {
         /**
          * Specifies the volume size in GB, which must be a multiple of 10.
+         * Changing this parameter will create a new resource.
          */
         size: number;
         /**
-         * Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-         * HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-         * parameter will create a new resource.
+         * Specifies the volume type. Value options are as follows:
+         * + **COMMON**: Common I/O. The SATA disk is used.
+         * + **HIGH**: High I/O. The SAS disk is used.
+         * + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
          */
         volumeType: string;
     }
@@ -2320,8 +2571,7 @@ export namespace Css {
         bandwidth: number;
         publicIp: string;
         /**
-         * Specifies the whitelist of access control.
-         * Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+         * Specifies the whitelist of access control. The whitelisted account id must be unique.
          */
         whitelist?: string;
         /**
@@ -2340,10 +2590,8 @@ export namespace Css {
         flavor: string;
         /**
          * Specifies the number of cluster instances.
-         * + When it is `essNodeConfig`, The value range is 1 to 200.
          * + When it is `masterNodeConfig`, The value range is 3 to 10.
          * + When it is `clientNodeConfig`, The value range is 1 to 32.
-         * + When it is `coldNodeConfig`, The value range is 1 to 32.
          */
         instanceNumber: number;
         /**
@@ -2356,12 +2604,14 @@ export namespace Css {
     export interface ClusterMasterNodeConfigVolume {
         /**
          * Specifies the volume size in GB, which must be a multiple of 10.
+         * Changing this parameter will create a new resource.
          */
         size: number;
         /**
-         * Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-         * HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-         * parameter will create a new resource.
+         * Specifies the volume type. Value options are as follows:
+         * + **COMMON**: Common I/O. The SATA disk is used.
+         * + **HIGH**: High I/O. The SAS disk is used.
+         * + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
          */
         volumeType: string;
     }
@@ -2386,12 +2636,12 @@ export namespace Css {
          * Changing this parameter will create a new resource.
          */
         name: string;
+        /**
+         * Instance specification code.
+         */
         specCode: string;
         /**
-         * The cluster status
-         * + `100`: The operation, such as instance creation, is in progress.
-         * + `200`: The cluster is available.
-         * + `303`: The cluster is unavailable.
+         * Instance status.
          */
         status: string;
         /**
@@ -2444,12 +2694,14 @@ export namespace Css {
     export interface ClusterNodeConfigVolume {
         /**
          * Specifies the volume size in GB, which must be a multiple of 10.
+         * Changing this parameter will create a new resource.
          */
         size: number;
         /**
-         * Specifies the volume type. COMMON: Common I/O. The SATA disk is used.
-         * HIGH: High I/O. The SAS disk is used. ULTRAHIGH: Ultra-high I/O. The solid-state drive (SSD) is used. Changing this
-         * parameter will create a new resource.
+         * Specifies the volume type. Value options are as follows:
+         * + **COMMON**: Common I/O. The SATA disk is used.
+         * + **HIGH**: High I/O. The SAS disk is used.
+         * + **ULTRAHIGH**: Ultra-high I/O. The solid-state drive (SSD) is used.
          */
         volumeType: string;
     }
@@ -2461,8 +2713,7 @@ export namespace Css {
         bandwidth: number;
         publicIp: string;
         /**
-         * Specifies the whitelist of access control.
-         * Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+         * Specifies the whitelist of access control. The whitelisted account id must be unique.
          */
         whitelist?: string;
         /**
@@ -2477,8 +2728,7 @@ export namespace Css {
          */
         endpointWithDnsName: boolean;
         /**
-         * Specifies the whitelist of access control.
-         * Separate the whitelisted Account IDs with commas (,), and each of them must be unique.
+         * Specifies the whitelist of access control. The whitelisted account id must be unique.
          */
         whitelists?: string[];
     }
@@ -2564,10 +2814,10 @@ export namespace Dcs {
         cacheMode: string;
         /**
          * The total memory of the cache, in GB.
-         * + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values:
+         * + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values:
          * `0.125`, `0.25`, `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
-         * Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-         * `1024`.
+         * Cluster instance specifications support `4`,`8`,`16`,`24`, `32`, `48`, `64`, `96`, `128`, `192`,
+         * `256`, `384`, `512`, `768` and `1024`.
          * + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
          * Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
          * + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -2625,6 +2875,7 @@ export namespace Dcs {
         periodType?: string;
         /**
          * Retention time. Unit: day, the value ranges from 1 to 7.
+         * This parameter is required if the backupType is **auto**.
          */
         saveDays?: number;
     }
@@ -2807,23 +3058,40 @@ export namespace Dds {
         startTime: string;
     }
 
+    export interface InstanceConfiguration {
+        /**
+         * Specifies the ID of the template.
+         * Changing this creates a new instance.
+         */
+        id: string;
+        /**
+         * Specifies the node type. Valid value:
+         * + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+         * + For an Enhanced Edition cluster instance, the value is **shard**.
+         * + For a Community Edition replica set instance, the value is **replica**.
+         * + For a Community Edition single node instance, the value is **single**.
+         */
+        type: string;
+    }
+
     export interface InstanceDatastore {
         /**
-         * Specifies the storage engine of the DB instance. DDS Community Edition
-         * supports wiredTiger engine, and the Enhanced Edition supports rocksDB engine.
+         * Specifies the storage engine of the DB instance.
+         * If `version` is set to `3.2`, `3.4`, or `4.0`, the value is **wiredTiger**.
+         * If `version` is set to `4.2`, or `4.4`, the value is **rocksDB**.
          */
         storageEngine?: string;
         /**
          * Specifies the node type. Valid value:
-         * + For a Community Edition cluster instance, the value can be mongos, shard, or config.
-         * + For an Enhanced Edition cluster instance, the value is shard.
-         * + For a Community Edition replica set instance, the value is replica.
-         * + For a Community Edition single node instance, the value is single.
+         * + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+         * + For an Enhanced Edition cluster instance, the value is **shard**.
+         * + For a Community Edition replica set instance, the value is **replica**.
+         * + For a Community Edition single node instance, the value is **single**.
          */
         type: string;
         /**
          * Specifies the DB instance version. For the Community Edition, the valid
-         * values are 3.2, 3.4, or 4.0. For the Enhanced Edition, only 3.4 is supported now.
+         * values are `3.2`, `3.4`, `4.0`, `4.2`, or `4.4`.
          */
         version: string;
     }
@@ -2855,22 +3123,24 @@ export namespace Dds {
          */
         specCode: string;
         /**
-         * Specifies the disk type. Valid value: ULTRAHIGH which indicates the type SSD.
+         * Specifies the disk type.
+         * Valid value: **ULTRAHIGH** which indicates the type SSD.
          */
         storage?: string;
         /**
          * Specifies the node type. Valid value:
-         * + For a Community Edition cluster instance, the value can be mongos, shard, or config.
-         * + For an Enhanced Edition cluster instance, the value is shard.
-         * + For a Community Edition replica set instance, the value is replica.
-         * + For a Community Edition single node instance, the value is single.
+         * + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+         * + For an Enhanced Edition cluster instance, the value is **shard**.
+         * + For a Community Edition replica set instance, the value is **replica**.
+         * + For a Community Edition single node instance, the value is **single**.
          */
         type: string;
     }
 
     export interface InstanceNode {
         /**
-         * Indicates the node ID.
+         * Specifies the ID of the template.
+         * Changing this creates a new instance.
          */
         id: string;
         /**
@@ -2898,10 +3168,10 @@ export namespace Dds {
         status: string;
         /**
          * Specifies the node type. Valid value:
-         * + For a Community Edition cluster instance, the value can be mongos, shard, or config.
-         * + For an Enhanced Edition cluster instance, the value is shard.
-         * + For a Community Edition replica set instance, the value is replica.
-         * + For a Community Edition single node instance, the value is single.
+         * + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+         * + For an Enhanced Edition cluster instance, the value is **shard**.
+         * + For a Community Edition replica set instance, the value is **replica**.
+         * + For a Community Edition single node instance, the value is **single**.
          */
         type: string;
     }
@@ -2911,27 +3181,33 @@ export namespace Dds {
 export namespace DedicatedApig {
     export interface ApiBackendParam {
         /**
-         * Specifies the description of the constant or system parameter, which contain a
-         * maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+         * Specifies the description of the constant or system parameter.  
+         * The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
          */
         description?: string;
         /**
-         * Specifies the location of the backend parameter. The valid values are **PATH**,
-         * **QUERY** and **HEADER**.
+         * Specifies the location of the backend parameter.  
+         * The valid values are **PATH**, **QUERY** and **HEADER**.
          */
         location: string;
         /**
-         * Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-         * a letter. Only letters, digits, and underscores (_) are allowed.
+         * Specifies the backend policy name.  
+         * The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
          */
         name: string;
         /**
-         * Specifies the condition type of the backend policy. The valid values are **Equal**,
-         * **Enumerated** and **Matching**, default to **Equal**.
+         * Specifies the type of the system parameter.  
+         * The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+         */
+        systemParamType?: string;
+        /**
+         * Specifies the condition type of the backend policy.  
+         * The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
          */
         type: string;
         /**
-         * Specifies the condition type. For a condition with the input parameter source:
+         * Specifies the value of the backend policy.  
+         * For a condition with the input parameter source:
          * + If the condition type is **Enumerated**, separate condition values with commas.
          * + If the condition type is **Matching**, enter a regular expression compatible with PERL.
          */
@@ -2944,21 +3220,21 @@ export namespace DedicatedApig {
          */
         authorizerId?: string;
         /**
-         * Specifies the URN of the function graph.
+         * Specifies the URN of the FunctionGraph function.
          */
         functionUrn: string;
         /**
-         * Specifies the invocation mode. The valid values are **async** and **sync**,
-         * default to **sync**.
+         * Specifies the invocation type.  
+         * The valid values are **async** and **sync**, defaults to **sync**.
          */
         invocationType?: string;
         /**
          * Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-         * valid value is range from 1 to 600,000, default to 5,000.
+         * valid value is range from `1` to `600,000`, defaults to `5,000`.
          */
         timeout?: number;
         /**
-         * Specifies the version of the function graph.
+         * Specifies the version of the FunctionGraph function.
          */
         version?: string;
     }
@@ -2974,63 +3250,70 @@ export namespace DedicatedApig {
          */
         backendParams?: outputs.DedicatedApig.ApiFuncGraphPolicyBackendParam[];
         /**
-         * Specifies an array of one or more policy conditions. Up to five conditions can be set.
+         * Specifies an array of one or more policy conditions.  
+         * Up to five conditions can be set.
          * The object structure is documented below.
          */
         conditions: outputs.DedicatedApig.ApiFuncGraphPolicyCondition[];
         /**
          * Specifies the effective mode of the backend policy. The valid values are **ALL**
-         * and **ANY**, default to **ANY**.
+         * and **ANY**, defaults to **ANY**.
          */
         effectiveMode?: string;
         /**
-         * Specifies the URN of the function graph.
+         * Specifies the URN of the FunctionGraph function.
          */
         functionUrn: string;
         /**
-         * Specifies the invocation mode of the function graph. The valid values are
-         * **async** and **sync**, default to **sync**.
+         * Specifies the invocation mode of the FunctionGraph function.  
+         * The valid values are **async** and **sync**, defaults to **sync**.
          */
         invocationMode?: string;
         /**
-         * Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-         * a letter. Only letters, digits, and underscores (_) are allowed.
+         * Specifies the backend policy name.  
+         * The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
          */
         name: string;
         /**
          * Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-         * valid value is range from 1 to 600,000, default to 5,000.
+         * valid value is range from `1` to `600,000`, defaults to `5,000`.
          */
         timeout?: number;
         /**
-         * Specifies the version of the function graph.
+         * Specifies the version of the FunctionGraph function.
          */
         version?: string;
     }
 
     export interface ApiFuncGraphPolicyBackendParam {
         /**
-         * Specifies the description of the constant or system parameter, which contain a
-         * maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+         * Specifies the description of the constant or system parameter.  
+         * The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
          */
         description?: string;
         /**
-         * Specifies the location of the backend parameter. The valid values are **PATH**,
-         * **QUERY** and **HEADER**.
+         * Specifies the location of the backend parameter.  
+         * The valid values are **PATH**, **QUERY** and **HEADER**.
          */
         location: string;
         /**
-         * Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-         * a letter. Only letters, digits, and underscores (_) are allowed.
+         * Specifies the backend policy name.  
+         * The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
          */
         name: string;
         /**
-         * Specifies the condition type of the backend policy. The valid values are **Equal**,
-         * **Enumerated** and **Matching**, default to **Equal**.
+         * Specifies the type of the system parameter.  
+         * The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+         */
+        systemParamType?: string;
+        /**
+         * Specifies the condition type of the backend policy.  
+         * The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
          */
         type: string;
         /**
-         * Specifies the condition type. For a condition with the input parameter source:
+         * Specifies the value of the backend policy.  
+         * For a condition with the input parameter source:
          * + If the condition type is **Enumerated**, separate condition values with commas.
          * + If the condition type is **Matching**, enter a regular expression compatible with PERL.
          */
@@ -3039,22 +3322,23 @@ export namespace DedicatedApig {
 
     export interface ApiFuncGraphPolicyCondition {
         /**
-         * Specifies the request parameter name. This parameter is required if the policy type
-         * is param.
+         * Specifies the request parameter name.
+         * This parameter is required if the policy type is **param**.
          */
         paramName?: string;
         /**
-         * Specifies the policy type. The valid values are **param** and **source**, default to
-         * **source**.
+         * Specifies the backend policy type.  
+         * The valid values are **param** and **source**, defaults to **source**.
          */
         source?: string;
         /**
-         * Specifies the condition type of the backend policy. The valid values are **Equal**,
-         * **Enumerated** and **Matching**, default to **Equal**.
+         * Specifies the condition type of the backend policy.  
+         * The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
          */
         type?: string;
         /**
-         * Specifies the condition type. For a condition with the input parameter source:
+         * Specifies the value of the backend policy.  
+         * For a condition with the input parameter source:
          * + If the condition type is **Enumerated**, separate condition values with commas.
          * + If the condition type is **Matching**, enter a regular expression compatible with PERL.
          */
@@ -3067,8 +3351,8 @@ export namespace DedicatedApig {
          */
         authorizerId?: string;
         /**
-         * Specifies the response of the backend policy, which contain a maximum of 2,048
-         * characters, and the angle brackets (< and >) are not allowed.
+         * Specifies the response of the backend policy.  
+         * The description contains a maximum of `2,048` characters and the angle brackets (< and >) are not allowed.
          */
         response?: string;
     }
@@ -3084,50 +3368,57 @@ export namespace DedicatedApig {
          */
         backendParams?: outputs.DedicatedApig.ApiMockPolicyBackendParam[];
         /**
-         * Specifies an array of one or more policy conditions. Up to five conditions can be set.
+         * Specifies an array of one or more policy conditions.  
+         * Up to five conditions can be set.
          * The object structure is documented below.
          */
         conditions: outputs.DedicatedApig.ApiMockPolicyCondition[];
         /**
          * Specifies the effective mode of the backend policy. The valid values are **ALL**
-         * and **ANY**, default to **ANY**.
+         * and **ANY**, defaults to **ANY**.
          */
         effectiveMode?: string;
         /**
-         * Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-         * a letter. Only letters, digits, and underscores (_) are allowed.
+         * Specifies the backend policy name.  
+         * The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
          */
         name: string;
         /**
-         * Specifies the response of the backend policy, which contain a maximum of 2,048
-         * characters, and the angle brackets (< and >) are not allowed.
+         * Specifies the response of the backend policy.  
+         * The description contains a maximum of `2,048` characters and the angle brackets (< and >) are not allowed.
          */
         response?: string;
     }
 
     export interface ApiMockPolicyBackendParam {
         /**
-         * Specifies the description of the constant or system parameter, which contain a
-         * maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+         * Specifies the description of the constant or system parameter.  
+         * The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
          */
         description?: string;
         /**
-         * Specifies the location of the backend parameter. The valid values are **PATH**,
-         * **QUERY** and **HEADER**.
+         * Specifies the location of the backend parameter.  
+         * The valid values are **PATH**, **QUERY** and **HEADER**.
          */
         location: string;
         /**
-         * Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-         * a letter. Only letters, digits, and underscores (_) are allowed.
+         * Specifies the backend policy name.  
+         * The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
          */
         name: string;
         /**
-         * Specifies the condition type of the backend policy. The valid values are **Equal**,
-         * **Enumerated** and **Matching**, default to **Equal**.
+         * Specifies the type of the system parameter.  
+         * The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+         */
+        systemParamType?: string;
+        /**
+         * Specifies the condition type of the backend policy.  
+         * The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
          */
         type: string;
         /**
-         * Specifies the condition type. For a condition with the input parameter source:
+         * Specifies the value of the backend policy.  
+         * For a condition with the input parameter source:
          * + If the condition type is **Enumerated**, separate condition values with commas.
          * + If the condition type is **Matching**, enter a regular expression compatible with PERL.
          */
@@ -3136,22 +3427,23 @@ export namespace DedicatedApig {
 
     export interface ApiMockPolicyCondition {
         /**
-         * Specifies the request parameter name. This parameter is required if the policy type
-         * is param.
+         * Specifies the request parameter name.
+         * This parameter is required if the policy type is **param**.
          */
         paramName?: string;
         /**
-         * Specifies the policy type. The valid values are **param** and **source**, default to
-         * **source**.
+         * Specifies the backend policy type.  
+         * The valid values are **param** and **source**, defaults to **source**.
          */
         source?: string;
         /**
-         * Specifies the condition type of the backend policy. The valid values are **Equal**,
-         * **Enumerated** and **Matching**, default to **Equal**.
+         * Specifies the condition type of the backend policy.  
+         * The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
          */
         type?: string;
         /**
-         * Specifies the condition type. For a condition with the input parameter source:
+         * Specifies the value of the backend policy.  
+         * For a condition with the input parameter source:
          * + If the condition type is **Enumerated**, separate condition values with commas.
          * + If the condition type is **Matching**, enter a regular expression compatible with PERL.
          */
@@ -3171,23 +3463,23 @@ export namespace DedicatedApig {
 
     export interface ApiRequestParam {
         /**
-         * Specifies the default value of the request parameter, which contain a maximum of 255
-         * characters, and the angle brackets (< and >) are not allowed.
+         * Specifies the default value of the request parameter.
+         * The value contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
          */
         default?: string;
         /**
-         * Specifies the description of the constant or system parameter, which contain a
-         * maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+         * Specifies the description of the constant or system parameter.  
+         * The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
          */
         description?: string;
         /**
-         * Specifies the example value of the request parameter, which contain a maximum of 255
-         * characters, and the angle brackets (< and >) are not allowed.
+         * Specifies the example value of the request parameter.  
+         * The example contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
          */
         example?: string;
         /**
-         * Specifies the location of the backend parameter. The valid values are **PATH**,
-         * **QUERY** and **HEADER**.
+         * Specifies the location of the backend parameter.  
+         * The valid values are **PATH**, **QUERY** and **HEADER**.
          */
         location?: string;
         /**
@@ -3195,13 +3487,12 @@ export namespace DedicatedApig {
          */
         maximum?: number;
         /**
-         * Specifies the minimum value or size of the request parameter. For string type,
-         * The `maximum` and `minimum` means size. For number type, they means value.
+         * Specifies the minimum value or size of the request parameter.
          */
         minimum?: number;
         /**
-         * Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-         * a letter. Only letters, digits, and underscores (_) are allowed.
+         * Specifies the backend policy name.  
+         * The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
          */
         name: string;
         /**
@@ -3209,8 +3500,8 @@ export namespace DedicatedApig {
          */
         required: boolean;
         /**
-         * Specifies the condition type of the backend policy. The valid values are **Equal**,
-         * **Enumerated** and **Matching**, default to **Equal**.
+         * Specifies the condition type of the backend policy.  
+         * The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
          */
         type?: string;
     }
@@ -3221,50 +3512,52 @@ export namespace DedicatedApig {
          */
         authorizerId?: string;
         /**
-         * Specifies the backend service address, which consists of a domain name or IP
-         * address, and a port number, with not more than 255 characters. The backend service address must be in the format "Host
-         * name:Port number", for example, apig.example.com:7443. If the port number is not specified, the default HTTPS port 443
-         * or the default HTTP port 80 is used. The backend service address can contain environment variables, each starting with
-         * a letter and consisting of 3 to 32 characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+         * Specifies the backend service address.  
+         * The value which consists of a domain name or IP address, and a port number, with not more than `255` characters.
+         * The backend service address must be in the format "{host name}:{Port number}", for example, `apig.example.com:7443`.
+         * If the port number is not specified, the default HTTPS port `443`, or the default HTTP port `80` is used.
+         * The backend service address can contain environment variables, each starting with a letter and consisting of `3` to
+         * `32` characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
          */
         backendAddress?: string;
         /**
-         * Specifies the proxy host header. The host header can be customized for requests to
-         * be forwarded to cloud servers through the VPC channel. By default, the original host header of the request is used.
+         * Specifies the proxy host header.  
+         * The host header can be customized for requests to be forwarded to cloud servers through the VPC channel.
+         * By default, the original host header of the request is used.
          */
         hostHeader?: string;
         /**
-         * Specifies the backend request address, which can contain a maximum of 512 characters and
+         * Specifies the backend request address, which can contain a maximum of `512` characters and
          * must comply with URI specifications.
-         * + The request address can contain request parameters enclosed with brackets ({}).
-         * + The request address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
+         * + The address can contain request parameters enclosed with brackets ({}).
+         * + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
          * underscores (_) and must comply with URI specifications.
-         * + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
+         * + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
          * Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
          */
         path: string;
         /**
-         * Specifies the backend request method of the API. The valid types are **GET**,
-         * **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+         * Specifies the backend request method of the API.  
+         * The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
          */
         requestMethod?: string;
         /**
          * Specifies the backend request protocol. The valid values are **HTTP** and
-         * **HTTPS**, default to **HTTPS**.
+         * **HTTPS**, defaults to **HTTPS**.
          */
         requestProtocol?: string;
         /**
-         * Specifies the indicates whether to enable two-way authentication, default to false.
+         * Specifies whether to enable two-way authentication, defaults to **false**.
          */
         sslEnable?: boolean;
         /**
          * Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-         * valid value is range from 1 to 600,000, default to 5,000.
+         * valid value is range from `1` to `600,000`, defaults to `5,000`.
          */
         timeout?: number;
         /**
-         * Specifies the VPC channel ID. This parameter and `backendAddress` are
-         * alternative.
+         * Specifies the VPC channel ID.  
+         * This parameter and `backendAddress` are alternative.
          */
         vpcChannelId?: string;
     }
@@ -3275,11 +3568,12 @@ export namespace DedicatedApig {
          */
         authorizerId?: string;
         /**
-         * Specifies the backend service address, which consists of a domain name or IP
-         * address, and a port number, with not more than 255 characters. The backend service address must be in the format "Host
-         * name:Port number", for example, apig.example.com:7443. If the port number is not specified, the default HTTPS port 443
-         * or the default HTTP port 80 is used. The backend service address can contain environment variables, each starting with
-         * a letter and consisting of 3 to 32 characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+         * Specifies the backend service address.  
+         * The value which consists of a domain name or IP address, and a port number, with not more than `255` characters.
+         * The backend service address must be in the format "{host name}:{Port number}", for example, `apig.example.com:7443`.
+         * If the port number is not specified, the default HTTPS port `443`, or the default HTTP port `80` is used.
+         * The backend service address can contain environment variables, each starting with a letter and consisting of `3` to
+         * `32` characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
          */
         backendAddress?: string;
         /**
@@ -3288,80 +3582,88 @@ export namespace DedicatedApig {
          */
         backendParams?: outputs.DedicatedApig.ApiWebPolicyBackendParam[];
         /**
-         * Specifies an array of one or more policy conditions. Up to five conditions can be set.
+         * Specifies an array of one or more policy conditions.  
+         * Up to five conditions can be set.
          * The object structure is documented below.
          */
         conditions: outputs.DedicatedApig.ApiWebPolicyCondition[];
         /**
          * Specifies the effective mode of the backend policy. The valid values are **ALL**
-         * and **ANY**, default to **ANY**.
+         * and **ANY**, defaults to **ANY**.
          */
         effectiveMode?: string;
         /**
-         * Specifies the proxy host header. The host header can be customized for requests to
-         * be forwarded to cloud servers through the VPC channel. By default, the original host header of the request is used.
+         * Specifies the proxy host header.  
+         * The host header can be customized for requests to be forwarded to cloud servers through the VPC channel.
+         * By default, the original host header of the request is used.
          */
         hostHeader?: string;
         /**
-         * Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-         * a letter. Only letters, digits, and underscores (_) are allowed.
+         * Specifies the backend policy name.  
+         * The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
          */
         name: string;
         /**
-         * Specifies the backend request address, which can contain a maximum of 512 characters and
+         * Specifies the backend request address, which can contain a maximum of `512` characters and
          * must comply with URI specifications.
-         * + The request address can contain request parameters enclosed with brackets ({}).
-         * + The request address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
+         * + The address can contain request parameters enclosed with brackets ({}).
+         * + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
          * underscores (_) and must comply with URI specifications.
-         * + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
+         * + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
          * Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
          */
         path: string;
         /**
-         * Specifies the backend request method of the API. The valid types are **GET**,
-         * **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+         * Specifies the backend request method of the API.  
+         * The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
          */
         requestMethod: string;
         /**
          * Specifies the backend request protocol. The valid values are **HTTP** and
-         * **HTTPS**, default to **HTTPS**.
+         * **HTTPS**, defaults to **HTTPS**.
          */
         requestProtocol?: string;
         /**
          * Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-         * valid value is range from 1 to 600,000, default to 5,000.
+         * valid value is range from `1` to `600,000`, defaults to `5,000`.
          */
         timeout?: number;
         /**
-         * Specifies the VPC channel ID. This parameter and `backendAddress` are
-         * alternative.
+         * Specifies the VPC channel ID.  
+         * This parameter and `backendAddress` are alternative.
          */
         vpcChannelId?: string;
     }
 
     export interface ApiWebPolicyBackendParam {
         /**
-         * Specifies the description of the constant or system parameter, which contain a
-         * maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+         * Specifies the description of the constant or system parameter.  
+         * The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
          */
         description?: string;
         /**
-         * Specifies the location of the backend parameter. The valid values are **PATH**,
-         * **QUERY** and **HEADER**.
+         * Specifies the location of the backend parameter.  
+         * The valid values are **PATH**, **QUERY** and **HEADER**.
          */
         location: string;
         /**
-         * Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-         * a letter. Only letters, digits, and underscores (_) are allowed.
+         * Specifies the backend policy name.  
+         * The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
          */
         name: string;
         /**
-         * Specifies the condition type of the backend policy. The valid values are **Equal**,
-         * **Enumerated** and **Matching**, default to **Equal**.
+         * Specifies the type of the system parameter.  
+         * The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+         */
+        systemParamType?: string;
+        /**
+         * Specifies the condition type of the backend policy.  
+         * The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
          */
         type: string;
         /**
-         * Specifies the condition type. For a condition with the input parameter source:
+         * Specifies the value of the backend policy.  
+         * For a condition with the input parameter source:
          * + If the condition type is **Enumerated**, separate condition values with commas.
          * + If the condition type is **Matching**, enter a regular expression compatible with PERL.
          */
@@ -3370,22 +3672,23 @@ export namespace DedicatedApig {
 
     export interface ApiWebPolicyCondition {
         /**
-         * Specifies the request parameter name. This parameter is required if the policy type
-         * is param.
+         * Specifies the request parameter name.
+         * This parameter is required if the policy type is **param**.
          */
         paramName?: string;
         /**
-         * Specifies the policy type. The valid values are **param** and **source**, default to
-         * **source**.
+         * Specifies the backend policy type.  
+         * The valid values are **param** and **source**, defaults to **source**.
          */
         source?: string;
         /**
-         * Specifies the condition type of the backend policy. The valid values are **Equal**,
-         * **Enumerated** and **Matching**, default to **Equal**.
+         * Specifies the condition type of the backend policy.  
+         * The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
          */
         type?: string;
         /**
-         * Specifies the condition type. For a condition with the input parameter source:
+         * Specifies the value of the backend policy.  
+         * For a condition with the input parameter source:
          * + If the condition type is **Enumerated**, separate condition values with commas.
          * + If the condition type is **Matching**, enter a regular expression compatible with PERL.
          */
@@ -3394,21 +3697,18 @@ export namespace DedicatedApig {
 
     export interface CustomAuthorizerIdentity {
         /**
-         * Specifies the parameter location, which support 'HEADER' and 'QUERY'.
-         * Changing this will create a new custom authorizer resource.
+         * Specifies the parameter location, which support **HEADER** and **QUERY**.
          */
         location: string;
         /**
          * Specifies the name of the parameter to be verified.
          * The parameter includes front-end and back-end parameters.
-         * Changing this will create a new custom authorizer resource.
          */
         name: string;
         /**
          * Specifies the parameter verification expression.
          * If omitted, the custom authorizer will not perform verification.
-         * The valid value is range form 1 to 2,048.
-         * Changing this will create a new custom authorizer resource.
+         * The valid value is range form `1` to `2,048`.
          */
         validation?: string;
     }
@@ -3435,29 +3735,39 @@ export namespace DedicatedApig {
 
     export interface GroupEnvironment {
         /**
-         * Specifies the APIG environment ID of the associated APIG group.
+         * Specifies the environment ID of the associated group.
          */
         environmentId: string;
         /**
-         * Specifies an array of one or more APIG environment variables. The object structure is
-         * documented below. The environment variables of different groups are isolated in the same environment.
+         * Specifies an array of one or more environment variables.  
+         * The object structure is documented below.
          */
         variables: outputs.DedicatedApig.GroupEnvironmentVariable[];
     }
 
     export interface GroupEnvironmentVariable {
         /**
-         * Specifies the variable name, which can contains of 3 to 32 characters, starting with a
-         * letter. Only letters, digits, hyphens (-), and underscores (_) are allowed. In the definition of an API, `name` (
-         * case-sensitive) indicates a variable, such as #Name#. It is replaced by the actual value when the API is published in
-         * an environment. The variable names are not allowed to be repeated for an API group.
+         * The variable ID.
+         */
+        id: string;
+        /**
+         * Specifies the variable name.  
+         * The valid length is limited from `3` to `32` characters.
+         * Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
+         * In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
+         * It is replaced by the actual value when the API is published in an environment.
+         * The variable names are not allowed to be repeated for an API group.
          */
         name: string;
         /**
-         * Specifies the environment ariable value, which can contains of 1 to 255 characters. Only
-         * letters, digits and special characters (_-/.:) are allowed.
+         * Specifies the variable value.  
+         * The valid length is limited from `1` to `255` characters.
+         * Only letters, digits and special characters (_-/.:) are allowed.
          */
         value: string;
+        /**
+         * @deprecated Use 'id' instead
+         */
         variableId: string;
     }
 
@@ -3468,7 +3778,7 @@ export namespace DedicatedApig {
          */
         body: string;
         /**
-         * Specifies the type of the API custom response rule.
+         * Specifies the error type of the API response rule.
          * + **AUTH_FAILURE**: Authentication failed.
          * + **AUTH_HEADER_MISSING**: The identity source is missing.
          * + **AUTHORIZER_FAILURE**: Custom authentication failed.
@@ -3488,12 +3798,12 @@ export namespace DedicatedApig {
         /**
          * Specifies the HTTP status code of the API response rule.
          */
-        statusCode?: number;
+        statusCode: number;
     }
 
     export interface ThrottlingPolicyAppThrottle {
         /**
-         * ID of the special application throttling policy.
+         * ID of the special user/application throttling policy.
          */
         id: string;
         /**
@@ -3506,14 +3816,14 @@ export namespace DedicatedApig {
          */
         throttlingObjectId: string;
         /**
-         * The object name which the special application throttling policy belongs.
+         * The object name which the special user/application throttling policy belongs.
          */
         throttlingObjectName: string;
     }
 
     export interface ThrottlingPolicyUserThrottle {
         /**
-         * ID of the special application throttling policy.
+         * ID of the special user/application throttling policy.
          */
         id: string;
         /**
@@ -3526,7 +3836,7 @@ export namespace DedicatedApig {
          */
         throttlingObjectId: string;
         /**
-         * The object name which the special application throttling policy belongs.
+         * The object name which the special user/application throttling policy belongs.
          */
         throttlingObjectName: string;
     }
@@ -3534,18 +3844,18 @@ export namespace DedicatedApig {
     export interface VpcChannelMember {
         /**
          * Specifies the ECS ID for each backend servers.
-         * Required if `memberType` is *ECS*.
+         * Required if the `memberType` is **ECS**.
          * This parameter and `ipAddress` are alternative.
          */
         id?: string;
         /**
          * Specifies the IP address each backend servers.
-         * Required if `memberType` is *EIP*.
+         * Required if the `memberType` is **EIP**.
          */
         ipAddress?: string;
         /**
          * Specifies the backend server weight.
-         * The valid values are range from 1 to 100, default to 1.
+         * The valid value ranges from `1` to `100`, defaults to `1`.
          */
         weight?: number;
     }
@@ -3683,6 +3993,13 @@ export namespace DedicatedElb {
          */
         cookieName?: string;
         /**
+         * Specifies the sticky session timeout duration in minutes. This parameter is
+         * invalid when type is set to APP_COOKIE. The value range varies depending on the protocol of the backend server group:
+         * + When the protocol of the backend server group is TCP or UDP, the value ranges from 1 to 60.
+         * + When the protocol of the backend server group is HTTP or HTTPS, the value ranges from 1 to 1440.
+         */
+        timeout: number;
+        /**
          * The type of persistence mode. The current specification supports SOURCE_IP,
          * HTTP_COOKIE, and APP_COOKIE.
          */
@@ -3740,7 +4057,16 @@ export namespace Dis {
 
 export namespace Dli {
     export interface SparkJobDependentPackage {
+        /**
+         * Specifies the user group name.
+         * Changing this parameter will submit a new spark job.
+         */
         groupName: string;
+        /**
+         * Specifies the user group resource for details.
+         * Changing this parameter will submit a new spark job.
+         * The object structure is documented below.
+         */
         packages: outputs.Dli.SparkJobDependentPackagePackage[];
     }
 
@@ -4016,11 +4342,15 @@ export namespace Dms {
          */
         maintainEnd: string;
         /**
+         * The connection address of the Kafka manager of an instance.
+         */
+        managementConnectAddress: string;
+        /**
          * The username for logging in to the Kafka Manager.
          */
         managerUser: string;
         /**
-         * The connection address of the Kafka manager of an instance.
+         * @deprecated typo in manegement_connect_address, please use "management_connect_address" instead.
          */
         manegementConnectAddress: string;
         /**
@@ -4056,6 +4386,9 @@ export namespace Dms {
          * The resource specifications identifier.
          */
         resourceSpecCode: string;
+        /**
+         * The action to be taken when the memory usage reaches the disk capacity threshold.
+         */
         retentionPolicy: string;
         /**
          * The security group ID associated with the instance.
@@ -4109,9 +4442,13 @@ export namespace Dms {
          */
         advertisedIp: string;
         /**
-         * The listener IP address.
+         * @deprecated typo in lisenter_ip, please use "listener_ip" instead.
          */
         lisenterIp: string;
+        /**
+         * The listener IP address.
+         */
+        listenerIp: string;
         /**
          * The port number.
          */
@@ -4124,13 +4461,17 @@ export namespace Dms {
 
     export interface KafkaInstanceCrossVpcAccess {
         /**
-         * -(Optional, String) The advertised IP Address or domain name.
+         * The advertised IP Address or domain name.
          */
         advertisedIp: string;
         /**
-         * The listener IP address.
+         * @deprecated typo in lisenter_ip, please use "listener_ip" instead.
          */
         lisenterIp: string;
+        /**
+         * The listener IP address.
+         */
+        listenerIp: string;
         /**
          * The port number.
          */
@@ -4143,14 +4484,14 @@ export namespace Dms {
 
     export interface KafkaPermissionsPolicy {
         /**
-         * -(Required, String) Specifies the permissions type. The value can be:
+         * Specifies the permissions type. The value can be:
          * + **all**: publish and subscribe permissions.
          * + **pub**: publish permissions.
          * + **sub**: subscribe permissions.
          */
         accessPolicy: string;
         /**
-         * -(Required, String) Specifies the user name.
+         * Specifies the username.
          */
         userName: string;
     }
@@ -4188,8 +4529,8 @@ export namespace Drs {
          */
         ip: string;
         /**
-         * Specifies the job name. The name consists of 4 to 50 characters, starting with
-         * a letter. Only letters, digits, underscores (\_) and hyphens (-) are allowed.
+         * Specifies the name of database.
+         * Changing this parameter will create a new resource.
          */
         name: string;
         /**
@@ -4278,8 +4619,8 @@ export namespace Drs {
          */
         ip: string;
         /**
-         * Specifies the job name. The name consists of 4 to 50 characters, starting with
-         * a letter. Only letters, digits, underscores (\_) and hyphens (-) are allowed.
+         * Specifies the name of database.
+         * Changing this parameter will create a new resource.
          */
         name: string;
         /**
@@ -4338,26 +4679,38 @@ export namespace Drs {
 export namespace Dws {
     export interface ClusterEndpoint {
         /**
-         * (Optional, String) Private network connection information.
+         * Private network connection information.
          */
         connectInfo: string;
         /**
-         * (Optional, String)
-         * JDBC URL. The following is the default format:
-         * jdbc:postgresql://< public_connect_info>/<YOUR_DATABASE_NAME>
+         * JDBC URL. Format: jdbc:postgresql://<public_connect_info>/<YOUR_DATABASE_NAME>
          */
         jdbcUrl: string;
     }
 
+    export interface ClusterMaintainWindow {
+        /**
+         * Maintenance time in each week in the unit of day.  
+         * The valid values are **Mon**, **Tue**, **Wed**, **Thu**, **Fri**,
+         * **Sat**, and **Sun**.
+         */
+        day: string;
+        /**
+         * Maintenance end time in HH:mm format. The time zone is GMT+0.
+         */
+        endTime: string;
+        /**
+         * Maintenance start time in HH:mm format. The time zone is GMT+0.
+         */
+        startTime: string;
+    }
+
     export interface ClusterPublicEndpoint {
         /**
-         * (Optional, String)
-         * JDBC URL. The following is the default format:
-         * jdbc:postgresql://< public_connect_info>/<YOUR_DATABASE_NAME>
+         * JDBC URL. Format: jdbc:postgresql://<public_connect_info>/<YOUR_DATABASE_NAME>
          */
         jdbcUrl: string;
         /**
-         * (Optional, String)
          * Public network connection information.
          */
         publicConnectInfo: string;
@@ -4365,43 +4718,88 @@ export namespace Dws {
 
     export interface ClusterPublicIp {
         /**
-         * EIP ID.
+         * The EIP ID.
          */
         eipId: string;
         /**
-         * Binding type of an EIP. The value can be either of the following:
-         * autoAssign not_use bindExisting The default value is not_use.
+         * The bind type of public IP.  
+         * The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
          */
         publicBindType: string;
     }
 
+    export interface ClusterVolume {
+        /**
+         * The capacity size, in GB.
+         */
+        capacity: string;
+        /**
+         * The volume type. Value options are as follows:
+         * + **SATA**: Common I/O. The SATA disk is used.
+         * + **SAS**: High I/O. The SAS disk is used.
+         * + **SSD**: Ultra-high I/O. The solid-state drive (SSD) is used.
+         * The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
+         */
+        type: string;
+    }
+
     export interface GetFlaovrsFlavor {
         /**
-         * Specifies the availability zone name.
+         * The list of availability zones.
          */
-        availabilityZone: string;
+        availabilityZones: string[];
         /**
-         * The name of the dws node flavor. It is referenced by `nodeType` in `huaweicloud.Dws.getFlaovrs`.
+         * The type of datastore.  
+         * The options are as follows:
+         * - **dws**: OLAP, elastic scaling, unlimited scaling of compute and storage capacity.
+         * - **hybrid**: a single data warehouse used for transaction and analytics workloads,
+         * in single-node or cluster mode.
+         * - **stream**: built-in time series operators; up to 40:1 compression ratio; applicable to IoT services.
+         */
+        datastoreType: string;
+        /**
+         * The ElasticVolumeSpec structure is documented below.
+         */
+        elasticVolumeSpecs: outputs.Dws.GetFlaovrsFlavorElasticVolumeSpec[];
+        /**
+         * The name of the dws node flavor.  
+         * It is referenced by `nodeType` in `huaweicloud.Dws.getFlaovrs`.
          */
         flavorId: string;
         /**
-         * Specifies the ram of the dws node flavor in GB.
+         * The ram of the dws node flavor in GB.
          */
         memory: number;
         /**
-         * Indicates the Disk size in GB.
+         * The default disk size in GB.
          */
         size: number;
         /**
-         * Specifies the vcpus of the dws node flavor.
+         * The vcpus of the dws node flavor.
          */
         vcpus: number;
         /**
-         * Indicates Disk type.
-         * + **LOCAL_DISK**: common I/O disk
-         * + **SSD**: ultra-high I/O disk
+         * Disk type.  
+         * The options are as follows:
+         * - **LOCAL_DISK**:common I/O disk.
+         * - **SSD**: ultra-high I/O disk.
          */
         volumetype: string;
+    }
+
+    export interface GetFlaovrsFlavorElasticVolumeSpec {
+        /**
+         * Maximum disk size.
+         */
+        maxSize: number;
+        /**
+         * Minimum disk size.
+         */
+        minSize: number;
+        /**
+         * Disk size increment step.
+         */
+        step: number;
     }
 
 }
@@ -4425,14 +4823,14 @@ export namespace Ecs {
          */
         port: string;
         /**
-         * The network UUID to attach to the server.
+         * The network ID to attach to the server.
          */
         uuid: string;
     }
 
     export interface GetInstanceSchedulerHint {
         /**
-         * The UUID of a Server Group where the instance will be placed into.
+         * The server group ID where the instance will be placed into.
          */
         group: string;
     }
@@ -4442,6 +4840,10 @@ export namespace Ecs {
          * The volume boot index on that attachment.
          */
         bootIndex: number;
+        /**
+         * Whether the volume is the system disk.
+         */
+        isSysVolume: boolean;
         /**
          * The volume pci address on that attachment.
          */
@@ -4455,7 +4857,7 @@ export namespace Ecs {
          */
         type: string;
         /**
-         * The volume id on that attachment.
+         * The volume ID on that attachment.
          */
         volumeId: string;
     }
@@ -4487,6 +4889,10 @@ export namespace Ecs {
          */
         imageId: string;
         /**
+         * The image name of the instance.
+         */
+        imageName: string;
+        /**
          * Specifies the key pair that is used to authenticate the instance.
          */
         keyPair: string;
@@ -4496,10 +4902,19 @@ export namespace Ecs {
          */
         name: string;
         /**
-         * The scheduler with hints on how the instance should be launched.
-         * The object structure is documented below.
+         * An array of one or more networks to attach to the instance.
+         * The network object structure is documented below.
          */
-        schedulerHints?: outputs.Ecs.GetInstancesInstanceSchedulerHint[];
+        networks: outputs.Ecs.GetInstancesInstanceNetwork[];
+        /**
+         * The EIP address that is associted to the instance.
+         */
+        publicIp: string;
+        /**
+         * The scheduler with hints on how the instance should be launched.
+         * The scheduler hints structure is documented below.
+         */
+        schedulerHints: outputs.Ecs.GetInstancesInstanceSchedulerHint[];
         /**
          * An array of one or more security group IDs to associate with the instance.
          */
@@ -4512,6 +4927,10 @@ export namespace Ecs {
          */
         status: string;
         /**
+         * The system disk voume ID.
+         */
+        systemDiskId: string;
+        /**
          * The key/value pairs to associate with the instance.
          */
         tags: {[key: string]: string};
@@ -4520,25 +4939,65 @@ export namespace Ecs {
          */
         userData: string;
         /**
-         * An array of one or more disks to attach to the instance. The object structure is documented below.
+         * An array of one or more disks to attach to the instance.
+         * The volume attached object structure is documented below.
          */
         volumeAttacheds: outputs.Ecs.GetInstancesInstanceVolumeAttached[];
     }
 
+    export interface GetInstancesInstanceNetwork {
+        /**
+         * The fixed IPv4 address of the instance on this network.
+         */
+        fixedIpV4: string;
+        /**
+         * The Fixed IPv6 address of the instance on that network.
+         */
+        fixedIpV6: string;
+        /**
+         * The MAC address of the NIC on that network.
+         */
+        mac: string;
+        /**
+         * The port ID corresponding to the IP address on that network.
+         */
+        port: string;
+        /**
+         * The network ID to attach to the server.
+         */
+        uuid: string;
+    }
+
     export interface GetInstancesInstanceSchedulerHint {
         /**
-         * The UUID of a server group where the instance will be placed into.
+         * The server group ID where the instance will be placed into.
          */
         group: string;
     }
 
     export interface GetInstancesInstanceVolumeAttached {
         /**
+         * The volume boot index on that attachment.
+         */
+        bootIndex: number;
+        /**
          * Whether the volume is the system disk.
          */
         isSysVolume: boolean;
         /**
-         * The volume id on that attachment.
+         * The volume pci address on that attachment.
+         */
+        pciAddress: string;
+        /**
+         * The volume size on that attachment.
+         */
+        size: number;
+        /**
+         * The volume type on that attachment.
+         */
+        type: string;
+        /**
+         * The volume ID on that attachment.
          */
         volumeId: string;
     }
@@ -4568,26 +5027,21 @@ export namespace Ecs {
         size?: number;
     }
 
-    export interface InstanceBlockDevice {
-        bootIndex?: number;
-        deleteOnTermination?: boolean;
-        destinationType?: string;
-        guestFormat?: string;
-        sourceType: string;
+    export interface InstanceDataDisk {
         /**
-         * Specifies the network UUID to attach to the instance.
+         * Specifies the ID of a KMS key. This is used to encrypt the disk.
          * Changing this creates a new instance.
          */
-        uuid?: string;
-        volumeSize?: number;
-    }
-
-    export interface InstanceDataDisk {
+        kmsKeyId?: string;
         /**
          * Specifies the bandwidth size. The value ranges from 1 to 300 Mbit/s.
          * This parameter is mandatory when `shareType` is set to **PER**. Changing this creates a new instance.
          */
         size: number;
+        /**
+         * Specifies the EVS snapshot ID or ID of the original data disk contained in
+         * the full-ECS image. Changing this creates a new instance.
+         */
         snapshotId?: string;
         /**
          * Specifies the ECS data disk type, which must be one of available disk types,
@@ -4607,13 +5061,22 @@ export namespace Ecs {
          * Changing this creates a new instance.
          */
         fixedIpV4: string;
+        /**
+         * The Fixed IPv6 address of the instance on that network.
+         */
         fixedIpV6: string;
         /**
          * Specifies whether the IPv6 function is enabled for the nic.
          * Defaults to false. Changing this creates a new instance.
          */
         ipv6Enable?: boolean;
+        /**
+         * The MAC address of the NIC on that network.
+         */
         mac: string;
+        /**
+         * The port ID corresponding to the IP address on that network.
+         */
         port: string;
         /**
          * Specifies whether the ECS processes only traffic that is destined specifically
@@ -4649,7 +5112,18 @@ export namespace Ecs {
     }
 
     export interface InstanceVolumeAttached {
+        /**
+         * The volume boot index on that attachment.
+         */
         bootIndex: number;
+        /**
+         * Specifies the ID of a KMS key. This is used to encrypt the disk.
+         * Changing this creates a new instance.
+         */
+        kmsKeyId: string;
+        /**
+         * The volume pci address on that attachment.
+         */
         pciAddress: string;
         /**
          * Specifies the bandwidth size. The value ranges from 1 to 300 Mbit/s.
@@ -4661,6 +5135,9 @@ export namespace Ecs {
          * contains of *SSD*, *GPSSD* and *SAS*. Changing this creates a new instance.
          */
         type: string;
+        /**
+         * The volume ID on that attachment.
+         */
         volumeId: string;
     }
 }
@@ -5009,11 +5486,17 @@ export namespace Evs {
     }
 
     export interface VolumeAttachment {
+        /**
+         * The device name.
+         */
         device: string;
         /**
-         * A resource ID in UUID format.
+         * The ID of the attachment information.
          */
         id: string;
+        /**
+         * The ID of the server to which the disk is attached.
+         */
         instanceId: string;
     }
 
@@ -5023,7 +5506,6 @@ export namespace FunctionGraph {
     export interface FunctionCustomImage {
         /**
          * Specifies the URL of SWR image, the URL must start with `swr.`.
-         * Changing this will create a new resource.
          */
         url: string;
     }
@@ -5495,11 +5977,13 @@ export namespace GaussDB {
 
     export interface MysqlInstanceDatastore {
         /**
-         * Specifies the database engine. Only "gauss-mysql" is supported now.
+         * Specifies the database engine. Only "gaussdb-mysql" is supported now.
+         * Changing this parameter will create a new resource.
          */
         engine: string;
         /**
          * Specifies the database version. Only "8.0" is supported now.
+         * Changing this parameter will create a new resource.
          */
         version: string;
     }
@@ -5554,14 +6038,17 @@ export namespace GaussDBforNoSQL {
     export interface CassandraInstanceDatastore {
         /**
          * Specifies the database engine. Only "GeminiDB-Cassandra" is supported now.
+         * Changing this parameter will create a new resource.
          */
         engine: string;
         /**
          * Specifies the storage engine. Only "rocksDB" is supported now.
+         * Changing this parameter will create a new resource.
          */
         storageEngine: string;
         /**
          * Specifies the database version.
+         * Changing this parameter will create a new resource.
          */
         version: string;
     }
@@ -5907,14 +6394,17 @@ export namespace GaussDBforNoSQL {
     export interface InfluxInstanceDatastore {
         /**
          * Specifies the database engine. Only **influxdb** is supported now.
+         * Changing this parameter will create a new resource.
          */
         engine: string;
         /**
          * Specifies the storage engine. Only **rocksDB** is supported now.
+         * Changing this parameter will create a new resource.
          */
         storageEngine: string;
         /**
          * Specifies the database version.
+         * Changing this parameter will create a new resource.
          */
         version: string;
     }
@@ -6019,14 +6509,17 @@ export namespace GaussDBforNoSQL {
     export interface RedisInstanceDatastore {
         /**
          * Specifies the database engine. Only "redis" is supported now.
+         * Changing this parameter will create a new resource.
          */
         engine: string;
         /**
          * Specifies the storage engine. Only "rocksDB" is supported now.
+         * Changing this parameter will create a new resource.
          */
         storageEngine: string;
         /**
          * Specifies the database version. Only "5.0" is supported now.
+         * Changing this parameter will create a new resource.
          */
         version: string;
     }
@@ -6046,6 +6539,10 @@ export namespace GaussDBforNoSQL {
          * Indicates the private IP address of a node.
          */
         privateIp: string;
+        /**
+         * Indicates the public IP address of a node.
+         */
+        publicIp: string;
         /**
          * Indicates the node status.
          */
@@ -6179,10 +6676,18 @@ export namespace GaussDBforOpenGauss {
          */
         privateIps: string[];
         /**
+         * Indicates the public IP address of the DB instance.
+         */
+        publicIps: string[];
+        /**
          * The region in which to obtain the instance. If omitted, the provider-level region will
          * be used.
          */
         region: string;
+        /**
+         * Indicates the replica num.
+         */
+        replicaNum: number;
         /**
          * Indicates the security group ID.
          */
@@ -6382,7 +6887,7 @@ export namespace Iam {
         cidr: string;
         /**
          * Specifies a description about an IP address range. This parameter can contain a
-         * maximum of 255 characters and the following charactors are not allowed:**@#%^&*<>\\**.
+         * maximum of 255 characters and the following characters are not allowed:**@#%^&*<>\\**.
          */
         description?: string;
     }
@@ -6390,7 +6895,7 @@ export namespace Iam {
     export interface AclIpRange {
         /**
          * Specifies a description about an IP address range. This parameter can contain a
-         * maximum of 255 characters and the following charactors are not allowed:**@#%^&*<>\\**.
+         * maximum of 255 characters and the following characters are not allowed:**@#%^&*<>\\**.
          */
         description?: string;
         /**
@@ -6608,9 +7113,21 @@ export namespace Iec {
     }
 
     export interface GetEipsEip {
+        /**
+         * The ID of bandwidth.
+         */
         bandwidthId: string;
+        /**
+         * The name of bandwidth.
+         */
         bandwidthName: string;
+        /**
+         * Whether the bandwidth is shared or exclusive.
+         */
         bandwidthShareType: string;
+        /**
+         * The size of bandwidth.
+         */
         bandwidthSize: number;
         /**
          * The ID of elastic IP.
@@ -7364,13 +7881,13 @@ export namespace IoTDA {
         commands: outputs.IoTDA.ProductServiceCommand[];
         /**
          * Specifies the description of the parameter. The description contains a maximum of
-         * 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+         * 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
          * characters are allowed: `?'#().,&%@!`.
          */
         description: string;
         /**
          * Specifies the service ID. The ID contains a maximum of 64 characters. Only letters,
-         * Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are allowed: `?'#().,&%@!`.
+         * Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
          */
         id: string;
         /**
@@ -7388,7 +7905,7 @@ export namespace IoTDA {
     export interface ProductServiceCommand {
         /**
          * Specifies the name of the parameter. The name contains a maximum of 64 characters.
-         * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+         * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
          * allowed: `?'#().,&%@!`.
          */
         name: string;
@@ -7407,10 +7924,13 @@ export namespace IoTDA {
     export interface ProductServiceCommandPara {
         /**
          * Specifies the description of the parameter. The description contains a maximum of
-         * 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+         * 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
          * characters are allowed: `?'#().,&%@!`.
          */
         description: string;
+        /**
+         * Specifies the list of enumerated values of the parameter.
+         */
         enumLists: string[];
         /**
          * Specifies the max value of the parameter when the `type` is **int** or **decimal**.
@@ -7429,7 +7949,7 @@ export namespace IoTDA {
         min?: string;
         /**
          * Specifies the name of the parameter. The name contains a maximum of 64 characters.
-         * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+         * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
          * allowed: `?'#().,&%@!`.
          */
         name: string;
@@ -7453,10 +7973,13 @@ export namespace IoTDA {
     export interface ProductServiceCommandResponse {
         /**
          * Specifies the description of the parameter. The description contains a maximum of
-         * 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+         * 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
          * characters are allowed: `?'#().,&%@!`.
          */
         description: string;
+        /**
+         * Specifies the list of enumerated values of the parameter.
+         */
         enumLists: string[];
         /**
          * Specifies the max value of the parameter when the `type` is **int** or **decimal**.
@@ -7475,7 +7998,7 @@ export namespace IoTDA {
         min?: string;
         /**
          * Specifies the name of the parameter. The name contains a maximum of 64 characters.
-         * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+         * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
          * allowed: `?'#().,&%@!`.
          */
         name: string;
@@ -7499,10 +8022,13 @@ export namespace IoTDA {
     export interface ProductServiceProperty {
         /**
          * Specifies the description of the parameter. The description contains a maximum of
-         * 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+         * 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
          * characters are allowed: `?'#().,&%@!`.
          */
         description: string;
+        /**
+         * Specifies the list of enumerated values of the parameter.
+         */
         enumLists: string[];
         /**
          * Specifies the max value of the parameter when the `type` is **int** or **decimal**.
@@ -7514,6 +8040,10 @@ export namespace IoTDA {
          * **jsonObject** or **string list**. Value range: 0 ~ 2147483647. Defaults to **0**.
          */
         maxLength: number;
+        /**
+         * Specifies the access mode of the device property.
+         * Options: **RW**, **W**, **R**.
+         */
         method: string;
         /**
          * Specifies the min value of the parameter when the `type` is **int** or **decimal**.
@@ -7522,7 +8052,7 @@ export namespace IoTDA {
         min?: string;
         /**
          * Specifies the name of the parameter. The name contains a maximum of 64 characters.
-         * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+         * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
          * allowed: `?'#().,&%@!`.
          */
         name: string;
@@ -7755,7 +8285,13 @@ export namespace Meeting {
     }
 
     export interface ConferenceJoinPassword {
+        /**
+         * The password of the common participant.
+         */
         guest: string;
+        /**
+         * The password of the meeting host.
+         */
         host: string;
     }
 
@@ -7881,6 +8417,10 @@ export namespace Meeting {
          * + **3**: The invited user.
          */
         callinRestriction: number;
+        /**
+         * The webinar Audience Display Strategy.
+         * The object structure is documented below.
+         */
         showAudiencePolicies: outputs.Meeting.ConferenceSubconferenceSubconfigurationShowAudiencePolicy[];
         /**
          * Specifies whether to open the waiting room (only valid for RTC enterprises).
@@ -8088,7 +8628,7 @@ export namespace ModelArts {
         /**
          * The labels information. Structure is documented below.
          */
-        labels?: outputs.ModelArts.GetDatasetsDatasetLabel[];
+        labels: outputs.ModelArts.GetDatasetsDatasetLabel[];
         /**
          * Specifies the name of datasets.
          */
@@ -8415,11 +8955,7 @@ export namespace Mpc {
          * The default value is 5. The unit is second.
          */
         maxIframesInterval?: number;
-        /**
-         * Specifies the maximum reference frames. When the `codec` is H.264,
-         * the vaule rang is 1 to 8. When the `codec` is H.265, the value is fixed at 4. The default value is 4. The unit is frame.
-         */
-        maxReferenceFrames?: number;
+        maxReferenceFrames: number;
         /**
          * Specifies the output policy. Possible values are **discard** and **transcode**.
          * The default value is transcode.
@@ -8503,11 +9039,7 @@ export namespace Mpc {
          * The default value is 5. The unit is second.
          */
         maxIframesInterval?: number;
-        /**
-         * Specifies the maximum reference frames. When the `codec` is H.264,
-         * the vaule rang is 1 to 8. When the `codec` is H.265, the value is fixed at 4. The default value is 4. The unit is frame.
-         */
-        maxReferenceFrames?: number;
+        maxReferenceFrames: number;
         /**
          * Specifies the output policy. Possible values are **discard** and **transcode**.
          * The default value is transcode.
@@ -8543,17 +9075,17 @@ export namespace Mrs {
     export interface ClusterAnalysisCoreNodes {
         /**
          * Specifies the roles deployed in a node group.This argument is mandatory
-         * when the cluster type is CUSTOM. Each character string represents a role expression.
+         * when the cluster type is **CUSTOM**. Each character string represents a role expression.
          */
         assignedRoles?: string[];
         /**
          * Specifies the data disk number of the nodes. The number configuration
          * of each node are as follows:
-         * + master_nodes: 1.
-         * + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-         * + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-         * + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-         * + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+         * + **master_nodes**: 1.
+         * + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+         * + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+         * + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+         * + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
          */
         dataVolumeCount: number;
         /**
@@ -8566,9 +9098,9 @@ export namespace Mrs {
          * Specifies the data disk flavor of the nodes.
          * Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
          * The following disk types are supported:
-         * + `SATA`: common I/O disk
-         * + `SAS`: high I/O disk
-         * + `SSD`: ultra-high I/O disk
+         * + **SATA**: common I/O disk.
+         * + **SAS**: high I/O disk.
+         * + **SSD**: ultra-high I/O disk.
          */
         dataVolumeType?: string;
         /**
@@ -8599,17 +9131,17 @@ export namespace Mrs {
     export interface ClusterAnalysisTaskNodes {
         /**
          * Specifies the roles deployed in a node group.This argument is mandatory
-         * when the cluster type is CUSTOM. Each character string represents a role expression.
+         * when the cluster type is **CUSTOM**. Each character string represents a role expression.
          */
         assignedRoles?: string[];
         /**
          * Specifies the data disk number of the nodes. The number configuration
          * of each node are as follows:
-         * + master_nodes: 1.
-         * + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-         * + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-         * + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-         * + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+         * + **master_nodes**: 1.
+         * + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+         * + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+         * + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+         * + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
          */
         dataVolumeCount: number;
         /**
@@ -8622,9 +9154,9 @@ export namespace Mrs {
          * Specifies the data disk flavor of the nodes.
          * Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
          * The following disk types are supported:
-         * + `SATA`: common I/O disk
-         * + `SAS`: high I/O disk
-         * + `SSD`: ultra-high I/O disk
+         * + **SATA**: common I/O disk.
+         * + **SAS**: high I/O disk.
+         * + **SSD**: ultra-high I/O disk.
          */
         dataVolumeType?: string;
         /**
@@ -8652,20 +9184,51 @@ export namespace Mrs {
         rootVolumeType: string;
     }
 
+    export interface ClusterComponentConfig {
+        /**
+         * Specifies the configuration of component installed.
+         * The object structure is documented below.
+         */
+        configs: outputs.Mrs.ClusterComponentConfigConfig[];
+        /**
+         * Specifies the component name of the cluster which has installed.
+         * Changing this will create a new MapReduce cluster resource.
+         */
+        name: string;
+    }
+
+    export interface ClusterComponentConfigConfig {
+        /**
+         * Specifies the configuration file name of component installed.
+         * Changing this will create a new MapReduce cluster resource.
+         */
+        configFileName: string;
+        /**
+         * Specifies the configuration item key of component installed.
+         * Changing this will create a new MapReduce cluster resource.
+         */
+        key: string;
+        /**
+         * Specifies the configuration item value of component installed.
+         * Changing this will create a new MapReduce cluster resource.
+         */
+        value: string;
+    }
+
     export interface ClusterCustomNode {
         /**
          * Specifies the roles deployed in a node group.This argument is mandatory
-         * when the cluster type is CUSTOM. Each character string represents a role expression.
+         * when the cluster type is **CUSTOM**. Each character string represents a role expression.
          */
         assignedRoles?: string[];
         /**
          * Specifies the data disk number of the nodes. The number configuration
          * of each node are as follows:
-         * + master_nodes: 1.
-         * + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-         * + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-         * + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-         * + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+         * + **master_nodes**: 1.
+         * + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+         * + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+         * + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+         * + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
          */
         dataVolumeCount: number;
         /**
@@ -8678,9 +9241,9 @@ export namespace Mrs {
          * Specifies the data disk flavor of the nodes.
          * Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
          * The following disk types are supported:
-         * + `SATA`: common I/O disk
-         * + `SAS`: high I/O disk
-         * + `SSD`: ultra-high I/O disk
+         * + **SATA**: common I/O disk.
+         * + **SAS**: high I/O disk.
+         * + **SSD**: ultra-high I/O disk.
          */
         dataVolumeType?: string;
         /**
@@ -8715,17 +9278,17 @@ export namespace Mrs {
     export interface ClusterMasterNodes {
         /**
          * Specifies the roles deployed in a node group.This argument is mandatory
-         * when the cluster type is CUSTOM. Each character string represents a role expression.
+         * when the cluster type is **CUSTOM**. Each character string represents a role expression.
          */
         assignedRoles?: string[];
         /**
          * Specifies the data disk number of the nodes. The number configuration
          * of each node are as follows:
-         * + master_nodes: 1.
-         * + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-         * + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-         * + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-         * + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+         * + **master_nodes**: 1.
+         * + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+         * + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+         * + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+         * + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
          */
         dataVolumeCount: number;
         /**
@@ -8738,9 +9301,9 @@ export namespace Mrs {
          * Specifies the data disk flavor of the nodes.
          * Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
          * The following disk types are supported:
-         * + `SATA`: common I/O disk
-         * + `SAS`: high I/O disk
-         * + `SSD`: ultra-high I/O disk
+         * + **SATA**: common I/O disk.
+         * + **SAS**: high I/O disk.
+         * + **SSD**: ultra-high I/O disk.
          */
         dataVolumeType?: string;
         /**
@@ -8771,17 +9334,17 @@ export namespace Mrs {
     export interface ClusterStreamingCoreNodes {
         /**
          * Specifies the roles deployed in a node group.This argument is mandatory
-         * when the cluster type is CUSTOM. Each character string represents a role expression.
+         * when the cluster type is **CUSTOM**. Each character string represents a role expression.
          */
         assignedRoles?: string[];
         /**
          * Specifies the data disk number of the nodes. The number configuration
          * of each node are as follows:
-         * + master_nodes: 1.
-         * + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-         * + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-         * + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-         * + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+         * + **master_nodes**: 1.
+         * + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+         * + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+         * + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+         * + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
          */
         dataVolumeCount: number;
         /**
@@ -8794,9 +9357,9 @@ export namespace Mrs {
          * Specifies the data disk flavor of the nodes.
          * Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
          * The following disk types are supported:
-         * + `SATA`: common I/O disk
-         * + `SAS`: high I/O disk
-         * + `SSD`: ultra-high I/O disk
+         * + **SATA**: common I/O disk.
+         * + **SAS**: high I/O disk.
+         * + **SSD**: ultra-high I/O disk.
          */
         dataVolumeType?: string;
         /**
@@ -8827,17 +9390,17 @@ export namespace Mrs {
     export interface ClusterStreamingTaskNodes {
         /**
          * Specifies the roles deployed in a node group.This argument is mandatory
-         * when the cluster type is CUSTOM. Each character string represents a role expression.
+         * when the cluster type is **CUSTOM**. Each character string represents a role expression.
          */
         assignedRoles?: string[];
         /**
          * Specifies the data disk number of the nodes. The number configuration
          * of each node are as follows:
-         * + master_nodes: 1.
-         * + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-         * + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-         * + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-         * + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+         * + **master_nodes**: 1.
+         * + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+         * + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+         * + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+         * + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
          */
         dataVolumeCount: number;
         /**
@@ -8850,9 +9413,9 @@ export namespace Mrs {
          * Specifies the data disk flavor of the nodes.
          * Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
          * The following disk types are supported:
-         * + `SATA`: common I/O disk
-         * + `SAS`: high I/O disk
-         * + `SSD`: ultra-high I/O disk
+         * + **SATA**: common I/O disk.
+         * + **SAS**: high I/O disk.
+         * + **SSD**: ultra-high I/O disk.
          */
         dataVolumeType?: string;
         /**
@@ -8999,6 +9562,17 @@ export namespace Obs {
          * To specify a key prefix for log objects.
          */
         targetPrefix?: string;
+    }
+
+    export interface BucketStorageInfo {
+        /**
+         * The number of objects stored in the bucket.
+         */
+        objectNumber: number;
+        /**
+         * The stored size of the bucket.
+         */
+        size: number;
     }
 
     export interface BucketWebsite {
@@ -9212,16 +9786,8 @@ export namespace Oms {
 
 export namespace Rds {
     export interface Database_privilegeUser {
-        /**
-         * Specifies the username of the database account. Changing this creates a new resource.
-         */
         name: string;
-        /**
-         * Specifies the read-only permission. The value can be:
-         * + **true**: indicates the read-only permission.
-         * + **false**: indicates the read and write permission.
-         */
-        readonly?: boolean;
+        readonly: boolean;
     }
 
     export interface GetEngineVersionsVersion {
@@ -9455,10 +10021,16 @@ export namespace Rds {
 
     export interface InstanceBackupStrategy {
         /**
-         * Specifies the retention days for specific backup files. The value range is from 0 to
-         * 732. If this parameter is not specified or set to 0, the automated backup policy is disabled.
+         * Specifies the retention days for specific backup files. The value range is from 0 to 732.
          */
         keepDays: number;
+        /**
+         * Specifies the backup cycle. Automatic backups will be performed on the specified days of
+         * the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+         * number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+         * Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
+         */
+        period: string;
         /**
          * Specifies the backup time window. Automated backups will be triggered during the
          * backup time window. It must be a valid value in the **hh:mm-HH:MM**
@@ -9474,7 +10046,7 @@ export namespace Rds {
          * Specifies the database password. The value cannot be empty and should
          * contain 8 to 32 characters, including uppercase and lowercase letters, digits, and the following special
          * characters: ~!@#%^*-_=+? You are advised to enter a strong password to improve security, preventing security risks
-         * such as brute force cracking. Changing this parameter will create a new resource.
+         * such as brute force cracking.
          */
         password: string;
         /**
@@ -9516,9 +10088,8 @@ export namespace Rds {
          */
         id: string;
         /**
-         * Specifies the DB instance name. The DB instance name of the same type must be unique for
-         * the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can
-         * contain only letters, digits, hyphens (-), and underscores (_).
+         * Specifies the parameter name. Some of them needs the instance to be restarted
+         * to take effect.
          */
         name: string;
         /**
@@ -9532,17 +10103,42 @@ export namespace Rds {
         status: string;
     }
 
+    export interface InstanceParameter {
+        /**
+         * Specifies the parameter name. Some of them needs the instance to be restarted
+         * to take effect.
+         */
+        name: string;
+        /**
+         * Specifies the parameter value.
+         */
+        value: string;
+    }
+
     export interface InstanceVolume {
         /**
-         * Specifies the key ID for disk encryption. Changing this parameter will create a new
-         * resource.
+         * Specifies the key ID for disk encryption.
+         * Changing this parameter will create a new resource.
          */
         diskEncryptionId: string;
+        /**
+         * Specifies the upper limit of automatic expansion of storage, in GB.
+         */
+        limitSize?: number;
         /**
          * Specifies the volume size. Its value range is from 40 GB to 4000 GB. The value must be a
          * multiple of 10 and greater than the original size.
          */
         size: number;
+        /**
+         * Specifies the threshold to trigger automatic expansion.  
+         * If the available storage drops to this threshold or `10` GB, the automatic expansion is triggered.
+         * The valid values are as follows:
+         * + **10**
+         * + **15**
+         * + **20**
+         */
+        triggerThreshold?: number;
         /**
          * Specifies the volume type. Its value can be any of the following and is
          * case-sensitive:
@@ -9788,7 +10384,7 @@ export namespace ServiceStage {
          */
         name: string;
         /**
-         * Specifies the variable value. The value can contian a maximum of `2,048` characters.
+         * Specifies the variable value. The value can contain a maximum of `2,048` characters.
          */
         value: string;
     }
@@ -9799,6 +10395,14 @@ export namespace ServiceStage {
          */
         clusterId: string;
         /**
+         * Specifies the cluster Name.
+         */
+        clusterName: string;
+        /**
+         * Specifies the cluster type.
+         */
+        clusterType: string;
+        /**
          * Specifies the build command. If omitted, the default command will be used.
          * + About the  default command or script: build.sh in the root directory will be preferentially executed.
          * If build.sh does not exist, the code will be compiled using the common method of the selected language,
@@ -9808,6 +10412,10 @@ export namespace ServiceStage {
          */
         cmd: string;
         /**
+         * Specifies the file path for dockerfile.
+         */
+        dockerfilePath: string;
+        /**
          * Specifies the filter labels for CCE nodes.
          */
         nodeLabel?: {[key: string]: string};
@@ -9816,6 +10424,10 @@ export namespace ServiceStage {
          * The organization is usually **domain name**. You can find out in the organization management of SWR.
          */
         organization: string;
+        /**
+         * Specifies whether to use the public cluster.
+         */
+        usePublicCluster: boolean;
     }
 
     export interface ComponentInstanceArtifact {
@@ -9825,7 +10437,7 @@ export namespace ServiceStage {
          */
         authType?: string;
         /**
-         * Specifies the name of a configuration item or secret.
+         * Specifies the configuration item.
          */
         name: string;
         /**
@@ -9918,7 +10530,7 @@ export namespace ServiceStage {
 
     export interface ComponentInstanceConfigurationEnvVariable {
         /**
-         * Specifies the name of a configuration item or secret.
+         * Specifies the configuration item.
          */
         name: string;
         /**
@@ -9977,7 +10589,7 @@ export namespace ServiceStage {
          */
         commands: string[];
         /**
-         * Specifies the custom IP address. The defualt address is pod IP address.
+         * Specifies the custom IP address. The default address is pod IP address.
          */
         host: string;
         /**
@@ -10011,7 +10623,7 @@ export namespace ServiceStage {
          */
         commands: string[];
         /**
-         * Specifies the custom IP address. The defualt address is pod IP address.
+         * Specifies the custom IP address. The default address is pod IP address.
          */
         host: string;
         /**
@@ -10113,7 +10725,7 @@ export namespace ServiceStage {
 
     export interface ComponentInstanceConfigurationProbeLivenessHttpParam {
         /**
-         * Specifies the custom IP address. The defualt address is pod IP address.
+         * Specifies the custom IP address. The default address is pod IP address.
          */
         host: string;
         /**
@@ -10179,7 +10791,7 @@ export namespace ServiceStage {
 
     export interface ComponentInstanceConfigurationProbeReadinessHttpParam {
         /**
-         * Specifies the custom IP address. The defualt address is pod IP address.
+         * Specifies the custom IP address. The default address is pod IP address.
          */
         host: string;
         /**
@@ -10290,13 +10902,17 @@ export namespace ServiceStage {
          */
         claimName: string;
         /**
-         * Specifies the name of a configuration item or secret.
+         * Specifies the configuration item.
          */
         name: string;
         /**
          * Specifies the request path.
          */
         path: string;
+        /**
+         * Specifies the Secret name. Required if the storage `type` is **Secret**.
+         */
+        secretName: string;
     }
 
     export interface ComponentInstanceConfigurationStrategy {
@@ -10310,7 +10926,7 @@ export namespace ServiceStage {
 
     export interface ComponentInstanceExternalAccess {
         /**
-         * Specifies the access address. For example: www.example.com.
+         * Specifies the access address. For example: `www.example.com`.
          */
         address: string;
         /**
@@ -10356,6 +10972,11 @@ export namespace ServiceStage {
          */
         authorization: string;
         /**
+         * Specifies the component builder's properties.
+         * The object structure is documented below.
+         */
+        properties: outputs.ServiceStage.ComponentSourceProperties;
+        /**
          * Specifies the namespace name.
          */
         repoNamespace?: string;
@@ -10378,6 +10999,21 @@ export namespace ServiceStage {
          * Specifies the URL of the repository or package storage.
          */
         url: string;
+    }
+
+    export interface ComponentSourceProperties {
+        /**
+         * Specifies the bucket name of obs.
+         */
+        bucket: string;
+        /**
+         * Specifies the endpoint of obs.
+         */
+        endpoint: string;
+        /**
+         * Specifies the key of obs.
+         */
+        key: string;
     }
 
     export interface EnvironmentBasicResource {
@@ -10731,6 +11367,9 @@ export namespace Sms {
          * The UTC time when the source server is registered.
          */
         registeredTime: string;
+        /**
+         * Specifies the status of the source server.
+         */
         state: string;
         /**
          * The vcpus count of the source server.
@@ -11021,42 +11660,43 @@ export namespace Vpc {
     export interface EipBandwidth {
         /**
          * Specifies whether the bandwidth is billed by traffic or by bandwidth
-         * size. The value can be *traffic* or *bandwidth*. Changing this creates a new resource.
+         * size. The value can be **traffic** or **bandwidth**. Changing this will create a new resource.
          */
         chargeMode: string;
         /**
-         * The shared bandwidth id. This parameter is mandatory when
-         * `shareType` is set to **WHOLE**. Changing this creates a new resource.
+         * The shared bandwidth ID.  
+         * This parameter is mandatory when `shareType` is set to **WHOLE**. Changing this will create a new resource.
          */
         id: string;
         /**
-         * The bandwidth name, which is a string of 1 to 64 characters that contain letters, digits,
-         * underscores (_), and hyphens (-). This parameter is mandatory when `shareType` is set to **PER**.
+         * Specifies the bandwidth name.  
+         * The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
+         * This parameter is mandatory when `shareType` is set to **PER**.
          */
         name: string;
         /**
-         * Whether the bandwidth is dedicated or shared. Changing this creates a new
-         * resource. Possible values are as follows:
+         * Specifies whether the bandwidth is dedicated or shared.  
+         * Changing this will create a new resource. Possible values are as follows:
          * + **PER**: Dedicated bandwidth
          * + **WHOLE**: Shared bandwidth
          */
         shareType: string;
         /**
-         * The bandwidth size. The value ranges from 1 to 300 Mbit/s. This parameter is mandatory
-         * when `shareType` is set to **PER**.
+         * The bandwidth size.  
+         * The value ranges from `1` to `300` Mbit/s. This parameter is mandatory when `shareType` is set to **PER**.
          */
         size: number;
     }
 
     export interface EipPublicip {
         /**
-         * Specifies the EIP to be assigned. The value must be a valid **IPv4**
-         * address in the available IP address range. The system automatically assigns an EIP if you do not specify it.
-         * Changing this creates a new resource.
+         * Specifies the EIP address to be assigned.  
+         * The value must be a valid **IPv4** address in the available IP address range.
+         * The system automatically assigns an EIP if you do not specify it. Changing this will create a new resource.
          */
         ipAddress: string;
         /**
-         * Specifies the IP version, either 4 (default) or 6.
+         * Specifies the IP version, either `4` (default) or `6`.
          */
         ipVersion: number;
         /**
@@ -11064,16 +11704,28 @@ export namespace Vpc {
          */
         portId: string;
         /**
-         * Specifies the EIP type. Possible values are *5_bgp* (dynamic BGP)
-         * and *5_sbgp* (static BGP), the default value is *5_bgp*. Changing this creates a new resource.
+         * Specifies the EIP type. Possible values are **5_bgp** (dynamic BGP)
+         * and **5_sbgp** (static BGP), the default value is **5_bgp**. Changing this will create a new resource.
          */
         type?: string;
     }
 
     export interface GetRouteTableRoute {
+        /**
+         * The description about the route.
+         */
         description: string;
+        /**
+         * The destination address in the CIDR notation format
+         */
         destination: string;
+        /**
+         * The next hop.
+         */
         nexthop: string;
+        /**
+         * The route type.
+         */
         type: string;
     }
 
@@ -11141,7 +11793,7 @@ export namespace Vpc {
          */
         enterpriseProjectId: string;
         /**
-         * The security group ID.
+         * Specifies the id of the desired security group.
          */
         id: string;
         /**
@@ -11262,18 +11914,18 @@ export namespace Vpc {
 
     export interface RouteTableRoute {
         /**
-         * - Specifies the supplementary information about the route.
+         * Specifies the supplementary information about the route.
          * The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
          */
         description?: string;
         /**
-         * - Specifies the destination address in the CIDR notation format,
+         * Specifies the destination address in the CIDR notation format,
          * for example, 192.168.200.0/24. The destination of each route must be unique and cannot overlap
          * with any subnet in the VPC.
          */
         destination: string;
         /**
-         * - Specifies the next hop.
+         * Specifies the next hop.
          * + If the route type is **ecs**, the value is an ECS instance ID in the VPC.
          * + If the route type is **eni**, the value is the extension NIC of an ECS in the VPC.
          * + If the route type is **vip**, the value is a virtual IP address.
@@ -11285,7 +11937,7 @@ export namespace Vpc {
          */
         nexthop: string;
         /**
-         * - Specifies the route type. Currently, the value can be:
+         * Specifies the route type. Currently, the value can be:
          * **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
          */
         type: string;
@@ -11349,6 +12001,10 @@ export namespace Vpc {
 export namespace Vpcep {
     export interface ApprovalConnection {
         /**
+         * The description of the VPC endpoint service connection.
+         */
+        description: string;
+        /**
          * The user's domain ID.
          */
         domainId: string;
@@ -11392,6 +12048,10 @@ export namespace Vpcep {
 
     export interface ServiceConnection {
         /**
+         * Specifies the description of the VPC endpoint service.
+         */
+        description: string;
+        /**
          * The user's domain ID.
          */
         domainId: string;
@@ -11411,8 +12071,7 @@ export namespace Vpcep {
 
     export interface ServicePortMapping {
         /**
-         * Specifies the protocol used in port mappings. The value can be **TCP** or **UDP**. The
-         * default value is **TCP**.
+         * Specifies the protocol used in port mappings. Only **TCP** is supported.
          */
         protocol?: string;
         /**
@@ -11433,7 +12092,7 @@ export namespace Waf {
     export interface DedicatedDomainServer {
         /**
          * IP address or domain name of the web server that the client accesses. For
-         * example, 192.168.1.1 or www.example.com. Changing this creates a new service.
+         * example, `192.168.1.1` or `www.example.com`. Changing this creates a new service.
          */
         address: string;
         /**
@@ -11465,7 +12124,7 @@ export namespace Waf {
     export interface DomainServer {
         /**
          * IP address or domain name of the web server that the client accesses. For example,
-         * 192.168.1.1 or www.a.com.
+         * `192.168.1.1` or `www.a.com`.
          */
         address: string;
         /**
@@ -11496,7 +12155,10 @@ export namespace Waf {
          * The ECS cpu architecture of WAF dedicated instance.
          */
         cpuArchitecture: string;
-        cpuFlavor: string;
+        /**
+         * The flavor of the ECS used by the WAF instance.
+         */
+        ecsFlavor: string;
         /**
          * The instance group ID used by the WAF dedicated instance in ELB mode.
          */

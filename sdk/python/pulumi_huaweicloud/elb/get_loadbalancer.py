@@ -21,7 +21,7 @@ class GetLoadbalancerResult:
     """
     A collection of values returned by getLoadbalancer.
     """
-    def __init__(__self__, description=None, enterprise_project_id=None, id=None, name=None, region=None, status=None, tags=None, vip_address=None, vip_port_id=None, vip_subnet_id=None):
+    def __init__(__self__, description=None, enterprise_project_id=None, id=None, name=None, public_ip=None, region=None, status=None, tags=None, vip_address=None, vip_port_id=None, vip_subnet_id=None):
         if description and not isinstance(description, str):
             raise TypeError("Expected argument 'description' to be a str")
         pulumi.set(__self__, "description", description)
@@ -34,6 +34,9 @@ class GetLoadbalancerResult:
         if name and not isinstance(name, str):
             raise TypeError("Expected argument 'name' to be a str")
         pulumi.set(__self__, "name", name)
+        if public_ip and not isinstance(public_ip, str):
+            raise TypeError("Expected argument 'public_ip' to be a str")
+        pulumi.set(__self__, "public_ip", public_ip)
         if region and not isinstance(region, str):
             raise TypeError("Expected argument 'region' to be a str")
         pulumi.set(__self__, "region", region)
@@ -72,6 +75,14 @@ class GetLoadbalancerResult:
     @pulumi.getter
     def name(self) -> str:
         return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="publicIp")
+    def public_ip(self) -> str:
+        """
+        The EIP address that is associated to the Load Balancer instance.
+        """
+        return pulumi.get(self, "public_ip")
 
     @property
     @pulumi.getter
@@ -120,6 +131,7 @@ class AwaitableGetLoadbalancerResult(GetLoadbalancerResult):
             enterprise_project_id=self.enterprise_project_id,
             id=self.id,
             name=self.name,
+            public_ip=self.public_ip,
             region=self.region,
             status=self.status,
             tags=self.tags,
@@ -161,7 +173,7 @@ def get_loadbalancer(description: Optional[str] = None,
     :param str status: Specifies the operating status of the load balancer. Valid values are *ONLINE* and
            *FROZEN*.
     :param str vip_address: Specifies the private IP address of the load balancer.
-    :param str vip_subnet_id: Specifies the ID of the subnet where the load balancer works.
+    :param str vip_subnet_id: Specifies the **IPv4 subnet ID** of the subnet where the load balancer works.
     """
     __args__ = dict()
     __args__['description'] = description
@@ -180,6 +192,7 @@ def get_loadbalancer(description: Optional[str] = None,
         enterprise_project_id=__ret__.enterprise_project_id,
         id=__ret__.id,
         name=__ret__.name,
+        public_ip=__ret__.public_ip,
         region=__ret__.region,
         status=__ret__.status,
         tags=__ret__.tags,
@@ -222,6 +235,6 @@ def get_loadbalancer_output(description: Optional[pulumi.Input[Optional[str]]] =
     :param str status: Specifies the operating status of the load balancer. Valid values are *ONLINE* and
            *FROZEN*.
     :param str vip_address: Specifies the private IP address of the load balancer.
-    :param str vip_subnet_id: Specifies the ID of the subnet where the load balancer works.
+    :param str vip_subnet_id: Specifies the **IPv4 subnet ID** of the subnet where the load balancer works.
     """
     ...

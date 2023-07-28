@@ -175,7 +175,7 @@ export class ComponentInstance extends pulumi.CustomResource {
     public readonly configuration!: pulumi.Output<outputs.ServiceStage.ComponentInstanceConfiguration>;
     /**
      * Specifies the description of the instance.
-     * The description can contian a maximum of `128` characters.
+     * The description can contain a maximum of `128` characters.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
@@ -199,7 +199,7 @@ export class ComponentInstance extends pulumi.CustomResource {
      */
     public readonly flavorId!: pulumi.Output<string>;
     /**
-     * Specifies the name of a configuration item or secret.
+     * Specifies the configuration item.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -330,7 +330,7 @@ export interface ComponentInstanceState {
     configuration?: pulumi.Input<inputs.ServiceStage.ComponentInstanceConfiguration>;
     /**
      * Specifies the description of the instance.
-     * The description can contian a maximum of `128` characters.
+     * The description can contain a maximum of `128` characters.
      */
     description?: pulumi.Input<string>;
     /**
@@ -354,7 +354,7 @@ export interface ComponentInstanceState {
      */
     flavorId?: pulumi.Input<string>;
     /**
-     * Specifies the name of a configuration item or secret.
+     * Specifies the configuration item.
      */
     name?: pulumi.Input<string>;
     /**
@@ -416,7 +416,7 @@ export interface ComponentInstanceArgs {
     configuration?: pulumi.Input<inputs.ServiceStage.ComponentInstanceConfiguration>;
     /**
      * Specifies the description of the instance.
-     * The description can contian a maximum of `128` characters.
+     * The description can contain a maximum of `128` characters.
      */
     description?: pulumi.Input<string>;
     /**
@@ -440,7 +440,7 @@ export interface ComponentInstanceArgs {
      */
     flavorId: pulumi.Input<string>;
     /**
-     * Specifies the name of a configuration item or secret.
+     * Specifies the configuration item.
      */
     name?: pulumi.Input<string>;
     /**

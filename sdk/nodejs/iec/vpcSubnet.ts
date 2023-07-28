@@ -69,7 +69,8 @@ export class VpcSubnet extends pulumi.CustomResource {
      */
     public readonly cidr!: pulumi.Output<string>;
     /**
-     * The status of subnet DHCP is enabled or not.
+     * Specifies the status of subnet DHCP is enabled or not.
+     * Valid values are **true** and **false**, defaults to **true**.
      */
     public readonly dhcpEnable!: pulumi.Output<boolean | undefined>;
     /**
@@ -87,6 +88,10 @@ export class VpcSubnet extends pulumi.CustomResource {
      * can contain letters, digits, underscores(_), and hyphens(-).
      */
     public readonly name!: pulumi.Output<string>;
+    /**
+     * The region in which to create the iec vpc subnet resource. If omitted, the
+     * provider-level region will be used. Changing this creates a new resource.
+     */
     public readonly region!: pulumi.Output<string | undefined>;
     /**
      * Specifies the ID of the iec site. Changing this parameter creates a new
@@ -170,7 +175,8 @@ export interface VpcSubnetState {
      */
     cidr?: pulumi.Input<string>;
     /**
-     * The status of subnet DHCP is enabled or not.
+     * Specifies the status of subnet DHCP is enabled or not.
+     * Valid values are **true** and **false**, defaults to **true**.
      */
     dhcpEnable?: pulumi.Input<boolean>;
     /**
@@ -188,6 +194,10 @@ export interface VpcSubnetState {
      * can contain letters, digits, underscores(_), and hyphens(-).
      */
     name?: pulumi.Input<string>;
+    /**
+     * The region in which to create the iec vpc subnet resource. If omitted, the
+     * provider-level region will be used. Changing this creates a new resource.
+     */
     region?: pulumi.Input<string>;
     /**
      * Specifies the ID of the iec site. Changing this parameter creates a new
@@ -219,7 +229,8 @@ export interface VpcSubnetArgs {
      */
     cidr: pulumi.Input<string>;
     /**
-     * The status of subnet DHCP is enabled or not.
+     * Specifies the status of subnet DHCP is enabled or not.
+     * Valid values are **true** and **false**, defaults to **true**.
      */
     dhcpEnable?: pulumi.Input<boolean>;
     /**
@@ -237,6 +248,10 @@ export interface VpcSubnetArgs {
      * can contain letters, digits, underscores(_), and hyphens(-).
      */
     name?: pulumi.Input<string>;
+    /**
+     * The region in which to create the iec vpc subnet resource. If omitted, the
+     * provider-level region will be used. Changing this creates a new resource.
+     */
     region?: pulumi.Input<string>;
     /**
      * Specifies the ID of the iec site. Changing this parameter creates a new

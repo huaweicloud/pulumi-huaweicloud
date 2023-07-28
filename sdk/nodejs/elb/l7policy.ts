@@ -77,9 +77,6 @@ export class L7policy extends pulumi.CustomResource {
      * HTTPS listener specified by `redirectListenerId`.
      */
     public readonly action!: pulumi.Output<string>;
-    /**
-     * The administrative state of the L7 Policy. This value can only be true (UP).
-     */
     public readonly adminStateUp!: pulumi.Output<boolean | undefined>;
     /**
      * Human-readable description for the L7 Policy.
@@ -184,9 +181,6 @@ export interface L7policyState {
      * HTTPS listener specified by `redirectListenerId`.
      */
     action?: pulumi.Input<string>;
-    /**
-     * The administrative state of the L7 Policy. This value can only be true (UP).
-     */
     adminStateUp?: pulumi.Input<boolean>;
     /**
      * Human-readable description for the L7 Policy.
@@ -245,9 +239,6 @@ export interface L7policyArgs {
      * HTTPS listener specified by `redirectListenerId`.
      */
     action: pulumi.Input<string>;
-    /**
-     * The administrative state of the L7 Policy. This value can only be true (UP).
-     */
     adminStateUp?: pulumi.Input<boolean>;
     /**
      * Human-readable description for the L7 Policy.

@@ -83,7 +83,7 @@ type User struct {
 	Email pulumi.StringPtrOutput `pulumi:"email"`
 	// Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
 	Enabled pulumi.BoolPtrOutput `pulumi:"enabled"`
-	// The tiem when the IAM user last login.
+	// The time when the IAM user last login.
 	LastLogin pulumi.StringOutput `pulumi:"lastLogin"`
 	// Specifies the name of the user. The user name consists of 5 to 32 characters. It can
 	// contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
@@ -148,7 +148,7 @@ type userState struct {
 	Email *string `pulumi:"email"`
 	// Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
 	Enabled *bool `pulumi:"enabled"`
-	// The tiem when the IAM user last login.
+	// The time when the IAM user last login.
 	LastLogin *string `pulumi:"lastLogin"`
 	// Specifies the name of the user. The user name consists of 5 to 32 characters. It can
 	// contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
@@ -184,7 +184,7 @@ type UserState struct {
 	Email pulumi.StringPtrInput
 	// Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
 	Enabled pulumi.BoolPtrInput
-	// The tiem when the IAM user last login.
+	// The time when the IAM user last login.
 	LastLogin pulumi.StringPtrInput
 	// Specifies the name of the user. The user name consists of 5 to 32 characters. It can
 	// contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
@@ -389,7 +389,7 @@ func (o UserOutput) Enabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *User) pulumi.BoolPtrOutput { return v.Enabled }).(pulumi.BoolPtrOutput)
 }
 
-// The tiem when the IAM user last login.
+// The time when the IAM user last login.
 func (o UserOutput) LastLogin() pulumi.StringOutput {
 	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.LastLogin }).(pulumi.StringOutput)
 }

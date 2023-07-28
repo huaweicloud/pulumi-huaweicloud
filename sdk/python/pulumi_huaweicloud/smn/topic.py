@@ -16,32 +16,49 @@ class TopicArgs:
     def __init__(__self__, *,
                  display_name: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 introduction: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
+                 services_publish_allowed: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 users_publish_allowed: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Topic resource.
         :param pulumi.Input[str] display_name: Specifies the topic display name, which is presented as the name of the email
                sender in an email message. The name can contains of 0 to 192 characters.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the SMN Topic, Value 0
                indicates the default enterprise project. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] introduction: Specifies the introduction of the topic,
+               this will be contained in the subscription invitation.
         :param pulumi.Input[str] name: Specifies the name of the topic to be created. The name can contains of 1 to 255
                characters and must start with a letter or digit, and can only contain letters, digits, underscores (_), and hyphens (-).
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: The region in which to create the SMN topic resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] services_publish_allowed: Specifies the services that can publish messages to this topic
+               separated by comma(,). If left empty, that means no service allowed.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the tags of the SMN topic, key/value pair format.
+        :param pulumi.Input[str] users_publish_allowed: Specifies the users who can publish messages to this topic.
+               The value can be **\\*** which indicates all users or user account URNs separated by comma(,). The format of
+               user account URN is **urn:csp:iam::domainId:root**. **domainId** indicates the account ID of another user.
+               If left empty, that means only the topic creator can publish messages.
         """
         if display_name is not None:
             pulumi.set(__self__, "display_name", display_name)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if introduction is not None:
+            pulumi.set(__self__, "introduction", introduction)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if services_publish_allowed is not None:
+            pulumi.set(__self__, "services_publish_allowed", services_publish_allowed)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
+        if users_publish_allowed is not None:
+            pulumi.set(__self__, "users_publish_allowed", users_publish_allowed)
 
     @property
     @pulumi.getter(name="displayName")
@@ -71,6 +88,19 @@ class TopicArgs:
 
     @property
     @pulumi.getter
+    def introduction(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the introduction of the topic,
+        this will be contained in the subscription invitation.
+        """
+        return pulumi.get(self, "introduction")
+
+    @introduction.setter
+    def introduction(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "introduction", value)
+
+    @property
+    @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the name of the topic to be created. The name can contains of 1 to 255
@@ -97,6 +127,19 @@ class TopicArgs:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="servicesPublishAllowed")
+    def services_publish_allowed(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the services that can publish messages to this topic
+        separated by comma(,). If left empty, that means no service allowed.
+        """
+        return pulumi.get(self, "services_publish_allowed")
+
+    @services_publish_allowed.setter
+    def services_publish_allowed(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "services_publish_allowed", value)
+
+    @property
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
@@ -108,6 +151,21 @@ class TopicArgs:
     def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
+    @property
+    @pulumi.getter(name="usersPublishAllowed")
+    def users_publish_allowed(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the users who can publish messages to this topic.
+        The value can be **\\*** which indicates all users or user account URNs separated by comma(,). The format of
+        user account URN is **urn:csp:iam::domainId:root**. **domainId** indicates the account ID of another user.
+        If left empty, that means only the topic creator can publish messages.
+        """
+        return pulumi.get(self, "users_publish_allowed")
+
+    @users_publish_allowed.setter
+    def users_publish_allowed(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "users_publish_allowed", value)
+
 
 @pulumi.input_type
 class _TopicState:
@@ -115,12 +173,15 @@ class _TopicState:
                  create_time: Optional[pulumi.Input[str]] = None,
                  display_name: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 introduction: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  push_policy: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 services_publish_allowed: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  topic_urn: Optional[pulumi.Input[str]] = None,
-                 update_time: Optional[pulumi.Input[str]] = None):
+                 update_time: Optional[pulumi.Input[str]] = None,
+                 users_publish_allowed: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Topic resources.
         :param pulumi.Input[str] create_time: Time when the topic was created.
@@ -128,16 +189,25 @@ class _TopicState:
                sender in an email message. The name can contains of 0 to 192 characters.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the SMN Topic, Value 0
                indicates the default enterprise project. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] introduction: Specifies the introduction of the topic,
+               this will be contained in the subscription invitation.
         :param pulumi.Input[str] name: Specifies the name of the topic to be created. The name can contains of 1 to 255
                characters and must start with a letter or digit, and can only contain letters, digits, underscores (_), and hyphens (-).
                Changing this parameter will create a new resource.
-        :param pulumi.Input[int] push_policy: Message pushing policy. 0 indicates that the message sending fails and the message is cached in the
-               queue. 1 indicates that the failed message is discarded.
+        :param pulumi.Input[int] push_policy: Message pushing policy.
+               + **0**: indicates that the message sending fails and the message is cached in the queue.
+               + **1**: indicates that the failed message is discarded.
         :param pulumi.Input[str] region: The region in which to create the SMN topic resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] services_publish_allowed: Specifies the services that can publish messages to this topic
+               separated by comma(,). If left empty, that means no service allowed.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the tags of the SMN topic, key/value pair format.
         :param pulumi.Input[str] topic_urn: Resource identifier of a topic, which is unique.
         :param pulumi.Input[str] update_time: Time when the topic was updated.
+        :param pulumi.Input[str] users_publish_allowed: Specifies the users who can publish messages to this topic.
+               The value can be **\\*** which indicates all users or user account URNs separated by comma(,). The format of
+               user account URN is **urn:csp:iam::domainId:root**. **domainId** indicates the account ID of another user.
+               If left empty, that means only the topic creator can publish messages.
         """
         if create_time is not None:
             pulumi.set(__self__, "create_time", create_time)
@@ -145,18 +215,24 @@ class _TopicState:
             pulumi.set(__self__, "display_name", display_name)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if introduction is not None:
+            pulumi.set(__self__, "introduction", introduction)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if push_policy is not None:
             pulumi.set(__self__, "push_policy", push_policy)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if services_publish_allowed is not None:
+            pulumi.set(__self__, "services_publish_allowed", services_publish_allowed)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
         if topic_urn is not None:
             pulumi.set(__self__, "topic_urn", topic_urn)
         if update_time is not None:
             pulumi.set(__self__, "update_time", update_time)
+        if users_publish_allowed is not None:
+            pulumi.set(__self__, "users_publish_allowed", users_publish_allowed)
 
     @property
     @pulumi.getter(name="createTime")
@@ -198,6 +274,19 @@ class _TopicState:
 
     @property
     @pulumi.getter
+    def introduction(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the introduction of the topic,
+        this will be contained in the subscription invitation.
+        """
+        return pulumi.get(self, "introduction")
+
+    @introduction.setter
+    def introduction(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "introduction", value)
+
+    @property
+    @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the name of the topic to be created. The name can contains of 1 to 255
@@ -214,8 +303,9 @@ class _TopicState:
     @pulumi.getter(name="pushPolicy")
     def push_policy(self) -> Optional[pulumi.Input[int]]:
         """
-        Message pushing policy. 0 indicates that the message sending fails and the message is cached in the
-        queue. 1 indicates that the failed message is discarded.
+        Message pushing policy.
+        + **0**: indicates that the message sending fails and the message is cached in the queue.
+        + **1**: indicates that the failed message is discarded.
         """
         return pulumi.get(self, "push_policy")
 
@@ -235,6 +325,19 @@ class _TopicState:
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter(name="servicesPublishAllowed")
+    def services_publish_allowed(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the services that can publish messages to this topic
+        separated by comma(,). If left empty, that means no service allowed.
+        """
+        return pulumi.get(self, "services_publish_allowed")
+
+    @services_publish_allowed.setter
+    def services_publish_allowed(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "services_publish_allowed", value)
 
     @property
     @pulumi.getter
@@ -272,6 +375,21 @@ class _TopicState:
     def update_time(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "update_time", value)
 
+    @property
+    @pulumi.getter(name="usersPublishAllowed")
+    def users_publish_allowed(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the users who can publish messages to this topic.
+        The value can be **\\*** which indicates all users or user account URNs separated by comma(,). The format of
+        user account URN is **urn:csp:iam::domainId:root**. **domainId** indicates the account ID of another user.
+        If left empty, that means only the topic creator can publish messages.
+        """
+        return pulumi.get(self, "users_publish_allowed")
+
+    @users_publish_allowed.setter
+    def users_publish_allowed(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "users_publish_allowed", value)
+
 
 class Topic(pulumi.CustomResource):
     @overload
@@ -280,20 +398,36 @@ class Topic(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  display_name: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 introduction: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 services_publish_allowed: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 users_publish_allowed: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages an SMN Topic resource within HuaweiCloud.
+        Manages an SMN topic resource within HuaweiCloud.
 
         ## Example Usage
+        ### Basic Usage
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
         topic1 = huaweicloud.smn.Topic("topic1", display_name="The display name of topic_1")
+        ```
+        ### Topic with policies
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        topic1 = huaweicloud.smn.Topic("topic1",
+            display_name="The display name of topic_1",
+            introduction="created by terraform",
+            services_publish_allowed="obs,vod,cce",
+            users_publish_allowed="urn:csp:iam::0970d7b7d400f2470fbec00316a03560:root,urn:csp:iam::0970d7b7d400f2470fbec00316a03561:root")
         ```
 
         ## Import
@@ -310,12 +444,20 @@ class Topic(pulumi.CustomResource):
                sender in an email message. The name can contains of 0 to 192 characters.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the SMN Topic, Value 0
                indicates the default enterprise project. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] introduction: Specifies the introduction of the topic,
+               this will be contained in the subscription invitation.
         :param pulumi.Input[str] name: Specifies the name of the topic to be created. The name can contains of 1 to 255
                characters and must start with a letter or digit, and can only contain letters, digits, underscores (_), and hyphens (-).
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: The region in which to create the SMN topic resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] services_publish_allowed: Specifies the services that can publish messages to this topic
+               separated by comma(,). If left empty, that means no service allowed.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the tags of the SMN topic, key/value pair format.
+        :param pulumi.Input[str] users_publish_allowed: Specifies the users who can publish messages to this topic.
+               The value can be **\\*** which indicates all users or user account URNs separated by comma(,). The format of
+               user account URN is **urn:csp:iam::domainId:root**. **domainId** indicates the account ID of another user.
+               If left empty, that means only the topic creator can publish messages.
         """
         ...
     @overload
@@ -324,15 +466,28 @@ class Topic(pulumi.CustomResource):
                  args: Optional[TopicArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages an SMN Topic resource within HuaweiCloud.
+        Manages an SMN topic resource within HuaweiCloud.
 
         ## Example Usage
+        ### Basic Usage
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
         topic1 = huaweicloud.smn.Topic("topic1", display_name="The display name of topic_1")
+        ```
+        ### Topic with policies
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        topic1 = huaweicloud.smn.Topic("topic1",
+            display_name="The display name of topic_1",
+            introduction="created by terraform",
+            services_publish_allowed="obs,vod,cce",
+            users_publish_allowed="urn:csp:iam::0970d7b7d400f2470fbec00316a03560:root,urn:csp:iam::0970d7b7d400f2470fbec00316a03561:root")
         ```
 
         ## Import
@@ -360,9 +515,12 @@ class Topic(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  display_name: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 introduction: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 services_publish_allowed: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 users_publish_allowed: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -374,9 +532,12 @@ class Topic(pulumi.CustomResource):
 
             __props__.__dict__["display_name"] = display_name
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+            __props__.__dict__["introduction"] = introduction
             __props__.__dict__["name"] = name
             __props__.__dict__["region"] = region
+            __props__.__dict__["services_publish_allowed"] = services_publish_allowed
             __props__.__dict__["tags"] = tags
+            __props__.__dict__["users_publish_allowed"] = users_publish_allowed
             __props__.__dict__["create_time"] = None
             __props__.__dict__["push_policy"] = None
             __props__.__dict__["topic_urn"] = None
@@ -394,12 +555,15 @@ class Topic(pulumi.CustomResource):
             create_time: Optional[pulumi.Input[str]] = None,
             display_name: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
+            introduction: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             push_policy: Optional[pulumi.Input[int]] = None,
             region: Optional[pulumi.Input[str]] = None,
+            services_publish_allowed: Optional[pulumi.Input[str]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             topic_urn: Optional[pulumi.Input[str]] = None,
-            update_time: Optional[pulumi.Input[str]] = None) -> 'Topic':
+            update_time: Optional[pulumi.Input[str]] = None,
+            users_publish_allowed: Optional[pulumi.Input[str]] = None) -> 'Topic':
         """
         Get an existing Topic resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -412,16 +576,25 @@ class Topic(pulumi.CustomResource):
                sender in an email message. The name can contains of 0 to 192 characters.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the SMN Topic, Value 0
                indicates the default enterprise project. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] introduction: Specifies the introduction of the topic,
+               this will be contained in the subscription invitation.
         :param pulumi.Input[str] name: Specifies the name of the topic to be created. The name can contains of 1 to 255
                characters and must start with a letter or digit, and can only contain letters, digits, underscores (_), and hyphens (-).
                Changing this parameter will create a new resource.
-        :param pulumi.Input[int] push_policy: Message pushing policy. 0 indicates that the message sending fails and the message is cached in the
-               queue. 1 indicates that the failed message is discarded.
+        :param pulumi.Input[int] push_policy: Message pushing policy.
+               + **0**: indicates that the message sending fails and the message is cached in the queue.
+               + **1**: indicates that the failed message is discarded.
         :param pulumi.Input[str] region: The region in which to create the SMN topic resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] services_publish_allowed: Specifies the services that can publish messages to this topic
+               separated by comma(,). If left empty, that means no service allowed.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the tags of the SMN topic, key/value pair format.
         :param pulumi.Input[str] topic_urn: Resource identifier of a topic, which is unique.
         :param pulumi.Input[str] update_time: Time when the topic was updated.
+        :param pulumi.Input[str] users_publish_allowed: Specifies the users who can publish messages to this topic.
+               The value can be **\\*** which indicates all users or user account URNs separated by comma(,). The format of
+               user account URN is **urn:csp:iam::domainId:root**. **domainId** indicates the account ID of another user.
+               If left empty, that means only the topic creator can publish messages.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -430,12 +603,15 @@ class Topic(pulumi.CustomResource):
         __props__.__dict__["create_time"] = create_time
         __props__.__dict__["display_name"] = display_name
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+        __props__.__dict__["introduction"] = introduction
         __props__.__dict__["name"] = name
         __props__.__dict__["push_policy"] = push_policy
         __props__.__dict__["region"] = region
+        __props__.__dict__["services_publish_allowed"] = services_publish_allowed
         __props__.__dict__["tags"] = tags
         __props__.__dict__["topic_urn"] = topic_urn
         __props__.__dict__["update_time"] = update_time
+        __props__.__dict__["users_publish_allowed"] = users_publish_allowed
         return Topic(resource_name, opts=opts, __props__=__props__)
 
     @property
@@ -466,6 +642,15 @@ class Topic(pulumi.CustomResource):
 
     @property
     @pulumi.getter
+    def introduction(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the introduction of the topic,
+        this will be contained in the subscription invitation.
+        """
+        return pulumi.get(self, "introduction")
+
+    @property
+    @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
         Specifies the name of the topic to be created. The name can contains of 1 to 255
@@ -478,8 +663,9 @@ class Topic(pulumi.CustomResource):
     @pulumi.getter(name="pushPolicy")
     def push_policy(self) -> pulumi.Output[int]:
         """
-        Message pushing policy. 0 indicates that the message sending fails and the message is cached in the
-        queue. 1 indicates that the failed message is discarded.
+        Message pushing policy.
+        + **0**: indicates that the message sending fails and the message is cached in the queue.
+        + **1**: indicates that the failed message is discarded.
         """
         return pulumi.get(self, "push_policy")
 
@@ -491,6 +677,15 @@ class Topic(pulumi.CustomResource):
         provider-level region will be used. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter(name="servicesPublishAllowed")
+    def services_publish_allowed(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the services that can publish messages to this topic
+        separated by comma(,). If left empty, that means no service allowed.
+        """
+        return pulumi.get(self, "services_publish_allowed")
 
     @property
     @pulumi.getter
@@ -515,4 +710,15 @@ class Topic(pulumi.CustomResource):
         Time when the topic was updated.
         """
         return pulumi.get(self, "update_time")
+
+    @property
+    @pulumi.getter(name="usersPublishAllowed")
+    def users_publish_allowed(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the users who can publish messages to this topic.
+        The value can be **\\*** which indicates all users or user account URNs separated by comma(,). The format of
+        user account URN is **urn:csp:iam::domainId:root**. **domainId** indicates the account ID of another user.
+        If left empty, that means only the topic creator can publish messages.
+        """
+        return pulumi.get(self, "users_publish_allowed")
 

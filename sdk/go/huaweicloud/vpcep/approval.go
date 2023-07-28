@@ -72,19 +72,29 @@ import (
 //	}
 //
 // ```
+//
+// ## Import
+//
+// VPC endpoint approval can be imported using the `id`, e.g. bash
+//
+// ```sh
+//
+//	$ pulumi import huaweicloud:Vpcep/approval:Approval test <id>
+//
+// ```
 type Approval struct {
 	pulumi.CustomResourceState
 
 	// An array of VPC endpoints connect to the VPC endpoint service. Structure is documented below.
 	Connections ApprovalConnectionArrayOutput `pulumi:"connections"`
-	// - Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
-	//   service. The VPC endpoints will be rejected when the resource was destroyed.
+	// Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
+	// service. The VPC endpoints will be rejected when the resource was destroyed.
 	Endpoints pulumi.StringArrayOutput `pulumi:"endpoints"`
 	// The region in which to obtain the VPC endpoint service. If omitted, the
 	// provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// - Specifies the ID of the VPC endpoint service. Changing this creates a new
-	//   resource.
+	// Specifies the ID of the VPC endpoint service. Changing this creates a new
+	// resource.
 	ServiceId pulumi.StringOutput `pulumi:"serviceId"`
 }
 
@@ -126,28 +136,28 @@ func GetApproval(ctx *pulumi.Context,
 type approvalState struct {
 	// An array of VPC endpoints connect to the VPC endpoint service. Structure is documented below.
 	Connections []ApprovalConnection `pulumi:"connections"`
-	// - Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
-	//   service. The VPC endpoints will be rejected when the resource was destroyed.
+	// Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
+	// service. The VPC endpoints will be rejected when the resource was destroyed.
 	Endpoints []string `pulumi:"endpoints"`
 	// The region in which to obtain the VPC endpoint service. If omitted, the
 	// provider-level region will be used. Changing this creates a new resource.
 	Region *string `pulumi:"region"`
-	// - Specifies the ID of the VPC endpoint service. Changing this creates a new
-	//   resource.
+	// Specifies the ID of the VPC endpoint service. Changing this creates a new
+	// resource.
 	ServiceId *string `pulumi:"serviceId"`
 }
 
 type ApprovalState struct {
 	// An array of VPC endpoints connect to the VPC endpoint service. Structure is documented below.
 	Connections ApprovalConnectionArrayInput
-	// - Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
-	//   service. The VPC endpoints will be rejected when the resource was destroyed.
+	// Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
+	// service. The VPC endpoints will be rejected when the resource was destroyed.
 	Endpoints pulumi.StringArrayInput
 	// The region in which to obtain the VPC endpoint service. If omitted, the
 	// provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringPtrInput
-	// - Specifies the ID of the VPC endpoint service. Changing this creates a new
-	//   resource.
+	// Specifies the ID of the VPC endpoint service. Changing this creates a new
+	// resource.
 	ServiceId pulumi.StringPtrInput
 }
 
@@ -156,27 +166,27 @@ func (ApprovalState) ElementType() reflect.Type {
 }
 
 type approvalArgs struct {
-	// - Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
-	//   service. The VPC endpoints will be rejected when the resource was destroyed.
+	// Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
+	// service. The VPC endpoints will be rejected when the resource was destroyed.
 	Endpoints []string `pulumi:"endpoints"`
 	// The region in which to obtain the VPC endpoint service. If omitted, the
 	// provider-level region will be used. Changing this creates a new resource.
 	Region *string `pulumi:"region"`
-	// - Specifies the ID of the VPC endpoint service. Changing this creates a new
-	//   resource.
+	// Specifies the ID of the VPC endpoint service. Changing this creates a new
+	// resource.
 	ServiceId string `pulumi:"serviceId"`
 }
 
 // The set of arguments for constructing a Approval resource.
 type ApprovalArgs struct {
-	// - Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
-	//   service. The VPC endpoints will be rejected when the resource was destroyed.
+	// Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
+	// service. The VPC endpoints will be rejected when the resource was destroyed.
 	Endpoints pulumi.StringArrayInput
 	// The region in which to obtain the VPC endpoint service. If omitted, the
 	// provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringPtrInput
-	// - Specifies the ID of the VPC endpoint service. Changing this creates a new
-	//   resource.
+	// Specifies the ID of the VPC endpoint service. Changing this creates a new
+	// resource.
 	ServiceId pulumi.StringInput
 }
 
@@ -272,8 +282,8 @@ func (o ApprovalOutput) Connections() ApprovalConnectionArrayOutput {
 	return o.ApplyT(func(v *Approval) ApprovalConnectionArrayOutput { return v.Connections }).(ApprovalConnectionArrayOutput)
 }
 
-//   - Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
-//     service. The VPC endpoints will be rejected when the resource was destroyed.
+// Specifies the list of VPC endpoint IDs which accepted to connect to VPC endpoint
+// service. The VPC endpoints will be rejected when the resource was destroyed.
 func (o ApprovalOutput) Endpoints() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Approval) pulumi.StringArrayOutput { return v.Endpoints }).(pulumi.StringArrayOutput)
 }
@@ -284,8 +294,8 @@ func (o ApprovalOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Approval) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-//   - Specifies the ID of the VPC endpoint service. Changing this creates a new
-//     resource.
+// Specifies the ID of the VPC endpoint service. Changing this creates a new
+// resource.
 func (o ApprovalOutput) ServiceId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Approval) pulumi.StringOutput { return v.ServiceId }).(pulumi.StringOutput)
 }

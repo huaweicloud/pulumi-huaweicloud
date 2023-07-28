@@ -75,7 +75,7 @@ import (
 //	}
 //
 // ```
-// ### Creating A Replica Set
+// ### Creating A Replica Set Community Edition
 //
 // ```go
 // package main
@@ -120,6 +120,51 @@ import (
 //	}
 //
 // ```
+// ### Creating A Single Community Edition
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Dds"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Dds"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			_, err := Dds.NewInstance(ctx, "instance", &Dds.InstanceArgs{
+//				AvailabilityZone: pulumi.String("{{ availability_zone }}"),
+//				Datastore: &dds.InstanceDatastoreArgs{
+//					StorageEngine: pulumi.String("wiredTiger"),
+//					Type:          pulumi.String("DDS-Community"),
+//					Version:       pulumi.String("3.4"),
+//				},
+//				Flavors: dds.InstanceFlavorArray{
+//					&dds.InstanceFlavorArgs{
+//						Num:      pulumi.Int(1),
+//						Size:     pulumi.Int(30),
+//						SpecCode: pulumi.String("dds.mongodb.s6.large.2.single"),
+//						Storage:  pulumi.String("ULTRAHIGH"),
+//						Type:     pulumi.String("single"),
+//					},
+//				},
+//				Mode:            pulumi.String("Single"),
+//				Password:        pulumi.String("Test@123"),
+//				SecurityGroupId: pulumi.String("{{ security_group_id }}"),
+//				SubnetId:        pulumi.String("{{ subnet_network_id }}}"),
+//				VpcId:           pulumi.String("{{ vpc_id }}"),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
 //
 // ## Import
 //
@@ -131,7 +176,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `availability_zone`, `flavor`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dds_instance" "instance" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `availability_zone`, `flavor`, configuration. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dds_instance" "instance" {
 //
 //	...
 //
@@ -139,7 +184,7 @@ import (
 //
 //	ignore_changes = [
 //
-//	password, availability_zone, flavor,
+//	password, availability_zone, flavor, configuration,
 //
 //	]
 //
@@ -147,8 +192,9 @@ import (
 type Instance struct {
 	pulumi.CustomResourceState
 
+	// Deprecated: Deprecated
 	AutoPay pulumi.StringPtrOutput `pulumi:"autoPay"`
-	// Specifies whether auto renew is enabled.
+	// Specifies whether auto-renew is enabled.
 	// Valid values are `true` and `false`, defaults to `false`.
 	// Changing this creates a new instance.
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
@@ -162,6 +208,9 @@ type Instance struct {
 	// + `prePaid`: indicates the yearly/monthly billing mode.
 	// + `postPaid`: indicates the pay-per-use billing mode.
 	ChargingMode pulumi.StringOutput `pulumi:"chargingMode"`
+	// Specifies the configuration information.
+	// The structure is described below. Changing this creates a new instance.
+	Configurations InstanceConfigurationArrayOutput `pulumi:"configurations"`
 	// Specifies database information. The structure is described below. Changing
 	// this creates a new instance.
 	Datastore InstanceDatastoreOutput `pulumi:"datastore"`
@@ -176,8 +225,8 @@ type Instance struct {
 	// Specifies the flavors information. The structure is described below. Changing
 	// this creates a new instance.
 	Flavors InstanceFlavorArrayOutput `pulumi:"flavors"`
-	// Specifies the mode of the database instance. Changing this creates a new
-	// instance.
+	// Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
+	// **Single** are supported. Changing this creates a new instance.
 	Mode pulumi.StringOutput `pulumi:"mode"`
 	// Specifies the DB instance name. The DB instance name of the same type is unique in the
 	// same tenant.
@@ -196,8 +245,8 @@ type Instance struct {
 	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
 	// Changing this creates a new instance.
 	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
-	// Specifies the database access port. The valid values are range from `2,100` to `9,500` and
-	// `27,017`, `27,018`, `27,019`. Defaults to `8,635`.
+	// Specifies the database access port. The valid values are range from `2100` to `9500` and
+	// `27017`, `27018`, `27019`. Defaults to `8635`.
 	Port pulumi.IntOutput `pulumi:"port"`
 	// Specifies the region of the DDS instance. Changing this creates a new
 	// instance.
@@ -270,8 +319,9 @@ func GetInstance(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Instance resources.
 type instanceState struct {
+	// Deprecated: Deprecated
 	AutoPay *string `pulumi:"autoPay"`
-	// Specifies whether auto renew is enabled.
+	// Specifies whether auto-renew is enabled.
 	// Valid values are `true` and `false`, defaults to `false`.
 	// Changing this creates a new instance.
 	AutoRenew *string `pulumi:"autoRenew"`
@@ -285,6 +335,9 @@ type instanceState struct {
 	// + `prePaid`: indicates the yearly/monthly billing mode.
 	// + `postPaid`: indicates the pay-per-use billing mode.
 	ChargingMode *string `pulumi:"chargingMode"`
+	// Specifies the configuration information.
+	// The structure is described below. Changing this creates a new instance.
+	Configurations []InstanceConfiguration `pulumi:"configurations"`
 	// Specifies database information. The structure is described below. Changing
 	// this creates a new instance.
 	Datastore *InstanceDatastore `pulumi:"datastore"`
@@ -299,8 +352,8 @@ type instanceState struct {
 	// Specifies the flavors information. The structure is described below. Changing
 	// this creates a new instance.
 	Flavors []InstanceFlavor `pulumi:"flavors"`
-	// Specifies the mode of the database instance. Changing this creates a new
-	// instance.
+	// Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
+	// **Single** are supported. Changing this creates a new instance.
 	Mode *string `pulumi:"mode"`
 	// Specifies the DB instance name. The DB instance name of the same type is unique in the
 	// same tenant.
@@ -319,8 +372,8 @@ type instanceState struct {
 	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
 	// Changing this creates a new instance.
 	PeriodUnit *string `pulumi:"periodUnit"`
-	// Specifies the database access port. The valid values are range from `2,100` to `9,500` and
-	// `27,017`, `27,018`, `27,019`. Defaults to `8,635`.
+	// Specifies the database access port. The valid values are range from `2100` to `9500` and
+	// `27017`, `27018`, `27019`. Defaults to `8635`.
 	Port *int `pulumi:"port"`
 	// Specifies the region of the DDS instance. Changing this creates a new
 	// instance.
@@ -340,8 +393,9 @@ type instanceState struct {
 }
 
 type InstanceState struct {
+	// Deprecated: Deprecated
 	AutoPay pulumi.StringPtrInput
-	// Specifies whether auto renew is enabled.
+	// Specifies whether auto-renew is enabled.
 	// Valid values are `true` and `false`, defaults to `false`.
 	// Changing this creates a new instance.
 	AutoRenew pulumi.StringPtrInput
@@ -355,6 +409,9 @@ type InstanceState struct {
 	// + `prePaid`: indicates the yearly/monthly billing mode.
 	// + `postPaid`: indicates the pay-per-use billing mode.
 	ChargingMode pulumi.StringPtrInput
+	// Specifies the configuration information.
+	// The structure is described below. Changing this creates a new instance.
+	Configurations InstanceConfigurationArrayInput
 	// Specifies database information. The structure is described below. Changing
 	// this creates a new instance.
 	Datastore InstanceDatastorePtrInput
@@ -369,8 +426,8 @@ type InstanceState struct {
 	// Specifies the flavors information. The structure is described below. Changing
 	// this creates a new instance.
 	Flavors InstanceFlavorArrayInput
-	// Specifies the mode of the database instance. Changing this creates a new
-	// instance.
+	// Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
+	// **Single** are supported. Changing this creates a new instance.
 	Mode pulumi.StringPtrInput
 	// Specifies the DB instance name. The DB instance name of the same type is unique in the
 	// same tenant.
@@ -389,8 +446,8 @@ type InstanceState struct {
 	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
 	// Changing this creates a new instance.
 	PeriodUnit pulumi.StringPtrInput
-	// Specifies the database access port. The valid values are range from `2,100` to `9,500` and
-	// `27,017`, `27,018`, `27,019`. Defaults to `8,635`.
+	// Specifies the database access port. The valid values are range from `2100` to `9500` and
+	// `27017`, `27018`, `27019`. Defaults to `8635`.
 	Port pulumi.IntPtrInput
 	// Specifies the region of the DDS instance. Changing this creates a new
 	// instance.
@@ -414,8 +471,9 @@ func (InstanceState) ElementType() reflect.Type {
 }
 
 type instanceArgs struct {
+	// Deprecated: Deprecated
 	AutoPay *string `pulumi:"autoPay"`
-	// Specifies whether auto renew is enabled.
+	// Specifies whether auto-renew is enabled.
 	// Valid values are `true` and `false`, defaults to `false`.
 	// Changing this creates a new instance.
 	AutoRenew *string `pulumi:"autoRenew"`
@@ -429,6 +487,9 @@ type instanceArgs struct {
 	// + `prePaid`: indicates the yearly/monthly billing mode.
 	// + `postPaid`: indicates the pay-per-use billing mode.
 	ChargingMode *string `pulumi:"chargingMode"`
+	// Specifies the configuration information.
+	// The structure is described below. Changing this creates a new instance.
+	Configurations []InstanceConfiguration `pulumi:"configurations"`
 	// Specifies database information. The structure is described below. Changing
 	// this creates a new instance.
 	Datastore InstanceDatastore `pulumi:"datastore"`
@@ -441,8 +502,8 @@ type instanceArgs struct {
 	// Specifies the flavors information. The structure is described below. Changing
 	// this creates a new instance.
 	Flavors []InstanceFlavor `pulumi:"flavors"`
-	// Specifies the mode of the database instance. Changing this creates a new
-	// instance.
+	// Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
+	// **Single** are supported. Changing this creates a new instance.
 	Mode string `pulumi:"mode"`
 	// Specifies the DB instance name. The DB instance name of the same type is unique in the
 	// same tenant.
@@ -459,8 +520,8 @@ type instanceArgs struct {
 	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
 	// Changing this creates a new instance.
 	PeriodUnit *string `pulumi:"periodUnit"`
-	// Specifies the database access port. The valid values are range from `2,100` to `9,500` and
-	// `27,017`, `27,018`, `27,019`. Defaults to `8,635`.
+	// Specifies the database access port. The valid values are range from `2100` to `9500` and
+	// `27017`, `27018`, `27019`. Defaults to `8635`.
 	Port *int `pulumi:"port"`
 	// Specifies the region of the DDS instance. Changing this creates a new
 	// instance.
@@ -479,8 +540,9 @@ type instanceArgs struct {
 
 // The set of arguments for constructing a Instance resource.
 type InstanceArgs struct {
+	// Deprecated: Deprecated
 	AutoPay pulumi.StringPtrInput
-	// Specifies whether auto renew is enabled.
+	// Specifies whether auto-renew is enabled.
 	// Valid values are `true` and `false`, defaults to `false`.
 	// Changing this creates a new instance.
 	AutoRenew pulumi.StringPtrInput
@@ -494,6 +556,9 @@ type InstanceArgs struct {
 	// + `prePaid`: indicates the yearly/monthly billing mode.
 	// + `postPaid`: indicates the pay-per-use billing mode.
 	ChargingMode pulumi.StringPtrInput
+	// Specifies the configuration information.
+	// The structure is described below. Changing this creates a new instance.
+	Configurations InstanceConfigurationArrayInput
 	// Specifies database information. The structure is described below. Changing
 	// this creates a new instance.
 	Datastore InstanceDatastoreInput
@@ -506,8 +571,8 @@ type InstanceArgs struct {
 	// Specifies the flavors information. The structure is described below. Changing
 	// this creates a new instance.
 	Flavors InstanceFlavorArrayInput
-	// Specifies the mode of the database instance. Changing this creates a new
-	// instance.
+	// Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
+	// **Single** are supported. Changing this creates a new instance.
 	Mode pulumi.StringInput
 	// Specifies the DB instance name. The DB instance name of the same type is unique in the
 	// same tenant.
@@ -524,8 +589,8 @@ type InstanceArgs struct {
 	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
 	// Changing this creates a new instance.
 	PeriodUnit pulumi.StringPtrInput
-	// Specifies the database access port. The valid values are range from `2,100` to `9,500` and
-	// `27,017`, `27,018`, `27,019`. Defaults to `8,635`.
+	// Specifies the database access port. The valid values are range from `2100` to `9500` and
+	// `27017`, `27018`, `27019`. Defaults to `8635`.
 	Port pulumi.IntPtrInput
 	// Specifies the region of the DDS instance. Changing this creates a new
 	// instance.
@@ -629,11 +694,12 @@ func (o InstanceOutput) ToInstanceOutputWithContext(ctx context.Context) Instanc
 	return o
 }
 
+// Deprecated: Deprecated
 func (o InstanceOutput) AutoPay() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.AutoPay }).(pulumi.StringPtrOutput)
 }
 
-// Specifies whether auto renew is enabled.
+// Specifies whether auto-renew is enabled.
 // Valid values are `true` and `false`, defaults to `false`.
 // Changing this creates a new instance.
 func (o InstanceOutput) AutoRenew() pulumi.StringPtrOutput {
@@ -657,6 +723,12 @@ func (o InstanceOutput) BackupStrategy() InstanceBackupStrategyOutput {
 // + `postPaid`: indicates the pay-per-use billing mode.
 func (o InstanceOutput) ChargingMode() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.ChargingMode }).(pulumi.StringOutput)
+}
+
+// Specifies the configuration information.
+// The structure is described below. Changing this creates a new instance.
+func (o InstanceOutput) Configurations() InstanceConfigurationArrayOutput {
+	return o.ApplyT(func(v *Instance) InstanceConfigurationArrayOutput { return v.Configurations }).(InstanceConfigurationArrayOutput)
 }
 
 // Specifies database information. The structure is described below. Changing
@@ -688,8 +760,8 @@ func (o InstanceOutput) Flavors() InstanceFlavorArrayOutput {
 	return o.ApplyT(func(v *Instance) InstanceFlavorArrayOutput { return v.Flavors }).(InstanceFlavorArrayOutput)
 }
 
-// Specifies the mode of the database instance. Changing this creates a new
-// instance.
+// Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
+// **Single** are supported. Changing this creates a new instance.
 func (o InstanceOutput) Mode() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.Mode }).(pulumi.StringOutput)
 }
@@ -726,8 +798,8 @@ func (o InstanceOutput) PeriodUnit() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.PeriodUnit }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the database access port. The valid values are range from `2,100` to `9,500` and
-// `27,017`, `27,018`, `27,019`. Defaults to `8,635`.
+// Specifies the database access port. The valid values are range from `2100` to `9500` and
+// `27017`, `27018`, `27019`. Defaults to `8635`.
 func (o InstanceOutput) Port() pulumi.IntOutput {
 	return o.ApplyT(func(v *Instance) pulumi.IntOutput { return v.Port }).(pulumi.IntOutput)
 }

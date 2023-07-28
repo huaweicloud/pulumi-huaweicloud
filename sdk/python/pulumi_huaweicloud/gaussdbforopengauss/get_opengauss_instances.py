@@ -53,6 +53,9 @@ class GetOpengaussInstancesResult:
     @property
     @pulumi.getter
     def instances(self) -> Sequence['outputs.GetOpengaussInstancesInstanceResult']:
+        """
+        An array of available instances.
+        """
         return pulumi.get(self, "instances")
 
     @property

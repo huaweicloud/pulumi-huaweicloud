@@ -64,7 +64,8 @@ type GetOpengaussInstancesArgs struct {
 // A collection of values returned by getOpengaussInstances.
 type GetOpengaussInstancesResult struct {
 	// The provider-assigned unique ID for this managed resource.
-	Id        string                          `pulumi:"id"`
+	Id string `pulumi:"id"`
+	// An array of available instances.
 	Instances []GetOpengaussInstancesInstance `pulumi:"instances"`
 	// Indicates the node name.
 	Name *string `pulumi:"name"`
@@ -126,6 +127,7 @@ func (o GetOpengaussInstancesResultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetOpengaussInstancesResult) string { return v.Id }).(pulumi.StringOutput)
 }
 
+// An array of available instances.
 func (o GetOpengaussInstancesResultOutput) Instances() GetOpengaussInstancesInstanceArrayOutput {
 	return o.ApplyT(func(v GetOpengaussInstancesResult) []GetOpengaussInstancesInstance { return v.Instances }).(GetOpengaussInstancesInstanceArrayOutput)
 }

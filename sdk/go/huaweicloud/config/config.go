@@ -111,6 +111,11 @@ func GetRegion(ctx *pulumi.Context) string {
 	return config.Get(ctx, "huaweicloud:region")
 }
 
+// Whether the service endpoints are regional
+func GetRegional(ctx *pulumi.Context) bool {
+	return config.GetBool(ctx, "huaweicloud:regional")
+}
+
 // The secret key of the HuaweiCloud to use.
 func GetSecretKey(ctx *pulumi.Context) string {
 	return config.Get(ctx, "huaweicloud:secretKey")

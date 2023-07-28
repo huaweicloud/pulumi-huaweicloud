@@ -717,8 +717,6 @@ type TranscodingTemplateGroupVideoCommon struct {
 	// Specifies the mximum I-frame interval. The value ranges from 2 to 10.
 	// The default value is 5. The unit is second.
 	MaxIframesInterval *int `pulumi:"maxIframesInterval"`
-	// Specifies the maximum reference frames. When the `codec` is H.264,
-	// the vaule rang is 1 to 8. When the `codec` is H.265, the value is fixed at 4. The default value is 4. The unit is frame.
 	MaxReferenceFrames *int `pulumi:"maxReferenceFrames"`
 	// Specifies the output policy. Possible values are **discard** and **transcode**.
 	// The default value is transcode.
@@ -784,8 +782,6 @@ type TranscodingTemplateGroupVideoCommonArgs struct {
 	// Specifies the mximum I-frame interval. The value ranges from 2 to 10.
 	// The default value is 5. The unit is second.
 	MaxIframesInterval pulumi.IntPtrInput `pulumi:"maxIframesInterval"`
-	// Specifies the maximum reference frames. When the `codec` is H.264,
-	// the vaule rang is 1 to 8. When the `codec` is H.265, the value is fixed at 4. The default value is 4. The unit is frame.
 	MaxReferenceFrames pulumi.IntPtrInput `pulumi:"maxReferenceFrames"`
 	// Specifies the output policy. Possible values are **discard** and **transcode**.
 	// The default value is transcode.
@@ -934,8 +930,6 @@ func (o TranscodingTemplateGroupVideoCommonOutput) MaxIframesInterval() pulumi.I
 	return o.ApplyT(func(v TranscodingTemplateGroupVideoCommon) *int { return v.MaxIframesInterval }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the maximum reference frames. When the `codec` is H.264,
-// the vaule rang is 1 to 8. When the `codec` is H.265, the value is fixed at 4. The default value is 4. The unit is frame.
 func (o TranscodingTemplateGroupVideoCommonOutput) MaxReferenceFrames() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateGroupVideoCommon) *int { return v.MaxReferenceFrames }).(pulumi.IntPtrOutput)
 }
@@ -1071,8 +1065,6 @@ func (o TranscodingTemplateGroupVideoCommonPtrOutput) MaxIframesInterval() pulum
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the maximum reference frames. When the `codec` is H.264,
-// the vaule rang is 1 to 8. When the `codec` is H.265, the value is fixed at 4. The default value is 4. The unit is frame.
 func (o TranscodingTemplateGroupVideoCommonPtrOutput) MaxReferenceFrames() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateGroupVideoCommon) *int {
 		if v == nil {
@@ -1165,8 +1157,6 @@ type TranscodingTemplateVideo struct {
 	// Specifies the mximum I-frame interval. The value ranges from 2 to 10.
 	// The default value is 5. The unit is second.
 	MaxIframesInterval *int `pulumi:"maxIframesInterval"`
-	// Specifies the maximum reference frames. When the `codec` is H.264,
-	// the vaule rang is 1 to 8. When the `codec` is H.265, the value is fixed at 4. The default value is 4. The unit is frame.
 	MaxReferenceFrames *int `pulumi:"maxReferenceFrames"`
 	// Specifies the output policy. Possible values are **discard** and **transcode**.
 	// The default value is transcode.
@@ -1244,8 +1234,6 @@ type TranscodingTemplateVideoArgs struct {
 	// Specifies the mximum I-frame interval. The value ranges from 2 to 10.
 	// The default value is 5. The unit is second.
 	MaxIframesInterval pulumi.IntPtrInput `pulumi:"maxIframesInterval"`
-	// Specifies the maximum reference frames. When the `codec` is H.264,
-	// the vaule rang is 1 to 8. When the `codec` is H.265, the value is fixed at 4. The default value is 4. The unit is frame.
 	MaxReferenceFrames pulumi.IntPtrInput `pulumi:"maxReferenceFrames"`
 	// Specifies the output policy. Possible values are **discard** and **transcode**.
 	// The default value is transcode.
@@ -1412,8 +1400,6 @@ func (o TranscodingTemplateVideoOutput) MaxIframesInterval() pulumi.IntPtrOutput
 	return o.ApplyT(func(v TranscodingTemplateVideo) *int { return v.MaxIframesInterval }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the maximum reference frames. When the `codec` is H.264,
-// the vaule rang is 1 to 8. When the `codec` is H.265, the value is fixed at 4. The default value is 4. The unit is frame.
 func (o TranscodingTemplateVideoOutput) MaxReferenceFrames() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateVideo) *int { return v.MaxReferenceFrames }).(pulumi.IntPtrOutput)
 }
@@ -1580,8 +1566,6 @@ func (o TranscodingTemplateVideoPtrOutput) MaxIframesInterval() pulumi.IntPtrOut
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the maximum reference frames. When the `codec` is H.264,
-// the vaule rang is 1 to 8. When the `codec` is H.265, the value is fixed at 4. The default value is 4. The unit is frame.
 func (o TranscodingTemplateVideoPtrOutput) MaxReferenceFrames() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateVideo) *int {
 		if v == nil {

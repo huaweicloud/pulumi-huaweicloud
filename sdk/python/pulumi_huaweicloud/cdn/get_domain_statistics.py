@@ -190,8 +190,9 @@ def get_domain_statistics(action: Optional[str] = None,
     :param str country: Specifies the country or region code. Use commas (,) to separate multiple codes.
            The value all indicates all country/region codes.
            See the [country and region](https://support.huaweicloud.com/intl/en-us/api-cdn/cdn_02_0089.html) for values.
-    :param str domain_name: Specifies the domain name list. Domain names are separated by commas (,),
-           for example, www.test1.com,www.test2.com. The value all indicates that all domain names under your account are queried.
+    :param str domain_name: Specifies the domain name list.
+           Domain names are separated by commas (,), for example, `www.test1.com,www.test2.com`.
+           The value all indicates that all domain names under your account are queried.
     :param int end_time: Specifies the end timestamp of the query.
            The timestamp must be set to a multiple of 5 minutes.
            + If the value of interval is 300, set this parameter to a multiple of 5 minutes,
@@ -292,8 +293,9 @@ def get_domain_statistics_output(action: Optional[pulumi.Input[str]] = None,
     :param str country: Specifies the country or region code. Use commas (,) to separate multiple codes.
            The value all indicates all country/region codes.
            See the [country and region](https://support.huaweicloud.com/intl/en-us/api-cdn/cdn_02_0089.html) for values.
-    :param str domain_name: Specifies the domain name list. Domain names are separated by commas (,),
-           for example, www.test1.com,www.test2.com. The value all indicates that all domain names under your account are queried.
+    :param str domain_name: Specifies the domain name list.
+           Domain names are separated by commas (,), for example, `www.test1.com,www.test2.com`.
+           The value all indicates that all domain names under your account are queried.
     :param int end_time: Specifies the end timestamp of the query.
            The timestamp must be set to a multiple of 5 minutes.
            + If the value of interval is 300, set this parameter to a multiple of 5 minutes,

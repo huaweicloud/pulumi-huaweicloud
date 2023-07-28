@@ -51,7 +51,8 @@ type Desktop struct {
 	// The user can only be successfully deleted if the user has no other desktops.
 	DeleteUser pulumi.BoolPtrOutput `pulumi:"deleteUser"`
 	// Specifies whether to send emails to user mailbox during important
-	// operations. Changing this will create a new resource.
+	// operations.
+	// Defaults to **false**. Changing this will create a new resource.
 	EmailNotification pulumi.BoolPtrOutput `pulumi:"emailNotification"`
 	// Specifies the flavor ID of desktop.
 	FlavorId pulumi.StringOutput `pulumi:"flavorId"`
@@ -168,7 +169,8 @@ type desktopState struct {
 	// The user can only be successfully deleted if the user has no other desktops.
 	DeleteUser *bool `pulumi:"deleteUser"`
 	// Specifies whether to send emails to user mailbox during important
-	// operations. Changing this will create a new resource.
+	// operations.
+	// Defaults to **false**. Changing this will create a new resource.
 	EmailNotification *bool `pulumi:"emailNotification"`
 	// Specifies the flavor ID of desktop.
 	FlavorId *string `pulumi:"flavorId"`
@@ -232,7 +234,8 @@ type DesktopState struct {
 	// The user can only be successfully deleted if the user has no other desktops.
 	DeleteUser pulumi.BoolPtrInput
 	// Specifies whether to send emails to user mailbox during important
-	// operations. Changing this will create a new resource.
+	// operations.
+	// Defaults to **false**. Changing this will create a new resource.
 	EmailNotification pulumi.BoolPtrInput
 	// Specifies the flavor ID of desktop.
 	FlavorId pulumi.StringPtrInput
@@ -300,7 +303,8 @@ type desktopArgs struct {
 	// The user can only be successfully deleted if the user has no other desktops.
 	DeleteUser *bool `pulumi:"deleteUser"`
 	// Specifies whether to send emails to user mailbox during important
-	// operations. Changing this will create a new resource.
+	// operations.
+	// Defaults to **false**. Changing this will create a new resource.
 	EmailNotification *bool `pulumi:"emailNotification"`
 	// Specifies the flavor ID of desktop.
 	FlavorId string `pulumi:"flavorId"`
@@ -365,7 +369,8 @@ type DesktopArgs struct {
 	// The user can only be successfully deleted if the user has no other desktops.
 	DeleteUser pulumi.BoolPtrInput
 	// Specifies whether to send emails to user mailbox during important
-	// operations. Changing this will create a new resource.
+	// operations.
+	// Defaults to **false**. Changing this will create a new resource.
 	EmailNotification pulumi.BoolPtrInput
 	// Specifies the flavor ID of desktop.
 	FlavorId pulumi.StringInput
@@ -524,7 +529,8 @@ func (o DesktopOutput) DeleteUser() pulumi.BoolPtrOutput {
 }
 
 // Specifies whether to send emails to user mailbox during important
-// operations. Changing this will create a new resource.
+// operations.
+// Defaults to **false**. Changing this will create a new resource.
 func (o DesktopOutput) EmailNotification() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Desktop) pulumi.BoolPtrOutput { return v.EmailNotification }).(pulumi.BoolPtrOutput)
 }

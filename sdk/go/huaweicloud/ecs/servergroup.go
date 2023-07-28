@@ -62,6 +62,7 @@ import (
 type Servergroup struct {
 	pulumi.CustomResourceState
 
+	// schema: Internal
 	FaultDomains pulumi.StringArrayOutput `pulumi:"faultDomains"`
 	// Specifies an array of one or more instance ID to attach server group.
 	Members pulumi.StringArrayOutput `pulumi:"members"`
@@ -107,6 +108,7 @@ func GetServergroup(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Servergroup resources.
 type servergroupState struct {
+	// schema: Internal
 	FaultDomains []string `pulumi:"faultDomains"`
 	// Specifies an array of one or more instance ID to attach server group.
 	Members []string `pulumi:"members"`
@@ -123,6 +125,7 @@ type servergroupState struct {
 }
 
 type ServergroupState struct {
+	// schema: Internal
 	FaultDomains pulumi.StringArrayInput
 	// Specifies an array of one or more instance ID to attach server group.
 	Members pulumi.StringArrayInput
@@ -260,6 +263,7 @@ func (o ServergroupOutput) ToServergroupOutputWithContext(ctx context.Context) S
 	return o
 }
 
+// schema: Internal
 func (o ServergroupOutput) FaultDomains() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Servergroup) pulumi.StringArrayOutput { return v.FaultDomains }).(pulumi.StringArrayOutput)
 }

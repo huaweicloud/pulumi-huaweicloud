@@ -49,6 +49,7 @@ export function getImage(args?: GetImageArgs, opts?: pulumi.InvokeOptions): Prom
     return pulumi.runtime.invoke("huaweicloud:Ims/getImage:getImage", {
         "architecture": args.architecture,
         "enterpriseProjectId": args.enterpriseProjectId,
+        "flavorId": args.flavorId,
         "imageType": args.imageType,
         "mostRecent": args.mostRecent,
         "name": args.name,
@@ -78,6 +79,11 @@ export interface GetImageArgs {
      * Specifies the enterprise project ID of the image.
      */
     enterpriseProjectId?: string;
+    /**
+     * Specifies the ECS flavor ID used to filter out available images.
+     * You can specify only one flavor ID and only ECS flavor ID is valid, BMS flavor is not supported.
+     */
+    flavorId?: string;
     /**
      * Specifies the environment where the image is used. For a BMS image, the value is **Ironic**.
      */
@@ -137,7 +143,7 @@ export interface GetImageArgs {
     tag?: string;
     /**
      * The visibility of the image. Must be one of
-     * **public**, **private** or **shared**.
+     * **public**, **private**, **market** or **shared**.
      */
     visibility?: string;
 }
@@ -147,6 +153,10 @@ export interface GetImageArgs {
  */
 export interface GetImageResult {
     readonly architecture?: string;
+    /**
+     * The backup ID of the whole image in the CBR vault.
+     */
+    readonly backupId: string;
     /**
      * The checksum of the data associated with the image.
      */
@@ -169,6 +179,7 @@ export interface GetImageResult {
      * it.
      */
     readonly file: string;
+    readonly flavorId: string;
     /**
      * The provider-assigned unique ID for this managed resource.
      */
@@ -221,6 +232,9 @@ export interface GetImageResult {
      */
     readonly status: string;
     readonly tag?: string;
+    /**
+     * The date when the image was last updated.
+     */
     readonly updatedAt: string;
     readonly visibility: string;
 }
@@ -241,6 +255,11 @@ export interface GetImageOutputArgs {
      * Specifies the enterprise project ID of the image.
      */
     enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specifies the ECS flavor ID used to filter out available images.
+     * You can specify only one flavor ID and only ECS flavor ID is valid, BMS flavor is not supported.
+     */
+    flavorId?: pulumi.Input<string>;
     /**
      * Specifies the environment where the image is used. For a BMS image, the value is **Ironic**.
      */
@@ -300,7 +319,7 @@ export interface GetImageOutputArgs {
     tag?: pulumi.Input<string>;
     /**
      * The visibility of the image. Must be one of
-     * **public**, **private** or **shared**.
+     * **public**, **private**, **market** or **shared**.
      */
     visibility?: pulumi.Input<string>;
 }

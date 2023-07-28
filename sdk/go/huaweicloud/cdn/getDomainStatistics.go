@@ -63,8 +63,9 @@ type GetDomainStatisticsArgs struct {
 	// The value all indicates all country/region codes.
 	// See the [country and region](https://support.huaweicloud.com/intl/en-us/api-cdn/cdn_02_0089.html) for values.
 	Country *string `pulumi:"country"`
-	// Specifies the domain name list. Domain names are separated by commas (,),
-	// for example, www.test1.com,www.test2.com. The value all indicates that all domain names under your account are queried.
+	// Specifies the domain name list.
+	// Domain names are separated by commas (,), for example, `www.test1.com,www.test2.com`.
+	// The value all indicates that all domain names under your account are queried.
 	DomainName string `pulumi:"domainName"`
 	// Specifies the end timestamp of the query.
 	// The timestamp must be set to a multiple of 5 minutes.
@@ -148,8 +149,9 @@ type GetDomainStatisticsOutputArgs struct {
 	// The value all indicates all country/region codes.
 	// See the [country and region](https://support.huaweicloud.com/intl/en-us/api-cdn/cdn_02_0089.html) for values.
 	Country pulumi.StringPtrInput `pulumi:"country"`
-	// Specifies the domain name list. Domain names are separated by commas (,),
-	// for example, www.test1.com,www.test2.com. The value all indicates that all domain names under your account are queried.
+	// Specifies the domain name list.
+	// Domain names are separated by commas (,), for example, `www.test1.com,www.test2.com`.
+	// The value all indicates that all domain names under your account are queried.
 	DomainName pulumi.StringInput `pulumi:"domainName"`
 	// Specifies the end timestamp of the query.
 	// The timestamp must be set to a multiple of 5 minutes.

@@ -188,7 +188,8 @@ class GetClusterResult:
     @pulumi.getter(name="eniSubnetId")
     def eni_subnet_id(self) -> str:
         """
-        ENI subnet ID. Specified when creating a CCE Turbo cluster.
+        The **IPv4 subnet ID** of the subnet where the ENI resides.
+        Specified when creating a CCE Turbo cluster.
         """
         return pulumi.get(self, "eni_subnet_id")
 

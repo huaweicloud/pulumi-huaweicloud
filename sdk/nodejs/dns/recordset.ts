@@ -5,10 +5,10 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Manages a DNS record set in the HuaweiCloud DNS Service.
+ * Manages a DNS record set resource within HuaweiCloud.
  *
  * ## Example Usage
- * ### Automatically detect the correct network
+ * ### Record Set with Multi-line
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -20,7 +20,54 @@ import * as utilities from "../utilities";
  *     ttl: 6000,
  *     zoneType: "public",
  * });
- * const rsExampleCom = new huaweicloud.dns.Recordset("rsExampleCom", {
+ * const test = new huaweicloud.dns.Recordset("test", {
+ *     zoneId: exampleZone.id,
+ *     type: "A",
+ *     description: "a recordset description",
+ *     status: "ENABLE",
+ *     ttl: 300,
+ *     records: ["10.1.0.0"],
+ *     lineId: "Dianxin_Shanxi",
+ *     weight: 3,
+ *     tags: {
+ *         key1: "value1",
+ *         key2: "value2",
+ *     },
+ * });
+ * ```
+ * ### Record Set with Public Zone
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const exampleZone = new huaweicloud.dns.Zone("exampleZone", {
+ *     email: "email2@example.com",
+ *     description: "a public zone",
+ *     ttl: 6000,
+ *     zoneType: "public",
+ * });
+ * const test = new huaweicloud.dns.Recordset("test", {
+ *     zoneId: exampleZone.id,
+ *     description: "An example record set",
+ *     ttl: 3000,
+ *     type: "A",
+ *     records: ["10.0.0.1"],
+ * });
+ * ```
+ * ### Record Set with Private Zone
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const exampleZone = new huaweicloud.dns.Zone("exampleZone", {
+ *     email: "email2@example.com",
+ *     description: "a private zone",
+ *     ttl: 6000,
+ *     zoneType: "private",
+ * });
+ * const test = new huaweicloud.dns.Recordset("test", {
  *     zoneId: exampleZone.id,
  *     description: "An example record set",
  *     ttl: 3000,
@@ -31,10 +78,10 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * This resource can be imported by specifying the zone ID and recordset ID, separated by a forward slash.
+ * The DNS recordset can be imported using `zone_id`, `recordset_id`, separated by slashes, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Dns/recordset:Recordset recordset_1 < zone_id >/< recordset_id >
+ *  $ pulumi import huaweicloud:Dns/recordset:Recordset test <zone_id>/<recordset_id>
  * ```
  */
 export class Recordset extends pulumi.CustomResource {
@@ -66,46 +113,61 @@ export class Recordset extends pulumi.CustomResource {
     }
 
     /**
-     * A description of the record set.
+     * Specifies the description of the record set.
      */
-    public readonly description!: pulumi.Output<string | undefined>;
+    public readonly description!: pulumi.Output<string>;
     /**
-     * The name of the record set. Note the `.` at the end of the name. Changing this
-     * creates a new DNS record set.
+     * Specifies the resolution line ID.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly lineId!: pulumi.Output<string>;
+    /**
+     * Specifies the name of the record set.
+     * The name suffixed with a zone name, which is a complete host name ended with a dot.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * An array of DNS records.
+     * Specifies an array of DNS records. The value rules vary depending on the record set type.
      */
     public readonly records!: pulumi.Output<string[]>;
     /**
-     * The region in which to create the DNS record set. If omitted, the `region`
-     * argument of the provider will be used. Changing this creates a new DNS record set.
+     * Specifies the region in which to create the resource.
+     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * The key/value pairs to associate with the record set.
+     * Specifies the status of the record set.
+     * Value options: **ENABLE**, **DISABLE**. The default value is **ENABLE**.
+     */
+    public readonly status!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the key/value pairs to associate with the DNS recordset.
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
-     * The time to live (TTL) of the record set (in seconds). The value range is 300–2147483647. The
-     * default value is 300.
+     * Specifies the time to live (TTL) of the record set (in seconds).
+     * The value range is 1–2147483647. The default value is 300.
      */
     public readonly ttl!: pulumi.Output<number | undefined>;
     /**
-     * The type of record set. The options include `A`, `AAAA`, `MX`,
-     * `CNAME`, `TXT`, `NS`, `SRV`, `CAA`, and `PTR`. Changing this creates a new DNS record set.
+     * Specifies the type of the record set.
+     * Value options: **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV**, **CAA**.
      */
     public readonly type!: pulumi.Output<string>;
     /**
-     * Map of additional options. Changing this creates a new record set.
+     * Specifies the weight of the record set.
+     * Only public zone support. The value range is 0–1000.
      */
-    public readonly valueSpecs!: pulumi.Output<{[key: string]: string} | undefined>;
+    public readonly weight!: pulumi.Output<number>;
     /**
-     * The ID of the zone in which to create the record set. Changing this creates a
-     * new DNS record set.
+     * Specifies the zone ID.
+     * Changing this parameter will create a new resource.
      */
     public readonly zoneId!: pulumi.Output<string>;
+    /**
+     * The zone name of the record set.
+     */
+    public /*out*/ readonly zoneName!: pulumi.Output<string>;
 
     /**
      * Create a Recordset resource with the given unique name, arguments, and options.
@@ -121,14 +183,17 @@ export class Recordset extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as RecordsetState | undefined;
             resourceInputs["description"] = state ? state.description : undefined;
+            resourceInputs["lineId"] = state ? state.lineId : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["records"] = state ? state.records : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["ttl"] = state ? state.ttl : undefined;
             resourceInputs["type"] = state ? state.type : undefined;
-            resourceInputs["valueSpecs"] = state ? state.valueSpecs : undefined;
+            resourceInputs["weight"] = state ? state.weight : undefined;
             resourceInputs["zoneId"] = state ? state.zoneId : undefined;
+            resourceInputs["zoneName"] = state ? state.zoneName : undefined;
         } else {
             const args = argsOrState as RecordsetArgs | undefined;
             if ((!args || args.records === undefined) && !opts.urn) {
@@ -141,14 +206,17 @@ export class Recordset extends pulumi.CustomResource {
                 throw new Error("Missing required property 'zoneId'");
             }
             resourceInputs["description"] = args ? args.description : undefined;
+            resourceInputs["lineId"] = args ? args.lineId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["records"] = args ? args.records : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["status"] = args ? args.status : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["ttl"] = args ? args.ttl : undefined;
             resourceInputs["type"] = args ? args.type : undefined;
-            resourceInputs["valueSpecs"] = args ? args.valueSpecs : undefined;
+            resourceInputs["weight"] = args ? args.weight : undefined;
             resourceInputs["zoneId"] = args ? args.zoneId : undefined;
+            resourceInputs["zoneName"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Recordset.__pulumiType, name, resourceInputs, opts);
@@ -160,46 +228,61 @@ export class Recordset extends pulumi.CustomResource {
  */
 export interface RecordsetState {
     /**
-     * A description of the record set.
+     * Specifies the description of the record set.
      */
     description?: pulumi.Input<string>;
     /**
-     * The name of the record set. Note the `.` at the end of the name. Changing this
-     * creates a new DNS record set.
+     * Specifies the resolution line ID.
+     * Changing this parameter will create a new resource.
+     */
+    lineId?: pulumi.Input<string>;
+    /**
+     * Specifies the name of the record set.
+     * The name suffixed with a zone name, which is a complete host name ended with a dot.
      */
     name?: pulumi.Input<string>;
     /**
-     * An array of DNS records.
+     * Specifies an array of DNS records. The value rules vary depending on the record set type.
      */
     records?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * The region in which to create the DNS record set. If omitted, the `region`
-     * argument of the provider will be used. Changing this creates a new DNS record set.
+     * Specifies the region in which to create the resource.
+     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * The key/value pairs to associate with the record set.
+     * Specifies the status of the record set.
+     * Value options: **ENABLE**, **DISABLE**. The default value is **ENABLE**.
+     */
+    status?: pulumi.Input<string>;
+    /**
+     * Specifies the key/value pairs to associate with the DNS recordset.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * The time to live (TTL) of the record set (in seconds). The value range is 300–2147483647. The
-     * default value is 300.
+     * Specifies the time to live (TTL) of the record set (in seconds).
+     * The value range is 1–2147483647. The default value is 300.
      */
     ttl?: pulumi.Input<number>;
     /**
-     * The type of record set. The options include `A`, `AAAA`, `MX`,
-     * `CNAME`, `TXT`, `NS`, `SRV`, `CAA`, and `PTR`. Changing this creates a new DNS record set.
+     * Specifies the type of the record set.
+     * Value options: **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV**, **CAA**.
      */
     type?: pulumi.Input<string>;
     /**
-     * Map of additional options. Changing this creates a new record set.
+     * Specifies the weight of the record set.
+     * Only public zone support. The value range is 0–1000.
      */
-    valueSpecs?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    weight?: pulumi.Input<number>;
     /**
-     * The ID of the zone in which to create the record set. Changing this creates a
-     * new DNS record set.
+     * Specifies the zone ID.
+     * Changing this parameter will create a new resource.
      */
     zoneId?: pulumi.Input<string>;
+    /**
+     * The zone name of the record set.
+     */
+    zoneName?: pulumi.Input<string>;
 }
 
 /**
@@ -207,44 +290,55 @@ export interface RecordsetState {
  */
 export interface RecordsetArgs {
     /**
-     * A description of the record set.
+     * Specifies the description of the record set.
      */
     description?: pulumi.Input<string>;
     /**
-     * The name of the record set. Note the `.` at the end of the name. Changing this
-     * creates a new DNS record set.
+     * Specifies the resolution line ID.
+     * Changing this parameter will create a new resource.
+     */
+    lineId?: pulumi.Input<string>;
+    /**
+     * Specifies the name of the record set.
+     * The name suffixed with a zone name, which is a complete host name ended with a dot.
      */
     name?: pulumi.Input<string>;
     /**
-     * An array of DNS records.
+     * Specifies an array of DNS records. The value rules vary depending on the record set type.
      */
     records: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * The region in which to create the DNS record set. If omitted, the `region`
-     * argument of the provider will be used. Changing this creates a new DNS record set.
+     * Specifies the region in which to create the resource.
+     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * The key/value pairs to associate with the record set.
+     * Specifies the status of the record set.
+     * Value options: **ENABLE**, **DISABLE**. The default value is **ENABLE**.
+     */
+    status?: pulumi.Input<string>;
+    /**
+     * Specifies the key/value pairs to associate with the DNS recordset.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * The time to live (TTL) of the record set (in seconds). The value range is 300–2147483647. The
-     * default value is 300.
+     * Specifies the time to live (TTL) of the record set (in seconds).
+     * The value range is 1–2147483647. The default value is 300.
      */
     ttl?: pulumi.Input<number>;
     /**
-     * The type of record set. The options include `A`, `AAAA`, `MX`,
-     * `CNAME`, `TXT`, `NS`, `SRV`, `CAA`, and `PTR`. Changing this creates a new DNS record set.
+     * Specifies the type of the record set.
+     * Value options: **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV**, **CAA**.
      */
     type: pulumi.Input<string>;
     /**
-     * Map of additional options. Changing this creates a new record set.
+     * Specifies the weight of the record set.
+     * Only public zone support. The value range is 0–1000.
      */
-    valueSpecs?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    weight?: pulumi.Input<number>;
     /**
-     * The ID of the zone in which to create the record set. Changing this creates a
-     * new DNS record set.
+     * Specifies the zone ID.
+     * Changing this parameter will create a new resource.
      */
     zoneId: pulumi.Input<string>;
 }

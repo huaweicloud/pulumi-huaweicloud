@@ -32,6 +32,7 @@ export function getSecgroups(args?: GetSecgroupsArgs, opts?: pulumi.InvokeOption
     return pulumi.runtime.invoke("huaweicloud:Vpc/getSecgroups:getSecgroups", {
         "description": args.description,
         "enterpriseProjectId": args.enterpriseProjectId,
+        "id": args.id,
         "name": args.name,
         "region": args.region,
     }, opts);
@@ -50,6 +51,10 @@ export interface GetSecgroupsArgs {
      * Specifies the enterprise project ID of the security group.
      */
     enterpriseProjectId?: string;
+    /**
+     * Specifies the id of the desired security group.
+     */
+    id?: string;
     /**
      * Specifies the name of the security group.
      */
@@ -71,14 +76,14 @@ export interface GetSecgroupsResult {
      */
     readonly enterpriseProjectId?: string;
     /**
-     * The provider-assigned unique ID for this managed resource.
+     * The security group ID.
      */
     readonly id: string;
     /**
      * The name of the security group.
      */
     readonly name?: string;
-    readonly region?: string;
+    readonly region: string;
     /**
      * The list of security groups. The object is documented below.
      */
@@ -102,6 +107,10 @@ export interface GetSecgroupsOutputArgs {
      * Specifies the enterprise project ID of the security group.
      */
     enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specifies the id of the desired security group.
+     */
+    id?: pulumi.Input<string>;
     /**
      * Specifies the name of the security group.
      */

@@ -71,6 +71,7 @@ type AdminAssignment struct {
 
 	// Specifies the user account to be assigned the administrator role.
 	// The value can contain **1** to **64** characters.
+	// Changing this parameter will create a new resource.
 	Account pulumi.StringOutput `pulumi:"account"`
 	// Specifies the (HUAWEI Cloud meeting) user account name to which the
 	// default administrator belongs. Changing this parameter will create a new resource.
@@ -121,6 +122,7 @@ func GetAdminAssignment(ctx *pulumi.Context,
 type adminAssignmentState struct {
 	// Specifies the user account to be assigned the administrator role.
 	// The value can contain **1** to **64** characters.
+	// Changing this parameter will create a new resource.
 	Account *string `pulumi:"account"`
 	// Specifies the (HUAWEI Cloud meeting) user account name to which the
 	// default administrator belongs. Changing this parameter will create a new resource.
@@ -139,6 +141,7 @@ type adminAssignmentState struct {
 type AdminAssignmentState struct {
 	// Specifies the user account to be assigned the administrator role.
 	// The value can contain **1** to **64** characters.
+	// Changing this parameter will create a new resource.
 	Account pulumi.StringPtrInput
 	// Specifies the (HUAWEI Cloud meeting) user account name to which the
 	// default administrator belongs. Changing this parameter will create a new resource.
@@ -161,6 +164,7 @@ func (AdminAssignmentState) ElementType() reflect.Type {
 type adminAssignmentArgs struct {
 	// Specifies the user account to be assigned the administrator role.
 	// The value can contain **1** to **64** characters.
+	// Changing this parameter will create a new resource.
 	Account string `pulumi:"account"`
 	// Specifies the (HUAWEI Cloud meeting) user account name to which the
 	// default administrator belongs. Changing this parameter will create a new resource.
@@ -180,6 +184,7 @@ type adminAssignmentArgs struct {
 type AdminAssignmentArgs struct {
 	// Specifies the user account to be assigned the administrator role.
 	// The value can contain **1** to **64** characters.
+	// Changing this parameter will create a new resource.
 	Account pulumi.StringInput
 	// Specifies the (HUAWEI Cloud meeting) user account name to which the
 	// default administrator belongs. Changing this parameter will create a new resource.
@@ -284,6 +289,7 @@ func (o AdminAssignmentOutput) ToAdminAssignmentOutputWithContext(ctx context.Co
 
 // Specifies the user account to be assigned the administrator role.
 // The value can contain **1** to **64** characters.
+// Changing this parameter will create a new resource.
 func (o AdminAssignmentOutput) Account() pulumi.StringOutput {
 	return o.ApplyT(func(v *AdminAssignment) pulumi.StringOutput { return v.Account }).(pulumi.StringOutput)
 }

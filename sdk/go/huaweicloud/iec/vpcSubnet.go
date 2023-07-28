@@ -69,7 +69,8 @@ type VpcSubnet struct {
 	// Specifies the network segment on which the subnet resides. The value must be in
 	// CIDR format and within the CIDR block of the iec vpc. Changing this parameter creates a new subnet resource.
 	Cidr pulumi.StringOutput `pulumi:"cidr"`
-	// The status of subnet DHCP is enabled or not.
+	// Specifies the status of subnet DHCP is enabled or not.
+	// Valid values are **true** and **false**, defaults to **true**.
 	DhcpEnable pulumi.BoolPtrOutput `pulumi:"dhcpEnable"`
 	// Specifies the DNS server address list of a subnet. These DNS server address must be
 	// valid IP addresses.
@@ -79,7 +80,9 @@ type VpcSubnet struct {
 	GatewayIp pulumi.StringOutput `pulumi:"gatewayIp"`
 	// Specifies the name of the iec vpc subnet. The value is a string of 1 to 64 characters that
 	// can contain letters, digits, underscores(_), and hyphens(-).
-	Name   pulumi.StringOutput    `pulumi:"name"`
+	Name pulumi.StringOutput `pulumi:"name"`
+	// The region in which to create the iec vpc subnet resource. If omitted, the
+	// provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringPtrOutput `pulumi:"region"`
 	// Specifies the ID of the iec site. Changing this parameter creates a new
 	// subnet resource.
@@ -138,7 +141,8 @@ type vpcSubnetState struct {
 	// Specifies the network segment on which the subnet resides. The value must be in
 	// CIDR format and within the CIDR block of the iec vpc. Changing this parameter creates a new subnet resource.
 	Cidr *string `pulumi:"cidr"`
-	// The status of subnet DHCP is enabled or not.
+	// Specifies the status of subnet DHCP is enabled or not.
+	// Valid values are **true** and **false**, defaults to **true**.
 	DhcpEnable *bool `pulumi:"dhcpEnable"`
 	// Specifies the DNS server address list of a subnet. These DNS server address must be
 	// valid IP addresses.
@@ -148,7 +152,9 @@ type vpcSubnetState struct {
 	GatewayIp *string `pulumi:"gatewayIp"`
 	// Specifies the name of the iec vpc subnet. The value is a string of 1 to 64 characters that
 	// can contain letters, digits, underscores(_), and hyphens(-).
-	Name   *string `pulumi:"name"`
+	Name *string `pulumi:"name"`
+	// The region in which to create the iec vpc subnet resource. If omitted, the
+	// provider-level region will be used. Changing this creates a new resource.
 	Region *string `pulumi:"region"`
 	// Specifies the ID of the iec site. Changing this parameter creates a new
 	// subnet resource.
@@ -166,7 +172,8 @@ type VpcSubnetState struct {
 	// Specifies the network segment on which the subnet resides. The value must be in
 	// CIDR format and within the CIDR block of the iec vpc. Changing this parameter creates a new subnet resource.
 	Cidr pulumi.StringPtrInput
-	// The status of subnet DHCP is enabled or not.
+	// Specifies the status of subnet DHCP is enabled or not.
+	// Valid values are **true** and **false**, defaults to **true**.
 	DhcpEnable pulumi.BoolPtrInput
 	// Specifies the DNS server address list of a subnet. These DNS server address must be
 	// valid IP addresses.
@@ -176,7 +183,9 @@ type VpcSubnetState struct {
 	GatewayIp pulumi.StringPtrInput
 	// Specifies the name of the iec vpc subnet. The value is a string of 1 to 64 characters that
 	// can contain letters, digits, underscores(_), and hyphens(-).
-	Name   pulumi.StringPtrInput
+	Name pulumi.StringPtrInput
+	// The region in which to create the iec vpc subnet resource. If omitted, the
+	// provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringPtrInput
 	// Specifies the ID of the iec site. Changing this parameter creates a new
 	// subnet resource.
@@ -198,7 +207,8 @@ type vpcSubnetArgs struct {
 	// Specifies the network segment on which the subnet resides. The value must be in
 	// CIDR format and within the CIDR block of the iec vpc. Changing this parameter creates a new subnet resource.
 	Cidr string `pulumi:"cidr"`
-	// The status of subnet DHCP is enabled or not.
+	// Specifies the status of subnet DHCP is enabled or not.
+	// Valid values are **true** and **false**, defaults to **true**.
 	DhcpEnable *bool `pulumi:"dhcpEnable"`
 	// Specifies the DNS server address list of a subnet. These DNS server address must be
 	// valid IP addresses.
@@ -208,7 +218,9 @@ type vpcSubnetArgs struct {
 	GatewayIp string `pulumi:"gatewayIp"`
 	// Specifies the name of the iec vpc subnet. The value is a string of 1 to 64 characters that
 	// can contain letters, digits, underscores(_), and hyphens(-).
-	Name   *string `pulumi:"name"`
+	Name *string `pulumi:"name"`
+	// The region in which to create the iec vpc subnet resource. If omitted, the
+	// provider-level region will be used. Changing this creates a new resource.
 	Region *string `pulumi:"region"`
 	// Specifies the ID of the iec site. Changing this parameter creates a new
 	// subnet resource.
@@ -223,7 +235,8 @@ type VpcSubnetArgs struct {
 	// Specifies the network segment on which the subnet resides. The value must be in
 	// CIDR format and within the CIDR block of the iec vpc. Changing this parameter creates a new subnet resource.
 	Cidr pulumi.StringInput
-	// The status of subnet DHCP is enabled or not.
+	// Specifies the status of subnet DHCP is enabled or not.
+	// Valid values are **true** and **false**, defaults to **true**.
 	DhcpEnable pulumi.BoolPtrInput
 	// Specifies the DNS server address list of a subnet. These DNS server address must be
 	// valid IP addresses.
@@ -233,7 +246,9 @@ type VpcSubnetArgs struct {
 	GatewayIp pulumi.StringInput
 	// Specifies the name of the iec vpc subnet. The value is a string of 1 to 64 characters that
 	// can contain letters, digits, underscores(_), and hyphens(-).
-	Name   pulumi.StringPtrInput
+	Name pulumi.StringPtrInput
+	// The region in which to create the iec vpc subnet resource. If omitted, the
+	// provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringPtrInput
 	// Specifies the ID of the iec site. Changing this parameter creates a new
 	// subnet resource.
@@ -336,7 +351,8 @@ func (o VpcSubnetOutput) Cidr() pulumi.StringOutput {
 	return o.ApplyT(func(v *VpcSubnet) pulumi.StringOutput { return v.Cidr }).(pulumi.StringOutput)
 }
 
-// The status of subnet DHCP is enabled or not.
+// Specifies the status of subnet DHCP is enabled or not.
+// Valid values are **true** and **false**, defaults to **true**.
 func (o VpcSubnetOutput) DhcpEnable() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *VpcSubnet) pulumi.BoolPtrOutput { return v.DhcpEnable }).(pulumi.BoolPtrOutput)
 }
@@ -359,6 +375,8 @@ func (o VpcSubnetOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *VpcSubnet) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
+// The region in which to create the iec vpc subnet resource. If omitted, the
+// provider-level region will be used. Changing this creates a new resource.
 func (o VpcSubnetOutput) Region() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *VpcSubnet) pulumi.StringPtrOutput { return v.Region }).(pulumi.StringPtrOutput)
 }

@@ -159,6 +159,7 @@ export class Provider extends pulumi.ProviderResource {
             resourceInputs["projectId"] = args ? args.projectId : undefined;
             resourceInputs["projectName"] = args ? args.projectName : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["regional"] = pulumi.output(args ? args.regional : undefined).apply(JSON.stringify);
             resourceInputs["secretKey"] = args ? args.secretKey : undefined;
             resourceInputs["securityToken"] = args ? args.securityToken : undefined;
             resourceInputs["sharedConfigFile"] = args ? args.sharedConfigFile : undefined;
@@ -258,6 +259,10 @@ export interface ProviderArgs {
      * The HuaweiCloud region to connect to.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Whether the service endpoints are regional
+     */
+    regional?: pulumi.Input<boolean>;
     /**
      * The secret key of the HuaweiCloud to use.
      */

@@ -119,6 +119,7 @@ import (
 //			imageUrl := cfg.RequireObject("imageUrl")
 //			_, err := FunctionGraph.NewFunction(ctx, "bySwrImage", &FunctionGraph.FunctionArgs{
 //				Agency:     pulumi.Any(agencyName),
+//				Handler:    pulumi.String("-"),
 //				App:        pulumi.String("default"),
 //				Runtime:    pulumi.String("Custom Image"),
 //				MemorySize: pulumi.Int(128),
@@ -145,6 +146,20 @@ import (
 //	$ pulumi import huaweicloud:FunctionGraph/function:Function my-func 7117d38e-4c8f-4624-a505-bd96b97d024c
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attributes are`app`, `func_code`, `agency`, `tags"`. It is generally recommended running `terraform plan` after importing a function. You can then decide if changes should be applied to the function, or the resource definition should be updated to align with the function. Also you can ignore changes as below. hcl resource "huaweicloud_fgs_function" "test" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [
+//
+//	app, func_code, agency, tags,
+//
+//	]
+//
+//	} }
 type Function struct {
 	pulumi.CustomResourceState
 
@@ -169,7 +184,6 @@ type Function struct {
 	CodeUrl pulumi.StringPtrOutput `pulumi:"codeUrl"`
 	// Specifies the custom image configuration for creating function.
 	// The object structure is documented below.
-	// Changing this will create a new resource.
 	CustomImage FunctionCustomImageOutput `pulumi:"customImage"`
 	// Specifies the ID list of the dependencies.
 	DependLists pulumi.StringArrayOutput `pulumi:"dependLists"`
@@ -198,6 +212,10 @@ type Function struct {
 	// Specifies the maximum duration the function can be initialized. Value range:
 	// 1s to 300s.
 	InitializerTimeout pulumi.IntOutput `pulumi:"initializerTimeout"`
+	// Specifies the maximum number of instances of the function.\
+	// The valid value ranges from `-1` to `1000`, defaults to `400`.
+	// + The minimum value is `-1` and means the number of instances is unlimited.
+	MaxInstanceNum pulumi.StringOutput `pulumi:"maxInstanceNum"`
 	// Specifies the memory size(MB) allocated to the function.
 	MemorySize pulumi.IntOutput `pulumi:"memorySize"`
 	// Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
@@ -216,9 +234,11 @@ type Function struct {
 	// provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Specifies the environment for executing the function.
-	// If the function is created using a SWR image, set this parameter to `Custom Image`.
+	// If the function is created using an SWR image, set this parameter to `Custom Image`.
 	// Changing this will create a new resource.
 	Runtime pulumi.StringOutput `pulumi:"runtime"`
+	// Specifies the key/value pairs to associate with the function.
+	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// Specifies the timeout interval of the function, ranges from 3s to 900s.
 	Timeout pulumi.IntOutput `pulumi:"timeout"`
 	// Uniform Resource Name
@@ -292,7 +312,6 @@ type functionState struct {
 	CodeUrl *string `pulumi:"codeUrl"`
 	// Specifies the custom image configuration for creating function.
 	// The object structure is documented below.
-	// Changing this will create a new resource.
 	CustomImage *FunctionCustomImage `pulumi:"customImage"`
 	// Specifies the ID list of the dependencies.
 	DependLists []string `pulumi:"dependLists"`
@@ -321,6 +340,10 @@ type functionState struct {
 	// Specifies the maximum duration the function can be initialized. Value range:
 	// 1s to 300s.
 	InitializerTimeout *int `pulumi:"initializerTimeout"`
+	// Specifies the maximum number of instances of the function.\
+	// The valid value ranges from `-1` to `1000`, defaults to `400`.
+	// + The minimum value is `-1` and means the number of instances is unlimited.
+	MaxInstanceNum *string `pulumi:"maxInstanceNum"`
 	// Specifies the memory size(MB) allocated to the function.
 	MemorySize *int `pulumi:"memorySize"`
 	// Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
@@ -339,9 +362,11 @@ type functionState struct {
 	// provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
 	// Specifies the environment for executing the function.
-	// If the function is created using a SWR image, set this parameter to `Custom Image`.
+	// If the function is created using an SWR image, set this parameter to `Custom Image`.
 	// Changing this will create a new resource.
 	Runtime *string `pulumi:"runtime"`
+	// Specifies the key/value pairs to associate with the function.
+	Tags map[string]string `pulumi:"tags"`
 	// Specifies the timeout interval of the function, ranges from 3s to 900s.
 	Timeout *int `pulumi:"timeout"`
 	// Uniform Resource Name
@@ -377,7 +402,6 @@ type FunctionState struct {
 	CodeUrl pulumi.StringPtrInput
 	// Specifies the custom image configuration for creating function.
 	// The object structure is documented below.
-	// Changing this will create a new resource.
 	CustomImage FunctionCustomImagePtrInput
 	// Specifies the ID list of the dependencies.
 	DependLists pulumi.StringArrayInput
@@ -406,6 +430,10 @@ type FunctionState struct {
 	// Specifies the maximum duration the function can be initialized. Value range:
 	// 1s to 300s.
 	InitializerTimeout pulumi.IntPtrInput
+	// Specifies the maximum number of instances of the function.\
+	// The valid value ranges from `-1` to `1000`, defaults to `400`.
+	// + The minimum value is `-1` and means the number of instances is unlimited.
+	MaxInstanceNum pulumi.StringPtrInput
 	// Specifies the memory size(MB) allocated to the function.
 	MemorySize pulumi.IntPtrInput
 	// Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
@@ -424,9 +452,11 @@ type FunctionState struct {
 	// provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
 	// Specifies the environment for executing the function.
-	// If the function is created using a SWR image, set this parameter to `Custom Image`.
+	// If the function is created using an SWR image, set this parameter to `Custom Image`.
 	// Changing this will create a new resource.
 	Runtime pulumi.StringPtrInput
+	// Specifies the key/value pairs to associate with the function.
+	Tags pulumi.StringMapInput
 	// Specifies the timeout interval of the function, ranges from 3s to 900s.
 	Timeout pulumi.IntPtrInput
 	// Uniform Resource Name
@@ -466,7 +496,6 @@ type functionArgs struct {
 	CodeUrl *string `pulumi:"codeUrl"`
 	// Specifies the custom image configuration for creating function.
 	// The object structure is documented below.
-	// Changing this will create a new resource.
 	CustomImage *FunctionCustomImage `pulumi:"customImage"`
 	// Specifies the ID list of the dependencies.
 	DependLists []string `pulumi:"dependLists"`
@@ -495,6 +524,10 @@ type functionArgs struct {
 	// Specifies the maximum duration the function can be initialized. Value range:
 	// 1s to 300s.
 	InitializerTimeout *int `pulumi:"initializerTimeout"`
+	// Specifies the maximum number of instances of the function.\
+	// The valid value ranges from `-1` to `1000`, defaults to `400`.
+	// + The minimum value is `-1` and means the number of instances is unlimited.
+	MaxInstanceNum *string `pulumi:"maxInstanceNum"`
 	// Specifies the memory size(MB) allocated to the function.
 	MemorySize int `pulumi:"memorySize"`
 	// Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
@@ -513,9 +546,11 @@ type functionArgs struct {
 	// provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
 	// Specifies the environment for executing the function.
-	// If the function is created using a SWR image, set this parameter to `Custom Image`.
+	// If the function is created using an SWR image, set this parameter to `Custom Image`.
 	// Changing this will create a new resource.
 	Runtime string `pulumi:"runtime"`
+	// Specifies the key/value pairs to associate with the function.
+	Tags map[string]string `pulumi:"tags"`
 	// Specifies the timeout interval of the function, ranges from 3s to 900s.
 	Timeout  int     `pulumi:"timeout"`
 	UserData *string `pulumi:"userData"`
@@ -548,7 +583,6 @@ type FunctionArgs struct {
 	CodeUrl pulumi.StringPtrInput
 	// Specifies the custom image configuration for creating function.
 	// The object structure is documented below.
-	// Changing this will create a new resource.
 	CustomImage FunctionCustomImagePtrInput
 	// Specifies the ID list of the dependencies.
 	DependLists pulumi.StringArrayInput
@@ -577,6 +611,10 @@ type FunctionArgs struct {
 	// Specifies the maximum duration the function can be initialized. Value range:
 	// 1s to 300s.
 	InitializerTimeout pulumi.IntPtrInput
+	// Specifies the maximum number of instances of the function.\
+	// The valid value ranges from `-1` to `1000`, defaults to `400`.
+	// + The minimum value is `-1` and means the number of instances is unlimited.
+	MaxInstanceNum pulumi.StringPtrInput
 	// Specifies the memory size(MB) allocated to the function.
 	MemorySize pulumi.IntInput
 	// Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
@@ -595,9 +633,11 @@ type FunctionArgs struct {
 	// provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
 	// Specifies the environment for executing the function.
-	// If the function is created using a SWR image, set this parameter to `Custom Image`.
+	// If the function is created using an SWR image, set this parameter to `Custom Image`.
 	// Changing this will create a new resource.
 	Runtime pulumi.StringInput
+	// Specifies the key/value pairs to associate with the function.
+	Tags pulumi.StringMapInput
 	// Specifies the timeout interval of the function, ranges from 3s to 900s.
 	Timeout  pulumi.IntInput
 	UserData pulumi.StringPtrInput
@@ -733,7 +773,6 @@ func (o FunctionOutput) CodeUrl() pulumi.StringPtrOutput {
 
 // Specifies the custom image configuration for creating function.
 // The object structure is documented below.
-// Changing this will create a new resource.
 func (o FunctionOutput) CustomImage() FunctionCustomImageOutput {
 	return o.ApplyT(func(v *Function) FunctionCustomImageOutput { return v.CustomImage }).(FunctionCustomImageOutput)
 }
@@ -795,6 +834,13 @@ func (o FunctionOutput) InitializerTimeout() pulumi.IntOutput {
 	return o.ApplyT(func(v *Function) pulumi.IntOutput { return v.InitializerTimeout }).(pulumi.IntOutput)
 }
 
+// Specifies the maximum number of instances of the function.\
+// The valid value ranges from `-1` to `1000`, defaults to `400`.
+// + The minimum value is `-1` and means the number of instances is unlimited.
+func (o FunctionOutput) MaxInstanceNum() pulumi.StringOutput {
+	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.MaxInstanceNum }).(pulumi.StringOutput)
+}
+
 // Specifies the memory size(MB) allocated to the function.
 func (o FunctionOutput) MemorySize() pulumi.IntOutput {
 	return o.ApplyT(func(v *Function) pulumi.IntOutput { return v.MemorySize }).(pulumi.IntOutput)
@@ -834,10 +880,15 @@ func (o FunctionOutput) Region() pulumi.StringOutput {
 }
 
 // Specifies the environment for executing the function.
-// If the function is created using a SWR image, set this parameter to `Custom Image`.
+// If the function is created using an SWR image, set this parameter to `Custom Image`.
 // Changing this will create a new resource.
 func (o FunctionOutput) Runtime() pulumi.StringOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.Runtime }).(pulumi.StringOutput)
+}
+
+// Specifies the key/value pairs to associate with the function.
+func (o FunctionOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *Function) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }
 
 // Specifies the timeout interval of the function, ranges from 3s to 900s.

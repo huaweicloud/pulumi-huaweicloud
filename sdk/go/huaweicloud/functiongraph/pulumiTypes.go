@@ -12,7 +12,6 @@ import (
 
 type FunctionCustomImage struct {
 	// Specifies the URL of SWR image, the URL must start with `swr.`.
-	// Changing this will create a new resource.
 	Url string `pulumi:"url"`
 }
 
@@ -29,7 +28,6 @@ type FunctionCustomImageInput interface {
 
 type FunctionCustomImageArgs struct {
 	// Specifies the URL of SWR image, the URL must start with `swr.`.
-	// Changing this will create a new resource.
 	Url pulumi.StringInput `pulumi:"url"`
 }
 
@@ -111,7 +109,6 @@ func (o FunctionCustomImageOutput) ToFunctionCustomImagePtrOutputWithContext(ctx
 }
 
 // Specifies the URL of SWR image, the URL must start with `swr.`.
-// Changing this will create a new resource.
 func (o FunctionCustomImageOutput) Url() pulumi.StringOutput {
 	return o.ApplyT(func(v FunctionCustomImage) string { return v.Url }).(pulumi.StringOutput)
 }
@@ -141,7 +138,6 @@ func (o FunctionCustomImagePtrOutput) Elem() FunctionCustomImageOutput {
 }
 
 // Specifies the URL of SWR image, the URL must start with `swr.`.
-// Changing this will create a new resource.
 func (o FunctionCustomImagePtrOutput) Url() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *FunctionCustomImage) *string {
 		if v == nil {

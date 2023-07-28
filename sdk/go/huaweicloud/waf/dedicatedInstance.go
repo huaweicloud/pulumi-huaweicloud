@@ -34,12 +34,14 @@ import (
 //			vpcId := cfg.RequireObject("vpcId")
 //			subnetId := cfg.RequireObject("subnetId")
 //			securityGroupId := cfg.RequireObject("securityGroupId")
+//			enterpriseProjectId := cfg.RequireObject("enterpriseProjectId")
 //			_, err := Waf.NewDedicatedInstance(ctx, "instance1", &Waf.DedicatedInstanceArgs{
-//				AvailableZone:     pulumi.Any(azName),
-//				SpecificationCode: pulumi.String("waf.instance.professional"),
-//				EcsFlavor:         pulumi.Any(ecsFlavorId),
-//				VpcId:             pulumi.Any(vpcId),
-//				SubnetId:          pulumi.Any(subnetId),
+//				AvailableZone:       pulumi.Any(azName),
+//				SpecificationCode:   pulumi.String("waf.instance.professional"),
+//				EcsFlavor:           pulumi.Any(ecsFlavorId),
+//				VpcId:               pulumi.Any(vpcId),
+//				SubnetId:            pulumi.Any(subnetId),
+//				EnterpriseProjectId: pulumi.Any(enterpriseProjectId),
 //				SecurityGroups: pulumi.StringArray{
 //					pulumi.Any(securityGroupId),
 //				},
@@ -55,11 +57,19 @@ import (
 //
 // ## Import
 //
-// WAF dedicated instance can be imported using the `id`, e.g.
+// There are two ways to import WAF dedicated instance state. * Using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Waf/dedicatedInstance:DedicatedInstance instance_1 2f87641090206b821f07e0f6bd6
+//	$ pulumi import huaweicloud:Waf/dedicatedInstance:DedicatedInstance test <id>
+//
+// ```
+//
+//   - Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+//
+// ```sh
+//
+//	$ pulumi import huaweicloud:Waf/dedicatedInstance:DedicatedInstance test <id>/<enterprise_project_id>
 //
 // ```
 type DedicatedInstance struct {
@@ -76,6 +86,9 @@ type DedicatedInstance struct {
 	// The flavor of the ECS used by the WAF instance. Flavors can be obtained
 	// through this data source `Ecs.getFlavors`. Changing this will create a new instance.
 	EcsFlavor pulumi.StringOutput `pulumi:"ecsFlavor"`
+	// The enterprise project ID of WAF dedicated instance. Changing this
+	// will migrate the WAF instance to a new enterprise project.
+	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
 	// The instance group ID used by the WAF dedicated instance in ELB mode.
 	// Changing this will create a new instance.
 	GroupId pulumi.StringPtrOutput `pulumi:"groupId"`
@@ -85,6 +98,8 @@ type DedicatedInstance struct {
 	// The region in which to create the WAF dedicated instance. If omitted, the
 	// provider-level region will be used. Changing this setting will create a new instance.
 	Region pulumi.StringOutput `pulumi:"region"`
+	// schema: Internal; Specifies whether this is resource tenant.
+	ResTenant pulumi.BoolPtrOutput `pulumi:"resTenant"`
 	// The running status of the instance. Values are:
 	RunStatus pulumi.IntOutput `pulumi:"runStatus"`
 	// The security group of the instance. This is an array of security group
@@ -168,6 +183,9 @@ type dedicatedInstanceState struct {
 	// The flavor of the ECS used by the WAF instance. Flavors can be obtained
 	// through this data source `Ecs.getFlavors`. Changing this will create a new instance.
 	EcsFlavor *string `pulumi:"ecsFlavor"`
+	// The enterprise project ID of WAF dedicated instance. Changing this
+	// will migrate the WAF instance to a new enterprise project.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// The instance group ID used by the WAF dedicated instance in ELB mode.
 	// Changing this will create a new instance.
 	GroupId *string `pulumi:"groupId"`
@@ -177,6 +195,8 @@ type dedicatedInstanceState struct {
 	// The region in which to create the WAF dedicated instance. If omitted, the
 	// provider-level region will be used. Changing this setting will create a new instance.
 	Region *string `pulumi:"region"`
+	// schema: Internal; Specifies whether this is resource tenant.
+	ResTenant *bool `pulumi:"resTenant"`
 	// The running status of the instance. Values are:
 	RunStatus *int `pulumi:"runStatus"`
 	// The security group of the instance. This is an array of security group
@@ -213,6 +233,9 @@ type DedicatedInstanceState struct {
 	// The flavor of the ECS used by the WAF instance. Flavors can be obtained
 	// through this data source `Ecs.getFlavors`. Changing this will create a new instance.
 	EcsFlavor pulumi.StringPtrInput
+	// The enterprise project ID of WAF dedicated instance. Changing this
+	// will migrate the WAF instance to a new enterprise project.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// The instance group ID used by the WAF dedicated instance in ELB mode.
 	// Changing this will create a new instance.
 	GroupId pulumi.StringPtrInput
@@ -222,6 +245,8 @@ type DedicatedInstanceState struct {
 	// The region in which to create the WAF dedicated instance. If omitted, the
 	// provider-level region will be used. Changing this setting will create a new instance.
 	Region pulumi.StringPtrInput
+	// schema: Internal; Specifies whether this is resource tenant.
+	ResTenant pulumi.BoolPtrInput
 	// The running status of the instance. Values are:
 	RunStatus pulumi.IntPtrInput
 	// The security group of the instance. This is an array of security group
@@ -260,6 +285,9 @@ type dedicatedInstanceArgs struct {
 	// The flavor of the ECS used by the WAF instance. Flavors can be obtained
 	// through this data source `Ecs.getFlavors`. Changing this will create a new instance.
 	EcsFlavor string `pulumi:"ecsFlavor"`
+	// The enterprise project ID of WAF dedicated instance. Changing this
+	// will migrate the WAF instance to a new enterprise project.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// The instance group ID used by the WAF dedicated instance in ELB mode.
 	// Changing this will create a new instance.
 	GroupId *string `pulumi:"groupId"`
@@ -269,6 +297,8 @@ type dedicatedInstanceArgs struct {
 	// The region in which to create the WAF dedicated instance. If omitted, the
 	// provider-level region will be used. Changing this setting will create a new instance.
 	Region *string `pulumi:"region"`
+	// schema: Internal; Specifies whether this is resource tenant.
+	ResTenant *bool `pulumi:"resTenant"`
 	// The security group of the instance. This is an array of security group
 	// ids. Changing this will create a new instance.
 	SecurityGroups []string `pulumi:"securityGroups"`
@@ -296,6 +326,9 @@ type DedicatedInstanceArgs struct {
 	// The flavor of the ECS used by the WAF instance. Flavors can be obtained
 	// through this data source `Ecs.getFlavors`. Changing this will create a new instance.
 	EcsFlavor pulumi.StringInput
+	// The enterprise project ID of WAF dedicated instance. Changing this
+	// will migrate the WAF instance to a new enterprise project.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// The instance group ID used by the WAF dedicated instance in ELB mode.
 	// Changing this will create a new instance.
 	GroupId pulumi.StringPtrInput
@@ -305,6 +338,8 @@ type DedicatedInstanceArgs struct {
 	// The region in which to create the WAF dedicated instance. If omitted, the
 	// provider-level region will be used. Changing this setting will create a new instance.
 	Region pulumi.StringPtrInput
+	// schema: Internal; Specifies whether this is resource tenant.
+	ResTenant pulumi.BoolPtrInput
 	// The security group of the instance. This is an array of security group
 	// ids. Changing this will create a new instance.
 	SecurityGroups pulumi.StringArrayInput
@@ -431,6 +466,12 @@ func (o DedicatedInstanceOutput) EcsFlavor() pulumi.StringOutput {
 	return o.ApplyT(func(v *DedicatedInstance) pulumi.StringOutput { return v.EcsFlavor }).(pulumi.StringOutput)
 }
 
+// The enterprise project ID of WAF dedicated instance. Changing this
+// will migrate the WAF instance to a new enterprise project.
+func (o DedicatedInstanceOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DedicatedInstance) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
+}
+
 // The instance group ID used by the WAF dedicated instance in ELB mode.
 // Changing this will create a new instance.
 func (o DedicatedInstanceOutput) GroupId() pulumi.StringPtrOutput {
@@ -447,6 +488,11 @@ func (o DedicatedInstanceOutput) Name() pulumi.StringOutput {
 // provider-level region will be used. Changing this setting will create a new instance.
 func (o DedicatedInstanceOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *DedicatedInstance) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
+}
+
+// schema: Internal; Specifies whether this is resource tenant.
+func (o DedicatedInstanceOutput) ResTenant() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *DedicatedInstance) pulumi.BoolPtrOutput { return v.ResTenant }).(pulumi.BoolPtrOutput)
 }
 
 // The running status of the instance. Values are:

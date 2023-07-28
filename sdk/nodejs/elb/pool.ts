@@ -61,9 +61,6 @@ export class Pool extends pulumi.CustomResource {
         return obj['__pulumiType'] === Pool.__pulumiType;
     }
 
-    /**
-     * The administrative state of the pool. A valid value is true (UP) or false (DOWN).
-     */
     public readonly adminStateUp!: pulumi.Output<boolean | undefined>;
     /**
      * Human-readable description for the pool.
@@ -161,9 +158,6 @@ export class Pool extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Pool resources.
  */
 export interface PoolState {
-    /**
-     * The administrative state of the pool. A valid value is true (UP) or false (DOWN).
-     */
     adminStateUp?: pulumi.Input<boolean>;
     /**
      * Human-readable description for the pool.
@@ -215,9 +209,6 @@ export interface PoolState {
  * The set of arguments for constructing a Pool resource.
  */
 export interface PoolArgs {
-    /**
-     * The administrative state of the pool. A valid value is true (UP) or false (DOWN).
-     */
     adminStateUp?: pulumi.Input<boolean>;
     /**
      * Human-readable description for the pool.

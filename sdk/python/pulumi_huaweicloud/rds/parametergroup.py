@@ -28,6 +28,8 @@ class ParametergroupArgs:
         :param pulumi.Input[str] description: The parameter group description. It contains a maximum of 256 characters and cannot
                contain the following special characters:>!<"&'= the value is left blank by default.
         :param pulumi.Input[str] name: The parameter group name. It contains a maximum of 64 characters.
+        :param pulumi.Input[str] region: The region in which to create the RDS parameter group. If omitted, the
+               provider-level region will be used. Changing this creates a new parameter group.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] values: Parameter group values key/value pairs defined by users based on the default parameter
                groups.
         """
@@ -82,6 +84,10 @@ class ParametergroupArgs:
     @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
+        """
+        The region in which to create the RDS parameter group. If omitted, the
+        provider-level region will be used. Changing this creates a new parameter group.
+        """
         return pulumi.get(self, "region")
 
     @region.setter
@@ -120,6 +126,8 @@ class _ParametergroupState:
         :param pulumi.Input[str] description: The parameter group description. It contains a maximum of 256 characters and cannot
                contain the following special characters:>!<"&'= the value is left blank by default.
         :param pulumi.Input[str] name: The parameter group name. It contains a maximum of 64 characters.
+        :param pulumi.Input[str] region: The region in which to create the RDS parameter group. If omitted, the
+               provider-level region will be used. Changing this creates a new parameter group.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] values: Parameter group values key/value pairs defined by users based on the default parameter
                groups.
         """
@@ -190,6 +198,10 @@ class _ParametergroupState:
     @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
+        """
+        The region in which to create the RDS parameter group. If omitted, the
+        provider-level region will be used. Changing this creates a new parameter group.
+        """
         return pulumi.get(self, "region")
 
     @region.setter
@@ -257,6 +269,8 @@ class Parametergroup(pulumi.CustomResource):
         :param pulumi.Input[str] description: The parameter group description. It contains a maximum of 256 characters and cannot
                contain the following special characters:>!<"&'= the value is left blank by default.
         :param pulumi.Input[str] name: The parameter group name. It contains a maximum of 64 characters.
+        :param pulumi.Input[str] region: The region in which to create the RDS parameter group. If omitted, the
+               provider-level region will be used. Changing this creates a new parameter group.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] values: Parameter group values key/value pairs defined by users based on the default parameter
                groups.
         """
@@ -362,6 +376,8 @@ class Parametergroup(pulumi.CustomResource):
         :param pulumi.Input[str] description: The parameter group description. It contains a maximum of 256 characters and cannot
                contain the following special characters:>!<"&'= the value is left blank by default.
         :param pulumi.Input[str] name: The parameter group name. It contains a maximum of 64 characters.
+        :param pulumi.Input[str] region: The region in which to create the RDS parameter group. If omitted, the
+               provider-level region will be used. Changing this creates a new parameter group.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] values: Parameter group values key/value pairs defined by users based on the default parameter
                groups.
         """
@@ -415,6 +431,10 @@ class Parametergroup(pulumi.CustomResource):
     @property
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
+        """
+        The region in which to create the RDS parameter group. If omitted, the
+        provider-level region will be used. Changing this creates a new parameter group.
+        """
         return pulumi.get(self, "region")
 
     @property

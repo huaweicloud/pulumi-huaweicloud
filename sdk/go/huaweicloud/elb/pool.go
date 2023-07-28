@@ -60,7 +60,6 @@ import (
 type Pool struct {
 	pulumi.CustomResourceState
 
-	// The administrative state of the pool. A valid value is true (UP) or false (DOWN).
 	AdminStateUp pulumi.BoolPtrOutput `pulumi:"adminStateUp"`
 	// Human-readable description for the pool.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
@@ -126,7 +125,6 @@ func GetPool(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Pool resources.
 type poolState struct {
-	// The administrative state of the pool. A valid value is true (UP) or false (DOWN).
 	AdminStateUp *bool `pulumi:"adminStateUp"`
 	// Human-readable description for the pool.
 	Description *string `pulumi:"description"`
@@ -157,7 +155,6 @@ type poolState struct {
 }
 
 type PoolState struct {
-	// The administrative state of the pool. A valid value is true (UP) or false (DOWN).
 	AdminStateUp pulumi.BoolPtrInput
 	// Human-readable description for the pool.
 	Description pulumi.StringPtrInput
@@ -192,7 +189,6 @@ func (PoolState) ElementType() reflect.Type {
 }
 
 type poolArgs struct {
-	// The administrative state of the pool. A valid value is true (UP) or false (DOWN).
 	AdminStateUp *bool `pulumi:"adminStateUp"`
 	// Human-readable description for the pool.
 	Description *string `pulumi:"description"`
@@ -224,7 +220,6 @@ type poolArgs struct {
 
 // The set of arguments for constructing a Pool resource.
 type PoolArgs struct {
-	// The administrative state of the pool. A valid value is true (UP) or false (DOWN).
 	AdminStateUp pulumi.BoolPtrInput
 	// Human-readable description for the pool.
 	Description pulumi.StringPtrInput
@@ -341,7 +336,6 @@ func (o PoolOutput) ToPoolOutputWithContext(ctx context.Context) PoolOutput {
 	return o
 }
 
-// The administrative state of the pool. A valid value is true (UP) or false (DOWN).
 func (o PoolOutput) AdminStateUp() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Pool) pulumi.BoolPtrOutput { return v.AdminStateUp }).(pulumi.BoolPtrOutput)
 }

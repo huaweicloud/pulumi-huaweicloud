@@ -132,11 +132,11 @@ import (
 //
 // ## Import
 //
-// CCE PVC can be imported using the cluster ID, namespace and name separated by a slash, e.g.
+// CCE PVC can be imported using the cluster ID, namespace and ID separated by slashes, e.g.
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Cce/pvc:Pvc test 5c20fdad-7288-11eb-b817-0255ac10158b/default/pvc_name
+//	$ pulumi import huaweicloud:Cce/pvc:Pvc test 5c20fdad-7288-11eb-b817-0255ac10158b/default/fa540f3b-12d9-40e5-8268-04bcfed95a46
 //
 // ```
 //

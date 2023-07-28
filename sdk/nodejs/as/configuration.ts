@@ -6,28 +6,32 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Manages an AS Configuration resource within HuaweiCloud.
+ * Manages an AS configuration resource within HuaweiCloud.
  *
  * ## Example Usage
  * ### Basic AS Configuration
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as fs from "fs";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
+ * const config = new pulumi.Config();
+ * const flavorId = config.requireObject("flavorId");
+ * const imageId = config.requireObject("imageId");
+ * const sshKey = config.requireObject("sshKey");
+ * const securityGroupId = config.requireObject("securityGroupId");
  * const myAsConfig = new huaweicloud.as.Configuration("myAsConfig", {
  *     scalingConfigurationName: "my_as_config",
  *     instanceConfig: {
- *         flavor: _var.flavor,
- *         image: _var.image_id,
+ *         flavor: flavorId,
+ *         image: imageId,
+ *         keyName: sshKey,
+ *         securityGroupIds: [securityGroupId],
  *         disks: [{
  *             size: 40,
  *             volumeType: "SSD",
  *             diskType: "SYS",
  *         }],
- *         keyName: _var.keyname,
- *         userData: fs.readFileSync("userdata.txt"),
  *     },
  * });
  * ```
@@ -35,14 +39,21 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as fs from "fs";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
+ * const config = new pulumi.Config();
+ * const flavorId = config.requireObject("flavorId");
+ * const imageId = config.requireObject("imageId");
+ * const sshKey = config.requireObject("sshKey");
+ * const kmsId = config.requireObject("kmsId");
+ * const securityGroupId = config.requireObject("securityGroupId");
  * const myAsConfig = new huaweicloud.as.Configuration("myAsConfig", {
  *     scalingConfigurationName: "my_as_config",
  *     instanceConfig: {
- *         flavor: _var.flavor,
- *         image: _var.image_id,
+ *         flavor: flavorId,
+ *         image: imageId,
+ *         keyName: sshKey,
+ *         securityGroupIds: [securityGroupId],
  *         disks: [
  *             {
  *                 size: 40,
@@ -53,11 +64,9 @@ import * as utilities from "../utilities";
  *                 size: 100,
  *                 volumeType: "SSD",
  *                 diskType: "DATA",
- *                 kmsId: _var.kms_id,
+ *                 kmsId: kmsId,
  *             },
  *         ],
- *         keyName: _var.keyname,
- *         userData: fs.readFileSync("userdata.txt"),
  *     },
  * });
  * ```
@@ -68,18 +77,24 @@ import * as utilities from "../utilities";
  * import * as fs from "fs";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
+ * const config = new pulumi.Config();
+ * const flavorId = config.requireObject("flavorId");
+ * const imageId = config.requireObject("imageId");
+ * const sshKey = config.requireObject("sshKey");
+ * const securityGroupId = config.requireObject("securityGroupId");
  * const myAsConfig = new huaweicloud.as.Configuration("myAsConfig", {
  *     scalingConfigurationName: "my_as_config",
  *     instanceConfig: {
- *         flavor: _var.flavor,
- *         image: _var.image_id,
+ *         flavor: flavorId,
+ *         image: imageId,
+ *         keyName: sshKey,
+ *         securityGroupIds: [securityGroupId],
+ *         userData: fs.readFileSync("userdata.txt"),
  *         disks: [{
  *             size: 40,
  *             volumeType: "SSD",
  *             diskType: "SYS",
  *         }],
- *         keyName: _var.keyname,
- *         userData: fs.readFileSync("userdata.txt"),
  *         metadata: {
  *             some_key: "some_value",
  *         },
@@ -92,14 +107,37 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
+ * const config = new pulumi.Config();
+ * const instanceId = config.requireObject("instanceId");
+ * const sshKey = config.requireObject("sshKey");
+ * const securityGroupId = config.requireObject("securityGroupId");
  * const myAsConfig = new huaweicloud.as.Configuration("myAsConfig", {
  *     scalingConfigurationName: "my_as_config",
  *     instanceConfig: {
- *         instanceId: "4579f2f5-cbe8-425a-8f32-53dcb9d9053a",
- *         keyName: _var.keyname,
+ *         instanceId: instanceId,
+ *         keyName: sshKey,
+ *         securityGroupIds: [securityGroupId],
  *     },
  * });
  * ```
+ *
+ * ## Import
+ *
+ * AS configurations can be imported by their `id`, e.g.
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:As/configuration:Configuration test 18518c8a-9d15-416b-8add-2ee874751d18
+ * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to `instance_config.0.instance_id` is missing from the API response. You can ignore changes after importing an AS configuration as below. resource "huaweicloud_as_configuration" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [ instance_config.0.instance_id ]
+ *
+ *  } }
  */
 export class Configuration extends pulumi.CustomResource {
     /**
@@ -136,7 +174,7 @@ export class Configuration extends pulumi.CustomResource {
     public readonly instanceConfig!: pulumi.Output<outputs.As.ConfigurationInstanceConfig>;
     /**
      * Specifies the region in which to create the AS configuration.
-     * If omitted, the `region` argument of the provider is used. Changing this will create a new resource.
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
@@ -145,6 +183,10 @@ export class Configuration extends pulumi.CustomResource {
      * Changing this will create a new resource.
      */
     public readonly scalingConfigurationName!: pulumi.Output<string>;
+    /**
+     * The AS configuration status, the value can be **Bound** or **Unbound**.
+     */
+    public /*out*/ readonly status!: pulumi.Output<string>;
 
     /**
      * Create a Configuration resource with the given unique name, arguments, and options.
@@ -162,6 +204,7 @@ export class Configuration extends pulumi.CustomResource {
             resourceInputs["instanceConfig"] = state ? state.instanceConfig : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["scalingConfigurationName"] = state ? state.scalingConfigurationName : undefined;
+            resourceInputs["status"] = state ? state.status : undefined;
         } else {
             const args = argsOrState as ConfigurationArgs | undefined;
             if ((!args || args.instanceConfig === undefined) && !opts.urn) {
@@ -173,6 +216,7 @@ export class Configuration extends pulumi.CustomResource {
             resourceInputs["instanceConfig"] = args ? args.instanceConfig : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["scalingConfigurationName"] = args ? args.scalingConfigurationName : undefined;
+            resourceInputs["status"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Configuration.__pulumiType, name, resourceInputs, opts);
@@ -190,7 +234,7 @@ export interface ConfigurationState {
     instanceConfig?: pulumi.Input<inputs.As.ConfigurationInstanceConfig>;
     /**
      * Specifies the region in which to create the AS configuration.
-     * If omitted, the `region` argument of the provider is used. Changing this will create a new resource.
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
@@ -199,6 +243,10 @@ export interface ConfigurationState {
      * Changing this will create a new resource.
      */
     scalingConfigurationName?: pulumi.Input<string>;
+    /**
+     * The AS configuration status, the value can be **Bound** or **Unbound**.
+     */
+    status?: pulumi.Input<string>;
 }
 
 /**
@@ -212,7 +260,7 @@ export interface ConfigurationArgs {
     instanceConfig: pulumi.Input<inputs.As.ConfigurationInstanceConfig>;
     /**
      * Specifies the region in which to create the AS configuration.
-     * If omitted, the `region` argument of the provider is used. Changing this will create a new resource.
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**

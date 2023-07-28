@@ -63,7 +63,7 @@ class InstanceArgs:
                + The minimum storage capacity of `efs` volume type is 500GB.
         :param pulumi.Input[str] password: Specifies the password of the couch datebase. The password consists of 8 to
                26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-               charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+               characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
         :param pulumi.Input[str] volume_type: Specifies the storage volume type to attach to each organization of the
                BCS instance. Valid values are `nfs` (SFS) and `efs` (SFS Turbo). Changing this will create a new instance.
         :param pulumi.Input['InstanceBlockInfoArgs'] block_info: Specifies the configuration of block generation. The block_info object
@@ -74,8 +74,11 @@ class InstanceArgs:
                omitted, the bcs instance will create a `channels` named `channel` by default. Changing this will create a new
                instance. The channels object structure is documented below.
         :param pulumi.Input['InstanceCouchdbArgs'] couchdb: Specifies the NoSQL database used by BCS instance. If omitted, the bcs instance
-               will create a `goleveldb`(File Database) database by default. Changing this will create a new instance. The couchdb
-               object structure is documented below.
+               will create a `goleveldb`(File Database) database by default. This field is required when database_type is `couchdb`.
+               Changing this will create a new instance. The couchdb object structure is documented below.
+        :param pulumi.Input[str] database_type: Specifies the type of the database used by the BCS service.
+               Valid values are `goleveldb` and `couchdb`. The default value is `goleveldb`.
+               If `couchdb` is used, specify the couchdb field. Changing this will create a new instance.
         :param pulumi.Input[bool] delete_obs: Specified whether to delete the associated OBS bucket when deleting BCS instance.
                `delete_obs` is used to delete the OBS created by the BCS instance of the Kafka consensus strategy. Default is false.
         :param pulumi.Input[bool] delete_storage: Specified whether to delete the associated SFS resources when deleting BCS
@@ -243,7 +246,7 @@ class InstanceArgs:
         """
         Specifies the password of the couch datebase. The password consists of 8 to
         26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-        charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+        characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
         """
         return pulumi.get(self, "password")
 
@@ -309,8 +312,8 @@ class InstanceArgs:
     def couchdb(self) -> Optional[pulumi.Input['InstanceCouchdbArgs']]:
         """
         Specifies the NoSQL database used by BCS instance. If omitted, the bcs instance
-        will create a `goleveldb`(File Database) database by default. Changing this will create a new instance. The couchdb
-        object structure is documented below.
+        will create a `goleveldb`(File Database) database by default. This field is required when database_type is `couchdb`.
+        Changing this will create a new instance. The couchdb object structure is documented below.
         """
         return pulumi.get(self, "couchdb")
 
@@ -321,6 +324,11 @@ class InstanceArgs:
     @property
     @pulumi.getter(name="databaseType")
     def database_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the type of the database used by the BCS service.
+        Valid values are `goleveldb` and `couchdb`. The default value is `goleveldb`.
+        If `couchdb` is used, specify the couchdb field. Changing this will create a new instance.
+        """
         return pulumi.get(self, "database_type")
 
     @database_type.setter
@@ -516,6 +524,7 @@ class _InstanceState:
                `Isdeleting`, `Normal`, `AbNormal` and `Unknown`.
                * `peer_orgs/status_detail` - The peer status in the format like `1/1`. The denominator is the total number of peers in
                the organization, and the numerator is the number of normal peers.
+               * `peer_orgs/address` - The peer domain name or IP address of the cluster.
                * `peer_orgs/address/domain_port` - The domain name address.
                * `peer_orgs/address/ip_port` - The IP address.
                * `kafka/name` - The Kafka instance name.
@@ -529,13 +538,17 @@ class _InstanceState:
         :param pulumi.Input[Sequence[pulumi.Input['InstanceChannelArgs']]] channels: Specifies an array of one or more channels to attach to the BCS instance. If
                omitted, the bcs instance will create a `channels` named `channel` by default. Changing this will create a new
                instance. The channels object structure is documented below.
+        :param pulumi.Input[str] cluster_type: The type of the cluster where the BCS service is deployed.
         :param pulumi.Input[str] consensus: Specifies the consensus algorithm used by the BCS instance. The valid
                values of fabric 1.4 are `solo`, `kafka` and `SFLIC`, and the valid values of fabric 2.0 are `SFLIC`
                and `etcdraft`. Changing this will create a new instance.
         :param pulumi.Input['InstanceCouchdbArgs'] couchdb: Specifies the NoSQL database used by BCS instance. If omitted, the bcs instance
-               will create a `goleveldb`(File Database) database by default. Changing this will create a new instance. The couchdb
-               object structure is documented below.
+               will create a `goleveldb`(File Database) database by default. This field is required when database_type is `couchdb`.
+               Changing this will create a new instance. The couchdb object structure is documented below.
         :param pulumi.Input[bool] cross_region_support: Whether the BCS instance is deployed across regions.
+        :param pulumi.Input[str] database_type: Specifies the type of the database used by the BCS service.
+               Valid values are `goleveldb` and `couchdb`. The default value is `goleveldb`.
+               If `couchdb` is used, specify the couchdb field. Changing this will create a new instance.
         :param pulumi.Input[bool] delete_obs: Specified whether to delete the associated OBS bucket when deleting BCS instance.
                `delete_obs` is used to delete the OBS created by the BCS instance of the Kafka consensus strategy. Default is false.
         :param pulumi.Input[bool] delete_storage: Specified whether to delete the associated SFS resources when deleting BCS
@@ -560,7 +573,7 @@ class _InstanceState:
                + The minimum storage capacity of `efs` volume type is 500GB.
         :param pulumi.Input[str] password: Specifies the password of the couch datebase. The password consists of 8 to
                26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-               charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+               characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input['InstancePeerOrgArgs']]] peer_orgs: Specifies an array of one or more Peer organizations to attach to the BCS
                instance. Changing this will create a new instance. If omitted, the bcs instance will create a `peer_orgs`
                named `organization` by default and the node count is 2. The peer_orgs object structure is documented below.
@@ -578,7 +591,7 @@ class _InstanceState:
         :param pulumi.Input[str] status: The status of the BCS instance.
         :param pulumi.Input[bool] tc3_need: Specified whether to add Trusted computing platform. Changing this will create
                a new instance.
-        :param pulumi.Input[str] version: The service verison of the BCS instance.
+        :param pulumi.Input[str] version: The service version of the BCS instance.
         :param pulumi.Input[str] volume_type: Specifies the storage volume type to attach to each organization of the
                BCS instance. Valid values are `nfs` (SFS) and `efs` (SFS Turbo). Changing this will create a new instance.
         """
@@ -659,6 +672,7 @@ class _InstanceState:
         `Isdeleting`, `Normal`, `AbNormal` and `Unknown`.
         * `peer_orgs/status_detail` - The peer status in the format like `1/1`. The denominator is the total number of peers in
         the organization, and the numerator is the number of normal peers.
+        * `peer_orgs/address` - The peer domain name or IP address of the cluster.
         * `peer_orgs/address/domain_port` - The domain name address.
         * `peer_orgs/address/ip_port` - The IP address.
         * `kafka/name` - The Kafka instance name.
@@ -726,6 +740,9 @@ class _InstanceState:
     @property
     @pulumi.getter(name="clusterType")
     def cluster_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        The type of the cluster where the BCS service is deployed.
+        """
         return pulumi.get(self, "cluster_type")
 
     @cluster_type.setter
@@ -751,8 +768,8 @@ class _InstanceState:
     def couchdb(self) -> Optional[pulumi.Input['InstanceCouchdbArgs']]:
         """
         Specifies the NoSQL database used by BCS instance. If omitted, the bcs instance
-        will create a `goleveldb`(File Database) database by default. Changing this will create a new instance. The couchdb
-        object structure is documented below.
+        will create a `goleveldb`(File Database) database by default. This field is required when database_type is `couchdb`.
+        Changing this will create a new instance. The couchdb object structure is documented below.
         """
         return pulumi.get(self, "couchdb")
 
@@ -775,6 +792,11 @@ class _InstanceState:
     @property
     @pulumi.getter(name="databaseType")
     def database_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the type of the database used by the BCS service.
+        Valid values are `goleveldb` and `couchdb`. The default value is `goleveldb`.
+        If `couchdb` is used, specify the couchdb field. Changing this will create a new instance.
+        """
         return pulumi.get(self, "database_type")
 
     @database_type.setter
@@ -930,7 +952,7 @@ class _InstanceState:
         """
         Specifies the password of the couch datebase. The password consists of 8 to
         26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-        charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+        characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
         """
         return pulumi.get(self, "password")
 
@@ -1058,7 +1080,7 @@ class _InstanceState:
     @pulumi.getter
     def version(self) -> Optional[pulumi.Input[str]]:
         """
-        The service verison of the BCS instance.
+        The service version of the BCS instance.
         """
         return pulumi.get(self, "version")
 
@@ -1130,8 +1152,11 @@ class Instance(pulumi.CustomResource):
                values of fabric 1.4 are `solo`, `kafka` and `SFLIC`, and the valid values of fabric 2.0 are `SFLIC`
                and `etcdraft`. Changing this will create a new instance.
         :param pulumi.Input[pulumi.InputType['InstanceCouchdbArgs']] couchdb: Specifies the NoSQL database used by BCS instance. If omitted, the bcs instance
-               will create a `goleveldb`(File Database) database by default. Changing this will create a new instance. The couchdb
-               object structure is documented below.
+               will create a `goleveldb`(File Database) database by default. This field is required when database_type is `couchdb`.
+               Changing this will create a new instance. The couchdb object structure is documented below.
+        :param pulumi.Input[str] database_type: Specifies the type of the database used by the BCS service.
+               Valid values are `goleveldb` and `couchdb`. The default value is `goleveldb`.
+               If `couchdb` is used, specify the couchdb field. Changing this will create a new instance.
         :param pulumi.Input[bool] delete_obs: Specified whether to delete the associated OBS bucket when deleting BCS instance.
                `delete_obs` is used to delete the OBS created by the BCS instance of the Kafka consensus strategy. Default is false.
         :param pulumi.Input[bool] delete_storage: Specified whether to delete the associated SFS resources when deleting BCS
@@ -1155,7 +1180,7 @@ class Instance(pulumi.CustomResource):
                + The minimum storage capacity of `efs` volume type is 500GB.
         :param pulumi.Input[str] password: Specifies the password of the couch datebase. The password consists of 8 to
                26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-               charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+               characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstancePeerOrgArgs']]]] peer_orgs: Specifies an array of one or more Peer organizations to attach to the BCS
                instance. Changing this will create a new instance. If omitted, the bcs instance will create a `peer_orgs`
                named `organization` by default and the node count is 2. The peer_orgs object structure is documented below.
@@ -1338,6 +1363,7 @@ class Instance(pulumi.CustomResource):
                `Isdeleting`, `Normal`, `AbNormal` and `Unknown`.
                * `peer_orgs/status_detail` - The peer status in the format like `1/1`. The denominator is the total number of peers in
                the organization, and the numerator is the number of normal peers.
+               * `peer_orgs/address` - The peer domain name or IP address of the cluster.
                * `peer_orgs/address/domain_port` - The domain name address.
                * `peer_orgs/address/ip_port` - The IP address.
                * `kafka/name` - The Kafka instance name.
@@ -1351,13 +1377,17 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceChannelArgs']]]] channels: Specifies an array of one or more channels to attach to the BCS instance. If
                omitted, the bcs instance will create a `channels` named `channel` by default. Changing this will create a new
                instance. The channels object structure is documented below.
+        :param pulumi.Input[str] cluster_type: The type of the cluster where the BCS service is deployed.
         :param pulumi.Input[str] consensus: Specifies the consensus algorithm used by the BCS instance. The valid
                values of fabric 1.4 are `solo`, `kafka` and `SFLIC`, and the valid values of fabric 2.0 are `SFLIC`
                and `etcdraft`. Changing this will create a new instance.
         :param pulumi.Input[pulumi.InputType['InstanceCouchdbArgs']] couchdb: Specifies the NoSQL database used by BCS instance. If omitted, the bcs instance
-               will create a `goleveldb`(File Database) database by default. Changing this will create a new instance. The couchdb
-               object structure is documented below.
+               will create a `goleveldb`(File Database) database by default. This field is required when database_type is `couchdb`.
+               Changing this will create a new instance. The couchdb object structure is documented below.
         :param pulumi.Input[bool] cross_region_support: Whether the BCS instance is deployed across regions.
+        :param pulumi.Input[str] database_type: Specifies the type of the database used by the BCS service.
+               Valid values are `goleveldb` and `couchdb`. The default value is `goleveldb`.
+               If `couchdb` is used, specify the couchdb field. Changing this will create a new instance.
         :param pulumi.Input[bool] delete_obs: Specified whether to delete the associated OBS bucket when deleting BCS instance.
                `delete_obs` is used to delete the OBS created by the BCS instance of the Kafka consensus strategy. Default is false.
         :param pulumi.Input[bool] delete_storage: Specified whether to delete the associated SFS resources when deleting BCS
@@ -1382,7 +1412,7 @@ class Instance(pulumi.CustomResource):
                + The minimum storage capacity of `efs` volume type is 500GB.
         :param pulumi.Input[str] password: Specifies the password of the couch datebase. The password consists of 8 to
                26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-               charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+               characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstancePeerOrgArgs']]]] peer_orgs: Specifies an array of one or more Peer organizations to attach to the BCS
                instance. Changing this will create a new instance. If omitted, the bcs instance will create a `peer_orgs`
                named `organization` by default and the node count is 2. The peer_orgs object structure is documented below.
@@ -1400,7 +1430,7 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[str] status: The status of the BCS instance.
         :param pulumi.Input[bool] tc3_need: Specified whether to add Trusted computing platform. Changing this will create
                a new instance.
-        :param pulumi.Input[str] version: The service verison of the BCS instance.
+        :param pulumi.Input[str] version: The service version of the BCS instance.
         :param pulumi.Input[str] volume_type: Specifies the storage volume type to attach to each organization of the
                BCS instance. Valid values are `nfs` (SFS) and `efs` (SFS Turbo). Changing this will create a new instance.
         """
@@ -1453,6 +1483,7 @@ class Instance(pulumi.CustomResource):
         `Isdeleting`, `Normal`, `AbNormal` and `Unknown`.
         * `peer_orgs/status_detail` - The peer status in the format like `1/1`. The denominator is the total number of peers in
         the organization, and the numerator is the number of normal peers.
+        * `peer_orgs/address` - The peer domain name or IP address of the cluster.
         * `peer_orgs/address/domain_port` - The domain name address.
         * `peer_orgs/address/ip_port` - The IP address.
         * `kafka/name` - The Kafka instance name.
@@ -1500,6 +1531,9 @@ class Instance(pulumi.CustomResource):
     @property
     @pulumi.getter(name="clusterType")
     def cluster_type(self) -> pulumi.Output[str]:
+        """
+        The type of the cluster where the BCS service is deployed.
+        """
         return pulumi.get(self, "cluster_type")
 
     @property
@@ -1517,8 +1551,8 @@ class Instance(pulumi.CustomResource):
     def couchdb(self) -> pulumi.Output[Optional['outputs.InstanceCouchdb']]:
         """
         Specifies the NoSQL database used by BCS instance. If omitted, the bcs instance
-        will create a `goleveldb`(File Database) database by default. Changing this will create a new instance. The couchdb
-        object structure is documented below.
+        will create a `goleveldb`(File Database) database by default. This field is required when database_type is `couchdb`.
+        Changing this will create a new instance. The couchdb object structure is documented below.
         """
         return pulumi.get(self, "couchdb")
 
@@ -1533,6 +1567,11 @@ class Instance(pulumi.CustomResource):
     @property
     @pulumi.getter(name="databaseType")
     def database_type(self) -> pulumi.Output[str]:
+        """
+        Specifies the type of the database used by the BCS service.
+        Valid values are `goleveldb` and `couchdb`. The default value is `goleveldb`.
+        If `couchdb` is used, specify the couchdb field. Changing this will create a new instance.
+        """
         return pulumi.get(self, "database_type")
 
     @property
@@ -1640,7 +1679,7 @@ class Instance(pulumi.CustomResource):
         """
         Specifies the password of the couch datebase. The password consists of 8 to
         26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-        charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+        characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
         """
         return pulumi.get(self, "password")
 
@@ -1728,7 +1767,7 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter
     def version(self) -> pulumi.Output[str]:
         """
-        The service verison of the BCS instance.
+        The service version of the BCS instance.
         """
         return pulumi.get(self, "version")
 
