@@ -125,7 +125,7 @@ type ServerTemplate struct {
 	// Specifies the name of the target server. Defaults to the template name.
 	TargetServerName pulumi.StringOutput `pulumi:"targetServerName"`
 	// Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-	// **GPSSD** and **ESSD**, defaults to **SAS**.
+	// defaults to **SAS**.
 	VolumeType pulumi.StringPtrOutput `pulumi:"volumeType"`
 	// Specifies the ID of the VPC which the target server belongs to.
 	// If omitted or set to "autoCreate", a new VPC will be created automatically during migration.
@@ -191,7 +191,7 @@ type serverTemplateState struct {
 	// Specifies the name of the target server. Defaults to the template name.
 	TargetServerName *string `pulumi:"targetServerName"`
 	// Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-	// **GPSSD** and **ESSD**, defaults to **SAS**.
+	// defaults to **SAS**.
 	VolumeType *string `pulumi:"volumeType"`
 	// Specifies the ID of the VPC which the target server belongs to.
 	// If omitted or set to "autoCreate", a new VPC will be created automatically during migration.
@@ -225,7 +225,7 @@ type ServerTemplateState struct {
 	// Specifies the name of the target server. Defaults to the template name.
 	TargetServerName pulumi.StringPtrInput
 	// Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-	// **GPSSD** and **ESSD**, defaults to **SAS**.
+	// defaults to **SAS**.
 	VolumeType pulumi.StringPtrInput
 	// Specifies the ID of the VPC which the target server belongs to.
 	// If omitted or set to "autoCreate", a new VPC will be created automatically during migration.
@@ -263,7 +263,7 @@ type serverTemplateArgs struct {
 	// Specifies the name of the target server. Defaults to the template name.
 	TargetServerName *string `pulumi:"targetServerName"`
 	// Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-	// **GPSSD** and **ESSD**, defaults to **SAS**.
+	// defaults to **SAS**.
 	VolumeType *string `pulumi:"volumeType"`
 	// Specifies the ID of the VPC which the target server belongs to.
 	// If omitted or set to "autoCreate", a new VPC will be created automatically during migration.
@@ -296,7 +296,7 @@ type ServerTemplateArgs struct {
 	// Specifies the name of the target server. Defaults to the template name.
 	TargetServerName pulumi.StringPtrInput
 	// Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-	// **GPSSD** and **ESSD**, defaults to **SAS**.
+	// defaults to **SAS**.
 	VolumeType pulumi.StringPtrInput
 	// Specifies the ID of the VPC which the target server belongs to.
 	// If omitted or set to "autoCreate", a new VPC will be created automatically during migration.
@@ -441,7 +441,7 @@ func (o ServerTemplateOutput) TargetServerName() pulumi.StringOutput {
 }
 
 // Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-// **GPSSD** and **ESSD**, defaults to **SAS**.
+// defaults to **SAS**.
 func (o ServerTemplateOutput) VolumeType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ServerTemplate) pulumi.StringPtrOutput { return v.VolumeType }).(pulumi.StringPtrOutput)
 }

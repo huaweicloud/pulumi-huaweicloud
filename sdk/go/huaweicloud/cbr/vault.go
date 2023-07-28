@@ -14,6 +14,49 @@ import (
 // Manages a CBR Vault resource within Huaweicloud.
 //
 // ## Example Usage
+// ### Create a server type vault
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cbr"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Cbr"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			vaultName := cfg.RequireObject("vaultName")
+//			ecsInstanceId := cfg.RequireObject("ecsInstanceId")
+//			attachedVolumeIds := cfg.Require("attachedVolumeIds")
+//			_, err := Cbr.NewVault(ctx, "test", &Cbr.VaultArgs{
+//				Type:            pulumi.String("server"),
+//				ProtectionType:  pulumi.String("backup"),
+//				ConsistentLevel: pulumi.String("crash_consistent"),
+//				Size:            pulumi.Int(100),
+//				Resources: cbr.VaultResourceArray{
+//					&cbr.VaultResourceArgs{
+//						ServerId: pulumi.Any(ecsInstanceId),
+//						Excludes: attachedVolumeIds,
+//					},
+//				},
+//				Tags: pulumi.StringMap{
+//					"foo": pulumi.String("bar"),
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
 // ### Create a disk type vault
 //
 // ```go
@@ -32,7 +75,7 @@ import (
 //		pulumi.Run(func(ctx *pulumi.Context) error {
 //			cfg := config.New(ctx, "")
 //			vaultName := cfg.RequireObject("vaultName")
-//			evsVolumeId := cfg.RequireObject("evsVolumeId")
+//			evsVolumeIds := cfg.Require("evsVolumeIds")
 //			_, err := Cbr.NewVault(ctx, "test", &Cbr.VaultArgs{
 //				Type:           pulumi.String("disk"),
 //				ProtectionType: pulumi.String("backup"),
@@ -40,9 +83,7 @@ import (
 //				AutoExpand:     pulumi.Bool(true),
 //				Resources: cbr.VaultResourceArray{
 //					&cbr.VaultResourceArgs{
-//						Includes: pulumi.StringArray{
-//							pulumi.Any(evsVolumeId),
-//						},
+//						Includes: evsVolumeIds,
 //					},
 //				},
 //				Tags: pulumi.StringMap{
@@ -75,16 +116,14 @@ import (
 //		pulumi.Run(func(ctx *pulumi.Context) error {
 //			cfg := config.New(ctx, "")
 //			vaultName := cfg.RequireObject("vaultName")
-//			sfsTurboId := cfg.RequireObject("sfsTurboId")
+//			sfsTurboIds := cfg.Require("sfsTurboIds")
 //			_, err := Cbr.NewVault(ctx, "test", &Cbr.VaultArgs{
 //				Type:           pulumi.String("turbo"),
 //				ProtectionType: pulumi.String("backup"),
 //				Size:           pulumi.Int(1000),
 //				Resources: cbr.VaultResourceArray{
 //					&cbr.VaultResourceArgs{
-//						Includes: pulumi.StringArray{
-//							pulumi.Any(sfsTurboId),
-//						},
+//						Includes: sfsTurboIds,
 //					},
 //				},
 //				Tags: pulumi.StringMap{
@@ -162,11 +201,15 @@ type Vault struct {
 	AutoBind pulumi.BoolOutput `pulumi:"autoBind"`
 	// Specifies to enable auto capacity expansion for the backup protection type vault.
 	// Defaults to **false**.
-	AutoExpand pulumi.BoolOutput      `pulumi:"autoExpand"`
-	AutoPay    pulumi.StringPtrOutput `pulumi:"autoPay"`
+	AutoExpand pulumi.BoolOutput `pulumi:"autoExpand"`
+	// Deprecated: Deprecated
+	AutoPay pulumi.StringPtrOutput `pulumi:"autoPay"`
 	// Specifies whether auto renew is enabled.
-	// Valid values are **true** and **false**. Defaults to **false**. Changing this will create a new vault.
+	// Valid values are **true** and **false**. Defaults to **false**.
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
+	// Specifies the backup name prefix.
+	// Changing this will create a new vault.
+	BackupNamePrefix pulumi.StringOutput `pulumi:"backupNamePrefix"`
 	// Specifies the tags to filter resources for automatic association with **auto_bind**.
 	BindRules pulumi.StringMapOutput `pulumi:"bindRules"`
 	// Specifies the charging mode of the vault.
@@ -174,13 +217,13 @@ type Vault struct {
 	// + **prePaid**: the yearly/monthly billing mode.
 	// + **postPaid**: the pay-per-use billing mode.
 	ChargingMode pulumi.StringOutput `pulumi:"chargingMode"`
-	// Specifies the backup specifications.
+	// Specifies the consistent level (specification) of the vault.
 	// The valid values are as follows:
 	// + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	// + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	ConsistentLevel pulumi.StringPtrOutput `pulumi:"consistentLevel"`
-	// Specifies a unique ID in UUID format of enterprise project.
-	// Changing this will create a new vault.
+	// Specifies the ID of the enterprise project to which the vault
+	// belongs. Changing this will create a new vault.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
 	// Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
 	// characters, which may consist of letters, digits, underscores(_) and hyphens (-).
@@ -195,8 +238,10 @@ type Vault struct {
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	// Changing this will create a new vault.
 	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
-	// Specifies a policy to associate with the CBR vault.
-	// `policyId` cannot be used with the vault of replicate protection type.
+	// Specifies the policy details to associate with the CBR vault.
+	// The object structure is documented below.
+	Policies VaultPolicyArrayOutput `pulumi:"policies"`
+	// schema:Deprecated; Using parameter 'policy' instead.
 	PolicyId pulumi.StringPtrOutput `pulumi:"policyId"`
 	// Specifies the protection type of the CBR vault.
 	// The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
@@ -273,11 +318,15 @@ type vaultState struct {
 	AutoBind *bool `pulumi:"autoBind"`
 	// Specifies to enable auto capacity expansion for the backup protection type vault.
 	// Defaults to **false**.
-	AutoExpand *bool   `pulumi:"autoExpand"`
-	AutoPay    *string `pulumi:"autoPay"`
+	AutoExpand *bool `pulumi:"autoExpand"`
+	// Deprecated: Deprecated
+	AutoPay *string `pulumi:"autoPay"`
 	// Specifies whether auto renew is enabled.
-	// Valid values are **true** and **false**. Defaults to **false**. Changing this will create a new vault.
+	// Valid values are **true** and **false**. Defaults to **false**.
 	AutoRenew *string `pulumi:"autoRenew"`
+	// Specifies the backup name prefix.
+	// Changing this will create a new vault.
+	BackupNamePrefix *string `pulumi:"backupNamePrefix"`
 	// Specifies the tags to filter resources for automatic association with **auto_bind**.
 	BindRules map[string]string `pulumi:"bindRules"`
 	// Specifies the charging mode of the vault.
@@ -285,13 +334,13 @@ type vaultState struct {
 	// + **prePaid**: the yearly/monthly billing mode.
 	// + **postPaid**: the pay-per-use billing mode.
 	ChargingMode *string `pulumi:"chargingMode"`
-	// Specifies the backup specifications.
+	// Specifies the consistent level (specification) of the vault.
 	// The valid values are as follows:
 	// + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	// + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	ConsistentLevel *string `pulumi:"consistentLevel"`
-	// Specifies a unique ID in UUID format of enterprise project.
-	// Changing this will create a new vault.
+	// Specifies the ID of the enterprise project to which the vault
+	// belongs. Changing this will create a new vault.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
 	// characters, which may consist of letters, digits, underscores(_) and hyphens (-).
@@ -306,8 +355,10 @@ type vaultState struct {
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	// Changing this will create a new vault.
 	PeriodUnit *string `pulumi:"periodUnit"`
-	// Specifies a policy to associate with the CBR vault.
-	// `policyId` cannot be used with the vault of replicate protection type.
+	// Specifies the policy details to associate with the CBR vault.
+	// The object structure is documented below.
+	Policies []VaultPolicy `pulumi:"policies"`
+	// schema:Deprecated; Using parameter 'policy' instead.
 	PolicyId *string `pulumi:"policyId"`
 	// Specifies the protection type of the CBR vault.
 	// The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
@@ -347,10 +398,14 @@ type VaultState struct {
 	// Specifies to enable auto capacity expansion for the backup protection type vault.
 	// Defaults to **false**.
 	AutoExpand pulumi.BoolPtrInput
-	AutoPay    pulumi.StringPtrInput
+	// Deprecated: Deprecated
+	AutoPay pulumi.StringPtrInput
 	// Specifies whether auto renew is enabled.
-	// Valid values are **true** and **false**. Defaults to **false**. Changing this will create a new vault.
+	// Valid values are **true** and **false**. Defaults to **false**.
 	AutoRenew pulumi.StringPtrInput
+	// Specifies the backup name prefix.
+	// Changing this will create a new vault.
+	BackupNamePrefix pulumi.StringPtrInput
 	// Specifies the tags to filter resources for automatic association with **auto_bind**.
 	BindRules pulumi.StringMapInput
 	// Specifies the charging mode of the vault.
@@ -358,13 +413,13 @@ type VaultState struct {
 	// + **prePaid**: the yearly/monthly billing mode.
 	// + **postPaid**: the pay-per-use billing mode.
 	ChargingMode pulumi.StringPtrInput
-	// Specifies the backup specifications.
+	// Specifies the consistent level (specification) of the vault.
 	// The valid values are as follows:
 	// + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	// + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	ConsistentLevel pulumi.StringPtrInput
-	// Specifies a unique ID in UUID format of enterprise project.
-	// Changing this will create a new vault.
+	// Specifies the ID of the enterprise project to which the vault
+	// belongs. Changing this will create a new vault.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
 	// characters, which may consist of letters, digits, underscores(_) and hyphens (-).
@@ -379,8 +434,10 @@ type VaultState struct {
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	// Changing this will create a new vault.
 	PeriodUnit pulumi.StringPtrInput
-	// Specifies a policy to associate with the CBR vault.
-	// `policyId` cannot be used with the vault of replicate protection type.
+	// Specifies the policy details to associate with the CBR vault.
+	// The object structure is documented below.
+	Policies VaultPolicyArrayInput
+	// schema:Deprecated; Using parameter 'policy' instead.
 	PolicyId pulumi.StringPtrInput
 	// Specifies the protection type of the CBR vault.
 	// The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
@@ -421,11 +478,15 @@ type vaultArgs struct {
 	AutoBind *bool `pulumi:"autoBind"`
 	// Specifies to enable auto capacity expansion for the backup protection type vault.
 	// Defaults to **false**.
-	AutoExpand *bool   `pulumi:"autoExpand"`
-	AutoPay    *string `pulumi:"autoPay"`
+	AutoExpand *bool `pulumi:"autoExpand"`
+	// Deprecated: Deprecated
+	AutoPay *string `pulumi:"autoPay"`
 	// Specifies whether auto renew is enabled.
-	// Valid values are **true** and **false**. Defaults to **false**. Changing this will create a new vault.
+	// Valid values are **true** and **false**. Defaults to **false**.
 	AutoRenew *string `pulumi:"autoRenew"`
+	// Specifies the backup name prefix.
+	// Changing this will create a new vault.
+	BackupNamePrefix *string `pulumi:"backupNamePrefix"`
 	// Specifies the tags to filter resources for automatic association with **auto_bind**.
 	BindRules map[string]string `pulumi:"bindRules"`
 	// Specifies the charging mode of the vault.
@@ -433,13 +494,13 @@ type vaultArgs struct {
 	// + **prePaid**: the yearly/monthly billing mode.
 	// + **postPaid**: the pay-per-use billing mode.
 	ChargingMode *string `pulumi:"chargingMode"`
-	// Specifies the backup specifications.
+	// Specifies the consistent level (specification) of the vault.
 	// The valid values are as follows:
 	// + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	// + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	ConsistentLevel *string `pulumi:"consistentLevel"`
-	// Specifies a unique ID in UUID format of enterprise project.
-	// Changing this will create a new vault.
+	// Specifies the ID of the enterprise project to which the vault
+	// belongs. Changing this will create a new vault.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
 	// characters, which may consist of letters, digits, underscores(_) and hyphens (-).
@@ -454,8 +515,10 @@ type vaultArgs struct {
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	// Changing this will create a new vault.
 	PeriodUnit *string `pulumi:"periodUnit"`
-	// Specifies a policy to associate with the CBR vault.
-	// `policyId` cannot be used with the vault of replicate protection type.
+	// Specifies the policy details to associate with the CBR vault.
+	// The object structure is documented below.
+	Policies []VaultPolicy `pulumi:"policies"`
+	// schema:Deprecated; Using parameter 'policy' instead.
 	PolicyId *string `pulumi:"policyId"`
 	// Specifies the protection type of the CBR vault.
 	// The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
@@ -486,10 +549,14 @@ type VaultArgs struct {
 	// Specifies to enable auto capacity expansion for the backup protection type vault.
 	// Defaults to **false**.
 	AutoExpand pulumi.BoolPtrInput
-	AutoPay    pulumi.StringPtrInput
+	// Deprecated: Deprecated
+	AutoPay pulumi.StringPtrInput
 	// Specifies whether auto renew is enabled.
-	// Valid values are **true** and **false**. Defaults to **false**. Changing this will create a new vault.
+	// Valid values are **true** and **false**. Defaults to **false**.
 	AutoRenew pulumi.StringPtrInput
+	// Specifies the backup name prefix.
+	// Changing this will create a new vault.
+	BackupNamePrefix pulumi.StringPtrInput
 	// Specifies the tags to filter resources for automatic association with **auto_bind**.
 	BindRules pulumi.StringMapInput
 	// Specifies the charging mode of the vault.
@@ -497,13 +564,13 @@ type VaultArgs struct {
 	// + **prePaid**: the yearly/monthly billing mode.
 	// + **postPaid**: the pay-per-use billing mode.
 	ChargingMode pulumi.StringPtrInput
-	// Specifies the backup specifications.
+	// Specifies the consistent level (specification) of the vault.
 	// The valid values are as follows:
 	// + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	// + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	ConsistentLevel pulumi.StringPtrInput
-	// Specifies a unique ID in UUID format of enterprise project.
-	// Changing this will create a new vault.
+	// Specifies the ID of the enterprise project to which the vault
+	// belongs. Changing this will create a new vault.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
 	// characters, which may consist of letters, digits, underscores(_) and hyphens (-).
@@ -518,8 +585,10 @@ type VaultArgs struct {
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	// Changing this will create a new vault.
 	PeriodUnit pulumi.StringPtrInput
-	// Specifies a policy to associate with the CBR vault.
-	// `policyId` cannot be used with the vault of replicate protection type.
+	// Specifies the policy details to associate with the CBR vault.
+	// The object structure is documented below.
+	Policies VaultPolicyArrayInput
+	// schema:Deprecated; Using parameter 'policy' instead.
 	PolicyId pulumi.StringPtrInput
 	// Specifies the protection type of the CBR vault.
 	// The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
@@ -646,14 +715,21 @@ func (o VaultOutput) AutoExpand() pulumi.BoolOutput {
 	return o.ApplyT(func(v *Vault) pulumi.BoolOutput { return v.AutoExpand }).(pulumi.BoolOutput)
 }
 
+// Deprecated: Deprecated
 func (o VaultOutput) AutoPay() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Vault) pulumi.StringPtrOutput { return v.AutoPay }).(pulumi.StringPtrOutput)
 }
 
 // Specifies whether auto renew is enabled.
-// Valid values are **true** and **false**. Defaults to **false**. Changing this will create a new vault.
+// Valid values are **true** and **false**. Defaults to **false**.
 func (o VaultOutput) AutoRenew() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Vault) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the backup name prefix.
+// Changing this will create a new vault.
+func (o VaultOutput) BackupNamePrefix() pulumi.StringOutput {
+	return o.ApplyT(func(v *Vault) pulumi.StringOutput { return v.BackupNamePrefix }).(pulumi.StringOutput)
 }
 
 // Specifies the tags to filter resources for automatic association with **auto_bind**.
@@ -669,7 +745,7 @@ func (o VaultOutput) ChargingMode() pulumi.StringOutput {
 	return o.ApplyT(func(v *Vault) pulumi.StringOutput { return v.ChargingMode }).(pulumi.StringOutput)
 }
 
-// Specifies the backup specifications.
+// Specifies the consistent level (specification) of the vault.
 // The valid values are as follows:
 // + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 // + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
@@ -677,8 +753,8 @@ func (o VaultOutput) ConsistentLevel() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Vault) pulumi.StringPtrOutput { return v.ConsistentLevel }).(pulumi.StringPtrOutput)
 }
 
-// Specifies a unique ID in UUID format of enterprise project.
-// Changing this will create a new vault.
+// Specifies the ID of the enterprise project to which the vault
+// belongs. Changing this will create a new vault.
 func (o VaultOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Vault) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
@@ -705,8 +781,13 @@ func (o VaultOutput) PeriodUnit() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Vault) pulumi.StringPtrOutput { return v.PeriodUnit }).(pulumi.StringPtrOutput)
 }
 
-// Specifies a policy to associate with the CBR vault.
-// `policyId` cannot be used with the vault of replicate protection type.
+// Specifies the policy details to associate with the CBR vault.
+// The object structure is documented below.
+func (o VaultOutput) Policies() VaultPolicyArrayOutput {
+	return o.ApplyT(func(v *Vault) VaultPolicyArrayOutput { return v.Policies }).(VaultPolicyArrayOutput)
+}
+
+// schema:Deprecated; Using parameter 'policy' instead.
 func (o VaultOutput) PolicyId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Vault) pulumi.StringPtrOutput { return v.PolicyId }).(pulumi.StringPtrOutput)
 }

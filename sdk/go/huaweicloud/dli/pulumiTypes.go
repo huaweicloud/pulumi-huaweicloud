@@ -11,8 +11,13 @@ import (
 )
 
 type SparkJobDependentPackage struct {
-	GroupName string                            `pulumi:"groupName"`
-	Packages  []SparkJobDependentPackagePackage `pulumi:"packages"`
+	// Specifies the user group name.
+	// Changing this parameter will submit a new spark job.
+	GroupName string `pulumi:"groupName"`
+	// Specifies the user group resource for details.
+	// Changing this parameter will submit a new spark job.
+	// The object structure is documented below.
+	Packages []SparkJobDependentPackagePackage `pulumi:"packages"`
 }
 
 // SparkJobDependentPackageInput is an input type that accepts SparkJobDependentPackageArgs and SparkJobDependentPackageOutput values.
@@ -27,8 +32,13 @@ type SparkJobDependentPackageInput interface {
 }
 
 type SparkJobDependentPackageArgs struct {
-	GroupName pulumi.StringInput                        `pulumi:"groupName"`
-	Packages  SparkJobDependentPackagePackageArrayInput `pulumi:"packages"`
+	// Specifies the user group name.
+	// Changing this parameter will submit a new spark job.
+	GroupName pulumi.StringInput `pulumi:"groupName"`
+	// Specifies the user group resource for details.
+	// Changing this parameter will submit a new spark job.
+	// The object structure is documented below.
+	Packages SparkJobDependentPackagePackageArrayInput `pulumi:"packages"`
 }
 
 func (SparkJobDependentPackageArgs) ElementType() reflect.Type {
@@ -82,10 +92,15 @@ func (o SparkJobDependentPackageOutput) ToSparkJobDependentPackageOutputWithCont
 	return o
 }
 
+// Specifies the user group name.
+// Changing this parameter will submit a new spark job.
 func (o SparkJobDependentPackageOutput) GroupName() pulumi.StringOutput {
 	return o.ApplyT(func(v SparkJobDependentPackage) string { return v.GroupName }).(pulumi.StringOutput)
 }
 
+// Specifies the user group resource for details.
+// Changing this parameter will submit a new spark job.
+// The object structure is documented below.
 func (o SparkJobDependentPackageOutput) Packages() SparkJobDependentPackagePackageArrayOutput {
 	return o.ApplyT(func(v SparkJobDependentPackage) []SparkJobDependentPackagePackage { return v.Packages }).(SparkJobDependentPackagePackageArrayOutput)
 }

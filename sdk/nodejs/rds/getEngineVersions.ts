@@ -29,7 +29,6 @@ export function getEngineVersions(args?: GetEngineVersionsArgs, opts?: pulumi.In
     return pulumi.runtime.invoke("huaweicloud:Rds/getEngineVersions:getEngineVersions", {
         "region": args.region,
         "type": args.type,
-        "versions": args.versions,
     }, opts);
 }
 
@@ -47,10 +46,6 @@ export interface GetEngineVersionsArgs {
      * The valid values are **MySQL**, **PostgreSQL** and **SQLServer**, default to **MySQL**.
      */
     type?: string;
-    /**
-     * List of RDS versions. Structure is documented below.
-     */
-    versions?: inputs.Rds.GetEngineVersionsVersion[];
 }
 
 /**
@@ -66,7 +61,7 @@ export interface GetEngineVersionsResult {
     /**
      * List of RDS versions. Structure is documented below.
      */
-    readonly versions?: outputs.Rds.GetEngineVersionsVersion[];
+    readonly versions: outputs.Rds.GetEngineVersionsVersion[];
 }
 
 export function getEngineVersionsOutput(args?: GetEngineVersionsOutputArgs, opts?: pulumi.InvokeOptions): pulumi.Output<GetEngineVersionsResult> {
@@ -87,8 +82,4 @@ export interface GetEngineVersionsOutputArgs {
      * The valid values are **MySQL**, **PostgreSQL** and **SQLServer**, default to **MySQL**.
      */
     type?: pulumi.Input<string>;
-    /**
-     * List of RDS versions. Structure is documented below.
-     */
-    versions?: pulumi.Input<pulumi.Input<inputs.Rds.GetEngineVersionsVersionArgs>[]>;
 }

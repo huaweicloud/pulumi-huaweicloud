@@ -100,7 +100,7 @@ export class User extends pulumi.CustomResource {
      */
     public readonly enabled!: pulumi.Output<boolean | undefined>;
     /**
-     * The tiem when the IAM user last login.
+     * The time when the IAM user last login.
      */
     public /*out*/ readonly lastLogin!: pulumi.Output<string>;
     /**
@@ -207,7 +207,7 @@ export interface UserState {
      */
     enabled?: pulumi.Input<boolean>;
     /**
-     * The tiem when the IAM user last login.
+     * The time when the IAM user last login.
      */
     lastLogin?: pulumi.Input<string>;
     /**

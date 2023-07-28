@@ -14,6 +14,7 @@ import (
 // Manages a VPC IP address group resource within HuaweiCloud.
 //
 // ## Example Usage
+// ### IPv4 Address Group
 //
 // ```go
 // package main
@@ -27,7 +28,7 @@ import (
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := Vpc.NewAddressGroup(ctx, "test", &Vpc.AddressGroupArgs{
+//			_, err := Vpc.NewAddressGroup(ctx, "ipv4", &Vpc.AddressGroupArgs{
 //				Addresses: pulumi.StringArray{
 //					pulumi.String("192.168.10.10"),
 //					pulumi.String("192.168.1.1-192.168.1.50"),
@@ -41,32 +42,84 @@ import (
 //	}
 //
 // ```
+// ### IPv6 Address Group
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Vpc"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			_, err := Vpc.NewAddressGroup(ctx, "ipv6", &Vpc.AddressGroupArgs{
+//				Addresses: pulumi.StringArray{
+//					pulumi.String("2001:db8:a583:6e::/64"),
+//				},
+//				IpVersion: pulumi.Int(6),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
 //
 // ## Import
 //
-// IP address groups can be imported using the `id`, e.g.
+// IP address groups can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
 //	$ pulumi import huaweicloud:Vpc/addressGroup:AddressGroup test bc96f6b0-ca2c-42ee-b719-0f26bc9c8661
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`force_destroy`. It is generally recommended running `terraform plan` after importing the image. You can then decide if changes should be applied to the image, or the resource definition should be updated to align with the image. Also you can ignore changes as below. hcl resource "huaweicloud_vpc_address_group" "test" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [
+//
+//	force_destroy,
+//
+//	]
+//
+//	} }
 type AddressGroup struct {
 	pulumi.CustomResourceState
 
-	// Specifies an array of one or more IPv4 addresses. The address can be a single IP
-	// address (such as 192.168.10.10), IP address range (such as 192.168.1.1-192.168.1.50) or IP address CIDR (such as 192.168.0.0/16).
-	// The maximum length is 20.
+	// Specifies an array of one or more IP addresses. The address can be a single IP
+	// address, IP address range or IP address CIDR. The maximum length is 20.
 	Addresses pulumi.StringArrayOutput `pulumi:"addresses"`
 	// Specifies the supplementary information about the IP address group.
 	// The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
 	Description pulumi.StringPtrOutput `pulumi:"description"`
-	// The IP version of the address group. The value is 4.
-	IpVersion pulumi.IntOutput `pulumi:"ipVersion"`
+	// Specifies the enterprise project ID.
+	// Changing this creates a new address group.
+	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
+	// Specifies whether to forcibly destroy the address group if it is associated with
+	// a security group rule, the address group and the associated security group rule will be deleted together.
+	// The default value is **false**.
+	ForceDestroy pulumi.BoolPtrOutput `pulumi:"forceDestroy"`
+	// Specifies the IP version, either `4` (default) or `6`.
+	// Changing this creates a new address group.
+	IpVersion pulumi.IntPtrOutput `pulumi:"ipVersion"`
+	// Specifies the maximum number of addresses that an address group can contain.
+	// Value range: **1**-**20**, the default value is **20**.
+	MaxCapacity pulumi.IntOutput `pulumi:"maxCapacity"`
 	// Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
 	// letters, digits, underscores (_), hyphens (-) and periods (.).
 	Name pulumi.StringOutput `pulumi:"name"`
-	// Specifies tThe region in which to create the IP address group. If omitted, the
+	// Specifies the region in which to create the IP address group. If omitted, the
 	// provider-level region will be used. Changing this creates a new address group.
 	Region pulumi.StringOutput `pulumi:"region"`
 }
@@ -104,37 +157,57 @@ func GetAddressGroup(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering AddressGroup resources.
 type addressGroupState struct {
-	// Specifies an array of one or more IPv4 addresses. The address can be a single IP
-	// address (such as 192.168.10.10), IP address range (such as 192.168.1.1-192.168.1.50) or IP address CIDR (such as 192.168.0.0/16).
-	// The maximum length is 20.
+	// Specifies an array of one or more IP addresses. The address can be a single IP
+	// address, IP address range or IP address CIDR. The maximum length is 20.
 	Addresses []string `pulumi:"addresses"`
 	// Specifies the supplementary information about the IP address group.
 	// The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
 	Description *string `pulumi:"description"`
-	// The IP version of the address group. The value is 4.
+	// Specifies the enterprise project ID.
+	// Changing this creates a new address group.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies whether to forcibly destroy the address group if it is associated with
+	// a security group rule, the address group and the associated security group rule will be deleted together.
+	// The default value is **false**.
+	ForceDestroy *bool `pulumi:"forceDestroy"`
+	// Specifies the IP version, either `4` (default) or `6`.
+	// Changing this creates a new address group.
 	IpVersion *int `pulumi:"ipVersion"`
+	// Specifies the maximum number of addresses that an address group can contain.
+	// Value range: **1**-**20**, the default value is **20**.
+	MaxCapacity *int `pulumi:"maxCapacity"`
 	// Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
 	// letters, digits, underscores (_), hyphens (-) and periods (.).
 	Name *string `pulumi:"name"`
-	// Specifies tThe region in which to create the IP address group. If omitted, the
+	// Specifies the region in which to create the IP address group. If omitted, the
 	// provider-level region will be used. Changing this creates a new address group.
 	Region *string `pulumi:"region"`
 }
 
 type AddressGroupState struct {
-	// Specifies an array of one or more IPv4 addresses. The address can be a single IP
-	// address (such as 192.168.10.10), IP address range (such as 192.168.1.1-192.168.1.50) or IP address CIDR (such as 192.168.0.0/16).
-	// The maximum length is 20.
+	// Specifies an array of one or more IP addresses. The address can be a single IP
+	// address, IP address range or IP address CIDR. The maximum length is 20.
 	Addresses pulumi.StringArrayInput
 	// Specifies the supplementary information about the IP address group.
 	// The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
 	Description pulumi.StringPtrInput
-	// The IP version of the address group. The value is 4.
+	// Specifies the enterprise project ID.
+	// Changing this creates a new address group.
+	EnterpriseProjectId pulumi.StringPtrInput
+	// Specifies whether to forcibly destroy the address group if it is associated with
+	// a security group rule, the address group and the associated security group rule will be deleted together.
+	// The default value is **false**.
+	ForceDestroy pulumi.BoolPtrInput
+	// Specifies the IP version, either `4` (default) or `6`.
+	// Changing this creates a new address group.
 	IpVersion pulumi.IntPtrInput
+	// Specifies the maximum number of addresses that an address group can contain.
+	// Value range: **1**-**20**, the default value is **20**.
+	MaxCapacity pulumi.IntPtrInput
 	// Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
 	// letters, digits, underscores (_), hyphens (-) and periods (.).
 	Name pulumi.StringPtrInput
-	// Specifies tThe region in which to create the IP address group. If omitted, the
+	// Specifies the region in which to create the IP address group. If omitted, the
 	// provider-level region will be used. Changing this creates a new address group.
 	Region pulumi.StringPtrInput
 }
@@ -144,34 +217,58 @@ func (AddressGroupState) ElementType() reflect.Type {
 }
 
 type addressGroupArgs struct {
-	// Specifies an array of one or more IPv4 addresses. The address can be a single IP
-	// address (such as 192.168.10.10), IP address range (such as 192.168.1.1-192.168.1.50) or IP address CIDR (such as 192.168.0.0/16).
-	// The maximum length is 20.
+	// Specifies an array of one or more IP addresses. The address can be a single IP
+	// address, IP address range or IP address CIDR. The maximum length is 20.
 	Addresses []string `pulumi:"addresses"`
 	// Specifies the supplementary information about the IP address group.
 	// The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
 	Description *string `pulumi:"description"`
+	// Specifies the enterprise project ID.
+	// Changing this creates a new address group.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies whether to forcibly destroy the address group if it is associated with
+	// a security group rule, the address group and the associated security group rule will be deleted together.
+	// The default value is **false**.
+	ForceDestroy *bool `pulumi:"forceDestroy"`
+	// Specifies the IP version, either `4` (default) or `6`.
+	// Changing this creates a new address group.
+	IpVersion *int `pulumi:"ipVersion"`
+	// Specifies the maximum number of addresses that an address group can contain.
+	// Value range: **1**-**20**, the default value is **20**.
+	MaxCapacity *int `pulumi:"maxCapacity"`
 	// Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
 	// letters, digits, underscores (_), hyphens (-) and periods (.).
 	Name *string `pulumi:"name"`
-	// Specifies tThe region in which to create the IP address group. If omitted, the
+	// Specifies the region in which to create the IP address group. If omitted, the
 	// provider-level region will be used. Changing this creates a new address group.
 	Region *string `pulumi:"region"`
 }
 
 // The set of arguments for constructing a AddressGroup resource.
 type AddressGroupArgs struct {
-	// Specifies an array of one or more IPv4 addresses. The address can be a single IP
-	// address (such as 192.168.10.10), IP address range (such as 192.168.1.1-192.168.1.50) or IP address CIDR (such as 192.168.0.0/16).
-	// The maximum length is 20.
+	// Specifies an array of one or more IP addresses. The address can be a single IP
+	// address, IP address range or IP address CIDR. The maximum length is 20.
 	Addresses pulumi.StringArrayInput
 	// Specifies the supplementary information about the IP address group.
 	// The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
 	Description pulumi.StringPtrInput
+	// Specifies the enterprise project ID.
+	// Changing this creates a new address group.
+	EnterpriseProjectId pulumi.StringPtrInput
+	// Specifies whether to forcibly destroy the address group if it is associated with
+	// a security group rule, the address group and the associated security group rule will be deleted together.
+	// The default value is **false**.
+	ForceDestroy pulumi.BoolPtrInput
+	// Specifies the IP version, either `4` (default) or `6`.
+	// Changing this creates a new address group.
+	IpVersion pulumi.IntPtrInput
+	// Specifies the maximum number of addresses that an address group can contain.
+	// Value range: **1**-**20**, the default value is **20**.
+	MaxCapacity pulumi.IntPtrInput
 	// Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
 	// letters, digits, underscores (_), hyphens (-) and periods (.).
 	Name pulumi.StringPtrInput
-	// Specifies tThe region in which to create the IP address group. If omitted, the
+	// Specifies the region in which to create the IP address group. If omitted, the
 	// provider-level region will be used. Changing this creates a new address group.
 	Region pulumi.StringPtrInput
 }
@@ -263,9 +360,8 @@ func (o AddressGroupOutput) ToAddressGroupOutputWithContext(ctx context.Context)
 	return o
 }
 
-// Specifies an array of one or more IPv4 addresses. The address can be a single IP
-// address (such as 192.168.10.10), IP address range (such as 192.168.1.1-192.168.1.50) or IP address CIDR (such as 192.168.0.0/16).
-// The maximum length is 20.
+// Specifies an array of one or more IP addresses. The address can be a single IP
+// address, IP address range or IP address CIDR. The maximum length is 20.
 func (o AddressGroupOutput) Addresses() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *AddressGroup) pulumi.StringArrayOutput { return v.Addresses }).(pulumi.StringArrayOutput)
 }
@@ -276,9 +372,29 @@ func (o AddressGroupOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *AddressGroup) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// The IP version of the address group. The value is 4.
-func (o AddressGroupOutput) IpVersion() pulumi.IntOutput {
-	return o.ApplyT(func(v *AddressGroup) pulumi.IntOutput { return v.IpVersion }).(pulumi.IntOutput)
+// Specifies the enterprise project ID.
+// Changing this creates a new address group.
+func (o AddressGroupOutput) EnterpriseProjectId() pulumi.StringOutput {
+	return o.ApplyT(func(v *AddressGroup) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
+}
+
+// Specifies whether to forcibly destroy the address group if it is associated with
+// a security group rule, the address group and the associated security group rule will be deleted together.
+// The default value is **false**.
+func (o AddressGroupOutput) ForceDestroy() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *AddressGroup) pulumi.BoolPtrOutput { return v.ForceDestroy }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the IP version, either `4` (default) or `6`.
+// Changing this creates a new address group.
+func (o AddressGroupOutput) IpVersion() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *AddressGroup) pulumi.IntPtrOutput { return v.IpVersion }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the maximum number of addresses that an address group can contain.
+// Value range: **1**-**20**, the default value is **20**.
+func (o AddressGroupOutput) MaxCapacity() pulumi.IntOutput {
+	return o.ApplyT(func(v *AddressGroup) pulumi.IntOutput { return v.MaxCapacity }).(pulumi.IntOutput)
 }
 
 // Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
@@ -287,7 +403,7 @@ func (o AddressGroupOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *AddressGroup) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies tThe region in which to create the IP address group. If omitted, the
+// Specifies the region in which to create the IP address group. If omitted, the
 // provider-level region will be used. Changing this creates a new address group.
 func (o AddressGroupOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *AddressGroup) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)

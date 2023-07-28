@@ -13,11 +13,14 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
+ * const config = new pulumi.Config();
+ * const elbPoolId = config.requireObject("elbPoolId");
+ * const ipv4SubnetId = config.requireObject("ipv4SubnetId");
  * const member1 = new huaweicloud.dedicatedelb.Member("member1", {
  *     address: "192.168.199.23",
  *     protocolPort: 8080,
- *     poolId: _var.pool_id,
- *     subnetId: _var.subnet_id,
+ *     poolId: elbPoolId,
+ *     subnetId: ipv4SubnetId,
  * });
  * ```
  *
@@ -81,9 +84,13 @@ export class Member extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * The subnet in which to access the member
+     * The **IPv4 or IPv6 subnet ID** of the subnet in which to access the member.
+     * + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+     * + If this parameter is not specified, **cross-VPC backend** has been enabled for the load balancer.
+     * In this case, cross-VPC backend servers must use private IPv4 addresses,
+     * and the protocol of the backend server group must be TCP, HTTP, or HTTPS.
      */
-    public readonly subnetId!: pulumi.Output<string>;
+    public readonly subnetId!: pulumi.Output<string | undefined>;
     /**
      * A positive integer value that indicates the relative portion of traffic that this member
      * should receive from the pool. For example, a member with a weight of 10 receives five times as much traffic as a
@@ -121,9 +128,6 @@ export class Member extends pulumi.CustomResource {
             }
             if ((!args || args.protocolPort === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'protocolPort'");
-            }
-            if ((!args || args.subnetId === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'subnetId'");
             }
             resourceInputs["address"] = args ? args.address : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
@@ -166,7 +170,11 @@ export interface MemberState {
      */
     region?: pulumi.Input<string>;
     /**
-     * The subnet in which to access the member
+     * The **IPv4 or IPv6 subnet ID** of the subnet in which to access the member.
+     * + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+     * + If this parameter is not specified, **cross-VPC backend** has been enabled for the load balancer.
+     * In this case, cross-VPC backend servers must use private IPv4 addresses,
+     * and the protocol of the backend server group must be TCP, HTTP, or HTTPS.
      */
     subnetId?: pulumi.Input<string>;
     /**
@@ -205,9 +213,13 @@ export interface MemberArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * The subnet in which to access the member
+     * The **IPv4 or IPv6 subnet ID** of the subnet in which to access the member.
+     * + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+     * + If this parameter is not specified, **cross-VPC backend** has been enabled for the load balancer.
+     * In this case, cross-VPC backend servers must use private IPv4 addresses,
+     * and the protocol of the backend server group must be TCP, HTTP, or HTTPS.
      */
-    subnetId: pulumi.Input<string>;
+    subnetId?: pulumi.Input<string>;
     /**
      * A positive integer value that indicates the relative portion of traffic that this member
      * should receive from the pool. For example, a member with a weight of 10 receives five times as much traffic as a

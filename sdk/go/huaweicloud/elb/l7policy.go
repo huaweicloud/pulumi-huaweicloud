@@ -82,8 +82,7 @@ type L7policy struct {
 	// + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirectPoolId`.
 	// + **REDIRECT_TO_LISTENER**: Requests are redirected from the HTTP listener specified by `listenerId` to the
 	//   HTTPS listener specified by `redirectListenerId`.
-	Action pulumi.StringOutput `pulumi:"action"`
-	// The administrative state of the L7 Policy. This value can only be true (UP).
+	Action       pulumi.StringOutput  `pulumi:"action"`
 	AdminStateUp pulumi.BoolPtrOutput `pulumi:"adminStateUp"`
 	// Human-readable description for the L7 Policy.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
@@ -155,9 +154,8 @@ type l7policyState struct {
 	// + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirectPoolId`.
 	// + **REDIRECT_TO_LISTENER**: Requests are redirected from the HTTP listener specified by `listenerId` to the
 	//   HTTPS listener specified by `redirectListenerId`.
-	Action *string `pulumi:"action"`
-	// The administrative state of the L7 Policy. This value can only be true (UP).
-	AdminStateUp *bool `pulumi:"adminStateUp"`
+	Action       *string `pulumi:"action"`
+	AdminStateUp *bool   `pulumi:"adminStateUp"`
 	// Human-readable description for the L7 Policy.
 	Description *string `pulumi:"description"`
 	// Specifies the ID of the listener for which the forwarding policy is added.
@@ -193,8 +191,7 @@ type L7policyState struct {
 	// + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirectPoolId`.
 	// + **REDIRECT_TO_LISTENER**: Requests are redirected from the HTTP listener specified by `listenerId` to the
 	//   HTTPS listener specified by `redirectListenerId`.
-	Action pulumi.StringPtrInput
-	// The administrative state of the L7 Policy. This value can only be true (UP).
+	Action       pulumi.StringPtrInput
 	AdminStateUp pulumi.BoolPtrInput
 	// Human-readable description for the L7 Policy.
 	Description pulumi.StringPtrInput
@@ -235,9 +232,8 @@ type l7policyArgs struct {
 	// + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirectPoolId`.
 	// + **REDIRECT_TO_LISTENER**: Requests are redirected from the HTTP listener specified by `listenerId` to the
 	//   HTTPS listener specified by `redirectListenerId`.
-	Action string `pulumi:"action"`
-	// The administrative state of the L7 Policy. This value can only be true (UP).
-	AdminStateUp *bool `pulumi:"adminStateUp"`
+	Action       string `pulumi:"action"`
+	AdminStateUp *bool  `pulumi:"adminStateUp"`
 	// Human-readable description for the L7 Policy.
 	Description *string `pulumi:"description"`
 	// Specifies the ID of the listener for which the forwarding policy is added.
@@ -274,8 +270,7 @@ type L7policyArgs struct {
 	// + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirectPoolId`.
 	// + **REDIRECT_TO_LISTENER**: Requests are redirected from the HTTP listener specified by `listenerId` to the
 	//   HTTPS listener specified by `redirectListenerId`.
-	Action pulumi.StringInput
-	// The administrative state of the L7 Policy. This value can only be true (UP).
+	Action       pulumi.StringInput
 	AdminStateUp pulumi.BoolPtrInput
 	// Human-readable description for the L7 Policy.
 	Description pulumi.StringPtrInput
@@ -402,7 +397,6 @@ func (o L7policyOutput) Action() pulumi.StringOutput {
 	return o.ApplyT(func(v *L7policy) pulumi.StringOutput { return v.Action }).(pulumi.StringOutput)
 }
 
-// The administrative state of the L7 Policy. This value can only be true (UP).
 func (o L7policyOutput) AdminStateUp() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *L7policy) pulumi.BoolPtrOutput { return v.AdminStateUp }).(pulumi.BoolPtrOutput)
 }

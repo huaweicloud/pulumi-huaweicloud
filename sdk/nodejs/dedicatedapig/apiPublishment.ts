@@ -44,13 +44,11 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * APIs can be imported using their `instance_id`, `env_id` and `api_id`, separated by slashes, e.g.
+ * The publishments can be imported using their related `instance_id`, `env_id` and `api_id`, separated by slashes, e.g.
  *
  * ```sh
- *  $ pulumi import huaweicloud:DedicatedApig/apiPublishment:ApiPublishment test
+ *  $ pulumi import huaweicloud:DedicatedApig/apiPublishment:ApiPublishment test <instance_id>/<env_id>/<api_id>
  * ```
- *
- *  9b0a0a2f97aa43afbf7d852e3ba6a6f9/c5b32727186c4fe6b60408a8a297be09/9a3b3484c08545f9b9b0dcb2de0f5b8a
  */
 export class ApiPublishment extends pulumi.CustomResource {
     /**
@@ -81,8 +79,8 @@ export class ApiPublishment extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies the API ID to be published or already published.
-     * Changing this will create a new publishment resource.
+     * Specifies the ID of the API to be published or already published.  
+     * Changing this will create a new resource.
      */
     public readonly apiId!: pulumi.Output<string>;
     /**
@@ -90,16 +88,18 @@ export class ApiPublishment extends pulumi.CustomResource {
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the environment ID to which the current version of the API will be
-     * published or has been published. Changing this will create a new publishment resource.
+     * Specifies the ID of the environmentto which the current version of the API
+     * will be published or has been published.
+     * Changing this will create a new resource.
      */
     public readonly envId!: pulumi.Output<string>;
     /**
-     * Environment name to which the current version of the API is published.
+     * The name of the environment to which the current version of the API is published.
      */
     public /*out*/ readonly envName!: pulumi.Output<string>;
     /**
-     * All publish informations of the API. The structure is documented below.
+     * All publish informations of the API.  
+     * The object structure is documented below.
      */
     public /*out*/ readonly histories!: pulumi.Output<outputs.DedicatedApig.ApiPublishmentHistory[]>;
     /**
@@ -114,10 +114,11 @@ export class ApiPublishment extends pulumi.CustomResource {
     /**
      * Time when the current version was published.
      */
-    public /*out*/ readonly publishTime!: pulumi.Output<string>;
+    public /*out*/ readonly publishedAt!: pulumi.Output<string>;
     /**
-     * Specifies the region in which to publish APIs.
-     * If omitted, the provider-level region will be used. Changing this will create a new publishment resource.
+     * Specifies the region in which to publish APIs.  
+     * If omitted, the provider-level region will be used.
+     * Changing this will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
@@ -145,7 +146,7 @@ export class ApiPublishment extends pulumi.CustomResource {
             resourceInputs["histories"] = state ? state.histories : undefined;
             resourceInputs["instanceId"] = state ? state.instanceId : undefined;
             resourceInputs["publishId"] = state ? state.publishId : undefined;
-            resourceInputs["publishTime"] = state ? state.publishTime : undefined;
+            resourceInputs["publishedAt"] = state ? state.publishedAt : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["versionId"] = state ? state.versionId : undefined;
         } else {
@@ -168,7 +169,7 @@ export class ApiPublishment extends pulumi.CustomResource {
             resourceInputs["envName"] = undefined /*out*/;
             resourceInputs["histories"] = undefined /*out*/;
             resourceInputs["publishId"] = undefined /*out*/;
-            resourceInputs["publishTime"] = undefined /*out*/;
+            resourceInputs["publishedAt"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(ApiPublishment.__pulumiType, name, resourceInputs, opts);
@@ -180,8 +181,8 @@ export class ApiPublishment extends pulumi.CustomResource {
  */
 export interface ApiPublishmentState {
     /**
-     * Specifies the API ID to be published or already published.
-     * Changing this will create a new publishment resource.
+     * Specifies the ID of the API to be published or already published.  
+     * Changing this will create a new resource.
      */
     apiId?: pulumi.Input<string>;
     /**
@@ -189,16 +190,18 @@ export interface ApiPublishmentState {
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the environment ID to which the current version of the API will be
-     * published or has been published. Changing this will create a new publishment resource.
+     * Specifies the ID of the environmentto which the current version of the API
+     * will be published or has been published.
+     * Changing this will create a new resource.
      */
     envId?: pulumi.Input<string>;
     /**
-     * Environment name to which the current version of the API is published.
+     * The name of the environment to which the current version of the API is published.
      */
     envName?: pulumi.Input<string>;
     /**
-     * All publish informations of the API. The structure is documented below.
+     * All publish informations of the API.  
+     * The object structure is documented below.
      */
     histories?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ApiPublishmentHistory>[]>;
     /**
@@ -213,10 +216,11 @@ export interface ApiPublishmentState {
     /**
      * Time when the current version was published.
      */
-    publishTime?: pulumi.Input<string>;
+    publishedAt?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to publish APIs.
-     * If omitted, the provider-level region will be used. Changing this will create a new publishment resource.
+     * Specifies the region in which to publish APIs.  
+     * If omitted, the provider-level region will be used.
+     * Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
@@ -230,8 +234,8 @@ export interface ApiPublishmentState {
  */
 export interface ApiPublishmentArgs {
     /**
-     * Specifies the API ID to be published or already published.
-     * Changing this will create a new publishment resource.
+     * Specifies the ID of the API to be published or already published.  
+     * Changing this will create a new resource.
      */
     apiId: pulumi.Input<string>;
     /**
@@ -239,8 +243,9 @@ export interface ApiPublishmentArgs {
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the environment ID to which the current version of the API will be
-     * published or has been published. Changing this will create a new publishment resource.
+     * Specifies the ID of the environmentto which the current version of the API
+     * will be published or has been published.
+     * Changing this will create a new resource.
      */
     envId: pulumi.Input<string>;
     /**
@@ -249,8 +254,9 @@ export interface ApiPublishmentArgs {
      */
     instanceId: pulumi.Input<string>;
     /**
-     * Specifies the region in which to publish APIs.
-     * If omitted, the provider-level region will be used. Changing this will create a new publishment resource.
+     * Specifies the region in which to publish APIs.  
+     * If omitted, the provider-level region will be used.
+     * Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**

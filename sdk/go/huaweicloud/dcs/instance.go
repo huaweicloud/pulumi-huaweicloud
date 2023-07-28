@@ -14,7 +14,7 @@ import (
 // Manages a DCS instance within HuaweiCloud.
 //
 // !> **WARNING:** DCS for Memcached is about to become unavailable and is no longer sold in some regions.
-// You can use DCS for Redis 4.0 or 5.0 instead. It is not possible to create Memcached instances through this resource.
+// You can use DCS for Redis 4.0, 5.0 or 6.0 instead. It is not possible to create Memcached instances through this resource.
 // You can use this resource to manage Memcached instances that exist in HuaweiCloud.
 //
 // ## Example Usage
@@ -138,7 +138,7 @@ import (
 //
 // ## Import
 //
-// DCS instance can be imported using the `id`, e.g.
+// DCS instance can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -166,11 +166,11 @@ type Instance struct {
 	// If the cache engine is *Redis*, you do not need to set this parameter.
 	// The username starts with a letter, consists of 1 to 64 characters, and supports only letters, digits, and
 	// hyphens (-). Changing this creates a new instance.
-	AccessUser pulumi.StringOutput    `pulumi:"accessUser"`
-	AutoPay    pulumi.StringPtrOutput `pulumi:"autoPay"`
+	AccessUser pulumi.StringOutput `pulumi:"accessUser"`
+	// Deprecated: Deprecated
+	AutoPay pulumi.StringPtrOutput `pulumi:"autoPay"`
 	// Specifies whether auto renew is enabled.
 	// Valid values are `true` and `false`, defaults to `false`.
-	// Changing this creates a new instance.
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
 	// The code of the AZ where the cache node resides.
 	// Master/Standby, Proxy Cluster, and Redis Cluster DCS instances support cross-AZ deployment.
@@ -199,10 +199,10 @@ type Instance struct {
 	// Deprecated: Deprecated, please use `backup_policy` instead
 	BeginAt pulumi.StringPtrOutput `pulumi:"beginAt"`
 	// Specifies the cache capacity. Unit: GB.
-	// + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`, `0.5`, `1`, `2`,
-	//   `4`, `8`, `16`, `32` and `64`.
-	//   Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-	//   `1024`.
+	// + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
+	//   `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
+	//   Cluster instance specifications support `4`,`8`,`16`, `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`,
+	//   `384`, `512`, `768` and `1024`.
 	// + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
 	//   Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
 	// + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -214,6 +214,10 @@ type Instance struct {
 	//   Default value is `postPaid`.
 	//   Changing this creates a new instance.
 	ChargingMode pulumi.StringOutput `pulumi:"chargingMode"`
+	// Specifies the ID of the replica to delete. This parameter is mandatory when
+	// you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
+	// at a time.
+	DeletedNodes pulumi.StringPtrOutput `pulumi:"deletedNodes"`
 	// Specifies the description of an instance.
 	// It is a string that contains a maximum of 1024 characters.
 	Description pulumi.StringOutput `pulumi:"description"`
@@ -223,7 +227,7 @@ type Instance struct {
 	// Changing this creates a new instance.
 	Engine pulumi.StringOutput `pulumi:"engine"`
 	// Specifies the version of a cache engine.
-	// It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, or 5.0.
+	// It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
 	// Changing this creates a new instance.
 	EngineVersion pulumi.StringPtrOutput `pulumi:"engineVersion"`
 	// The enterprise project id of the dcs instance.
@@ -272,13 +276,11 @@ type Instance struct {
 	// The ID of the order that created the instance.
 	OrderId pulumi.StringOutput `pulumi:"orderId"`
 	// Specifies the password of a DCS instance.
-	// Changing this creates a new instance.
 	// The password of a DCS instance must meet the following complexity requirements:
 	// + Must be a string of 8 to 32 bits in length.
 	// + Must contain three combinations of the following four characters: Lower case letters, uppercase letter, digital,
 	//   Special characters include (`~!@#$^&*()-_=+\\|{}:,<.>/?).
 	// + The new password cannot be the same as the old password.
-	//   Redis instance defaults to 6379. Memcached instance does not use this argument.
 	Password pulumi.StringPtrOutput `pulumi:"password"`
 	// Specifies the charging period of the instance.
 	// If `periodUnit` is set to *month*, the value ranges from 1 to 9.
@@ -296,6 +298,7 @@ type Instance struct {
 	// Changing this creates a new instance.
 	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
 	// Port customization, which is supported only by Redis 4.0 and Redis 5.0 instances.
+	// Redis instance defaults to 6379. Memcached instance does not use this argument.
 	Port pulumi.IntOutput `pulumi:"port"`
 	// The IP address of the DCS instance,
 	// which can only be the currently available IP address the selected subnet.
@@ -310,9 +313,13 @@ type Instance struct {
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Critical command renaming, which is supported only by Redis 4.0 and
 	// Redis 5.0 instances but not by Redis 3.0 instance.
-	// The valid commands that can be renamed are: *command*, *keys*, *flushdb*, *flushall* and *hgetall*.
+	// The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
 	RenameCommands pulumi.StringMapOutput `pulumi:"renameCommands"`
+	// Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
+	// parameter is not set, the system randomly deletes unnecessary shards.
+	ReservedIps pulumi.StringArrayOutput `pulumi:"reservedIps"`
 	// Retention time. Unit: day, the value ranges from 1 to 7.
+	// This parameter is required if the backupType is **auto**.
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
 	SaveDays pulumi.IntPtrOutput `pulumi:"saveDays"`
@@ -339,6 +346,9 @@ type Instance struct {
 	SubnetName pulumi.StringOutput `pulumi:"subnetName"`
 	// The key/value pairs to associate with the dcs instance.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
+	// The Parameter Template ID.
+	// Changing this creates a new instance resource.
+	TemplateId pulumi.StringPtrOutput `pulumi:"templateId"`
 	// Size of the used memory. Unit: MB.
 	UsedMemory pulumi.IntOutput `pulumi:"usedMemory"`
 	// Deprecated: Deprecated
@@ -405,10 +415,10 @@ type instanceState struct {
 	// The username starts with a letter, consists of 1 to 64 characters, and supports only letters, digits, and
 	// hyphens (-). Changing this creates a new instance.
 	AccessUser *string `pulumi:"accessUser"`
-	AutoPay    *string `pulumi:"autoPay"`
+	// Deprecated: Deprecated
+	AutoPay *string `pulumi:"autoPay"`
 	// Specifies whether auto renew is enabled.
 	// Valid values are `true` and `false`, defaults to `false`.
-	// Changing this creates a new instance.
 	AutoRenew *string `pulumi:"autoRenew"`
 	// The code of the AZ where the cache node resides.
 	// Master/Standby, Proxy Cluster, and Redis Cluster DCS instances support cross-AZ deployment.
@@ -437,10 +447,10 @@ type instanceState struct {
 	// Deprecated: Deprecated, please use `backup_policy` instead
 	BeginAt *string `pulumi:"beginAt"`
 	// Specifies the cache capacity. Unit: GB.
-	// + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`, `0.5`, `1`, `2`,
-	//   `4`, `8`, `16`, `32` and `64`.
-	//   Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-	//   `1024`.
+	// + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
+	//   `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
+	//   Cluster instance specifications support `4`,`8`,`16`, `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`,
+	//   `384`, `512`, `768` and `1024`.
 	// + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
 	//   Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
 	// + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -452,6 +462,10 @@ type instanceState struct {
 	//   Default value is `postPaid`.
 	//   Changing this creates a new instance.
 	ChargingMode *string `pulumi:"chargingMode"`
+	// Specifies the ID of the replica to delete. This parameter is mandatory when
+	// you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
+	// at a time.
+	DeletedNodes *string `pulumi:"deletedNodes"`
 	// Specifies the description of an instance.
 	// It is a string that contains a maximum of 1024 characters.
 	Description *string `pulumi:"description"`
@@ -461,7 +475,7 @@ type instanceState struct {
 	// Changing this creates a new instance.
 	Engine *string `pulumi:"engine"`
 	// Specifies the version of a cache engine.
-	// It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, or 5.0.
+	// It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
 	// Changing this creates a new instance.
 	EngineVersion *string `pulumi:"engineVersion"`
 	// The enterprise project id of the dcs instance.
@@ -510,13 +524,11 @@ type instanceState struct {
 	// The ID of the order that created the instance.
 	OrderId *string `pulumi:"orderId"`
 	// Specifies the password of a DCS instance.
-	// Changing this creates a new instance.
 	// The password of a DCS instance must meet the following complexity requirements:
 	// + Must be a string of 8 to 32 bits in length.
 	// + Must contain three combinations of the following four characters: Lower case letters, uppercase letter, digital,
 	//   Special characters include (`~!@#$^&*()-_=+\\|{}:,<.>/?).
 	// + The new password cannot be the same as the old password.
-	//   Redis instance defaults to 6379. Memcached instance does not use this argument.
 	Password *string `pulumi:"password"`
 	// Specifies the charging period of the instance.
 	// If `periodUnit` is set to *month*, the value ranges from 1 to 9.
@@ -534,6 +546,7 @@ type instanceState struct {
 	// Changing this creates a new instance.
 	PeriodUnit *string `pulumi:"periodUnit"`
 	// Port customization, which is supported only by Redis 4.0 and Redis 5.0 instances.
+	// Redis instance defaults to 6379. Memcached instance does not use this argument.
 	Port *int `pulumi:"port"`
 	// The IP address of the DCS instance,
 	// which can only be the currently available IP address the selected subnet.
@@ -548,9 +561,13 @@ type instanceState struct {
 	Region *string `pulumi:"region"`
 	// Critical command renaming, which is supported only by Redis 4.0 and
 	// Redis 5.0 instances but not by Redis 3.0 instance.
-	// The valid commands that can be renamed are: *command*, *keys*, *flushdb*, *flushall* and *hgetall*.
+	// The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
 	RenameCommands map[string]string `pulumi:"renameCommands"`
+	// Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
+	// parameter is not set, the system randomly deletes unnecessary shards.
+	ReservedIps []string `pulumi:"reservedIps"`
 	// Retention time. Unit: day, the value ranges from 1 to 7.
+	// This parameter is required if the backupType is **auto**.
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
 	SaveDays *int `pulumi:"saveDays"`
@@ -577,6 +594,9 @@ type instanceState struct {
 	SubnetName *string `pulumi:"subnetName"`
 	// The key/value pairs to associate with the dcs instance.
 	Tags map[string]string `pulumi:"tags"`
+	// The Parameter Template ID.
+	// Changing this creates a new instance resource.
+	TemplateId *string `pulumi:"templateId"`
 	// Size of the used memory. Unit: MB.
 	UsedMemory *int `pulumi:"usedMemory"`
 	// Deprecated: Deprecated
@@ -602,10 +622,10 @@ type InstanceState struct {
 	// The username starts with a letter, consists of 1 to 64 characters, and supports only letters, digits, and
 	// hyphens (-). Changing this creates a new instance.
 	AccessUser pulumi.StringPtrInput
-	AutoPay    pulumi.StringPtrInput
+	// Deprecated: Deprecated
+	AutoPay pulumi.StringPtrInput
 	// Specifies whether auto renew is enabled.
 	// Valid values are `true` and `false`, defaults to `false`.
-	// Changing this creates a new instance.
 	AutoRenew pulumi.StringPtrInput
 	// The code of the AZ where the cache node resides.
 	// Master/Standby, Proxy Cluster, and Redis Cluster DCS instances support cross-AZ deployment.
@@ -634,10 +654,10 @@ type InstanceState struct {
 	// Deprecated: Deprecated, please use `backup_policy` instead
 	BeginAt pulumi.StringPtrInput
 	// Specifies the cache capacity. Unit: GB.
-	// + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`, `0.5`, `1`, `2`,
-	//   `4`, `8`, `16`, `32` and `64`.
-	//   Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-	//   `1024`.
+	// + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
+	//   `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
+	//   Cluster instance specifications support `4`,`8`,`16`, `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`,
+	//   `384`, `512`, `768` and `1024`.
 	// + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
 	//   Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
 	// + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -649,6 +669,10 @@ type InstanceState struct {
 	//   Default value is `postPaid`.
 	//   Changing this creates a new instance.
 	ChargingMode pulumi.StringPtrInput
+	// Specifies the ID of the replica to delete. This parameter is mandatory when
+	// you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
+	// at a time.
+	DeletedNodes pulumi.StringPtrInput
 	// Specifies the description of an instance.
 	// It is a string that contains a maximum of 1024 characters.
 	Description pulumi.StringPtrInput
@@ -658,7 +682,7 @@ type InstanceState struct {
 	// Changing this creates a new instance.
 	Engine pulumi.StringPtrInput
 	// Specifies the version of a cache engine.
-	// It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, or 5.0.
+	// It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
 	// Changing this creates a new instance.
 	EngineVersion pulumi.StringPtrInput
 	// The enterprise project id of the dcs instance.
@@ -707,13 +731,11 @@ type InstanceState struct {
 	// The ID of the order that created the instance.
 	OrderId pulumi.StringPtrInput
 	// Specifies the password of a DCS instance.
-	// Changing this creates a new instance.
 	// The password of a DCS instance must meet the following complexity requirements:
 	// + Must be a string of 8 to 32 bits in length.
 	// + Must contain three combinations of the following four characters: Lower case letters, uppercase letter, digital,
 	//   Special characters include (`~!@#$^&*()-_=+\\|{}:,<.>/?).
 	// + The new password cannot be the same as the old password.
-	//   Redis instance defaults to 6379. Memcached instance does not use this argument.
 	Password pulumi.StringPtrInput
 	// Specifies the charging period of the instance.
 	// If `periodUnit` is set to *month*, the value ranges from 1 to 9.
@@ -731,6 +753,7 @@ type InstanceState struct {
 	// Changing this creates a new instance.
 	PeriodUnit pulumi.StringPtrInput
 	// Port customization, which is supported only by Redis 4.0 and Redis 5.0 instances.
+	// Redis instance defaults to 6379. Memcached instance does not use this argument.
 	Port pulumi.IntPtrInput
 	// The IP address of the DCS instance,
 	// which can only be the currently available IP address the selected subnet.
@@ -745,9 +768,13 @@ type InstanceState struct {
 	Region pulumi.StringPtrInput
 	// Critical command renaming, which is supported only by Redis 4.0 and
 	// Redis 5.0 instances but not by Redis 3.0 instance.
-	// The valid commands that can be renamed are: *command*, *keys*, *flushdb*, *flushall* and *hgetall*.
+	// The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
 	RenameCommands pulumi.StringMapInput
+	// Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
+	// parameter is not set, the system randomly deletes unnecessary shards.
+	ReservedIps pulumi.StringArrayInput
 	// Retention time. Unit: day, the value ranges from 1 to 7.
+	// This parameter is required if the backupType is **auto**.
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
 	SaveDays pulumi.IntPtrInput
@@ -774,6 +801,9 @@ type InstanceState struct {
 	SubnetName pulumi.StringPtrInput
 	// The key/value pairs to associate with the dcs instance.
 	Tags pulumi.StringMapInput
+	// The Parameter Template ID.
+	// Changing this creates a new instance resource.
+	TemplateId pulumi.StringPtrInput
 	// Size of the used memory. Unit: MB.
 	UsedMemory pulumi.IntPtrInput
 	// Deprecated: Deprecated
@@ -803,10 +833,10 @@ type instanceArgs struct {
 	// The username starts with a letter, consists of 1 to 64 characters, and supports only letters, digits, and
 	// hyphens (-). Changing this creates a new instance.
 	AccessUser *string `pulumi:"accessUser"`
-	AutoPay    *string `pulumi:"autoPay"`
+	// Deprecated: Deprecated
+	AutoPay *string `pulumi:"autoPay"`
 	// Specifies whether auto renew is enabled.
 	// Valid values are `true` and `false`, defaults to `false`.
-	// Changing this creates a new instance.
 	AutoRenew *string `pulumi:"autoRenew"`
 	// The code of the AZ where the cache node resides.
 	// Master/Standby, Proxy Cluster, and Redis Cluster DCS instances support cross-AZ deployment.
@@ -835,10 +865,10 @@ type instanceArgs struct {
 	// Deprecated: Deprecated, please use `backup_policy` instead
 	BeginAt *string `pulumi:"beginAt"`
 	// Specifies the cache capacity. Unit: GB.
-	// + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`, `0.5`, `1`, `2`,
-	//   `4`, `8`, `16`, `32` and `64`.
-	//   Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-	//   `1024`.
+	// + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
+	//   `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
+	//   Cluster instance specifications support `4`,`8`,`16`, `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`,
+	//   `384`, `512`, `768` and `1024`.
 	// + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
 	//   Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
 	// + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -850,6 +880,10 @@ type instanceArgs struct {
 	//   Default value is `postPaid`.
 	//   Changing this creates a new instance.
 	ChargingMode *string `pulumi:"chargingMode"`
+	// Specifies the ID of the replica to delete. This parameter is mandatory when
+	// you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
+	// at a time.
+	DeletedNodes *string `pulumi:"deletedNodes"`
 	// Specifies the description of an instance.
 	// It is a string that contains a maximum of 1024 characters.
 	Description *string `pulumi:"description"`
@@ -857,7 +891,7 @@ type instanceArgs struct {
 	// Changing this creates a new instance.
 	Engine string `pulumi:"engine"`
 	// Specifies the version of a cache engine.
-	// It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, or 5.0.
+	// It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
 	// Changing this creates a new instance.
 	EngineVersion *string `pulumi:"engineVersion"`
 	// The enterprise project id of the dcs instance.
@@ -898,13 +932,11 @@ type instanceArgs struct {
 	// Only chinese, letters (case-insensitive), digits, underscores (_) ,and hyphens (-) are allowed.
 	Name *string `pulumi:"name"`
 	// Specifies the password of a DCS instance.
-	// Changing this creates a new instance.
 	// The password of a DCS instance must meet the following complexity requirements:
 	// + Must be a string of 8 to 32 bits in length.
 	// + Must contain three combinations of the following four characters: Lower case letters, uppercase letter, digital,
 	//   Special characters include (`~!@#$^&*()-_=+\\|{}:,<.>/?).
 	// + The new password cannot be the same as the old password.
-	//   Redis instance defaults to 6379. Memcached instance does not use this argument.
 	Password *string `pulumi:"password"`
 	// Specifies the charging period of the instance.
 	// If `periodUnit` is set to *month*, the value ranges from 1 to 9.
@@ -922,6 +954,7 @@ type instanceArgs struct {
 	// Changing this creates a new instance.
 	PeriodUnit *string `pulumi:"periodUnit"`
 	// Port customization, which is supported only by Redis 4.0 and Redis 5.0 instances.
+	// Redis instance defaults to 6379. Memcached instance does not use this argument.
 	Port *int `pulumi:"port"`
 	// The IP address of the DCS instance,
 	// which can only be the currently available IP address the selected subnet.
@@ -936,9 +969,13 @@ type instanceArgs struct {
 	Region *string `pulumi:"region"`
 	// Critical command renaming, which is supported only by Redis 4.0 and
 	// Redis 5.0 instances but not by Redis 3.0 instance.
-	// The valid commands that can be renamed are: *command*, *keys*, *flushdb*, *flushall* and *hgetall*.
+	// The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
 	RenameCommands map[string]string `pulumi:"renameCommands"`
+	// Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
+	// parameter is not set, the system randomly deletes unnecessary shards.
+	ReservedIps []string `pulumi:"reservedIps"`
 	// Retention time. Unit: day, the value ranges from 1 to 7.
+	// This parameter is required if the backupType is **auto**.
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
 	SaveDays *int `pulumi:"saveDays"`
@@ -950,6 +987,9 @@ type instanceArgs struct {
 	SubnetId string `pulumi:"subnetId"`
 	// The key/value pairs to associate with the dcs instance.
 	Tags map[string]string `pulumi:"tags"`
+	// The Parameter Template ID.
+	// Changing this creates a new instance resource.
+	TemplateId *string `pulumi:"templateId"`
 	// The ID of VPC which the instance belongs to.
 	// Changing this creates a new instance resource.
 	VpcId string `pulumi:"vpcId"`
@@ -968,10 +1008,10 @@ type InstanceArgs struct {
 	// The username starts with a letter, consists of 1 to 64 characters, and supports only letters, digits, and
 	// hyphens (-). Changing this creates a new instance.
 	AccessUser pulumi.StringPtrInput
-	AutoPay    pulumi.StringPtrInput
+	// Deprecated: Deprecated
+	AutoPay pulumi.StringPtrInput
 	// Specifies whether auto renew is enabled.
 	// Valid values are `true` and `false`, defaults to `false`.
-	// Changing this creates a new instance.
 	AutoRenew pulumi.StringPtrInput
 	// The code of the AZ where the cache node resides.
 	// Master/Standby, Proxy Cluster, and Redis Cluster DCS instances support cross-AZ deployment.
@@ -1000,10 +1040,10 @@ type InstanceArgs struct {
 	// Deprecated: Deprecated, please use `backup_policy` instead
 	BeginAt pulumi.StringPtrInput
 	// Specifies the cache capacity. Unit: GB.
-	// + **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`, `0.5`, `1`, `2`,
-	//   `4`, `8`, `16`, `32` and `64`.
-	//   Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-	//   `1024`.
+	// + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
+	//   `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
+	//   Cluster instance specifications support `4`,`8`,`16`, `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`,
+	//   `384`, `512`, `768` and `1024`.
 	// + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
 	//   Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
 	// + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -1015,6 +1055,10 @@ type InstanceArgs struct {
 	//   Default value is `postPaid`.
 	//   Changing this creates a new instance.
 	ChargingMode pulumi.StringPtrInput
+	// Specifies the ID of the replica to delete. This parameter is mandatory when
+	// you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
+	// at a time.
+	DeletedNodes pulumi.StringPtrInput
 	// Specifies the description of an instance.
 	// It is a string that contains a maximum of 1024 characters.
 	Description pulumi.StringPtrInput
@@ -1022,7 +1066,7 @@ type InstanceArgs struct {
 	// Changing this creates a new instance.
 	Engine pulumi.StringInput
 	// Specifies the version of a cache engine.
-	// It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, or 5.0.
+	// It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
 	// Changing this creates a new instance.
 	EngineVersion pulumi.StringPtrInput
 	// The enterprise project id of the dcs instance.
@@ -1063,13 +1107,11 @@ type InstanceArgs struct {
 	// Only chinese, letters (case-insensitive), digits, underscores (_) ,and hyphens (-) are allowed.
 	Name pulumi.StringPtrInput
 	// Specifies the password of a DCS instance.
-	// Changing this creates a new instance.
 	// The password of a DCS instance must meet the following complexity requirements:
 	// + Must be a string of 8 to 32 bits in length.
 	// + Must contain three combinations of the following four characters: Lower case letters, uppercase letter, digital,
 	//   Special characters include (`~!@#$^&*()-_=+\\|{}:,<.>/?).
 	// + The new password cannot be the same as the old password.
-	//   Redis instance defaults to 6379. Memcached instance does not use this argument.
 	Password pulumi.StringPtrInput
 	// Specifies the charging period of the instance.
 	// If `periodUnit` is set to *month*, the value ranges from 1 to 9.
@@ -1087,6 +1129,7 @@ type InstanceArgs struct {
 	// Changing this creates a new instance.
 	PeriodUnit pulumi.StringPtrInput
 	// Port customization, which is supported only by Redis 4.0 and Redis 5.0 instances.
+	// Redis instance defaults to 6379. Memcached instance does not use this argument.
 	Port pulumi.IntPtrInput
 	// The IP address of the DCS instance,
 	// which can only be the currently available IP address the selected subnet.
@@ -1101,9 +1144,13 @@ type InstanceArgs struct {
 	Region pulumi.StringPtrInput
 	// Critical command renaming, which is supported only by Redis 4.0 and
 	// Redis 5.0 instances but not by Redis 3.0 instance.
-	// The valid commands that can be renamed are: *command*, *keys*, *flushdb*, *flushall* and *hgetall*.
+	// The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
 	RenameCommands pulumi.StringMapInput
+	// Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
+	// parameter is not set, the system randomly deletes unnecessary shards.
+	ReservedIps pulumi.StringArrayInput
 	// Retention time. Unit: day, the value ranges from 1 to 7.
+	// This parameter is required if the backupType is **auto**.
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
 	SaveDays pulumi.IntPtrInput
@@ -1115,6 +1162,9 @@ type InstanceArgs struct {
 	SubnetId pulumi.StringInput
 	// The key/value pairs to associate with the dcs instance.
 	Tags pulumi.StringMapInput
+	// The Parameter Template ID.
+	// Changing this creates a new instance resource.
+	TemplateId pulumi.StringPtrInput
 	// The ID of VPC which the instance belongs to.
 	// Changing this creates a new instance resource.
 	VpcId pulumi.StringInput
@@ -1221,13 +1271,13 @@ func (o InstanceOutput) AccessUser() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.AccessUser }).(pulumi.StringOutput)
 }
 
+// Deprecated: Deprecated
 func (o InstanceOutput) AutoPay() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.AutoPay }).(pulumi.StringPtrOutput)
 }
 
 // Specifies whether auto renew is enabled.
 // Valid values are `true` and `false`, defaults to `false`.
-// Changing this creates a new instance.
 func (o InstanceOutput) AutoRenew() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
 }
@@ -1277,10 +1327,10 @@ func (o InstanceOutput) BeginAt() pulumi.StringPtrOutput {
 }
 
 // Specifies the cache capacity. Unit: GB.
-//   - **Redis4.0 and Redis5.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`, `0.5`, `1`, `2`,
-//     `4`, `8`, `16`, `32` and `64`.
-//     Cluster instance specifications support `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`, `384`, `512`, `768` and
-//     `1024`.
+//   - **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
+//     `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
+//     Cluster instance specifications support `4`,`8`,`16`, `24`, `32`, `48`, `64`, `96`, `128`, `192`, `256`,
+//     `384`, `512`, `768` and `1024`.
 //   - **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
 //     Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
 //   - **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
@@ -1296,6 +1346,13 @@ func (o InstanceOutput) Capacity() pulumi.Float64Output {
 //     Changing this creates a new instance.
 func (o InstanceOutput) ChargingMode() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.ChargingMode }).(pulumi.StringOutput)
+}
+
+// Specifies the ID of the replica to delete. This parameter is mandatory when
+// you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
+// at a time.
+func (o InstanceOutput) DeletedNodes() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.DeletedNodes }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the description of an instance.
@@ -1316,7 +1373,7 @@ func (o InstanceOutput) Engine() pulumi.StringOutput {
 }
 
 // Specifies the version of a cache engine.
-// It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, or 5.0.
+// It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
 // Changing this creates a new instance.
 func (o InstanceOutput) EngineVersion() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.EngineVersion }).(pulumi.StringPtrOutput)
@@ -1398,13 +1455,11 @@ func (o InstanceOutput) OrderId() pulumi.StringOutput {
 }
 
 // Specifies the password of a DCS instance.
-// Changing this creates a new instance.
 // The password of a DCS instance must meet the following complexity requirements:
 //   - Must be a string of 8 to 32 bits in length.
 //   - Must contain three combinations of the following four characters: Lower case letters, uppercase letter, digital,
 //     Special characters include (`~!@#$^&*()-_=+\\|{}:,<.>/?).
 //   - The new password cannot be the same as the old password.
-//     Redis instance defaults to 6379. Memcached instance does not use this argument.
 func (o InstanceOutput) Password() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.Password }).(pulumi.StringPtrOutput)
 }
@@ -1434,6 +1489,7 @@ func (o InstanceOutput) PeriodUnit() pulumi.StringPtrOutput {
 }
 
 // Port customization, which is supported only by Redis 4.0 and Redis 5.0 instances.
+// Redis instance defaults to 6379. Memcached instance does not use this argument.
 func (o InstanceOutput) Port() pulumi.IntOutput {
 	return o.ApplyT(func(v *Instance) pulumi.IntOutput { return v.Port }).(pulumi.IntOutput)
 }
@@ -1460,12 +1516,19 @@ func (o InstanceOutput) Region() pulumi.StringOutput {
 
 // Critical command renaming, which is supported only by Redis 4.0 and
 // Redis 5.0 instances but not by Redis 3.0 instance.
-// The valid commands that can be renamed are: *command*, *keys*, *flushdb*, *flushall* and *hgetall*.
+// The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
 func (o InstanceOutput) RenameCommands() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringMapOutput { return v.RenameCommands }).(pulumi.StringMapOutput)
 }
 
+// Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
+// parameter is not set, the system randomly deletes unnecessary shards.
+func (o InstanceOutput) ReservedIps() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringArrayOutput { return v.ReservedIps }).(pulumi.StringArrayOutput)
+}
+
 // Retention time. Unit: day, the value ranges from 1 to 7.
+// This parameter is required if the backupType is **auto**.
 //
 // Deprecated: Deprecated, please use `backup_policy` instead
 func (o InstanceOutput) SaveDays() pulumi.IntPtrOutput {
@@ -1511,6 +1574,12 @@ func (o InstanceOutput) SubnetName() pulumi.StringOutput {
 // The key/value pairs to associate with the dcs instance.
 func (o InstanceOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
+}
+
+// The Parameter Template ID.
+// Changing this creates a new instance resource.
+func (o InstanceOutput) TemplateId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.TemplateId }).(pulumi.StringPtrOutput)
 }
 
 // Size of the used memory. Unit: MB.

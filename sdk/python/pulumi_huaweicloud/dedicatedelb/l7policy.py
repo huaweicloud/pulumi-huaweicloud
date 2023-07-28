@@ -15,26 +15,48 @@ __all__ = ['L7policyArgs', 'L7policy']
 class L7policyArgs:
     def __init__(__self__, *,
                  listener_id: pulumi.Input[str],
-                 redirect_pool_id: pulumi.Input[str],
+                 action: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 redirect_listener_id: Optional[pulumi.Input[str]] = None,
+                 redirect_pool_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a L7policy resource.
         :param pulumi.Input[str] listener_id: The Listener on which the L7 Policy will be associated with. Changing
                this creates a new L7 Policy.
-        :param pulumi.Input[str] redirect_pool_id: Requests matching this policy will be redirected to the pool with this ID.
+        :param pulumi.Input[str] action: Specifies whether requests are forwarded to another backend server group
+               or redirected to an HTTPS listener. Changing this creates a new L7 Policy. The value ranges:
+               + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirect_pool_id`.
+               + **REDIRECT_TO_LISTENER**: Requests are redirected from the HTTP listener specified by `listener_id` to the
+               HTTPS listener specified by `redirect_listener_id`.
+               Defaults to **REDIRECT_TO_POOL**.
         :param pulumi.Input[str] description: Human-readable description for the L7 Policy.
         :param pulumi.Input[str] name: Human-readable name for the L7 Policy. Does not have to be unique.
+        :param pulumi.Input[str] redirect_listener_id: Specifies the ID of the listener to which the traffic is redirected.
+               This parameter is mandatory when `action` is set to **REDIRECT_TO_LISTENER**. The listener must meet the
+               following requirements:
+               + Can only be an HTTPS listener.
+               + Can only be a listener of the same load balancer.
+        :param pulumi.Input[str] redirect_pool_id: Specifies the ID of the backend server group to which traffic is forwarded.
+               This parameter is mandatory when `action` is set to **REDIRECT_TO_POOL**. The backend server group must meet the
+               following requirements:
+               + Cannot be the default backend server group of the listener.
+               + Cannot be the backend server group used by forwarding policies of other listeners.
         :param pulumi.Input[str] region: The region in which to create the L7 Policy resource. If omitted, the
                provider-level region will be used. Changing this creates a new L7 Policy.
         """
         pulumi.set(__self__, "listener_id", listener_id)
-        pulumi.set(__self__, "redirect_pool_id", redirect_pool_id)
+        if action is not None:
+            pulumi.set(__self__, "action", action)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if redirect_listener_id is not None:
+            pulumi.set(__self__, "redirect_listener_id", redirect_listener_id)
+        if redirect_pool_id is not None:
+            pulumi.set(__self__, "redirect_pool_id", redirect_pool_id)
         if region is not None:
             pulumi.set(__self__, "region", region)
 
@@ -52,16 +74,21 @@ class L7policyArgs:
         pulumi.set(self, "listener_id", value)
 
     @property
-    @pulumi.getter(name="redirectPoolId")
-    def redirect_pool_id(self) -> pulumi.Input[str]:
+    @pulumi.getter
+    def action(self) -> Optional[pulumi.Input[str]]:
         """
-        Requests matching this policy will be redirected to the pool with this ID.
+        Specifies whether requests are forwarded to another backend server group
+        or redirected to an HTTPS listener. Changing this creates a new L7 Policy. The value ranges:
+        + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirect_pool_id`.
+        + **REDIRECT_TO_LISTENER**: Requests are redirected from the HTTP listener specified by `listener_id` to the
+        HTTPS listener specified by `redirect_listener_id`.
+        Defaults to **REDIRECT_TO_POOL**.
         """
-        return pulumi.get(self, "redirect_pool_id")
+        return pulumi.get(self, "action")
 
-    @redirect_pool_id.setter
-    def redirect_pool_id(self, value: pulumi.Input[str]):
-        pulumi.set(self, "redirect_pool_id", value)
+    @action.setter
+    def action(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "action", value)
 
     @property
     @pulumi.getter
@@ -88,6 +115,38 @@ class L7policyArgs:
         pulumi.set(self, "name", value)
 
     @property
+    @pulumi.getter(name="redirectListenerId")
+    def redirect_listener_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the listener to which the traffic is redirected.
+        This parameter is mandatory when `action` is set to **REDIRECT_TO_LISTENER**. The listener must meet the
+        following requirements:
+        + Can only be an HTTPS listener.
+        + Can only be a listener of the same load balancer.
+        """
+        return pulumi.get(self, "redirect_listener_id")
+
+    @redirect_listener_id.setter
+    def redirect_listener_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "redirect_listener_id", value)
+
+    @property
+    @pulumi.getter(name="redirectPoolId")
+    def redirect_pool_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the backend server group to which traffic is forwarded.
+        This parameter is mandatory when `action` is set to **REDIRECT_TO_POOL**. The backend server group must meet the
+        following requirements:
+        + Cannot be the default backend server group of the listener.
+        + Cannot be the backend server group used by forwarding policies of other listeners.
+        """
+        return pulumi.get(self, "redirect_pool_id")
+
+    @redirect_pool_id.setter
+    def redirect_pool_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "redirect_pool_id", value)
+
+    @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
@@ -104,31 +163,69 @@ class L7policyArgs:
 @pulumi.input_type
 class _L7policyState:
     def __init__(__self__, *,
+                 action: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  listener_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 redirect_listener_id: Optional[pulumi.Input[str]] = None,
                  redirect_pool_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering L7policy resources.
+        :param pulumi.Input[str] action: Specifies whether requests are forwarded to another backend server group
+               or redirected to an HTTPS listener. Changing this creates a new L7 Policy. The value ranges:
+               + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirect_pool_id`.
+               + **REDIRECT_TO_LISTENER**: Requests are redirected from the HTTP listener specified by `listener_id` to the
+               HTTPS listener specified by `redirect_listener_id`.
+               Defaults to **REDIRECT_TO_POOL**.
         :param pulumi.Input[str] description: Human-readable description for the L7 Policy.
         :param pulumi.Input[str] listener_id: The Listener on which the L7 Policy will be associated with. Changing
                this creates a new L7 Policy.
         :param pulumi.Input[str] name: Human-readable name for the L7 Policy. Does not have to be unique.
-        :param pulumi.Input[str] redirect_pool_id: Requests matching this policy will be redirected to the pool with this ID.
+        :param pulumi.Input[str] redirect_listener_id: Specifies the ID of the listener to which the traffic is redirected.
+               This parameter is mandatory when `action` is set to **REDIRECT_TO_LISTENER**. The listener must meet the
+               following requirements:
+               + Can only be an HTTPS listener.
+               + Can only be a listener of the same load balancer.
+        :param pulumi.Input[str] redirect_pool_id: Specifies the ID of the backend server group to which traffic is forwarded.
+               This parameter is mandatory when `action` is set to **REDIRECT_TO_POOL**. The backend server group must meet the
+               following requirements:
+               + Cannot be the default backend server group of the listener.
+               + Cannot be the backend server group used by forwarding policies of other listeners.
         :param pulumi.Input[str] region: The region in which to create the L7 Policy resource. If omitted, the
                provider-level region will be used. Changing this creates a new L7 Policy.
         """
+        if action is not None:
+            pulumi.set(__self__, "action", action)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if listener_id is not None:
             pulumi.set(__self__, "listener_id", listener_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if redirect_listener_id is not None:
+            pulumi.set(__self__, "redirect_listener_id", redirect_listener_id)
         if redirect_pool_id is not None:
             pulumi.set(__self__, "redirect_pool_id", redirect_pool_id)
         if region is not None:
             pulumi.set(__self__, "region", region)
+
+    @property
+    @pulumi.getter
+    def action(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether requests are forwarded to another backend server group
+        or redirected to an HTTPS listener. Changing this creates a new L7 Policy. The value ranges:
+        + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirect_pool_id`.
+        + **REDIRECT_TO_LISTENER**: Requests are redirected from the HTTP listener specified by `listener_id` to the
+        HTTPS listener specified by `redirect_listener_id`.
+        Defaults to **REDIRECT_TO_POOL**.
+        """
+        return pulumi.get(self, "action")
+
+    @action.setter
+    def action(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "action", value)
 
     @property
     @pulumi.getter
@@ -168,10 +265,30 @@ class _L7policyState:
         pulumi.set(self, "name", value)
 
     @property
+    @pulumi.getter(name="redirectListenerId")
+    def redirect_listener_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the listener to which the traffic is redirected.
+        This parameter is mandatory when `action` is set to **REDIRECT_TO_LISTENER**. The listener must meet the
+        following requirements:
+        + Can only be an HTTPS listener.
+        + Can only be a listener of the same load balancer.
+        """
+        return pulumi.get(self, "redirect_listener_id")
+
+    @redirect_listener_id.setter
+    def redirect_listener_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "redirect_listener_id", value)
+
+    @property
     @pulumi.getter(name="redirectPoolId")
     def redirect_pool_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Requests matching this policy will be redirected to the pool with this ID.
+        Specifies the ID of the backend server group to which traffic is forwarded.
+        This parameter is mandatory when `action` is set to **REDIRECT_TO_POOL**. The backend server group must meet the
+        following requirements:
+        + Cannot be the default backend server group of the listener.
+        + Cannot be the backend server group used by forwarding policies of other listeners.
         """
         return pulumi.get(self, "redirect_pool_id")
 
@@ -198,9 +315,11 @@ class L7policy(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 action: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  listener_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 redirect_listener_id: Optional[pulumi.Input[str]] = None,
                  redirect_pool_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  __props__=None):
@@ -217,6 +336,7 @@ class L7policy(pulumi.CustomResource):
         listener_id = config.require_object("listenerId")
         pool_id = config.require_object("poolId")
         policy1 = huaweicloud.dedicated_elb.L7policy("policy1",
+            action="REDIRECT_TO_POOL",
             description="test description",
             listener_id=listener_id,
             redirect_pool_id=pool_id)
@@ -224,19 +344,34 @@ class L7policy(pulumi.CustomResource):
 
         ## Import
 
-        ELB policy can be imported using the policy ID, e.g.
+        ELB policy can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedElb/l7policy:L7policy policy_1 5c20fdad-7288-11eb-b817-0255ac10158b
+         $ pulumi import huaweicloud:DedicatedElb/l7policy:L7policy policy_1 <id>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] action: Specifies whether requests are forwarded to another backend server group
+               or redirected to an HTTPS listener. Changing this creates a new L7 Policy. The value ranges:
+               + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirect_pool_id`.
+               + **REDIRECT_TO_LISTENER**: Requests are redirected from the HTTP listener specified by `listener_id` to the
+               HTTPS listener specified by `redirect_listener_id`.
+               Defaults to **REDIRECT_TO_POOL**.
         :param pulumi.Input[str] description: Human-readable description for the L7 Policy.
         :param pulumi.Input[str] listener_id: The Listener on which the L7 Policy will be associated with. Changing
                this creates a new L7 Policy.
         :param pulumi.Input[str] name: Human-readable name for the L7 Policy. Does not have to be unique.
-        :param pulumi.Input[str] redirect_pool_id: Requests matching this policy will be redirected to the pool with this ID.
+        :param pulumi.Input[str] redirect_listener_id: Specifies the ID of the listener to which the traffic is redirected.
+               This parameter is mandatory when `action` is set to **REDIRECT_TO_LISTENER**. The listener must meet the
+               following requirements:
+               + Can only be an HTTPS listener.
+               + Can only be a listener of the same load balancer.
+        :param pulumi.Input[str] redirect_pool_id: Specifies the ID of the backend server group to which traffic is forwarded.
+               This parameter is mandatory when `action` is set to **REDIRECT_TO_POOL**. The backend server group must meet the
+               following requirements:
+               + Cannot be the default backend server group of the listener.
+               + Cannot be the backend server group used by forwarding policies of other listeners.
         :param pulumi.Input[str] region: The region in which to create the L7 Policy resource. If omitted, the
                provider-level region will be used. Changing this creates a new L7 Policy.
         """
@@ -259,6 +394,7 @@ class L7policy(pulumi.CustomResource):
         listener_id = config.require_object("listenerId")
         pool_id = config.require_object("poolId")
         policy1 = huaweicloud.dedicated_elb.L7policy("policy1",
+            action="REDIRECT_TO_POOL",
             description="test description",
             listener_id=listener_id,
             redirect_pool_id=pool_id)
@@ -266,10 +402,10 @@ class L7policy(pulumi.CustomResource):
 
         ## Import
 
-        ELB policy can be imported using the policy ID, e.g.
+        ELB policy can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedElb/l7policy:L7policy policy_1 5c20fdad-7288-11eb-b817-0255ac10158b
+         $ pulumi import huaweicloud:DedicatedElb/l7policy:L7policy policy_1 <id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -287,9 +423,11 @@ class L7policy(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 action: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  listener_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 redirect_listener_id: Optional[pulumi.Input[str]] = None,
                  redirect_pool_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  __props__=None):
@@ -301,13 +439,13 @@ class L7policy(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = L7policyArgs.__new__(L7policyArgs)
 
+            __props__.__dict__["action"] = action
             __props__.__dict__["description"] = description
             if listener_id is None and not opts.urn:
                 raise TypeError("Missing required property 'listener_id'")
             __props__.__dict__["listener_id"] = listener_id
             __props__.__dict__["name"] = name
-            if redirect_pool_id is None and not opts.urn:
-                raise TypeError("Missing required property 'redirect_pool_id'")
+            __props__.__dict__["redirect_listener_id"] = redirect_listener_id
             __props__.__dict__["redirect_pool_id"] = redirect_pool_id
             __props__.__dict__["region"] = region
         super(L7policy, __self__).__init__(
@@ -320,9 +458,11 @@ class L7policy(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            action: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
             listener_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
+            redirect_listener_id: Optional[pulumi.Input[str]] = None,
             redirect_pool_id: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None) -> 'L7policy':
         """
@@ -332,11 +472,26 @@ class L7policy(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] action: Specifies whether requests are forwarded to another backend server group
+               or redirected to an HTTPS listener. Changing this creates a new L7 Policy. The value ranges:
+               + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirect_pool_id`.
+               + **REDIRECT_TO_LISTENER**: Requests are redirected from the HTTP listener specified by `listener_id` to the
+               HTTPS listener specified by `redirect_listener_id`.
+               Defaults to **REDIRECT_TO_POOL**.
         :param pulumi.Input[str] description: Human-readable description for the L7 Policy.
         :param pulumi.Input[str] listener_id: The Listener on which the L7 Policy will be associated with. Changing
                this creates a new L7 Policy.
         :param pulumi.Input[str] name: Human-readable name for the L7 Policy. Does not have to be unique.
-        :param pulumi.Input[str] redirect_pool_id: Requests matching this policy will be redirected to the pool with this ID.
+        :param pulumi.Input[str] redirect_listener_id: Specifies the ID of the listener to which the traffic is redirected.
+               This parameter is mandatory when `action` is set to **REDIRECT_TO_LISTENER**. The listener must meet the
+               following requirements:
+               + Can only be an HTTPS listener.
+               + Can only be a listener of the same load balancer.
+        :param pulumi.Input[str] redirect_pool_id: Specifies the ID of the backend server group to which traffic is forwarded.
+               This parameter is mandatory when `action` is set to **REDIRECT_TO_POOL**. The backend server group must meet the
+               following requirements:
+               + Cannot be the default backend server group of the listener.
+               + Cannot be the backend server group used by forwarding policies of other listeners.
         :param pulumi.Input[str] region: The region in which to create the L7 Policy resource. If omitted, the
                provider-level region will be used. Changing this creates a new L7 Policy.
         """
@@ -344,12 +499,27 @@ class L7policy(pulumi.CustomResource):
 
         __props__ = _L7policyState.__new__(_L7policyState)
 
+        __props__.__dict__["action"] = action
         __props__.__dict__["description"] = description
         __props__.__dict__["listener_id"] = listener_id
         __props__.__dict__["name"] = name
+        __props__.__dict__["redirect_listener_id"] = redirect_listener_id
         __props__.__dict__["redirect_pool_id"] = redirect_pool_id
         __props__.__dict__["region"] = region
         return L7policy(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter
+    def action(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies whether requests are forwarded to another backend server group
+        or redirected to an HTTPS listener. Changing this creates a new L7 Policy. The value ranges:
+        + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirect_pool_id`.
+        + **REDIRECT_TO_LISTENER**: Requests are redirected from the HTTP listener specified by `listener_id` to the
+        HTTPS listener specified by `redirect_listener_id`.
+        Defaults to **REDIRECT_TO_POOL**.
+        """
+        return pulumi.get(self, "action")
 
     @property
     @pulumi.getter
@@ -377,10 +547,26 @@ class L7policy(pulumi.CustomResource):
         return pulumi.get(self, "name")
 
     @property
+    @pulumi.getter(name="redirectListenerId")
+    def redirect_listener_id(self) -> pulumi.Output[str]:
+        """
+        Specifies the ID of the listener to which the traffic is redirected.
+        This parameter is mandatory when `action` is set to **REDIRECT_TO_LISTENER**. The listener must meet the
+        following requirements:
+        + Can only be an HTTPS listener.
+        + Can only be a listener of the same load balancer.
+        """
+        return pulumi.get(self, "redirect_listener_id")
+
+    @property
     @pulumi.getter(name="redirectPoolId")
     def redirect_pool_id(self) -> pulumi.Output[str]:
         """
-        Requests matching this policy will be redirected to the pool with this ID.
+        Specifies the ID of the backend server group to which traffic is forwarded.
+        This parameter is mandatory when `action` is set to **REDIRECT_TO_POOL**. The backend server group must meet the
+        following requirements:
+        + Cannot be the default backend server group of the listener.
+        + Cannot be the backend server group used by forwarding policies of other listeners.
         """
         return pulumi.get(self, "redirect_pool_id")
 

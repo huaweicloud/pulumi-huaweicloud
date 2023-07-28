@@ -36,8 +36,6 @@ class ListenerArgs:
                creates a new listener.
         :param pulumi.Input[int] protocol_port: The port on which to listen for client traffic. Changing this creates a
                new listener.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the listener. A valid value is true (UP) or false (
-               DOWN).
         :param pulumi.Input[int] connection_limit: The maximum number of connections allowed for the listener. The value ranges from
                -1 to 2,147,483,647. This parameter is reserved and has been not used. Only the administrator can specify the maximum
                number of connections.
@@ -126,10 +124,6 @@ class ListenerArgs:
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> Optional[pulumi.Input[bool]]:
-        """
-        The administrative state of the listener. A valid value is true (UP) or false (
-        DOWN).
-        """
         return pulumi.get(self, "admin_state_up")
 
     @admin_state_up.setter
@@ -280,8 +274,6 @@ class _ListenerState:
                  tenant_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Listener resources.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the listener. A valid value is true (UP) or false (
-               DOWN).
         :param pulumi.Input[int] connection_limit: The maximum number of connections allowed for the listener. The value ranges from
                -1 to 2,147,483,647. This parameter is reserved and has been not used. Only the administrator can specify the maximum
                number of connections.
@@ -340,10 +332,6 @@ class _ListenerState:
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> Optional[pulumi.Input[bool]]:
-        """
-        The administrative state of the listener. A valid value is true (UP) or false (
-        DOWN).
-        """
         return pulumi.get(self, "admin_state_up")
 
     @admin_state_up.setter
@@ -562,8 +550,6 @@ class Listener(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the listener. A valid value is true (UP) or false (
-               DOWN).
         :param pulumi.Input[int] connection_limit: The maximum number of connections allowed for the listener. The value ranges from
                -1 to 2,147,483,647. This parameter is reserved and has been not used. Only the administrator can specify the maximum
                number of connections.
@@ -711,8 +697,6 @@ class Listener(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the listener. A valid value is true (UP) or false (
-               DOWN).
         :param pulumi.Input[int] connection_limit: The maximum number of connections allowed for the listener. The value ranges from
                -1 to 2,147,483,647. This parameter is reserved and has been not used. Only the administrator can specify the maximum
                number of connections.
@@ -759,10 +743,6 @@ class Listener(pulumi.CustomResource):
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> pulumi.Output[Optional[bool]]:
-        """
-        The administrative state of the listener. A valid value is true (UP) or false (
-        DOWN).
-        """
         return pulumi.get(self, "admin_state_up")
 
     @property

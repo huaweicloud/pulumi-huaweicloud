@@ -77,7 +77,8 @@ export class Desktop extends pulumi.CustomResource {
     public readonly deleteUser!: pulumi.Output<boolean | undefined>;
     /**
      * Specifies whether to send emails to user mailbox during important
-     * operations. Changing this will create a new resource.
+     * operations.
+     * Defaults to **false**. Changing this will create a new resource.
      */
     public readonly emailNotification!: pulumi.Output<boolean | undefined>;
     /**
@@ -256,7 +257,8 @@ export interface DesktopState {
     deleteUser?: pulumi.Input<boolean>;
     /**
      * Specifies whether to send emails to user mailbox during important
-     * operations. Changing this will create a new resource.
+     * operations.
+     * Defaults to **false**. Changing this will create a new resource.
      */
     emailNotification?: pulumi.Input<boolean>;
     /**
@@ -357,7 +359,8 @@ export interface DesktopArgs {
     deleteUser?: pulumi.Input<boolean>;
     /**
      * Specifies whether to send emails to user mailbox during important
-     * operations. Changing this will create a new resource.
+     * operations.
+     * Defaults to **false**. Changing this will create a new resource.
      */
     emailNotification?: pulumi.Input<boolean>;
     /**

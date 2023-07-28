@@ -148,7 +148,7 @@ type Conference struct {
 	// The audience meeting link address.
 	AudienceJoinUri pulumi.StringOutput `pulumi:"audienceJoinUri"`
 	// Specifies the auxiliary streaming address, the maximum length is 255 characters.
-	// Only availabe if `recordType` is **2** or **3**.
+	// Only available if `recordType` is **2** or **3**.
 	AuxAddress pulumi.StringOutput `pulumi:"auxAddress"`
 	// The host meeting link address.
 	ChairJoinUri pulumi.StringOutput `pulumi:"chairJoinUri"`
@@ -163,7 +163,7 @@ type Conference struct {
 	// The object structure is documented below.
 	Configuration ConferenceConfigurationPtrOutput `pulumi:"configuration"`
 	// Specifies the corporation ID.
-	// Required if the application is used in multiple enterprises. Only availabe if `appId` is set.
+	// Required if the application is used in multiple enterprises. Only available if `appId` is set.
 	// Changing this parameter will create a new resource.
 	CorpId pulumi.StringOutput `pulumi:"corpId"`
 	// Specifies the configurations of the cyclical conference.
@@ -187,8 +187,10 @@ type Conference struct {
 	// Specifies whether to record auxiliary stream.
 	// + **0**: Do not record.
 	// + **1**: Record.
-	IsRecordAuxStream pulumi.IntOutput                  `pulumi:"isRecordAuxStream"`
-	JoinPasswords     ConferenceJoinPasswordArrayOutput `pulumi:"joinPasswords"`
+	IsRecordAuxStream pulumi.IntOutput `pulumi:"isRecordAuxStream"`
+	// The meeting password.
+	// The joinPassword structure is documented below.
+	JoinPasswords ConferenceJoinPasswordArrayOutput `pulumi:"joinPasswords"`
 	// Specifies the default language of the conference, the default value is defined by the
 	// conference cloud service. For languages supported by the system, it is passed according to the RFC3066 specification.
 	// The valid values are as follows:
@@ -196,7 +198,7 @@ type Conference struct {
 	// + **en-US**: US English.
 	Language pulumi.StringOutput `pulumi:"language"`
 	// Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-	// Only availabe if `recordType` is **2** or **3**.
+	// Only available if `recordType` is **2** or **3**.
 	LiveAddress pulumi.StringOutput `pulumi:"liveAddress"`
 	// Specifies the conference media type list.
 	// It consists of one or more enumerations, and the valid values are as follows:
@@ -301,7 +303,7 @@ type conferenceState struct {
 	// The audience meeting link address.
 	AudienceJoinUri *string `pulumi:"audienceJoinUri"`
 	// Specifies the auxiliary streaming address, the maximum length is 255 characters.
-	// Only availabe if `recordType` is **2** or **3**.
+	// Only available if `recordType` is **2** or **3**.
 	AuxAddress *string `pulumi:"auxAddress"`
 	// The host meeting link address.
 	ChairJoinUri *string `pulumi:"chairJoinUri"`
@@ -316,7 +318,7 @@ type conferenceState struct {
 	// The object structure is documented below.
 	Configuration *ConferenceConfiguration `pulumi:"configuration"`
 	// Specifies the corporation ID.
-	// Required if the application is used in multiple enterprises. Only availabe if `appId` is set.
+	// Required if the application is used in multiple enterprises. Only available if `appId` is set.
 	// Changing this parameter will create a new resource.
 	CorpId *string `pulumi:"corpId"`
 	// Specifies the configurations of the cyclical conference.
@@ -340,8 +342,10 @@ type conferenceState struct {
 	// Specifies whether to record auxiliary stream.
 	// + **0**: Do not record.
 	// + **1**: Record.
-	IsRecordAuxStream *int                     `pulumi:"isRecordAuxStream"`
-	JoinPasswords     []ConferenceJoinPassword `pulumi:"joinPasswords"`
+	IsRecordAuxStream *int `pulumi:"isRecordAuxStream"`
+	// The meeting password.
+	// The joinPassword structure is documented below.
+	JoinPasswords []ConferenceJoinPassword `pulumi:"joinPasswords"`
 	// Specifies the default language of the conference, the default value is defined by the
 	// conference cloud service. For languages supported by the system, it is passed according to the RFC3066 specification.
 	// The valid values are as follows:
@@ -349,7 +353,7 @@ type conferenceState struct {
 	// + **en-US**: US English.
 	Language *string `pulumi:"language"`
 	// Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-	// Only availabe if `recordType` is **2** or **3**.
+	// Only available if `recordType` is **2** or **3**.
 	LiveAddress *string `pulumi:"liveAddress"`
 	// Specifies the conference media type list.
 	// It consists of one or more enumerations, and the valid values are as follows:
@@ -416,7 +420,7 @@ type ConferenceState struct {
 	// The audience meeting link address.
 	AudienceJoinUri pulumi.StringPtrInput
 	// Specifies the auxiliary streaming address, the maximum length is 255 characters.
-	// Only availabe if `recordType` is **2** or **3**.
+	// Only available if `recordType` is **2** or **3**.
 	AuxAddress pulumi.StringPtrInput
 	// The host meeting link address.
 	ChairJoinUri pulumi.StringPtrInput
@@ -431,7 +435,7 @@ type ConferenceState struct {
 	// The object structure is documented below.
 	Configuration ConferenceConfigurationPtrInput
 	// Specifies the corporation ID.
-	// Required if the application is used in multiple enterprises. Only availabe if `appId` is set.
+	// Required if the application is used in multiple enterprises. Only available if `appId` is set.
 	// Changing this parameter will create a new resource.
 	CorpId pulumi.StringPtrInput
 	// Specifies the configurations of the cyclical conference.
@@ -456,7 +460,9 @@ type ConferenceState struct {
 	// + **0**: Do not record.
 	// + **1**: Record.
 	IsRecordAuxStream pulumi.IntPtrInput
-	JoinPasswords     ConferenceJoinPasswordArrayInput
+	// The meeting password.
+	// The joinPassword structure is documented below.
+	JoinPasswords ConferenceJoinPasswordArrayInput
 	// Specifies the default language of the conference, the default value is defined by the
 	// conference cloud service. For languages supported by the system, it is passed according to the RFC3066 specification.
 	// The valid values are as follows:
@@ -464,7 +470,7 @@ type ConferenceState struct {
 	// + **en-US**: US English.
 	Language pulumi.StringPtrInput
 	// Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-	// Only availabe if `recordType` is **2** or **3**.
+	// Only available if `recordType` is **2** or **3**.
 	LiveAddress pulumi.StringPtrInput
 	// Specifies the conference media type list.
 	// It consists of one or more enumerations, and the valid values are as follows:
@@ -531,13 +537,13 @@ type conferenceArgs struct {
 	// Required if `appId` is set. Changing this parameter will create a new resource.
 	AppKey *string `pulumi:"appKey"`
 	// Specifies the auxiliary streaming address, the maximum length is 255 characters.
-	// Only availabe if `recordType` is **2** or **3**.
+	// Only available if `recordType` is **2** or **3**.
 	AuxAddress *string `pulumi:"auxAddress"`
 	// Specifies the other conference configurations.
 	// The object structure is documented below.
 	Configuration *ConferenceConfiguration `pulumi:"configuration"`
 	// Specifies the corporation ID.
-	// Required if the application is used in multiple enterprises. Only availabe if `appId` is set.
+	// Required if the application is used in multiple enterprises. Only available if `appId` is set.
 	// Changing this parameter will create a new resource.
 	CorpId *string `pulumi:"corpId"`
 	// Specifies the configurations of the cyclical conference.
@@ -567,7 +573,7 @@ type conferenceArgs struct {
 	// + **en-US**: US English.
 	Language *string `pulumi:"language"`
 	// Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-	// Only availabe if `recordType` is **2** or **3**.
+	// Only available if `recordType` is **2** or **3**.
 	LiveAddress *string `pulumi:"liveAddress"`
 	// Specifies the conference media type list.
 	// It consists of one or more enumerations, and the valid values are as follows:
@@ -624,13 +630,13 @@ type ConferenceArgs struct {
 	// Required if `appId` is set. Changing this parameter will create a new resource.
 	AppKey pulumi.StringPtrInput
 	// Specifies the auxiliary streaming address, the maximum length is 255 characters.
-	// Only availabe if `recordType` is **2** or **3**.
+	// Only available if `recordType` is **2** or **3**.
 	AuxAddress pulumi.StringPtrInput
 	// Specifies the other conference configurations.
 	// The object structure is documented below.
 	Configuration ConferenceConfigurationPtrInput
 	// Specifies the corporation ID.
-	// Required if the application is used in multiple enterprises. Only availabe if `appId` is set.
+	// Required if the application is used in multiple enterprises. Only available if `appId` is set.
 	// Changing this parameter will create a new resource.
 	CorpId pulumi.StringPtrInput
 	// Specifies the configurations of the cyclical conference.
@@ -660,7 +666,7 @@ type ConferenceArgs struct {
 	// + **en-US**: US English.
 	Language pulumi.StringPtrInput
 	// Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-	// Only availabe if `recordType` is **2** or **3**.
+	// Only available if `recordType` is **2** or **3**.
 	LiveAddress pulumi.StringPtrInput
 	// Specifies the conference media type list.
 	// It consists of one or more enumerations, and the valid values are as follows:
@@ -824,7 +830,7 @@ func (o ConferenceOutput) AudienceJoinUri() pulumi.StringOutput {
 }
 
 // Specifies the auxiliary streaming address, the maximum length is 255 characters.
-// Only availabe if `recordType` is **2** or **3**.
+// Only available if `recordType` is **2** or **3**.
 func (o ConferenceOutput) AuxAddress() pulumi.StringOutput {
 	return o.ApplyT(func(v *Conference) pulumi.StringOutput { return v.AuxAddress }).(pulumi.StringOutput)
 }
@@ -854,7 +860,7 @@ func (o ConferenceOutput) Configuration() ConferenceConfigurationPtrOutput {
 }
 
 // Specifies the corporation ID.
-// Required if the application is used in multiple enterprises. Only availabe if `appId` is set.
+// Required if the application is used in multiple enterprises. Only available if `appId` is set.
 // Changing this parameter will create a new resource.
 func (o ConferenceOutput) CorpId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Conference) pulumi.StringOutput { return v.CorpId }).(pulumi.StringOutput)
@@ -900,6 +906,8 @@ func (o ConferenceOutput) IsRecordAuxStream() pulumi.IntOutput {
 	return o.ApplyT(func(v *Conference) pulumi.IntOutput { return v.IsRecordAuxStream }).(pulumi.IntOutput)
 }
 
+// The meeting password.
+// The joinPassword structure is documented below.
 func (o ConferenceOutput) JoinPasswords() ConferenceJoinPasswordArrayOutput {
 	return o.ApplyT(func(v *Conference) ConferenceJoinPasswordArrayOutput { return v.JoinPasswords }).(ConferenceJoinPasswordArrayOutput)
 }
@@ -914,7 +922,7 @@ func (o ConferenceOutput) Language() pulumi.StringOutput {
 }
 
 // Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-// Only availabe if `recordType` is **2** or **3**.
+// Only available if `recordType` is **2** or **3**.
 func (o ConferenceOutput) LiveAddress() pulumi.StringOutput {
 	return o.ApplyT(func(v *Conference) pulumi.StringOutput { return v.LiveAddress }).(pulumi.StringOutput)
 }

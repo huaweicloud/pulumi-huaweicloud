@@ -52,8 +52,8 @@ class BucketArgs:
                "private", "public-read", "public-read-write" and "log-delivery-write". Defaults to `private`.
         :param pulumi.Input[Sequence[pulumi.Input['BucketCorsRuleArgs']]] cors_rules: A rule of Cross-Origin Resource Sharing (documented below).
         :param pulumi.Input[bool] encryption: Whether enable default server-side encryption of the bucket in SSE-KMS mode.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the OBS bucket. Changing
-               this will create a new bucket.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the OBS bucket.
+               Defaults to `0`.
         :param pulumi.Input[bool] force_destroy: A boolean that indicates all objects should be deleted from the bucket, so that the
                bucket can be destroyed without error. Default to `false`.
         :param pulumi.Input[str] kms_key_id: Specifies the ID of a KMS key. If omitted, the default master key will be used.
@@ -73,7 +73,6 @@ class BucketArgs:
         :param pulumi.Input[int] quota: Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
                storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
                quota is not limited.
-               <!-- markdownlint-enable MD033 -->
         :param pulumi.Input[str] region: Specifies the region where this bucket will be created. If not specified, used
                the region by the provider. Changing this will create a new bucket.
         :param pulumi.Input[str] storage_class: Specifies the storage class of the bucket. OBS provides three storage classes:
@@ -185,8 +184,8 @@ class BucketArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project id of the OBS bucket. Changing
-        this will create a new bucket.
+        Specifies the enterprise project id of the OBS bucket.
+        Defaults to `0`.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -316,7 +315,6 @@ class BucketArgs:
         Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
         storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
         quota is not limited.
-        <!-- markdownlint-enable MD033 -->
         """
         return pulumi.get(self, "quota")
 
@@ -410,6 +408,7 @@ class _BucketState:
                  quota: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  storage_class: Optional[pulumi.Input[str]] = None,
+                 storage_infos: Optional[pulumi.Input[Sequence[pulumi.Input['BucketStorageInfoArgs']]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  versioning: Optional[pulumi.Input[bool]] = None,
                  website: Optional[pulumi.Input['BucketWebsiteArgs']] = None):
@@ -431,8 +430,8 @@ class _BucketState:
         :param pulumi.Input[str] bucket_version: The OBS version of the bucket.
         :param pulumi.Input[Sequence[pulumi.Input['BucketCorsRuleArgs']]] cors_rules: A rule of Cross-Origin Resource Sharing (documented below).
         :param pulumi.Input[bool] encryption: Whether enable default server-side encryption of the bucket in SSE-KMS mode.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the OBS bucket. Changing
-               this will create a new bucket.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the OBS bucket.
+               Defaults to `0`.
         :param pulumi.Input[bool] force_destroy: A boolean that indicates all objects should be deleted from the bucket, so that the
                bucket can be destroyed without error. Default to `false`.
         :param pulumi.Input[str] kms_key_id: Specifies the ID of a KMS key. If omitted, the default master key will be used.
@@ -452,11 +451,12 @@ class _BucketState:
         :param pulumi.Input[int] quota: Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
                storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
                quota is not limited.
-               <!-- markdownlint-enable MD033 -->
         :param pulumi.Input[str] region: Specifies the region where this bucket will be created. If not specified, used
                the region by the provider. Changing this will create a new bucket.
         :param pulumi.Input[str] storage_class: Specifies the storage class of the bucket. OBS provides three storage classes:
                "STANDARD", "WARM" (Infrequent Access) and "COLD" (Archive). Defaults to `STANDARD`.
+        :param pulumi.Input[Sequence[pulumi.Input['BucketStorageInfoArgs']]] storage_infos: The OBS storage info of the bucket.
+               The object structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A mapping of tags to assign to the bucket. Each tag is represented by one key-value pair.
         :param pulumi.Input[bool] versioning: Whether enable versioning. Once you version-enable a bucket, it can never return to an
                unversioned state. You can, however, suspend versioning on that bucket.
@@ -500,6 +500,8 @@ class _BucketState:
             pulumi.set(__self__, "region", region)
         if storage_class is not None:
             pulumi.set(__self__, "storage_class", storage_class)
+        if storage_infos is not None:
+            pulumi.set(__self__, "storage_infos", storage_infos)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
         if versioning is not None:
@@ -593,8 +595,8 @@ class _BucketState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project id of the OBS bucket. Changing
-        this will create a new bucket.
+        Specifies the enterprise project id of the OBS bucket.
+        Defaults to `0`.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -724,7 +726,6 @@ class _BucketState:
         Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
         storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
         quota is not limited.
-        <!-- markdownlint-enable MD033 -->
         """
         return pulumi.get(self, "quota")
 
@@ -757,6 +758,19 @@ class _BucketState:
     @storage_class.setter
     def storage_class(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "storage_class", value)
+
+    @property
+    @pulumi.getter(name="storageInfos")
+    def storage_infos(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['BucketStorageInfoArgs']]]]:
+        """
+        The OBS storage info of the bucket.
+        The object structure is documented below.
+        """
+        return pulumi.get(self, "storage_infos")
+
+    @storage_infos.setter
+    def storage_infos(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['BucketStorageInfoArgs']]]]):
+        pulumi.set(self, "storage_infos", value)
 
     @property
     @pulumi.getter
@@ -1006,8 +1020,8 @@ class Bucket(pulumi.CustomResource):
                bucket or its objects by entering a domain name.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['BucketCorsRuleArgs']]]] cors_rules: A rule of Cross-Origin Resource Sharing (documented below).
         :param pulumi.Input[bool] encryption: Whether enable default server-side encryption of the bucket in SSE-KMS mode.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the OBS bucket. Changing
-               this will create a new bucket.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the OBS bucket.
+               Defaults to `0`.
         :param pulumi.Input[bool] force_destroy: A boolean that indicates all objects should be deleted from the bucket, so that the
                bucket can be destroyed without error. Default to `false`.
         :param pulumi.Input[str] kms_key_id: Specifies the ID of a KMS key. If omitted, the default master key will be used.
@@ -1027,7 +1041,6 @@ class Bucket(pulumi.CustomResource):
         :param pulumi.Input[int] quota: Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
                storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
                quota is not limited.
-               <!-- markdownlint-enable MD033 -->
         :param pulumi.Input[str] region: Specifies the region where this bucket will be created. If not specified, used
                the region by the provider. Changing this will create a new bucket.
         :param pulumi.Input[str] storage_class: Specifies the storage class of the bucket. OBS provides three storage classes:
@@ -1279,6 +1292,7 @@ class Bucket(pulumi.CustomResource):
             __props__.__dict__["website"] = website
             __props__.__dict__["bucket_domain_name"] = None
             __props__.__dict__["bucket_version"] = None
+            __props__.__dict__["storage_infos"] = None
         super(Bucket, __self__).__init__(
             'huaweicloud:Obs/bucket:Bucket',
             resource_name,
@@ -1308,6 +1322,7 @@ class Bucket(pulumi.CustomResource):
             quota: Optional[pulumi.Input[int]] = None,
             region: Optional[pulumi.Input[str]] = None,
             storage_class: Optional[pulumi.Input[str]] = None,
+            storage_infos: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['BucketStorageInfoArgs']]]]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             versioning: Optional[pulumi.Input[bool]] = None,
             website: Optional[pulumi.Input[pulumi.InputType['BucketWebsiteArgs']]] = None) -> 'Bucket':
@@ -1334,8 +1349,8 @@ class Bucket(pulumi.CustomResource):
         :param pulumi.Input[str] bucket_version: The OBS version of the bucket.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['BucketCorsRuleArgs']]]] cors_rules: A rule of Cross-Origin Resource Sharing (documented below).
         :param pulumi.Input[bool] encryption: Whether enable default server-side encryption of the bucket in SSE-KMS mode.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the OBS bucket. Changing
-               this will create a new bucket.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the OBS bucket.
+               Defaults to `0`.
         :param pulumi.Input[bool] force_destroy: A boolean that indicates all objects should be deleted from the bucket, so that the
                bucket can be destroyed without error. Default to `false`.
         :param pulumi.Input[str] kms_key_id: Specifies the ID of a KMS key. If omitted, the default master key will be used.
@@ -1355,11 +1370,12 @@ class Bucket(pulumi.CustomResource):
         :param pulumi.Input[int] quota: Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
                storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
                quota is not limited.
-               <!-- markdownlint-enable MD033 -->
         :param pulumi.Input[str] region: Specifies the region where this bucket will be created. If not specified, used
                the region by the provider. Changing this will create a new bucket.
         :param pulumi.Input[str] storage_class: Specifies the storage class of the bucket. OBS provides three storage classes:
                "STANDARD", "WARM" (Infrequent Access) and "COLD" (Archive). Defaults to `STANDARD`.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['BucketStorageInfoArgs']]]] storage_infos: The OBS storage info of the bucket.
+               The object structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A mapping of tags to assign to the bucket. Each tag is represented by one key-value pair.
         :param pulumi.Input[bool] versioning: Whether enable versioning. Once you version-enable a bucket, it can never return to an
                unversioned state. You can, however, suspend versioning on that bucket.
@@ -1388,6 +1404,7 @@ class Bucket(pulumi.CustomResource):
         __props__.__dict__["quota"] = quota
         __props__.__dict__["region"] = region
         __props__.__dict__["storage_class"] = storage_class
+        __props__.__dict__["storage_infos"] = storage_infos
         __props__.__dict__["tags"] = tags
         __props__.__dict__["versioning"] = versioning
         __props__.__dict__["website"] = website
@@ -1455,8 +1472,8 @@ class Bucket(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        Specifies the enterprise project id of the OBS bucket. Changing
-        this will create a new bucket.
+        Specifies the enterprise project id of the OBS bucket.
+        Defaults to `0`.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -1546,7 +1563,6 @@ class Bucket(pulumi.CustomResource):
         Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
         storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
         quota is not limited.
-        <!-- markdownlint-enable MD033 -->
         """
         return pulumi.get(self, "quota")
 
@@ -1567,6 +1583,15 @@ class Bucket(pulumi.CustomResource):
         "STANDARD", "WARM" (Infrequent Access) and "COLD" (Archive). Defaults to `STANDARD`.
         """
         return pulumi.get(self, "storage_class")
+
+    @property
+    @pulumi.getter(name="storageInfos")
+    def storage_infos(self) -> pulumi.Output[Sequence['outputs.BucketStorageInfo']]:
+        """
+        The OBS storage info of the bucket.
+        The object structure is documented below.
+        """
+        return pulumi.get(self, "storage_infos")
 
     @property
     @pulumi.getter

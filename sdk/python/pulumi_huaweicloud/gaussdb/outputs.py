@@ -89,8 +89,10 @@ class MysqlInstanceDatastore(dict):
                  engine: str,
                  version: str):
         """
-        :param str engine: Specifies the database engine. Only "gauss-mysql" is supported now.
+        :param str engine: Specifies the database engine. Only "gaussdb-mysql" is supported now.
+               Changing this parameter will create a new resource.
         :param str version: Specifies the database version. Only "8.0" is supported now.
+               Changing this parameter will create a new resource.
         """
         pulumi.set(__self__, "engine", engine)
         pulumi.set(__self__, "version", version)
@@ -99,7 +101,8 @@ class MysqlInstanceDatastore(dict):
     @pulumi.getter
     def engine(self) -> str:
         """
-        Specifies the database engine. Only "gauss-mysql" is supported now.
+        Specifies the database engine. Only "gaussdb-mysql" is supported now.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "engine")
 
@@ -108,6 +111,7 @@ class MysqlInstanceDatastore(dict):
     def version(self) -> str:
         """
         Specifies the database version. Only "8.0" is supported now.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "version")
 

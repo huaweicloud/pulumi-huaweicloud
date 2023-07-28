@@ -91,9 +91,14 @@ import (
 type ReadReplicaInstance struct {
 	pulumi.CustomResourceState
 
+	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
+	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
 	// Specifies the AZ name. Changing this parameter will create a new
 	// resource.
 	AvailabilityZone pulumi.StringOutput `pulumi:"availabilityZone"`
+	// Specifies the charging mode of the read replica instance. Valid values
+	// are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+	ChargingMode pulumi.StringOutput `pulumi:"chargingMode"`
 	// Indicates the database information. Structure is documented below.
 	Dbs ReadReplicaInstanceDbArrayOutput `pulumi:"dbs"`
 	// The enterprise project id of the read replica instance.
@@ -106,6 +111,14 @@ type ReadReplicaInstance struct {
 	// case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_). Changing this parameter will
 	// create a new resource.
 	Name pulumi.StringOutput `pulumi:"name"`
+	// Specifies the charging period of the read replica instance. If `periodUnit` is
+	// set to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
+	// parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+	Period pulumi.IntPtrOutput `pulumi:"period"`
+	// Specifies the charging period unit of the read replica instance. Valid
+	// values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this
+	// creates a new resource.
+	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
 	// Specifies the DB instance ID, which is used to create a read
 	// replica. Changing this parameter will create a new resource.
 	PrimaryInstanceId pulumi.StringOutput `pulumi:"primaryInstanceId"`
@@ -184,9 +197,14 @@ func GetReadReplicaInstance(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering ReadReplicaInstance resources.
 type readReplicaInstanceState struct {
+	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
+	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the AZ name. Changing this parameter will create a new
 	// resource.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
+	// Specifies the charging mode of the read replica instance. Valid values
+	// are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+	ChargingMode *string `pulumi:"chargingMode"`
 	// Indicates the database information. Structure is documented below.
 	Dbs []ReadReplicaInstanceDb `pulumi:"dbs"`
 	// The enterprise project id of the read replica instance.
@@ -199,6 +217,14 @@ type readReplicaInstanceState struct {
 	// case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_). Changing this parameter will
 	// create a new resource.
 	Name *string `pulumi:"name"`
+	// Specifies the charging period of the read replica instance. If `periodUnit` is
+	// set to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
+	// parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+	Period *int `pulumi:"period"`
+	// Specifies the charging period unit of the read replica instance. Valid
+	// values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this
+	// creates a new resource.
+	PeriodUnit *string `pulumi:"periodUnit"`
 	// Specifies the DB instance ID, which is used to create a read
 	// replica. Changing this parameter will create a new resource.
 	PrimaryInstanceId *string `pulumi:"primaryInstanceId"`
@@ -236,9 +262,14 @@ type readReplicaInstanceState struct {
 }
 
 type ReadReplicaInstanceState struct {
+	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
+	AutoRenew pulumi.StringPtrInput
 	// Specifies the AZ name. Changing this parameter will create a new
 	// resource.
 	AvailabilityZone pulumi.StringPtrInput
+	// Specifies the charging mode of the read replica instance. Valid values
+	// are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+	ChargingMode pulumi.StringPtrInput
 	// Indicates the database information. Structure is documented below.
 	Dbs ReadReplicaInstanceDbArrayInput
 	// The enterprise project id of the read replica instance.
@@ -251,6 +282,14 @@ type ReadReplicaInstanceState struct {
 	// case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_). Changing this parameter will
 	// create a new resource.
 	Name pulumi.StringPtrInput
+	// Specifies the charging period of the read replica instance. If `periodUnit` is
+	// set to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
+	// parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+	Period pulumi.IntPtrInput
+	// Specifies the charging period unit of the read replica instance. Valid
+	// values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this
+	// creates a new resource.
+	PeriodUnit pulumi.StringPtrInput
 	// Specifies the DB instance ID, which is used to create a read
 	// replica. Changing this parameter will create a new resource.
 	PrimaryInstanceId pulumi.StringPtrInput
@@ -292,9 +331,14 @@ func (ReadReplicaInstanceState) ElementType() reflect.Type {
 }
 
 type readReplicaInstanceArgs struct {
+	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
+	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the AZ name. Changing this parameter will create a new
 	// resource.
 	AvailabilityZone string `pulumi:"availabilityZone"`
+	// Specifies the charging mode of the read replica instance. Valid values
+	// are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+	ChargingMode *string `pulumi:"chargingMode"`
 	// The enterprise project id of the read replica instance.
 	// Changing this parameter will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
@@ -305,6 +349,14 @@ type readReplicaInstanceArgs struct {
 	// case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_). Changing this parameter will
 	// create a new resource.
 	Name *string `pulumi:"name"`
+	// Specifies the charging period of the read replica instance. If `periodUnit` is
+	// set to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
+	// parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+	Period *int `pulumi:"period"`
+	// Specifies the charging period unit of the read replica instance. Valid
+	// values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this
+	// creates a new resource.
+	PeriodUnit *string `pulumi:"periodUnit"`
 	// Specifies the DB instance ID, which is used to create a read
 	// replica. Changing this parameter will create a new resource.
 	PrimaryInstanceId string `pulumi:"primaryInstanceId"`
@@ -323,9 +375,14 @@ type readReplicaInstanceArgs struct {
 
 // The set of arguments for constructing a ReadReplicaInstance resource.
 type ReadReplicaInstanceArgs struct {
+	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
+	AutoRenew pulumi.StringPtrInput
 	// Specifies the AZ name. Changing this parameter will create a new
 	// resource.
 	AvailabilityZone pulumi.StringInput
+	// Specifies the charging mode of the read replica instance. Valid values
+	// are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+	ChargingMode pulumi.StringPtrInput
 	// The enterprise project id of the read replica instance.
 	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
@@ -336,6 +393,14 @@ type ReadReplicaInstanceArgs struct {
 	// case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_). Changing this parameter will
 	// create a new resource.
 	Name pulumi.StringPtrInput
+	// Specifies the charging period of the read replica instance. If `periodUnit` is
+	// set to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
+	// parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+	Period pulumi.IntPtrInput
+	// Specifies the charging period unit of the read replica instance. Valid
+	// values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this
+	// creates a new resource.
+	PeriodUnit pulumi.StringPtrInput
 	// Specifies the DB instance ID, which is used to create a read
 	// replica. Changing this parameter will create a new resource.
 	PrimaryInstanceId pulumi.StringInput
@@ -439,10 +504,21 @@ func (o ReadReplicaInstanceOutput) ToReadReplicaInstanceOutputWithContext(ctx co
 	return o
 }
 
+// Specifies whether auto renew is enabled. Valid values are "true" and "false".
+func (o ReadReplicaInstanceOutput) AutoRenew() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the AZ name. Changing this parameter will create a new
 // resource.
 func (o ReadReplicaInstanceOutput) AvailabilityZone() pulumi.StringOutput {
 	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.StringOutput { return v.AvailabilityZone }).(pulumi.StringOutput)
+}
+
+// Specifies the charging mode of the read replica instance. Valid values
+// are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+func (o ReadReplicaInstanceOutput) ChargingMode() pulumi.StringOutput {
+	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.StringOutput { return v.ChargingMode }).(pulumi.StringOutput)
 }
 
 // Indicates the database information. Structure is documented below.
@@ -467,6 +543,20 @@ func (o ReadReplicaInstanceOutput) Flavor() pulumi.StringOutput {
 // create a new resource.
 func (o ReadReplicaInstanceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the charging period of the read replica instance. If `periodUnit` is
+// set to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
+// parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+func (o ReadReplicaInstanceOutput) Period() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.IntPtrOutput { return v.Period }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the charging period unit of the read replica instance. Valid
+// values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this
+// creates a new resource.
+func (o ReadReplicaInstanceOutput) PeriodUnit() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.StringPtrOutput { return v.PeriodUnit }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the DB instance ID, which is used to create a read

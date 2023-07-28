@@ -28,17 +28,17 @@ class LoadbalancerArgs:
                  vip_address: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Loadbalancer resource.
-        :param pulumi.Input[str] vip_subnet_id: The network on which to allocate the loadbalancer's address. A tenant
-               can only create Loadbalancers on networks authorized by policy (e.g. networks that belong to them or networks that are
-               shared). Changing this creates a new loadbalancer.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the loadbalancer. A valid value is true (UP) or
-               false (DOWN).
+        :param pulumi.Input[str] vip_subnet_id: The **IPv4 subnet ID** of the subnet where the load balancer works.
+               Changing this creates a new loadbalancer.
         :param pulumi.Input[str] description: Human-readable description for the loadbalancer.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the loadbalancer. Changing this
                creates a new loadbalancer.
+        :param pulumi.Input[str] flavor: schema: Deprecated
+        :param pulumi.Input[str] loadbalancer_provider: schema: Deprecated
         :param pulumi.Input[str] name: Human-readable name for the loadbalancer. Does not have to be unique.
         :param pulumi.Input[str] region: The region in which to create the loadbalancer resource. If omitted, the
                provider-level region will be used. Changing this creates a new loadbalancer.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: schema: Deprecated
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the loadbalancer.
         :param pulumi.Input[str] vip_address: The ip address of the load balancer. Changing this creates a new
                loadbalancer.
@@ -74,9 +74,8 @@ class LoadbalancerArgs:
     @pulumi.getter(name="vipSubnetId")
     def vip_subnet_id(self) -> pulumi.Input[str]:
         """
-        The network on which to allocate the loadbalancer's address. A tenant
-        can only create Loadbalancers on networks authorized by policy (e.g. networks that belong to them or networks that are
-        shared). Changing this creates a new loadbalancer.
+        The **IPv4 subnet ID** of the subnet where the load balancer works.
+        Changing this creates a new loadbalancer.
         """
         return pulumi.get(self, "vip_subnet_id")
 
@@ -87,10 +86,6 @@ class LoadbalancerArgs:
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> Optional[pulumi.Input[bool]]:
-        """
-        The administrative state of the loadbalancer. A valid value is true (UP) or
-        false (DOWN).
-        """
         return pulumi.get(self, "admin_state_up")
 
     @admin_state_up.setter
@@ -125,6 +120,9 @@ class LoadbalancerArgs:
     @property
     @pulumi.getter
     def flavor(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Deprecated
+        """
         return pulumi.get(self, "flavor")
 
     @flavor.setter
@@ -134,6 +132,9 @@ class LoadbalancerArgs:
     @property
     @pulumi.getter(name="loadbalancerProvider")
     def loadbalancer_provider(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Deprecated
+        """
         return pulumi.get(self, "loadbalancer_provider")
 
     @loadbalancer_provider.setter
@@ -168,6 +169,9 @@ class LoadbalancerArgs:
     @property
     @pulumi.getter(name="securityGroupIds")
     def security_group_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        schema: Deprecated
+        """
         return pulumi.get(self, "security_group_ids")
 
     @security_group_ids.setter
@@ -218,6 +222,7 @@ class _LoadbalancerState:
                  flavor: Optional[pulumi.Input[str]] = None,
                  loadbalancer_provider: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 public_ip: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -227,21 +232,22 @@ class _LoadbalancerState:
                  vip_subnet_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Loadbalancer resources.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the loadbalancer. A valid value is true (UP) or
-               false (DOWN).
         :param pulumi.Input[str] description: Human-readable description for the loadbalancer.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the loadbalancer. Changing this
                creates a new loadbalancer.
+        :param pulumi.Input[str] flavor: schema: Deprecated
+        :param pulumi.Input[str] loadbalancer_provider: schema: Deprecated
         :param pulumi.Input[str] name: Human-readable name for the loadbalancer. Does not have to be unique.
+        :param pulumi.Input[str] public_ip: The EIP address that is associated to the Load Balancer instance.
         :param pulumi.Input[str] region: The region in which to create the loadbalancer resource. If omitted, the
                provider-level region will be used. Changing this creates a new loadbalancer.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: schema: Deprecated
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the loadbalancer.
         :param pulumi.Input[str] vip_address: The ip address of the load balancer. Changing this creates a new
                loadbalancer.
         :param pulumi.Input[str] vip_port_id: The Port ID of the Load Balancer IP.
-        :param pulumi.Input[str] vip_subnet_id: The network on which to allocate the loadbalancer's address. A tenant
-               can only create Loadbalancers on networks authorized by policy (e.g. networks that belong to them or networks that are
-               shared). Changing this creates a new loadbalancer.
+        :param pulumi.Input[str] vip_subnet_id: The **IPv4 subnet ID** of the subnet where the load balancer works.
+               Changing this creates a new loadbalancer.
         """
         if admin_state_up is not None:
             pulumi.set(__self__, "admin_state_up", admin_state_up)
@@ -255,6 +261,8 @@ class _LoadbalancerState:
             pulumi.set(__self__, "loadbalancer_provider", loadbalancer_provider)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if public_ip is not None:
+            pulumi.set(__self__, "public_ip", public_ip)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if security_group_ids is not None:
@@ -276,10 +284,6 @@ class _LoadbalancerState:
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> Optional[pulumi.Input[bool]]:
-        """
-        The administrative state of the loadbalancer. A valid value is true (UP) or
-        false (DOWN).
-        """
         return pulumi.get(self, "admin_state_up")
 
     @admin_state_up.setter
@@ -314,6 +318,9 @@ class _LoadbalancerState:
     @property
     @pulumi.getter
     def flavor(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Deprecated
+        """
         return pulumi.get(self, "flavor")
 
     @flavor.setter
@@ -323,6 +330,9 @@ class _LoadbalancerState:
     @property
     @pulumi.getter(name="loadbalancerProvider")
     def loadbalancer_provider(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Deprecated
+        """
         return pulumi.get(self, "loadbalancer_provider")
 
     @loadbalancer_provider.setter
@@ -342,6 +352,18 @@ class _LoadbalancerState:
         pulumi.set(self, "name", value)
 
     @property
+    @pulumi.getter(name="publicIp")
+    def public_ip(self) -> Optional[pulumi.Input[str]]:
+        """
+        The EIP address that is associated to the Load Balancer instance.
+        """
+        return pulumi.get(self, "public_ip")
+
+    @public_ip.setter
+    def public_ip(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "public_ip", value)
+
+    @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
@@ -357,6 +379,9 @@ class _LoadbalancerState:
     @property
     @pulumi.getter(name="securityGroupIds")
     def security_group_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        schema: Deprecated
+        """
         return pulumi.get(self, "security_group_ids")
 
     @security_group_ids.setter
@@ -413,9 +438,8 @@ class _LoadbalancerState:
     @pulumi.getter(name="vipSubnetId")
     def vip_subnet_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The network on which to allocate the loadbalancer's address. A tenant
-        can only create Loadbalancers on networks authorized by policy (e.g. networks that belong to them or networks that are
-        shared). Changing this creates a new loadbalancer.
+        The **IPv4 subnet ID** of the subnet where the load balancer works.
+        Changing this creates a new loadbalancer.
         """
         return pulumi.get(self, "vip_subnet_id")
 
@@ -452,11 +476,13 @@ class Loadbalancer(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        ipv4_subnet_id = config.require_object("ipv4SubnetId")
         lb1 = huaweicloud.elb.Loadbalancer("lb1",
+            vip_subnet_id=ipv4_subnet_id,
             tags={
                 "key": "value",
-            },
-            vip_subnet_id="d9415786-5f1a-428b-b35f-2f1523e146d2")
+            })
         ```
         ### Loadbalancer With EIP
 
@@ -464,7 +490,9 @@ class Loadbalancer(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        lb1 = huaweicloud.elb.Loadbalancer("lb1", vip_subnet_id="d9415786-5f1a-428b-b35f-2f1523e146d2")
+        config = pulumi.Config()
+        ipv4_subnet_id = config.require_object("ipv4SubnetId")
+        lb1 = huaweicloud.elb.Loadbalancer("lb1", vip_subnet_id=ipv4_subnet_id)
         eip1 = huaweicloud.vpc.EipAssociate("eip1",
             public_ip="1.2.3.4",
             port_id=lb1.vip_port_id)
@@ -480,20 +508,20 @@ class Loadbalancer(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the loadbalancer. A valid value is true (UP) or
-               false (DOWN).
         :param pulumi.Input[str] description: Human-readable description for the loadbalancer.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the loadbalancer. Changing this
                creates a new loadbalancer.
+        :param pulumi.Input[str] flavor: schema: Deprecated
+        :param pulumi.Input[str] loadbalancer_provider: schema: Deprecated
         :param pulumi.Input[str] name: Human-readable name for the loadbalancer. Does not have to be unique.
         :param pulumi.Input[str] region: The region in which to create the loadbalancer resource. If omitted, the
                provider-level region will be used. Changing this creates a new loadbalancer.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: schema: Deprecated
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the loadbalancer.
         :param pulumi.Input[str] vip_address: The ip address of the load balancer. Changing this creates a new
                loadbalancer.
-        :param pulumi.Input[str] vip_subnet_id: The network on which to allocate the loadbalancer's address. A tenant
-               can only create Loadbalancers on networks authorized by policy (e.g. networks that belong to them or networks that are
-               shared). Changing this creates a new loadbalancer.
+        :param pulumi.Input[str] vip_subnet_id: The **IPv4 subnet ID** of the subnet where the load balancer works.
+               Changing this creates a new loadbalancer.
         """
         ...
     @overload
@@ -511,11 +539,13 @@ class Loadbalancer(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        ipv4_subnet_id = config.require_object("ipv4SubnetId")
         lb1 = huaweicloud.elb.Loadbalancer("lb1",
+            vip_subnet_id=ipv4_subnet_id,
             tags={
                 "key": "value",
-            },
-            vip_subnet_id="d9415786-5f1a-428b-b35f-2f1523e146d2")
+            })
         ```
         ### Loadbalancer With EIP
 
@@ -523,7 +553,9 @@ class Loadbalancer(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        lb1 = huaweicloud.elb.Loadbalancer("lb1", vip_subnet_id="d9415786-5f1a-428b-b35f-2f1523e146d2")
+        config = pulumi.Config()
+        ipv4_subnet_id = config.require_object("ipv4SubnetId")
+        lb1 = huaweicloud.elb.Loadbalancer("lb1", vip_subnet_id=ipv4_subnet_id)
         eip1 = huaweicloud.vpc.EipAssociate("eip1",
             public_ip="1.2.3.4",
             port_id=lb1.vip_port_id)
@@ -590,6 +622,7 @@ class Loadbalancer(pulumi.CustomResource):
             if vip_subnet_id is None and not opts.urn:
                 raise TypeError("Missing required property 'vip_subnet_id'")
             __props__.__dict__["vip_subnet_id"] = vip_subnet_id
+            __props__.__dict__["public_ip"] = None
             __props__.__dict__["vip_port_id"] = None
         super(Loadbalancer, __self__).__init__(
             'huaweicloud:Elb/loadbalancer:Loadbalancer',
@@ -607,6 +640,7 @@ class Loadbalancer(pulumi.CustomResource):
             flavor: Optional[pulumi.Input[str]] = None,
             loadbalancer_provider: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
+            public_ip: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -621,21 +655,22 @@ class Loadbalancer(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the loadbalancer. A valid value is true (UP) or
-               false (DOWN).
         :param pulumi.Input[str] description: Human-readable description for the loadbalancer.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the loadbalancer. Changing this
                creates a new loadbalancer.
+        :param pulumi.Input[str] flavor: schema: Deprecated
+        :param pulumi.Input[str] loadbalancer_provider: schema: Deprecated
         :param pulumi.Input[str] name: Human-readable name for the loadbalancer. Does not have to be unique.
+        :param pulumi.Input[str] public_ip: The EIP address that is associated to the Load Balancer instance.
         :param pulumi.Input[str] region: The region in which to create the loadbalancer resource. If omitted, the
                provider-level region will be used. Changing this creates a new loadbalancer.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: schema: Deprecated
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the loadbalancer.
         :param pulumi.Input[str] vip_address: The ip address of the load balancer. Changing this creates a new
                loadbalancer.
         :param pulumi.Input[str] vip_port_id: The Port ID of the Load Balancer IP.
-        :param pulumi.Input[str] vip_subnet_id: The network on which to allocate the loadbalancer's address. A tenant
-               can only create Loadbalancers on networks authorized by policy (e.g. networks that belong to them or networks that are
-               shared). Changing this creates a new loadbalancer.
+        :param pulumi.Input[str] vip_subnet_id: The **IPv4 subnet ID** of the subnet where the load balancer works.
+               Changing this creates a new loadbalancer.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -647,6 +682,7 @@ class Loadbalancer(pulumi.CustomResource):
         __props__.__dict__["flavor"] = flavor
         __props__.__dict__["loadbalancer_provider"] = loadbalancer_provider
         __props__.__dict__["name"] = name
+        __props__.__dict__["public_ip"] = public_ip
         __props__.__dict__["region"] = region
         __props__.__dict__["security_group_ids"] = security_group_ids
         __props__.__dict__["tags"] = tags
@@ -659,10 +695,6 @@ class Loadbalancer(pulumi.CustomResource):
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> pulumi.Output[Optional[bool]]:
-        """
-        The administrative state of the loadbalancer. A valid value is true (UP) or
-        false (DOWN).
-        """
         return pulumi.get(self, "admin_state_up")
 
     @property
@@ -685,11 +717,17 @@ class Loadbalancer(pulumi.CustomResource):
     @property
     @pulumi.getter
     def flavor(self) -> pulumi.Output[Optional[str]]:
+        """
+        schema: Deprecated
+        """
         return pulumi.get(self, "flavor")
 
     @property
     @pulumi.getter(name="loadbalancerProvider")
     def loadbalancer_provider(self) -> pulumi.Output[str]:
+        """
+        schema: Deprecated
+        """
         return pulumi.get(self, "loadbalancer_provider")
 
     @property
@@ -699,6 +737,14 @@ class Loadbalancer(pulumi.CustomResource):
         Human-readable name for the loadbalancer. Does not have to be unique.
         """
         return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="publicIp")
+    def public_ip(self) -> pulumi.Output[str]:
+        """
+        The EIP address that is associated to the Load Balancer instance.
+        """
+        return pulumi.get(self, "public_ip")
 
     @property
     @pulumi.getter
@@ -712,6 +758,9 @@ class Loadbalancer(pulumi.CustomResource):
     @property
     @pulumi.getter(name="securityGroupIds")
     def security_group_ids(self) -> pulumi.Output[Sequence[str]]:
+        """
+        schema: Deprecated
+        """
         return pulumi.get(self, "security_group_ids")
 
     @property
@@ -748,9 +797,8 @@ class Loadbalancer(pulumi.CustomResource):
     @pulumi.getter(name="vipSubnetId")
     def vip_subnet_id(self) -> pulumi.Output[str]:
         """
-        The network on which to allocate the loadbalancer's address. A tenant
-        can only create Loadbalancers on networks authorized by policy (e.g. networks that belong to them or networks that are
-        shared). Changing this creates a new loadbalancer.
+        The **IPv4 subnet ID** of the subnet where the load balancer works.
+        Changing this creates a new loadbalancer.
         """
         return pulumi.get(self, "vip_subnet_id")
 

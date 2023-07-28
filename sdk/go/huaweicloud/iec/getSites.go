@@ -55,7 +55,6 @@ type GetSitesArgs struct {
 	City *string `pulumi:"city"`
 	// Specifies the province of the IEC sites located.
 	Province *string `pulumi:"province"`
-	Region   *string `pulumi:"region"`
 }
 
 // A collection of values returned by getSites.
@@ -68,7 +67,6 @@ type GetSitesResult struct {
 	Id string `pulumi:"id"`
 	// The province of the IEC service site located.
 	Province *string `pulumi:"province"`
-	Region   string  `pulumi:"region"`
 	// An array of one or more IEC service sites. The sites object structure is documented below.
 	Sites []GetSitesSite `pulumi:"sites"`
 }
@@ -94,7 +92,6 @@ type GetSitesOutputArgs struct {
 	City pulumi.StringPtrInput `pulumi:"city"`
 	// Specifies the province of the IEC sites located.
 	Province pulumi.StringPtrInput `pulumi:"province"`
-	Region   pulumi.StringPtrInput `pulumi:"region"`
 }
 
 func (GetSitesOutputArgs) ElementType() reflect.Type {
@@ -134,10 +131,6 @@ func (o GetSitesResultOutput) Id() pulumi.StringOutput {
 // The province of the IEC service site located.
 func (o GetSitesResultOutput) Province() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetSitesResult) *string { return v.Province }).(pulumi.StringPtrOutput)
-}
-
-func (o GetSitesResultOutput) Region() pulumi.StringOutput {
-	return o.ApplyT(func(v GetSitesResult) string { return v.Region }).(pulumi.StringOutput)
 }
 
 // An array of one or more IEC service sites. The sites object structure is documented below.

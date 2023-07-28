@@ -35,10 +35,11 @@ import (
 //			cfg := config.New(ctx, "")
 //			certificatedId := cfg.RequireObject("certificatedId")
 //			vpcId := cfg.RequireObject("vpcId")
-//			dedicatedEngineId := cfg.RequireObject("dedicatedEngineId")
+//			enterpriseProjectId := cfg.RequireObject("enterpriseProjectId")
 //			_, err := Waf.NewDedicatedDomain(ctx, "domain1", &Waf.DedicatedDomainArgs{
-//				Domain:        pulumi.String("www.example.com"),
-//				CertificateId: pulumi.Any(huaweicloud_waf_certificate.Certificate_1.Id),
+//				Domain:              pulumi.String("www.example.com"),
+//				CertificateId:       pulumi.Any(certificatedId),
+//				EnterpriseProjectId: pulumi.Any(enterpriseProjectId),
 //				Servers: waf.DedicatedDomainServerArray{
 //					&waf.DedicatedDomainServerArgs{
 //						ClientProtocol: pulumi.String("HTTPS"),
@@ -61,11 +62,19 @@ import (
 //
 // ## Import
 //
-// Dedicated mode domain can be imported using the `id`, e.g.
+// There are two ways to import WAF dedicated domain state. * Using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Waf/dedicatedDomain:DedicatedDomain domain_1 69e9a86becb4424298cc6bdeacbf69d5
+//	$ pulumi import huaweicloud:Waf/dedicatedDomain:DedicatedDomain test <id>
+//
+// ```
+//
+//   - Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+//
+// ```sh
+//
+//	$ pulumi import huaweicloud:Waf/dedicatedDomain:DedicatedDomain test <id>/<enterprise_project_id>
 //
 // ```
 type DedicatedDomain struct {
@@ -80,15 +89,26 @@ type DedicatedDomain struct {
 	CertificateId pulumi.StringPtrOutput `pulumi:"certificateId"`
 	// The name of the certificate used by the domain name.
 	CertificateName pulumi.StringOutput `pulumi:"certificateName"`
-	Cipher          pulumi.StringOutput `pulumi:"cipher"`
+	// Specifies the cipher suite of domain. The options include `cipher1`, `cipher2`,
+	// `cipher3`, `cipher4`, `cipherDefault`.
+	Cipher pulumi.StringOutput `pulumi:"cipher"`
 	// The compliance certifications of the domain, values are:
 	ComplianceCertification pulumi.BoolMapOutput `pulumi:"complianceCertification"`
-	// Specifies the domain name to be protected. For example, www.example.com or
-	// *.example.com. Changing this creates a new domain.
+	// Specifies the protected domain name or IP address (port allowed). For example,
+	// `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
 	Domain pulumi.StringOutput `pulumi:"domain"`
+	// Specifies the enterprise project ID of WAF dedicated domain.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
 	// Specifies whether to retain the policy when deleting a domain name.
 	// Defaults to `true`.
 	KeepPolicy pulumi.BoolPtrOutput `pulumi:"keepPolicy"`
+	// Specifies the status of the PCI 3DS compliance certification check. The options
+	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	Pci3ds pulumi.BoolOutput `pulumi:"pci3ds"`
+	// Specifies the status of the PCI DSS compliance certification check. The options
+	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	PciDss pulumi.BoolOutput `pulumi:"pciDss"`
 	// Specifies the policy ID associated with the domain. If not specified, a new policy
 	// will be created automatically.
 	PolicyId pulumi.StringOutput `pulumi:"policyId"`
@@ -105,7 +125,8 @@ type DedicatedDomain struct {
 	// The server configuration list of the domain. A maximum of 80 can be configured.
 	// The object structure is documented below.
 	Servers DedicatedDomainServerArrayOutput `pulumi:"servers"`
-	// The TLS configuration of domain.
+	// Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
+	// `TLS v1.2`.
 	Tls pulumi.StringOutput `pulumi:"tls"`
 	// The traffic identifier of domain. Valid values are:
 	TrafficIdentifier pulumi.StringMapOutput `pulumi:"trafficIdentifier"`
@@ -156,15 +177,26 @@ type dedicatedDomainState struct {
 	CertificateId *string `pulumi:"certificateId"`
 	// The name of the certificate used by the domain name.
 	CertificateName *string `pulumi:"certificateName"`
-	Cipher          *string `pulumi:"cipher"`
+	// Specifies the cipher suite of domain. The options include `cipher1`, `cipher2`,
+	// `cipher3`, `cipher4`, `cipherDefault`.
+	Cipher *string `pulumi:"cipher"`
 	// The compliance certifications of the domain, values are:
 	ComplianceCertification map[string]bool `pulumi:"complianceCertification"`
-	// Specifies the domain name to be protected. For example, www.example.com or
-	// *.example.com. Changing this creates a new domain.
+	// Specifies the protected domain name or IP address (port allowed). For example,
+	// `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
 	Domain *string `pulumi:"domain"`
+	// Specifies the enterprise project ID of WAF dedicated domain.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies whether to retain the policy when deleting a domain name.
 	// Defaults to `true`.
 	KeepPolicy *bool `pulumi:"keepPolicy"`
+	// Specifies the status of the PCI 3DS compliance certification check. The options
+	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	Pci3ds *bool `pulumi:"pci3ds"`
+	// Specifies the status of the PCI DSS compliance certification check. The options
+	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	PciDss *bool `pulumi:"pciDss"`
 	// Specifies the policy ID associated with the domain. If not specified, a new policy
 	// will be created automatically.
 	PolicyId *string `pulumi:"policyId"`
@@ -181,7 +213,8 @@ type dedicatedDomainState struct {
 	// The server configuration list of the domain. A maximum of 80 can be configured.
 	// The object structure is documented below.
 	Servers []DedicatedDomainServer `pulumi:"servers"`
-	// The TLS configuration of domain.
+	// Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
+	// `TLS v1.2`.
 	Tls *string `pulumi:"tls"`
 	// The traffic identifier of domain. Valid values are:
 	TrafficIdentifier map[string]string `pulumi:"trafficIdentifier"`
@@ -197,15 +230,26 @@ type DedicatedDomainState struct {
 	CertificateId pulumi.StringPtrInput
 	// The name of the certificate used by the domain name.
 	CertificateName pulumi.StringPtrInput
-	Cipher          pulumi.StringPtrInput
+	// Specifies the cipher suite of domain. The options include `cipher1`, `cipher2`,
+	// `cipher3`, `cipher4`, `cipherDefault`.
+	Cipher pulumi.StringPtrInput
 	// The compliance certifications of the domain, values are:
 	ComplianceCertification pulumi.BoolMapInput
-	// Specifies the domain name to be protected. For example, www.example.com or
-	// *.example.com. Changing this creates a new domain.
+	// Specifies the protected domain name or IP address (port allowed). For example,
+	// `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
 	Domain pulumi.StringPtrInput
+	// Specifies the enterprise project ID of WAF dedicated domain.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies whether to retain the policy when deleting a domain name.
 	// Defaults to `true`.
 	KeepPolicy pulumi.BoolPtrInput
+	// Specifies the status of the PCI 3DS compliance certification check. The options
+	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	Pci3ds pulumi.BoolPtrInput
+	// Specifies the status of the PCI DSS compliance certification check. The options
+	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	PciDss pulumi.BoolPtrInput
 	// Specifies the policy ID associated with the domain. If not specified, a new policy
 	// will be created automatically.
 	PolicyId pulumi.StringPtrInput
@@ -222,7 +266,8 @@ type DedicatedDomainState struct {
 	// The server configuration list of the domain. A maximum of 80 can be configured.
 	// The object structure is documented below.
 	Servers DedicatedDomainServerArrayInput
-	// The TLS configuration of domain.
+	// Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
+	// `TLS v1.2`.
 	Tls pulumi.StringPtrInput
 	// The traffic identifier of domain. Valid values are:
 	TrafficIdentifier pulumi.StringMapInput
@@ -236,12 +281,24 @@ type dedicatedDomainArgs struct {
 	// Specifies the certificate ID. This parameter is mandatory when `clientProtocol`
 	// is set to HTTPS.
 	CertificateId *string `pulumi:"certificateId"`
-	// Specifies the domain name to be protected. For example, www.example.com or
-	// *.example.com. Changing this creates a new domain.
+	// Specifies the cipher suite of domain. The options include `cipher1`, `cipher2`,
+	// `cipher3`, `cipher4`, `cipherDefault`.
+	Cipher *string `pulumi:"cipher"`
+	// Specifies the protected domain name or IP address (port allowed). For example,
+	// `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
 	Domain string `pulumi:"domain"`
+	// Specifies the enterprise project ID of WAF dedicated domain.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies whether to retain the policy when deleting a domain name.
 	// Defaults to `true`.
 	KeepPolicy *bool `pulumi:"keepPolicy"`
+	// Specifies the status of the PCI 3DS compliance certification check. The options
+	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	Pci3ds *bool `pulumi:"pci3ds"`
+	// Specifies the status of the PCI DSS compliance certification check. The options
+	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	PciDss *bool `pulumi:"pciDss"`
 	// Specifies the policy ID associated with the domain. If not specified, a new policy
 	// will be created automatically.
 	PolicyId *string `pulumi:"policyId"`
@@ -256,6 +313,9 @@ type dedicatedDomainArgs struct {
 	// The server configuration list of the domain. A maximum of 80 can be configured.
 	// The object structure is documented below.
 	Servers []DedicatedDomainServer `pulumi:"servers"`
+	// Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
+	// `TLS v1.2`.
+	Tls *string `pulumi:"tls"`
 }
 
 // The set of arguments for constructing a DedicatedDomain resource.
@@ -263,12 +323,24 @@ type DedicatedDomainArgs struct {
 	// Specifies the certificate ID. This parameter is mandatory when `clientProtocol`
 	// is set to HTTPS.
 	CertificateId pulumi.StringPtrInput
-	// Specifies the domain name to be protected. For example, www.example.com or
-	// *.example.com. Changing this creates a new domain.
+	// Specifies the cipher suite of domain. The options include `cipher1`, `cipher2`,
+	// `cipher3`, `cipher4`, `cipherDefault`.
+	Cipher pulumi.StringPtrInput
+	// Specifies the protected domain name or IP address (port allowed). For example,
+	// `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
 	Domain pulumi.StringInput
+	// Specifies the enterprise project ID of WAF dedicated domain.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies whether to retain the policy when deleting a domain name.
 	// Defaults to `true`.
 	KeepPolicy pulumi.BoolPtrInput
+	// Specifies the status of the PCI 3DS compliance certification check. The options
+	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	Pci3ds pulumi.BoolPtrInput
+	// Specifies the status of the PCI DSS compliance certification check. The options
+	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	PciDss pulumi.BoolPtrInput
 	// Specifies the policy ID associated with the domain. If not specified, a new policy
 	// will be created automatically.
 	PolicyId pulumi.StringPtrInput
@@ -283,6 +355,9 @@ type DedicatedDomainArgs struct {
 	// The server configuration list of the domain. A maximum of 80 can be configured.
 	// The object structure is documented below.
 	Servers DedicatedDomainServerArrayInput
+	// Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
+	// `TLS v1.2`.
+	Tls pulumi.StringPtrInput
 }
 
 func (DedicatedDomainArgs) ElementType() reflect.Type {
@@ -393,6 +468,8 @@ func (o DedicatedDomainOutput) CertificateName() pulumi.StringOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.StringOutput { return v.CertificateName }).(pulumi.StringOutput)
 }
 
+// Specifies the cipher suite of domain. The options include `cipher1`, `cipher2`,
+// `cipher3`, `cipher4`, `cipherDefault`.
 func (o DedicatedDomainOutput) Cipher() pulumi.StringOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.StringOutput { return v.Cipher }).(pulumi.StringOutput)
 }
@@ -402,16 +479,34 @@ func (o DedicatedDomainOutput) ComplianceCertification() pulumi.BoolMapOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.BoolMapOutput { return v.ComplianceCertification }).(pulumi.BoolMapOutput)
 }
 
-// Specifies the domain name to be protected. For example, www.example.com or
-// *.example.com. Changing this creates a new domain.
+// Specifies the protected domain name or IP address (port allowed). For example,
+// `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
 func (o DedicatedDomainOutput) Domain() pulumi.StringOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.StringOutput { return v.Domain }).(pulumi.StringOutput)
+}
+
+// Specifies the enterprise project ID of WAF dedicated domain.
+// Changing this parameter will create a new resource.
+func (o DedicatedDomainOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DedicatedDomain) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
 
 // Specifies whether to retain the policy when deleting a domain name.
 // Defaults to `true`.
 func (o DedicatedDomainOutput) KeepPolicy() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.BoolPtrOutput { return v.KeepPolicy }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the status of the PCI 3DS compliance certification check. The options
+// include `true` and `false`. This parameter must be used together with tls and cipher.
+func (o DedicatedDomainOutput) Pci3ds() pulumi.BoolOutput {
+	return o.ApplyT(func(v *DedicatedDomain) pulumi.BoolOutput { return v.Pci3ds }).(pulumi.BoolOutput)
+}
+
+// Specifies the status of the PCI DSS compliance certification check. The options
+// include `true` and `false`. This parameter must be used together with tls and cipher.
+func (o DedicatedDomainOutput) PciDss() pulumi.BoolOutput {
+	return o.ApplyT(func(v *DedicatedDomain) pulumi.BoolOutput { return v.PciDss }).(pulumi.BoolOutput)
 }
 
 // Specifies the policy ID associated with the domain. If not specified, a new policy
@@ -448,7 +543,8 @@ func (o DedicatedDomainOutput) Servers() DedicatedDomainServerArrayOutput {
 	return o.ApplyT(func(v *DedicatedDomain) DedicatedDomainServerArrayOutput { return v.Servers }).(DedicatedDomainServerArrayOutput)
 }
 
-// The TLS configuration of domain.
+// Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
+// `TLS v1.2`.
 func (o DedicatedDomainOutput) Tls() pulumi.StringOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.StringOutput { return v.Tls }).(pulumi.StringOutput)
 }

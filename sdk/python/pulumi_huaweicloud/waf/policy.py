@@ -16,12 +16,15 @@ __all__ = ['PolicyArgs', 'Policy']
 @pulumi.input_type
 class PolicyArgs:
     def __init__(__self__, *,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  level: Optional[pulumi.Input[int]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  protection_mode: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Policy resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF policy.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[int] level: Specifies the protection level. Defaults to `2`. Valid values are:
                + `1`: low
                + `2`: medium
@@ -35,6 +38,8 @@ class PolicyArgs:
         :param pulumi.Input[str] region: The region in which to create the WAF policy resource. If omitted, the
                provider-level region will be used. Changing this setting will push a new certificate.
         """
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if level is not None:
             pulumi.set(__self__, "level", level)
         if name is not None:
@@ -43,6 +48,19 @@ class PolicyArgs:
             pulumi.set(__self__, "protection_mode", protection_mode)
         if region is not None:
             pulumi.set(__self__, "region", region)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID of WAF policy.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
 
     @property
     @pulumi.getter
@@ -104,6 +122,7 @@ class PolicyArgs:
 @pulumi.input_type
 class _PolicyState:
     def __init__(__self__, *,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  full_detection: Optional[pulumi.Input[bool]] = None,
                  level: Optional[pulumi.Input[int]] = None,
                  name: Optional[pulumi.Input[str]] = None,
@@ -112,6 +131,8 @@ class _PolicyState:
                  region: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Policy resources.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF policy.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[bool] full_detection: The detection mode in Precise Protection.
                + `true`: full detection, Full detection finishes all threat detections before blocking requests that meet Precise
                Protection specified conditions.
@@ -131,6 +152,8 @@ class _PolicyState:
         :param pulumi.Input[str] region: The region in which to create the WAF policy resource. If omitted, the
                provider-level region will be used. Changing this setting will push a new certificate.
         """
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if full_detection is not None:
             pulumi.set(__self__, "full_detection", full_detection)
         if level is not None:
@@ -143,6 +166,19 @@ class _PolicyState:
             pulumi.set(__self__, "protection_mode", protection_mode)
         if region is not None:
             pulumi.set(__self__, "region", region)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID of WAF policy.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
 
     @property
     @pulumi.getter(name="fullDetection")
@@ -234,6 +270,7 @@ class Policy(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  level: Optional[pulumi.Input[int]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  protection_mode: Optional[pulumi.Input[str]] = None,
@@ -251,21 +288,32 @@ class Policy(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        enterprise_project_id = config.require_object("enterpriseProjectId")
         policy1 = huaweicloud.waf.Policy("policy1",
+            protection_mode="log",
             level=2,
-            protection_mode="log")
+            enterprise_project_id=enterprise_project_id)
         ```
 
         ## Import
 
-        Policies can be imported using the `id`, e.g.
+        There are two ways to import WAF policy state. * Using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Waf/policy:Policy policy_2 25e1df831bea4022a6e22bebe678915a
+         $ pulumi import huaweicloud:Waf/policy:Policy test <id>
+        ```
+
+         * Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Waf/policy:Policy test <id>/<enterprise_project_id>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF policy.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[int] level: Specifies the protection level. Defaults to `2`. Valid values are:
                + `1`: low
                + `2`: medium
@@ -297,17 +345,26 @@ class Policy(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        enterprise_project_id = config.require_object("enterpriseProjectId")
         policy1 = huaweicloud.waf.Policy("policy1",
+            protection_mode="log",
             level=2,
-            protection_mode="log")
+            enterprise_project_id=enterprise_project_id)
         ```
 
         ## Import
 
-        Policies can be imported using the `id`, e.g.
+        There are two ways to import WAF policy state. * Using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Waf/policy:Policy policy_2 25e1df831bea4022a6e22bebe678915a
+         $ pulumi import huaweicloud:Waf/policy:Policy test <id>
+        ```
+
+         * Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Waf/policy:Policy test <id>/<enterprise_project_id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -325,6 +382,7 @@ class Policy(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  level: Optional[pulumi.Input[int]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  protection_mode: Optional[pulumi.Input[str]] = None,
@@ -338,6 +396,7 @@ class Policy(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = PolicyArgs.__new__(PolicyArgs)
 
+            __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["level"] = level
             __props__.__dict__["name"] = name
             __props__.__dict__["protection_mode"] = protection_mode
@@ -354,6 +413,7 @@ class Policy(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            enterprise_project_id: Optional[pulumi.Input[str]] = None,
             full_detection: Optional[pulumi.Input[bool]] = None,
             level: Optional[pulumi.Input[int]] = None,
             name: Optional[pulumi.Input[str]] = None,
@@ -367,6 +427,8 @@ class Policy(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF policy.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[bool] full_detection: The detection mode in Precise Protection.
                + `true`: full detection, Full detection finishes all threat detections before blocking requests that meet Precise
                Protection specified conditions.
@@ -390,6 +452,7 @@ class Policy(pulumi.CustomResource):
 
         __props__ = _PolicyState.__new__(_PolicyState)
 
+        __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["full_detection"] = full_detection
         __props__.__dict__["level"] = level
         __props__.__dict__["name"] = name
@@ -397,6 +460,15 @@ class Policy(pulumi.CustomResource):
         __props__.__dict__["protection_mode"] = protection_mode
         __props__.__dict__["region"] = region
         return Policy(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the enterprise project ID of WAF policy.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
 
     @property
     @pulumi.getter(name="fullDetection")

@@ -5,7 +5,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Use this data source to get the information of an available HuaweiCloud NAT gateway.
+ * Use this data source to get an available public NAT gateway within HuaweiCloud.
  *
  * ## Example Usage
  *
@@ -13,9 +13,11 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as huaweicloud from "@pulumi/huaweicloud";
  *
- * const natgateway = pulumi.output(huaweicloud.Nat.getGateway({
- *     name: "tf_test_natgateway",
- * }));
+ * const config = new pulumi.Config();
+ * const gatewayName = config.requireObject("gatewayName");
+ * const test = huaweicloud.Nat.getGateway({
+ *     name: gatewayName,
+ * });
  * ```
  */
 export function getGateway(args?: GetGatewayArgs, opts?: pulumi.InvokeOptions): Promise<GetGatewayResult> {
@@ -63,8 +65,8 @@ export interface GetGatewayArgs {
      */
     internalNetworkId?: string;
     /**
-     * Specifies the NAT gateway name. The name can contain only digits, letters, underscores (_)
-     * , and hyphens(-).
+     * Specifies the public NAT gateway name.  
+     * The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
      */
     name?: string;
     /**
@@ -77,11 +79,11 @@ export interface GetGatewayArgs {
      */
     routerId?: string;
     /**
-     * The NAT gateway type. The value can be:
-     * + `1`: small type, which supports up to 10,000 SNAT connections.
-     * + `2`: medium type, which supports up to 50,000 SNAT connections.
-     * + `3`: large type, which supports up to 200,000 SNAT connections.
-     * + `4`: extra-large type, which supports up to 1,000,000 SNAT connections.
+     * The public NAT gateway type. The valid values are as follows:
+     * + **1**: Small type, which supports up to `10,000` SNAT connections.
+     * + **2**: Medium type, which supports up to `50,000` SNAT connections.
+     * + **3**: Large type, which supports up to `200,000` SNAT connections.
+     * + **4**: Extra-large type, which supports up to `1,000,000` SNAT connections.
      */
     spec?: string;
     /**
@@ -90,11 +92,11 @@ export interface GetGatewayArgs {
     status?: string;
     /**
      * Specifies the subnet ID of the downstream interface (the next hop of the DVR) of the
-     * NAT gateway.
+     * public NAT gateway.
      */
     subnetId?: string;
     /**
-     * Specifies the ID of the VPC this NAT gateway belongs to.
+     * Specifies the ID of the VPC this public NAT gateway belongs to.
      */
     vpcId?: string;
 }
@@ -149,8 +151,8 @@ export interface GetGatewayOutputArgs {
      */
     internalNetworkId?: pulumi.Input<string>;
     /**
-     * Specifies the NAT gateway name. The name can contain only digits, letters, underscores (_)
-     * , and hyphens(-).
+     * Specifies the public NAT gateway name.  
+     * The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
      */
     name?: pulumi.Input<string>;
     /**
@@ -163,11 +165,11 @@ export interface GetGatewayOutputArgs {
      */
     routerId?: pulumi.Input<string>;
     /**
-     * The NAT gateway type. The value can be:
-     * + `1`: small type, which supports up to 10,000 SNAT connections.
-     * + `2`: medium type, which supports up to 50,000 SNAT connections.
-     * + `3`: large type, which supports up to 200,000 SNAT connections.
-     * + `4`: extra-large type, which supports up to 1,000,000 SNAT connections.
+     * The public NAT gateway type. The valid values are as follows:
+     * + **1**: Small type, which supports up to `10,000` SNAT connections.
+     * + **2**: Medium type, which supports up to `50,000` SNAT connections.
+     * + **3**: Large type, which supports up to `200,000` SNAT connections.
+     * + **4**: Extra-large type, which supports up to `1,000,000` SNAT connections.
      */
     spec?: pulumi.Input<string>;
     /**
@@ -176,11 +178,11 @@ export interface GetGatewayOutputArgs {
     status?: pulumi.Input<string>;
     /**
      * Specifies the subnet ID of the downstream interface (the next hop of the DVR) of the
-     * NAT gateway.
+     * public NAT gateway.
      */
     subnetId?: pulumi.Input<string>;
     /**
-     * Specifies the ID of the VPC this NAT gateway belongs to.
+     * Specifies the ID of the VPC this public NAT gateway belongs to.
      */
     vpcId?: pulumi.Input<string>;
 }

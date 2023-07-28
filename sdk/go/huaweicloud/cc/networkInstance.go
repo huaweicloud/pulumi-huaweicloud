@@ -36,7 +36,7 @@ type NetworkInstance struct {
 	CloudConnectionId pulumi.StringOutput `pulumi:"cloudConnectionId"`
 	// The description about the network instance.\
 	// The description can contain a maximum of 255 characters.
-	Description pulumi.StringOutput `pulumi:"description"`
+	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Account ID.
 	DomainId pulumi.StringOutput `pulumi:"domainId"`
 	// Account ID of the VPC or virtual gateway.
@@ -348,8 +348,8 @@ func (o NetworkInstanceOutput) CloudConnectionId() pulumi.StringOutput {
 
 // The description about the network instance.\
 // The description can contain a maximum of 255 characters.
-func (o NetworkInstanceOutput) Description() pulumi.StringOutput {
-	return o.ApplyT(func(v *NetworkInstance) pulumi.StringOutput { return v.Description }).(pulumi.StringOutput)
+func (o NetworkInstanceOutput) Description() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NetworkInstance) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
 // Account ID.

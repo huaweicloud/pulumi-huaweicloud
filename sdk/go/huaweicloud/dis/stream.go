@@ -123,6 +123,7 @@ type Stream struct {
 	// Indicates a stream ID in UUID format.
 	StreamId pulumi.StringOutput `pulumi:"streamId"`
 	// Name of the DIS stream to be created.
+	// Changing this parameter will create a new resource.
 	StreamName pulumi.StringOutput `pulumi:"streamName"`
 	// Stream Type. The value is COMMON(means 1M bandwidth) or ADVANCED(means 5M
 	// bandwidth). Changing this parameter will create a new resource.
@@ -211,6 +212,7 @@ type streamState struct {
 	// Indicates a stream ID in UUID format.
 	StreamId *string `pulumi:"streamId"`
 	// Name of the DIS stream to be created.
+	// Changing this parameter will create a new resource.
 	StreamName *string `pulumi:"streamName"`
 	// Stream Type. The value is COMMON(means 1M bandwidth) or ADVANCED(means 5M
 	// bandwidth). Changing this parameter will create a new resource.
@@ -264,6 +266,7 @@ type StreamState struct {
 	// Indicates a stream ID in UUID format.
 	StreamId pulumi.StringPtrInput
 	// Name of the DIS stream to be created.
+	// Changing this parameter will create a new resource.
 	StreamName pulumi.StringPtrInput
 	// Stream Type. The value is COMMON(means 1M bandwidth) or ADVANCED(means 5M
 	// bandwidth). Changing this parameter will create a new resource.
@@ -311,6 +314,7 @@ type streamArgs struct {
 	// Value range: `24` to `72`. Unit: `hour`. Default:`24`. Changing this parameter will create a new resource.
 	RetentionPeriod *int `pulumi:"retentionPeriod"`
 	// Name of the DIS stream to be created.
+	// Changing this parameter will create a new resource.
 	StreamName string `pulumi:"streamName"`
 	// Stream Type. The value is COMMON(means 1M bandwidth) or ADVANCED(means 5M
 	// bandwidth). Changing this parameter will create a new resource.
@@ -353,6 +357,7 @@ type StreamArgs struct {
 	// Value range: `24` to `72`. Unit: `hour`. Default:`24`. Changing this parameter will create a new resource.
 	RetentionPeriod pulumi.IntPtrInput
 	// Name of the DIS stream to be created.
+	// Changing this parameter will create a new resource.
 	StreamName pulumi.StringInput
 	// Stream Type. The value is COMMON(means 1M bandwidth) or ADVANCED(means 5M
 	// bandwidth). Changing this parameter will create a new resource.
@@ -535,6 +540,7 @@ func (o StreamOutput) StreamId() pulumi.StringOutput {
 }
 
 // Name of the DIS stream to be created.
+// Changing this parameter will create a new resource.
 func (o StreamOutput) StreamName() pulumi.StringOutput {
 	return o.ApplyT(func(v *Stream) pulumi.StringOutput { return v.StreamName }).(pulumi.StringOutput)
 }

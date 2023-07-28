@@ -32,17 +32,17 @@ class UserArgs:
                The times is in local time, depending on the timezone.
         :param pulumi.Input[str] description: Specifies the description of user. The maximum length is `255` characters.
         :param pulumi.Input[bool] disabled: Specifies whether the user is disabled.
-               Defualts to **false**.
+               Defaults to **false**.
         :param pulumi.Input[bool] enable_change_password: Specifies whether to allow password modification.
-               Defualts to **true**.
+               Defaults to **true**.
         :param pulumi.Input[str] name: Specifies the user name.
                + Pure numeric: the valid length is between `1` and `20`.
                + Non-pure numeric: the name can contain `1` to `20` characters, only letters, digits, hyphens (-), underscore (_) and
                dots (.) are allowed. The name must start with a letter.
         :param pulumi.Input[bool] next_login_change_password: Specifies whether the next login requires a password reset.
-               Defualts to **true**.
+               Defaults to **true**.
         :param pulumi.Input[bool] password_never_expires: Specifies whether the password will never expires.
-               Defualts to **false**.
+               Defaults to **false**.
         :param pulumi.Input[str] region: The region in which to create the Workspace user resource.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
@@ -108,7 +108,7 @@ class UserArgs:
     def disabled(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether the user is disabled.
-        Defualts to **false**.
+        Defaults to **false**.
         """
         return pulumi.get(self, "disabled")
 
@@ -121,7 +121,7 @@ class UserArgs:
     def enable_change_password(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to allow password modification.
-        Defualts to **true**.
+        Defaults to **true**.
         """
         return pulumi.get(self, "enable_change_password")
 
@@ -149,7 +149,7 @@ class UserArgs:
     def next_login_change_password(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether the next login requires a password reset.
-        Defualts to **true**.
+        Defaults to **true**.
         """
         return pulumi.get(self, "next_login_change_password")
 
@@ -162,7 +162,7 @@ class UserArgs:
     def password_never_expires(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether the password will never expires.
-        Defualts to **false**.
+        Defaults to **false**.
         """
         return pulumi.get(self, "password_never_expires")
 
@@ -206,19 +206,19 @@ class _UserState:
                The times is in local time, depending on the timezone.
         :param pulumi.Input[str] description: Specifies the description of user. The maximum length is `255` characters.
         :param pulumi.Input[bool] disabled: Specifies whether the user is disabled.
-               Defualts to **false**.
+               Defaults to **false**.
         :param pulumi.Input[str] email: Specifies the email address of user. The value can contain `1` to `64` characters.
         :param pulumi.Input[bool] enable_change_password: Specifies whether to allow password modification.
-               Defualts to **true**.
+               Defaults to **true**.
         :param pulumi.Input[bool] locked: Whether the user is locked.
         :param pulumi.Input[str] name: Specifies the user name.
                + Pure numeric: the valid length is between `1` and `20`.
                + Non-pure numeric: the name can contain `1` to `20` characters, only letters, digits, hyphens (-), underscore (_) and
                dots (.) are allowed. The name must start with a letter.
         :param pulumi.Input[bool] next_login_change_password: Specifies whether the next login requires a password reset.
-               Defualts to **true**.
+               Defaults to **true**.
         :param pulumi.Input[bool] password_never_expires: Specifies whether the password will never expires.
-               Defualts to **false**.
+               Defaults to **false**.
         :param pulumi.Input[str] region: The region in which to create the Workspace user resource.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[int] total_desktops: The number of desktops the user has.
@@ -278,7 +278,7 @@ class _UserState:
     def disabled(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether the user is disabled.
-        Defualts to **false**.
+        Defaults to **false**.
         """
         return pulumi.get(self, "disabled")
 
@@ -303,7 +303,7 @@ class _UserState:
     def enable_change_password(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to allow password modification.
-        Defualts to **true**.
+        Defaults to **true**.
         """
         return pulumi.get(self, "enable_change_password")
 
@@ -343,7 +343,7 @@ class _UserState:
     def next_login_change_password(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether the next login requires a password reset.
-        Defualts to **true**.
+        Defaults to **true**.
         """
         return pulumi.get(self, "next_login_change_password")
 
@@ -356,7 +356,7 @@ class _UserState:
     def password_never_expires(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether the password will never expires.
-        Defualts to **false**.
+        Defaults to **false**.
         """
         return pulumi.get(self, "password_never_expires")
 
@@ -443,18 +443,18 @@ class User(pulumi.CustomResource):
                The times is in local time, depending on the timezone.
         :param pulumi.Input[str] description: Specifies the description of user. The maximum length is `255` characters.
         :param pulumi.Input[bool] disabled: Specifies whether the user is disabled.
-               Defualts to **false**.
+               Defaults to **false**.
         :param pulumi.Input[str] email: Specifies the email address of user. The value can contain `1` to `64` characters.
         :param pulumi.Input[bool] enable_change_password: Specifies whether to allow password modification.
-               Defualts to **true**.
+               Defaults to **true**.
         :param pulumi.Input[str] name: Specifies the user name.
                + Pure numeric: the valid length is between `1` and `20`.
                + Non-pure numeric: the name can contain `1` to `20` characters, only letters, digits, hyphens (-), underscore (_) and
                dots (.) are allowed. The name must start with a letter.
         :param pulumi.Input[bool] next_login_change_password: Specifies whether the next login requires a password reset.
-               Defualts to **true**.
+               Defaults to **true**.
         :param pulumi.Input[bool] password_never_expires: Specifies whether the password will never expires.
-               Defualts to **false**.
+               Defaults to **false**.
         :param pulumi.Input[str] region: The region in which to create the Workspace user resource.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
@@ -574,19 +574,19 @@ class User(pulumi.CustomResource):
                The times is in local time, depending on the timezone.
         :param pulumi.Input[str] description: Specifies the description of user. The maximum length is `255` characters.
         :param pulumi.Input[bool] disabled: Specifies whether the user is disabled.
-               Defualts to **false**.
+               Defaults to **false**.
         :param pulumi.Input[str] email: Specifies the email address of user. The value can contain `1` to `64` characters.
         :param pulumi.Input[bool] enable_change_password: Specifies whether to allow password modification.
-               Defualts to **true**.
+               Defaults to **true**.
         :param pulumi.Input[bool] locked: Whether the user is locked.
         :param pulumi.Input[str] name: Specifies the user name.
                + Pure numeric: the valid length is between `1` and `20`.
                + Non-pure numeric: the name can contain `1` to `20` characters, only letters, digits, hyphens (-), underscore (_) and
                dots (.) are allowed. The name must start with a letter.
         :param pulumi.Input[bool] next_login_change_password: Specifies whether the next login requires a password reset.
-               Defualts to **true**.
+               Defaults to **true**.
         :param pulumi.Input[bool] password_never_expires: Specifies whether the password will never expires.
-               Defualts to **false**.
+               Defaults to **false**.
         :param pulumi.Input[str] region: The region in which to create the Workspace user resource.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[int] total_desktops: The number of desktops the user has.
@@ -632,7 +632,7 @@ class User(pulumi.CustomResource):
     def disabled(self) -> pulumi.Output[Optional[bool]]:
         """
         Specifies whether the user is disabled.
-        Defualts to **false**.
+        Defaults to **false**.
         """
         return pulumi.get(self, "disabled")
 
@@ -649,7 +649,7 @@ class User(pulumi.CustomResource):
     def enable_change_password(self) -> pulumi.Output[Optional[bool]]:
         """
         Specifies whether to allow password modification.
-        Defualts to **true**.
+        Defaults to **true**.
         """
         return pulumi.get(self, "enable_change_password")
 
@@ -677,7 +677,7 @@ class User(pulumi.CustomResource):
     def next_login_change_password(self) -> pulumi.Output[Optional[bool]]:
         """
         Specifies whether the next login requires a password reset.
-        Defualts to **true**.
+        Defaults to **true**.
         """
         return pulumi.get(self, "next_login_change_password")
 
@@ -686,7 +686,7 @@ class User(pulumi.CustomResource):
     def password_never_expires(self) -> pulumi.Output[Optional[bool]]:
         """
         Specifies whether the password will never expires.
-        Defualts to **false**.
+        Defaults to **false**.
         """
         return pulumi.get(self, "password_never_expires")
 

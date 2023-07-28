@@ -59,7 +59,7 @@ import (
 //
 // ## Import
 //
-// Clusters can be imported by `id`. For example,
+// Clusters can be imported by `id`. For example, bash
 //
 // ```sh
 //
@@ -71,7 +71,7 @@ import (
 //
 // It is generally recommended running `terraform plan` after importing a cluster.
 //
-// You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. resource "huaweicloud_cdm_cluster" "test" {
+// You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_cdm_cluster" "test" {
 //
 //	...
 //
@@ -135,9 +135,8 @@ type Cluster struct {
 	Status pulumi.StringOutput `pulumi:"status"`
 	// Specifies subnet ID. Changing this parameter will create a new resource.
 	SubnetId pulumi.StringOutput `pulumi:"subnetId"`
-	// Specifies cluster version. Default value is `2.8.6.2`.
-	// Changing this parameter will create a new resource.
-	Version pulumi.StringPtrOutput `pulumi:"version"`
+	// Specifies the cluster version. Changing this parameter will create a new resource.
+	Version pulumi.StringOutput `pulumi:"version"`
 	// Specifies VPC ID. Changing this parameter will create a new resource.
 	VpcId pulumi.StringOutput `pulumi:"vpcId"`
 }
@@ -235,8 +234,7 @@ type clusterState struct {
 	Status *string `pulumi:"status"`
 	// Specifies subnet ID. Changing this parameter will create a new resource.
 	SubnetId *string `pulumi:"subnetId"`
-	// Specifies cluster version. Default value is `2.8.6.2`.
-	// Changing this parameter will create a new resource.
+	// Specifies the cluster version. Changing this parameter will create a new resource.
 	Version *string `pulumi:"version"`
 	// Specifies VPC ID. Changing this parameter will create a new resource.
 	VpcId *string `pulumi:"vpcId"`
@@ -291,8 +289,7 @@ type ClusterState struct {
 	Status pulumi.StringPtrInput
 	// Specifies subnet ID. Changing this parameter will create a new resource.
 	SubnetId pulumi.StringPtrInput
-	// Specifies cluster version. Default value is `2.8.6.2`.
-	// Changing this parameter will create a new resource.
+	// Specifies the cluster version. Changing this parameter will create a new resource.
 	Version pulumi.StringPtrInput
 	// Specifies VPC ID. Changing this parameter will create a new resource.
 	VpcId pulumi.StringPtrInput
@@ -341,8 +338,7 @@ type clusterArgs struct {
 	SecurityGroupId string `pulumi:"securityGroupId"`
 	// Specifies subnet ID. Changing this parameter will create a new resource.
 	SubnetId string `pulumi:"subnetId"`
-	// Specifies cluster version. Default value is `2.8.6.2`.
-	// Changing this parameter will create a new resource.
+	// Specifies the cluster version. Changing this parameter will create a new resource.
 	Version *string `pulumi:"version"`
 	// Specifies VPC ID. Changing this parameter will create a new resource.
 	VpcId string `pulumi:"vpcId"`
@@ -388,8 +384,7 @@ type ClusterArgs struct {
 	SecurityGroupId pulumi.StringInput
 	// Specifies subnet ID. Changing this parameter will create a new resource.
 	SubnetId pulumi.StringInput
-	// Specifies cluster version. Default value is `2.8.6.2`.
-	// Changing this parameter will create a new resource.
+	// Specifies the cluster version. Changing this parameter will create a new resource.
 	Version pulumi.StringPtrInput
 	// Specifies VPC ID. Changing this parameter will create a new resource.
 	VpcId pulumi.StringInput
@@ -581,10 +576,9 @@ func (o ClusterOutput) SubnetId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.SubnetId }).(pulumi.StringOutput)
 }
 
-// Specifies cluster version. Default value is `2.8.6.2`.
-// Changing this parameter will create a new resource.
-func (o ClusterOutput) Version() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *Cluster) pulumi.StringPtrOutput { return v.Version }).(pulumi.StringPtrOutput)
+// Specifies the cluster version. Changing this parameter will create a new resource.
+func (o ClusterOutput) Version() pulumi.StringOutput {
+	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.Version }).(pulumi.StringOutput)
 }
 
 // Specifies VPC ID. Changing this parameter will create a new resource.

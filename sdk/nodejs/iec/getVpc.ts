@@ -69,6 +69,9 @@ export interface GetVpcResult {
     readonly mode: string;
     readonly name: string;
     readonly region: string;
+    /**
+     * Indicates the number of subnets.
+     */
     readonly subnetNum: number;
 }
 

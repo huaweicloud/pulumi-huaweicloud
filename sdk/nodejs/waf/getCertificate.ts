@@ -12,23 +12,12 @@ import * as utilities from "../utilities";
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as huaweicloud from "@pulumi/huaweicloud";
- * import * as pulumi from "@huaweicloudos/pulumi";
  *
+ * const config = new pulumi.Config();
+ * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
  * const certificate1 = huaweicloud.Waf.getCertificate({
  *     name: "certificate name",
- * });
- * const domain1 = new huaweicloud.waf.Domain("domain1", {
- *     domain: "www.domainname.com",
- *     certificateId: certificate1.then(certificate1 => certificate1.id),
- *     certificateName: certificate1.then(certificate1 => certificate1.name),
- *     keepPolicy: false,
- *     proxy: false,
- *     servers: [{
- *         clientProtocol: "HTTPS",
- *         serverProtocol: "HTTP",
- *         address: "192.168.10.1",
- *         port: 8080,
- *     }],
+ *     enterpriseProjectId: enterpriseProjectId,
  * });
  * ```
  */
@@ -39,6 +28,7 @@ export function getCertificate(args: GetCertificateArgs, opts?: pulumi.InvokeOpt
 
     opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
     return pulumi.runtime.invoke("huaweicloud:Waf/getCertificate:getCertificate", {
+        "enterpriseProjectId": args.enterpriseProjectId,
         "expireStatus": args.expireStatus,
         "name": args.name,
         "region": args.region,
@@ -49,6 +39,10 @@ export function getCertificate(args: GetCertificateArgs, opts?: pulumi.InvokeOpt
  * A collection of arguments for invoking getCertificate.
  */
 export interface GetCertificateArgs {
+    /**
+     * The enterprise project ID of WAF certificate.
+     */
+    enterpriseProjectId?: string;
     /**
      * The expire status of certificate. Defaults is `0`. The value can be:
      * + `0`: not expire
@@ -71,6 +65,7 @@ export interface GetCertificateArgs {
  * A collection of values returned by getCertificate.
  */
 export interface GetCertificateResult {
+    readonly enterpriseProjectId?: string;
     /**
      * Indicates the time when the certificate expires.
      */
@@ -92,6 +87,10 @@ export function getCertificateOutput(args: GetCertificateOutputArgs, opts?: pulu
  * A collection of arguments for invoking getCertificate.
  */
 export interface GetCertificateOutputArgs {
+    /**
+     * The enterprise project ID of WAF certificate.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * The expire status of certificate. Defaults is `0`. The value can be:
      * + `0`: not expire

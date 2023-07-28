@@ -61,6 +61,9 @@ class GetNetwork_aclResult:
     @property
     @pulumi.getter(name="inboundRules")
     def inbound_rules(self) -> Sequence[str]:
+        """
+        A list of the IDs of ingress rules associated with the IEC network ACL.
+        """
         return pulumi.get(self, "inbound_rules")
 
     @property
@@ -76,6 +79,9 @@ class GetNetwork_aclResult:
     @property
     @pulumi.getter(name="outboundRules")
     def outbound_rules(self) -> Sequence[str]:
+        """
+        A list of the IDs of egress rules associated with the IEC network ACL.
+        """
         return pulumi.get(self, "outbound_rules")
 
     @property

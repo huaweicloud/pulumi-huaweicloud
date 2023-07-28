@@ -54,7 +54,8 @@ func LookupVpc(ctx *pulumi.Context, args *LookupVpcArgs, opts ...pulumi.InvokeOp
 // A collection of arguments for invoking getVpc.
 type LookupVpcArgs struct {
 	// Specifies the cidr block of the desired VPC.
-	Cidr                *string `pulumi:"cidr"`
+	Cidr *string `pulumi:"cidr"`
+	// Specifies the enterprise project ID which the desired VPC belongs to.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the id of the VPC to retrieve.
 	Id *string `pulumi:"id"`
@@ -101,7 +102,8 @@ func LookupVpcOutput(ctx *pulumi.Context, args LookupVpcOutputArgs, opts ...pulu
 // A collection of arguments for invoking getVpc.
 type LookupVpcOutputArgs struct {
 	// Specifies the cidr block of the desired VPC.
-	Cidr                pulumi.StringPtrInput `pulumi:"cidr"`
+	Cidr pulumi.StringPtrInput `pulumi:"cidr"`
+	// Specifies the enterprise project ID which the desired VPC belongs to.
 	EnterpriseProjectId pulumi.StringPtrInput `pulumi:"enterpriseProjectId"`
 	// Specifies the id of the VPC to retrieve.
 	Id pulumi.StringPtrInput `pulumi:"id"`

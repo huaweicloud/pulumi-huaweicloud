@@ -98,12 +98,12 @@ export class RouteTable extends pulumi.CustomResource {
     }
 
     /**
-     * - Specifies the supplementary information about the route.
+     * Specifies the supplementary information about the route.
      * The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * - Specifies the route table name. The value is a string of no more than
+     * Specifies the route table name. The value is a string of no more than
      * 64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
      */
     public readonly name!: pulumi.Output<string>;
@@ -113,16 +113,16 @@ export class RouteTable extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * - Specifies the route object list. The route object
+     * Specifies the route object list. The route object
      * is documented below.
      */
     public readonly routes!: pulumi.Output<outputs.Vpc.RouteTableRoute[]>;
     /**
-     * - Specifies an array of one or more subnets associating with the route table.
+     * Specifies an array of one or more subnets associating with the route table.
      */
     public readonly subnets!: pulumi.Output<string[] | undefined>;
     /**
-     * - Specifies the VPC ID for which a route table is to be added.
+     * Specifies the VPC ID for which a route table is to be added.
      * Changing this creates a new resource.
      */
     public readonly vpcId!: pulumi.Output<string>;
@@ -168,12 +168,12 @@ export class RouteTable extends pulumi.CustomResource {
  */
 export interface RouteTableState {
     /**
-     * - Specifies the supplementary information about the route.
+     * Specifies the supplementary information about the route.
      * The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
      */
     description?: pulumi.Input<string>;
     /**
-     * - Specifies the route table name. The value is a string of no more than
+     * Specifies the route table name. The value is a string of no more than
      * 64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
      */
     name?: pulumi.Input<string>;
@@ -183,16 +183,16 @@ export interface RouteTableState {
      */
     region?: pulumi.Input<string>;
     /**
-     * - Specifies the route object list. The route object
+     * Specifies the route object list. The route object
      * is documented below.
      */
     routes?: pulumi.Input<pulumi.Input<inputs.Vpc.RouteTableRoute>[]>;
     /**
-     * - Specifies an array of one or more subnets associating with the route table.
+     * Specifies an array of one or more subnets associating with the route table.
      */
     subnets?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * - Specifies the VPC ID for which a route table is to be added.
+     * Specifies the VPC ID for which a route table is to be added.
      * Changing this creates a new resource.
      */
     vpcId?: pulumi.Input<string>;
@@ -203,12 +203,12 @@ export interface RouteTableState {
  */
 export interface RouteTableArgs {
     /**
-     * - Specifies the supplementary information about the route.
+     * Specifies the supplementary information about the route.
      * The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
      */
     description?: pulumi.Input<string>;
     /**
-     * - Specifies the route table name. The value is a string of no more than
+     * Specifies the route table name. The value is a string of no more than
      * 64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
      */
     name?: pulumi.Input<string>;
@@ -218,16 +218,16 @@ export interface RouteTableArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * - Specifies the route object list. The route object
+     * Specifies the route object list. The route object
      * is documented below.
      */
     routes?: pulumi.Input<pulumi.Input<inputs.Vpc.RouteTableRoute>[]>;
     /**
-     * - Specifies an array of one or more subnets associating with the route table.
+     * Specifies an array of one or more subnets associating with the route table.
      */
     subnets?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * - Specifies the VPC ID for which a route table is to be added.
+     * Specifies the VPC ID for which a route table is to be added.
      * Changing this creates a new resource.
      */
     vpcId: pulumi.Input<string>;

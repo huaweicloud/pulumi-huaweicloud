@@ -8,36 +8,6 @@ import * as utilities from "../utilities";
  * Manage DMS RabbitMQ instance resources within HuaweiCloud.
  *
  * ## Example Usage
- * ### Basic Instance
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
- * import * as pulumi from "@huaweicloudos/pulumi";
- *
- * const config = new pulumi.Config();
- * const vpcId = config.requireObject("vpcId");
- * const subnetId = config.requireObject("subnetId");
- * const securityGroupId = config.requireObject("securityGroupId");
- * const zones = huaweicloud.getAvailabilityZones({});
- * const testProduct = huaweicloud.Dms.getProduct({
- *     engine: "rabbitmq",
- *     instanceType: "cluster",
- *     version: "3.7.17",
- *     nodeNum: "3",
- * });
- * const testRabbitmqInstance = new huaweicloud.dms.RabbitmqInstance("testRabbitmqInstance", {
- *     productId: testProduct.then(testProduct => testProduct.id),
- *     engineVersion: testProduct.then(testProduct => testProduct.version),
- *     storageSpecCode: testProduct.then(testProduct => testProduct.storageSpecCode),
- *     vpcId: vpcId,
- *     networkId: subnetId,
- *     securityGroupId: securityGroupId,
- *     availabilityZones: [zones.then(zones => zones.names?[0])],
- *     accessUser: "user",
- *     password: "Rabbitmqtest@123",
- * });
- * ```
  *
  * ## Import
  *
@@ -47,7 +17,7 @@ import * as utilities from "../utilities";
  *  $ pulumi import huaweicloud:Dms/rabbitmqInstance:RabbitmqInstance huaweicloud_dms_rabbitmq_instance.instance_1 8d3c7938-dc47-4937-a30f-c80de381c5e3
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`. It is generally recommended running `terraform plan` after importing a DMS RabbitMQ instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dms_rabbitmq_instance" "instance_1" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `auto_renew`, `period` and `period_unit`. It is generally recommended running `terraform plan` after importing a DMS RabbitMQ instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dms_rabbitmq_instance" "instance_1" {
  *
  *  ...
  *
@@ -55,7 +25,7 @@ import * as utilities from "../utilities";
  *
  *  ignore_changes = [
  *
- *  password
+ *  password, auto_renew, period, period_unit,
  *
  *  ]
  *
@@ -95,6 +65,10 @@ export class RabbitmqInstance extends pulumi.CustomResource {
      */
     public readonly accessUser!: pulumi.Output<string>;
     /**
+     * Specifies whether auto renew is enabled. Valid values are **true** and **false**.
+     */
+    public readonly autoRenew!: pulumi.Output<string | undefined>;
+    /**
      * Specifies the names of an AZ.
      * The parameter value can not be left blank or an empty array.
      * Changing this creates a new instance resource.
@@ -104,6 +78,16 @@ export class RabbitmqInstance extends pulumi.CustomResource {
      * @deprecated available_zones has deprecated, please use "availability_zones" instead.
      */
     public readonly availableZones!: pulumi.Output<string[]>;
+    /**
+     * Specifies the broker numbers.
+     * It is required when creating a cluster instance with `flavorId`.
+     */
+    public readonly brokerNum!: pulumi.Output<number>;
+    /**
+     * Specifies the charging mode of the instance. Valid values are
+     * **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
+     */
+    public readonly chargingMode!: pulumi.Output<string>;
     /**
      * Indicates the IP address of the DMS RabbitMQ instance.
      */
@@ -131,6 +115,11 @@ export class RabbitmqInstance extends pulumi.CustomResource {
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
+     * Specifies a flavor ID.
+     * It is mandatory when the `chargingMode` is **prePaid**.
+     */
+    public readonly flavorId!: pulumi.Output<string | undefined>;
+    /**
      * Specifies the time at which a maintenance time window starts. Format: HH:mm.
      * The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
      * time window.
@@ -152,6 +141,10 @@ export class RabbitmqInstance extends pulumi.CustomResource {
     /**
      * Indicates the management address of the DMS RabbitMQ instance.
      */
+    public /*out*/ readonly managementConnectAddress!: pulumi.Output<string>;
+    /**
+     * @deprecated typo in manegement_connect_address, please use "management_connect_address" instead.
+     */
     public /*out*/ readonly manegementConnectAddress!: pulumi.Output<string>;
     /**
      * Specifies the name of the DMS RabbitMQ instance. An instance name starts with a letter,
@@ -172,13 +165,25 @@ export class RabbitmqInstance extends pulumi.CustomResource {
      */
     public readonly password!: pulumi.Output<string>;
     /**
+     * Specifies the charging period of the instance. If `periodUnit` is set to
+     * **month**, the value ranges from 1 to 9. If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+     * This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this creates a new resource.
+     */
+    public readonly period!: pulumi.Output<number | undefined>;
+    /**
+     * Specifies the charging period unit of the instance.
+     * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this creates a new resource.
+     */
+    public readonly periodUnit!: pulumi.Output<string | undefined>;
+    /**
      * Indicates the port number of the DMS RabbitMQ instance.
      */
     public /*out*/ readonly port!: pulumi.Output<number>;
     /**
-     * Specifies a product ID. Changing this creates a new instance resource.
+     * @deprecated product_id has deprecated, please use "flavor_id" instead.
      */
-    public readonly productId!: pulumi.Output<string>;
+    public readonly productId!: pulumi.Output<string | undefined>;
     /**
      * Specifies the ID of the elastic IP address (EIP)
      * bound to the DMS RabbitMQ instance.
@@ -212,7 +217,8 @@ export class RabbitmqInstance extends pulumi.CustomResource {
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
-     * Specifies the message storage space, unit is GB. Value range:
+     * Specifies the message storage space, unit is GB.
+     * It is required when creating a instance with `flavorId`. Value range:
      * + Single-node RabbitMQ instance: 100–90,000 GB
      * + Cluster RabbitMQ instance: 100 GB x number of nodes to 90,000 GB, 200 GB x number of nodes to 90,000 GB,
      * and 300 GB x number of nodes to 90,000 GB
@@ -263,20 +269,27 @@ export class RabbitmqInstance extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as RabbitmqInstanceState | undefined;
             resourceInputs["accessUser"] = state ? state.accessUser : undefined;
+            resourceInputs["autoRenew"] = state ? state.autoRenew : undefined;
             resourceInputs["availabilityZones"] = state ? state.availabilityZones : undefined;
             resourceInputs["availableZones"] = state ? state.availableZones : undefined;
+            resourceInputs["brokerNum"] = state ? state.brokerNum : undefined;
+            resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
             resourceInputs["connectAddress"] = state ? state.connectAddress : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["enablePublicIp"] = state ? state.enablePublicIp : undefined;
             resourceInputs["engine"] = state ? state.engine : undefined;
             resourceInputs["engineVersion"] = state ? state.engineVersion : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
+            resourceInputs["flavorId"] = state ? state.flavorId : undefined;
             resourceInputs["maintainBegin"] = state ? state.maintainBegin : undefined;
             resourceInputs["maintainEnd"] = state ? state.maintainEnd : undefined;
+            resourceInputs["managementConnectAddress"] = state ? state.managementConnectAddress : undefined;
             resourceInputs["manegementConnectAddress"] = state ? state.manegementConnectAddress : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["networkId"] = state ? state.networkId : undefined;
             resourceInputs["password"] = state ? state.password : undefined;
+            resourceInputs["period"] = state ? state.period : undefined;
+            resourceInputs["periodUnit"] = state ? state.periodUnit : undefined;
             resourceInputs["port"] = state ? state.port : undefined;
             resourceInputs["productId"] = state ? state.productId : undefined;
             resourceInputs["publicIpId"] = state ? state.publicIpId : undefined;
@@ -305,9 +318,6 @@ export class RabbitmqInstance extends pulumi.CustomResource {
             if ((!args || args.password === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'password'");
             }
-            if ((!args || args.productId === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'productId'");
-            }
             if ((!args || args.securityGroupId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'securityGroupId'");
             }
@@ -318,16 +328,22 @@ export class RabbitmqInstance extends pulumi.CustomResource {
                 throw new Error("Missing required property 'vpcId'");
             }
             resourceInputs["accessUser"] = args ? args.accessUser : undefined;
+            resourceInputs["autoRenew"] = args ? args.autoRenew : undefined;
             resourceInputs["availabilityZones"] = args ? args.availabilityZones : undefined;
             resourceInputs["availableZones"] = args ? args.availableZones : undefined;
+            resourceInputs["brokerNum"] = args ? args.brokerNum : undefined;
+            resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["engineVersion"] = args ? args.engineVersion : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
+            resourceInputs["flavorId"] = args ? args.flavorId : undefined;
             resourceInputs["maintainBegin"] = args ? args.maintainBegin : undefined;
             resourceInputs["maintainEnd"] = args ? args.maintainEnd : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["networkId"] = args ? args.networkId : undefined;
             resourceInputs["password"] = args ? args.password : undefined;
+            resourceInputs["period"] = args ? args.period : undefined;
+            resourceInputs["periodUnit"] = args ? args.periodUnit : undefined;
             resourceInputs["productId"] = args ? args.productId : undefined;
             resourceInputs["publicIpId"] = args ? args.publicIpId : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
@@ -340,6 +356,7 @@ export class RabbitmqInstance extends pulumi.CustomResource {
             resourceInputs["connectAddress"] = undefined /*out*/;
             resourceInputs["enablePublicIp"] = undefined /*out*/;
             resourceInputs["engine"] = undefined /*out*/;
+            resourceInputs["managementConnectAddress"] = undefined /*out*/;
             resourceInputs["manegementConnectAddress"] = undefined /*out*/;
             resourceInputs["port"] = undefined /*out*/;
             resourceInputs["resourceSpecCode"] = undefined /*out*/;
@@ -365,6 +382,10 @@ export interface RabbitmqInstanceState {
      */
     accessUser?: pulumi.Input<string>;
     /**
+     * Specifies whether auto renew is enabled. Valid values are **true** and **false**.
+     */
+    autoRenew?: pulumi.Input<string>;
+    /**
      * Specifies the names of an AZ.
      * The parameter value can not be left blank or an empty array.
      * Changing this creates a new instance resource.
@@ -374,6 +395,16 @@ export interface RabbitmqInstanceState {
      * @deprecated available_zones has deprecated, please use "availability_zones" instead.
      */
     availableZones?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * Specifies the broker numbers.
+     * It is required when creating a cluster instance with `flavorId`.
+     */
+    brokerNum?: pulumi.Input<number>;
+    /**
+     * Specifies the charging mode of the instance. Valid values are
+     * **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
+     */
+    chargingMode?: pulumi.Input<string>;
     /**
      * Indicates the IP address of the DMS RabbitMQ instance.
      */
@@ -401,6 +432,11 @@ export interface RabbitmqInstanceState {
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
+     * Specifies a flavor ID.
+     * It is mandatory when the `chargingMode` is **prePaid**.
+     */
+    flavorId?: pulumi.Input<string>;
+    /**
      * Specifies the time at which a maintenance time window starts. Format: HH:mm.
      * The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
      * time window.
@@ -422,6 +458,10 @@ export interface RabbitmqInstanceState {
     /**
      * Indicates the management address of the DMS RabbitMQ instance.
      */
+    managementConnectAddress?: pulumi.Input<string>;
+    /**
+     * @deprecated typo in manegement_connect_address, please use "management_connect_address" instead.
+     */
     manegementConnectAddress?: pulumi.Input<string>;
     /**
      * Specifies the name of the DMS RabbitMQ instance. An instance name starts with a letter,
@@ -442,11 +482,23 @@ export interface RabbitmqInstanceState {
      */
     password?: pulumi.Input<string>;
     /**
+     * Specifies the charging period of the instance. If `periodUnit` is set to
+     * **month**, the value ranges from 1 to 9. If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+     * This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this creates a new resource.
+     */
+    period?: pulumi.Input<number>;
+    /**
+     * Specifies the charging period unit of the instance.
+     * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this creates a new resource.
+     */
+    periodUnit?: pulumi.Input<string>;
+    /**
      * Indicates the port number of the DMS RabbitMQ instance.
      */
     port?: pulumi.Input<number>;
     /**
-     * Specifies a product ID. Changing this creates a new instance resource.
+     * @deprecated product_id has deprecated, please use "flavor_id" instead.
      */
     productId?: pulumi.Input<string>;
     /**
@@ -482,7 +534,8 @@ export interface RabbitmqInstanceState {
      */
     status?: pulumi.Input<string>;
     /**
-     * Specifies the message storage space, unit is GB. Value range:
+     * Specifies the message storage space, unit is GB.
+     * It is required when creating a instance with `flavorId`. Value range:
      * + Single-node RabbitMQ instance: 100–90,000 GB
      * + Cluster RabbitMQ instance: 100 GB x number of nodes to 90,000 GB, 200 GB x number of nodes to 90,000 GB,
      * and 300 GB x number of nodes to 90,000 GB
@@ -530,6 +583,10 @@ export interface RabbitmqInstanceArgs {
      */
     accessUser: pulumi.Input<string>;
     /**
+     * Specifies whether auto renew is enabled. Valid values are **true** and **false**.
+     */
+    autoRenew?: pulumi.Input<string>;
+    /**
      * Specifies the names of an AZ.
      * The parameter value can not be left blank or an empty array.
      * Changing this creates a new instance resource.
@@ -539,6 +596,16 @@ export interface RabbitmqInstanceArgs {
      * @deprecated available_zones has deprecated, please use "availability_zones" instead.
      */
     availableZones?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * Specifies the broker numbers.
+     * It is required when creating a cluster instance with `flavorId`.
+     */
+    brokerNum?: pulumi.Input<number>;
+    /**
+     * Specifies the charging mode of the instance. Valid values are
+     * **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
+     */
+    chargingMode?: pulumi.Input<string>;
     /**
      * Specifies the description of the DMS RabbitMQ instance.
      * It is a character string containing not more than 1,024 characters.
@@ -553,6 +620,11 @@ export interface RabbitmqInstanceArgs {
      * Specifies the enterprise project ID of the RabbitMQ instance.
      */
     enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specifies a flavor ID.
+     * It is mandatory when the `chargingMode` is **prePaid**.
+     */
+    flavorId?: pulumi.Input<string>;
     /**
      * Specifies the time at which a maintenance time window starts. Format: HH:mm.
      * The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
@@ -591,9 +663,21 @@ export interface RabbitmqInstanceArgs {
      */
     password: pulumi.Input<string>;
     /**
-     * Specifies a product ID. Changing this creates a new instance resource.
+     * Specifies the charging period of the instance. If `periodUnit` is set to
+     * **month**, the value ranges from 1 to 9. If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+     * This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this creates a new resource.
      */
-    productId: pulumi.Input<string>;
+    period?: pulumi.Input<number>;
+    /**
+     * Specifies the charging period unit of the instance.
+     * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this creates a new resource.
+     */
+    periodUnit?: pulumi.Input<string>;
+    /**
+     * @deprecated product_id has deprecated, please use "flavor_id" instead.
+     */
+    productId?: pulumi.Input<string>;
     /**
      * Specifies the ID of the elastic IP address (EIP)
      * bound to the DMS RabbitMQ instance.
@@ -614,7 +698,8 @@ export interface RabbitmqInstanceArgs {
      */
     sslEnable?: pulumi.Input<boolean>;
     /**
-     * Specifies the message storage space, unit is GB. Value range:
+     * Specifies the message storage space, unit is GB.
+     * It is required when creating a instance with `flavorId`. Value range:
      * + Single-node RabbitMQ instance: 100–90,000 GB
      * + Cluster RabbitMQ instance: 100 GB x number of nodes to 90,000 GB, 200 GB x number of nodes to 90,000 GB,
      * and 300 GB x number of nodes to 90,000 GB

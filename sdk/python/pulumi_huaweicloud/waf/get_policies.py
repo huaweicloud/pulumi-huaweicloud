@@ -22,7 +22,10 @@ class GetPoliciesResult:
     """
     A collection of values returned by getPolicies.
     """
-    def __init__(__self__, id=None, name=None, policies=None, region=None):
+    def __init__(__self__, enterprise_project_id=None, id=None, name=None, policies=None, region=None):
+        if enterprise_project_id and not isinstance(enterprise_project_id, str):
+            raise TypeError("Expected argument 'enterprise_project_id' to be a str")
+        pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if id and not isinstance(id, str):
             raise TypeError("Expected argument 'id' to be a str")
         pulumi.set(__self__, "id", id)
@@ -35,6 +38,11 @@ class GetPoliciesResult:
         if region and not isinstance(region, str):
             raise TypeError("Expected argument 'region' to be a str")
         pulumi.set(__self__, "region", region)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[str]:
+        return pulumi.get(self, "enterprise_project_id")
 
     @property
     @pulumi.getter
@@ -72,13 +80,15 @@ class AwaitableGetPoliciesResult(GetPoliciesResult):
         if False:
             yield self
         return GetPoliciesResult(
+            enterprise_project_id=self.enterprise_project_id,
             id=self.id,
             name=self.name,
             policies=self.policies,
             region=self.region)
 
 
-def get_policies(name: Optional[str] = None,
+def get_policies(enterprise_project_id: Optional[str] = None,
+                 name: Optional[str] = None,
                  region: Optional[str] = None,
                  opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetPoliciesResult:
     """
@@ -92,21 +102,26 @@ def get_policies(name: Optional[str] = None,
 
     config = pulumi.Config()
     policy_name = config.require_object("policyName")
-    policies = huaweicloud.Waf.get_policies(name=policy_name)
+    enterprise_project_id = config.require_object("enterpriseProjectId")
+    policies = huaweicloud.Waf.get_policies(name=policy_name,
+        enterprise_project_id=enterprise_project_id)
     ```
 
 
+    :param str enterprise_project_id: Specifies the enterprise project ID of WAF policies.
     :param str name: Policy name used for matching. The value is case sensitive and supports fuzzy matching.
     :param str region: The region in which to obtain the WAF policies. If omitted, the provider-level region
            will be used.
     """
     __args__ = dict()
+    __args__['enterpriseProjectId'] = enterprise_project_id
     __args__['name'] = name
     __args__['region'] = region
     opts = pulumi.InvokeOptions.merge(_utilities.get_invoke_opts_defaults(), opts)
     __ret__ = pulumi.runtime.invoke('huaweicloud:Waf/getPolicies:getPolicies', __args__, opts=opts, typ=GetPoliciesResult).value
 
     return AwaitableGetPoliciesResult(
+        enterprise_project_id=__ret__.enterprise_project_id,
         id=__ret__.id,
         name=__ret__.name,
         policies=__ret__.policies,
@@ -114,7 +129,8 @@ def get_policies(name: Optional[str] = None,
 
 
 @_utilities.lift_output_func(get_policies)
-def get_policies_output(name: Optional[pulumi.Input[Optional[str]]] = None,
+def get_policies_output(enterprise_project_id: Optional[pulumi.Input[Optional[str]]] = None,
+                        name: Optional[pulumi.Input[Optional[str]]] = None,
                         region: Optional[pulumi.Input[Optional[str]]] = None,
                         opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetPoliciesResult]:
     """
@@ -128,10 +144,13 @@ def get_policies_output(name: Optional[pulumi.Input[Optional[str]]] = None,
 
     config = pulumi.Config()
     policy_name = config.require_object("policyName")
-    policies = huaweicloud.Waf.get_policies(name=policy_name)
+    enterprise_project_id = config.require_object("enterpriseProjectId")
+    policies = huaweicloud.Waf.get_policies(name=policy_name,
+        enterprise_project_id=enterprise_project_id)
     ```
 
 
+    :param str enterprise_project_id: Specifies the enterprise project ID of WAF policies.
     :param str name: Policy name used for matching. The value is case sensitive and supports fuzzy matching.
     :param str region: The region in which to obtain the WAF policies. If omitted, the provider-level region
            will be used.

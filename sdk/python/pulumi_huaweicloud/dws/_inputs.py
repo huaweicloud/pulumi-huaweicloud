@@ -11,8 +11,10 @@ from .. import _utilities
 
 __all__ = [
     'ClusterEndpointArgs',
+    'ClusterMaintainWindowArgs',
     'ClusterPublicEndpointArgs',
     'ClusterPublicIpArgs',
+    'ClusterVolumeArgs',
 ]
 
 @pulumi.input_type
@@ -21,10 +23,8 @@ class ClusterEndpointArgs:
                  connect_info: Optional[pulumi.Input[str]] = None,
                  jdbc_url: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[str] connect_info: (Optional, String) Private network connection information.
-        :param pulumi.Input[str] jdbc_url: (Optional, String)
-               JDBC URL. The following is the default format:
-               jdbc:postgresql://< public_connect_info>/<YOUR_DATABASE_NAME>
+        :param pulumi.Input[str] connect_info: Private network connection information.
+        :param pulumi.Input[str] jdbc_url: JDBC URL. Format: jdbc:postgresql://<public_connect_info>/<YOUR_DATABASE_NAME>
         """
         if connect_info is not None:
             pulumi.set(__self__, "connect_info", connect_info)
@@ -35,7 +35,7 @@ class ClusterEndpointArgs:
     @pulumi.getter(name="connectInfo")
     def connect_info(self) -> Optional[pulumi.Input[str]]:
         """
-        (Optional, String) Private network connection information.
+        Private network connection information.
         """
         return pulumi.get(self, "connect_info")
 
@@ -47,9 +47,7 @@ class ClusterEndpointArgs:
     @pulumi.getter(name="jdbcUrl")
     def jdbc_url(self) -> Optional[pulumi.Input[str]]:
         """
-        (Optional, String)
-        JDBC URL. The following is the default format:
-        jdbc:postgresql://< public_connect_info>/<YOUR_DATABASE_NAME>
+        JDBC URL. Format: jdbc:postgresql://<public_connect_info>/<YOUR_DATABASE_NAME>
         """
         return pulumi.get(self, "jdbc_url")
 
@@ -59,16 +57,72 @@ class ClusterEndpointArgs:
 
 
 @pulumi.input_type
+class ClusterMaintainWindowArgs:
+    def __init__(__self__, *,
+                 day: Optional[pulumi.Input[str]] = None,
+                 end_time: Optional[pulumi.Input[str]] = None,
+                 start_time: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] day: Maintenance time in each week in the unit of day.  
+               The valid values are **Mon**, **Tue**, **Wed**, **Thu**, **Fri**,
+               **Sat**, and **Sun**.
+        :param pulumi.Input[str] end_time: Maintenance end time in HH:mm format. The time zone is GMT+0.
+        :param pulumi.Input[str] start_time: Maintenance start time in HH:mm format. The time zone is GMT+0.
+        """
+        if day is not None:
+            pulumi.set(__self__, "day", day)
+        if end_time is not None:
+            pulumi.set(__self__, "end_time", end_time)
+        if start_time is not None:
+            pulumi.set(__self__, "start_time", start_time)
+
+    @property
+    @pulumi.getter
+    def day(self) -> Optional[pulumi.Input[str]]:
+        """
+        Maintenance time in each week in the unit of day.  
+        The valid values are **Mon**, **Tue**, **Wed**, **Thu**, **Fri**,
+        **Sat**, and **Sun**.
+        """
+        return pulumi.get(self, "day")
+
+    @day.setter
+    def day(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "day", value)
+
+    @property
+    @pulumi.getter(name="endTime")
+    def end_time(self) -> Optional[pulumi.Input[str]]:
+        """
+        Maintenance end time in HH:mm format. The time zone is GMT+0.
+        """
+        return pulumi.get(self, "end_time")
+
+    @end_time.setter
+    def end_time(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "end_time", value)
+
+    @property
+    @pulumi.getter(name="startTime")
+    def start_time(self) -> Optional[pulumi.Input[str]]:
+        """
+        Maintenance start time in HH:mm format. The time zone is GMT+0.
+        """
+        return pulumi.get(self, "start_time")
+
+    @start_time.setter
+    def start_time(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "start_time", value)
+
+
+@pulumi.input_type
 class ClusterPublicEndpointArgs:
     def __init__(__self__, *,
                  jdbc_url: Optional[pulumi.Input[str]] = None,
                  public_connect_info: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[str] jdbc_url: (Optional, String)
-               JDBC URL. The following is the default format:
-               jdbc:postgresql://< public_connect_info>/<YOUR_DATABASE_NAME>
-        :param pulumi.Input[str] public_connect_info: (Optional, String)
-               Public network connection information.
+        :param pulumi.Input[str] jdbc_url: JDBC URL. Format: jdbc:postgresql://<public_connect_info>/<YOUR_DATABASE_NAME>
+        :param pulumi.Input[str] public_connect_info: Public network connection information.
         """
         if jdbc_url is not None:
             pulumi.set(__self__, "jdbc_url", jdbc_url)
@@ -79,9 +133,7 @@ class ClusterPublicEndpointArgs:
     @pulumi.getter(name="jdbcUrl")
     def jdbc_url(self) -> Optional[pulumi.Input[str]]:
         """
-        (Optional, String)
-        JDBC URL. The following is the default format:
-        jdbc:postgresql://< public_connect_info>/<YOUR_DATABASE_NAME>
+        JDBC URL. Format: jdbc:postgresql://<public_connect_info>/<YOUR_DATABASE_NAME>
         """
         return pulumi.get(self, "jdbc_url")
 
@@ -93,7 +145,6 @@ class ClusterPublicEndpointArgs:
     @pulumi.getter(name="publicConnectInfo")
     def public_connect_info(self) -> Optional[pulumi.Input[str]]:
         """
-        (Optional, String)
         Public network connection information.
         """
         return pulumi.get(self, "public_connect_info")
@@ -109,9 +160,9 @@ class ClusterPublicIpArgs:
                  eip_id: Optional[pulumi.Input[str]] = None,
                  public_bind_type: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[str] eip_id: EIP ID.
-        :param pulumi.Input[str] public_bind_type: Binding type of an EIP. The value can be either of the following:
-               auto_assign not_use bind_existing The default value is not_use.
+        :param pulumi.Input[str] eip_id: The EIP ID.
+        :param pulumi.Input[str] public_bind_type: The bind type of public IP.  
+               The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
         """
         if eip_id is not None:
             pulumi.set(__self__, "eip_id", eip_id)
@@ -122,7 +173,7 @@ class ClusterPublicIpArgs:
     @pulumi.getter(name="eipId")
     def eip_id(self) -> Optional[pulumi.Input[str]]:
         """
-        EIP ID.
+        The EIP ID.
         """
         return pulumi.get(self, "eip_id")
 
@@ -134,13 +185,60 @@ class ClusterPublicIpArgs:
     @pulumi.getter(name="publicBindType")
     def public_bind_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Binding type of an EIP. The value can be either of the following:
-        auto_assign not_use bind_existing The default value is not_use.
+        The bind type of public IP.  
+        The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
         """
         return pulumi.get(self, "public_bind_type")
 
     @public_bind_type.setter
     def public_bind_type(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "public_bind_type", value)
+
+
+@pulumi.input_type
+class ClusterVolumeArgs:
+    def __init__(__self__, *,
+                 capacity: Optional[pulumi.Input[str]] = None,
+                 type: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] capacity: The capacity size, in GB.
+        :param pulumi.Input[str] type: The volume type. Value options are as follows:
+               + **SATA**: Common I/O. The SATA disk is used.
+               + **SAS**: High I/O. The SAS disk is used.
+               + **SSD**: Ultra-high I/O. The solid-state drive (SSD) is used.
+               The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
+        """
+        if capacity is not None:
+            pulumi.set(__self__, "capacity", capacity)
+        if type is not None:
+            pulumi.set(__self__, "type", type)
+
+    @property
+    @pulumi.getter
+    def capacity(self) -> Optional[pulumi.Input[str]]:
+        """
+        The capacity size, in GB.
+        """
+        return pulumi.get(self, "capacity")
+
+    @capacity.setter
+    def capacity(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "capacity", value)
+
+    @property
+    @pulumi.getter
+    def type(self) -> Optional[pulumi.Input[str]]:
+        """
+        The volume type. Value options are as follows:
+        + **SATA**: Common I/O. The SATA disk is used.
+        + **SAS**: High I/O. The SAS disk is used.
+        + **SSD**: Ultra-high I/O. The solid-state drive (SSD) is used.
+        The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
+        """
+        return pulumi.get(self, "type")
+
+    @type.setter
+    def type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "type", value)
 
 

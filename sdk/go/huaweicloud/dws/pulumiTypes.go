@@ -11,11 +11,9 @@ import (
 )
 
 type ClusterEndpoint struct {
-	// (Optional, String) Private network connection information.
+	// Private network connection information.
 	ConnectInfo *string `pulumi:"connectInfo"`
-	// (Optional, String)
-	// JDBC URL. The following is the default format:
-	// jdbc:postgresql://< public_connect_info>/<YOUR_DATABASE_NAME>
+	// JDBC URL. Format: jdbc:postgresql://<public_connect_info>/<YOUR_DATABASE_NAME>
 	JdbcUrl *string `pulumi:"jdbcUrl"`
 }
 
@@ -31,11 +29,9 @@ type ClusterEndpointInput interface {
 }
 
 type ClusterEndpointArgs struct {
-	// (Optional, String) Private network connection information.
+	// Private network connection information.
 	ConnectInfo pulumi.StringPtrInput `pulumi:"connectInfo"`
-	// (Optional, String)
-	// JDBC URL. The following is the default format:
-	// jdbc:postgresql://< public_connect_info>/<YOUR_DATABASE_NAME>
+	// JDBC URL. Format: jdbc:postgresql://<public_connect_info>/<YOUR_DATABASE_NAME>
 	JdbcUrl pulumi.StringPtrInput `pulumi:"jdbcUrl"`
 }
 
@@ -90,14 +86,12 @@ func (o ClusterEndpointOutput) ToClusterEndpointOutputWithContext(ctx context.Co
 	return o
 }
 
-// (Optional, String) Private network connection information.
+// Private network connection information.
 func (o ClusterEndpointOutput) ConnectInfo() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterEndpoint) *string { return v.ConnectInfo }).(pulumi.StringPtrOutput)
 }
 
-// (Optional, String)
-// JDBC URL. The following is the default format:
-// jdbc:postgresql://< public_connect_info>/<YOUR_DATABASE_NAME>
+// JDBC URL. Format: jdbc:postgresql://<public_connect_info>/<YOUR_DATABASE_NAME>
 func (o ClusterEndpointOutput) JdbcUrl() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterEndpoint) *string { return v.JdbcUrl }).(pulumi.StringPtrOutput)
 }
@@ -122,12 +116,130 @@ func (o ClusterEndpointArrayOutput) Index(i pulumi.IntInput) ClusterEndpointOutp
 	}).(ClusterEndpointOutput)
 }
 
+type ClusterMaintainWindow struct {
+	// Maintenance time in each week in the unit of day.\
+	// The valid values are **Mon**, **Tue**, **Wed**, **Thu**, **Fri**,
+	// **Sat**, and **Sun**.
+	Day *string `pulumi:"day"`
+	// Maintenance end time in HH:mm format. The time zone is GMT+0.
+	EndTime *string `pulumi:"endTime"`
+	// Maintenance start time in HH:mm format. The time zone is GMT+0.
+	StartTime *string `pulumi:"startTime"`
+}
+
+// ClusterMaintainWindowInput is an input type that accepts ClusterMaintainWindowArgs and ClusterMaintainWindowOutput values.
+// You can construct a concrete instance of `ClusterMaintainWindowInput` via:
+//
+//	ClusterMaintainWindowArgs{...}
+type ClusterMaintainWindowInput interface {
+	pulumi.Input
+
+	ToClusterMaintainWindowOutput() ClusterMaintainWindowOutput
+	ToClusterMaintainWindowOutputWithContext(context.Context) ClusterMaintainWindowOutput
+}
+
+type ClusterMaintainWindowArgs struct {
+	// Maintenance time in each week in the unit of day.\
+	// The valid values are **Mon**, **Tue**, **Wed**, **Thu**, **Fri**,
+	// **Sat**, and **Sun**.
+	Day pulumi.StringPtrInput `pulumi:"day"`
+	// Maintenance end time in HH:mm format. The time zone is GMT+0.
+	EndTime pulumi.StringPtrInput `pulumi:"endTime"`
+	// Maintenance start time in HH:mm format. The time zone is GMT+0.
+	StartTime pulumi.StringPtrInput `pulumi:"startTime"`
+}
+
+func (ClusterMaintainWindowArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterMaintainWindow)(nil)).Elem()
+}
+
+func (i ClusterMaintainWindowArgs) ToClusterMaintainWindowOutput() ClusterMaintainWindowOutput {
+	return i.ToClusterMaintainWindowOutputWithContext(context.Background())
+}
+
+func (i ClusterMaintainWindowArgs) ToClusterMaintainWindowOutputWithContext(ctx context.Context) ClusterMaintainWindowOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterMaintainWindowOutput)
+}
+
+// ClusterMaintainWindowArrayInput is an input type that accepts ClusterMaintainWindowArray and ClusterMaintainWindowArrayOutput values.
+// You can construct a concrete instance of `ClusterMaintainWindowArrayInput` via:
+//
+//	ClusterMaintainWindowArray{ ClusterMaintainWindowArgs{...} }
+type ClusterMaintainWindowArrayInput interface {
+	pulumi.Input
+
+	ToClusterMaintainWindowArrayOutput() ClusterMaintainWindowArrayOutput
+	ToClusterMaintainWindowArrayOutputWithContext(context.Context) ClusterMaintainWindowArrayOutput
+}
+
+type ClusterMaintainWindowArray []ClusterMaintainWindowInput
+
+func (ClusterMaintainWindowArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterMaintainWindow)(nil)).Elem()
+}
+
+func (i ClusterMaintainWindowArray) ToClusterMaintainWindowArrayOutput() ClusterMaintainWindowArrayOutput {
+	return i.ToClusterMaintainWindowArrayOutputWithContext(context.Background())
+}
+
+func (i ClusterMaintainWindowArray) ToClusterMaintainWindowArrayOutputWithContext(ctx context.Context) ClusterMaintainWindowArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterMaintainWindowArrayOutput)
+}
+
+type ClusterMaintainWindowOutput struct{ *pulumi.OutputState }
+
+func (ClusterMaintainWindowOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterMaintainWindow)(nil)).Elem()
+}
+
+func (o ClusterMaintainWindowOutput) ToClusterMaintainWindowOutput() ClusterMaintainWindowOutput {
+	return o
+}
+
+func (o ClusterMaintainWindowOutput) ToClusterMaintainWindowOutputWithContext(ctx context.Context) ClusterMaintainWindowOutput {
+	return o
+}
+
+// Maintenance time in each week in the unit of day.\
+// The valid values are **Mon**, **Tue**, **Wed**, **Thu**, **Fri**,
+// **Sat**, and **Sun**.
+func (o ClusterMaintainWindowOutput) Day() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterMaintainWindow) *string { return v.Day }).(pulumi.StringPtrOutput)
+}
+
+// Maintenance end time in HH:mm format. The time zone is GMT+0.
+func (o ClusterMaintainWindowOutput) EndTime() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterMaintainWindow) *string { return v.EndTime }).(pulumi.StringPtrOutput)
+}
+
+// Maintenance start time in HH:mm format. The time zone is GMT+0.
+func (o ClusterMaintainWindowOutput) StartTime() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterMaintainWindow) *string { return v.StartTime }).(pulumi.StringPtrOutput)
+}
+
+type ClusterMaintainWindowArrayOutput struct{ *pulumi.OutputState }
+
+func (ClusterMaintainWindowArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterMaintainWindow)(nil)).Elem()
+}
+
+func (o ClusterMaintainWindowArrayOutput) ToClusterMaintainWindowArrayOutput() ClusterMaintainWindowArrayOutput {
+	return o
+}
+
+func (o ClusterMaintainWindowArrayOutput) ToClusterMaintainWindowArrayOutputWithContext(ctx context.Context) ClusterMaintainWindowArrayOutput {
+	return o
+}
+
+func (o ClusterMaintainWindowArrayOutput) Index(i pulumi.IntInput) ClusterMaintainWindowOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) ClusterMaintainWindow {
+		return vs[0].([]ClusterMaintainWindow)[vs[1].(int)]
+	}).(ClusterMaintainWindowOutput)
+}
+
 type ClusterPublicEndpoint struct {
-	// (Optional, String)
-	// JDBC URL. The following is the default format:
-	// jdbc:postgresql://< public_connect_info>/<YOUR_DATABASE_NAME>
+	// JDBC URL. Format: jdbc:postgresql://<public_connect_info>/<YOUR_DATABASE_NAME>
 	JdbcUrl *string `pulumi:"jdbcUrl"`
-	// (Optional, String)
 	// Public network connection information.
 	PublicConnectInfo *string `pulumi:"publicConnectInfo"`
 }
@@ -144,11 +256,8 @@ type ClusterPublicEndpointInput interface {
 }
 
 type ClusterPublicEndpointArgs struct {
-	// (Optional, String)
-	// JDBC URL. The following is the default format:
-	// jdbc:postgresql://< public_connect_info>/<YOUR_DATABASE_NAME>
+	// JDBC URL. Format: jdbc:postgresql://<public_connect_info>/<YOUR_DATABASE_NAME>
 	JdbcUrl pulumi.StringPtrInput `pulumi:"jdbcUrl"`
-	// (Optional, String)
 	// Public network connection information.
 	PublicConnectInfo pulumi.StringPtrInput `pulumi:"publicConnectInfo"`
 }
@@ -204,14 +313,11 @@ func (o ClusterPublicEndpointOutput) ToClusterPublicEndpointOutputWithContext(ct
 	return o
 }
 
-// (Optional, String)
-// JDBC URL. The following is the default format:
-// jdbc:postgresql://< public_connect_info>/<YOUR_DATABASE_NAME>
+// JDBC URL. Format: jdbc:postgresql://<public_connect_info>/<YOUR_DATABASE_NAME>
 func (o ClusterPublicEndpointOutput) JdbcUrl() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterPublicEndpoint) *string { return v.JdbcUrl }).(pulumi.StringPtrOutput)
 }
 
-// (Optional, String)
 // Public network connection information.
 func (o ClusterPublicEndpointOutput) PublicConnectInfo() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterPublicEndpoint) *string { return v.PublicConnectInfo }).(pulumi.StringPtrOutput)
@@ -238,10 +344,10 @@ func (o ClusterPublicEndpointArrayOutput) Index(i pulumi.IntInput) ClusterPublic
 }
 
 type ClusterPublicIp struct {
-	// EIP ID.
+	// The EIP ID.
 	EipId *string `pulumi:"eipId"`
-	// Binding type of an EIP. The value can be either of the following:
-	// autoAssign not_use bindExisting The default value is not_use.
+	// The bind type of public IP.\
+	// The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
 	PublicBindType *string `pulumi:"publicBindType"`
 }
 
@@ -257,10 +363,10 @@ type ClusterPublicIpInput interface {
 }
 
 type ClusterPublicIpArgs struct {
-	// EIP ID.
+	// The EIP ID.
 	EipId pulumi.StringPtrInput `pulumi:"eipId"`
-	// Binding type of an EIP. The value can be either of the following:
-	// autoAssign not_use bindExisting The default value is not_use.
+	// The bind type of public IP.\
+	// The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
 	PublicBindType pulumi.StringPtrInput `pulumi:"publicBindType"`
 }
 
@@ -341,13 +447,13 @@ func (o ClusterPublicIpOutput) ToClusterPublicIpPtrOutputWithContext(ctx context
 	}).(ClusterPublicIpPtrOutput)
 }
 
-// EIP ID.
+// The EIP ID.
 func (o ClusterPublicIpOutput) EipId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterPublicIp) *string { return v.EipId }).(pulumi.StringPtrOutput)
 }
 
-// Binding type of an EIP. The value can be either of the following:
-// autoAssign not_use bindExisting The default value is not_use.
+// The bind type of public IP.\
+// The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
 func (o ClusterPublicIpOutput) PublicBindType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterPublicIp) *string { return v.PublicBindType }).(pulumi.StringPtrOutput)
 }
@@ -376,7 +482,7 @@ func (o ClusterPublicIpPtrOutput) Elem() ClusterPublicIpOutput {
 	}).(ClusterPublicIpOutput)
 }
 
-// EIP ID.
+// The EIP ID.
 func (o ClusterPublicIpPtrOutput) EipId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterPublicIp) *string {
 		if v == nil {
@@ -386,8 +492,8 @@ func (o ClusterPublicIpPtrOutput) EipId() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Binding type of an EIP. The value can be either of the following:
-// autoAssign not_use bindExisting The default value is not_use.
+// The bind type of public IP.\
+// The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
 func (o ClusterPublicIpPtrOutput) PublicBindType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterPublicIp) *string {
 		if v == nil {
@@ -397,20 +503,203 @@ func (o ClusterPublicIpPtrOutput) PublicBindType() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
+type ClusterVolume struct {
+	// The capacity size, in GB.
+	Capacity *string `pulumi:"capacity"`
+	// The volume type. Value options are as follows:
+	// + **SATA**: Common I/O. The SATA disk is used.
+	// + **SAS**: High I/O. The SAS disk is used.
+	// + **SSD**: Ultra-high I/O. The solid-state drive (SSD) is used.
+	//   The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
+	Type *string `pulumi:"type"`
+}
+
+// ClusterVolumeInput is an input type that accepts ClusterVolumeArgs and ClusterVolumeOutput values.
+// You can construct a concrete instance of `ClusterVolumeInput` via:
+//
+//	ClusterVolumeArgs{...}
+type ClusterVolumeInput interface {
+	pulumi.Input
+
+	ToClusterVolumeOutput() ClusterVolumeOutput
+	ToClusterVolumeOutputWithContext(context.Context) ClusterVolumeOutput
+}
+
+type ClusterVolumeArgs struct {
+	// The capacity size, in GB.
+	Capacity pulumi.StringPtrInput `pulumi:"capacity"`
+	// The volume type. Value options are as follows:
+	// + **SATA**: Common I/O. The SATA disk is used.
+	// + **SAS**: High I/O. The SAS disk is used.
+	// + **SSD**: Ultra-high I/O. The solid-state drive (SSD) is used.
+	//   The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
+	Type pulumi.StringPtrInput `pulumi:"type"`
+}
+
+func (ClusterVolumeArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterVolume)(nil)).Elem()
+}
+
+func (i ClusterVolumeArgs) ToClusterVolumeOutput() ClusterVolumeOutput {
+	return i.ToClusterVolumeOutputWithContext(context.Background())
+}
+
+func (i ClusterVolumeArgs) ToClusterVolumeOutputWithContext(ctx context.Context) ClusterVolumeOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterVolumeOutput)
+}
+
+func (i ClusterVolumeArgs) ToClusterVolumePtrOutput() ClusterVolumePtrOutput {
+	return i.ToClusterVolumePtrOutputWithContext(context.Background())
+}
+
+func (i ClusterVolumeArgs) ToClusterVolumePtrOutputWithContext(ctx context.Context) ClusterVolumePtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterVolumeOutput).ToClusterVolumePtrOutputWithContext(ctx)
+}
+
+// ClusterVolumePtrInput is an input type that accepts ClusterVolumeArgs, ClusterVolumePtr and ClusterVolumePtrOutput values.
+// You can construct a concrete instance of `ClusterVolumePtrInput` via:
+//
+//	        ClusterVolumeArgs{...}
+//
+//	or:
+//
+//	        nil
+type ClusterVolumePtrInput interface {
+	pulumi.Input
+
+	ToClusterVolumePtrOutput() ClusterVolumePtrOutput
+	ToClusterVolumePtrOutputWithContext(context.Context) ClusterVolumePtrOutput
+}
+
+type clusterVolumePtrType ClusterVolumeArgs
+
+func ClusterVolumePtr(v *ClusterVolumeArgs) ClusterVolumePtrInput {
+	return (*clusterVolumePtrType)(v)
+}
+
+func (*clusterVolumePtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**ClusterVolume)(nil)).Elem()
+}
+
+func (i *clusterVolumePtrType) ToClusterVolumePtrOutput() ClusterVolumePtrOutput {
+	return i.ToClusterVolumePtrOutputWithContext(context.Background())
+}
+
+func (i *clusterVolumePtrType) ToClusterVolumePtrOutputWithContext(ctx context.Context) ClusterVolumePtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterVolumePtrOutput)
+}
+
+type ClusterVolumeOutput struct{ *pulumi.OutputState }
+
+func (ClusterVolumeOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterVolume)(nil)).Elem()
+}
+
+func (o ClusterVolumeOutput) ToClusterVolumeOutput() ClusterVolumeOutput {
+	return o
+}
+
+func (o ClusterVolumeOutput) ToClusterVolumeOutputWithContext(ctx context.Context) ClusterVolumeOutput {
+	return o
+}
+
+func (o ClusterVolumeOutput) ToClusterVolumePtrOutput() ClusterVolumePtrOutput {
+	return o.ToClusterVolumePtrOutputWithContext(context.Background())
+}
+
+func (o ClusterVolumeOutput) ToClusterVolumePtrOutputWithContext(ctx context.Context) ClusterVolumePtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v ClusterVolume) *ClusterVolume {
+		return &v
+	}).(ClusterVolumePtrOutput)
+}
+
+// The capacity size, in GB.
+func (o ClusterVolumeOutput) Capacity() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterVolume) *string { return v.Capacity }).(pulumi.StringPtrOutput)
+}
+
+// The volume type. Value options are as follows:
+//   - **SATA**: Common I/O. The SATA disk is used.
+//   - **SAS**: High I/O. The SAS disk is used.
+//   - **SSD**: Ultra-high I/O. The solid-state drive (SSD) is used.
+//     The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
+func (o ClusterVolumeOutput) Type() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterVolume) *string { return v.Type }).(pulumi.StringPtrOutput)
+}
+
+type ClusterVolumePtrOutput struct{ *pulumi.OutputState }
+
+func (ClusterVolumePtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**ClusterVolume)(nil)).Elem()
+}
+
+func (o ClusterVolumePtrOutput) ToClusterVolumePtrOutput() ClusterVolumePtrOutput {
+	return o
+}
+
+func (o ClusterVolumePtrOutput) ToClusterVolumePtrOutputWithContext(ctx context.Context) ClusterVolumePtrOutput {
+	return o
+}
+
+func (o ClusterVolumePtrOutput) Elem() ClusterVolumeOutput {
+	return o.ApplyT(func(v *ClusterVolume) ClusterVolume {
+		if v != nil {
+			return *v
+		}
+		var ret ClusterVolume
+		return ret
+	}).(ClusterVolumeOutput)
+}
+
+// The capacity size, in GB.
+func (o ClusterVolumePtrOutput) Capacity() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ClusterVolume) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Capacity
+	}).(pulumi.StringPtrOutput)
+}
+
+// The volume type. Value options are as follows:
+//   - **SATA**: Common I/O. The SATA disk is used.
+//   - **SAS**: High I/O. The SAS disk is used.
+//   - **SSD**: Ultra-high I/O. The solid-state drive (SSD) is used.
+//     The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
+func (o ClusterVolumePtrOutput) Type() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ClusterVolume) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Type
+	}).(pulumi.StringPtrOutput)
+}
+
 type GetFlaovrsFlavor struct {
-	// Specifies the availability zone name.
-	AvailabilityZone string `pulumi:"availabilityZone"`
-	// The name of the dws node flavor. It is referenced by `nodeType` in `Dws.getFlaovrs`.
+	// The list of availability zones.
+	AvailabilityZones []string `pulumi:"availabilityZones"`
+	// The type of datastore.\
+	// The options are as follows:
+	// - **dws**: OLAP, elastic scaling, unlimited scaling of compute and storage capacity.
+	// - **hybrid**: a single data warehouse used for transaction and analytics workloads,
+	//   in single-node or cluster mode.
+	// - **stream**: built-in time series operators; up to 40:1 compression ratio; applicable to IoT services.
+	DatastoreType string `pulumi:"datastoreType"`
+	// The ElasticVolumeSpec structure is documented below.
+	ElasticVolumeSpecs []GetFlaovrsFlavorElasticVolumeSpec `pulumi:"elasticVolumeSpecs"`
+	// The name of the dws node flavor.\
+	// It is referenced by `nodeType` in `Dws.getFlaovrs`.
 	FlavorId string `pulumi:"flavorId"`
-	// Specifies the ram of the dws node flavor in GB.
+	// The ram of the dws node flavor in GB.
 	Memory int `pulumi:"memory"`
-	// Indicates the Disk size in GB.
+	// The default disk size in GB.
 	Size int `pulumi:"size"`
-	// Specifies the vcpus of the dws node flavor.
+	// The vcpus of the dws node flavor.
 	Vcpus int `pulumi:"vcpus"`
-	// Indicates Disk type.
-	// + **LOCAL_DISK**: common I/O disk
-	// + **SSD**: ultra-high I/O disk
+	// Disk type.\
+	// The options are as follows:
+	// - **LOCAL_DISK**:common I/O disk.
+	// - **SSD**: ultra-high I/O disk.
 	Volumetype string `pulumi:"volumetype"`
 }
 
@@ -426,19 +715,30 @@ type GetFlaovrsFlavorInput interface {
 }
 
 type GetFlaovrsFlavorArgs struct {
-	// Specifies the availability zone name.
-	AvailabilityZone pulumi.StringInput `pulumi:"availabilityZone"`
-	// The name of the dws node flavor. It is referenced by `nodeType` in `Dws.getFlaovrs`.
+	// The list of availability zones.
+	AvailabilityZones pulumi.StringArrayInput `pulumi:"availabilityZones"`
+	// The type of datastore.\
+	// The options are as follows:
+	// - **dws**: OLAP, elastic scaling, unlimited scaling of compute and storage capacity.
+	// - **hybrid**: a single data warehouse used for transaction and analytics workloads,
+	//   in single-node or cluster mode.
+	// - **stream**: built-in time series operators; up to 40:1 compression ratio; applicable to IoT services.
+	DatastoreType pulumi.StringInput `pulumi:"datastoreType"`
+	// The ElasticVolumeSpec structure is documented below.
+	ElasticVolumeSpecs GetFlaovrsFlavorElasticVolumeSpecArrayInput `pulumi:"elasticVolumeSpecs"`
+	// The name of the dws node flavor.\
+	// It is referenced by `nodeType` in `Dws.getFlaovrs`.
 	FlavorId pulumi.StringInput `pulumi:"flavorId"`
-	// Specifies the ram of the dws node flavor in GB.
+	// The ram of the dws node flavor in GB.
 	Memory pulumi.IntInput `pulumi:"memory"`
-	// Indicates the Disk size in GB.
+	// The default disk size in GB.
 	Size pulumi.IntInput `pulumi:"size"`
-	// Specifies the vcpus of the dws node flavor.
+	// The vcpus of the dws node flavor.
 	Vcpus pulumi.IntInput `pulumi:"vcpus"`
-	// Indicates Disk type.
-	// + **LOCAL_DISK**: common I/O disk
-	// + **SSD**: ultra-high I/O disk
+	// Disk type.\
+	// The options are as follows:
+	// - **LOCAL_DISK**:common I/O disk.
+	// - **SSD**: ultra-high I/O disk.
 	Volumetype pulumi.StringInput `pulumi:"volumetype"`
 }
 
@@ -493,34 +793,51 @@ func (o GetFlaovrsFlavorOutput) ToGetFlaovrsFlavorOutputWithContext(ctx context.
 	return o
 }
 
-// Specifies the availability zone name.
-func (o GetFlaovrsFlavorOutput) AvailabilityZone() pulumi.StringOutput {
-	return o.ApplyT(func(v GetFlaovrsFlavor) string { return v.AvailabilityZone }).(pulumi.StringOutput)
+// The list of availability zones.
+func (o GetFlaovrsFlavorOutput) AvailabilityZones() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetFlaovrsFlavor) []string { return v.AvailabilityZones }).(pulumi.StringArrayOutput)
 }
 
-// The name of the dws node flavor. It is referenced by `nodeType` in `Dws.getFlaovrs`.
+// The type of datastore.\
+// The options are as follows:
+//   - **dws**: OLAP, elastic scaling, unlimited scaling of compute and storage capacity.
+//   - **hybrid**: a single data warehouse used for transaction and analytics workloads,
+//     in single-node or cluster mode.
+//   - **stream**: built-in time series operators; up to 40:1 compression ratio; applicable to IoT services.
+func (o GetFlaovrsFlavorOutput) DatastoreType() pulumi.StringOutput {
+	return o.ApplyT(func(v GetFlaovrsFlavor) string { return v.DatastoreType }).(pulumi.StringOutput)
+}
+
+// The ElasticVolumeSpec structure is documented below.
+func (o GetFlaovrsFlavorOutput) ElasticVolumeSpecs() GetFlaovrsFlavorElasticVolumeSpecArrayOutput {
+	return o.ApplyT(func(v GetFlaovrsFlavor) []GetFlaovrsFlavorElasticVolumeSpec { return v.ElasticVolumeSpecs }).(GetFlaovrsFlavorElasticVolumeSpecArrayOutput)
+}
+
+// The name of the dws node flavor.\
+// It is referenced by `nodeType` in `Dws.getFlaovrs`.
 func (o GetFlaovrsFlavorOutput) FlavorId() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlaovrsFlavor) string { return v.FlavorId }).(pulumi.StringOutput)
 }
 
-// Specifies the ram of the dws node flavor in GB.
+// The ram of the dws node flavor in GB.
 func (o GetFlaovrsFlavorOutput) Memory() pulumi.IntOutput {
 	return o.ApplyT(func(v GetFlaovrsFlavor) int { return v.Memory }).(pulumi.IntOutput)
 }
 
-// Indicates the Disk size in GB.
+// The default disk size in GB.
 func (o GetFlaovrsFlavorOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v GetFlaovrsFlavor) int { return v.Size }).(pulumi.IntOutput)
 }
 
-// Specifies the vcpus of the dws node flavor.
+// The vcpus of the dws node flavor.
 func (o GetFlaovrsFlavorOutput) Vcpus() pulumi.IntOutput {
 	return o.ApplyT(func(v GetFlaovrsFlavor) int { return v.Vcpus }).(pulumi.IntOutput)
 }
 
-// Indicates Disk type.
-// + **LOCAL_DISK**: common I/O disk
-// + **SSD**: ultra-high I/O disk
+// Disk type.\
+// The options are as follows:
+// - **LOCAL_DISK**:common I/O disk.
+// - **SSD**: ultra-high I/O disk.
 func (o GetFlaovrsFlavorOutput) Volumetype() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlaovrsFlavor) string { return v.Volumetype }).(pulumi.StringOutput)
 }
@@ -545,21 +862,148 @@ func (o GetFlaovrsFlavorArrayOutput) Index(i pulumi.IntInput) GetFlaovrsFlavorOu
 	}).(GetFlaovrsFlavorOutput)
 }
 
+type GetFlaovrsFlavorElasticVolumeSpec struct {
+	// Maximum disk size.
+	MaxSize int `pulumi:"maxSize"`
+	// Minimum disk size.
+	MinSize int `pulumi:"minSize"`
+	// Disk size increment step.
+	Step int `pulumi:"step"`
+}
+
+// GetFlaovrsFlavorElasticVolumeSpecInput is an input type that accepts GetFlaovrsFlavorElasticVolumeSpecArgs and GetFlaovrsFlavorElasticVolumeSpecOutput values.
+// You can construct a concrete instance of `GetFlaovrsFlavorElasticVolumeSpecInput` via:
+//
+//	GetFlaovrsFlavorElasticVolumeSpecArgs{...}
+type GetFlaovrsFlavorElasticVolumeSpecInput interface {
+	pulumi.Input
+
+	ToGetFlaovrsFlavorElasticVolumeSpecOutput() GetFlaovrsFlavorElasticVolumeSpecOutput
+	ToGetFlaovrsFlavorElasticVolumeSpecOutputWithContext(context.Context) GetFlaovrsFlavorElasticVolumeSpecOutput
+}
+
+type GetFlaovrsFlavorElasticVolumeSpecArgs struct {
+	// Maximum disk size.
+	MaxSize pulumi.IntInput `pulumi:"maxSize"`
+	// Minimum disk size.
+	MinSize pulumi.IntInput `pulumi:"minSize"`
+	// Disk size increment step.
+	Step pulumi.IntInput `pulumi:"step"`
+}
+
+func (GetFlaovrsFlavorElasticVolumeSpecArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetFlaovrsFlavorElasticVolumeSpec)(nil)).Elem()
+}
+
+func (i GetFlaovrsFlavorElasticVolumeSpecArgs) ToGetFlaovrsFlavorElasticVolumeSpecOutput() GetFlaovrsFlavorElasticVolumeSpecOutput {
+	return i.ToGetFlaovrsFlavorElasticVolumeSpecOutputWithContext(context.Background())
+}
+
+func (i GetFlaovrsFlavorElasticVolumeSpecArgs) ToGetFlaovrsFlavorElasticVolumeSpecOutputWithContext(ctx context.Context) GetFlaovrsFlavorElasticVolumeSpecOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetFlaovrsFlavorElasticVolumeSpecOutput)
+}
+
+// GetFlaovrsFlavorElasticVolumeSpecArrayInput is an input type that accepts GetFlaovrsFlavorElasticVolumeSpecArray and GetFlaovrsFlavorElasticVolumeSpecArrayOutput values.
+// You can construct a concrete instance of `GetFlaovrsFlavorElasticVolumeSpecArrayInput` via:
+//
+//	GetFlaovrsFlavorElasticVolumeSpecArray{ GetFlaovrsFlavorElasticVolumeSpecArgs{...} }
+type GetFlaovrsFlavorElasticVolumeSpecArrayInput interface {
+	pulumi.Input
+
+	ToGetFlaovrsFlavorElasticVolumeSpecArrayOutput() GetFlaovrsFlavorElasticVolumeSpecArrayOutput
+	ToGetFlaovrsFlavorElasticVolumeSpecArrayOutputWithContext(context.Context) GetFlaovrsFlavorElasticVolumeSpecArrayOutput
+}
+
+type GetFlaovrsFlavorElasticVolumeSpecArray []GetFlaovrsFlavorElasticVolumeSpecInput
+
+func (GetFlaovrsFlavorElasticVolumeSpecArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetFlaovrsFlavorElasticVolumeSpec)(nil)).Elem()
+}
+
+func (i GetFlaovrsFlavorElasticVolumeSpecArray) ToGetFlaovrsFlavorElasticVolumeSpecArrayOutput() GetFlaovrsFlavorElasticVolumeSpecArrayOutput {
+	return i.ToGetFlaovrsFlavorElasticVolumeSpecArrayOutputWithContext(context.Background())
+}
+
+func (i GetFlaovrsFlavorElasticVolumeSpecArray) ToGetFlaovrsFlavorElasticVolumeSpecArrayOutputWithContext(ctx context.Context) GetFlaovrsFlavorElasticVolumeSpecArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetFlaovrsFlavorElasticVolumeSpecArrayOutput)
+}
+
+type GetFlaovrsFlavorElasticVolumeSpecOutput struct{ *pulumi.OutputState }
+
+func (GetFlaovrsFlavorElasticVolumeSpecOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetFlaovrsFlavorElasticVolumeSpec)(nil)).Elem()
+}
+
+func (o GetFlaovrsFlavorElasticVolumeSpecOutput) ToGetFlaovrsFlavorElasticVolumeSpecOutput() GetFlaovrsFlavorElasticVolumeSpecOutput {
+	return o
+}
+
+func (o GetFlaovrsFlavorElasticVolumeSpecOutput) ToGetFlaovrsFlavorElasticVolumeSpecOutputWithContext(ctx context.Context) GetFlaovrsFlavorElasticVolumeSpecOutput {
+	return o
+}
+
+// Maximum disk size.
+func (o GetFlaovrsFlavorElasticVolumeSpecOutput) MaxSize() pulumi.IntOutput {
+	return o.ApplyT(func(v GetFlaovrsFlavorElasticVolumeSpec) int { return v.MaxSize }).(pulumi.IntOutput)
+}
+
+// Minimum disk size.
+func (o GetFlaovrsFlavorElasticVolumeSpecOutput) MinSize() pulumi.IntOutput {
+	return o.ApplyT(func(v GetFlaovrsFlavorElasticVolumeSpec) int { return v.MinSize }).(pulumi.IntOutput)
+}
+
+// Disk size increment step.
+func (o GetFlaovrsFlavorElasticVolumeSpecOutput) Step() pulumi.IntOutput {
+	return o.ApplyT(func(v GetFlaovrsFlavorElasticVolumeSpec) int { return v.Step }).(pulumi.IntOutput)
+}
+
+type GetFlaovrsFlavorElasticVolumeSpecArrayOutput struct{ *pulumi.OutputState }
+
+func (GetFlaovrsFlavorElasticVolumeSpecArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetFlaovrsFlavorElasticVolumeSpec)(nil)).Elem()
+}
+
+func (o GetFlaovrsFlavorElasticVolumeSpecArrayOutput) ToGetFlaovrsFlavorElasticVolumeSpecArrayOutput() GetFlaovrsFlavorElasticVolumeSpecArrayOutput {
+	return o
+}
+
+func (o GetFlaovrsFlavorElasticVolumeSpecArrayOutput) ToGetFlaovrsFlavorElasticVolumeSpecArrayOutputWithContext(ctx context.Context) GetFlaovrsFlavorElasticVolumeSpecArrayOutput {
+	return o
+}
+
+func (o GetFlaovrsFlavorElasticVolumeSpecArrayOutput) Index(i pulumi.IntInput) GetFlaovrsFlavorElasticVolumeSpecOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetFlaovrsFlavorElasticVolumeSpec {
+		return vs[0].([]GetFlaovrsFlavorElasticVolumeSpec)[vs[1].(int)]
+	}).(GetFlaovrsFlavorElasticVolumeSpecOutput)
+}
+
 func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterEndpointInput)(nil)).Elem(), ClusterEndpointArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterEndpointArrayInput)(nil)).Elem(), ClusterEndpointArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterMaintainWindowInput)(nil)).Elem(), ClusterMaintainWindowArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterMaintainWindowArrayInput)(nil)).Elem(), ClusterMaintainWindowArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterPublicEndpointInput)(nil)).Elem(), ClusterPublicEndpointArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterPublicEndpointArrayInput)(nil)).Elem(), ClusterPublicEndpointArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterPublicIpInput)(nil)).Elem(), ClusterPublicIpArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterPublicIpPtrInput)(nil)).Elem(), ClusterPublicIpArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterVolumeInput)(nil)).Elem(), ClusterVolumeArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterVolumePtrInput)(nil)).Elem(), ClusterVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetFlaovrsFlavorInput)(nil)).Elem(), GetFlaovrsFlavorArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetFlaovrsFlavorArrayInput)(nil)).Elem(), GetFlaovrsFlavorArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetFlaovrsFlavorElasticVolumeSpecInput)(nil)).Elem(), GetFlaovrsFlavorElasticVolumeSpecArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetFlaovrsFlavorElasticVolumeSpecArrayInput)(nil)).Elem(), GetFlaovrsFlavorElasticVolumeSpecArray{})
 	pulumi.RegisterOutputType(ClusterEndpointOutput{})
 	pulumi.RegisterOutputType(ClusterEndpointArrayOutput{})
+	pulumi.RegisterOutputType(ClusterMaintainWindowOutput{})
+	pulumi.RegisterOutputType(ClusterMaintainWindowArrayOutput{})
 	pulumi.RegisterOutputType(ClusterPublicEndpointOutput{})
 	pulumi.RegisterOutputType(ClusterPublicEndpointArrayOutput{})
 	pulumi.RegisterOutputType(ClusterPublicIpOutput{})
 	pulumi.RegisterOutputType(ClusterPublicIpPtrOutput{})
+	pulumi.RegisterOutputType(ClusterVolumeOutput{})
+	pulumi.RegisterOutputType(ClusterVolumePtrOutput{})
 	pulumi.RegisterOutputType(GetFlaovrsFlavorOutput{})
 	pulumi.RegisterOutputType(GetFlaovrsFlavorArrayOutput{})
+	pulumi.RegisterOutputType(GetFlaovrsFlavorElasticVolumeSpecOutput{})
+	pulumi.RegisterOutputType(GetFlaovrsFlavorElasticVolumeSpecArrayOutput{})
 }

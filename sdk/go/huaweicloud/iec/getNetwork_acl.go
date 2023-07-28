@@ -62,12 +62,14 @@ type GetNetwork_aclArgs struct {
 // A collection of values returned by getNetwork_acl.
 type GetNetwork_aclResult struct {
 	// The description of the IEC network ACL.
-	Description   string                  `pulumi:"description"`
-	Id            string                  `pulumi:"id"`
-	InboundRules  []string                `pulumi:"inboundRules"`
-	Name          string                  `pulumi:"name"`
-	Networks      []GetNetwork_aclNetwork `pulumi:"networks"`
-	OutboundRules []string                `pulumi:"outboundRules"`
+	Description string `pulumi:"description"`
+	Id          string `pulumi:"id"`
+	// A list of the IDs of ingress rules associated with the IEC network ACL.
+	InboundRules []string                `pulumi:"inboundRules"`
+	Name         string                  `pulumi:"name"`
+	Networks     []GetNetwork_aclNetwork `pulumi:"networks"`
+	// A list of the IDs of egress rules associated with the IEC network ACL.
+	OutboundRules []string `pulumi:"outboundRules"`
 	// The status of the IEC network ACL.
 	Status string `pulumi:"status"`
 }
@@ -121,6 +123,7 @@ func (o GetNetwork_aclResultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetNetwork_aclResult) string { return v.Id }).(pulumi.StringOutput)
 }
 
+// A list of the IDs of ingress rules associated with the IEC network ACL.
 func (o GetNetwork_aclResultOutput) InboundRules() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v GetNetwork_aclResult) []string { return v.InboundRules }).(pulumi.StringArrayOutput)
 }
@@ -133,6 +136,7 @@ func (o GetNetwork_aclResultOutput) Networks() GetNetwork_aclNetworkArrayOutput 
 	return o.ApplyT(func(v GetNetwork_aclResult) []GetNetwork_aclNetwork { return v.Networks }).(GetNetwork_aclNetworkArrayOutput)
 }
 
+// A list of the IDs of egress rules associated with the IEC network ACL.
 func (o GetNetwork_aclResultOutput) OutboundRules() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v GetNetwork_aclResult) []string { return v.OutboundRules }).(pulumi.StringArrayOutput)
 }

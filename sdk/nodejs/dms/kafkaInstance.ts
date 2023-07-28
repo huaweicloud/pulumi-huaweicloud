@@ -9,7 +9,7 @@ import * as utilities from "../utilities";
  * Manage DMS Kafka instance resources within HuaweiCloud.
  *
  * ## Example Usage
- * ### Create a kafka instance using product ID
+ * ### Create a Kafka instance using flavor ID
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -20,43 +20,45 @@ import * as utilities from "../utilities";
  * const vpcId = config.requireObject("vpcId");
  * const subnetId = config.requireObject("subnetId");
  * const securityGroupId = config.requireObject("securityGroupId");
- * const instanceName = config.requireObject("instanceName");
- * const testAvailabilityZones = huaweicloud.getAvailabilityZones({});
- * const testProduct = huaweicloud.Dms.getProduct({
- *     engine: "kafka",
- *     instanceType: "cluster",
- *     version: "2.3.0",
- *     bandwidth: "100MB",
- *     storageSpecCode: "dms.physical.storage.ultra",
+ * const availabilityZones = config.getObject("availabilityZones") || [
+ *     "your_availability_zones_a",
+ *     "your_availability_zones_b",
+ *     "your_availability_zones_c",
+ * ];
+ * const flavorId = config.get("flavorId") || "your_flavor_id, such: c6.2u4g.cluster";
+ * const storageSpecCode = config.get("storageSpecCode") || "your_storage_spec_code, such: dms.physical.storage.ultra.v2";
+ * const testFlavors = huaweicloud.Dms.getFlavors({
+ *     type: "cluster",
+ *     flavorId: flavorId,
+ *     availabilityZones: availabilityZones,
+ *     storageSpecCode: storageSpecCode,
  * });
  * const testKafkaInstance = new huaweicloud.dms.KafkaInstance("testKafkaInstance", {
- *     productId: data.huaweicloud_dms_product.product_1.id,
- *     engineVersion: data.huaweicloud_dms_product.product_1.version,
- *     storageSpecCode: data.huaweicloud_dms_product.product_1.storage_spec_code,
- *     availabilityZones: [
- *         data.huaweicloud_availability_zones.zones.names[0],
- *         data.huaweicloud_availability_zones.zones.names[1],
- *         data.huaweicloud_availability_zones.zones.names[2],
- *     ],
  *     vpcId: vpcId,
  *     networkId: subnetId,
  *     securityGroupId: securityGroupId,
+ *     flavorId: testFlavors.then(testFlavors => testFlavors.flavorId),
+ *     storageSpecCode: testFlavors.then(testFlavors => testFlavors.flavors?[0]?.ios?[0]?.storageSpecCode),
+ *     availabilityZones: availabilityZones,
+ *     engineVersion: "2.7",
+ *     storageSpace: 600,
+ *     brokerNum: 3,
  *     accessUser: "user",
- *     password: "Kafkatest@123",
- *     managerUser: "kafka-user",
- *     managerPassword: "Kafkatest@123",
+ *     password: `Kafka_%^&_Test`,
+ *     managerUser: "kafka_manager",
+ *     managerPassword: "Kafka_Test^&*(",
  * });
  * ```
  *
  * ## Import
  *
- * DMS kafka instance can be imported using the instance id, e.g.
+ * DMS Kafka instance can be imported using the instance id, e.g.
  *
  * ```sh
  *  $ pulumi import huaweicloud:Dms/kafkaInstance:KafkaInstance huaweicloud_dms_kafka_instance.instance_1 8d3c7938-dc47-4937-a30f-c80de381c5e3
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `manager_password` and `public_ip_ids`. It is generally recommended running `terraform plan` after importing a DMS kafka instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dms_kafka_instance" "instance_1" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `manager_password` and `public_ip_ids`. It is generally recommended running `terraform plan` after importing a DMS Kafka instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dms_kafka_instance" "instance_1" {
  *
  *  ...
  *
@@ -99,10 +101,14 @@ export class KafkaInstance extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies a username. A username consists of 4 to 64 characters and
-     * supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
+     * Specifies the username of SASL_SSL user. A username consists of 4
+     * to 64 characters and supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
      */
     public readonly accessUser!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies whether auto renew is enabled. Valid values are "true" and "false".
+     */
+    public readonly autoRenew!: pulumi.Output<string | undefined>;
     /**
      * The names of the AZ where the Kafka instances reside.
      * The parameter value can not be left blank or an empty array. Changing this creates a new instance resource.
@@ -113,44 +119,48 @@ export class KafkaInstance extends pulumi.CustomResource {
      */
     public readonly availableZones!: pulumi.Output<string[]>;
     /**
-     * The Bandwidth of a Kafka instance, that is the maximum amount of data transferred per unit time.
-     * Unit: MB.
-     *
      * @deprecated The bandwidth has been deprecated. If you need to change the bandwidth, please update the product_id.
      */
     public readonly bandwidth!: pulumi.Output<string>;
     /**
-     * Specifies the broker numbers. Changing this creates a new instance resource.
-     * If the instance is created with `flavorId`, this parameter is required.
+     * Specifies the broker numbers.
+     * It is required when creating an instance with `flavorId`.
      */
     public readonly brokerNum!: pulumi.Output<number>;
     /**
-     * Indicates the IP address of the DMS kafka instance.
+     * Specifies the charging mode of the instance. Valid values are *prePaid*
+     * and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+     */
+    public readonly chargingMode!: pulumi.Output<string>;
+    /**
+     * Indicates the IP address of the DMS Kafka instance.
      */
     public /*out*/ readonly connectAddress!: pulumi.Output<string>;
     /**
-     * Specifies the access information of cross-VPC.
+     * Specifies the cross-VPC access information.
      * The object structure is documented below.
      */
     public readonly crossVpcAccesses!: pulumi.Output<outputs.Dms.KafkaInstanceCrossVpcAccess[]>;
     /**
-     * Specifies the description of the DMS kafka instance. It is a character string
+     * Specifies the description of the DMS Kafka instance. It is a character string
      * containing not more than 1,024 characters.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies whether to enable dumping. Changing this creates a new instance
-     * resource.
+     * Specifies whether to enable message dumping.
+     * Changing this creates a new instance resource.
      */
     public readonly dumping!: pulumi.Output<boolean>;
     /**
      * Specifies whether to enable automatic topic creation. If automatic
      * topic creation is enabled, a topic will be automatically created with 3 partitions and 3 replicas when a message is
-     * produced to or consumed from a topic that does not exist. Changing this creates a new instance resource.
+     * produced to or consumed from a topic that does not exist.
+     * The default value is false.
+     * Changing this creates a new instance resource.
      */
     public readonly enableAutoTopic!: pulumi.Output<boolean>;
     /**
-     * Indicates whether public access to the DMS kafka instance is enabled.
+     * Indicates whether public access to the DMS Kafka instance is enabled.
      */
     public /*out*/ readonly enablePublicIp!: pulumi.Output<boolean>;
     /**
@@ -158,16 +168,16 @@ export class KafkaInstance extends pulumi.CustomResource {
      */
     public /*out*/ readonly engine!: pulumi.Output<string>;
     /**
-     * Specifies the version of the kafka engine. Valid values are **1.1.0**
-     * and **2.3.0**. Changing this creates a new instance resource.
+     * Specifies the version of the Kafka engine,
+     * such as 1.1.0, 2.3.0, 2.7 or other supported versions. Changing this creates a new instance resource.
      */
     public readonly engineVersion!: pulumi.Output<string>;
     /**
-     * Specifies the enterprise project ID of the kafka instance.
+     * Specifies the enterprise project ID of the Kafka instance.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
-     * Specifies the kafka [flavor ID](https://support.huaweicloud.com/intl/en-us/productdesc-kafka/Kafka-specification.html),
+     * Specifies the Kafka [flavor ID](https://support.huaweicloud.com/intl/en-us/productdesc-kafka/Kafka-specification.html),
      * e.g. **c6.2u4g.cluster**. This parameter and `productId` are alternative.
      */
     public readonly flavorId!: pulumi.Output<string | undefined>;
@@ -189,6 +199,10 @@ export class KafkaInstance extends pulumi.CustomResource {
      */
     public readonly maintainEnd!: pulumi.Output<string>;
     /**
+     * Indicates the Kafka Manager connection address of a Kafka instance.
+     */
+    public /*out*/ readonly managementConnectAddress!: pulumi.Output<string>;
+    /**
      * Specifies the password for logging in to the Kafka Manager. The
      * password must meet the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of
      * the following character types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_
@@ -202,11 +216,11 @@ export class KafkaInstance extends pulumi.CustomResource {
      */
     public readonly managerUser!: pulumi.Output<string>;
     /**
-     * Indicates the connection address of the Kafka Manager of a Kafka instance.
+     * @deprecated typo in manegement_connect_address, please use "management_connect_address" instead.
      */
     public /*out*/ readonly manegementConnectAddress!: pulumi.Output<string>;
     /**
-     * Specifies the name of the DMS kafka instance. An instance name starts with a letter,
+     * Specifies the name of the DMS Kafka instance. An instance name starts with a letter,
      * consists of 4 to 64 characters, and supports only letters, digits, hyphens (-) and underscores (_).
      */
     public readonly name!: pulumi.Output<string>;
@@ -216,16 +230,28 @@ export class KafkaInstance extends pulumi.CustomResource {
      */
     public readonly networkId!: pulumi.Output<string>;
     /**
-     * Indicates the maximum number of topics in the DMS kafka instance.
+     * Indicates the number of partitions in Kafka instance.
      */
     public /*out*/ readonly partitionNum!: pulumi.Output<number>;
     /**
-     * Specifies the password of the DMS kafka instance. A password must meet the
+     * Specifies the password of SASL_SSL user. A password must meet the
      * following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character
      * types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\|[{}]:'",<.>/?).
      * Changing this creates a new instance resource.
      */
     public readonly password!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the charging period of the instance. If `periodUnit` is set to *month*
+     * , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This parameter is
+     * mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+     */
+    public readonly period!: pulumi.Output<number | undefined>;
+    /**
+     * Specifies the charging period unit of the instance.
+     * Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+     * Changing this creates a new resource.
+     */
+    public readonly periodUnit!: pulumi.Output<string | undefined>;
     /**
      * The port number.
      */
@@ -237,13 +263,13 @@ export class KafkaInstance extends pulumi.CustomResource {
     public readonly productId!: pulumi.Output<string | undefined>;
     /**
      * Specifies the IDs of the elastic IP address (EIP)
-     * bound to the DMS kafka instance. Changing this creates a new instance resource.
+     * bound to the DMS Kafka instance. Changing this creates a new instance resource.
      * + If the instance is created with `flavorId`, the total number of public IPs is equal to `brokerNum`.
      * + If the instance is created with `productId`, the total number of public IPs must provide as follows:
      */
     public readonly publicIpIds!: pulumi.Output<string[] | undefined>;
     /**
-     * The region in which to create the DMS kafka instance resource. If omitted, the
+     * The region in which to create the DMS Kafka instances. If omitted, the
      * provider-level region will be used. Changing this creates a new instance resource.
      */
     public readonly region!: pulumi.Output<string>;
@@ -267,17 +293,17 @@ export class KafkaInstance extends pulumi.CustomResource {
      */
     public /*out*/ readonly sslEnable!: pulumi.Output<boolean>;
     /**
-     * Indicates the status of the DMS kafka instance.
+     * Indicates the status of the DMS Kafka instance.
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
      * Specifies the message storage capacity, the unit is GB.
      * The storage spaces corresponding to the product IDs are as follows:
-     * + **c6.2u4g.cluster** (100MB bandwidth): `600` to `90,000` GB
-     * + **c6.4u8g.cluster** (300MB bandwidth): `1,200` to `90,000` GB
-     * + **c6.8u16g.cluster** (600MB bandwidth): `2,400` to `90,000` GB
-     * + **c6.12u12g.cluster**: `3,600` to `90,000` GB
-     * + **c6.16u32g.cluster** (1,200MB bandwidth): `4,800` to `90,000` GB
+     * + **c6.2u4g.cluster** (100MB bandwidth): `300` to `300,000` GB
+     * + **c6.4u8g.cluster** (300MB bandwidth): `300` to `600,000` GB
+     * + **c6.8u16g.cluster** (600MB bandwidth): `300` to `900,000` GB
+     * + **c6.12u12g.cluster**: `300` to `900,000` GB
+     * + **c6.16u32g.cluster** (1,200MB bandwidth): `300` to `900,000` GB
      */
     public readonly storageSpace!: pulumi.Output<number>;
     /**
@@ -288,11 +314,11 @@ export class KafkaInstance extends pulumi.CustomResource {
      */
     public readonly storageSpecCode!: pulumi.Output<string>;
     /**
-     * The key/value pairs to associate with the DMS kafka instance.
+     * The key/value pairs to associate with the DMS Kafka instance.
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
-     * Indicates the DMS kafka instance type.
+     * Indicates the DMS Kafka instance type.
      */
     public /*out*/ readonly type!: pulumi.Output<string>;
     /**
@@ -300,11 +326,11 @@ export class KafkaInstance extends pulumi.CustomResource {
      */
     public /*out*/ readonly usedStorageSpace!: pulumi.Output<number>;
     /**
-     * Indicates the ID of the user who created the DMS kafka instance
+     * Indicates the ID of the user who created the DMS Kafka instance
      */
     public /*out*/ readonly userId!: pulumi.Output<string>;
     /**
-     * Indicates the name of the user who created the DMS kafka instance
+     * Indicates the name of the user who created the DMS Kafka instance
      */
     public /*out*/ readonly userName!: pulumi.Output<string>;
     /**
@@ -326,10 +352,12 @@ export class KafkaInstance extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as KafkaInstanceState | undefined;
             resourceInputs["accessUser"] = state ? state.accessUser : undefined;
+            resourceInputs["autoRenew"] = state ? state.autoRenew : undefined;
             resourceInputs["availabilityZones"] = state ? state.availabilityZones : undefined;
             resourceInputs["availableZones"] = state ? state.availableZones : undefined;
             resourceInputs["bandwidth"] = state ? state.bandwidth : undefined;
             resourceInputs["brokerNum"] = state ? state.brokerNum : undefined;
+            resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
             resourceInputs["connectAddress"] = state ? state.connectAddress : undefined;
             resourceInputs["crossVpcAccesses"] = state ? state.crossVpcAccesses : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
@@ -342,6 +370,7 @@ export class KafkaInstance extends pulumi.CustomResource {
             resourceInputs["flavorId"] = state ? state.flavorId : undefined;
             resourceInputs["maintainBegin"] = state ? state.maintainBegin : undefined;
             resourceInputs["maintainEnd"] = state ? state.maintainEnd : undefined;
+            resourceInputs["managementConnectAddress"] = state ? state.managementConnectAddress : undefined;
             resourceInputs["managerPassword"] = state ? state.managerPassword : undefined;
             resourceInputs["managerUser"] = state ? state.managerUser : undefined;
             resourceInputs["manegementConnectAddress"] = state ? state.manegementConnectAddress : undefined;
@@ -349,6 +378,8 @@ export class KafkaInstance extends pulumi.CustomResource {
             resourceInputs["networkId"] = state ? state.networkId : undefined;
             resourceInputs["partitionNum"] = state ? state.partitionNum : undefined;
             resourceInputs["password"] = state ? state.password : undefined;
+            resourceInputs["period"] = state ? state.period : undefined;
+            resourceInputs["periodUnit"] = state ? state.periodUnit : undefined;
             resourceInputs["port"] = state ? state.port : undefined;
             resourceInputs["productId"] = state ? state.productId : undefined;
             resourceInputs["publicIpIds"] = state ? state.publicIpIds : undefined;
@@ -390,10 +421,12 @@ export class KafkaInstance extends pulumi.CustomResource {
                 throw new Error("Missing required property 'vpcId'");
             }
             resourceInputs["accessUser"] = args ? args.accessUser : undefined;
+            resourceInputs["autoRenew"] = args ? args.autoRenew : undefined;
             resourceInputs["availabilityZones"] = args ? args.availabilityZones : undefined;
             resourceInputs["availableZones"] = args ? args.availableZones : undefined;
             resourceInputs["bandwidth"] = args ? args.bandwidth : undefined;
             resourceInputs["brokerNum"] = args ? args.brokerNum : undefined;
+            resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
             resourceInputs["crossVpcAccesses"] = args ? args.crossVpcAccesses : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["dumping"] = args ? args.dumping : undefined;
@@ -408,6 +441,8 @@ export class KafkaInstance extends pulumi.CustomResource {
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["networkId"] = args ? args.networkId : undefined;
             resourceInputs["password"] = args ? args.password : undefined;
+            resourceInputs["period"] = args ? args.period : undefined;
+            resourceInputs["periodUnit"] = args ? args.periodUnit : undefined;
             resourceInputs["productId"] = args ? args.productId : undefined;
             resourceInputs["publicIpIds"] = args ? args.publicIpIds : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
@@ -420,6 +455,7 @@ export class KafkaInstance extends pulumi.CustomResource {
             resourceInputs["connectAddress"] = undefined /*out*/;
             resourceInputs["enablePublicIp"] = undefined /*out*/;
             resourceInputs["engine"] = undefined /*out*/;
+            resourceInputs["managementConnectAddress"] = undefined /*out*/;
             resourceInputs["manegementConnectAddress"] = undefined /*out*/;
             resourceInputs["partitionNum"] = undefined /*out*/;
             resourceInputs["port"] = undefined /*out*/;
@@ -441,10 +477,14 @@ export class KafkaInstance extends pulumi.CustomResource {
  */
 export interface KafkaInstanceState {
     /**
-     * Specifies a username. A username consists of 4 to 64 characters and
-     * supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
+     * Specifies the username of SASL_SSL user. A username consists of 4
+     * to 64 characters and supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
      */
     accessUser?: pulumi.Input<string>;
+    /**
+     * Specifies whether auto renew is enabled. Valid values are "true" and "false".
+     */
+    autoRenew?: pulumi.Input<string>;
     /**
      * The names of the AZ where the Kafka instances reside.
      * The parameter value can not be left blank or an empty array. Changing this creates a new instance resource.
@@ -455,44 +495,48 @@ export interface KafkaInstanceState {
      */
     availableZones?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * The Bandwidth of a Kafka instance, that is the maximum amount of data transferred per unit time.
-     * Unit: MB.
-     *
      * @deprecated The bandwidth has been deprecated. If you need to change the bandwidth, please update the product_id.
      */
     bandwidth?: pulumi.Input<string>;
     /**
-     * Specifies the broker numbers. Changing this creates a new instance resource.
-     * If the instance is created with `flavorId`, this parameter is required.
+     * Specifies the broker numbers.
+     * It is required when creating an instance with `flavorId`.
      */
     brokerNum?: pulumi.Input<number>;
     /**
-     * Indicates the IP address of the DMS kafka instance.
+     * Specifies the charging mode of the instance. Valid values are *prePaid*
+     * and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+     */
+    chargingMode?: pulumi.Input<string>;
+    /**
+     * Indicates the IP address of the DMS Kafka instance.
      */
     connectAddress?: pulumi.Input<string>;
     /**
-     * Specifies the access information of cross-VPC.
+     * Specifies the cross-VPC access information.
      * The object structure is documented below.
      */
     crossVpcAccesses?: pulumi.Input<pulumi.Input<inputs.Dms.KafkaInstanceCrossVpcAccess>[]>;
     /**
-     * Specifies the description of the DMS kafka instance. It is a character string
+     * Specifies the description of the DMS Kafka instance. It is a character string
      * containing not more than 1,024 characters.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies whether to enable dumping. Changing this creates a new instance
-     * resource.
+     * Specifies whether to enable message dumping.
+     * Changing this creates a new instance resource.
      */
     dumping?: pulumi.Input<boolean>;
     /**
      * Specifies whether to enable automatic topic creation. If automatic
      * topic creation is enabled, a topic will be automatically created with 3 partitions and 3 replicas when a message is
-     * produced to or consumed from a topic that does not exist. Changing this creates a new instance resource.
+     * produced to or consumed from a topic that does not exist.
+     * The default value is false.
+     * Changing this creates a new instance resource.
      */
     enableAutoTopic?: pulumi.Input<boolean>;
     /**
-     * Indicates whether public access to the DMS kafka instance is enabled.
+     * Indicates whether public access to the DMS Kafka instance is enabled.
      */
     enablePublicIp?: pulumi.Input<boolean>;
     /**
@@ -500,16 +544,16 @@ export interface KafkaInstanceState {
      */
     engine?: pulumi.Input<string>;
     /**
-     * Specifies the version of the kafka engine. Valid values are **1.1.0**
-     * and **2.3.0**. Changing this creates a new instance resource.
+     * Specifies the version of the Kafka engine,
+     * such as 1.1.0, 2.3.0, 2.7 or other supported versions. Changing this creates a new instance resource.
      */
     engineVersion?: pulumi.Input<string>;
     /**
-     * Specifies the enterprise project ID of the kafka instance.
+     * Specifies the enterprise project ID of the Kafka instance.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Specifies the kafka [flavor ID](https://support.huaweicloud.com/intl/en-us/productdesc-kafka/Kafka-specification.html),
+     * Specifies the Kafka [flavor ID](https://support.huaweicloud.com/intl/en-us/productdesc-kafka/Kafka-specification.html),
      * e.g. **c6.2u4g.cluster**. This parameter and `productId` are alternative.
      */
     flavorId?: pulumi.Input<string>;
@@ -531,6 +575,10 @@ export interface KafkaInstanceState {
      */
     maintainEnd?: pulumi.Input<string>;
     /**
+     * Indicates the Kafka Manager connection address of a Kafka instance.
+     */
+    managementConnectAddress?: pulumi.Input<string>;
+    /**
      * Specifies the password for logging in to the Kafka Manager. The
      * password must meet the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of
      * the following character types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_
@@ -544,11 +592,11 @@ export interface KafkaInstanceState {
      */
     managerUser?: pulumi.Input<string>;
     /**
-     * Indicates the connection address of the Kafka Manager of a Kafka instance.
+     * @deprecated typo in manegement_connect_address, please use "management_connect_address" instead.
      */
     manegementConnectAddress?: pulumi.Input<string>;
     /**
-     * Specifies the name of the DMS kafka instance. An instance name starts with a letter,
+     * Specifies the name of the DMS Kafka instance. An instance name starts with a letter,
      * consists of 4 to 64 characters, and supports only letters, digits, hyphens (-) and underscores (_).
      */
     name?: pulumi.Input<string>;
@@ -558,16 +606,28 @@ export interface KafkaInstanceState {
      */
     networkId?: pulumi.Input<string>;
     /**
-     * Indicates the maximum number of topics in the DMS kafka instance.
+     * Indicates the number of partitions in Kafka instance.
      */
     partitionNum?: pulumi.Input<number>;
     /**
-     * Specifies the password of the DMS kafka instance. A password must meet the
+     * Specifies the password of SASL_SSL user. A password must meet the
      * following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character
      * types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\|[{}]:'",<.>/?).
      * Changing this creates a new instance resource.
      */
     password?: pulumi.Input<string>;
+    /**
+     * Specifies the charging period of the instance. If `periodUnit` is set to *month*
+     * , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This parameter is
+     * mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+     */
+    period?: pulumi.Input<number>;
+    /**
+     * Specifies the charging period unit of the instance.
+     * Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+     * Changing this creates a new resource.
+     */
+    periodUnit?: pulumi.Input<string>;
     /**
      * The port number.
      */
@@ -579,13 +639,13 @@ export interface KafkaInstanceState {
     productId?: pulumi.Input<string>;
     /**
      * Specifies the IDs of the elastic IP address (EIP)
-     * bound to the DMS kafka instance. Changing this creates a new instance resource.
+     * bound to the DMS Kafka instance. Changing this creates a new instance resource.
      * + If the instance is created with `flavorId`, the total number of public IPs is equal to `brokerNum`.
      * + If the instance is created with `productId`, the total number of public IPs must provide as follows:
      */
     publicIpIds?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * The region in which to create the DMS kafka instance resource. If omitted, the
+     * The region in which to create the DMS Kafka instances. If omitted, the
      * provider-level region will be used. Changing this creates a new instance resource.
      */
     region?: pulumi.Input<string>;
@@ -609,17 +669,17 @@ export interface KafkaInstanceState {
      */
     sslEnable?: pulumi.Input<boolean>;
     /**
-     * Indicates the status of the DMS kafka instance.
+     * Indicates the status of the DMS Kafka instance.
      */
     status?: pulumi.Input<string>;
     /**
      * Specifies the message storage capacity, the unit is GB.
      * The storage spaces corresponding to the product IDs are as follows:
-     * + **c6.2u4g.cluster** (100MB bandwidth): `600` to `90,000` GB
-     * + **c6.4u8g.cluster** (300MB bandwidth): `1,200` to `90,000` GB
-     * + **c6.8u16g.cluster** (600MB bandwidth): `2,400` to `90,000` GB
-     * + **c6.12u12g.cluster**: `3,600` to `90,000` GB
-     * + **c6.16u32g.cluster** (1,200MB bandwidth): `4,800` to `90,000` GB
+     * + **c6.2u4g.cluster** (100MB bandwidth): `300` to `300,000` GB
+     * + **c6.4u8g.cluster** (300MB bandwidth): `300` to `600,000` GB
+     * + **c6.8u16g.cluster** (600MB bandwidth): `300` to `900,000` GB
+     * + **c6.12u12g.cluster**: `300` to `900,000` GB
+     * + **c6.16u32g.cluster** (1,200MB bandwidth): `300` to `900,000` GB
      */
     storageSpace?: pulumi.Input<number>;
     /**
@@ -630,11 +690,11 @@ export interface KafkaInstanceState {
      */
     storageSpecCode?: pulumi.Input<string>;
     /**
-     * The key/value pairs to associate with the DMS kafka instance.
+     * The key/value pairs to associate with the DMS Kafka instance.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Indicates the DMS kafka instance type.
+     * Indicates the DMS Kafka instance type.
      */
     type?: pulumi.Input<string>;
     /**
@@ -642,11 +702,11 @@ export interface KafkaInstanceState {
      */
     usedStorageSpace?: pulumi.Input<number>;
     /**
-     * Indicates the ID of the user who created the DMS kafka instance
+     * Indicates the ID of the user who created the DMS Kafka instance
      */
     userId?: pulumi.Input<string>;
     /**
-     * Indicates the name of the user who created the DMS kafka instance
+     * Indicates the name of the user who created the DMS Kafka instance
      */
     userName?: pulumi.Input<string>;
     /**
@@ -660,10 +720,14 @@ export interface KafkaInstanceState {
  */
 export interface KafkaInstanceArgs {
     /**
-     * Specifies a username. A username consists of 4 to 64 characters and
-     * supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
+     * Specifies the username of SASL_SSL user. A username consists of 4
+     * to 64 characters and supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
      */
     accessUser?: pulumi.Input<string>;
+    /**
+     * Specifies whether auto renew is enabled. Valid values are "true" and "false".
+     */
+    autoRenew?: pulumi.Input<string>;
     /**
      * The names of the AZ where the Kafka instances reside.
      * The parameter value can not be left blank or an empty array. Changing this creates a new instance resource.
@@ -674,49 +738,53 @@ export interface KafkaInstanceArgs {
      */
     availableZones?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * The Bandwidth of a Kafka instance, that is the maximum amount of data transferred per unit time.
-     * Unit: MB.
-     *
      * @deprecated The bandwidth has been deprecated. If you need to change the bandwidth, please update the product_id.
      */
     bandwidth?: pulumi.Input<string>;
     /**
-     * Specifies the broker numbers. Changing this creates a new instance resource.
-     * If the instance is created with `flavorId`, this parameter is required.
+     * Specifies the broker numbers.
+     * It is required when creating an instance with `flavorId`.
      */
     brokerNum?: pulumi.Input<number>;
     /**
-     * Specifies the access information of cross-VPC.
+     * Specifies the charging mode of the instance. Valid values are *prePaid*
+     * and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+     */
+    chargingMode?: pulumi.Input<string>;
+    /**
+     * Specifies the cross-VPC access information.
      * The object structure is documented below.
      */
     crossVpcAccesses?: pulumi.Input<pulumi.Input<inputs.Dms.KafkaInstanceCrossVpcAccess>[]>;
     /**
-     * Specifies the description of the DMS kafka instance. It is a character string
+     * Specifies the description of the DMS Kafka instance. It is a character string
      * containing not more than 1,024 characters.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies whether to enable dumping. Changing this creates a new instance
-     * resource.
+     * Specifies whether to enable message dumping.
+     * Changing this creates a new instance resource.
      */
     dumping?: pulumi.Input<boolean>;
     /**
      * Specifies whether to enable automatic topic creation. If automatic
      * topic creation is enabled, a topic will be automatically created with 3 partitions and 3 replicas when a message is
-     * produced to or consumed from a topic that does not exist. Changing this creates a new instance resource.
+     * produced to or consumed from a topic that does not exist.
+     * The default value is false.
+     * Changing this creates a new instance resource.
      */
     enableAutoTopic?: pulumi.Input<boolean>;
     /**
-     * Specifies the version of the kafka engine. Valid values are **1.1.0**
-     * and **2.3.0**. Changing this creates a new instance resource.
+     * Specifies the version of the Kafka engine,
+     * such as 1.1.0, 2.3.0, 2.7 or other supported versions. Changing this creates a new instance resource.
      */
     engineVersion: pulumi.Input<string>;
     /**
-     * Specifies the enterprise project ID of the kafka instance.
+     * Specifies the enterprise project ID of the Kafka instance.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Specifies the kafka [flavor ID](https://support.huaweicloud.com/intl/en-us/productdesc-kafka/Kafka-specification.html),
+     * Specifies the Kafka [flavor ID](https://support.huaweicloud.com/intl/en-us/productdesc-kafka/Kafka-specification.html),
      * e.g. **c6.2u4g.cluster**. This parameter and `productId` are alternative.
      */
     flavorId?: pulumi.Input<string>;
@@ -751,7 +819,7 @@ export interface KafkaInstanceArgs {
      */
     managerUser: pulumi.Input<string>;
     /**
-     * Specifies the name of the DMS kafka instance. An instance name starts with a letter,
+     * Specifies the name of the DMS Kafka instance. An instance name starts with a letter,
      * consists of 4 to 64 characters, and supports only letters, digits, hyphens (-) and underscores (_).
      */
     name?: pulumi.Input<string>;
@@ -761,12 +829,24 @@ export interface KafkaInstanceArgs {
      */
     networkId: pulumi.Input<string>;
     /**
-     * Specifies the password of the DMS kafka instance. A password must meet the
+     * Specifies the password of SASL_SSL user. A password must meet the
      * following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character
      * types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\|[{}]:'",<.>/?).
      * Changing this creates a new instance resource.
      */
     password?: pulumi.Input<string>;
+    /**
+     * Specifies the charging period of the instance. If `periodUnit` is set to *month*
+     * , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This parameter is
+     * mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+     */
+    period?: pulumi.Input<number>;
+    /**
+     * Specifies the charging period unit of the instance.
+     * Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+     * Changing this creates a new resource.
+     */
+    periodUnit?: pulumi.Input<string>;
     /**
      * Specifies a product ID, which includes bandwidth, partition, broker and default
      * storage capacity.
@@ -774,13 +854,13 @@ export interface KafkaInstanceArgs {
     productId?: pulumi.Input<string>;
     /**
      * Specifies the IDs of the elastic IP address (EIP)
-     * bound to the DMS kafka instance. Changing this creates a new instance resource.
+     * bound to the DMS Kafka instance. Changing this creates a new instance resource.
      * + If the instance is created with `flavorId`, the total number of public IPs is equal to `brokerNum`.
      * + If the instance is created with `productId`, the total number of public IPs must provide as follows:
      */
     publicIpIds?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * The region in which to create the DMS kafka instance resource. If omitted, the
+     * The region in which to create the DMS Kafka instances. If omitted, the
      * provider-level region will be used. Changing this creates a new instance resource.
      */
     region?: pulumi.Input<string>;
@@ -798,11 +878,11 @@ export interface KafkaInstanceArgs {
     /**
      * Specifies the message storage capacity, the unit is GB.
      * The storage spaces corresponding to the product IDs are as follows:
-     * + **c6.2u4g.cluster** (100MB bandwidth): `600` to `90,000` GB
-     * + **c6.4u8g.cluster** (300MB bandwidth): `1,200` to `90,000` GB
-     * + **c6.8u16g.cluster** (600MB bandwidth): `2,400` to `90,000` GB
-     * + **c6.12u12g.cluster**: `3,600` to `90,000` GB
-     * + **c6.16u32g.cluster** (1,200MB bandwidth): `4,800` to `90,000` GB
+     * + **c6.2u4g.cluster** (100MB bandwidth): `300` to `300,000` GB
+     * + **c6.4u8g.cluster** (300MB bandwidth): `300` to `600,000` GB
+     * + **c6.8u16g.cluster** (600MB bandwidth): `300` to `900,000` GB
+     * + **c6.12u12g.cluster**: `300` to `900,000` GB
+     * + **c6.16u32g.cluster** (1,200MB bandwidth): `300` to `900,000` GB
      */
     storageSpace?: pulumi.Input<number>;
     /**
@@ -813,7 +893,7 @@ export interface KafkaInstanceArgs {
      */
     storageSpecCode: pulumi.Input<string>;
     /**
-     * The key/value pairs to associate with the DMS kafka instance.
+     * The key/value pairs to associate with the DMS Kafka instance.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**

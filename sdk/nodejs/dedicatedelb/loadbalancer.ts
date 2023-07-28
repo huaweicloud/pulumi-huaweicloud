@@ -22,7 +22,7 @@ import * as utilities from "../utilities";
  *     crossVpcBackend: true,
  *     description: "basic example",
  *     enterpriseProjectId: "{{ eps_id }}",
- *     ipv4SubnetId: "{{ subnet_id }}",
+ *     ipv4SubnetId: "{{ ipv4_subnet_id }}",
  *     l4FlavorId: "{{ l4_flavor_id }}",
  *     l7FlavorId: "{{ l7_flavor_id }}",
  *     vpcId: "{{ vpc_id }}",
@@ -43,7 +43,7 @@ import * as utilities from "../utilities";
  *     description: "basic example",
  *     enterpriseProjectId: "{{ eps_id }}",
  *     ipv4EipId: "{{ eip_id }}",
- *     ipv4SubnetId: "{{ subnet_id }}",
+ *     ipv4SubnetId: "{{ ipv4_subnet_id }}",
  *     ipv6BandwidthId: "{{ ipv6_bandwidth_id }}",
  *     ipv6NetworkId: "{{ ipv6_network_id }}",
  *     l4FlavorId: "{{ l4_flavor_id }}",
@@ -68,7 +68,7 @@ import * as utilities from "../utilities";
  *     description: "basic example",
  *     enterpriseProjectId: "{{ eps_id }}",
  *     iptype: "5_bgp",
- *     ipv4SubnetId: "{{ subnet_id }}",
+ *     ipv4SubnetId: "{{ ipv4_subnet_id }}",
  *     ipv6BandwidthId: "{{ ipv6_bandwidth_id }}",
  *     ipv6NetworkId: "{{ ipv6_network_id }}",
  *     l4FlavorId: "{{ l4_flavor_id }}",
@@ -128,12 +128,19 @@ export class Loadbalancer extends pulumi.CustomResource {
         return obj['__pulumiType'] === Loadbalancer.__pulumiType;
     }
 
+    /**
+     * @deprecated Deprecated
+     */
     public readonly autoPay!: pulumi.Output<string | undefined>;
     /**
-     * Specifies whether auto renew is enabled. Valid values are **true** and
-     * **false**. Changing this parameter will create a new resource.
+     * Specifies whether auto renew is enabled. Valid values are **true** and **false**.
      */
     public readonly autoRenew!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies whether autoscaling is enabled. Valid values are **true** and
+     * **false**.
+     */
+    public readonly autoscalingEnabled!: pulumi.Output<boolean>;
     /**
      * Specifies the list of AZ names. Changing this parameter will create a
      * new resource.
@@ -185,7 +192,8 @@ export class Loadbalancer extends pulumi.CustomResource {
      */
     public readonly ipv4EipId!: pulumi.Output<string>;
     /**
-     * The subnet on which to allocate the loadbalancer's ipv4 address.
+     * The **IPv4 subnet ID** of the subnet on which to allocate the loadbalancer's
+     * ipv4 address.
      */
     public readonly ipv4SubnetId!: pulumi.Output<string | undefined>;
     /**
@@ -205,7 +213,7 @@ export class Loadbalancer extends pulumi.CustomResource {
      */
     public /*out*/ readonly ipv6EipId!: pulumi.Output<string>;
     /**
-     * The network on which to allocate the loadbalancer's ipv6 address.
+     * The **ID** of the subnet on which to allocate the loadbalancer's ipv6 address.
      */
     public readonly ipv6NetworkId!: pulumi.Output<string | undefined>;
     /**
@@ -216,6 +224,11 @@ export class Loadbalancer extends pulumi.CustomResource {
      * The L7 flavor id of the load balancer.
      */
     public readonly l7FlavorId!: pulumi.Output<string>;
+    /**
+     * Specifies the ID of the minimum Layer-7 flavor for elastic scaling.
+     * This parameter cannot be left blank if there are HTTP or HTTPS listeners.
+     */
+    public readonly minL7FlavorId!: pulumi.Output<string>;
     /**
      * Human-readable name for the loadbalancer.
      */
@@ -268,6 +281,7 @@ export class Loadbalancer extends pulumi.CustomResource {
             const state = argsOrState as LoadbalancerState | undefined;
             resourceInputs["autoPay"] = state ? state.autoPay : undefined;
             resourceInputs["autoRenew"] = state ? state.autoRenew : undefined;
+            resourceInputs["autoscalingEnabled"] = state ? state.autoscalingEnabled : undefined;
             resourceInputs["availabilityZones"] = state ? state.availabilityZones : undefined;
             resourceInputs["bandwidthChargeMode"] = state ? state.bandwidthChargeMode : undefined;
             resourceInputs["bandwidthSize"] = state ? state.bandwidthSize : undefined;
@@ -287,6 +301,7 @@ export class Loadbalancer extends pulumi.CustomResource {
             resourceInputs["ipv6NetworkId"] = state ? state.ipv6NetworkId : undefined;
             resourceInputs["l4FlavorId"] = state ? state.l4FlavorId : undefined;
             resourceInputs["l7FlavorId"] = state ? state.l7FlavorId : undefined;
+            resourceInputs["minL7FlavorId"] = state ? state.minL7FlavorId : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["period"] = state ? state.period : undefined;
             resourceInputs["periodUnit"] = state ? state.periodUnit : undefined;
@@ -301,6 +316,7 @@ export class Loadbalancer extends pulumi.CustomResource {
             }
             resourceInputs["autoPay"] = args ? args.autoPay : undefined;
             resourceInputs["autoRenew"] = args ? args.autoRenew : undefined;
+            resourceInputs["autoscalingEnabled"] = args ? args.autoscalingEnabled : undefined;
             resourceInputs["availabilityZones"] = args ? args.availabilityZones : undefined;
             resourceInputs["bandwidthChargeMode"] = args ? args.bandwidthChargeMode : undefined;
             resourceInputs["bandwidthSize"] = args ? args.bandwidthSize : undefined;
@@ -316,6 +332,7 @@ export class Loadbalancer extends pulumi.CustomResource {
             resourceInputs["ipv6NetworkId"] = args ? args.ipv6NetworkId : undefined;
             resourceInputs["l4FlavorId"] = args ? args.l4FlavorId : undefined;
             resourceInputs["l7FlavorId"] = args ? args.l7FlavorId : undefined;
+            resourceInputs["minL7FlavorId"] = args ? args.minL7FlavorId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["period"] = args ? args.period : undefined;
             resourceInputs["periodUnit"] = args ? args.periodUnit : undefined;
@@ -337,12 +354,19 @@ export class Loadbalancer extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Loadbalancer resources.
  */
 export interface LoadbalancerState {
+    /**
+     * @deprecated Deprecated
+     */
     autoPay?: pulumi.Input<string>;
     /**
-     * Specifies whether auto renew is enabled. Valid values are **true** and
-     * **false**. Changing this parameter will create a new resource.
+     * Specifies whether auto renew is enabled. Valid values are **true** and **false**.
      */
     autoRenew?: pulumi.Input<string>;
+    /**
+     * Specifies whether autoscaling is enabled. Valid values are **true** and
+     * **false**.
+     */
+    autoscalingEnabled?: pulumi.Input<boolean>;
     /**
      * Specifies the list of AZ names. Changing this parameter will create a
      * new resource.
@@ -394,7 +418,8 @@ export interface LoadbalancerState {
      */
     ipv4EipId?: pulumi.Input<string>;
     /**
-     * The subnet on which to allocate the loadbalancer's ipv4 address.
+     * The **IPv4 subnet ID** of the subnet on which to allocate the loadbalancer's
+     * ipv4 address.
      */
     ipv4SubnetId?: pulumi.Input<string>;
     /**
@@ -414,7 +439,7 @@ export interface LoadbalancerState {
      */
     ipv6EipId?: pulumi.Input<string>;
     /**
-     * The network on which to allocate the loadbalancer's ipv6 address.
+     * The **ID** of the subnet on which to allocate the loadbalancer's ipv6 address.
      */
     ipv6NetworkId?: pulumi.Input<string>;
     /**
@@ -425,6 +450,11 @@ export interface LoadbalancerState {
      * The L7 flavor id of the load balancer.
      */
     l7FlavorId?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the minimum Layer-7 flavor for elastic scaling.
+     * This parameter cannot be left blank if there are HTTP or HTTPS listeners.
+     */
+    minL7FlavorId?: pulumi.Input<string>;
     /**
      * Human-readable name for the loadbalancer.
      */
@@ -467,12 +497,19 @@ export interface LoadbalancerState {
  * The set of arguments for constructing a Loadbalancer resource.
  */
 export interface LoadbalancerArgs {
+    /**
+     * @deprecated Deprecated
+     */
     autoPay?: pulumi.Input<string>;
     /**
-     * Specifies whether auto renew is enabled. Valid values are **true** and
-     * **false**. Changing this parameter will create a new resource.
+     * Specifies whether auto renew is enabled. Valid values are **true** and **false**.
      */
     autoRenew?: pulumi.Input<string>;
+    /**
+     * Specifies whether autoscaling is enabled. Valid values are **true** and
+     * **false**.
+     */
+    autoscalingEnabled?: pulumi.Input<boolean>;
     /**
      * Specifies the list of AZ names. Changing this parameter will create a
      * new resource.
@@ -520,7 +557,8 @@ export interface LoadbalancerArgs {
      */
     ipv4EipId?: pulumi.Input<string>;
     /**
-     * The subnet on which to allocate the loadbalancer's ipv4 address.
+     * The **IPv4 subnet ID** of the subnet on which to allocate the loadbalancer's
+     * ipv4 address.
      */
     ipv4SubnetId?: pulumi.Input<string>;
     /**
@@ -528,7 +566,7 @@ export interface LoadbalancerArgs {
      */
     ipv6BandwidthId?: pulumi.Input<string>;
     /**
-     * The network on which to allocate the loadbalancer's ipv6 address.
+     * The **ID** of the subnet on which to allocate the loadbalancer's ipv6 address.
      */
     ipv6NetworkId?: pulumi.Input<string>;
     /**
@@ -539,6 +577,11 @@ export interface LoadbalancerArgs {
      * The L7 flavor id of the load balancer.
      */
     l7FlavorId?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the minimum Layer-7 flavor for elastic scaling.
+     * This parameter cannot be left blank if there are HTTP or HTTPS listeners.
+     */
+    minL7FlavorId?: pulumi.Input<string>;
     /**
      * Human-readable name for the loadbalancer.
      */

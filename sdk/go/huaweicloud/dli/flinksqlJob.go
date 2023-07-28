@@ -121,8 +121,9 @@ type FlinksqlJob struct {
 	SmnTopic pulumi.StringPtrOutput `pulumi:"smnTopic"`
 	// Specifies stream SQL statement, which includes at least the following
 	// three parts: source, query, and sink. Length range: 1024x1024 characters.
-	Sql    pulumi.StringPtrOutput `pulumi:"sql"`
-	Status pulumi.StringOutput    `pulumi:"status"`
+	Sql pulumi.StringPtrOutput `pulumi:"sql"`
+	// The Job status.
+	Status pulumi.StringOutput `pulumi:"status"`
 	// Specifies the key/value pairs to associate with the resource.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// Specifies number of CUs for each Task Manager. The default value is 1.
@@ -234,7 +235,8 @@ type flinksqlJobState struct {
 	SmnTopic *string `pulumi:"smnTopic"`
 	// Specifies stream SQL statement, which includes at least the following
 	// three parts: source, query, and sink. Length range: 1024x1024 characters.
-	Sql    *string `pulumi:"sql"`
+	Sql *string `pulumi:"sql"`
+	// The Job status.
 	Status *string `pulumi:"status"`
 	// Specifies the key/value pairs to associate with the resource.
 	Tags map[string]string `pulumi:"tags"`
@@ -318,7 +320,8 @@ type FlinksqlJobState struct {
 	SmnTopic pulumi.StringPtrInput
 	// Specifies stream SQL statement, which includes at least the following
 	// three parts: source, query, and sink. Length range: 1024x1024 characters.
-	Sql    pulumi.StringPtrInput
+	Sql pulumi.StringPtrInput
+	// The Job status.
 	Status pulumi.StringPtrInput
 	// Specifies the key/value pairs to associate with the resource.
 	Tags pulumi.StringMapInput
@@ -726,6 +729,7 @@ func (o FlinksqlJobOutput) Sql() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *FlinksqlJob) pulumi.StringPtrOutput { return v.Sql }).(pulumi.StringPtrOutput)
 }
 
+// The Job status.
 func (o FlinksqlJobOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *FlinksqlJob) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
 }

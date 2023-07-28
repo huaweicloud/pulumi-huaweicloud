@@ -22,7 +22,7 @@ class RoleArgs:
         The set of arguments for constructing a Role resource.
         :param pulumi.Input[str] description: Description of the custom policy.
         :param pulumi.Input[str] policy: Document of the custom policy in JSON format. For more details, please refer to the
-               [offical document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+               [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
         :param pulumi.Input[str] type: Display mode. Valid options are *AX*: Account level and *XA*: Project level.
         :param pulumi.Input[str] name: Name of the custom policy.
         """
@@ -49,7 +49,7 @@ class RoleArgs:
     def policy(self) -> pulumi.Input[str]:
         """
         Document of the custom policy in JSON format. For more details, please refer to the
-        [offical document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+        [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
         """
         return pulumi.get(self, "policy")
 
@@ -95,7 +95,7 @@ class _RoleState:
         :param pulumi.Input[str] description: Description of the custom policy.
         :param pulumi.Input[str] name: Name of the custom policy.
         :param pulumi.Input[str] policy: Document of the custom policy in JSON format. For more details, please refer to the
-               [offical document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+               [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
         :param pulumi.Input[int] references: The number of references.
         :param pulumi.Input[str] type: Display mode. Valid options are *AX*: Account level and *XA*: Project level.
         """
@@ -139,7 +139,7 @@ class _RoleState:
     def policy(self) -> Optional[pulumi.Input[str]]:
         """
         Document of the custom policy in JSON format. For more details, please refer to the
-        [offical document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+        [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
         """
         return pulumi.get(self, "policy")
 
@@ -234,7 +234,7 @@ class Role(pulumi.CustomResource):
         :param pulumi.Input[str] description: Description of the custom policy.
         :param pulumi.Input[str] name: Name of the custom policy.
         :param pulumi.Input[str] policy: Document of the custom policy in JSON format. For more details, please refer to the
-               [offical document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+               [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
         :param pulumi.Input[str] type: Display mode. Valid options are *AX*: Account level and *XA*: Project level.
         """
         ...
@@ -354,7 +354,7 @@ class Role(pulumi.CustomResource):
         :param pulumi.Input[str] description: Description of the custom policy.
         :param pulumi.Input[str] name: Name of the custom policy.
         :param pulumi.Input[str] policy: Document of the custom policy in JSON format. For more details, please refer to the
-               [offical document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+               [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
         :param pulumi.Input[int] references: The number of references.
         :param pulumi.Input[str] type: Display mode. Valid options are *AX*: Account level and *XA*: Project level.
         """
@@ -390,7 +390,7 @@ class Role(pulumi.CustomResource):
     def policy(self) -> pulumi.Output[str]:
         """
         Document of the custom policy in JSON format. For more details, please refer to the
-        [offical document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+        [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
         """
         return pulumi.get(self, "policy")
 

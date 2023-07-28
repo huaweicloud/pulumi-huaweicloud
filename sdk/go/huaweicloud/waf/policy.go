@@ -24,14 +24,18 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Waf"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			enterpriseProjectId := cfg.RequireObject("enterpriseProjectId")
 //			_, err := Waf.NewPolicy(ctx, "policy1", &Waf.PolicyArgs{
-//				Level:          pulumi.Int(2),
-//				ProtectionMode: pulumi.String("log"),
+//				ProtectionMode:      pulumi.String("log"),
+//				Level:               pulumi.Int(2),
+//				EnterpriseProjectId: pulumi.Any(enterpriseProjectId),
 //			})
 //			if err != nil {
 //				return err
@@ -44,16 +48,27 @@ import (
 //
 // ## Import
 //
-// Policies can be imported using the `id`, e.g.
+// There are two ways to import WAF policy state. * Using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Waf/policy:Policy policy_2 25e1df831bea4022a6e22bebe678915a
+//	$ pulumi import huaweicloud:Waf/policy:Policy test <id>
+//
+// ```
+//
+//   - Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+//
+// ```sh
+//
+//	$ pulumi import huaweicloud:Waf/policy:Policy test <id>/<enterprise_project_id>
 //
 // ```
 type Policy struct {
 	pulumi.CustomResourceState
 
+	// Specifies the enterprise project ID of WAF policy.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
 	// The detection mode in Precise Protection.
 	// + `true`: full detection, Full detection finishes all threat detections before blocking requests that meet Precise
 	//   Protection specified conditions.
@@ -110,6 +125,9 @@ func GetPolicy(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Policy resources.
 type policyState struct {
+	// Specifies the enterprise project ID of WAF policy.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// The detection mode in Precise Protection.
 	// + `true`: full detection, Full detection finishes all threat detections before blocking requests that meet Precise
 	//   Protection specified conditions.
@@ -137,6 +155,9 @@ type policyState struct {
 }
 
 type PolicyState struct {
+	// Specifies the enterprise project ID of WAF policy.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// The detection mode in Precise Protection.
 	// + `true`: full detection, Full detection finishes all threat detections before blocking requests that meet Precise
 	//   Protection specified conditions.
@@ -168,6 +189,9 @@ func (PolicyState) ElementType() reflect.Type {
 }
 
 type policyArgs struct {
+	// Specifies the enterprise project ID of WAF policy.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the protection level. Defaults to `2`. Valid values are:
 	// + `1`: low
 	// + `2`: medium
@@ -188,6 +212,9 @@ type policyArgs struct {
 
 // The set of arguments for constructing a Policy resource.
 type PolicyArgs struct {
+	// Specifies the enterprise project ID of WAF policy.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the protection level. Defaults to `2`. Valid values are:
 	// + `1`: low
 	// + `2`: medium
@@ -291,6 +318,12 @@ func (o PolicyOutput) ToPolicyOutput() PolicyOutput {
 
 func (o PolicyOutput) ToPolicyOutputWithContext(ctx context.Context) PolicyOutput {
 	return o
+}
+
+// Specifies the enterprise project ID of WAF policy.
+// Changing this parameter will create a new resource.
+func (o PolicyOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Policy) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
 
 // The detection mode in Precise Protection.

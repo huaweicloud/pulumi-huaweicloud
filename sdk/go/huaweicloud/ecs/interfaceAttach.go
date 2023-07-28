@@ -14,7 +14,7 @@ import (
 // Attaches a Network Interface to an Instance.
 //
 // ## Example Usage
-// ### Basic Attachment
+// ### Attach a port (under the specified network) to the ECS instance and generate a random IP address
 //
 // ```go
 // package main
@@ -22,9 +22,6 @@ import (
 // import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Ecs"
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Vpc"
-//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Ecs"
-//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Vpc"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
@@ -33,33 +30,11 @@ import (
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
 //			cfg := config.New(ctx, "")
-//			securityGroupId := cfg.RequireObject("securityGroupId")
-//			mynet, err := Vpc.GetSubnet(ctx, &vpc.GetSubnetArgs{
-//				Name: pulumi.StringRef("subnet-default"),
-//			}, nil)
-//			if err != nil {
-//				return err
-//			}
-//			myinstance, err := Ecs.NewInstance(ctx, "myinstance", &Ecs.InstanceArgs{
-//				ImageId:  pulumi.String("ad091b52-742f-469e-8f3c-fd81cadf0743"),
-//				FlavorId: pulumi.String("s6.small.1"),
-//				KeyPair:  pulumi.String("my_key_pair_name"),
-//				SecurityGroupIds: pulumi.StringArray{
-//					pulumi.Any(securityGroupId),
-//				},
-//				AvailabilityZone: pulumi.String("cn-north-4a"),
-//				Networks: ecs.InstanceNetworkArray{
-//					&ecs.InstanceNetworkArgs{
-//						Uuid: pulumi.String("55534eaa-533a-419d-9b40-ec427ea7195a"),
-//					},
-//				},
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			_, err = Ecs.NewInterfaceAttach(ctx, "attached", &Ecs.InterfaceAttachArgs{
-//				InstanceId: myinstance.ID(),
-//				NetworkId:  pulumi.String(mynet.Id),
+//			instanceId := cfg.RequireObject("instanceId")
+//			networkId := cfg.RequireObject("networkId")
+//			_, err := Ecs.NewInterfaceAttach(ctx, "test", &Ecs.InterfaceAttachArgs{
+//				InstanceId: pulumi.Any(instanceId),
+//				NetworkId:  pulumi.Any(networkId),
 //			})
 //			if err != nil {
 //				return err
@@ -69,63 +44,7 @@ import (
 //	}
 //
 // ```
-// ### Attachment Specifying a Fixed IP
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Ecs"
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Vpc"
-//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Ecs"
-//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Vpc"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			cfg := config.New(ctx, "")
-//			securityGroupId := cfg.RequireObject("securityGroupId")
-//			mynet, err := Vpc.GetSubnet(ctx, &vpc.GetSubnetArgs{
-//				Name: pulumi.StringRef("subnet-default"),
-//			}, nil)
-//			if err != nil {
-//				return err
-//			}
-//			myinstance, err := Ecs.NewInstance(ctx, "myinstance", &Ecs.InstanceArgs{
-//				ImageId:  pulumi.String("ad091b52-742f-469e-8f3c-fd81cadf0743"),
-//				FlavorId: pulumi.String("s6.small.1"),
-//				KeyPair:  pulumi.String("my_key_pair_name"),
-//				SecurityGroupIds: pulumi.StringArray{
-//					pulumi.Any(securityGroupId),
-//				},
-//				AvailabilityZone: pulumi.String("cn-north-4a"),
-//				Networks: ecs.InstanceNetworkArray{
-//					&ecs.InstanceNetworkArgs{
-//						Uuid: pulumi.String("55534eaa-533a-419d-9b40-ec427ea7195a"),
-//					},
-//				},
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			_, err = Ecs.NewInterfaceAttach(ctx, "attached", &Ecs.InterfaceAttachArgs{
-//				InstanceId: myinstance.ID(),
-//				NetworkId:  pulumi.String(mynet.Id),
-//				FixedIp:    pulumi.String("10.0.10.10"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
-// ### Attachment Using an Existing Port
+// ### Attach a custom port to the ECS instance
 //
 // ```go
 // package main
@@ -216,6 +135,9 @@ type InterfaceAttach struct {
 	// The region in which to create the network interface attache resource. If
 	// omitted, the provider-level region will be used. Changing this creates a new network interface attache resource.
 	Region pulumi.StringOutput `pulumi:"region"`
+	// Specifies the list of security group IDs bound to the specified port.\
+	// Defaults to the default security group.
+	SecurityGroupIds pulumi.StringArrayOutput `pulumi:"securityGroupIds"`
 	// Specifies whether the ECS processes only traffic that is destined specifically
 	// for it. This function is enabled by default but should be disabled if the ECS functions as a SNAT server or has a
 	// virtual IP address bound to it.
@@ -271,6 +193,9 @@ type interfaceAttachState struct {
 	// The region in which to create the network interface attache resource. If
 	// omitted, the provider-level region will be used. Changing this creates a new network interface attache resource.
 	Region *string `pulumi:"region"`
+	// Specifies the list of security group IDs bound to the specified port.\
+	// Defaults to the default security group.
+	SecurityGroupIds []string `pulumi:"securityGroupIds"`
 	// Specifies whether the ECS processes only traffic that is destined specifically
 	// for it. This function is enabled by default but should be disabled if the ECS functions as a SNAT server or has a
 	// virtual IP address bound to it.
@@ -294,6 +219,9 @@ type InterfaceAttachState struct {
 	// The region in which to create the network interface attache resource. If
 	// omitted, the provider-level region will be used. Changing this creates a new network interface attache resource.
 	Region pulumi.StringPtrInput
+	// Specifies the list of security group IDs bound to the specified port.\
+	// Defaults to the default security group.
+	SecurityGroupIds pulumi.StringArrayInput
 	// Specifies whether the ECS processes only traffic that is destined specifically
 	// for it. This function is enabled by default but should be disabled if the ECS functions as a SNAT server or has a
 	// virtual IP address bound to it.
@@ -319,6 +247,9 @@ type interfaceAttachArgs struct {
 	// The region in which to create the network interface attache resource. If
 	// omitted, the provider-level region will be used. Changing this creates a new network interface attache resource.
 	Region *string `pulumi:"region"`
+	// Specifies the list of security group IDs bound to the specified port.\
+	// Defaults to the default security group.
+	SecurityGroupIds []string `pulumi:"securityGroupIds"`
 	// Specifies whether the ECS processes only traffic that is destined specifically
 	// for it. This function is enabled by default but should be disabled if the ECS functions as a SNAT server or has a
 	// virtual IP address bound to it.
@@ -341,6 +272,9 @@ type InterfaceAttachArgs struct {
 	// The region in which to create the network interface attache resource. If
 	// omitted, the provider-level region will be used. Changing this creates a new network interface attache resource.
 	Region pulumi.StringPtrInput
+	// Specifies the list of security group IDs bound to the specified port.\
+	// Defaults to the default security group.
+	SecurityGroupIds pulumi.StringArrayInput
 	// Specifies whether the ECS processes only traffic that is destined specifically
 	// for it. This function is enabled by default but should be disabled if the ECS functions as a SNAT server or has a
 	// virtual IP address bound to it.
@@ -466,6 +400,12 @@ func (o InterfaceAttachOutput) PortId() pulumi.StringOutput {
 // omitted, the provider-level region will be used. Changing this creates a new network interface attache resource.
 func (o InterfaceAttachOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *InterfaceAttach) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
+}
+
+// Specifies the list of security group IDs bound to the specified port.\
+// Defaults to the default security group.
+func (o InterfaceAttachOutput) SecurityGroupIds() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *InterfaceAttach) pulumi.StringArrayOutput { return v.SecurityGroupIds }).(pulumi.StringArrayOutput)
 }
 
 // Specifies whether the ECS processes only traffic that is destined specifically

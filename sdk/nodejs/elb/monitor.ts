@@ -89,9 +89,6 @@ export class Monitor extends pulumi.CustomResource {
         return obj['__pulumiType'] === Monitor.__pulumiType;
     }
 
-    /**
-     * The administrative state of the monitor.
-     */
     public readonly adminStateUp!: pulumi.Output<boolean | undefined>;
     /**
      * Specifies the maximum time between health checks in the unit of second. The value ranges
@@ -219,9 +216,6 @@ export class Monitor extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Monitor resources.
  */
 export interface MonitorState {
-    /**
-     * The administrative state of the monitor.
-     */
     adminStateUp?: pulumi.Input<boolean>;
     /**
      * Specifies the maximum time between health checks in the unit of second. The value ranges
@@ -288,9 +282,6 @@ export interface MonitorState {
  * The set of arguments for constructing a Monitor resource.
  */
 export interface MonitorArgs {
-    /**
-     * The administrative state of the monitor.
-     */
     adminStateUp?: pulumi.Input<boolean>;
     /**
      * Specifies the maximum time between health checks in the unit of second. The value ranges

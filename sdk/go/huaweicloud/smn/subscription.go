@@ -70,8 +70,8 @@ type Subscription struct {
 	pulumi.CustomResourceState
 
 	// Message endpoint. Changing this parameter will create a new resource.
-	// + **For an HTTP subscription**, the endpoint starts with http://.
-	// + **For an HTTPS subscription**, the endpoint starts with https://.
+	// + **For an HTTP subscription**, the endpoint starts with `http://`.
+	// + **For an HTTPS subscription**, the endpoint starts with `https://`.
 	// + **For an email subscription**, the endpoint is an mail address.
 	// + **For an SMS message subscription**, the endpoint is a phone number,
 	//   the format is \[+\]\[country code\]\[phone number\], e.g. +86185xxxx0000.
@@ -87,10 +87,12 @@ type Subscription struct {
 	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Remark information. The remarks must be a UTF-8-coded character string
-	// containing 128 bytes.
+	// containing 128 bytes. Changing this parameter will create a new resource.
 	Remark pulumi.StringPtrOutput `pulumi:"remark"`
-	// Subscription status. 0 indicates that the subscription is not confirmed. 1 indicates that the subscription
-	// is confirmed. 3 indicates that the subscription is canceled.
+	// Subscription status.
+	// + **0**: indicates that the subscription is not confirmed.
+	// + **1**: indicates that the subscription is confirmed.
+	// + **3**: indicates that the subscription is canceled.
 	Status pulumi.IntOutput `pulumi:"status"`
 	// Resource identifier of a subscription, which is unique.
 	SubscriptionUrn pulumi.StringOutput `pulumi:"subscriptionUrn"`
@@ -139,8 +141,8 @@ func GetSubscription(ctx *pulumi.Context,
 // Input properties used for looking up and filtering Subscription resources.
 type subscriptionState struct {
 	// Message endpoint. Changing this parameter will create a new resource.
-	// + **For an HTTP subscription**, the endpoint starts with http://.
-	// + **For an HTTPS subscription**, the endpoint starts with https://.
+	// + **For an HTTP subscription**, the endpoint starts with `http://`.
+	// + **For an HTTPS subscription**, the endpoint starts with `https://`.
 	// + **For an email subscription**, the endpoint is an mail address.
 	// + **For an SMS message subscription**, the endpoint is a phone number,
 	//   the format is \[+\]\[country code\]\[phone number\], e.g. +86185xxxx0000.
@@ -156,10 +158,12 @@ type subscriptionState struct {
 	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
 	// Remark information. The remarks must be a UTF-8-coded character string
-	// containing 128 bytes.
+	// containing 128 bytes. Changing this parameter will create a new resource.
 	Remark *string `pulumi:"remark"`
-	// Subscription status. 0 indicates that the subscription is not confirmed. 1 indicates that the subscription
-	// is confirmed. 3 indicates that the subscription is canceled.
+	// Subscription status.
+	// + **0**: indicates that the subscription is not confirmed.
+	// + **1**: indicates that the subscription is confirmed.
+	// + **3**: indicates that the subscription is canceled.
 	Status *int `pulumi:"status"`
 	// Resource identifier of a subscription, which is unique.
 	SubscriptionUrn *string `pulumi:"subscriptionUrn"`
@@ -170,8 +174,8 @@ type subscriptionState struct {
 
 type SubscriptionState struct {
 	// Message endpoint. Changing this parameter will create a new resource.
-	// + **For an HTTP subscription**, the endpoint starts with http://.
-	// + **For an HTTPS subscription**, the endpoint starts with https://.
+	// + **For an HTTP subscription**, the endpoint starts with `http://`.
+	// + **For an HTTPS subscription**, the endpoint starts with `https://`.
 	// + **For an email subscription**, the endpoint is an mail address.
 	// + **For an SMS message subscription**, the endpoint is a phone number,
 	//   the format is \[+\]\[country code\]\[phone number\], e.g. +86185xxxx0000.
@@ -187,10 +191,12 @@ type SubscriptionState struct {
 	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
 	// Remark information. The remarks must be a UTF-8-coded character string
-	// containing 128 bytes.
+	// containing 128 bytes. Changing this parameter will create a new resource.
 	Remark pulumi.StringPtrInput
-	// Subscription status. 0 indicates that the subscription is not confirmed. 1 indicates that the subscription
-	// is confirmed. 3 indicates that the subscription is canceled.
+	// Subscription status.
+	// + **0**: indicates that the subscription is not confirmed.
+	// + **1**: indicates that the subscription is confirmed.
+	// + **3**: indicates that the subscription is canceled.
 	Status pulumi.IntPtrInput
 	// Resource identifier of a subscription, which is unique.
 	SubscriptionUrn pulumi.StringPtrInput
@@ -205,8 +211,8 @@ func (SubscriptionState) ElementType() reflect.Type {
 
 type subscriptionArgs struct {
 	// Message endpoint. Changing this parameter will create a new resource.
-	// + **For an HTTP subscription**, the endpoint starts with http://.
-	// + **For an HTTPS subscription**, the endpoint starts with https://.
+	// + **For an HTTP subscription**, the endpoint starts with `http://`.
+	// + **For an HTTPS subscription**, the endpoint starts with `https://`.
 	// + **For an email subscription**, the endpoint is an mail address.
 	// + **For an SMS message subscription**, the endpoint is a phone number,
 	//   the format is \[+\]\[country code\]\[phone number\], e.g. +86185xxxx0000.
@@ -220,7 +226,7 @@ type subscriptionArgs struct {
 	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
 	// Remark information. The remarks must be a UTF-8-coded character string
-	// containing 128 bytes.
+	// containing 128 bytes. Changing this parameter will create a new resource.
 	Remark *string `pulumi:"remark"`
 	// Specifies the resource identifier of a topic, which is unique.
 	// Changing this parameter will create a new resource.
@@ -230,8 +236,8 @@ type subscriptionArgs struct {
 // The set of arguments for constructing a Subscription resource.
 type SubscriptionArgs struct {
 	// Message endpoint. Changing this parameter will create a new resource.
-	// + **For an HTTP subscription**, the endpoint starts with http://.
-	// + **For an HTTPS subscription**, the endpoint starts with https://.
+	// + **For an HTTP subscription**, the endpoint starts with `http://`.
+	// + **For an HTTPS subscription**, the endpoint starts with `https://`.
 	// + **For an email subscription**, the endpoint is an mail address.
 	// + **For an SMS message subscription**, the endpoint is a phone number,
 	//   the format is \[+\]\[country code\]\[phone number\], e.g. +86185xxxx0000.
@@ -245,7 +251,7 @@ type SubscriptionArgs struct {
 	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
 	// Remark information. The remarks must be a UTF-8-coded character string
-	// containing 128 bytes.
+	// containing 128 bytes. Changing this parameter will create a new resource.
 	Remark pulumi.StringPtrInput
 	// Specifies the resource identifier of a topic, which is unique.
 	// Changing this parameter will create a new resource.
@@ -340,8 +346,8 @@ func (o SubscriptionOutput) ToSubscriptionOutputWithContext(ctx context.Context)
 }
 
 // Message endpoint. Changing this parameter will create a new resource.
-//   - **For an HTTP subscription**, the endpoint starts with http://.
-//   - **For an HTTPS subscription**, the endpoint starts with https://.
+//   - **For an HTTP subscription**, the endpoint starts with `http://`.
+//   - **For an HTTPS subscription**, the endpoint starts with `https://`.
 //   - **For an email subscription**, the endpoint is an mail address.
 //   - **For an SMS message subscription**, the endpoint is a phone number,
 //     the format is \[+\]\[country code\]\[phone number\], e.g. +86185xxxx0000.
@@ -369,13 +375,15 @@ func (o SubscriptionOutput) Region() pulumi.StringOutput {
 }
 
 // Remark information. The remarks must be a UTF-8-coded character string
-// containing 128 bytes.
+// containing 128 bytes. Changing this parameter will create a new resource.
 func (o SubscriptionOutput) Remark() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Subscription) pulumi.StringPtrOutput { return v.Remark }).(pulumi.StringPtrOutput)
 }
 
-// Subscription status. 0 indicates that the subscription is not confirmed. 1 indicates that the subscription
-// is confirmed. 3 indicates that the subscription is canceled.
+// Subscription status.
+// + **0**: indicates that the subscription is not confirmed.
+// + **1**: indicates that the subscription is confirmed.
+// + **3**: indicates that the subscription is canceled.
 func (o SubscriptionOutput) Status() pulumi.IntOutput {
 	return o.ApplyT(func(v *Subscription) pulumi.IntOutput { return v.Status }).(pulumi.IntOutput)
 }

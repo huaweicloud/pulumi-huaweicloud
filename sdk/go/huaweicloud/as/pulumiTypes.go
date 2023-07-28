@@ -503,13 +503,21 @@ func (o BandwidthPolicyScheduledPolicyPtrOutput) StartTime() pulumi.StringPtrOut
 }
 
 type ConfigurationInstanceConfig struct {
+	// Specifies whether the bandwidth is billed by traffic or by bandwidth
+	// size. The value can be **traffic** or **bandwidth**. Changing this creates a new resource.
+	ChargingMode *string `pulumi:"chargingMode"`
 	// Specifies the disk group information. System disks are mandatory and
 	// data disks are optional. The object structure is documented below.
 	// Changing this will create a new resource.
 	Disks []ConfigurationInstanceConfigDisk `pulumi:"disks"`
+	// Specifies the ECS group ID. Changing this will create a new resource.
+	EcsGroupId *string `pulumi:"ecsGroupId"`
 	// Specifies the ECS flavor name. A maximum of 10 flavors can be selected.
 	// Use a comma (,) to separate multiple flavor names. Changing this will create a new resource.
 	Flavor *string `pulumi:"flavor"`
+	// Specifies the priority policy used when there are multiple flavors
+	// and instances to be created using an AS configuration. The value can be `PICK_FIRST` and `COST_FIRST`.
+	FlavorPriorityPolicy *string `pulumi:"flavorPriorityPolicy"`
 	// Specifies the ECS image ID. Changing this will create a new resource.
 	Image *string `pulumi:"image"`
 	// Specifies the ECS instance ID when using its specification
@@ -531,6 +539,9 @@ type ConfigurationInstanceConfig struct {
 	// The object structure is documented below.
 	// Changing this will create a new resource.
 	PublicIp *ConfigurationInstanceConfigPublicIp `pulumi:"publicIp"`
+	// Specifies an array of one or more security group IDs.
+	// Changing this will create a new resource.
+	SecurityGroupIds []string `pulumi:"securityGroupIds"`
 	// Specifies the user data to provide when launching the instance.
 	// The file content must be encoded with Base64. Changing this will create a new resource.
 	UserData *string `pulumi:"userData"`
@@ -548,13 +559,21 @@ type ConfigurationInstanceConfigInput interface {
 }
 
 type ConfigurationInstanceConfigArgs struct {
+	// Specifies whether the bandwidth is billed by traffic or by bandwidth
+	// size. The value can be **traffic** or **bandwidth**. Changing this creates a new resource.
+	ChargingMode pulumi.StringPtrInput `pulumi:"chargingMode"`
 	// Specifies the disk group information. System disks are mandatory and
 	// data disks are optional. The object structure is documented below.
 	// Changing this will create a new resource.
 	Disks ConfigurationInstanceConfigDiskArrayInput `pulumi:"disks"`
+	// Specifies the ECS group ID. Changing this will create a new resource.
+	EcsGroupId pulumi.StringPtrInput `pulumi:"ecsGroupId"`
 	// Specifies the ECS flavor name. A maximum of 10 flavors can be selected.
 	// Use a comma (,) to separate multiple flavor names. Changing this will create a new resource.
 	Flavor pulumi.StringPtrInput `pulumi:"flavor"`
+	// Specifies the priority policy used when there are multiple flavors
+	// and instances to be created using an AS configuration. The value can be `PICK_FIRST` and `COST_FIRST`.
+	FlavorPriorityPolicy pulumi.StringPtrInput `pulumi:"flavorPriorityPolicy"`
 	// Specifies the ECS image ID. Changing this will create a new resource.
 	Image pulumi.StringPtrInput `pulumi:"image"`
 	// Specifies the ECS instance ID when using its specification
@@ -576,6 +595,9 @@ type ConfigurationInstanceConfigArgs struct {
 	// The object structure is documented below.
 	// Changing this will create a new resource.
 	PublicIp ConfigurationInstanceConfigPublicIpPtrInput `pulumi:"publicIp"`
+	// Specifies an array of one or more security group IDs.
+	// Changing this will create a new resource.
+	SecurityGroupIds pulumi.StringArrayInput `pulumi:"securityGroupIds"`
 	// Specifies the user data to provide when launching the instance.
 	// The file content must be encoded with Base64. Changing this will create a new resource.
 	UserData pulumi.StringPtrInput `pulumi:"userData"`
@@ -658,6 +680,12 @@ func (o ConfigurationInstanceConfigOutput) ToConfigurationInstanceConfigPtrOutpu
 	}).(ConfigurationInstanceConfigPtrOutput)
 }
 
+// Specifies whether the bandwidth is billed by traffic or by bandwidth
+// size. The value can be **traffic** or **bandwidth**. Changing this creates a new resource.
+func (o ConfigurationInstanceConfigOutput) ChargingMode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ConfigurationInstanceConfig) *string { return v.ChargingMode }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the disk group information. System disks are mandatory and
 // data disks are optional. The object structure is documented below.
 // Changing this will create a new resource.
@@ -665,10 +693,21 @@ func (o ConfigurationInstanceConfigOutput) Disks() ConfigurationInstanceConfigDi
 	return o.ApplyT(func(v ConfigurationInstanceConfig) []ConfigurationInstanceConfigDisk { return v.Disks }).(ConfigurationInstanceConfigDiskArrayOutput)
 }
 
+// Specifies the ECS group ID. Changing this will create a new resource.
+func (o ConfigurationInstanceConfigOutput) EcsGroupId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ConfigurationInstanceConfig) *string { return v.EcsGroupId }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the ECS flavor name. A maximum of 10 flavors can be selected.
 // Use a comma (,) to separate multiple flavor names. Changing this will create a new resource.
 func (o ConfigurationInstanceConfigOutput) Flavor() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ConfigurationInstanceConfig) *string { return v.Flavor }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the priority policy used when there are multiple flavors
+// and instances to be created using an AS configuration. The value can be `PICK_FIRST` and `COST_FIRST`.
+func (o ConfigurationInstanceConfigOutput) FlavorPriorityPolicy() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ConfigurationInstanceConfig) *string { return v.FlavorPriorityPolicy }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the ECS image ID. Changing this will create a new resource.
@@ -710,6 +749,12 @@ func (o ConfigurationInstanceConfigOutput) PublicIp() ConfigurationInstanceConfi
 	return o.ApplyT(func(v ConfigurationInstanceConfig) *ConfigurationInstanceConfigPublicIp { return v.PublicIp }).(ConfigurationInstanceConfigPublicIpPtrOutput)
 }
 
+// Specifies an array of one or more security group IDs.
+// Changing this will create a new resource.
+func (o ConfigurationInstanceConfigOutput) SecurityGroupIds() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v ConfigurationInstanceConfig) []string { return v.SecurityGroupIds }).(pulumi.StringArrayOutput)
+}
+
 // Specifies the user data to provide when launching the instance.
 // The file content must be encoded with Base64. Changing this will create a new resource.
 func (o ConfigurationInstanceConfigOutput) UserData() pulumi.StringPtrOutput {
@@ -740,6 +785,17 @@ func (o ConfigurationInstanceConfigPtrOutput) Elem() ConfigurationInstanceConfig
 	}).(ConfigurationInstanceConfigOutput)
 }
 
+// Specifies whether the bandwidth is billed by traffic or by bandwidth
+// size. The value can be **traffic** or **bandwidth**. Changing this creates a new resource.
+func (o ConfigurationInstanceConfigPtrOutput) ChargingMode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ConfigurationInstanceConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.ChargingMode
+	}).(pulumi.StringPtrOutput)
+}
+
 // Specifies the disk group information. System disks are mandatory and
 // data disks are optional. The object structure is documented below.
 // Changing this will create a new resource.
@@ -752,6 +808,16 @@ func (o ConfigurationInstanceConfigPtrOutput) Disks() ConfigurationInstanceConfi
 	}).(ConfigurationInstanceConfigDiskArrayOutput)
 }
 
+// Specifies the ECS group ID. Changing this will create a new resource.
+func (o ConfigurationInstanceConfigPtrOutput) EcsGroupId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ConfigurationInstanceConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.EcsGroupId
+	}).(pulumi.StringPtrOutput)
+}
+
 // Specifies the ECS flavor name. A maximum of 10 flavors can be selected.
 // Use a comma (,) to separate multiple flavor names. Changing this will create a new resource.
 func (o ConfigurationInstanceConfigPtrOutput) Flavor() pulumi.StringPtrOutput {
@@ -760,6 +826,17 @@ func (o ConfigurationInstanceConfigPtrOutput) Flavor() pulumi.StringPtrOutput {
 			return nil
 		}
 		return v.Flavor
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the priority policy used when there are multiple flavors
+// and instances to be created using an AS configuration. The value can be `PICK_FIRST` and `COST_FIRST`.
+func (o ConfigurationInstanceConfigPtrOutput) FlavorPriorityPolicy() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ConfigurationInstanceConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.FlavorPriorityPolicy
 	}).(pulumi.StringPtrOutput)
 }
 
@@ -830,6 +907,17 @@ func (o ConfigurationInstanceConfigPtrOutput) PublicIp() ConfigurationInstanceCo
 		}
 		return v.PublicIp
 	}).(ConfigurationInstanceConfigPublicIpPtrOutput)
+}
+
+// Specifies an array of one or more security group IDs.
+// Changing this will create a new resource.
+func (o ConfigurationInstanceConfigPtrOutput) SecurityGroupIds() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *ConfigurationInstanceConfig) []string {
+		if v == nil {
+			return nil
+		}
+		return v.SecurityGroupIds
+	}).(pulumi.StringArrayOutput)
 }
 
 // Specifies the user data to provide when launching the instance.
@@ -995,6 +1083,8 @@ func (o ConfigurationInstanceConfigDiskArrayOutput) Index(i pulumi.IntInput) Con
 }
 
 type ConfigurationInstanceConfigPersonality struct {
+	// Specifies the content of the injected file, which must be encoded with base64.
+	// Changing this creates a new resource.
 	Content string `pulumi:"content"`
 	// Specifies the path of the injected file. Changing this creates a new resource.
 	Path string `pulumi:"path"`
@@ -1012,6 +1102,8 @@ type ConfigurationInstanceConfigPersonalityInput interface {
 }
 
 type ConfigurationInstanceConfigPersonalityArgs struct {
+	// Specifies the content of the injected file, which must be encoded with base64.
+	// Changing this creates a new resource.
 	Content pulumi.StringInput `pulumi:"content"`
 	// Specifies the path of the injected file. Changing this creates a new resource.
 	Path pulumi.StringInput `pulumi:"path"`
@@ -1068,6 +1160,8 @@ func (o ConfigurationInstanceConfigPersonalityOutput) ToConfigurationInstanceCon
 	return o
 }
 
+// Specifies the content of the injected file, which must be encoded with base64.
+// Changing this creates a new resource.
 func (o ConfigurationInstanceConfigPersonalityOutput) Content() pulumi.StringOutput {
 	return o.ApplyT(func(v ConfigurationInstanceConfigPersonality) string { return v.Content }).(pulumi.StringOutput)
 }
@@ -1720,8 +1814,15 @@ func (o GroupLbaasListenerArrayOutput) Index(i pulumi.IntInput) GroupLbaasListen
 }
 
 type GroupNetwork struct {
-	// The UUID of the security group.
+	// Specifies the ID of the security group.
 	Id string `pulumi:"id"`
+	// Specifies the ID of the shared bandwidth of an IPv6 address.
+	Ipv6BandwidthId *string `pulumi:"ipv6BandwidthId"`
+	// Specifies whether to support IPv6 addresses. The default value is `false`.
+	Ipv6Enable *bool `pulumi:"ipv6Enable"`
+	// Specifies whether processesing only traffic that is destined specifically
+	// for it. Defaults to true.
+	SourceDestCheck *bool `pulumi:"sourceDestCheck"`
 }
 
 // GroupNetworkInput is an input type that accepts GroupNetworkArgs and GroupNetworkOutput values.
@@ -1736,8 +1837,15 @@ type GroupNetworkInput interface {
 }
 
 type GroupNetworkArgs struct {
-	// The UUID of the security group.
+	// Specifies the ID of the security group.
 	Id pulumi.StringInput `pulumi:"id"`
+	// Specifies the ID of the shared bandwidth of an IPv6 address.
+	Ipv6BandwidthId pulumi.StringPtrInput `pulumi:"ipv6BandwidthId"`
+	// Specifies whether to support IPv6 addresses. The default value is `false`.
+	Ipv6Enable pulumi.BoolPtrInput `pulumi:"ipv6Enable"`
+	// Specifies whether processesing only traffic that is destined specifically
+	// for it. Defaults to true.
+	SourceDestCheck pulumi.BoolPtrInput `pulumi:"sourceDestCheck"`
 }
 
 func (GroupNetworkArgs) ElementType() reflect.Type {
@@ -1791,9 +1899,25 @@ func (o GroupNetworkOutput) ToGroupNetworkOutputWithContext(ctx context.Context)
 	return o
 }
 
-// The UUID of the security group.
+// Specifies the ID of the security group.
 func (o GroupNetworkOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GroupNetwork) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Specifies the ID of the shared bandwidth of an IPv6 address.
+func (o GroupNetworkOutput) Ipv6BandwidthId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v GroupNetwork) *string { return v.Ipv6BandwidthId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether to support IPv6 addresses. The default value is `false`.
+func (o GroupNetworkOutput) Ipv6Enable() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v GroupNetwork) *bool { return v.Ipv6Enable }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether processesing only traffic that is destined specifically
+// for it. Defaults to true.
+func (o GroupNetworkOutput) SourceDestCheck() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v GroupNetwork) *bool { return v.SourceDestCheck }).(pulumi.BoolPtrOutput)
 }
 
 type GroupNetworkArrayOutput struct{ *pulumi.OutputState }
@@ -1817,7 +1941,7 @@ func (o GroupNetworkArrayOutput) Index(i pulumi.IntInput) GroupNetworkOutput {
 }
 
 type GroupSecurityGroup struct {
-	// The UUID of the security group.
+	// Specifies the ID of the security group.
 	Id string `pulumi:"id"`
 }
 
@@ -1833,7 +1957,7 @@ type GroupSecurityGroupInput interface {
 }
 
 type GroupSecurityGroupArgs struct {
-	// The UUID of the security group.
+	// Specifies the ID of the security group.
 	Id pulumi.StringInput `pulumi:"id"`
 }
 
@@ -1888,7 +2012,7 @@ func (o GroupSecurityGroupOutput) ToGroupSecurityGroupOutputWithContext(ctx cont
 	return o
 }
 
-// The UUID of the security group.
+// Specifies the ID of the security group.
 func (o GroupSecurityGroupOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GroupSecurityGroup) string { return v.Id }).(pulumi.StringOutput)
 }
@@ -1914,9 +2038,9 @@ func (o GroupSecurityGroupArrayOutput) Index(i pulumi.IntInput) GroupSecurityGro
 }
 
 type PolicyScalingPolicyAction struct {
-	// The number of instances to be operated. The default number is 1.
+	// Specifies the number of instances to be operated. The default number is 1.
 	InstanceNumber *int `pulumi:"instanceNumber"`
-	// The operation to be performed. The options include `ADD` (default), `REMOVE`,
+	// Specifies the operation to be performed. The options include `ADD` (default), `REMOVE`,
 	// and `SET`.
 	Operation *string `pulumi:"operation"`
 }
@@ -1933,9 +2057,9 @@ type PolicyScalingPolicyActionInput interface {
 }
 
 type PolicyScalingPolicyActionArgs struct {
-	// The number of instances to be operated. The default number is 1.
+	// Specifies the number of instances to be operated. The default number is 1.
 	InstanceNumber pulumi.IntPtrInput `pulumi:"instanceNumber"`
-	// The operation to be performed. The options include `ADD` (default), `REMOVE`,
+	// Specifies the operation to be performed. The options include `ADD` (default), `REMOVE`,
 	// and `SET`.
 	Operation pulumi.StringPtrInput `pulumi:"operation"`
 }
@@ -2017,12 +2141,12 @@ func (o PolicyScalingPolicyActionOutput) ToPolicyScalingPolicyActionPtrOutputWit
 	}).(PolicyScalingPolicyActionPtrOutput)
 }
 
-// The number of instances to be operated. The default number is 1.
+// Specifies the number of instances to be operated. The default number is 1.
 func (o PolicyScalingPolicyActionOutput) InstanceNumber() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v PolicyScalingPolicyAction) *int { return v.InstanceNumber }).(pulumi.IntPtrOutput)
 }
 
-// The operation to be performed. The options include `ADD` (default), `REMOVE`,
+// Specifies the operation to be performed. The options include `ADD` (default), `REMOVE`,
 // and `SET`.
 func (o PolicyScalingPolicyActionOutput) Operation() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v PolicyScalingPolicyAction) *string { return v.Operation }).(pulumi.StringPtrOutput)
@@ -2052,7 +2176,7 @@ func (o PolicyScalingPolicyActionPtrOutput) Elem() PolicyScalingPolicyActionOutp
 	}).(PolicyScalingPolicyActionOutput)
 }
 
-// The number of instances to be operated. The default number is 1.
+// Specifies the number of instances to be operated. The default number is 1.
 func (o PolicyScalingPolicyActionPtrOutput) InstanceNumber() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *PolicyScalingPolicyAction) *int {
 		if v == nil {
@@ -2062,7 +2186,7 @@ func (o PolicyScalingPolicyActionPtrOutput) InstanceNumber() pulumi.IntPtrOutput
 	}).(pulumi.IntPtrOutput)
 }
 
-// The operation to be performed. The options include `ADD` (default), `REMOVE`,
+// Specifies the operation to be performed. The options include `ADD` (default), `REMOVE`,
 // and `SET`.
 func (o PolicyScalingPolicyActionPtrOutput) Operation() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *PolicyScalingPolicyAction) *string {
@@ -2074,20 +2198,20 @@ func (o PolicyScalingPolicyActionPtrOutput) Operation() pulumi.StringPtrOutput {
 }
 
 type PolicyScheduledPolicy struct {
-	// The end time of the scaling action triggered periodically. The time format complies
+	// Specifies the end time of the scaling action triggered periodically. The time format complies
 	// with UTC. This argument is mandatory when `scalingPolicyType`
 	// is set to `RECURRENCE`. The time format is YYYY-MM-DDThh:mmZ.
 	EndTime *string `pulumi:"endTime"`
-	// The time when the scaling action is triggered.
-	// + If `scalingPolicyType` is set to `SCHEDULED`, the time format is YYYY-MM-DDThh:mmZ.
-	// + If `scalingPolicyType` is set to `RECURRENCE`, the time format is hh:mm.
+	// Specifies the time when the scaling action is triggered.
+	// + If `scalingPolicyType` is set to `SCHEDULED`, the time format is **YYYY-MM-DDThh:mmZ**.
+	// + If `scalingPolicyType` is set to `RECURRENCE`, the time format is **hh:mm**.
 	LaunchTime string `pulumi:"launchTime"`
-	// The periodic triggering type. This argument is mandatory when
+	// Specifies the periodic triggering type. This argument is mandatory when
 	// `scalingPolicyType` is set to `RECURRENCE`. The options include `Daily`, `Weekly`, and `Monthly`.
 	RecurrenceType *string `pulumi:"recurrenceType"`
-	// The frequency at which scaling actions are triggered.
+	// Specifies the frequency at which scaling actions are triggered.
 	RecurrenceValue *string `pulumi:"recurrenceValue"`
-	// The start time of the scaling action triggered periodically. The time format
+	// Specifies the start time of the scaling action triggered periodically. The time format
 	// complies with UTC. The current time is used by default. The time format is YYYY-MM-DDThh:mmZ.
 	StartTime *string `pulumi:"startTime"`
 }
@@ -2104,20 +2228,20 @@ type PolicyScheduledPolicyInput interface {
 }
 
 type PolicyScheduledPolicyArgs struct {
-	// The end time of the scaling action triggered periodically. The time format complies
+	// Specifies the end time of the scaling action triggered periodically. The time format complies
 	// with UTC. This argument is mandatory when `scalingPolicyType`
 	// is set to `RECURRENCE`. The time format is YYYY-MM-DDThh:mmZ.
 	EndTime pulumi.StringPtrInput `pulumi:"endTime"`
-	// The time when the scaling action is triggered.
-	// + If `scalingPolicyType` is set to `SCHEDULED`, the time format is YYYY-MM-DDThh:mmZ.
-	// + If `scalingPolicyType` is set to `RECURRENCE`, the time format is hh:mm.
+	// Specifies the time when the scaling action is triggered.
+	// + If `scalingPolicyType` is set to `SCHEDULED`, the time format is **YYYY-MM-DDThh:mmZ**.
+	// + If `scalingPolicyType` is set to `RECURRENCE`, the time format is **hh:mm**.
 	LaunchTime pulumi.StringInput `pulumi:"launchTime"`
-	// The periodic triggering type. This argument is mandatory when
+	// Specifies the periodic triggering type. This argument is mandatory when
 	// `scalingPolicyType` is set to `RECURRENCE`. The options include `Daily`, `Weekly`, and `Monthly`.
 	RecurrenceType pulumi.StringPtrInput `pulumi:"recurrenceType"`
-	// The frequency at which scaling actions are triggered.
+	// Specifies the frequency at which scaling actions are triggered.
 	RecurrenceValue pulumi.StringPtrInput `pulumi:"recurrenceValue"`
-	// The start time of the scaling action triggered periodically. The time format
+	// Specifies the start time of the scaling action triggered periodically. The time format
 	// complies with UTC. The current time is used by default. The time format is YYYY-MM-DDThh:mmZ.
 	StartTime pulumi.StringPtrInput `pulumi:"startTime"`
 }
@@ -2199,32 +2323,32 @@ func (o PolicyScheduledPolicyOutput) ToPolicyScheduledPolicyPtrOutputWithContext
 	}).(PolicyScheduledPolicyPtrOutput)
 }
 
-// The end time of the scaling action triggered periodically. The time format complies
+// Specifies the end time of the scaling action triggered periodically. The time format complies
 // with UTC. This argument is mandatory when `scalingPolicyType`
 // is set to `RECURRENCE`. The time format is YYYY-MM-DDThh:mmZ.
 func (o PolicyScheduledPolicyOutput) EndTime() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v PolicyScheduledPolicy) *string { return v.EndTime }).(pulumi.StringPtrOutput)
 }
 
-// The time when the scaling action is triggered.
-// + If `scalingPolicyType` is set to `SCHEDULED`, the time format is YYYY-MM-DDThh:mmZ.
-// + If `scalingPolicyType` is set to `RECURRENCE`, the time format is hh:mm.
+// Specifies the time when the scaling action is triggered.
+// + If `scalingPolicyType` is set to `SCHEDULED`, the time format is **YYYY-MM-DDThh:mmZ**.
+// + If `scalingPolicyType` is set to `RECURRENCE`, the time format is **hh:mm**.
 func (o PolicyScheduledPolicyOutput) LaunchTime() pulumi.StringOutput {
 	return o.ApplyT(func(v PolicyScheduledPolicy) string { return v.LaunchTime }).(pulumi.StringOutput)
 }
 
-// The periodic triggering type. This argument is mandatory when
+// Specifies the periodic triggering type. This argument is mandatory when
 // `scalingPolicyType` is set to `RECURRENCE`. The options include `Daily`, `Weekly`, and `Monthly`.
 func (o PolicyScheduledPolicyOutput) RecurrenceType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v PolicyScheduledPolicy) *string { return v.RecurrenceType }).(pulumi.StringPtrOutput)
 }
 
-// The frequency at which scaling actions are triggered.
+// Specifies the frequency at which scaling actions are triggered.
 func (o PolicyScheduledPolicyOutput) RecurrenceValue() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v PolicyScheduledPolicy) *string { return v.RecurrenceValue }).(pulumi.StringPtrOutput)
 }
 
-// The start time of the scaling action triggered periodically. The time format
+// Specifies the start time of the scaling action triggered periodically. The time format
 // complies with UTC. The current time is used by default. The time format is YYYY-MM-DDThh:mmZ.
 func (o PolicyScheduledPolicyOutput) StartTime() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v PolicyScheduledPolicy) *string { return v.StartTime }).(pulumi.StringPtrOutput)
@@ -2254,7 +2378,7 @@ func (o PolicyScheduledPolicyPtrOutput) Elem() PolicyScheduledPolicyOutput {
 	}).(PolicyScheduledPolicyOutput)
 }
 
-// The end time of the scaling action triggered periodically. The time format complies
+// Specifies the end time of the scaling action triggered periodically. The time format complies
 // with UTC. This argument is mandatory when `scalingPolicyType`
 // is set to `RECURRENCE`. The time format is YYYY-MM-DDThh:mmZ.
 func (o PolicyScheduledPolicyPtrOutput) EndTime() pulumi.StringPtrOutput {
@@ -2266,9 +2390,9 @@ func (o PolicyScheduledPolicyPtrOutput) EndTime() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// The time when the scaling action is triggered.
-// + If `scalingPolicyType` is set to `SCHEDULED`, the time format is YYYY-MM-DDThh:mmZ.
-// + If `scalingPolicyType` is set to `RECURRENCE`, the time format is hh:mm.
+// Specifies the time when the scaling action is triggered.
+// + If `scalingPolicyType` is set to `SCHEDULED`, the time format is **YYYY-MM-DDThh:mmZ**.
+// + If `scalingPolicyType` is set to `RECURRENCE`, the time format is **hh:mm**.
 func (o PolicyScheduledPolicyPtrOutput) LaunchTime() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *PolicyScheduledPolicy) *string {
 		if v == nil {
@@ -2278,7 +2402,7 @@ func (o PolicyScheduledPolicyPtrOutput) LaunchTime() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// The periodic triggering type. This argument is mandatory when
+// Specifies the periodic triggering type. This argument is mandatory when
 // `scalingPolicyType` is set to `RECURRENCE`. The options include `Daily`, `Weekly`, and `Monthly`.
 func (o PolicyScheduledPolicyPtrOutput) RecurrenceType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *PolicyScheduledPolicy) *string {
@@ -2289,7 +2413,7 @@ func (o PolicyScheduledPolicyPtrOutput) RecurrenceType() pulumi.StringPtrOutput 
 	}).(pulumi.StringPtrOutput)
 }
 
-// The frequency at which scaling actions are triggered.
+// Specifies the frequency at which scaling actions are triggered.
 func (o PolicyScheduledPolicyPtrOutput) RecurrenceValue() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *PolicyScheduledPolicy) *string {
 		if v == nil {
@@ -2299,7 +2423,7 @@ func (o PolicyScheduledPolicyPtrOutput) RecurrenceValue() pulumi.StringPtrOutput
 	}).(pulumi.StringPtrOutput)
 }
 
-// The start time of the scaling action triggered periodically. The time format
+// Specifies the start time of the scaling action triggered periodically. The time format
 // complies with UTC. The current time is used by default. The time format is YYYY-MM-DDThh:mmZ.
 func (o PolicyScheduledPolicyPtrOutput) StartTime() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *PolicyScheduledPolicy) *string {

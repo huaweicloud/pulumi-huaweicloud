@@ -120,6 +120,11 @@ type PoolPersistence struct {
 	// The name of the cookie if persistence mode is set appropriately. Required
 	// if `type = APP_COOKIE`.
 	CookieName *string `pulumi:"cookieName"`
+	// Specifies the sticky session timeout duration in minutes. This parameter is
+	// invalid when type is set to APP_COOKIE. The value range varies depending on the protocol of the backend server group:
+	// + When the protocol of the backend server group is TCP or UDP, the value ranges from 1 to 60.
+	// + When the protocol of the backend server group is HTTP or HTTPS, the value ranges from 1 to 1440.
+	Timeout *int `pulumi:"timeout"`
 	// The type of persistence mode. The current specification supports SOURCE_IP,
 	// HTTP_COOKIE, and APP_COOKIE.
 	Type string `pulumi:"type"`
@@ -140,6 +145,11 @@ type PoolPersistenceArgs struct {
 	// The name of the cookie if persistence mode is set appropriately. Required
 	// if `type = APP_COOKIE`.
 	CookieName pulumi.StringPtrInput `pulumi:"cookieName"`
+	// Specifies the sticky session timeout duration in minutes. This parameter is
+	// invalid when type is set to APP_COOKIE. The value range varies depending on the protocol of the backend server group:
+	// + When the protocol of the backend server group is TCP or UDP, the value ranges from 1 to 60.
+	// + When the protocol of the backend server group is HTTP or HTTPS, the value ranges from 1 to 1440.
+	Timeout pulumi.IntPtrInput `pulumi:"timeout"`
 	// The type of persistence mode. The current specification supports SOURCE_IP,
 	// HTTP_COOKIE, and APP_COOKIE.
 	Type pulumi.StringInput `pulumi:"type"`
@@ -200,6 +210,14 @@ func (o PoolPersistenceOutput) ToPoolPersistenceOutputWithContext(ctx context.Co
 // if `type = APP_COOKIE`.
 func (o PoolPersistenceOutput) CookieName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v PoolPersistence) *string { return v.CookieName }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the sticky session timeout duration in minutes. This parameter is
+// invalid when type is set to APP_COOKIE. The value range varies depending on the protocol of the backend server group:
+// + When the protocol of the backend server group is TCP or UDP, the value ranges from 1 to 60.
+// + When the protocol of the backend server group is HTTP or HTTPS, the value ranges from 1 to 1440.
+func (o PoolPersistenceOutput) Timeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v PoolPersistence) *int { return v.Timeout }).(pulumi.IntPtrOutput)
 }
 
 // The type of persistence mode. The current specification supports SOURCE_IP,

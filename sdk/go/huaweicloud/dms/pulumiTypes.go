@@ -11,10 +11,12 @@ import (
 )
 
 type KafkaInstanceCrossVpcAccess struct {
-	// -(Optional, String) The advertised IP Address or domain name.
+	// The advertised IP Address or domain name.
 	AdvertisedIp *string `pulumi:"advertisedIp"`
-	// The listener IP address.
+	// Deprecated: typo in lisenter_ip, please use "listener_ip" instead.
 	LisenterIp *string `pulumi:"lisenterIp"`
+	// The listener IP address.
+	ListenerIp *string `pulumi:"listenerIp"`
 	// The port number.
 	Port *int `pulumi:"port"`
 	// The port ID associated with the address.
@@ -33,10 +35,12 @@ type KafkaInstanceCrossVpcAccessInput interface {
 }
 
 type KafkaInstanceCrossVpcAccessArgs struct {
-	// -(Optional, String) The advertised IP Address or domain name.
+	// The advertised IP Address or domain name.
 	AdvertisedIp pulumi.StringPtrInput `pulumi:"advertisedIp"`
-	// The listener IP address.
+	// Deprecated: typo in lisenter_ip, please use "listener_ip" instead.
 	LisenterIp pulumi.StringPtrInput `pulumi:"lisenterIp"`
+	// The listener IP address.
+	ListenerIp pulumi.StringPtrInput `pulumi:"listenerIp"`
 	// The port number.
 	Port pulumi.IntPtrInput `pulumi:"port"`
 	// The port ID associated with the address.
@@ -94,14 +98,19 @@ func (o KafkaInstanceCrossVpcAccessOutput) ToKafkaInstanceCrossVpcAccessOutputWi
 	return o
 }
 
-// -(Optional, String) The advertised IP Address or domain name.
+// The advertised IP Address or domain name.
 func (o KafkaInstanceCrossVpcAccessOutput) AdvertisedIp() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v KafkaInstanceCrossVpcAccess) *string { return v.AdvertisedIp }).(pulumi.StringPtrOutput)
 }
 
-// The listener IP address.
+// Deprecated: typo in lisenter_ip, please use "listener_ip" instead.
 func (o KafkaInstanceCrossVpcAccessOutput) LisenterIp() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v KafkaInstanceCrossVpcAccess) *string { return v.LisenterIp }).(pulumi.StringPtrOutput)
+}
+
+// The listener IP address.
+func (o KafkaInstanceCrossVpcAccessOutput) ListenerIp() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v KafkaInstanceCrossVpcAccess) *string { return v.ListenerIp }).(pulumi.StringPtrOutput)
 }
 
 // The port number.
@@ -135,12 +144,12 @@ func (o KafkaInstanceCrossVpcAccessArrayOutput) Index(i pulumi.IntInput) KafkaIn
 }
 
 type KafkaPermissionsPolicy struct {
-	// -(Required, String) Specifies the permissions type. The value can be:
+	// Specifies the permissions type. The value can be:
 	// + **all**: publish and subscribe permissions.
 	// + **pub**: publish permissions.
 	// + **sub**: subscribe permissions.
 	AccessPolicy string `pulumi:"accessPolicy"`
-	// -(Required, String) Specifies the user name.
+	// Specifies the username.
 	UserName string `pulumi:"userName"`
 }
 
@@ -156,12 +165,12 @@ type KafkaPermissionsPolicyInput interface {
 }
 
 type KafkaPermissionsPolicyArgs struct {
-	// -(Required, String) Specifies the permissions type. The value can be:
+	// Specifies the permissions type. The value can be:
 	// + **all**: publish and subscribe permissions.
 	// + **pub**: publish permissions.
 	// + **sub**: subscribe permissions.
 	AccessPolicy pulumi.StringInput `pulumi:"accessPolicy"`
-	// -(Required, String) Specifies the user name.
+	// Specifies the username.
 	UserName pulumi.StringInput `pulumi:"userName"`
 }
 
@@ -216,7 +225,7 @@ func (o KafkaPermissionsPolicyOutput) ToKafkaPermissionsPolicyOutputWithContext(
 	return o
 }
 
-// -(Required, String) Specifies the permissions type. The value can be:
+// Specifies the permissions type. The value can be:
 // + **all**: publish and subscribe permissions.
 // + **pub**: publish permissions.
 // + **sub**: subscribe permissions.
@@ -224,7 +233,7 @@ func (o KafkaPermissionsPolicyOutput) AccessPolicy() pulumi.StringOutput {
 	return o.ApplyT(func(v KafkaPermissionsPolicy) string { return v.AccessPolicy }).(pulumi.StringOutput)
 }
 
-// -(Required, String) Specifies the user name.
+// Specifies the username.
 func (o KafkaPermissionsPolicyOutput) UserName() pulumi.StringOutput {
 	return o.ApplyT(func(v KafkaPermissionsPolicy) string { return v.UserName }).(pulumi.StringOutput)
 }
@@ -978,9 +987,11 @@ type GetInstancesInstance struct {
 	MaintainBegin string `pulumi:"maintainBegin"`
 	// The time at which a maintenance time window ends, the format is `HH:mm`.
 	MaintainEnd string `pulumi:"maintainEnd"`
+	// The connection address of the Kafka manager of an instance.
+	ManagementConnectAddress string `pulumi:"managementConnectAddress"`
 	// The username for logging in to the Kafka Manager.
 	ManagerUser string `pulumi:"managerUser"`
-	// The connection address of the Kafka manager of an instance.
+	// Deprecated: typo in manegement_connect_address, please use "management_connect_address" instead.
 	ManegementConnectAddress string `pulumi:"manegementConnectAddress"`
 	// Specifies the kafka instance name for data-source queries.
 	Name string `pulumi:"name"`
@@ -999,7 +1010,8 @@ type GetInstancesInstance struct {
 	PublicIpIds []string `pulumi:"publicIpIds"`
 	// The resource specifications identifier.
 	ResourceSpecCode string `pulumi:"resourceSpecCode"`
-	RetentionPolicy  string `pulumi:"retentionPolicy"`
+	// The action to be taken when the memory usage reaches the disk capacity threshold.
+	RetentionPolicy string `pulumi:"retentionPolicy"`
 	// The security group ID associated with the instance.
 	SecurityGroupId string `pulumi:"securityGroupId"`
 	// Whether the Kafka SASL_SSL is enabled.
@@ -1063,9 +1075,11 @@ type GetInstancesInstanceArgs struct {
 	MaintainBegin pulumi.StringInput `pulumi:"maintainBegin"`
 	// The time at which a maintenance time window ends, the format is `HH:mm`.
 	MaintainEnd pulumi.StringInput `pulumi:"maintainEnd"`
+	// The connection address of the Kafka manager of an instance.
+	ManagementConnectAddress pulumi.StringInput `pulumi:"managementConnectAddress"`
 	// The username for logging in to the Kafka Manager.
 	ManagerUser pulumi.StringInput `pulumi:"managerUser"`
-	// The connection address of the Kafka manager of an instance.
+	// Deprecated: typo in manegement_connect_address, please use "management_connect_address" instead.
 	ManegementConnectAddress pulumi.StringInput `pulumi:"manegementConnectAddress"`
 	// Specifies the kafka instance name for data-source queries.
 	Name pulumi.StringInput `pulumi:"name"`
@@ -1084,7 +1098,8 @@ type GetInstancesInstanceArgs struct {
 	PublicIpIds pulumi.StringArrayInput `pulumi:"publicIpIds"`
 	// The resource specifications identifier.
 	ResourceSpecCode pulumi.StringInput `pulumi:"resourceSpecCode"`
-	RetentionPolicy  pulumi.StringInput `pulumi:"retentionPolicy"`
+	// The action to be taken when the memory usage reaches the disk capacity threshold.
+	RetentionPolicy pulumi.StringInput `pulumi:"retentionPolicy"`
 	// The security group ID associated with the instance.
 	SecurityGroupId pulumi.StringInput `pulumi:"securityGroupId"`
 	// Whether the Kafka SASL_SSL is enabled.
@@ -1226,12 +1241,17 @@ func (o GetInstancesInstanceOutput) MaintainEnd() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstancesInstance) string { return v.MaintainEnd }).(pulumi.StringOutput)
 }
 
+// The connection address of the Kafka manager of an instance.
+func (o GetInstancesInstanceOutput) ManagementConnectAddress() pulumi.StringOutput {
+	return o.ApplyT(func(v GetInstancesInstance) string { return v.ManagementConnectAddress }).(pulumi.StringOutput)
+}
+
 // The username for logging in to the Kafka Manager.
 func (o GetInstancesInstanceOutput) ManagerUser() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstancesInstance) string { return v.ManagerUser }).(pulumi.StringOutput)
 }
 
-// The connection address of the Kafka manager of an instance.
+// Deprecated: typo in manegement_connect_address, please use "management_connect_address" instead.
 func (o GetInstancesInstanceOutput) ManegementConnectAddress() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstancesInstance) string { return v.ManegementConnectAddress }).(pulumi.StringOutput)
 }
@@ -1277,6 +1297,7 @@ func (o GetInstancesInstanceOutput) ResourceSpecCode() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstancesInstance) string { return v.ResourceSpecCode }).(pulumi.StringOutput)
 }
 
+// The action to be taken when the memory usage reaches the disk capacity threshold.
 func (o GetInstancesInstanceOutput) RetentionPolicy() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstancesInstance) string { return v.RetentionPolicy }).(pulumi.StringOutput)
 }
@@ -1359,8 +1380,10 @@ func (o GetInstancesInstanceArrayOutput) Index(i pulumi.IntInput) GetInstancesIn
 type GetInstancesInstanceCrossVpcAccess struct {
 	// The advertised IP Address.
 	AdvertisedIp string `pulumi:"advertisedIp"`
-	// The listener IP address.
+	// Deprecated: typo in lisenter_ip, please use "listener_ip" instead.
 	LisenterIp string `pulumi:"lisenterIp"`
+	// The listener IP address.
+	ListenerIp string `pulumi:"listenerIp"`
 	// The port number.
 	Port int `pulumi:"port"`
 	// The port ID associated with the address.
@@ -1381,8 +1404,10 @@ type GetInstancesInstanceCrossVpcAccessInput interface {
 type GetInstancesInstanceCrossVpcAccessArgs struct {
 	// The advertised IP Address.
 	AdvertisedIp pulumi.StringInput `pulumi:"advertisedIp"`
-	// The listener IP address.
+	// Deprecated: typo in lisenter_ip, please use "listener_ip" instead.
 	LisenterIp pulumi.StringInput `pulumi:"lisenterIp"`
+	// The listener IP address.
+	ListenerIp pulumi.StringInput `pulumi:"listenerIp"`
 	// The port number.
 	Port pulumi.IntInput `pulumi:"port"`
 	// The port ID associated with the address.
@@ -1445,9 +1470,14 @@ func (o GetInstancesInstanceCrossVpcAccessOutput) AdvertisedIp() pulumi.StringOu
 	return o.ApplyT(func(v GetInstancesInstanceCrossVpcAccess) string { return v.AdvertisedIp }).(pulumi.StringOutput)
 }
 
-// The listener IP address.
+// Deprecated: typo in lisenter_ip, please use "listener_ip" instead.
 func (o GetInstancesInstanceCrossVpcAccessOutput) LisenterIp() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstancesInstanceCrossVpcAccess) string { return v.LisenterIp }).(pulumi.StringOutput)
+}
+
+// The listener IP address.
+func (o GetInstancesInstanceCrossVpcAccessOutput) ListenerIp() pulumi.StringOutput {
+	return o.ApplyT(func(v GetInstancesInstanceCrossVpcAccess) string { return v.ListenerIp }).(pulumi.StringOutput)
 }
 
 // The port number.

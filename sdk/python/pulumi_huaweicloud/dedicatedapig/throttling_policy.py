@@ -31,39 +31,43 @@ class ThrottlingPolicyArgs:
                  user_throttles: Optional[pulumi.Input[Sequence[pulumi.Input['ThrottlingPolicyUserThrottleArgs']]]] = None):
         """
         The set of arguments for constructing a ThrottlingPolicy resource.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API
-               throttling policy belongs to. Changing this will create a new API throttling policy resource.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the throttling
+               policy belongs.
+               Changing this will create a new resource.
         :param pulumi.Input[int] max_api_requests: Specifies the maximum number of times an API can be accessed within a specified
                period.
         :param pulumi.Input[int] period: Specifies the period of time for limiting the number of API calls.
                This parameter applies with each of the API call limits: `max_api_requests`, `max_app_requests`, `max_ip_requests`
                and `max_user_requests`.
-        :param pulumi.Input[Sequence[pulumi.Input['ThrottlingPolicyAppThrottleArgs']]] app_throttles: Specifies an array of one or more special throttling policies for APP limit.
-               The `throttle` object of the `user_throttles` structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input['ThrottlingPolicyAppThrottleArgs']]] app_throttles: Specifies the array of one or more special throttling policies for APP limit.
+               The object structure is documented below.
         :param pulumi.Input[str] description: Specifies the description about the API throttling policy.
-               The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
-               Chinese characters must be in UTF-8 or Unicode format.
+               The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         :param pulumi.Input[int] max_app_requests: Specifies the maximum number of times the API can be accessed by an app within
-               the same period. The value of this parameter must be less than or equal to the value of `max_user_requests`.
+               the same period.
+               The value of this parameter must be less than or equal to the value of `max_user_requests`.
         :param pulumi.Input[int] max_ip_requests: Specifies the maximum number of times the API can be accessed by an IP address
-               within the same period. The value of this parameter must be less than or equal to the value of `max_api_requests`.
+               within the same period.
+               The value of this parameter must be less than or equal to the value of `max_api_requests`.
         :param pulumi.Input[int] max_user_requests: Specifies the maximum number of times the API can be accessed by a user within
-               the same period. The value of this parameter must be less than or equal to the value of `max_api_requests`.
-        :param pulumi.Input[str] name: Specifies the name of the API throttling policy.
-               The policy name consists of 3 to 64 characters, starting with a letter.
-               Only letters, digits and underscores (_) are allowed.
+               the same period.
+               The value of this parameter must be less than or equal to the value of `max_api_requests`.
+        :param pulumi.Input[str] name: Specifies the name of the throttling policy.  
+               The valid length is limited from `3` to `64`, only Chinese and English letters, digits and underscores (_) are
+               allowed.
+               The name must start with a Chinese or English letter.
         :param pulumi.Input[str] period_unit: Specifies the time unit for limiting the number of API calls.
-               The valid values are *SECOND*, *MINUTE*, *HOUR* and *DAY*, default to *MINUTE*.
-        :param pulumi.Input[str] region: Specifies the region in which to create the API throttling policy resource.
-               If omitted, the provider-level region will be used. Changing this will create a new API throttling policy resource.
-        :param pulumi.Input[str] type: Specifies the type of the request throttling policy.
+               The valid values are **SECOND**, **MINUTE**, **HOUR** and **DAY**, defaults to **MINUTE**.
+        :param pulumi.Input[str] region: Specifies the region where the throttling policy is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[str] type: Specifies the type of the request throttling policy.  
                The valid values are as follows:
-               + API-based: limiting the maximum number of times a single API bound to the policy can be called within the
+               + **API-based**: limiting the maximum number of times a single API bound to the policy can be called within the
                specified period.
-               + API-shared: limiting the maximum number of times all APIs bound to the policy can be called within the specified
+               + **API-shared**: limiting the maximum number of times all APIs bound to the policy can be called within the specified
                period.
-        :param pulumi.Input[Sequence[pulumi.Input['ThrottlingPolicyUserThrottleArgs']]] user_throttles: Specifies an array of one or more special throttling policies for IAM user limit.
-               The `throttle` object of the `user_throttles` structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input['ThrottlingPolicyUserThrottleArgs']]] user_throttles: Specifies the array of one or more special throttling policies for IAM user limit.
+               The object structure is documented below.
         """
         pulumi.set(__self__, "instance_id", instance_id)
         pulumi.set(__self__, "max_api_requests", max_api_requests)
@@ -93,8 +97,9 @@ class ThrottlingPolicyArgs:
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Input[str]:
         """
-        Specifies an ID of the APIG dedicated instance to which the API
-        throttling policy belongs to. Changing this will create a new API throttling policy resource.
+        Specifies the ID of the dedicated instance to which the throttling
+        policy belongs.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -133,8 +138,8 @@ class ThrottlingPolicyArgs:
     @pulumi.getter(name="appThrottles")
     def app_throttles(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ThrottlingPolicyAppThrottleArgs']]]]:
         """
-        Specifies an array of one or more special throttling policies for APP limit.
-        The `throttle` object of the `user_throttles` structure is documented below.
+        Specifies the array of one or more special throttling policies for APP limit.
+        The object structure is documented below.
         """
         return pulumi.get(self, "app_throttles")
 
@@ -147,8 +152,7 @@ class ThrottlingPolicyArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description about the API throttling policy.
-        The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
-        Chinese characters must be in UTF-8 or Unicode format.
+        The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -161,7 +165,8 @@ class ThrottlingPolicyArgs:
     def max_app_requests(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the maximum number of times the API can be accessed by an app within
-        the same period. The value of this parameter must be less than or equal to the value of `max_user_requests`.
+        the same period.
+        The value of this parameter must be less than or equal to the value of `max_user_requests`.
         """
         return pulumi.get(self, "max_app_requests")
 
@@ -174,7 +179,8 @@ class ThrottlingPolicyArgs:
     def max_ip_requests(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the maximum number of times the API can be accessed by an IP address
-        within the same period. The value of this parameter must be less than or equal to the value of `max_api_requests`.
+        within the same period.
+        The value of this parameter must be less than or equal to the value of `max_api_requests`.
         """
         return pulumi.get(self, "max_ip_requests")
 
@@ -187,7 +193,8 @@ class ThrottlingPolicyArgs:
     def max_user_requests(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the maximum number of times the API can be accessed by a user within
-        the same period. The value of this parameter must be less than or equal to the value of `max_api_requests`.
+        the same period.
+        The value of this parameter must be less than or equal to the value of `max_api_requests`.
         """
         return pulumi.get(self, "max_user_requests")
 
@@ -199,9 +206,10 @@ class ThrottlingPolicyArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the API throttling policy.
-        The policy name consists of 3 to 64 characters, starting with a letter.
-        Only letters, digits and underscores (_) are allowed.
+        Specifies the name of the throttling policy.  
+        The valid length is limited from `3` to `64`, only Chinese and English letters, digits and underscores (_) are
+        allowed.
+        The name must start with a Chinese or English letter.
         """
         return pulumi.get(self, "name")
 
@@ -214,7 +222,7 @@ class ThrottlingPolicyArgs:
     def period_unit(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the time unit for limiting the number of API calls.
-        The valid values are *SECOND*, *MINUTE*, *HOUR* and *DAY*, default to *MINUTE*.
+        The valid values are **SECOND**, **MINUTE**, **HOUR** and **DAY**, defaults to **MINUTE**.
         """
         return pulumi.get(self, "period_unit")
 
@@ -226,8 +234,8 @@ class ThrottlingPolicyArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create the API throttling policy resource.
-        If omitted, the provider-level region will be used. Changing this will create a new API throttling policy resource.
+        Specifies the region where the throttling policy is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -239,11 +247,11 @@ class ThrottlingPolicyArgs:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the type of the request throttling policy.
+        Specifies the type of the request throttling policy.  
         The valid values are as follows:
-        + API-based: limiting the maximum number of times a single API bound to the policy can be called within the
+        + **API-based**: limiting the maximum number of times a single API bound to the policy can be called within the
         specified period.
-        + API-shared: limiting the maximum number of times all APIs bound to the policy can be called within the specified
+        + **API-shared**: limiting the maximum number of times all APIs bound to the policy can be called within the specified
         period.
         """
         return pulumi.get(self, "type")
@@ -256,8 +264,8 @@ class ThrottlingPolicyArgs:
     @pulumi.getter(name="userThrottles")
     def user_throttles(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ThrottlingPolicyUserThrottleArgs']]]]:
         """
-        Specifies an array of one or more special throttling policies for IAM user limit.
-        The `throttle` object of the `user_throttles` structure is documented below.
+        Specifies the array of one or more special throttling policies for IAM user limit.
+        The object structure is documented below.
         """
         return pulumi.get(self, "user_throttles")
 
@@ -270,7 +278,7 @@ class ThrottlingPolicyArgs:
 class _ThrottlingPolicyState:
     def __init__(__self__, *,
                  app_throttles: Optional[pulumi.Input[Sequence[pulumi.Input['ThrottlingPolicyAppThrottleArgs']]]] = None,
-                 create_time: Optional[pulumi.Input[str]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
                  max_api_requests: Optional[pulumi.Input[int]] = None,
@@ -285,45 +293,49 @@ class _ThrottlingPolicyState:
                  user_throttles: Optional[pulumi.Input[Sequence[pulumi.Input['ThrottlingPolicyUserThrottleArgs']]]] = None):
         """
         Input properties used for looking up and filtering ThrottlingPolicy resources.
-        :param pulumi.Input[Sequence[pulumi.Input['ThrottlingPolicyAppThrottleArgs']]] app_throttles: Specifies an array of one or more special throttling policies for APP limit.
-               The `throttle` object of the `user_throttles` structure is documented below.
-        :param pulumi.Input[str] create_time: Time when the API throttling policy was created.
+        :param pulumi.Input[Sequence[pulumi.Input['ThrottlingPolicyAppThrottleArgs']]] app_throttles: Specifies the array of one or more special throttling policies for APP limit.
+               The object structure is documented below.
+        :param pulumi.Input[str] created_at: The creation time of the throttling policy.
         :param pulumi.Input[str] description: Specifies the description about the API throttling policy.
-               The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
-               Chinese characters must be in UTF-8 or Unicode format.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API
-               throttling policy belongs to. Changing this will create a new API throttling policy resource.
+               The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the throttling
+               policy belongs.
+               Changing this will create a new resource.
         :param pulumi.Input[int] max_api_requests: Specifies the maximum number of times an API can be accessed within a specified
                period.
         :param pulumi.Input[int] max_app_requests: Specifies the maximum number of times the API can be accessed by an app within
-               the same period. The value of this parameter must be less than or equal to the value of `max_user_requests`.
+               the same period.
+               The value of this parameter must be less than or equal to the value of `max_user_requests`.
         :param pulumi.Input[int] max_ip_requests: Specifies the maximum number of times the API can be accessed by an IP address
-               within the same period. The value of this parameter must be less than or equal to the value of `max_api_requests`.
+               within the same period.
+               The value of this parameter must be less than or equal to the value of `max_api_requests`.
         :param pulumi.Input[int] max_user_requests: Specifies the maximum number of times the API can be accessed by a user within
-               the same period. The value of this parameter must be less than or equal to the value of `max_api_requests`.
-        :param pulumi.Input[str] name: Specifies the name of the API throttling policy.
-               The policy name consists of 3 to 64 characters, starting with a letter.
-               Only letters, digits and underscores (_) are allowed.
+               the same period.
+               The value of this parameter must be less than or equal to the value of `max_api_requests`.
+        :param pulumi.Input[str] name: Specifies the name of the throttling policy.  
+               The valid length is limited from `3` to `64`, only Chinese and English letters, digits and underscores (_) are
+               allowed.
+               The name must start with a Chinese or English letter.
         :param pulumi.Input[int] period: Specifies the period of time for limiting the number of API calls.
                This parameter applies with each of the API call limits: `max_api_requests`, `max_app_requests`, `max_ip_requests`
                and `max_user_requests`.
         :param pulumi.Input[str] period_unit: Specifies the time unit for limiting the number of API calls.
-               The valid values are *SECOND*, *MINUTE*, *HOUR* and *DAY*, default to *MINUTE*.
-        :param pulumi.Input[str] region: Specifies the region in which to create the API throttling policy resource.
-               If omitted, the provider-level region will be used. Changing this will create a new API throttling policy resource.
-        :param pulumi.Input[str] type: Specifies the type of the request throttling policy.
+               The valid values are **SECOND**, **MINUTE**, **HOUR** and **DAY**, defaults to **MINUTE**.
+        :param pulumi.Input[str] region: Specifies the region where the throttling policy is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[str] type: Specifies the type of the request throttling policy.  
                The valid values are as follows:
-               + API-based: limiting the maximum number of times a single API bound to the policy can be called within the
+               + **API-based**: limiting the maximum number of times a single API bound to the policy can be called within the
                specified period.
-               + API-shared: limiting the maximum number of times all APIs bound to the policy can be called within the specified
+               + **API-shared**: limiting the maximum number of times all APIs bound to the policy can be called within the specified
                period.
-        :param pulumi.Input[Sequence[pulumi.Input['ThrottlingPolicyUserThrottleArgs']]] user_throttles: Specifies an array of one or more special throttling policies for IAM user limit.
-               The `throttle` object of the `user_throttles` structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input['ThrottlingPolicyUserThrottleArgs']]] user_throttles: Specifies the array of one or more special throttling policies for IAM user limit.
+               The object structure is documented below.
         """
         if app_throttles is not None:
             pulumi.set(__self__, "app_throttles", app_throttles)
-        if create_time is not None:
-            pulumi.set(__self__, "create_time", create_time)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if instance_id is not None:
@@ -353,8 +365,8 @@ class _ThrottlingPolicyState:
     @pulumi.getter(name="appThrottles")
     def app_throttles(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ThrottlingPolicyAppThrottleArgs']]]]:
         """
-        Specifies an array of one or more special throttling policies for APP limit.
-        The `throttle` object of the `user_throttles` structure is documented below.
+        Specifies the array of one or more special throttling policies for APP limit.
+        The object structure is documented below.
         """
         return pulumi.get(self, "app_throttles")
 
@@ -363,24 +375,23 @@ class _ThrottlingPolicyState:
         pulumi.set(self, "app_throttles", value)
 
     @property
-    @pulumi.getter(name="createTime")
-    def create_time(self) -> Optional[pulumi.Input[str]]:
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
         """
-        Time when the API throttling policy was created.
+        The creation time of the throttling policy.
         """
-        return pulumi.get(self, "create_time")
+        return pulumi.get(self, "created_at")
 
-    @create_time.setter
-    def create_time(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "create_time", value)
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
 
     @property
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description about the API throttling policy.
-        The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
-        Chinese characters must be in UTF-8 or Unicode format.
+        The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -392,8 +403,9 @@ class _ThrottlingPolicyState:
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies an ID of the APIG dedicated instance to which the API
-        throttling policy belongs to. Changing this will create a new API throttling policy resource.
+        Specifies the ID of the dedicated instance to which the throttling
+        policy belongs.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -419,7 +431,8 @@ class _ThrottlingPolicyState:
     def max_app_requests(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the maximum number of times the API can be accessed by an app within
-        the same period. The value of this parameter must be less than or equal to the value of `max_user_requests`.
+        the same period.
+        The value of this parameter must be less than or equal to the value of `max_user_requests`.
         """
         return pulumi.get(self, "max_app_requests")
 
@@ -432,7 +445,8 @@ class _ThrottlingPolicyState:
     def max_ip_requests(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the maximum number of times the API can be accessed by an IP address
-        within the same period. The value of this parameter must be less than or equal to the value of `max_api_requests`.
+        within the same period.
+        The value of this parameter must be less than or equal to the value of `max_api_requests`.
         """
         return pulumi.get(self, "max_ip_requests")
 
@@ -445,7 +459,8 @@ class _ThrottlingPolicyState:
     def max_user_requests(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the maximum number of times the API can be accessed by a user within
-        the same period. The value of this parameter must be less than or equal to the value of `max_api_requests`.
+        the same period.
+        The value of this parameter must be less than or equal to the value of `max_api_requests`.
         """
         return pulumi.get(self, "max_user_requests")
 
@@ -457,9 +472,10 @@ class _ThrottlingPolicyState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the API throttling policy.
-        The policy name consists of 3 to 64 characters, starting with a letter.
-        Only letters, digits and underscores (_) are allowed.
+        Specifies the name of the throttling policy.  
+        The valid length is limited from `3` to `64`, only Chinese and English letters, digits and underscores (_) are
+        allowed.
+        The name must start with a Chinese or English letter.
         """
         return pulumi.get(self, "name")
 
@@ -486,7 +502,7 @@ class _ThrottlingPolicyState:
     def period_unit(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the time unit for limiting the number of API calls.
-        The valid values are *SECOND*, *MINUTE*, *HOUR* and *DAY*, default to *MINUTE*.
+        The valid values are **SECOND**, **MINUTE**, **HOUR** and **DAY**, defaults to **MINUTE**.
         """
         return pulumi.get(self, "period_unit")
 
@@ -498,8 +514,8 @@ class _ThrottlingPolicyState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create the API throttling policy resource.
-        If omitted, the provider-level region will be used. Changing this will create a new API throttling policy resource.
+        Specifies the region where the throttling policy is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -511,11 +527,11 @@ class _ThrottlingPolicyState:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the type of the request throttling policy.
+        Specifies the type of the request throttling policy.  
         The valid values are as follows:
-        + API-based: limiting the maximum number of times a single API bound to the policy can be called within the
+        + **API-based**: limiting the maximum number of times a single API bound to the policy can be called within the
         specified period.
-        + API-shared: limiting the maximum number of times all APIs bound to the policy can be called within the specified
+        + **API-shared**: limiting the maximum number of times all APIs bound to the policy can be called within the specified
         period.
         """
         return pulumi.get(self, "type")
@@ -528,8 +544,8 @@ class _ThrottlingPolicyState:
     @pulumi.getter(name="userThrottles")
     def user_throttles(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ThrottlingPolicyUserThrottleArgs']]]]:
         """
-        Specifies an array of one or more special throttling policies for IAM user limit.
-        The `throttle` object of the `user_throttles` structure is documented below.
+        Specifies the array of one or more special throttling policies for IAM user limit.
+        The object structure is documented below.
         """
         return pulumi.get(self, "user_throttles")
 
@@ -591,18 +607,13 @@ class ThrottlingPolicy(pulumi.CustomResource):
         config = pulumi.Config()
         instance_id = config.require_object("instanceId")
         policy_name = config.require_object("policyName")
-        description = config.require_object("description")
         application_id = config.require_object("applicationId")
         test = huaweicloud.dedicated_apig.ThrottlingPolicy("test",
             instance_id=instance_id,
-            description=description,
             type="API-based",
             period=10,
             period_unit="MINUTE",
             max_api_requests=70,
-            max_user_requests=45,
-            max_app_requests=45,
-            max_ip_requests=45,
             app_throttles=[huaweicloud.dedicated_apig.ThrottlingPolicyAppThrottleArgs(
                 max_api_requests=40,
                 throttling_object_id=application_id,
@@ -611,47 +622,51 @@ class ThrottlingPolicy(pulumi.CustomResource):
 
         ## Import
 
-        API Throttling Policies of APIG can be imported using their `name` and the ID of the APIG instances to which the environment belongs, separated by a slash, e.g.
+        API Throttling Policies can be imported using their `name` and related dedicated instance ID, separated by a slash, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/throttlingPolicy:ThrottlingPolicy test <instance ID>/<name>
+         $ pulumi import huaweicloud:DedicatedApig/throttlingPolicy:ThrottlingPolicy test <instance_id>/<name>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ThrottlingPolicyAppThrottleArgs']]]] app_throttles: Specifies an array of one or more special throttling policies for APP limit.
-               The `throttle` object of the `user_throttles` structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ThrottlingPolicyAppThrottleArgs']]]] app_throttles: Specifies the array of one or more special throttling policies for APP limit.
+               The object structure is documented below.
         :param pulumi.Input[str] description: Specifies the description about the API throttling policy.
-               The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
-               Chinese characters must be in UTF-8 or Unicode format.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API
-               throttling policy belongs to. Changing this will create a new API throttling policy resource.
+               The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the throttling
+               policy belongs.
+               Changing this will create a new resource.
         :param pulumi.Input[int] max_api_requests: Specifies the maximum number of times an API can be accessed within a specified
                period.
         :param pulumi.Input[int] max_app_requests: Specifies the maximum number of times the API can be accessed by an app within
-               the same period. The value of this parameter must be less than or equal to the value of `max_user_requests`.
+               the same period.
+               The value of this parameter must be less than or equal to the value of `max_user_requests`.
         :param pulumi.Input[int] max_ip_requests: Specifies the maximum number of times the API can be accessed by an IP address
-               within the same period. The value of this parameter must be less than or equal to the value of `max_api_requests`.
+               within the same period.
+               The value of this parameter must be less than or equal to the value of `max_api_requests`.
         :param pulumi.Input[int] max_user_requests: Specifies the maximum number of times the API can be accessed by a user within
-               the same period. The value of this parameter must be less than or equal to the value of `max_api_requests`.
-        :param pulumi.Input[str] name: Specifies the name of the API throttling policy.
-               The policy name consists of 3 to 64 characters, starting with a letter.
-               Only letters, digits and underscores (_) are allowed.
+               the same period.
+               The value of this parameter must be less than or equal to the value of `max_api_requests`.
+        :param pulumi.Input[str] name: Specifies the name of the throttling policy.  
+               The valid length is limited from `3` to `64`, only Chinese and English letters, digits and underscores (_) are
+               allowed.
+               The name must start with a Chinese or English letter.
         :param pulumi.Input[int] period: Specifies the period of time for limiting the number of API calls.
                This parameter applies with each of the API call limits: `max_api_requests`, `max_app_requests`, `max_ip_requests`
                and `max_user_requests`.
         :param pulumi.Input[str] period_unit: Specifies the time unit for limiting the number of API calls.
-               The valid values are *SECOND*, *MINUTE*, *HOUR* and *DAY*, default to *MINUTE*.
-        :param pulumi.Input[str] region: Specifies the region in which to create the API throttling policy resource.
-               If omitted, the provider-level region will be used. Changing this will create a new API throttling policy resource.
-        :param pulumi.Input[str] type: Specifies the type of the request throttling policy.
+               The valid values are **SECOND**, **MINUTE**, **HOUR** and **DAY**, defaults to **MINUTE**.
+        :param pulumi.Input[str] region: Specifies the region where the throttling policy is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[str] type: Specifies the type of the request throttling policy.  
                The valid values are as follows:
-               + API-based: limiting the maximum number of times a single API bound to the policy can be called within the
+               + **API-based**: limiting the maximum number of times a single API bound to the policy can be called within the
                specified period.
-               + API-shared: limiting the maximum number of times all APIs bound to the policy can be called within the specified
+               + **API-shared**: limiting the maximum number of times all APIs bound to the policy can be called within the specified
                period.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ThrottlingPolicyUserThrottleArgs']]]] user_throttles: Specifies an array of one or more special throttling policies for IAM user limit.
-               The `throttle` object of the `user_throttles` structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ThrottlingPolicyUserThrottleArgs']]]] user_throttles: Specifies the array of one or more special throttling policies for IAM user limit.
+               The object structure is documented below.
         """
         ...
     @overload
@@ -693,18 +708,13 @@ class ThrottlingPolicy(pulumi.CustomResource):
         config = pulumi.Config()
         instance_id = config.require_object("instanceId")
         policy_name = config.require_object("policyName")
-        description = config.require_object("description")
         application_id = config.require_object("applicationId")
         test = huaweicloud.dedicated_apig.ThrottlingPolicy("test",
             instance_id=instance_id,
-            description=description,
             type="API-based",
             period=10,
             period_unit="MINUTE",
             max_api_requests=70,
-            max_user_requests=45,
-            max_app_requests=45,
-            max_ip_requests=45,
             app_throttles=[huaweicloud.dedicated_apig.ThrottlingPolicyAppThrottleArgs(
                 max_api_requests=40,
                 throttling_object_id=application_id,
@@ -713,10 +723,10 @@ class ThrottlingPolicy(pulumi.CustomResource):
 
         ## Import
 
-        API Throttling Policies of APIG can be imported using their `name` and the ID of the APIG instances to which the environment belongs, separated by a slash, e.g.
+        API Throttling Policies can be imported using their `name` and related dedicated instance ID, separated by a slash, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/throttlingPolicy:ThrottlingPolicy test <instance ID>/<name>
+         $ pulumi import huaweicloud:DedicatedApig/throttlingPolicy:ThrottlingPolicy test <instance_id>/<name>
         ```
 
         :param str resource_name: The name of the resource.
@@ -775,7 +785,7 @@ class ThrottlingPolicy(pulumi.CustomResource):
             __props__.__dict__["region"] = region
             __props__.__dict__["type"] = type
             __props__.__dict__["user_throttles"] = user_throttles
-            __props__.__dict__["create_time"] = None
+            __props__.__dict__["created_at"] = None
         super(ThrottlingPolicy, __self__).__init__(
             'huaweicloud:DedicatedApig/throttlingPolicy:ThrottlingPolicy',
             resource_name,
@@ -787,7 +797,7 @@ class ThrottlingPolicy(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             app_throttles: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ThrottlingPolicyAppThrottleArgs']]]]] = None,
-            create_time: Optional[pulumi.Input[str]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
             instance_id: Optional[pulumi.Input[str]] = None,
             max_api_requests: Optional[pulumi.Input[int]] = None,
@@ -807,47 +817,51 @@ class ThrottlingPolicy(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ThrottlingPolicyAppThrottleArgs']]]] app_throttles: Specifies an array of one or more special throttling policies for APP limit.
-               The `throttle` object of the `user_throttles` structure is documented below.
-        :param pulumi.Input[str] create_time: Time when the API throttling policy was created.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ThrottlingPolicyAppThrottleArgs']]]] app_throttles: Specifies the array of one or more special throttling policies for APP limit.
+               The object structure is documented below.
+        :param pulumi.Input[str] created_at: The creation time of the throttling policy.
         :param pulumi.Input[str] description: Specifies the description about the API throttling policy.
-               The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
-               Chinese characters must be in UTF-8 or Unicode format.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API
-               throttling policy belongs to. Changing this will create a new API throttling policy resource.
+               The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the throttling
+               policy belongs.
+               Changing this will create a new resource.
         :param pulumi.Input[int] max_api_requests: Specifies the maximum number of times an API can be accessed within a specified
                period.
         :param pulumi.Input[int] max_app_requests: Specifies the maximum number of times the API can be accessed by an app within
-               the same period. The value of this parameter must be less than or equal to the value of `max_user_requests`.
+               the same period.
+               The value of this parameter must be less than or equal to the value of `max_user_requests`.
         :param pulumi.Input[int] max_ip_requests: Specifies the maximum number of times the API can be accessed by an IP address
-               within the same period. The value of this parameter must be less than or equal to the value of `max_api_requests`.
+               within the same period.
+               The value of this parameter must be less than or equal to the value of `max_api_requests`.
         :param pulumi.Input[int] max_user_requests: Specifies the maximum number of times the API can be accessed by a user within
-               the same period. The value of this parameter must be less than or equal to the value of `max_api_requests`.
-        :param pulumi.Input[str] name: Specifies the name of the API throttling policy.
-               The policy name consists of 3 to 64 characters, starting with a letter.
-               Only letters, digits and underscores (_) are allowed.
+               the same period.
+               The value of this parameter must be less than or equal to the value of `max_api_requests`.
+        :param pulumi.Input[str] name: Specifies the name of the throttling policy.  
+               The valid length is limited from `3` to `64`, only Chinese and English letters, digits and underscores (_) are
+               allowed.
+               The name must start with a Chinese or English letter.
         :param pulumi.Input[int] period: Specifies the period of time for limiting the number of API calls.
                This parameter applies with each of the API call limits: `max_api_requests`, `max_app_requests`, `max_ip_requests`
                and `max_user_requests`.
         :param pulumi.Input[str] period_unit: Specifies the time unit for limiting the number of API calls.
-               The valid values are *SECOND*, *MINUTE*, *HOUR* and *DAY*, default to *MINUTE*.
-        :param pulumi.Input[str] region: Specifies the region in which to create the API throttling policy resource.
-               If omitted, the provider-level region will be used. Changing this will create a new API throttling policy resource.
-        :param pulumi.Input[str] type: Specifies the type of the request throttling policy.
+               The valid values are **SECOND**, **MINUTE**, **HOUR** and **DAY**, defaults to **MINUTE**.
+        :param pulumi.Input[str] region: Specifies the region where the throttling policy is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[str] type: Specifies the type of the request throttling policy.  
                The valid values are as follows:
-               + API-based: limiting the maximum number of times a single API bound to the policy can be called within the
+               + **API-based**: limiting the maximum number of times a single API bound to the policy can be called within the
                specified period.
-               + API-shared: limiting the maximum number of times all APIs bound to the policy can be called within the specified
+               + **API-shared**: limiting the maximum number of times all APIs bound to the policy can be called within the specified
                period.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ThrottlingPolicyUserThrottleArgs']]]] user_throttles: Specifies an array of one or more special throttling policies for IAM user limit.
-               The `throttle` object of the `user_throttles` structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ThrottlingPolicyUserThrottleArgs']]]] user_throttles: Specifies the array of one or more special throttling policies for IAM user limit.
+               The object structure is documented below.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _ThrottlingPolicyState.__new__(_ThrottlingPolicyState)
 
         __props__.__dict__["app_throttles"] = app_throttles
-        __props__.__dict__["create_time"] = create_time
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["description"] = description
         __props__.__dict__["instance_id"] = instance_id
         __props__.__dict__["max_api_requests"] = max_api_requests
@@ -866,26 +880,25 @@ class ThrottlingPolicy(pulumi.CustomResource):
     @pulumi.getter(name="appThrottles")
     def app_throttles(self) -> pulumi.Output[Optional[Sequence['outputs.ThrottlingPolicyAppThrottle']]]:
         """
-        Specifies an array of one or more special throttling policies for APP limit.
-        The `throttle` object of the `user_throttles` structure is documented below.
+        Specifies the array of one or more special throttling policies for APP limit.
+        The object structure is documented below.
         """
         return pulumi.get(self, "app_throttles")
 
     @property
-    @pulumi.getter(name="createTime")
-    def create_time(self) -> pulumi.Output[str]:
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
         """
-        Time when the API throttling policy was created.
+        The creation time of the throttling policy.
         """
-        return pulumi.get(self, "create_time")
+        return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the description about the API throttling policy.
-        The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
-        Chinese characters must be in UTF-8 or Unicode format.
+        The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -893,8 +906,9 @@ class ThrottlingPolicy(pulumi.CustomResource):
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Output[str]:
         """
-        Specifies an ID of the APIG dedicated instance to which the API
-        throttling policy belongs to. Changing this will create a new API throttling policy resource.
+        Specifies the ID of the dedicated instance to which the throttling
+        policy belongs.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -912,7 +926,8 @@ class ThrottlingPolicy(pulumi.CustomResource):
     def max_app_requests(self) -> pulumi.Output[Optional[int]]:
         """
         Specifies the maximum number of times the API can be accessed by an app within
-        the same period. The value of this parameter must be less than or equal to the value of `max_user_requests`.
+        the same period.
+        The value of this parameter must be less than or equal to the value of `max_user_requests`.
         """
         return pulumi.get(self, "max_app_requests")
 
@@ -921,7 +936,8 @@ class ThrottlingPolicy(pulumi.CustomResource):
     def max_ip_requests(self) -> pulumi.Output[Optional[int]]:
         """
         Specifies the maximum number of times the API can be accessed by an IP address
-        within the same period. The value of this parameter must be less than or equal to the value of `max_api_requests`.
+        within the same period.
+        The value of this parameter must be less than or equal to the value of `max_api_requests`.
         """
         return pulumi.get(self, "max_ip_requests")
 
@@ -930,7 +946,8 @@ class ThrottlingPolicy(pulumi.CustomResource):
     def max_user_requests(self) -> pulumi.Output[Optional[int]]:
         """
         Specifies the maximum number of times the API can be accessed by a user within
-        the same period. The value of this parameter must be less than or equal to the value of `max_api_requests`.
+        the same period.
+        The value of this parameter must be less than or equal to the value of `max_api_requests`.
         """
         return pulumi.get(self, "max_user_requests")
 
@@ -938,9 +955,10 @@ class ThrottlingPolicy(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of the API throttling policy.
-        The policy name consists of 3 to 64 characters, starting with a letter.
-        Only letters, digits and underscores (_) are allowed.
+        Specifies the name of the throttling policy.  
+        The valid length is limited from `3` to `64`, only Chinese and English letters, digits and underscores (_) are
+        allowed.
+        The name must start with a Chinese or English letter.
         """
         return pulumi.get(self, "name")
 
@@ -959,7 +977,7 @@ class ThrottlingPolicy(pulumi.CustomResource):
     def period_unit(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the time unit for limiting the number of API calls.
-        The valid values are *SECOND*, *MINUTE*, *HOUR* and *DAY*, default to *MINUTE*.
+        The valid values are **SECOND**, **MINUTE**, **HOUR** and **DAY**, defaults to **MINUTE**.
         """
         return pulumi.get(self, "period_unit")
 
@@ -967,8 +985,8 @@ class ThrottlingPolicy(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        Specifies the region in which to create the API throttling policy resource.
-        If omitted, the provider-level region will be used. Changing this will create a new API throttling policy resource.
+        Specifies the region where the throttling policy is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -976,11 +994,11 @@ class ThrottlingPolicy(pulumi.CustomResource):
     @pulumi.getter
     def type(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the type of the request throttling policy.
+        Specifies the type of the request throttling policy.  
         The valid values are as follows:
-        + API-based: limiting the maximum number of times a single API bound to the policy can be called within the
+        + **API-based**: limiting the maximum number of times a single API bound to the policy can be called within the
         specified period.
-        + API-shared: limiting the maximum number of times all APIs bound to the policy can be called within the specified
+        + **API-shared**: limiting the maximum number of times all APIs bound to the policy can be called within the specified
         period.
         """
         return pulumi.get(self, "type")
@@ -989,8 +1007,8 @@ class ThrottlingPolicy(pulumi.CustomResource):
     @pulumi.getter(name="userThrottles")
     def user_throttles(self) -> pulumi.Output[Optional[Sequence['outputs.ThrottlingPolicyUserThrottle']]]:
         """
-        Specifies an array of one or more special throttling policies for IAM user limit.
-        The `throttle` object of the `user_throttles` structure is documented below.
+        Specifies the array of one or more special throttling policies for IAM user limit.
+        The object structure is documented below.
         """
         return pulumi.get(self, "user_throttles")
 

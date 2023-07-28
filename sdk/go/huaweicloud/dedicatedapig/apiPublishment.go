@@ -81,29 +81,29 @@ import (
 //
 // ## Import
 //
-// APIs can be imported using their `instance_id`, `env_id` and `api_id`, separated by slashes, e.g.
+// The publishments can be imported using their related `instance_id`, `env_id` and `api_id`, separated by slashes, e.g.
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:DedicatedApig/apiPublishment:ApiPublishment test
+//	$ pulumi import huaweicloud:DedicatedApig/apiPublishment:ApiPublishment test <instance_id>/<env_id>/<api_id>
 //
 // ```
-//
-//	9b0a0a2f97aa43afbf7d852e3ba6a6f9/c5b32727186c4fe6b60408a8a297be09/9a3b3484c08545f9b9b0dcb2de0f5b8a
 type ApiPublishment struct {
 	pulumi.CustomResourceState
 
-	// Specifies the API ID to be published or already published.
-	// Changing this will create a new publishment resource.
+	// Specifies the ID of the API to be published or already published.\
+	// Changing this will create a new resource.
 	ApiId pulumi.StringOutput `pulumi:"apiId"`
 	// Specifies the description of the current publishment.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
-	// Specifies the environment ID to which the current version of the API will be
-	// published or has been published. Changing this will create a new publishment resource.
+	// Specifies the ID of the environmentto which the current version of the API
+	// will be published or has been published.
+	// Changing this will create a new resource.
 	EnvId pulumi.StringOutput `pulumi:"envId"`
-	// Environment name to which the current version of the API is published.
+	// The name of the environment to which the current version of the API is published.
 	EnvName pulumi.StringOutput `pulumi:"envName"`
-	// All publish informations of the API. The structure is documented below.
+	// All publish informations of the API.\
+	// The object structure is documented below.
 	Histories ApiPublishmentHistoryArrayOutput `pulumi:"histories"`
 	// Specifies an ID of the APIG dedicated instance to which the API belongs
 	// to. Changing this will create a new publishment resource.
@@ -111,9 +111,10 @@ type ApiPublishment struct {
 	// The publish ID of the API in current environment.
 	PublishId pulumi.StringOutput `pulumi:"publishId"`
 	// Time when the current version was published.
-	PublishTime pulumi.StringOutput `pulumi:"publishTime"`
-	// Specifies the region in which to publish APIs.
-	// If omitted, the provider-level region will be used. Changing this will create a new publishment resource.
+	PublishedAt pulumi.StringOutput `pulumi:"publishedAt"`
+	// Specifies the region in which to publish APIs.\
+	// If omitted, the provider-level region will be used.
+	// Changing this will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Specifies the version ID of the current publishment.
 	VersionId pulumi.StringPtrOutput `pulumi:"versionId"`
@@ -158,17 +159,19 @@ func GetApiPublishment(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering ApiPublishment resources.
 type apiPublishmentState struct {
-	// Specifies the API ID to be published or already published.
-	// Changing this will create a new publishment resource.
+	// Specifies the ID of the API to be published or already published.\
+	// Changing this will create a new resource.
 	ApiId *string `pulumi:"apiId"`
 	// Specifies the description of the current publishment.
 	Description *string `pulumi:"description"`
-	// Specifies the environment ID to which the current version of the API will be
-	// published or has been published. Changing this will create a new publishment resource.
+	// Specifies the ID of the environmentto which the current version of the API
+	// will be published or has been published.
+	// Changing this will create a new resource.
 	EnvId *string `pulumi:"envId"`
-	// Environment name to which the current version of the API is published.
+	// The name of the environment to which the current version of the API is published.
 	EnvName *string `pulumi:"envName"`
-	// All publish informations of the API. The structure is documented below.
+	// All publish informations of the API.\
+	// The object structure is documented below.
 	Histories []ApiPublishmentHistory `pulumi:"histories"`
 	// Specifies an ID of the APIG dedicated instance to which the API belongs
 	// to. Changing this will create a new publishment resource.
@@ -176,26 +179,29 @@ type apiPublishmentState struct {
 	// The publish ID of the API in current environment.
 	PublishId *string `pulumi:"publishId"`
 	// Time when the current version was published.
-	PublishTime *string `pulumi:"publishTime"`
-	// Specifies the region in which to publish APIs.
-	// If omitted, the provider-level region will be used. Changing this will create a new publishment resource.
+	PublishedAt *string `pulumi:"publishedAt"`
+	// Specifies the region in which to publish APIs.\
+	// If omitted, the provider-level region will be used.
+	// Changing this will create a new resource.
 	Region *string `pulumi:"region"`
 	// Specifies the version ID of the current publishment.
 	VersionId *string `pulumi:"versionId"`
 }
 
 type ApiPublishmentState struct {
-	// Specifies the API ID to be published or already published.
-	// Changing this will create a new publishment resource.
+	// Specifies the ID of the API to be published or already published.\
+	// Changing this will create a new resource.
 	ApiId pulumi.StringPtrInput
 	// Specifies the description of the current publishment.
 	Description pulumi.StringPtrInput
-	// Specifies the environment ID to which the current version of the API will be
-	// published or has been published. Changing this will create a new publishment resource.
+	// Specifies the ID of the environmentto which the current version of the API
+	// will be published or has been published.
+	// Changing this will create a new resource.
 	EnvId pulumi.StringPtrInput
-	// Environment name to which the current version of the API is published.
+	// The name of the environment to which the current version of the API is published.
 	EnvName pulumi.StringPtrInput
-	// All publish informations of the API. The structure is documented below.
+	// All publish informations of the API.\
+	// The object structure is documented below.
 	Histories ApiPublishmentHistoryArrayInput
 	// Specifies an ID of the APIG dedicated instance to which the API belongs
 	// to. Changing this will create a new publishment resource.
@@ -203,9 +209,10 @@ type ApiPublishmentState struct {
 	// The publish ID of the API in current environment.
 	PublishId pulumi.StringPtrInput
 	// Time when the current version was published.
-	PublishTime pulumi.StringPtrInput
-	// Specifies the region in which to publish APIs.
-	// If omitted, the provider-level region will be used. Changing this will create a new publishment resource.
+	PublishedAt pulumi.StringPtrInput
+	// Specifies the region in which to publish APIs.\
+	// If omitted, the provider-level region will be used.
+	// Changing this will create a new resource.
 	Region pulumi.StringPtrInput
 	// Specifies the version ID of the current publishment.
 	VersionId pulumi.StringPtrInput
@@ -216,19 +223,21 @@ func (ApiPublishmentState) ElementType() reflect.Type {
 }
 
 type apiPublishmentArgs struct {
-	// Specifies the API ID to be published or already published.
-	// Changing this will create a new publishment resource.
+	// Specifies the ID of the API to be published or already published.\
+	// Changing this will create a new resource.
 	ApiId string `pulumi:"apiId"`
 	// Specifies the description of the current publishment.
 	Description *string `pulumi:"description"`
-	// Specifies the environment ID to which the current version of the API will be
-	// published or has been published. Changing this will create a new publishment resource.
+	// Specifies the ID of the environmentto which the current version of the API
+	// will be published or has been published.
+	// Changing this will create a new resource.
 	EnvId string `pulumi:"envId"`
 	// Specifies an ID of the APIG dedicated instance to which the API belongs
 	// to. Changing this will create a new publishment resource.
 	InstanceId string `pulumi:"instanceId"`
-	// Specifies the region in which to publish APIs.
-	// If omitted, the provider-level region will be used. Changing this will create a new publishment resource.
+	// Specifies the region in which to publish APIs.\
+	// If omitted, the provider-level region will be used.
+	// Changing this will create a new resource.
 	Region *string `pulumi:"region"`
 	// Specifies the version ID of the current publishment.
 	VersionId *string `pulumi:"versionId"`
@@ -236,19 +245,21 @@ type apiPublishmentArgs struct {
 
 // The set of arguments for constructing a ApiPublishment resource.
 type ApiPublishmentArgs struct {
-	// Specifies the API ID to be published or already published.
-	// Changing this will create a new publishment resource.
+	// Specifies the ID of the API to be published or already published.\
+	// Changing this will create a new resource.
 	ApiId pulumi.StringInput
 	// Specifies the description of the current publishment.
 	Description pulumi.StringPtrInput
-	// Specifies the environment ID to which the current version of the API will be
-	// published or has been published. Changing this will create a new publishment resource.
+	// Specifies the ID of the environmentto which the current version of the API
+	// will be published or has been published.
+	// Changing this will create a new resource.
 	EnvId pulumi.StringInput
 	// Specifies an ID of the APIG dedicated instance to which the API belongs
 	// to. Changing this will create a new publishment resource.
 	InstanceId pulumi.StringInput
-	// Specifies the region in which to publish APIs.
-	// If omitted, the provider-level region will be used. Changing this will create a new publishment resource.
+	// Specifies the region in which to publish APIs.\
+	// If omitted, the provider-level region will be used.
+	// Changing this will create a new resource.
 	Region pulumi.StringPtrInput
 	// Specifies the version ID of the current publishment.
 	VersionId pulumi.StringPtrInput
@@ -341,8 +352,8 @@ func (o ApiPublishmentOutput) ToApiPublishmentOutputWithContext(ctx context.Cont
 	return o
 }
 
-// Specifies the API ID to be published or already published.
-// Changing this will create a new publishment resource.
+// Specifies the ID of the API to be published or already published.\
+// Changing this will create a new resource.
 func (o ApiPublishmentOutput) ApiId() pulumi.StringOutput {
 	return o.ApplyT(func(v *ApiPublishment) pulumi.StringOutput { return v.ApiId }).(pulumi.StringOutput)
 }
@@ -352,18 +363,20 @@ func (o ApiPublishmentOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ApiPublishment) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the environment ID to which the current version of the API will be
-// published or has been published. Changing this will create a new publishment resource.
+// Specifies the ID of the environmentto which the current version of the API
+// will be published or has been published.
+// Changing this will create a new resource.
 func (o ApiPublishmentOutput) EnvId() pulumi.StringOutput {
 	return o.ApplyT(func(v *ApiPublishment) pulumi.StringOutput { return v.EnvId }).(pulumi.StringOutput)
 }
 
-// Environment name to which the current version of the API is published.
+// The name of the environment to which the current version of the API is published.
 func (o ApiPublishmentOutput) EnvName() pulumi.StringOutput {
 	return o.ApplyT(func(v *ApiPublishment) pulumi.StringOutput { return v.EnvName }).(pulumi.StringOutput)
 }
 
-// All publish informations of the API. The structure is documented below.
+// All publish informations of the API.\
+// The object structure is documented below.
 func (o ApiPublishmentOutput) Histories() ApiPublishmentHistoryArrayOutput {
 	return o.ApplyT(func(v *ApiPublishment) ApiPublishmentHistoryArrayOutput { return v.Histories }).(ApiPublishmentHistoryArrayOutput)
 }
@@ -380,12 +393,13 @@ func (o ApiPublishmentOutput) PublishId() pulumi.StringOutput {
 }
 
 // Time when the current version was published.
-func (o ApiPublishmentOutput) PublishTime() pulumi.StringOutput {
-	return o.ApplyT(func(v *ApiPublishment) pulumi.StringOutput { return v.PublishTime }).(pulumi.StringOutput)
+func (o ApiPublishmentOutput) PublishedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *ApiPublishment) pulumi.StringOutput { return v.PublishedAt }).(pulumi.StringOutput)
 }
 
-// Specifies the region in which to publish APIs.
-// If omitted, the provider-level region will be used. Changing this will create a new publishment resource.
+// Specifies the region in which to publish APIs.\
+// If omitted, the provider-level region will be used.
+// Changing this will create a new resource.
 func (o ApiPublishmentOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *ApiPublishment) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }

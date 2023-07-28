@@ -7,6 +7,25 @@ import * as utilities from "../utilities";
 
 /**
  * Use this data source to get a list of VPC.
+ *
+ * ## Example Usage
+ *
+ * An example filter by name and tag
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as huaweicloud from "@pulumi/huaweicloud";
+ *
+ * const config = new pulumi.Config();
+ * const vpcName = config.requireObject("vpcName");
+ * const vpc = huaweicloud.Vpc.getVpcs({
+ *     name: vpcName,
+ *     tags: {
+ *         foo: "bar",
+ *     },
+ * });
+ * export const vpcIds = [vpc.then(vpc => vpc.vpcs)].map(__item => __item?.id);
+ * ```
  */
 export function getVpcs(args?: GetVpcsArgs, opts?: pulumi.InvokeOptions): Promise<GetVpcsResult> {
     args = args || {};

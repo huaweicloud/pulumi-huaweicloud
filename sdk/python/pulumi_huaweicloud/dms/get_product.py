@@ -130,6 +130,9 @@ class GetProductResult:
     @property
     @pulumi.getter(name="storageSpecCodes")
     def storage_spec_codes(self) -> Sequence[str]:
+        """
+        The available I/O specifications.
+        """
         return pulumi.get(self, "storage_spec_codes")
 
     @property
@@ -175,12 +178,11 @@ def get_product(availability_zones: Optional[Sequence[str]] = None,
                 region: Optional[str] = None,
                 storage: Optional[str] = None,
                 storage_spec_code: Optional[str] = None,
-                storage_spec_codes: Optional[Sequence[str]] = None,
                 version: Optional[str] = None,
                 vm_specification: Optional[str] = None,
                 opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetProductResult:
     """
-    Use this data source to get the ID of an available HuaweiCloud dms product.
+    Use this data source to get the ID of an available HuaweiCloud DMS product.
 
     ## Example Usage
     ### Filter DMS kafka product list by I/O specification
@@ -237,7 +239,6 @@ def get_product(availability_zones: Optional[Sequence[str]] = None,
     __args__['region'] = region
     __args__['storage'] = storage
     __args__['storageSpecCode'] = storage_spec_code
-    __args__['storageSpecCodes'] = storage_spec_codes
     __args__['version'] = version
     __args__['vmSpecification'] = vm_specification
     opts = pulumi.InvokeOptions.merge(_utilities.get_invoke_opts_defaults(), opts)
@@ -271,12 +272,11 @@ def get_product_output(availability_zones: Optional[pulumi.Input[Optional[Sequen
                        region: Optional[pulumi.Input[Optional[str]]] = None,
                        storage: Optional[pulumi.Input[Optional[str]]] = None,
                        storage_spec_code: Optional[pulumi.Input[Optional[str]]] = None,
-                       storage_spec_codes: Optional[pulumi.Input[Optional[Sequence[str]]]] = None,
                        version: Optional[pulumi.Input[Optional[str]]] = None,
                        vm_specification: Optional[pulumi.Input[Optional[str]]] = None,
                        opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetProductResult]:
     """
-    Use this data source to get the ID of an available HuaweiCloud dms product.
+    Use this data source to get the ID of an available HuaweiCloud DMS product.
 
     ## Example Usage
     ### Filter DMS kafka product list by I/O specification

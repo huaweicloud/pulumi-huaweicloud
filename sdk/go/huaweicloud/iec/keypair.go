@@ -57,7 +57,9 @@ type Keypair struct {
 	// Specifies a pregenerated OpenSSH-formatted public key. Changing this
 	// parameter creates a new keypair resource.
 	PublicKey pulumi.StringOutput `pulumi:"publicKey"`
-	Region    pulumi.StringOutput `pulumi:"region"`
+	// The region in which to create the keypair resource. If omitted, the
+	// provider-level region will be used. Changing this creates a new resource.
+	Region pulumi.StringOutput `pulumi:"region"`
 }
 
 // NewKeypair registers a new resource with the given unique name, arguments, and options.
@@ -99,7 +101,9 @@ type keypairState struct {
 	// Specifies a pregenerated OpenSSH-formatted public key. Changing this
 	// parameter creates a new keypair resource.
 	PublicKey *string `pulumi:"publicKey"`
-	Region    *string `pulumi:"region"`
+	// The region in which to create the keypair resource. If omitted, the
+	// provider-level region will be used. Changing this creates a new resource.
+	Region *string `pulumi:"region"`
 }
 
 type KeypairState struct {
@@ -112,7 +116,9 @@ type KeypairState struct {
 	// Specifies a pregenerated OpenSSH-formatted public key. Changing this
 	// parameter creates a new keypair resource.
 	PublicKey pulumi.StringPtrInput
-	Region    pulumi.StringPtrInput
+	// The region in which to create the keypair resource. If omitted, the
+	// provider-level region will be used. Changing this creates a new resource.
+	Region pulumi.StringPtrInput
 }
 
 func (KeypairState) ElementType() reflect.Type {
@@ -127,7 +133,9 @@ type keypairArgs struct {
 	// Specifies a pregenerated OpenSSH-formatted public key. Changing this
 	// parameter creates a new keypair resource.
 	PublicKey *string `pulumi:"publicKey"`
-	Region    *string `pulumi:"region"`
+	// The region in which to create the keypair resource. If omitted, the
+	// provider-level region will be used. Changing this creates a new resource.
+	Region *string `pulumi:"region"`
 }
 
 // The set of arguments for constructing a Keypair resource.
@@ -139,7 +147,9 @@ type KeypairArgs struct {
 	// Specifies a pregenerated OpenSSH-formatted public key. Changing this
 	// parameter creates a new keypair resource.
 	PublicKey pulumi.StringPtrInput
-	Region    pulumi.StringPtrInput
+	// The region in which to create the keypair resource. If omitted, the
+	// provider-level region will be used. Changing this creates a new resource.
+	Region pulumi.StringPtrInput
 }
 
 func (KeypairArgs) ElementType() reflect.Type {
@@ -247,6 +257,8 @@ func (o KeypairOutput) PublicKey() pulumi.StringOutput {
 	return o.ApplyT(func(v *Keypair) pulumi.StringOutput { return v.PublicKey }).(pulumi.StringOutput)
 }
 
+// The region in which to create the keypair resource. If omitted, the
+// provider-level region will be used. Changing this creates a new resource.
 func (o KeypairOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Keypair) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }

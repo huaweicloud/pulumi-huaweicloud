@@ -90,6 +90,9 @@ export class NetworkAclRule extends pulumi.CustomResource {
      * Specifies a unique id for the iec network ACL.
      */
     public readonly networkAclId!: pulumi.Output<string>;
+    /**
+     * The ID of the firewall policy for the iec network ACL.
+     */
     public /*out*/ readonly policyId!: pulumi.Output<string>;
     /**
      * Specifies the protocol supported by the iec network ACL rule. Valid values are: *tcp*
@@ -199,6 +202,9 @@ export interface NetworkAclRuleState {
      * Specifies a unique id for the iec network ACL.
      */
     networkAclId?: pulumi.Input<string>;
+    /**
+     * The ID of the firewall policy for the iec network ACL.
+     */
     policyId?: pulumi.Input<string>;
     /**
      * Specifies the protocol supported by the iec network ACL rule. Valid values are: *tcp*

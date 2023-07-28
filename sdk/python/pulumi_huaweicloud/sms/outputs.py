@@ -290,6 +290,7 @@ class GetSourceServersServerResult(dict):
         :param str os_type: The OS type of the source server. The value can be **WINDOWS** and **LINUX**.
         :param str os_version: The OS version of the source server, for example, UBUNTU_20_4_64BIT.
         :param str registered_time: The UTC time when the source server is registered.
+        :param str state: Specifies the status of the source server.
         :param int vcpus: The vcpus count of the source server.
         """
         pulumi.set(__self__, "agent_version", agent_version)
@@ -388,6 +389,9 @@ class GetSourceServersServerResult(dict):
     @property
     @pulumi.getter
     def state(self) -> str:
+        """
+        Specifies the status of the source server.
+        """
         return pulumi.get(self, "state")
 
     @property

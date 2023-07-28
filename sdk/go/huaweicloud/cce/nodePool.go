@@ -14,6 +14,7 @@ import (
 // Add a node pool to a container cluster.
 //
 // ## Example Usage
+// ### Basic Usage
 //
 // ```go
 // package main
@@ -65,6 +66,64 @@ import (
 //	}
 //
 // ```
+// ## Node pool with storage configuration
+// ### PrePaid node pool
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cce"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Cce"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			clusterId := cfg.RequireObject("clusterId")
+//			keyPair := cfg.RequireObject("keyPair")
+//			availabilityZone := cfg.RequireObject("availabilityZone")
+//			_, err := Cce.NewNodePool(ctx, "nodePool", &Cce.NodePoolArgs{
+//				ClusterId:             pulumi.Any(clusterId),
+//				Os:                    pulumi.String("EulerOS 2.5"),
+//				InitialNodeCount:      pulumi.Int(2),
+//				FlavorId:              pulumi.String("s3.large.4"),
+//				AvailabilityZone:      pulumi.Any(availabilityZone),
+//				KeyPair:               pulumi.Any(_var.Keypair),
+//				ScallEnable:           pulumi.Bool(true),
+//				MinNodeCount:          pulumi.Int(1),
+//				MaxNodeCount:          pulumi.Int(10),
+//				ScaleDownCooldownTime: pulumi.Int(100),
+//				Priority:              pulumi.Int(1),
+//				Type:                  pulumi.String("vm"),
+//				ChargingMode:          pulumi.String("prePaid"),
+//				PeriodUnit:            pulumi.String("month"),
+//				Period:                pulumi.Int(1),
+//				RootVolume: &cce.NodePoolRootVolumeArgs{
+//					Size:       pulumi.Int(40),
+//					Volumetype: pulumi.String("SAS"),
+//				},
+//				DataVolumes: cce.NodePoolDataVolumeArray{
+//					&cce.NodePoolDataVolumeArgs{
+//						Size:       pulumi.Int(100),
+//						Volumetype: pulumi.String("SAS"),
+//					},
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
+//
+//	> You need to remove all nodes in the node pool on the console, before deleting a prepaid node pool.
 //
 // ## Import
 //
@@ -76,7 +135,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `subnet_id`, `preinstall`, `posteinstall`, `taints` and `initial_node_count`. It is generally recommended running `terraform plan` after importing a node pool. You can then decide if changes should be applied to the node pool, or the resource definition should be updated to align with the node pool. Also you can ignore changes as below. resource "huaweicloud_cce_node_pool" "my_node_pool" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `subnet_id`, `preinstall`, `posteinstall`, `taints`, `initial_node_count` and `pod_security_groups`. It is generally recommended running `terraform plan` after importing a node pool. You can then decide if changes should be applied to the node pool, or the resource definition should be updated to align with the node pool. Also you can ignore changes as below. resource "huaweicloud_cce_node_pool" "my_node_pool" {
 //
 //	...
 //
@@ -92,11 +151,17 @@ import (
 type NodePool struct {
 	pulumi.CustomResourceState
 
+	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
+	// Changing this parameter will create a new resource.
+	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
 	// Specifies the name of the available partition (AZ). Default value
 	// is random to create nodes in a random AZ in the node pool. Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringPtrOutput `pulumi:"availabilityZone"`
 	// Billing mode of a node.
 	BillingMode pulumi.IntOutput `pulumi:"billingMode"`
+	// Specifies the charging mode of the CCE node pool. Valid values are
+	// *prePaid* and *postPaid*, defaults to *postPaid*. Changing this parameter will create a new resource.
+	ChargingMode pulumi.StringOutput `pulumi:"chargingMode"`
 	// Specifies the cluster ID.
 	// Changing this parameter will create a new resource.
 	ClusterId pulumi.StringOutput `pulumi:"clusterId"`
@@ -105,6 +170,9 @@ type NodePool struct {
 	// Specifies the configuration of the data disks.
 	// The structure is described below. Changing this parameter will create a new resource.
 	DataVolumes NodePoolDataVolumeArrayOutput `pulumi:"dataVolumes"`
+	// Specifies the ECS group ID. If specified, the node will be created under
+	// the cloud server group. Changing this parameter will create a new resource.
+	EcsGroupId pulumi.StringPtrOutput `pulumi:"ecsGroupId"`
 	// Specifies the extended parameter.
 	// Changing this parameter will create a new resource.
 	// The available keys are as follows:
@@ -131,7 +199,8 @@ type NodePool struct {
 	MaxPods pulumi.IntOutput `pulumi:"maxPods"`
 	// Specifies the minimum number of nodes allowed if auto scaling is enabled.
 	MinNodeCount pulumi.IntPtrOutput `pulumi:"minNodeCount"`
-	// Specifies the node pool name.
+	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+	// and **user** are supported. Changing this parameter will create a new resource.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the operating system of the node.
 	// Changing this parameter will create a new resource.
@@ -140,6 +209,17 @@ type NodePool struct {
 	// This parameter can be plain or salted and is alternative to `keyPair`.
 	// Changing this parameter will create a new resource.
 	Password pulumi.StringPtrOutput `pulumi:"password"`
+	// Specifies the charging period of the CCE node pool. If `periodUnit` is set to
+	// *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This parameter
+	// is mandatory if `chargingMode` is set to *prePaid*. Changing this parameter will create a new resource.
+	Period pulumi.IntPtrOutput `pulumi:"period"`
+	// Specifies the charging period unit of the CCE node pool.
+	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+	// Changing this parameter will create a new resource.
+	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
+	// Specifies the list of security group IDs for the pod.
+	// Only supported in CCE Turbo clusters of v1.19 and above. Changing this parameter will create a new resource.
+	PodSecurityGroups pulumi.StringArrayOutput `pulumi:"podSecurityGroups"`
 	// Specifies the script to be executed after installation.
 	// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
 	Postinstall pulumi.StringPtrOutput `pulumi:"postinstall"`
@@ -155,14 +235,25 @@ type NodePool struct {
 	// Specifies the configuration of the system disk.
 	// The structure is described below. Changing this parameter will create a new resource.
 	RootVolume NodePoolRootVolumeOutput `pulumi:"rootVolume"`
-	Runtime    pulumi.StringOutput      `pulumi:"runtime"`
+	// Specifies the runtime of the CCE node pool. Valid values are *docker* and
+	// *containerd*. Changing this creates a new resource.
+	Runtime pulumi.StringOutput `pulumi:"runtime"`
 	// Specifies the time interval between two scaling operations, in minutes.
 	ScaleDownCooldownTime pulumi.IntPtrOutput `pulumi:"scaleDownCooldownTime"`
 	// Specifies whether to enable auto scaling.
 	// If Autoscaler is enabled, install the autoscaler add-on to use the auto scaling feature.
 	ScallEnable pulumi.BoolPtrOutput `pulumi:"scallEnable"`
+	// Specifies the list of custom security group IDs for the node pool.
+	// If specified, the nodes will be put in these security groups. When specifying a security group, do not modify
+	// the rules of the port on which CCE running depends. For details, see
+	// [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+	SecurityGroups pulumi.StringArrayOutput `pulumi:"securityGroups"`
 	// Node status information.
 	Status pulumi.StringOutput `pulumi:"status"`
+	// Specifies the disk initialization management parameter.
+	// If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
+	// This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+	Storage NodePoolStorageOutput `pulumi:"storage"`
 	// Specifies the ID of the subnet to which the NIC belongs.
 	// Changing this parameter will create a new resource.
 	SubnetId pulumi.StringPtrOutput `pulumi:"subnetId"`
@@ -171,7 +262,8 @@ type NodePool struct {
 	// Specifies the taints configuration of the nodes to set anti-affinity.
 	// The structure is described below.
 	Taints NodePoolTaintArrayOutput `pulumi:"taints"`
-	// Specifies the node pool type. Possible values are: **vm** and **ElasticBMS**.
+	// Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
+	// The default value is **evs**. Changing this parameter will create a new resource.
 	Type pulumi.StringOutput `pulumi:"type"`
 }
 
@@ -220,11 +312,17 @@ func GetNodePool(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering NodePool resources.
 type nodePoolState struct {
+	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
+	// Changing this parameter will create a new resource.
+	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the name of the available partition (AZ). Default value
 	// is random to create nodes in a random AZ in the node pool. Changing this parameter will create a new resource.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// Billing mode of a node.
 	BillingMode *int `pulumi:"billingMode"`
+	// Specifies the charging mode of the CCE node pool. Valid values are
+	// *prePaid* and *postPaid*, defaults to *postPaid*. Changing this parameter will create a new resource.
+	ChargingMode *string `pulumi:"chargingMode"`
 	// Specifies the cluster ID.
 	// Changing this parameter will create a new resource.
 	ClusterId *string `pulumi:"clusterId"`
@@ -233,6 +331,9 @@ type nodePoolState struct {
 	// Specifies the configuration of the data disks.
 	// The structure is described below. Changing this parameter will create a new resource.
 	DataVolumes []NodePoolDataVolume `pulumi:"dataVolumes"`
+	// Specifies the ECS group ID. If specified, the node will be created under
+	// the cloud server group. Changing this parameter will create a new resource.
+	EcsGroupId *string `pulumi:"ecsGroupId"`
 	// Specifies the extended parameter.
 	// Changing this parameter will create a new resource.
 	// The available keys are as follows:
@@ -259,7 +360,8 @@ type nodePoolState struct {
 	MaxPods *int `pulumi:"maxPods"`
 	// Specifies the minimum number of nodes allowed if auto scaling is enabled.
 	MinNodeCount *int `pulumi:"minNodeCount"`
-	// Specifies the node pool name.
+	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+	// and **user** are supported. Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the operating system of the node.
 	// Changing this parameter will create a new resource.
@@ -268,6 +370,17 @@ type nodePoolState struct {
 	// This parameter can be plain or salted and is alternative to `keyPair`.
 	// Changing this parameter will create a new resource.
 	Password *string `pulumi:"password"`
+	// Specifies the charging period of the CCE node pool. If `periodUnit` is set to
+	// *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This parameter
+	// is mandatory if `chargingMode` is set to *prePaid*. Changing this parameter will create a new resource.
+	Period *int `pulumi:"period"`
+	// Specifies the charging period unit of the CCE node pool.
+	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+	// Changing this parameter will create a new resource.
+	PeriodUnit *string `pulumi:"periodUnit"`
+	// Specifies the list of security group IDs for the pod.
+	// Only supported in CCE Turbo clusters of v1.19 and above. Changing this parameter will create a new resource.
+	PodSecurityGroups []string `pulumi:"podSecurityGroups"`
 	// Specifies the script to be executed after installation.
 	// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
 	Postinstall *string `pulumi:"postinstall"`
@@ -283,14 +396,25 @@ type nodePoolState struct {
 	// Specifies the configuration of the system disk.
 	// The structure is described below. Changing this parameter will create a new resource.
 	RootVolume *NodePoolRootVolume `pulumi:"rootVolume"`
-	Runtime    *string             `pulumi:"runtime"`
+	// Specifies the runtime of the CCE node pool. Valid values are *docker* and
+	// *containerd*. Changing this creates a new resource.
+	Runtime *string `pulumi:"runtime"`
 	// Specifies the time interval between two scaling operations, in minutes.
 	ScaleDownCooldownTime *int `pulumi:"scaleDownCooldownTime"`
 	// Specifies whether to enable auto scaling.
 	// If Autoscaler is enabled, install the autoscaler add-on to use the auto scaling feature.
 	ScallEnable *bool `pulumi:"scallEnable"`
+	// Specifies the list of custom security group IDs for the node pool.
+	// If specified, the nodes will be put in these security groups. When specifying a security group, do not modify
+	// the rules of the port on which CCE running depends. For details, see
+	// [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+	SecurityGroups []string `pulumi:"securityGroups"`
 	// Node status information.
 	Status *string `pulumi:"status"`
+	// Specifies the disk initialization management parameter.
+	// If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
+	// This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+	Storage *NodePoolStorage `pulumi:"storage"`
 	// Specifies the ID of the subnet to which the NIC belongs.
 	// Changing this parameter will create a new resource.
 	SubnetId *string `pulumi:"subnetId"`
@@ -299,16 +423,23 @@ type nodePoolState struct {
 	// Specifies the taints configuration of the nodes to set anti-affinity.
 	// The structure is described below.
 	Taints []NodePoolTaint `pulumi:"taints"`
-	// Specifies the node pool type. Possible values are: **vm** and **ElasticBMS**.
+	// Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
+	// The default value is **evs**. Changing this parameter will create a new resource.
 	Type *string `pulumi:"type"`
 }
 
 type NodePoolState struct {
+	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
+	// Changing this parameter will create a new resource.
+	AutoRenew pulumi.StringPtrInput
 	// Specifies the name of the available partition (AZ). Default value
 	// is random to create nodes in a random AZ in the node pool. Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringPtrInput
 	// Billing mode of a node.
 	BillingMode pulumi.IntPtrInput
+	// Specifies the charging mode of the CCE node pool. Valid values are
+	// *prePaid* and *postPaid*, defaults to *postPaid*. Changing this parameter will create a new resource.
+	ChargingMode pulumi.StringPtrInput
 	// Specifies the cluster ID.
 	// Changing this parameter will create a new resource.
 	ClusterId pulumi.StringPtrInput
@@ -317,6 +448,9 @@ type NodePoolState struct {
 	// Specifies the configuration of the data disks.
 	// The structure is described below. Changing this parameter will create a new resource.
 	DataVolumes NodePoolDataVolumeArrayInput
+	// Specifies the ECS group ID. If specified, the node will be created under
+	// the cloud server group. Changing this parameter will create a new resource.
+	EcsGroupId pulumi.StringPtrInput
 	// Specifies the extended parameter.
 	// Changing this parameter will create a new resource.
 	// The available keys are as follows:
@@ -343,7 +477,8 @@ type NodePoolState struct {
 	MaxPods pulumi.IntPtrInput
 	// Specifies the minimum number of nodes allowed if auto scaling is enabled.
 	MinNodeCount pulumi.IntPtrInput
-	// Specifies the node pool name.
+	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+	// and **user** are supported. Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
 	// Specifies the operating system of the node.
 	// Changing this parameter will create a new resource.
@@ -352,6 +487,17 @@ type NodePoolState struct {
 	// This parameter can be plain or salted and is alternative to `keyPair`.
 	// Changing this parameter will create a new resource.
 	Password pulumi.StringPtrInput
+	// Specifies the charging period of the CCE node pool. If `periodUnit` is set to
+	// *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This parameter
+	// is mandatory if `chargingMode` is set to *prePaid*. Changing this parameter will create a new resource.
+	Period pulumi.IntPtrInput
+	// Specifies the charging period unit of the CCE node pool.
+	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+	// Changing this parameter will create a new resource.
+	PeriodUnit pulumi.StringPtrInput
+	// Specifies the list of security group IDs for the pod.
+	// Only supported in CCE Turbo clusters of v1.19 and above. Changing this parameter will create a new resource.
+	PodSecurityGroups pulumi.StringArrayInput
 	// Specifies the script to be executed after installation.
 	// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
 	Postinstall pulumi.StringPtrInput
@@ -367,14 +513,25 @@ type NodePoolState struct {
 	// Specifies the configuration of the system disk.
 	// The structure is described below. Changing this parameter will create a new resource.
 	RootVolume NodePoolRootVolumePtrInput
-	Runtime    pulumi.StringPtrInput
+	// Specifies the runtime of the CCE node pool. Valid values are *docker* and
+	// *containerd*. Changing this creates a new resource.
+	Runtime pulumi.StringPtrInput
 	// Specifies the time interval between two scaling operations, in minutes.
 	ScaleDownCooldownTime pulumi.IntPtrInput
 	// Specifies whether to enable auto scaling.
 	// If Autoscaler is enabled, install the autoscaler add-on to use the auto scaling feature.
 	ScallEnable pulumi.BoolPtrInput
+	// Specifies the list of custom security group IDs for the node pool.
+	// If specified, the nodes will be put in these security groups. When specifying a security group, do not modify
+	// the rules of the port on which CCE running depends. For details, see
+	// [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+	SecurityGroups pulumi.StringArrayInput
 	// Node status information.
 	Status pulumi.StringPtrInput
+	// Specifies the disk initialization management parameter.
+	// If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
+	// This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+	Storage NodePoolStoragePtrInput
 	// Specifies the ID of the subnet to which the NIC belongs.
 	// Changing this parameter will create a new resource.
 	SubnetId pulumi.StringPtrInput
@@ -383,7 +540,8 @@ type NodePoolState struct {
 	// Specifies the taints configuration of the nodes to set anti-affinity.
 	// The structure is described below.
 	Taints NodePoolTaintArrayInput
-	// Specifies the node pool type. Possible values are: **vm** and **ElasticBMS**.
+	// Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
+	// The default value is **evs**. Changing this parameter will create a new resource.
 	Type pulumi.StringPtrInput
 }
 
@@ -392,15 +550,24 @@ func (NodePoolState) ElementType() reflect.Type {
 }
 
 type nodePoolArgs struct {
+	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
+	// Changing this parameter will create a new resource.
+	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the name of the available partition (AZ). Default value
 	// is random to create nodes in a random AZ in the node pool. Changing this parameter will create a new resource.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
+	// Specifies the charging mode of the CCE node pool. Valid values are
+	// *prePaid* and *postPaid*, defaults to *postPaid*. Changing this parameter will create a new resource.
+	ChargingMode *string `pulumi:"chargingMode"`
 	// Specifies the cluster ID.
 	// Changing this parameter will create a new resource.
 	ClusterId string `pulumi:"clusterId"`
 	// Specifies the configuration of the data disks.
 	// The structure is described below. Changing this parameter will create a new resource.
 	DataVolumes []NodePoolDataVolume `pulumi:"dataVolumes"`
+	// Specifies the ECS group ID. If specified, the node will be created under
+	// the cloud server group. Changing this parameter will create a new resource.
+	EcsGroupId *string `pulumi:"ecsGroupId"`
 	// Specifies the extended parameter.
 	// Changing this parameter will create a new resource.
 	// The available keys are as follows:
@@ -427,7 +594,8 @@ type nodePoolArgs struct {
 	MaxPods *int `pulumi:"maxPods"`
 	// Specifies the minimum number of nodes allowed if auto scaling is enabled.
 	MinNodeCount *int `pulumi:"minNodeCount"`
-	// Specifies the node pool name.
+	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+	// and **user** are supported. Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the operating system of the node.
 	// Changing this parameter will create a new resource.
@@ -436,6 +604,17 @@ type nodePoolArgs struct {
 	// This parameter can be plain or salted and is alternative to `keyPair`.
 	// Changing this parameter will create a new resource.
 	Password *string `pulumi:"password"`
+	// Specifies the charging period of the CCE node pool. If `periodUnit` is set to
+	// *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This parameter
+	// is mandatory if `chargingMode` is set to *prePaid*. Changing this parameter will create a new resource.
+	Period *int `pulumi:"period"`
+	// Specifies the charging period unit of the CCE node pool.
+	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+	// Changing this parameter will create a new resource.
+	PeriodUnit *string `pulumi:"periodUnit"`
+	// Specifies the list of security group IDs for the pod.
+	// Only supported in CCE Turbo clusters of v1.19 and above. Changing this parameter will create a new resource.
+	PodSecurityGroups []string `pulumi:"podSecurityGroups"`
 	// Specifies the script to be executed after installation.
 	// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
 	Postinstall *string `pulumi:"postinstall"`
@@ -451,12 +630,23 @@ type nodePoolArgs struct {
 	// Specifies the configuration of the system disk.
 	// The structure is described below. Changing this parameter will create a new resource.
 	RootVolume NodePoolRootVolume `pulumi:"rootVolume"`
-	Runtime    *string            `pulumi:"runtime"`
+	// Specifies the runtime of the CCE node pool. Valid values are *docker* and
+	// *containerd*. Changing this creates a new resource.
+	Runtime *string `pulumi:"runtime"`
 	// Specifies the time interval between two scaling operations, in minutes.
 	ScaleDownCooldownTime *int `pulumi:"scaleDownCooldownTime"`
 	// Specifies whether to enable auto scaling.
 	// If Autoscaler is enabled, install the autoscaler add-on to use the auto scaling feature.
 	ScallEnable *bool `pulumi:"scallEnable"`
+	// Specifies the list of custom security group IDs for the node pool.
+	// If specified, the nodes will be put in these security groups. When specifying a security group, do not modify
+	// the rules of the port on which CCE running depends. For details, see
+	// [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+	SecurityGroups []string `pulumi:"securityGroups"`
+	// Specifies the disk initialization management parameter.
+	// If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
+	// This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+	Storage *NodePoolStorage `pulumi:"storage"`
 	// Specifies the ID of the subnet to which the NIC belongs.
 	// Changing this parameter will create a new resource.
 	SubnetId *string `pulumi:"subnetId"`
@@ -465,21 +655,31 @@ type nodePoolArgs struct {
 	// Specifies the taints configuration of the nodes to set anti-affinity.
 	// The structure is described below.
 	Taints []NodePoolTaint `pulumi:"taints"`
-	// Specifies the node pool type. Possible values are: **vm** and **ElasticBMS**.
+	// Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
+	// The default value is **evs**. Changing this parameter will create a new resource.
 	Type *string `pulumi:"type"`
 }
 
 // The set of arguments for constructing a NodePool resource.
 type NodePoolArgs struct {
+	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
+	// Changing this parameter will create a new resource.
+	AutoRenew pulumi.StringPtrInput
 	// Specifies the name of the available partition (AZ). Default value
 	// is random to create nodes in a random AZ in the node pool. Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringPtrInput
+	// Specifies the charging mode of the CCE node pool. Valid values are
+	// *prePaid* and *postPaid*, defaults to *postPaid*. Changing this parameter will create a new resource.
+	ChargingMode pulumi.StringPtrInput
 	// Specifies the cluster ID.
 	// Changing this parameter will create a new resource.
 	ClusterId pulumi.StringInput
 	// Specifies the configuration of the data disks.
 	// The structure is described below. Changing this parameter will create a new resource.
 	DataVolumes NodePoolDataVolumeArrayInput
+	// Specifies the ECS group ID. If specified, the node will be created under
+	// the cloud server group. Changing this parameter will create a new resource.
+	EcsGroupId pulumi.StringPtrInput
 	// Specifies the extended parameter.
 	// Changing this parameter will create a new resource.
 	// The available keys are as follows:
@@ -506,7 +706,8 @@ type NodePoolArgs struct {
 	MaxPods pulumi.IntPtrInput
 	// Specifies the minimum number of nodes allowed if auto scaling is enabled.
 	MinNodeCount pulumi.IntPtrInput
-	// Specifies the node pool name.
+	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+	// and **user** are supported. Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
 	// Specifies the operating system of the node.
 	// Changing this parameter will create a new resource.
@@ -515,6 +716,17 @@ type NodePoolArgs struct {
 	// This parameter can be plain or salted and is alternative to `keyPair`.
 	// Changing this parameter will create a new resource.
 	Password pulumi.StringPtrInput
+	// Specifies the charging period of the CCE node pool. If `periodUnit` is set to
+	// *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This parameter
+	// is mandatory if `chargingMode` is set to *prePaid*. Changing this parameter will create a new resource.
+	Period pulumi.IntPtrInput
+	// Specifies the charging period unit of the CCE node pool.
+	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+	// Changing this parameter will create a new resource.
+	PeriodUnit pulumi.StringPtrInput
+	// Specifies the list of security group IDs for the pod.
+	// Only supported in CCE Turbo clusters of v1.19 and above. Changing this parameter will create a new resource.
+	PodSecurityGroups pulumi.StringArrayInput
 	// Specifies the script to be executed after installation.
 	// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
 	Postinstall pulumi.StringPtrInput
@@ -530,12 +742,23 @@ type NodePoolArgs struct {
 	// Specifies the configuration of the system disk.
 	// The structure is described below. Changing this parameter will create a new resource.
 	RootVolume NodePoolRootVolumeInput
-	Runtime    pulumi.StringPtrInput
+	// Specifies the runtime of the CCE node pool. Valid values are *docker* and
+	// *containerd*. Changing this creates a new resource.
+	Runtime pulumi.StringPtrInput
 	// Specifies the time interval between two scaling operations, in minutes.
 	ScaleDownCooldownTime pulumi.IntPtrInput
 	// Specifies whether to enable auto scaling.
 	// If Autoscaler is enabled, install the autoscaler add-on to use the auto scaling feature.
 	ScallEnable pulumi.BoolPtrInput
+	// Specifies the list of custom security group IDs for the node pool.
+	// If specified, the nodes will be put in these security groups. When specifying a security group, do not modify
+	// the rules of the port on which CCE running depends. For details, see
+	// [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+	SecurityGroups pulumi.StringArrayInput
+	// Specifies the disk initialization management parameter.
+	// If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
+	// This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+	Storage NodePoolStoragePtrInput
 	// Specifies the ID of the subnet to which the NIC belongs.
 	// Changing this parameter will create a new resource.
 	SubnetId pulumi.StringPtrInput
@@ -544,7 +767,8 @@ type NodePoolArgs struct {
 	// Specifies the taints configuration of the nodes to set anti-affinity.
 	// The structure is described below.
 	Taints NodePoolTaintArrayInput
-	// Specifies the node pool type. Possible values are: **vm** and **ElasticBMS**.
+	// Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
+	// The default value is **evs**. Changing this parameter will create a new resource.
 	Type pulumi.StringPtrInput
 }
 
@@ -635,6 +859,12 @@ func (o NodePoolOutput) ToNodePoolOutputWithContext(ctx context.Context) NodePoo
 	return o
 }
 
+// Specifies whether auto renew is enabled. Valid values are "true" and "false".
+// Changing this parameter will create a new resource.
+func (o NodePoolOutput) AutoRenew() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePool) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the name of the available partition (AZ). Default value
 // is random to create nodes in a random AZ in the node pool. Changing this parameter will create a new resource.
 func (o NodePoolOutput) AvailabilityZone() pulumi.StringPtrOutput {
@@ -644,6 +874,12 @@ func (o NodePoolOutput) AvailabilityZone() pulumi.StringPtrOutput {
 // Billing mode of a node.
 func (o NodePoolOutput) BillingMode() pulumi.IntOutput {
 	return o.ApplyT(func(v *NodePool) pulumi.IntOutput { return v.BillingMode }).(pulumi.IntOutput)
+}
+
+// Specifies the charging mode of the CCE node pool. Valid values are
+// *prePaid* and *postPaid*, defaults to *postPaid*. Changing this parameter will create a new resource.
+func (o NodePoolOutput) ChargingMode() pulumi.StringOutput {
+	return o.ApplyT(func(v *NodePool) pulumi.StringOutput { return v.ChargingMode }).(pulumi.StringOutput)
 }
 
 // Specifies the cluster ID.
@@ -661,6 +897,12 @@ func (o NodePoolOutput) CurrentNodeCount() pulumi.IntOutput {
 // The structure is described below. Changing this parameter will create a new resource.
 func (o NodePoolOutput) DataVolumes() NodePoolDataVolumeArrayOutput {
 	return o.ApplyT(func(v *NodePool) NodePoolDataVolumeArrayOutput { return v.DataVolumes }).(NodePoolDataVolumeArrayOutput)
+}
+
+// Specifies the ECS group ID. If specified, the node will be created under
+// the cloud server group. Changing this parameter will create a new resource.
+func (o NodePoolOutput) EcsGroupId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePool) pulumi.StringPtrOutput { return v.EcsGroupId }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the extended parameter.
@@ -713,7 +955,8 @@ func (o NodePoolOutput) MinNodeCount() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *NodePool) pulumi.IntPtrOutput { return v.MinNodeCount }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the node pool name.
+// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+// and **user** are supported. Changing this parameter will create a new resource.
 func (o NodePoolOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *NodePool) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
@@ -729,6 +972,26 @@ func (o NodePoolOutput) Os() pulumi.StringOutput {
 // Changing this parameter will create a new resource.
 func (o NodePoolOutput) Password() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *NodePool) pulumi.StringPtrOutput { return v.Password }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the charging period of the CCE node pool. If `periodUnit` is set to
+// *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This parameter
+// is mandatory if `chargingMode` is set to *prePaid*. Changing this parameter will create a new resource.
+func (o NodePoolOutput) Period() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *NodePool) pulumi.IntPtrOutput { return v.Period }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the charging period unit of the CCE node pool.
+// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+// Changing this parameter will create a new resource.
+func (o NodePoolOutput) PeriodUnit() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePool) pulumi.StringPtrOutput { return v.PeriodUnit }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the list of security group IDs for the pod.
+// Only supported in CCE Turbo clusters of v1.19 and above. Changing this parameter will create a new resource.
+func (o NodePoolOutput) PodSecurityGroups() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *NodePool) pulumi.StringArrayOutput { return v.PodSecurityGroups }).(pulumi.StringArrayOutput)
 }
 
 // Specifies the script to be executed after installation.
@@ -761,6 +1024,8 @@ func (o NodePoolOutput) RootVolume() NodePoolRootVolumeOutput {
 	return o.ApplyT(func(v *NodePool) NodePoolRootVolumeOutput { return v.RootVolume }).(NodePoolRootVolumeOutput)
 }
 
+// Specifies the runtime of the CCE node pool. Valid values are *docker* and
+// *containerd*. Changing this creates a new resource.
 func (o NodePoolOutput) Runtime() pulumi.StringOutput {
 	return o.ApplyT(func(v *NodePool) pulumi.StringOutput { return v.Runtime }).(pulumi.StringOutput)
 }
@@ -776,9 +1041,24 @@ func (o NodePoolOutput) ScallEnable() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *NodePool) pulumi.BoolPtrOutput { return v.ScallEnable }).(pulumi.BoolPtrOutput)
 }
 
+// Specifies the list of custom security group IDs for the node pool.
+// If specified, the nodes will be put in these security groups. When specifying a security group, do not modify
+// the rules of the port on which CCE running depends. For details, see
+// [documentation](https://support.huaweicloud.com/intl/en-us/cce_faq/cce_faq_00265.html).
+func (o NodePoolOutput) SecurityGroups() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *NodePool) pulumi.StringArrayOutput { return v.SecurityGroups }).(pulumi.StringArrayOutput)
+}
+
 // Node status information.
 func (o NodePoolOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *NodePool) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
+}
+
+// Specifies the disk initialization management parameter.
+// If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
+// This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+func (o NodePoolOutput) Storage() NodePoolStorageOutput {
+	return o.ApplyT(func(v *NodePool) NodePoolStorageOutput { return v.Storage }).(NodePoolStorageOutput)
 }
 
 // Specifies the ID of the subnet to which the NIC belongs.
@@ -798,7 +1078,8 @@ func (o NodePoolOutput) Taints() NodePoolTaintArrayOutput {
 	return o.ApplyT(func(v *NodePool) NodePoolTaintArrayOutput { return v.Taints }).(NodePoolTaintArrayOutput)
 }
 
-// Specifies the node pool type. Possible values are: **vm** and **ElasticBMS**.
+// Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
+// The default value is **evs**. Changing this parameter will create a new resource.
 func (o NodePoolOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v *NodePool) pulumi.StringOutput { return v.Type }).(pulumi.StringOutput)
 }

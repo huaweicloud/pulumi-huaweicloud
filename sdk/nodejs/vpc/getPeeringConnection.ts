@@ -90,6 +90,10 @@ export interface GetPeeringConnectionArgs {
  * A collection of values returned by getPeeringConnection.
  */
 export interface GetPeeringConnectionResult {
+    /**
+     * The description of the VPC Peering Connection.
+     */
+    readonly description: string;
     readonly id: string;
     readonly name: string;
     readonly peerTenantId: string;

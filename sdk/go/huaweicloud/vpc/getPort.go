@@ -51,7 +51,7 @@ func LookupPort(ctx *pulumi.Context, args *LookupPortArgs, opts ...pulumi.Invoke
 
 // A collection of arguments for invoking getPort.
 type LookupPortArgs struct {
-	// The administrative state of the port.
+	// Deprecated: this field is deprecated
 	AdminStateUp *bool `pulumi:"adminStateUp"`
 	// The ID of the device the port belongs to.
 	DeviceId *string `pulumi:"deviceId"`
@@ -66,7 +66,8 @@ type LookupPortArgs struct {
 	// Specifies the ID of the network the port belongs to.
 	NetworkId *string `pulumi:"networkId"`
 	// Specifies the ID of the port.
-	PortId    *string `pulumi:"portId"`
+	PortId *string `pulumi:"portId"`
+	// Deprecated: this field is deprecated
 	ProjectId *string `pulumi:"projectId"`
 	// Specifies the region in which to obtain the port. If omitted, the provider-level region
 	// will be used.
@@ -74,14 +75,17 @@ type LookupPortArgs struct {
 	// The list of port security group IDs to filter.
 	SecurityGroupIds []string `pulumi:"securityGroupIds"`
 	// Specifies the status of the port.
-	Status   *string `pulumi:"status"`
+	Status *string `pulumi:"status"`
+	// Deprecated: this field is deprecated
 	TenantId *string `pulumi:"tenantId"`
 }
 
 // A collection of values returned by getPort.
 type LookupPortResult struct {
-	// The administrative state of the port.
+	// Deprecated: this field is deprecated
 	AdminStateUp bool `pulumi:"adminStateUp"`
+	// The collection of allowed IP addresses on the port.
+	AllAllowedIps []string `pulumi:"allAllowedIps"`
 	// The collection of Fixed IP addresses on the port.
 	AllFixedIps []string `pulumi:"allFixedIps"`
 	// The collection of security group IDs applied on the port.
@@ -95,14 +99,16 @@ type LookupPortResult struct {
 	Id         string `pulumi:"id"`
 	MacAddress string `pulumi:"macAddress"`
 	// The name of the port.
-	Name             string   `pulumi:"name"`
-	NetworkId        string   `pulumi:"networkId"`
-	PortId           string   `pulumi:"portId"`
+	Name      string `pulumi:"name"`
+	NetworkId string `pulumi:"networkId"`
+	PortId    string `pulumi:"portId"`
+	// Deprecated: this field is deprecated
 	ProjectId        *string  `pulumi:"projectId"`
 	Region           string   `pulumi:"region"`
 	SecurityGroupIds []string `pulumi:"securityGroupIds"`
 	Status           string   `pulumi:"status"`
-	TenantId         *string  `pulumi:"tenantId"`
+	// Deprecated: this field is deprecated
+	TenantId *string `pulumi:"tenantId"`
 }
 
 func LookupPortOutput(ctx *pulumi.Context, args LookupPortOutputArgs, opts ...pulumi.InvokeOption) LookupPortResultOutput {
@@ -120,7 +126,7 @@ func LookupPortOutput(ctx *pulumi.Context, args LookupPortOutputArgs, opts ...pu
 
 // A collection of arguments for invoking getPort.
 type LookupPortOutputArgs struct {
-	// The administrative state of the port.
+	// Deprecated: this field is deprecated
 	AdminStateUp pulumi.BoolPtrInput `pulumi:"adminStateUp"`
 	// The ID of the device the port belongs to.
 	DeviceId pulumi.StringPtrInput `pulumi:"deviceId"`
@@ -135,7 +141,8 @@ type LookupPortOutputArgs struct {
 	// Specifies the ID of the network the port belongs to.
 	NetworkId pulumi.StringPtrInput `pulumi:"networkId"`
 	// Specifies the ID of the port.
-	PortId    pulumi.StringPtrInput `pulumi:"portId"`
+	PortId pulumi.StringPtrInput `pulumi:"portId"`
+	// Deprecated: this field is deprecated
 	ProjectId pulumi.StringPtrInput `pulumi:"projectId"`
 	// Specifies the region in which to obtain the port. If omitted, the provider-level region
 	// will be used.
@@ -143,7 +150,8 @@ type LookupPortOutputArgs struct {
 	// The list of port security group IDs to filter.
 	SecurityGroupIds pulumi.StringArrayInput `pulumi:"securityGroupIds"`
 	// Specifies the status of the port.
-	Status   pulumi.StringPtrInput `pulumi:"status"`
+	Status pulumi.StringPtrInput `pulumi:"status"`
+	// Deprecated: this field is deprecated
 	TenantId pulumi.StringPtrInput `pulumi:"tenantId"`
 }
 
@@ -166,9 +174,14 @@ func (o LookupPortResultOutput) ToLookupPortResultOutputWithContext(ctx context.
 	return o
 }
 
-// The administrative state of the port.
+// Deprecated: this field is deprecated
 func (o LookupPortResultOutput) AdminStateUp() pulumi.BoolOutput {
 	return o.ApplyT(func(v LookupPortResult) bool { return v.AdminStateUp }).(pulumi.BoolOutput)
+}
+
+// The collection of allowed IP addresses on the port.
+func (o LookupPortResultOutput) AllAllowedIps() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v LookupPortResult) []string { return v.AllAllowedIps }).(pulumi.StringArrayOutput)
 }
 
 // The collection of Fixed IP addresses on the port.
@@ -217,6 +230,7 @@ func (o LookupPortResultOutput) PortId() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupPortResult) string { return v.PortId }).(pulumi.StringOutput)
 }
 
+// Deprecated: this field is deprecated
 func (o LookupPortResultOutput) ProjectId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v LookupPortResult) *string { return v.ProjectId }).(pulumi.StringPtrOutput)
 }
@@ -233,6 +247,7 @@ func (o LookupPortResultOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupPortResult) string { return v.Status }).(pulumi.StringOutput)
 }
 
+// Deprecated: this field is deprecated
 func (o LookupPortResultOutput) TenantId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v LookupPortResult) *string { return v.TenantId }).(pulumi.StringPtrOutput)
 }

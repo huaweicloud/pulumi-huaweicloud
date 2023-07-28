@@ -14,6 +14,116 @@ import (
 // Manages a dedicated microservice instance resource within HuaweiCloud.
 //
 // ## Example Usage
+// ### Create a microservice instance under a microservice with RBAC authentication of engine disabled
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cse"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Cse"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			engineConnAddr := cfg.RequireObject("engineConnAddr")
+//			microserviceId := cfg.RequireObject("microserviceId")
+//			regionName := cfg.RequireObject("regionName")
+//			azName := cfg.RequireObject("azName")
+//			_, err := Cse.NewMicroserviceInstance(ctx, "test", &Cse.MicroserviceInstanceArgs{
+//				ConnectAddress: pulumi.Any(engineConnAddr),
+//				MicroserviceId: pulumi.Any(microserviceId),
+//				HostName:       pulumi.String("localhost"),
+//				Endpoints: pulumi.StringArray{
+//					pulumi.String("grpc://127.0.1.132:9980"),
+//					pulumi.String("rest://127.0.0.111:8081"),
+//				},
+//				Version: pulumi.String("1.0.0"),
+//				Properties: pulumi.StringMap{
+//					"_TAGS":  pulumi.String("A, B"),
+//					"attr1":  pulumi.String("a"),
+//					"nodeIP": pulumi.String("127.0.0.1"),
+//				},
+//				HealthCheck: &cse.MicroserviceInstanceHealthCheckArgs{
+//					Mode:       pulumi.String("push"),
+//					Interval:   pulumi.Int(30),
+//					MaxRetries: pulumi.Int(3),
+//				},
+//				DataCenter: &cse.MicroserviceInstanceDataCenterArgs{
+//					Name:             pulumi.String("dc"),
+//					Region:           pulumi.Any(regionName),
+//					AvailabilityZone: pulumi.Any(azName),
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
+// ### Create a microservice instance under a microservice with RBAC authentication of engine enabled
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cse"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Cse"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			engineConnAddr := cfg.RequireObject("engineConnAddr")
+//			microserviceId := cfg.RequireObject("microserviceId")
+//			regionName := cfg.RequireObject("regionName")
+//			azName := cfg.RequireObject("azName")
+//			_, err := Cse.NewMicroserviceInstance(ctx, "test", &Cse.MicroserviceInstanceArgs{
+//				ConnectAddress: pulumi.Any(engineConnAddr),
+//				MicroserviceId: pulumi.Any(microserviceId),
+//				HostName:       pulumi.String("localhost"),
+//				Endpoints: pulumi.StringArray{
+//					pulumi.String("grpc://127.0.1.132:9980"),
+//					pulumi.String("rest://127.0.0.111:8081"),
+//				},
+//				Version: pulumi.String("1.0.0"),
+//				Properties: pulumi.StringMap{
+//					"_TAGS":  pulumi.String("A, B"),
+//					"attr1":  pulumi.String("a"),
+//					"nodeIP": pulumi.String("127.0.0.1"),
+//				},
+//				HealthCheck: &cse.MicroserviceInstanceHealthCheckArgs{
+//					Mode:       pulumi.String("push"),
+//					Interval:   pulumi.Int(30),
+//					MaxRetries: pulumi.Int(3),
+//				},
+//				DataCenter: &cse.MicroserviceInstanceDataCenterArgs{
+//					Name:             pulumi.String("dc"),
+//					Region:           pulumi.Any(regionName),
+//					AvailabilityZone: pulumi.Any(azName),
+//				},
+//				AdminUser: pulumi.String("root"),
+//				AdminPass: pulumi.String("Huawei!123"),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
 //
 // ## Import
 //
@@ -74,7 +184,7 @@ type MicroserviceInstance struct {
 	Properties pulumi.StringMapOutput `pulumi:"properties"`
 	// The microservice instance status. The values supports **UP**, **DOWN**, **STARTING** and **OUTOFSERVICE**.
 	Status pulumi.StringOutput `pulumi:"status"`
-	// Specifies the verison of the dedicated microservice instance.
+	// Specifies the version of the dedicated microservice instance.
 	// Changing this will create a new microservice instance.
 	Version pulumi.StringOutput `pulumi:"version"`
 }
@@ -158,7 +268,7 @@ type microserviceInstanceState struct {
 	Properties map[string]string `pulumi:"properties"`
 	// The microservice instance status. The values supports **UP**, **DOWN**, **STARTING** and **OUTOFSERVICE**.
 	Status *string `pulumi:"status"`
-	// Specifies the verison of the dedicated microservice instance.
+	// Specifies the version of the dedicated microservice instance.
 	// Changing this will create a new microservice instance.
 	Version *string `pulumi:"version"`
 }
@@ -201,7 +311,7 @@ type MicroserviceInstanceState struct {
 	Properties pulumi.StringMapInput
 	// The microservice instance status. The values supports **UP**, **DOWN**, **STARTING** and **OUTOFSERVICE**.
 	Status pulumi.StringPtrInput
-	// Specifies the verison of the dedicated microservice instance.
+	// Specifies the version of the dedicated microservice instance.
 	// Changing this will create a new microservice instance.
 	Version pulumi.StringPtrInput
 }
@@ -246,7 +356,7 @@ type microserviceInstanceArgs struct {
 	// Specifies the extended attributes.
 	// Changing this will create a new microservice instance.
 	Properties map[string]string `pulumi:"properties"`
-	// Specifies the verison of the dedicated microservice instance.
+	// Specifies the version of the dedicated microservice instance.
 	// Changing this will create a new microservice instance.
 	Version *string `pulumi:"version"`
 }
@@ -288,7 +398,7 @@ type MicroserviceInstanceArgs struct {
 	// Specifies the extended attributes.
 	// Changing this will create a new microservice instance.
 	Properties pulumi.StringMapInput
-	// Specifies the verison of the dedicated microservice instance.
+	// Specifies the version of the dedicated microservice instance.
 	// Changing this will create a new microservice instance.
 	Version pulumi.StringPtrInput
 }
@@ -447,7 +557,7 @@ func (o MicroserviceInstanceOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *MicroserviceInstance) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
 }
 
-// Specifies the verison of the dedicated microservice instance.
+// Specifies the version of the dedicated microservice instance.
 // Changing this will create a new microservice instance.
 func (o MicroserviceInstanceOutput) Version() pulumi.StringOutput {
 	return o.ApplyT(func(v *MicroserviceInstance) pulumi.StringOutput { return v.Version }).(pulumi.StringOutput)

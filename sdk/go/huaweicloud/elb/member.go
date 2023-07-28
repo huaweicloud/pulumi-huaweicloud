@@ -22,16 +22,20 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Elb"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			lbPoolId := cfg.RequireObject("lbPoolId")
+//			ipv4SubnetId := cfg.RequireObject("ipv4SubnetId")
 //			_, err := Elb.NewMember(ctx, "member1", &Elb.MemberArgs{
 //				Address:      pulumi.String("192.168.199.23"),
 //				ProtocolPort: pulumi.Int(8080),
-//				PoolId:       pulumi.Any(_var.Pool_id),
-//				SubnetId:     pulumi.Any(_var.Subnet_id),
+//				PoolId:       pulumi.Any(lbPoolId),
+//				SubnetId:     pulumi.Any(ipv4SubnetId),
 //			})
 //			if err != nil {
 //				return err
@@ -56,9 +60,7 @@ type Member struct {
 
 	// The IP address of the member to receive traffic from the load balancer.
 	// Changing this creates a new member.
-	Address pulumi.StringOutput `pulumi:"address"`
-	// The administrative state of the member.
-	// A valid value is true (UP) or false (DOWN).
+	Address      pulumi.StringOutput  `pulumi:"address"`
 	AdminStateUp pulumi.BoolPtrOutput `pulumi:"adminStateUp"`
 	// Human-readable name for the member.
 	Name pulumi.StringOutput `pulumi:"name"`
@@ -70,7 +72,7 @@ type Member struct {
 	// The region in which to create the ELB member resource. If omitted, the the
 	// provider-level region will be used. Changing this creates a new member.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// The subnet in which to access the member
+	// The **IPv4 subnet ID** of the subnet in which to access the member.
 	SubnetId pulumi.StringOutput `pulumi:"subnetId"`
 	// Deprecated: tenant_id is deprecated
 	TenantId pulumi.StringOutput `pulumi:"tenantId"`
@@ -124,10 +126,8 @@ func GetMember(ctx *pulumi.Context,
 type memberState struct {
 	// The IP address of the member to receive traffic from the load balancer.
 	// Changing this creates a new member.
-	Address *string `pulumi:"address"`
-	// The administrative state of the member.
-	// A valid value is true (UP) or false (DOWN).
-	AdminStateUp *bool `pulumi:"adminStateUp"`
+	Address      *string `pulumi:"address"`
+	AdminStateUp *bool   `pulumi:"adminStateUp"`
 	// Human-readable name for the member.
 	Name *string `pulumi:"name"`
 	// The id of the pool that this member will be assigned to.
@@ -138,7 +138,7 @@ type memberState struct {
 	// The region in which to create the ELB member resource. If omitted, the the
 	// provider-level region will be used. Changing this creates a new member.
 	Region *string `pulumi:"region"`
-	// The subnet in which to access the member
+	// The **IPv4 subnet ID** of the subnet in which to access the member.
 	SubnetId *string `pulumi:"subnetId"`
 	// Deprecated: tenant_id is deprecated
 	TenantId *string `pulumi:"tenantId"`
@@ -151,9 +151,7 @@ type memberState struct {
 type MemberState struct {
 	// The IP address of the member to receive traffic from the load balancer.
 	// Changing this creates a new member.
-	Address pulumi.StringPtrInput
-	// The administrative state of the member.
-	// A valid value is true (UP) or false (DOWN).
+	Address      pulumi.StringPtrInput
 	AdminStateUp pulumi.BoolPtrInput
 	// Human-readable name for the member.
 	Name pulumi.StringPtrInput
@@ -165,7 +163,7 @@ type MemberState struct {
 	// The region in which to create the ELB member resource. If omitted, the the
 	// provider-level region will be used. Changing this creates a new member.
 	Region pulumi.StringPtrInput
-	// The subnet in which to access the member
+	// The **IPv4 subnet ID** of the subnet in which to access the member.
 	SubnetId pulumi.StringPtrInput
 	// Deprecated: tenant_id is deprecated
 	TenantId pulumi.StringPtrInput
@@ -182,10 +180,8 @@ func (MemberState) ElementType() reflect.Type {
 type memberArgs struct {
 	// The IP address of the member to receive traffic from the load balancer.
 	// Changing this creates a new member.
-	Address string `pulumi:"address"`
-	// The administrative state of the member.
-	// A valid value is true (UP) or false (DOWN).
-	AdminStateUp *bool `pulumi:"adminStateUp"`
+	Address      string `pulumi:"address"`
+	AdminStateUp *bool  `pulumi:"adminStateUp"`
 	// Human-readable name for the member.
 	Name *string `pulumi:"name"`
 	// The id of the pool that this member will be assigned to.
@@ -196,7 +192,7 @@ type memberArgs struct {
 	// The region in which to create the ELB member resource. If omitted, the the
 	// provider-level region will be used. Changing this creates a new member.
 	Region *string `pulumi:"region"`
-	// The subnet in which to access the member
+	// The **IPv4 subnet ID** of the subnet in which to access the member.
 	SubnetId string `pulumi:"subnetId"`
 	// Deprecated: tenant_id is deprecated
 	TenantId *string `pulumi:"tenantId"`
@@ -210,9 +206,7 @@ type memberArgs struct {
 type MemberArgs struct {
 	// The IP address of the member to receive traffic from the load balancer.
 	// Changing this creates a new member.
-	Address pulumi.StringInput
-	// The administrative state of the member.
-	// A valid value is true (UP) or false (DOWN).
+	Address      pulumi.StringInput
 	AdminStateUp pulumi.BoolPtrInput
 	// Human-readable name for the member.
 	Name pulumi.StringPtrInput
@@ -224,7 +218,7 @@ type MemberArgs struct {
 	// The region in which to create the ELB member resource. If omitted, the the
 	// provider-level region will be used. Changing this creates a new member.
 	Region pulumi.StringPtrInput
-	// The subnet in which to access the member
+	// The **IPv4 subnet ID** of the subnet in which to access the member.
 	SubnetId pulumi.StringInput
 	// Deprecated: tenant_id is deprecated
 	TenantId pulumi.StringPtrInput
@@ -327,8 +321,6 @@ func (o MemberOutput) Address() pulumi.StringOutput {
 	return o.ApplyT(func(v *Member) pulumi.StringOutput { return v.Address }).(pulumi.StringOutput)
 }
 
-// The administrative state of the member.
-// A valid value is true (UP) or false (DOWN).
 func (o MemberOutput) AdminStateUp() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Member) pulumi.BoolPtrOutput { return v.AdminStateUp }).(pulumi.BoolPtrOutput)
 }
@@ -355,7 +347,7 @@ func (o MemberOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Member) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// The subnet in which to access the member
+// The **IPv4 subnet ID** of the subnet in which to access the member.
 func (o MemberOutput) SubnetId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Member) pulumi.StringOutput { return v.SubnetId }).(pulumi.StringOutput)
 }

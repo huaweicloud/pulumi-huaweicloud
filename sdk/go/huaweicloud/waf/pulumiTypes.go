@@ -12,7 +12,7 @@ import (
 
 type DedicatedDomainServer struct {
 	// IP address or domain name of the web server that the client accesses. For
-	// example, 192.168.1.1 or www.example.com. Changing this creates a new service.
+	// example, `192.168.1.1` or `www.example.com`. Changing this creates a new service.
 	Address string `pulumi:"address"`
 	// Protocol type of the client. The options include `HTTP` and `HTTPS`.
 	// Changing this creates a new service.
@@ -43,7 +43,7 @@ type DedicatedDomainServerInput interface {
 
 type DedicatedDomainServerArgs struct {
 	// IP address or domain name of the web server that the client accesses. For
-	// example, 192.168.1.1 or www.example.com. Changing this creates a new service.
+	// example, `192.168.1.1` or `www.example.com`. Changing this creates a new service.
 	Address pulumi.StringInput `pulumi:"address"`
 	// Protocol type of the client. The options include `HTTP` and `HTTPS`.
 	// Changing this creates a new service.
@@ -113,7 +113,7 @@ func (o DedicatedDomainServerOutput) ToDedicatedDomainServerOutputWithContext(ct
 }
 
 // IP address or domain name of the web server that the client accesses. For
-// example, 192.168.1.1 or www.example.com. Changing this creates a new service.
+// example, `192.168.1.1` or `www.example.com`. Changing this creates a new service.
 func (o DedicatedDomainServerOutput) Address() pulumi.StringOutput {
 	return o.ApplyT(func(v DedicatedDomainServer) string { return v.Address }).(pulumi.StringOutput)
 }
@@ -169,7 +169,7 @@ func (o DedicatedDomainServerArrayOutput) Index(i pulumi.IntInput) DedicatedDoma
 
 type DomainServer struct {
 	// IP address or domain name of the web server that the client accesses. For example,
-	// 192.168.1.1 or www.a.com.
+	// `192.168.1.1` or `www.a.com`.
 	Address string `pulumi:"address"`
 	// Protocol type of the client. The options include `HTTP` and `HTTPS`.
 	ClientProtocol string `pulumi:"clientProtocol"`
@@ -193,7 +193,7 @@ type DomainServerInput interface {
 
 type DomainServerArgs struct {
 	// IP address or domain name of the web server that the client accesses. For example,
-	// 192.168.1.1 or www.a.com.
+	// `192.168.1.1` or `www.a.com`.
 	Address pulumi.StringInput `pulumi:"address"`
 	// Protocol type of the client. The options include `HTTP` and `HTTPS`.
 	ClientProtocol pulumi.StringInput `pulumi:"clientProtocol"`
@@ -256,7 +256,7 @@ func (o DomainServerOutput) ToDomainServerOutputWithContext(ctx context.Context)
 }
 
 // IP address or domain name of the web server that the client accesses. For example,
-// 192.168.1.1 or www.a.com.
+// `192.168.1.1` or `www.a.com`.
 func (o DomainServerOutput) Address() pulumi.StringOutput {
 	return o.ApplyT(func(v DomainServer) string { return v.Address }).(pulumi.StringOutput)
 }
@@ -518,7 +518,8 @@ type GetDedicatedInstancesInstance struct {
 	AvailableZone string `pulumi:"availableZone"`
 	// The ECS cpu architecture of WAF dedicated instance.
 	CpuArchitecture string `pulumi:"cpuArchitecture"`
-	CpuFlavor       string `pulumi:"cpuFlavor"`
+	// The flavor of the ECS used by the WAF instance.
+	EcsFlavor string `pulumi:"ecsFlavor"`
 	// The instance group ID used by the WAF dedicated instance in ELB mode.
 	GroupId string `pulumi:"groupId"`
 	// The id of WAF dedicated instance.
@@ -559,7 +560,8 @@ type GetDedicatedInstancesInstanceArgs struct {
 	AvailableZone pulumi.StringInput `pulumi:"availableZone"`
 	// The ECS cpu architecture of WAF dedicated instance.
 	CpuArchitecture pulumi.StringInput `pulumi:"cpuArchitecture"`
-	CpuFlavor       pulumi.StringInput `pulumi:"cpuFlavor"`
+	// The flavor of the ECS used by the WAF instance.
+	EcsFlavor pulumi.StringInput `pulumi:"ecsFlavor"`
 	// The instance group ID used by the WAF dedicated instance in ELB mode.
 	GroupId pulumi.StringInput `pulumi:"groupId"`
 	// The id of WAF dedicated instance.
@@ -648,8 +650,9 @@ func (o GetDedicatedInstancesInstanceOutput) CpuArchitecture() pulumi.StringOutp
 	return o.ApplyT(func(v GetDedicatedInstancesInstance) string { return v.CpuArchitecture }).(pulumi.StringOutput)
 }
 
-func (o GetDedicatedInstancesInstanceOutput) CpuFlavor() pulumi.StringOutput {
-	return o.ApplyT(func(v GetDedicatedInstancesInstance) string { return v.CpuFlavor }).(pulumi.StringOutput)
+// The flavor of the ECS used by the WAF instance.
+func (o GetDedicatedInstancesInstanceOutput) EcsFlavor() pulumi.StringOutput {
+	return o.ApplyT(func(v GetDedicatedInstancesInstance) string { return v.EcsFlavor }).(pulumi.StringOutput)
 }
 
 // The instance group ID used by the WAF dedicated instance in ELB mode.

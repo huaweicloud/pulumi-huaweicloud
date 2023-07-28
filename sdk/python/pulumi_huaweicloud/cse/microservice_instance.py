@@ -54,7 +54,7 @@ class MicroserviceInstanceArgs:
                Changing this will create a new microservice instance.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] properties: Specifies the extended attributes.
                Changing this will create a new microservice instance.
-        :param pulumi.Input[str] version: Specifies the verison of the dedicated microservice instance.
+        :param pulumi.Input[str] version: Specifies the version of the dedicated microservice instance.
                Changing this will create a new microservice instance.
         """
         pulumi.set(__self__, "connect_address", connect_address)
@@ -203,7 +203,7 @@ class MicroserviceInstanceArgs:
     @pulumi.getter
     def version(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the verison of the dedicated microservice instance.
+        Specifies the version of the dedicated microservice instance.
         Changing this will create a new microservice instance.
         """
         return pulumi.get(self, "version")
@@ -256,7 +256,7 @@ class _MicroserviceInstanceState:
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] properties: Specifies the extended attributes.
                Changing this will create a new microservice instance.
         :param pulumi.Input[str] status: The microservice instance status. The values supports **UP**, **DOWN**, **STARTING** and **OUTOFSERVICE**.
-        :param pulumi.Input[str] version: Specifies the verison of the dedicated microservice instance.
+        :param pulumi.Input[str] version: Specifies the version of the dedicated microservice instance.
                Changing this will create a new microservice instance.
         """
         if admin_pass is not None:
@@ -423,7 +423,7 @@ class _MicroserviceInstanceState:
     @pulumi.getter
     def version(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the verison of the dedicated microservice instance.
+        Specifies the version of the dedicated microservice instance.
         Changing this will create a new microservice instance.
         """
         return pulumi.get(self, "version")
@@ -453,6 +453,80 @@ class MicroserviceInstance(pulumi.CustomResource):
         Manages a dedicated microservice instance resource within HuaweiCloud.
 
         ## Example Usage
+        ### Create a microservice instance under a microservice with RBAC authentication of engine disabled
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        engine_conn_addr = config.require_object("engineConnAddr")
+        microservice_id = config.require_object("microserviceId")
+        region_name = config.require_object("regionName")
+        az_name = config.require_object("azName")
+        test = huaweicloud.cse.MicroserviceInstance("test",
+            connect_address=engine_conn_addr,
+            microservice_id=microservice_id,
+            host_name="localhost",
+            endpoints=[
+                "grpc://127.0.1.132:9980",
+                "rest://127.0.0.111:8081",
+            ],
+            version="1.0.0",
+            properties={
+                "_TAGS": "A, B",
+                "attr1": "a",
+                "nodeIP": "127.0.0.1",
+            },
+            health_check=huaweicloud.cse.MicroserviceInstanceHealthCheckArgs(
+                mode="push",
+                interval=30,
+                max_retries=3,
+            ),
+            data_center=huaweicloud.cse.MicroserviceInstanceDataCenterArgs(
+                name="dc",
+                region=region_name,
+                availability_zone=az_name,
+            ))
+        ```
+        ### Create a microservice instance under a microservice with RBAC authentication of engine enabled
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        engine_conn_addr = config.require_object("engineConnAddr")
+        microservice_id = config.require_object("microserviceId")
+        region_name = config.require_object("regionName")
+        az_name = config.require_object("azName")
+        test = huaweicloud.cse.MicroserviceInstance("test",
+            connect_address=engine_conn_addr,
+            microservice_id=microservice_id,
+            host_name="localhost",
+            endpoints=[
+                "grpc://127.0.1.132:9980",
+                "rest://127.0.0.111:8081",
+            ],
+            version="1.0.0",
+            properties={
+                "_TAGS": "A, B",
+                "attr1": "a",
+                "nodeIP": "127.0.0.1",
+            },
+            health_check=huaweicloud.cse.MicroserviceInstanceHealthCheckArgs(
+                mode="push",
+                interval=30,
+                max_retries=3,
+            ),
+            data_center=huaweicloud.cse.MicroserviceInstanceDataCenterArgs(
+                name="dc",
+                region=region_name,
+                availability_zone=az_name,
+            ),
+            admin_user="root",
+            admin_pass="Huawei!123")
+        ```
 
         ## Import
 
@@ -498,7 +572,7 @@ class MicroserviceInstance(pulumi.CustomResource):
                belongs. Changing this will create a new microservice instance.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] properties: Specifies the extended attributes.
                Changing this will create a new microservice instance.
-        :param pulumi.Input[str] version: Specifies the verison of the dedicated microservice instance.
+        :param pulumi.Input[str] version: Specifies the version of the dedicated microservice instance.
                Changing this will create a new microservice instance.
         """
         ...
@@ -511,6 +585,80 @@ class MicroserviceInstance(pulumi.CustomResource):
         Manages a dedicated microservice instance resource within HuaweiCloud.
 
         ## Example Usage
+        ### Create a microservice instance under a microservice with RBAC authentication of engine disabled
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        engine_conn_addr = config.require_object("engineConnAddr")
+        microservice_id = config.require_object("microserviceId")
+        region_name = config.require_object("regionName")
+        az_name = config.require_object("azName")
+        test = huaweicloud.cse.MicroserviceInstance("test",
+            connect_address=engine_conn_addr,
+            microservice_id=microservice_id,
+            host_name="localhost",
+            endpoints=[
+                "grpc://127.0.1.132:9980",
+                "rest://127.0.0.111:8081",
+            ],
+            version="1.0.0",
+            properties={
+                "_TAGS": "A, B",
+                "attr1": "a",
+                "nodeIP": "127.0.0.1",
+            },
+            health_check=huaweicloud.cse.MicroserviceInstanceHealthCheckArgs(
+                mode="push",
+                interval=30,
+                max_retries=3,
+            ),
+            data_center=huaweicloud.cse.MicroserviceInstanceDataCenterArgs(
+                name="dc",
+                region=region_name,
+                availability_zone=az_name,
+            ))
+        ```
+        ### Create a microservice instance under a microservice with RBAC authentication of engine enabled
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        engine_conn_addr = config.require_object("engineConnAddr")
+        microservice_id = config.require_object("microserviceId")
+        region_name = config.require_object("regionName")
+        az_name = config.require_object("azName")
+        test = huaweicloud.cse.MicroserviceInstance("test",
+            connect_address=engine_conn_addr,
+            microservice_id=microservice_id,
+            host_name="localhost",
+            endpoints=[
+                "grpc://127.0.1.132:9980",
+                "rest://127.0.0.111:8081",
+            ],
+            version="1.0.0",
+            properties={
+                "_TAGS": "A, B",
+                "attr1": "a",
+                "nodeIP": "127.0.0.1",
+            },
+            health_check=huaweicloud.cse.MicroserviceInstanceHealthCheckArgs(
+                mode="push",
+                interval=30,
+                max_retries=3,
+            ),
+            data_center=huaweicloud.cse.MicroserviceInstanceDataCenterArgs(
+                name="dc",
+                region=region_name,
+                availability_zone=az_name,
+            ),
+            admin_user="root",
+            admin_pass="Huawei!123")
+        ```
 
         ## Import
 
@@ -636,7 +784,7 @@ class MicroserviceInstance(pulumi.CustomResource):
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] properties: Specifies the extended attributes.
                Changing this will create a new microservice instance.
         :param pulumi.Input[str] status: The microservice instance status. The values supports **UP**, **DOWN**, **STARTING** and **OUTOFSERVICE**.
-        :param pulumi.Input[str] version: Specifies the verison of the dedicated microservice instance.
+        :param pulumi.Input[str] version: Specifies the version of the dedicated microservice instance.
                Changing this will create a new microservice instance.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -757,7 +905,7 @@ class MicroserviceInstance(pulumi.CustomResource):
     @pulumi.getter
     def version(self) -> pulumi.Output[str]:
         """
-        Specifies the verison of the dedicated microservice instance.
+        Specifies the version of the dedicated microservice instance.
         Changing this will create a new microservice instance.
         """
         return pulumi.get(self, "version")

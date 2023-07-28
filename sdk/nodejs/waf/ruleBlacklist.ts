@@ -11,25 +11,52 @@ import * as utilities from "../utilities";
  * used. The blacklist and whitelist rule resource can be used in Cloud Mode, Dedicated Mode and ELB Mode.
  *
  * ## Example Usage
+ * ### WAF rule blacklist and whitelist with ip address
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const policy1 = new huaweicloud.waf.Policy("policy1", {});
- * const rule1 = new huaweicloud.waf.RuleBlacklist("rule1", {
- *     policyId: policy1.id,
+ * const config = new pulumi.Config();
+ * const policyId = config.requireObject("policyId");
+ * const rule = new huaweicloud.waf.RuleBlacklist("rule", {
+ *     policyId: policyId,
  *     ipAddress: "192.168.0.0/24",
  *     action: 0,
+ *     description: "test description",
+ * });
+ * ```
+ * ### WAF rule blacklist and whitelist with address group
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const policyId = config.requireObject("policyId");
+ * const addressGroupId = config.requireObject("addressGroupId");
+ * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
+ * const rule = new huaweicloud.waf.RuleBlacklist("rule", {
+ *     policyId: policyId,
+ *     addressGroupId: addressGroupId,
+ *     enterpriseProjectId: enterpriseProjectId,
+ *     action: 1,
+ *     description: "test description",
  * });
  * ```
  *
  * ## Import
  *
- * Blacklist and Whiltelist Rules can be imported using the policy ID and rule ID separated by a slash, e.g.
+ * There are two ways to import WAF rule blacklist state. * Using `policy_id` and `rule_id`, separated by a slash, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Waf/ruleBlacklist:RuleBlacklist rule_1 d78b439fd5e54ea08886e5f63ee7b3f5/ac01a092d50e4e6ba3cd622c1128ba2c
+ *  $ pulumi import huaweicloud:Waf/ruleBlacklist:RuleBlacklist test <policy_id>/<rule_id>
+ * ```
+ *
+ *  * Using `policy_id`, `rule_id` and `enterprise_project_id`, separated by slashes, e.g. bash
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:Waf/ruleBlacklist:RuleBlacklist test <policy_id>/<rule_id>/<enterprise_project_id>
  * ```
  */
 export class RuleBlacklist extends pulumi.CustomResource {
@@ -68,9 +95,39 @@ export class RuleBlacklist extends pulumi.CustomResource {
      */
     public readonly action!: pulumi.Output<number | undefined>;
     /**
-     * Specifies the IP address or range. For example, 192.168.0.125 or 192.168.0.0/24.
+     * Specifies the WAF address group id.
+     * This parameter is required when `ipAddress` is not specified. The parameter `addressGroupId` and `ipAddress`
+     * can not be configured together.
      */
-    public readonly ipAddress!: pulumi.Output<string>;
+    public readonly addressGroupId!: pulumi.Output<string | undefined>;
+    /**
+     * The name of the IP address group.
+     */
+    public /*out*/ readonly addressGroupName!: pulumi.Output<string>;
+    /**
+     * The number of IP addresses or IP address ranges in the IP address group.
+     */
+    public /*out*/ readonly addressGroupSize!: pulumi.Output<number>;
+    /**
+     * Specifies the rule description of the WAF address group.
+     */
+    public readonly description!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the enterprise project ID of WAF rule blacklist
+     * and whitelist. Changing this parameter will create a new resource.
+     */
+    public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the IP address or range. For example, 192.168.0.125 or 192.168.0.0/24.
+     * This parameter is required when `addressGroupId` is not specified. The parameter `addressGroupId` and `ipAddress`
+     * can not be configured together.
+     */
+    public readonly ipAddress!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the Rule name. The value can contain a maximum of 64 characters.
+     * Only letters, digits, hyphens (-), underscores (_) and periods (.) are allowed.
+     */
+    public readonly name!: pulumi.Output<string>;
     /**
      * Specifies the WAF policy ID. Changing this creates a new rule. Please make
      * sure that the region which the policy belongs to be consistent with the `region`.
@@ -96,21 +153,30 @@ export class RuleBlacklist extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as RuleBlacklistState | undefined;
             resourceInputs["action"] = state ? state.action : undefined;
+            resourceInputs["addressGroupId"] = state ? state.addressGroupId : undefined;
+            resourceInputs["addressGroupName"] = state ? state.addressGroupName : undefined;
+            resourceInputs["addressGroupSize"] = state ? state.addressGroupSize : undefined;
+            resourceInputs["description"] = state ? state.description : undefined;
+            resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["ipAddress"] = state ? state.ipAddress : undefined;
+            resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["policyId"] = state ? state.policyId : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
         } else {
             const args = argsOrState as RuleBlacklistArgs | undefined;
-            if ((!args || args.ipAddress === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'ipAddress'");
-            }
             if ((!args || args.policyId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'policyId'");
             }
             resourceInputs["action"] = args ? args.action : undefined;
+            resourceInputs["addressGroupId"] = args ? args.addressGroupId : undefined;
+            resourceInputs["description"] = args ? args.description : undefined;
+            resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["ipAddress"] = args ? args.ipAddress : undefined;
+            resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["policyId"] = args ? args.policyId : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["addressGroupName"] = undefined /*out*/;
+            resourceInputs["addressGroupSize"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(RuleBlacklist.__pulumiType, name, resourceInputs, opts);
@@ -129,9 +195,39 @@ export interface RuleBlacklistState {
      */
     action?: pulumi.Input<number>;
     /**
+     * Specifies the WAF address group id.
+     * This parameter is required when `ipAddress` is not specified. The parameter `addressGroupId` and `ipAddress`
+     * can not be configured together.
+     */
+    addressGroupId?: pulumi.Input<string>;
+    /**
+     * The name of the IP address group.
+     */
+    addressGroupName?: pulumi.Input<string>;
+    /**
+     * The number of IP addresses or IP address ranges in the IP address group.
+     */
+    addressGroupSize?: pulumi.Input<number>;
+    /**
+     * Specifies the rule description of the WAF address group.
+     */
+    description?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID of WAF rule blacklist
+     * and whitelist. Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
      * Specifies the IP address or range. For example, 192.168.0.125 or 192.168.0.0/24.
+     * This parameter is required when `addressGroupId` is not specified. The parameter `addressGroupId` and `ipAddress`
+     * can not be configured together.
      */
     ipAddress?: pulumi.Input<string>;
+    /**
+     * Specifies the Rule name. The value can contain a maximum of 64 characters.
+     * Only letters, digits, hyphens (-), underscores (_) and periods (.) are allowed.
+     */
+    name?: pulumi.Input<string>;
     /**
      * Specifies the WAF policy ID. Changing this creates a new rule. Please make
      * sure that the region which the policy belongs to be consistent with the `region`.
@@ -156,9 +252,31 @@ export interface RuleBlacklistArgs {
      */
     action?: pulumi.Input<number>;
     /**
-     * Specifies the IP address or range. For example, 192.168.0.125 or 192.168.0.0/24.
+     * Specifies the WAF address group id.
+     * This parameter is required when `ipAddress` is not specified. The parameter `addressGroupId` and `ipAddress`
+     * can not be configured together.
      */
-    ipAddress: pulumi.Input<string>;
+    addressGroupId?: pulumi.Input<string>;
+    /**
+     * Specifies the rule description of the WAF address group.
+     */
+    description?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID of WAF rule blacklist
+     * and whitelist. Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specifies the IP address or range. For example, 192.168.0.125 or 192.168.0.0/24.
+     * This parameter is required when `addressGroupId` is not specified. The parameter `addressGroupId` and `ipAddress`
+     * can not be configured together.
+     */
+    ipAddress?: pulumi.Input<string>;
+    /**
+     * Specifies the Rule name. The value can contain a maximum of 64 characters.
+     * Only letters, digits, hyphens (-), underscores (_) and periods (.) are allowed.
+     */
+    name?: pulumi.Input<string>;
     /**
      * Specifies the WAF policy ID. Changing this creates a new rule. Please make
      * sure that the region which the policy belongs to be consistent with the `region`.

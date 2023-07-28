@@ -16,9 +16,12 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const policy1 = new huaweicloud.waf.Policy("policy1", {});
+ * const config = new pulumi.Config();
+ * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
+ * const policyId = config.requireObject("policyId");
  * const rule1 = new huaweicloud.waf.RuleWebTamperProtection("rule1", {
- *     policyId: policy1.id,
+ *     policyId: policyId,
+ *     enterpriseProjectId: enterpriseProjectId,
  *     domain: "www.your-domain.com",
  *     path: "/payment",
  * });
@@ -26,10 +29,16 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Web Tamper Protection Rules can be imported using the policy ID and rule ID separated by a slash, e.g.
+ * There are two ways to import WAF rule web tamper protection state. * Using `policy_id` and `rule_id`, separated by a slash, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Waf/ruleWebTamperProtection:RuleWebTamperProtection rule_1 840c6dfdd5604c1781eea033eae2004f/c6dbc13bb7e74788ae53ecc9254b3ea8
+ *  $ pulumi import huaweicloud:Waf/ruleWebTamperProtection:RuleWebTamperProtection test <policy_id>/<rule_id>
+ * ```
+ *
+ *  * Using `policy_id`, `rule_id` and `enterprise_project_id`, separated by slashes, e.g. bash
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:Waf/ruleWebTamperProtection:RuleWebTamperProtection test <policy_id>/<rule_id>/<enterprise_project_id>
  * ```
  */
 export class RuleWebTamperProtection extends pulumi.CustomResource {
@@ -65,6 +74,11 @@ export class RuleWebTamperProtection extends pulumi.CustomResource {
      */
     public readonly domain!: pulumi.Output<string>;
     /**
+     * Specifies the enterprise project ID of WAF tamper protection
+     * rule. Changing this parameter will create a new resource.
+     */
+    public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
+    /**
      * Specifies the URL protected by the web tamper protection rule, excluding a
      * domain name. Changing this creates a new rule.
      */
@@ -93,6 +107,7 @@ export class RuleWebTamperProtection extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as RuleWebTamperProtectionState | undefined;
             resourceInputs["domain"] = state ? state.domain : undefined;
+            resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["path"] = state ? state.path : undefined;
             resourceInputs["policyId"] = state ? state.policyId : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
@@ -108,6 +123,7 @@ export class RuleWebTamperProtection extends pulumi.CustomResource {
                 throw new Error("Missing required property 'policyId'");
             }
             resourceInputs["domain"] = args ? args.domain : undefined;
+            resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["path"] = args ? args.path : undefined;
             resourceInputs["policyId"] = args ? args.policyId : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
@@ -125,6 +141,11 @@ export interface RuleWebTamperProtectionState {
      * Specifies the domain name. Changing this creates a new rule.
      */
     domain?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID of WAF tamper protection
+     * rule. Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Specifies the URL protected by the web tamper protection rule, excluding a
      * domain name. Changing this creates a new rule.
@@ -149,6 +170,11 @@ export interface RuleWebTamperProtectionArgs {
      * Specifies the domain name. Changing this creates a new rule.
      */
     domain: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID of WAF tamper protection
+     * rule. Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Specifies the URL protected by the web tamper protection rule, excluding a
      * domain name. Changing this creates a new rule.

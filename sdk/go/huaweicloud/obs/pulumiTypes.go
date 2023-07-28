@@ -861,6 +861,112 @@ func (o BucketLoggingArrayOutput) Index(i pulumi.IntInput) BucketLoggingOutput {
 	}).(BucketLoggingOutput)
 }
 
+type BucketStorageInfo struct {
+	// The number of objects stored in the bucket.
+	ObjectNumber *int `pulumi:"objectNumber"`
+	// The stored size of the bucket.
+	Size *int `pulumi:"size"`
+}
+
+// BucketStorageInfoInput is an input type that accepts BucketStorageInfoArgs and BucketStorageInfoOutput values.
+// You can construct a concrete instance of `BucketStorageInfoInput` via:
+//
+//	BucketStorageInfoArgs{...}
+type BucketStorageInfoInput interface {
+	pulumi.Input
+
+	ToBucketStorageInfoOutput() BucketStorageInfoOutput
+	ToBucketStorageInfoOutputWithContext(context.Context) BucketStorageInfoOutput
+}
+
+type BucketStorageInfoArgs struct {
+	// The number of objects stored in the bucket.
+	ObjectNumber pulumi.IntPtrInput `pulumi:"objectNumber"`
+	// The stored size of the bucket.
+	Size pulumi.IntPtrInput `pulumi:"size"`
+}
+
+func (BucketStorageInfoArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*BucketStorageInfo)(nil)).Elem()
+}
+
+func (i BucketStorageInfoArgs) ToBucketStorageInfoOutput() BucketStorageInfoOutput {
+	return i.ToBucketStorageInfoOutputWithContext(context.Background())
+}
+
+func (i BucketStorageInfoArgs) ToBucketStorageInfoOutputWithContext(ctx context.Context) BucketStorageInfoOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(BucketStorageInfoOutput)
+}
+
+// BucketStorageInfoArrayInput is an input type that accepts BucketStorageInfoArray and BucketStorageInfoArrayOutput values.
+// You can construct a concrete instance of `BucketStorageInfoArrayInput` via:
+//
+//	BucketStorageInfoArray{ BucketStorageInfoArgs{...} }
+type BucketStorageInfoArrayInput interface {
+	pulumi.Input
+
+	ToBucketStorageInfoArrayOutput() BucketStorageInfoArrayOutput
+	ToBucketStorageInfoArrayOutputWithContext(context.Context) BucketStorageInfoArrayOutput
+}
+
+type BucketStorageInfoArray []BucketStorageInfoInput
+
+func (BucketStorageInfoArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]BucketStorageInfo)(nil)).Elem()
+}
+
+func (i BucketStorageInfoArray) ToBucketStorageInfoArrayOutput() BucketStorageInfoArrayOutput {
+	return i.ToBucketStorageInfoArrayOutputWithContext(context.Background())
+}
+
+func (i BucketStorageInfoArray) ToBucketStorageInfoArrayOutputWithContext(ctx context.Context) BucketStorageInfoArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(BucketStorageInfoArrayOutput)
+}
+
+type BucketStorageInfoOutput struct{ *pulumi.OutputState }
+
+func (BucketStorageInfoOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*BucketStorageInfo)(nil)).Elem()
+}
+
+func (o BucketStorageInfoOutput) ToBucketStorageInfoOutput() BucketStorageInfoOutput {
+	return o
+}
+
+func (o BucketStorageInfoOutput) ToBucketStorageInfoOutputWithContext(ctx context.Context) BucketStorageInfoOutput {
+	return o
+}
+
+// The number of objects stored in the bucket.
+func (o BucketStorageInfoOutput) ObjectNumber() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v BucketStorageInfo) *int { return v.ObjectNumber }).(pulumi.IntPtrOutput)
+}
+
+// The stored size of the bucket.
+func (o BucketStorageInfoOutput) Size() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v BucketStorageInfo) *int { return v.Size }).(pulumi.IntPtrOutput)
+}
+
+type BucketStorageInfoArrayOutput struct{ *pulumi.OutputState }
+
+func (BucketStorageInfoArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]BucketStorageInfo)(nil)).Elem()
+}
+
+func (o BucketStorageInfoArrayOutput) ToBucketStorageInfoArrayOutput() BucketStorageInfoArrayOutput {
+	return o
+}
+
+func (o BucketStorageInfoArrayOutput) ToBucketStorageInfoArrayOutputWithContext(ctx context.Context) BucketStorageInfoArrayOutput {
+	return o
+}
+
+func (o BucketStorageInfoArrayOutput) Index(i pulumi.IntInput) BucketStorageInfoOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) BucketStorageInfo {
+		return vs[0].([]BucketStorageInfo)[vs[1].(int)]
+	}).(BucketStorageInfoOutput)
+}
+
 type BucketWebsite struct {
 	// Specifies the error page returned when an error occurs during static website
 	// access. Only HTML, JPG, PNG, BMP, and WEBP files under the root directory are supported.
@@ -1234,6 +1340,8 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*BucketLifecycleRuleTransitionArrayInput)(nil)).Elem(), BucketLifecycleRuleTransitionArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*BucketLoggingInput)(nil)).Elem(), BucketLoggingArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*BucketLoggingArrayInput)(nil)).Elem(), BucketLoggingArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*BucketStorageInfoInput)(nil)).Elem(), BucketStorageInfoArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*BucketStorageInfoArrayInput)(nil)).Elem(), BucketStorageInfoArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*BucketWebsiteInput)(nil)).Elem(), BucketWebsiteArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*BucketWebsitePtrInput)(nil)).Elem(), BucketWebsiteArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetBucketsBucketInput)(nil)).Elem(), GetBucketsBucketArgs{})
@@ -1252,6 +1360,8 @@ func init() {
 	pulumi.RegisterOutputType(BucketLifecycleRuleTransitionArrayOutput{})
 	pulumi.RegisterOutputType(BucketLoggingOutput{})
 	pulumi.RegisterOutputType(BucketLoggingArrayOutput{})
+	pulumi.RegisterOutputType(BucketStorageInfoOutput{})
+	pulumi.RegisterOutputType(BucketStorageInfoArrayOutput{})
 	pulumi.RegisterOutputType(BucketWebsiteOutput{})
 	pulumi.RegisterOutputType(BucketWebsitePtrOutput{})
 	pulumi.RegisterOutputType(GetBucketsBucketOutput{})

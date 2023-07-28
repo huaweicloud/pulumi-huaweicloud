@@ -85,12 +85,10 @@ export class Addon extends pulumi.CustomResource {
     /**
      * Specifies the add-on template installation parameters.
      * These parameters vary depending on the add-on. Structure is documented below.
-     * Changing this parameter will create a new resource.
      */
     public readonly values!: pulumi.Output<outputs.Cce.AddonValues | undefined>;
     /**
      * Specifies the version of the add-on.
-     * Changing this parameter will create a new resource.
      */
     public readonly version!: pulumi.Output<string>;
 
@@ -121,9 +119,6 @@ export class Addon extends pulumi.CustomResource {
             }
             if ((!args || args.templateName === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'templateName'");
-            }
-            if ((!args || args.version === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'version'");
             }
             resourceInputs["clusterId"] = args ? args.clusterId : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
@@ -168,12 +163,10 @@ export interface AddonState {
     /**
      * Specifies the add-on template installation parameters.
      * These parameters vary depending on the add-on. Structure is documented below.
-     * Changing this parameter will create a new resource.
      */
     values?: pulumi.Input<inputs.Cce.AddonValues>;
     /**
      * Specifies the version of the add-on.
-     * Changing this parameter will create a new resource.
      */
     version?: pulumi.Input<string>;
 }
@@ -200,12 +193,10 @@ export interface AddonArgs {
     /**
      * Specifies the add-on template installation parameters.
      * These parameters vary depending on the add-on. Structure is documented below.
-     * Changing this parameter will create a new resource.
      */
     values?: pulumi.Input<inputs.Cce.AddonValues>;
     /**
      * Specifies the version of the add-on.
-     * Changing this parameter will create a new resource.
      */
-    version: pulumi.Input<string>;
+    version?: pulumi.Input<string>;
 }

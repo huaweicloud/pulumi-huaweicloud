@@ -73,7 +73,7 @@ type DeviceGroup struct {
 	pulumi.CustomResourceState
 
 	// Specifies the description of device group. The description contains a maximum of 64
-	// characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters
+	// characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
 	// are allowed: `?'#().,&%@!`.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the list of device IDs bound to the group.
@@ -126,7 +126,7 @@ func GetDeviceGroup(ctx *pulumi.Context,
 // Input properties used for looking up and filtering DeviceGroup resources.
 type deviceGroupState struct {
 	// Specifies the description of device group. The description contains a maximum of 64
-	// characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters
+	// characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
 	// are allowed: `?'#().,&%@!`.
 	Description *string `pulumi:"description"`
 	// Specifies the list of device IDs bound to the group.
@@ -147,7 +147,7 @@ type deviceGroupState struct {
 
 type DeviceGroupState struct {
 	// Specifies the description of device group. The description contains a maximum of 64
-	// characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters
+	// characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
 	// are allowed: `?'#().,&%@!`.
 	Description pulumi.StringPtrInput
 	// Specifies the list of device IDs bound to the group.
@@ -172,7 +172,7 @@ func (DeviceGroupState) ElementType() reflect.Type {
 
 type deviceGroupArgs struct {
 	// Specifies the description of device group. The description contains a maximum of 64
-	// characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters
+	// characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
 	// are allowed: `?'#().,&%@!`.
 	Description *string `pulumi:"description"`
 	// Specifies the list of device IDs bound to the group.
@@ -194,7 +194,7 @@ type deviceGroupArgs struct {
 // The set of arguments for constructing a DeviceGroup resource.
 type DeviceGroupArgs struct {
 	// Specifies the description of device group. The description contains a maximum of 64
-	// characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters
+	// characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
 	// are allowed: `?'#().,&%@!`.
 	Description pulumi.StringPtrInput
 	// Specifies the list of device IDs bound to the group.
@@ -301,7 +301,7 @@ func (o DeviceGroupOutput) ToDeviceGroupOutputWithContext(ctx context.Context) D
 }
 
 // Specifies the description of device group. The description contains a maximum of 64
-// characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters
+// characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
 // are allowed: `?'#().,&%@!`.
 func (o DeviceGroupOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DeviceGroup) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)

@@ -72,6 +72,7 @@ export class AdminAssignment extends pulumi.CustomResource {
     /**
      * Specifies the user account to be assigned the administrator role.
      * The value can contain **1** to **64** characters.
+     * Changing this parameter will create a new resource.
      */
     public readonly account!: pulumi.Output<string>;
     /**
@@ -136,6 +137,7 @@ export interface AdminAssignmentState {
     /**
      * Specifies the user account to be assigned the administrator role.
      * The value can contain **1** to **64** characters.
+     * Changing this parameter will create a new resource.
      */
     account?: pulumi.Input<string>;
     /**
@@ -167,6 +169,7 @@ export interface AdminAssignmentArgs {
     /**
      * Specifies the user account to be assigned the administrator role.
      * The value can contain **1** to **64** characters.
+     * Changing this parameter will create a new resource.
      */
     account: pulumi.Input<string>;
     /**

@@ -56,10 +56,10 @@ class ComponentInstanceArgs:
                deployment configurations, and O&M monitoring.
                The object structure is documented below.
         :param pulumi.Input[str] description: Specifies the description of the instance.
-               The description can contian a maximum of `128` characters.
+               The description can contain a maximum of `128` characters.
         :param pulumi.Input[Sequence[pulumi.Input['ComponentInstanceExternalAccessArgs']]] external_accesses: Specifies the configuration of the external network access.
                The object structure is documented below.
-        :param pulumi.Input[str] name: Specifies the name of a configuration item or secret.
+        :param pulumi.Input[str] name: Specifies the configuration item.
         :param pulumi.Input[str] region: Specifies the region in which to create (deploy) the ServiceStage (component) instance.
                If omitted, the provider-level region will be used. Changing this will create a new instance.
         """
@@ -211,7 +211,7 @@ class ComponentInstanceArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of the instance.
-        The description can contian a maximum of `128` characters.
+        The description can contain a maximum of `128` characters.
         """
         return pulumi.get(self, "description")
 
@@ -236,7 +236,7 @@ class ComponentInstanceArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of a configuration item or secret.
+        Specifies the configuration item.
         """
         return pulumi.get(self, "name")
 
@@ -288,7 +288,7 @@ class _ComponentInstanceState:
                deployment configurations, and O&M monitoring.
                The object structure is documented below.
         :param pulumi.Input[str] description: Specifies the description of the instance.
-               The description can contian a maximum of `128` characters.
+               The description can contain a maximum of `128` characters.
         :param pulumi.Input[str] environment_id: Specifies the environment ID in which the component to build (deployed).
                Changing this will create a new instance.
         :param pulumi.Input[Sequence[pulumi.Input['ComponentInstanceExternalAccessArgs']]] external_accesses: Specifies the configuration of the external network access.
@@ -300,7 +300,7 @@ class _ComponentInstanceState:
                + **xxG**: storage capacity allocated to a component instance (reserved field). You can set it to a fixed number.
                + **xxC-xxC**: the maximum and minimum number of CPU cores allocated to a component instance.
                + **xxGi-xxGi**: the maximum and minimum memory allocated to a component instance.
-        :param pulumi.Input[str] name: Specifies the name of a configuration item or secret.
+        :param pulumi.Input[str] name: Specifies the configuration item.
         :param pulumi.Input[Sequence[pulumi.Input['ComponentInstanceReferResourceArgs']]] refer_resources: Specifies the deployed resources.
                The object structure is documented below.
         :param pulumi.Input[str] region: Specifies the region in which to create (deploy) the ServiceStage (component) instance.
@@ -404,7 +404,7 @@ class _ComponentInstanceState:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of the instance.
-        The description can contian a maximum of `128` characters.
+        The description can contain a maximum of `128` characters.
         """
         return pulumi.get(self, "description")
 
@@ -460,7 +460,7 @@ class _ComponentInstanceState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of a configuration item or secret.
+        Specifies the configuration item.
         """
         return pulumi.get(self, "name")
 
@@ -686,7 +686,7 @@ class ComponentInstance(pulumi.CustomResource):
                deployment configurations, and O&M monitoring.
                The object structure is documented below.
         :param pulumi.Input[str] description: Specifies the description of the instance.
-               The description can contian a maximum of `128` characters.
+               The description can contain a maximum of `128` characters.
         :param pulumi.Input[str] environment_id: Specifies the environment ID in which the component to build (deployed).
                Changing this will create a new instance.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ComponentInstanceExternalAccessArgs']]]] external_accesses: Specifies the configuration of the external network access.
@@ -698,7 +698,7 @@ class ComponentInstance(pulumi.CustomResource):
                + **xxG**: storage capacity allocated to a component instance (reserved field). You can set it to a fixed number.
                + **xxC-xxC**: the maximum and minimum number of CPU cores allocated to a component instance.
                + **xxGi-xxGi**: the maximum and minimum memory allocated to a component instance.
-        :param pulumi.Input[str] name: Specifies the name of a configuration item or secret.
+        :param pulumi.Input[str] name: Specifies the configuration item.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ComponentInstanceReferResourceArgs']]]] refer_resources: Specifies the deployed resources.
                The object structure is documented below.
         :param pulumi.Input[str] region: Specifies the region in which to create (deploy) the ServiceStage (component) instance.
@@ -936,7 +936,7 @@ class ComponentInstance(pulumi.CustomResource):
                deployment configurations, and O&M monitoring.
                The object structure is documented below.
         :param pulumi.Input[str] description: Specifies the description of the instance.
-               The description can contian a maximum of `128` characters.
+               The description can contain a maximum of `128` characters.
         :param pulumi.Input[str] environment_id: Specifies the environment ID in which the component to build (deployed).
                Changing this will create a new instance.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ComponentInstanceExternalAccessArgs']]]] external_accesses: Specifies the configuration of the external network access.
@@ -948,7 +948,7 @@ class ComponentInstance(pulumi.CustomResource):
                + **xxG**: storage capacity allocated to a component instance (reserved field). You can set it to a fixed number.
                + **xxC-xxC**: the maximum and minimum number of CPU cores allocated to a component instance.
                + **xxGi-xxGi**: the maximum and minimum memory allocated to a component instance.
-        :param pulumi.Input[str] name: Specifies the name of a configuration item or secret.
+        :param pulumi.Input[str] name: Specifies the configuration item.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ComponentInstanceReferResourceArgs']]]] refer_resources: Specifies the deployed resources.
                The object structure is documented below.
         :param pulumi.Input[str] region: Specifies the region in which to create (deploy) the ServiceStage (component) instance.
@@ -1027,7 +1027,7 @@ class ComponentInstance(pulumi.CustomResource):
     def description(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the description of the instance.
-        The description can contian a maximum of `128` characters.
+        The description can contain a maximum of `128` characters.
         """
         return pulumi.get(self, "description")
 
@@ -1067,7 +1067,7 @@ class ComponentInstance(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of a configuration item or secret.
+        Specifies the configuration item.
         """
         return pulumi.get(self, "name")
 

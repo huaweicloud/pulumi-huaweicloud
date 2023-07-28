@@ -110,8 +110,6 @@ type Zone struct {
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// The time to live (TTL) of the zone.
 	Ttl pulumi.IntPtrOutput `pulumi:"ttl"`
-	// Map of additional options. Changing this creates a new DNS zone.
-	ValueSpecs pulumi.StringMapOutput `pulumi:"valueSpecs"`
 	// The type of zone. Can either be `public` or `private`. Changing this
 	// creates a new DNS zone.
 	ZoneType pulumi.StringPtrOutput `pulumi:"zoneType"`
@@ -169,8 +167,6 @@ type zoneState struct {
 	Tags map[string]string `pulumi:"tags"`
 	// The time to live (TTL) of the zone.
 	Ttl *int `pulumi:"ttl"`
-	// Map of additional options. Changing this creates a new DNS zone.
-	ValueSpecs map[string]string `pulumi:"valueSpecs"`
 	// The type of zone. Can either be `public` or `private`. Changing this
 	// creates a new DNS zone.
 	ZoneType *string `pulumi:"zoneType"`
@@ -199,8 +195,6 @@ type ZoneState struct {
 	Tags pulumi.StringMapInput
 	// The time to live (TTL) of the zone.
 	Ttl pulumi.IntPtrInput
-	// Map of additional options. Changing this creates a new DNS zone.
-	ValueSpecs pulumi.StringMapInput
 	// The type of zone. Can either be `public` or `private`. Changing this
 	// creates a new DNS zone.
 	ZoneType pulumi.StringPtrInput
@@ -231,8 +225,6 @@ type zoneArgs struct {
 	Tags map[string]string `pulumi:"tags"`
 	// The time to live (TTL) of the zone.
 	Ttl *int `pulumi:"ttl"`
-	// Map of additional options. Changing this creates a new DNS zone.
-	ValueSpecs map[string]string `pulumi:"valueSpecs"`
 	// The type of zone. Can either be `public` or `private`. Changing this
 	// creates a new DNS zone.
 	ZoneType *string `pulumi:"zoneType"`
@@ -260,8 +252,6 @@ type ZoneArgs struct {
 	Tags pulumi.StringMapInput
 	// The time to live (TTL) of the zone.
 	Ttl pulumi.IntPtrInput
-	// Map of additional options. Changing this creates a new DNS zone.
-	ValueSpecs pulumi.StringMapInput
 	// The type of zone. Can either be `public` or `private`. Changing this
 	// creates a new DNS zone.
 	ZoneType pulumi.StringPtrInput
@@ -401,11 +391,6 @@ func (o ZoneOutput) Tags() pulumi.StringMapOutput {
 // The time to live (TTL) of the zone.
 func (o ZoneOutput) Ttl() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *Zone) pulumi.IntPtrOutput { return v.Ttl }).(pulumi.IntPtrOutput)
-}
-
-// Map of additional options. Changing this creates a new DNS zone.
-func (o ZoneOutput) ValueSpecs() pulumi.StringMapOutput {
-	return o.ApplyT(func(v *Zone) pulumi.StringMapOutput { return v.ValueSpecs }).(pulumi.StringMapOutput)
 }
 
 // The type of zone. Can either be `public` or `private`. Changing this

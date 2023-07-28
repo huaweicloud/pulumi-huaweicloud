@@ -63,7 +63,7 @@ type MediaCategory struct {
 	pulumi.CustomResourceState
 
 	// The json string of subcategory information. It supports up to 3 levels of categories,
-	// and each catagory supports up to 128 subcategories.
+	// and each category supports up to 128 subcategories.
 	Children pulumi.StringOutput `pulumi:"children"`
 	// Specifies the category name, which contains a maximum of 64 characters.
 	Name pulumi.StringOutput `pulumi:"name"`
@@ -106,7 +106,7 @@ func GetMediaCategory(ctx *pulumi.Context,
 // Input properties used for looking up and filtering MediaCategory resources.
 type mediaCategoryState struct {
 	// The json string of subcategory information. It supports up to 3 levels of categories,
-	// and each catagory supports up to 128 subcategories.
+	// and each category supports up to 128 subcategories.
 	Children *string `pulumi:"children"`
 	// Specifies the category name, which contains a maximum of 64 characters.
 	Name *string `pulumi:"name"`
@@ -120,7 +120,7 @@ type mediaCategoryState struct {
 
 type MediaCategoryState struct {
 	// The json string of subcategory information. It supports up to 3 levels of categories,
-	// and each catagory supports up to 128 subcategories.
+	// and each category supports up to 128 subcategories.
 	Children pulumi.StringPtrInput
 	// Specifies the category name, which contains a maximum of 64 characters.
 	Name pulumi.StringPtrInput
@@ -247,7 +247,7 @@ func (o MediaCategoryOutput) ToMediaCategoryOutputWithContext(ctx context.Contex
 }
 
 // The json string of subcategory information. It supports up to 3 levels of categories,
-// and each catagory supports up to 128 subcategories.
+// and each category supports up to 128 subcategories.
 func (o MediaCategoryOutput) Children() pulumi.StringOutput {
 	return o.ApplyT(func(v *MediaCategory) pulumi.StringOutput { return v.Children }).(pulumi.StringOutput)
 }

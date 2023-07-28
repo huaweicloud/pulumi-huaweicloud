@@ -41,8 +41,9 @@ class MongoInstanceArgs:
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a MongoInstance resource.
-        :param pulumi.Input[str] availability_zone: Specifies the AZ name. Changing this parameter will create a new
-               resource.
+        :param pulumi.Input[str] availability_zone: Specifies the AZ name. For a three-AZ deployment instance,
+               use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] flavor: Specifies the instance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/mongoug-nosql/nosql_05_0029.html)
                Changing this parameter will create a new resource.
@@ -57,7 +58,7 @@ class MongoInstanceArgs:
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/mongoug-nosql/nosql_05_0029.html)
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are **true** and **false**. Changing this will do nothing.
+               Valid values are **true** and **false**.
         :param pulumi.Input['MongoInstanceBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance. Valid values are **prePaid**
                and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
@@ -137,8 +138,9 @@ class MongoInstanceArgs:
     @pulumi.getter(name="availabilityZone")
     def availability_zone(self) -> pulumi.Input[str]:
         """
-        Specifies the AZ name. Changing this parameter will create a new
-        resource.
+        Specifies the AZ name. For a three-AZ deployment instance,
+        use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "availability_zone")
 
@@ -219,7 +221,7 @@ class MongoInstanceArgs:
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies whether auto renew is enabled.
-        Valid values are **true** and **false**. Changing this will do nothing.
+        Valid values are **true** and **false**.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -452,6 +454,8 @@ class _MongoInstanceState:
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  force_import: Optional[pulumi.Input[bool]] = None,
+                 lb_ip_address: Optional[pulumi.Input[str]] = None,
+                 lb_port: Optional[pulumi.Input[str]] = None,
                  mode: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  node_num: Optional[pulumi.Input[int]] = None,
@@ -472,9 +476,10 @@ class _MongoInstanceState:
         """
         Input properties used for looking up and filtering MongoInstance resources.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are **true** and **false**. Changing this will do nothing.
-        :param pulumi.Input[str] availability_zone: Specifies the AZ name. Changing this parameter will create a new
-               resource.
+               Valid values are **true** and **false**.
+        :param pulumi.Input[str] availability_zone: Specifies the AZ name. For a three-AZ deployment instance,
+               use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+               Changing this parameter will create a new resource.
         :param pulumi.Input['MongoInstanceBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance. Valid values are **prePaid**
                and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
@@ -493,6 +498,8 @@ class _MongoInstanceState:
                Changing this parameter will create a new resource.
         :param pulumi.Input[bool] force_import: If specified, try to import the instance instead of creating if the name already
                existed.
+        :param pulumi.Input[str] lb_ip_address: Indicates the LB IP address of the db.
+        :param pulumi.Input[str] lb_port: Indicates the LB port of the db.
         :param pulumi.Input[str] mode: Indicates the instance type.
         :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The
                value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
@@ -552,6 +559,10 @@ class _MongoInstanceState:
             pulumi.set(__self__, "flavor", flavor)
         if force_import is not None:
             pulumi.set(__self__, "force_import", force_import)
+        if lb_ip_address is not None:
+            pulumi.set(__self__, "lb_ip_address", lb_ip_address)
+        if lb_port is not None:
+            pulumi.set(__self__, "lb_port", lb_port)
         if mode is not None:
             pulumi.set(__self__, "mode", mode)
         if name is not None:
@@ -592,7 +603,7 @@ class _MongoInstanceState:
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies whether auto renew is enabled.
-        Valid values are **true** and **false**. Changing this will do nothing.
+        Valid values are **true** and **false**.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -604,8 +615,9 @@ class _MongoInstanceState:
     @pulumi.getter(name="availabilityZone")
     def availability_zone(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the AZ name. Changing this parameter will create a new
-        resource.
+        Specifies the AZ name. For a three-AZ deployment instance,
+        use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "availability_zone")
 
@@ -740,6 +752,30 @@ class _MongoInstanceState:
     @force_import.setter
     def force_import(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "force_import", value)
+
+    @property
+    @pulumi.getter(name="lbIpAddress")
+    def lb_ip_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the LB IP address of the db.
+        """
+        return pulumi.get(self, "lb_ip_address")
+
+    @lb_ip_address.setter
+    def lb_ip_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "lb_ip_address", value)
+
+    @property
+    @pulumi.getter(name="lbPort")
+    def lb_port(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the LB port of the db.
+        """
+        return pulumi.get(self, "lb_port")
+
+    @lb_port.setter
+    def lb_port(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "lb_port", value)
 
     @property
     @pulumi.getter
@@ -1040,15 +1076,16 @@ class MongoInstance(pulumi.CustomResource):
         GaussDB mongo instance can be imported using the `id`, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:GaussDBforNoSQL/mongoInstance:MongoInstance instance_1 2e045d8b-b226-4aa2-91b9-7e76357655c06
+         $ pulumi import huaweicloud:GaussDBforNoSQL/mongoInstance:MongoInstance instance_1 2d3cb29c73754417bbbf46b1f856b371in10
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are **true** and **false**. Changing this will do nothing.
-        :param pulumi.Input[str] availability_zone: Specifies the AZ name. Changing this parameter will create a new
-               resource.
+               Valid values are **true** and **false**.
+        :param pulumi.Input[str] availability_zone: Specifies the AZ name. For a three-AZ deployment instance,
+               use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['MongoInstanceBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance. Valid values are **prePaid**
                and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
@@ -1150,7 +1187,7 @@ class MongoInstance(pulumi.CustomResource):
         GaussDB mongo instance can be imported using the `id`, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:GaussDBforNoSQL/mongoInstance:MongoInstance instance_1 2e045d8b-b226-4aa2-91b9-7e76357655c06
+         $ pulumi import huaweicloud:GaussDBforNoSQL/mongoInstance:MongoInstance instance_1 2d3cb29c73754417bbbf46b1f856b371in10
         ```
 
         :param str resource_name: The name of the resource.
@@ -1236,6 +1273,8 @@ class MongoInstance(pulumi.CustomResource):
                 raise TypeError("Missing required property 'vpc_id'")
             __props__.__dict__["vpc_id"] = vpc_id
             __props__.__dict__["db_user_name"] = None
+            __props__.__dict__["lb_ip_address"] = None
+            __props__.__dict__["lb_port"] = None
             __props__.__dict__["mode"] = None
             __props__.__dict__["nodes"] = None
             __props__.__dict__["port"] = None
@@ -1263,6 +1302,8 @@ class MongoInstance(pulumi.CustomResource):
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             flavor: Optional[pulumi.Input[str]] = None,
             force_import: Optional[pulumi.Input[bool]] = None,
+            lb_ip_address: Optional[pulumi.Input[str]] = None,
+            lb_port: Optional[pulumi.Input[str]] = None,
             mode: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             node_num: Optional[pulumi.Input[int]] = None,
@@ -1288,9 +1329,10 @@ class MongoInstance(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are **true** and **false**. Changing this will do nothing.
-        :param pulumi.Input[str] availability_zone: Specifies the AZ name. Changing this parameter will create a new
-               resource.
+               Valid values are **true** and **false**.
+        :param pulumi.Input[str] availability_zone: Specifies the AZ name. For a three-AZ deployment instance,
+               use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['MongoInstanceBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance. Valid values are **prePaid**
                and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
@@ -1309,6 +1351,8 @@ class MongoInstance(pulumi.CustomResource):
                Changing this parameter will create a new resource.
         :param pulumi.Input[bool] force_import: If specified, try to import the instance instead of creating if the name already
                existed.
+        :param pulumi.Input[str] lb_ip_address: Indicates the LB IP address of the db.
+        :param pulumi.Input[str] lb_port: Indicates the LB port of the db.
         :param pulumi.Input[str] mode: Indicates the instance type.
         :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The
                value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
@@ -1360,6 +1404,8 @@ class MongoInstance(pulumi.CustomResource):
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["flavor"] = flavor
         __props__.__dict__["force_import"] = force_import
+        __props__.__dict__["lb_ip_address"] = lb_ip_address
+        __props__.__dict__["lb_port"] = lb_port
         __props__.__dict__["mode"] = mode
         __props__.__dict__["name"] = name
         __props__.__dict__["node_num"] = node_num
@@ -1384,7 +1430,7 @@ class MongoInstance(pulumi.CustomResource):
     def auto_renew(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies whether auto renew is enabled.
-        Valid values are **true** and **false**. Changing this will do nothing.
+        Valid values are **true** and **false**.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -1392,8 +1438,9 @@ class MongoInstance(pulumi.CustomResource):
     @pulumi.getter(name="availabilityZone")
     def availability_zone(self) -> pulumi.Output[str]:
         """
-        Specifies the AZ name. Changing this parameter will create a new
-        resource.
+        Specifies the AZ name. For a three-AZ deployment instance,
+        use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "availability_zone")
 
@@ -1484,6 +1531,22 @@ class MongoInstance(pulumi.CustomResource):
         existed.
         """
         return pulumi.get(self, "force_import")
+
+    @property
+    @pulumi.getter(name="lbIpAddress")
+    def lb_ip_address(self) -> pulumi.Output[str]:
+        """
+        Indicates the LB IP address of the db.
+        """
+        return pulumi.get(self, "lb_ip_address")
+
+    @property
+    @pulumi.getter(name="lbPort")
+    def lb_port(self) -> pulumi.Output[str]:
+        """
+        Indicates the LB port of the db.
+        """
+        return pulumi.get(self, "lb_port")
 
     @property
     @pulumi.getter

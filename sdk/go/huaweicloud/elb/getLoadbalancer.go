@@ -69,7 +69,7 @@ type LookupLoadbalancerArgs struct {
 	Status *string `pulumi:"status"`
 	// Specifies the private IP address of the load balancer.
 	VipAddress *string `pulumi:"vipAddress"`
-	// Specifies the ID of the subnet where the load balancer works.
+	// Specifies the **IPv4 subnet ID** of the subnet where the load balancer works.
 	VipSubnetId *string `pulumi:"vipSubnetId"`
 }
 
@@ -79,8 +79,10 @@ type LookupLoadbalancerResult struct {
 	EnterpriseProjectId string `pulumi:"enterpriseProjectId"`
 	Id                  string `pulumi:"id"`
 	Name                string `pulumi:"name"`
-	Region              string `pulumi:"region"`
-	Status              string `pulumi:"status"`
+	// The EIP address that is associated to the Load Balancer instance.
+	PublicIp string `pulumi:"publicIp"`
+	Region   string `pulumi:"region"`
+	Status   string `pulumi:"status"`
 	// The tags associated with the load balancer.
 	Tags       map[string]string `pulumi:"tags"`
 	VipAddress string            `pulumi:"vipAddress"`
@@ -120,7 +122,7 @@ type LookupLoadbalancerOutputArgs struct {
 	Status pulumi.StringPtrInput `pulumi:"status"`
 	// Specifies the private IP address of the load balancer.
 	VipAddress pulumi.StringPtrInput `pulumi:"vipAddress"`
-	// Specifies the ID of the subnet where the load balancer works.
+	// Specifies the **IPv4 subnet ID** of the subnet where the load balancer works.
 	VipSubnetId pulumi.StringPtrInput `pulumi:"vipSubnetId"`
 }
 
@@ -157,6 +159,11 @@ func (o LookupLoadbalancerResultOutput) Id() pulumi.StringOutput {
 
 func (o LookupLoadbalancerResultOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupLoadbalancerResult) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// The EIP address that is associated to the Load Balancer instance.
+func (o LookupLoadbalancerResultOutput) PublicIp() pulumi.StringOutput {
+	return o.ApplyT(func(v LookupLoadbalancerResult) string { return v.PublicIp }).(pulumi.StringOutput)
 }
 
 func (o LookupLoadbalancerResultOutput) Region() pulumi.StringOutput {

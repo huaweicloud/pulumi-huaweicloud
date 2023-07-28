@@ -53,7 +53,7 @@ func LookupServer(ctx *pulumi.Context, args *LookupServerArgs, opts ...pulumi.In
 
 // A collection of arguments for invoking getServer.
 type LookupServerArgs struct {
-	// The ID of the edgecloud service.
+	// Specifies the ID of the edgecloud service.
 	EdgecloudId *string `pulumi:"edgecloudId"`
 	// Specifies the IEC server name, which can be queried with a regular expression.
 	Name string `pulumi:"name"`
@@ -65,8 +65,7 @@ type LookupServerArgs struct {
 type LookupServerResult struct {
 	// An array of site ID and operator for the IEC server. The object structure is documented below.
 	CoverageSites []GetServerCoverageSite `pulumi:"coverageSites"`
-	// The ID of the edgecloud service.
-	EdgecloudId string `pulumi:"edgecloudId"`
+	EdgecloudId   string                  `pulumi:"edgecloudId"`
 	// The Name of the edgecloud service.
 	EdgecloudName string `pulumi:"edgecloudName"`
 	// The flavor ID of the IEC server.
@@ -74,12 +73,14 @@ type LookupServerResult struct {
 	// The flavor name of the IEC server.
 	FlavorName string `pulumi:"flavorName"`
 	// The provider-assigned unique ID for this managed resource.
-	Id      string `pulumi:"id"`
+	Id string `pulumi:"id"`
+	// The image ID of the IEC server.
 	ImageId string `pulumi:"imageId"`
 	// The image name of the IEC server.
 	ImageName string `pulumi:"imageName"`
-	KeyPair   string `pulumi:"keyPair"`
-	Name      string `pulumi:"name"`
+	// The name of a key pair to put on the IEC server.
+	KeyPair string `pulumi:"keyPair"`
+	Name    string `pulumi:"name"`
 	// An array of one or more networks to attach to the IEC server. The object structure is documented below.
 	Nics []GetServerNic `pulumi:"nics"`
 	// The EIP address that is associted to the IEC server.
@@ -89,7 +90,8 @@ type LookupServerResult struct {
 	Status         string   `pulumi:"status"`
 	// The system disk voume ID.
 	SystemDiskId string `pulumi:"systemDiskId"`
-	UserData     string `pulumi:"userData"`
+	// The user data (information after encoding) configured during IEC server creation.
+	UserData string `pulumi:"userData"`
 	// An array of one or more disks to attach to the IEC server. The object structure is documented
 	// below.
 	VolumeAttacheds []GetServerVolumeAttached `pulumi:"volumeAttacheds"`
@@ -112,7 +114,7 @@ func LookupServerOutput(ctx *pulumi.Context, args LookupServerOutputArgs, opts .
 
 // A collection of arguments for invoking getServer.
 type LookupServerOutputArgs struct {
-	// The ID of the edgecloud service.
+	// Specifies the ID of the edgecloud service.
 	EdgecloudId pulumi.StringPtrInput `pulumi:"edgecloudId"`
 	// Specifies the IEC server name, which can be queried with a regular expression.
 	Name pulumi.StringInput `pulumi:"name"`
@@ -144,7 +146,6 @@ func (o LookupServerResultOutput) CoverageSites() GetServerCoverageSiteArrayOutp
 	return o.ApplyT(func(v LookupServerResult) []GetServerCoverageSite { return v.CoverageSites }).(GetServerCoverageSiteArrayOutput)
 }
 
-// The ID of the edgecloud service.
 func (o LookupServerResultOutput) EdgecloudId() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupServerResult) string { return v.EdgecloudId }).(pulumi.StringOutput)
 }
@@ -169,6 +170,7 @@ func (o LookupServerResultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupServerResult) string { return v.Id }).(pulumi.StringOutput)
 }
 
+// The image ID of the IEC server.
 func (o LookupServerResultOutput) ImageId() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupServerResult) string { return v.ImageId }).(pulumi.StringOutput)
 }
@@ -178,6 +180,7 @@ func (o LookupServerResultOutput) ImageName() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupServerResult) string { return v.ImageName }).(pulumi.StringOutput)
 }
 
+// The name of a key pair to put on the IEC server.
 func (o LookupServerResultOutput) KeyPair() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupServerResult) string { return v.KeyPair }).(pulumi.StringOutput)
 }
@@ -210,6 +213,7 @@ func (o LookupServerResultOutput) SystemDiskId() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupServerResult) string { return v.SystemDiskId }).(pulumi.StringOutput)
 }
 
+// The user data (information after encoding) configured during IEC server creation.
 func (o LookupServerResultOutput) UserData() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupServerResult) string { return v.UserData }).(pulumi.StringOutput)
 }

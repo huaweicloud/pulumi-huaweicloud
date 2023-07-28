@@ -74,6 +74,9 @@ class GetSourceServersResult:
     @property
     @pulumi.getter
     def state(self) -> Optional[str]:
+        """
+        The status of the source server.
+        """
         return pulumi.get(self, "state")
 
 
@@ -113,6 +116,7 @@ def get_source_servers(id: Optional[str] = None,
     :param str id: Specifies the ID of the source server.
     :param str ip: Specifies the IP address of the source server.
     :param str name: Specifies the name of the source server.
+    :param str state: Specifies the status of the source server.
     """
     __args__ = dict()
     __args__['id'] = id
@@ -154,5 +158,6 @@ def get_source_servers_output(id: Optional[pulumi.Input[Optional[str]]] = None,
     :param str id: Specifies the ID of the source server.
     :param str ip: Specifies the IP address of the source server.
     :param str name: Specifies the name of the source server.
+    :param str state: Specifies the status of the source server.
     """
     ...

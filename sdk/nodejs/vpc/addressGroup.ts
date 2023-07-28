@@ -8,26 +8,52 @@ import * as utilities from "../utilities";
  * Manages a VPC IP address group resource within HuaweiCloud.
  *
  * ## Example Usage
+ * ### IPv4 Address Group
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as huaweicloud from "@pulumi/huaweicloud";
  *
- * const test = new huaweicloud.Vpc.AddressGroup("test", {
+ * const ipv4 = new huaweicloud.Vpc.AddressGroup("ipv4", {
  *     addresses: [
  *         "192.168.10.10",
  *         "192.168.1.1-192.168.1.50",
  *     ],
  * });
  * ```
+ * ### IPv6 Address Group
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as huaweicloud from "@pulumi/huaweicloud";
+ *
+ * const ipv6 = new huaweicloud.Vpc.AddressGroup("ipv6", {
+ *     addresses: ["2001:db8:a583:6e::/64"],
+ *     ipVersion: 6,
+ * });
+ * ```
  *
  * ## Import
  *
- * IP address groups can be imported using the `id`, e.g.
+ * IP address groups can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Vpc/addressGroup:AddressGroup test bc96f6b0-ca2c-42ee-b719-0f26bc9c8661
  * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`force_destroy`. It is generally recommended running `terraform plan` after importing the image. You can then decide if changes should be applied to the image, or the resource definition should be updated to align with the image. Also you can ignore changes as below. hcl resource "huaweicloud_vpc_address_group" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [
+ *
+ *  force_destroy,
+ *
+ *  ]
+ *
+ *  } }
  */
 export class AddressGroup extends pulumi.CustomResource {
     /**
@@ -58,9 +84,8 @@ export class AddressGroup extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies an array of one or more IPv4 addresses. The address can be a single IP
-     * address (such as 192.168.10.10), IP address range (such as 192.168.1.1-192.168.1.50) or IP address CIDR (such as 192.168.0.0/16).
-     * The maximum length is 20.
+     * Specifies an array of one or more IP addresses. The address can be a single IP
+     * address, IP address range or IP address CIDR. The maximum length is 20.
      */
     public readonly addresses!: pulumi.Output<string[]>;
     /**
@@ -69,16 +94,33 @@ export class AddressGroup extends pulumi.CustomResource {
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * The IP version of the address group. The value is 4.
+     * Specifies the enterprise project ID.
+     * Changing this creates a new address group.
      */
-    public /*out*/ readonly ipVersion!: pulumi.Output<number>;
+    public readonly enterpriseProjectId!: pulumi.Output<string>;
+    /**
+     * Specifies whether to forcibly destroy the address group if it is associated with
+     * a security group rule, the address group and the associated security group rule will be deleted together.
+     * The default value is **false**.
+     */
+    public readonly forceDestroy!: pulumi.Output<boolean | undefined>;
+    /**
+     * Specifies the IP version, either `4` (default) or `6`.
+     * Changing this creates a new address group.
+     */
+    public readonly ipVersion!: pulumi.Output<number | undefined>;
+    /**
+     * Specifies the maximum number of addresses that an address group can contain.
+     * Value range: **1**-**20**, the default value is **20**.
+     */
+    public readonly maxCapacity!: pulumi.Output<number>;
     /**
      * Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
      * letters, digits, underscores (_), hyphens (-) and periods (.).
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Specifies tThe region in which to create the IP address group. If omitted, the
+     * Specifies the region in which to create the IP address group. If omitted, the
      * provider-level region will be used. Changing this creates a new address group.
      */
     public readonly region!: pulumi.Output<string>;
@@ -98,7 +140,10 @@ export class AddressGroup extends pulumi.CustomResource {
             const state = argsOrState as AddressGroupState | undefined;
             resourceInputs["addresses"] = state ? state.addresses : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
+            resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
+            resourceInputs["forceDestroy"] = state ? state.forceDestroy : undefined;
             resourceInputs["ipVersion"] = state ? state.ipVersion : undefined;
+            resourceInputs["maxCapacity"] = state ? state.maxCapacity : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
         } else {
@@ -108,9 +153,12 @@ export class AddressGroup extends pulumi.CustomResource {
             }
             resourceInputs["addresses"] = args ? args.addresses : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
+            resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
+            resourceInputs["forceDestroy"] = args ? args.forceDestroy : undefined;
+            resourceInputs["ipVersion"] = args ? args.ipVersion : undefined;
+            resourceInputs["maxCapacity"] = args ? args.maxCapacity : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
-            resourceInputs["ipVersion"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(AddressGroup.__pulumiType, name, resourceInputs, opts);
@@ -122,9 +170,8 @@ export class AddressGroup extends pulumi.CustomResource {
  */
 export interface AddressGroupState {
     /**
-     * Specifies an array of one or more IPv4 addresses. The address can be a single IP
-     * address (such as 192.168.10.10), IP address range (such as 192.168.1.1-192.168.1.50) or IP address CIDR (such as 192.168.0.0/16).
-     * The maximum length is 20.
+     * Specifies an array of one or more IP addresses. The address can be a single IP
+     * address, IP address range or IP address CIDR. The maximum length is 20.
      */
     addresses?: pulumi.Input<pulumi.Input<string>[]>;
     /**
@@ -133,16 +180,33 @@ export interface AddressGroupState {
      */
     description?: pulumi.Input<string>;
     /**
-     * The IP version of the address group. The value is 4.
+     * Specifies the enterprise project ID.
+     * Changing this creates a new address group.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specifies whether to forcibly destroy the address group if it is associated with
+     * a security group rule, the address group and the associated security group rule will be deleted together.
+     * The default value is **false**.
+     */
+    forceDestroy?: pulumi.Input<boolean>;
+    /**
+     * Specifies the IP version, either `4` (default) or `6`.
+     * Changing this creates a new address group.
      */
     ipVersion?: pulumi.Input<number>;
+    /**
+     * Specifies the maximum number of addresses that an address group can contain.
+     * Value range: **1**-**20**, the default value is **20**.
+     */
+    maxCapacity?: pulumi.Input<number>;
     /**
      * Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
      * letters, digits, underscores (_), hyphens (-) and periods (.).
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies tThe region in which to create the IP address group. If omitted, the
+     * Specifies the region in which to create the IP address group. If omitted, the
      * provider-level region will be used. Changing this creates a new address group.
      */
     region?: pulumi.Input<string>;
@@ -153,9 +217,8 @@ export interface AddressGroupState {
  */
 export interface AddressGroupArgs {
     /**
-     * Specifies an array of one or more IPv4 addresses. The address can be a single IP
-     * address (such as 192.168.10.10), IP address range (such as 192.168.1.1-192.168.1.50) or IP address CIDR (such as 192.168.0.0/16).
-     * The maximum length is 20.
+     * Specifies an array of one or more IP addresses. The address can be a single IP
+     * address, IP address range or IP address CIDR. The maximum length is 20.
      */
     addresses: pulumi.Input<pulumi.Input<string>[]>;
     /**
@@ -164,12 +227,33 @@ export interface AddressGroupArgs {
      */
     description?: pulumi.Input<string>;
     /**
+     * Specifies the enterprise project ID.
+     * Changing this creates a new address group.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specifies whether to forcibly destroy the address group if it is associated with
+     * a security group rule, the address group and the associated security group rule will be deleted together.
+     * The default value is **false**.
+     */
+    forceDestroy?: pulumi.Input<boolean>;
+    /**
+     * Specifies the IP version, either `4` (default) or `6`.
+     * Changing this creates a new address group.
+     */
+    ipVersion?: pulumi.Input<number>;
+    /**
+     * Specifies the maximum number of addresses that an address group can contain.
+     * Value range: **1**-**20**, the default value is **20**.
+     */
+    maxCapacity?: pulumi.Input<number>;
+    /**
      * Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
      * letters, digits, underscores (_), hyphens (-) and periods (.).
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies tThe region in which to create the IP address group. If omitted, the
+     * Specifies the region in which to create the IP address group. If omitted, the
      * provider-level region will be used. Changing this creates a new address group.
      */
     region?: pulumi.Input<string>;

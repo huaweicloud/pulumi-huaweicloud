@@ -23,6 +23,7 @@ class AdminAssignmentArgs:
         The set of arguments for constructing a AdminAssignment resource.
         :param pulumi.Input[str] account: Specifies the user account to be assigned the administrator role.
                The value can contain **1** to **64** characters.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_name: Specifies the (HUAWEI Cloud meeting) user account name to which the
                default administrator belongs. Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_password: Specifies the user password.
@@ -48,6 +49,7 @@ class AdminAssignmentArgs:
         """
         Specifies the user account to be assigned the administrator role.
         The value can contain **1** to **64** characters.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "account")
 
@@ -120,6 +122,7 @@ class _AdminAssignmentState:
         Input properties used for looking up and filtering AdminAssignment resources.
         :param pulumi.Input[str] account: Specifies the user account to be assigned the administrator role.
                The value can contain **1** to **64** characters.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_name: Specifies the (HUAWEI Cloud meeting) user account name to which the
                default administrator belongs. Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_password: Specifies the user password.
@@ -146,6 +149,7 @@ class _AdminAssignmentState:
         """
         Specifies the user account to be assigned the administrator role.
         The value can contain **1** to **64** characters.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "account")
 
@@ -257,6 +261,7 @@ class AdminAssignment(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] account: Specifies the user account to be assigned the administrator role.
                The value can contain **1** to **64** characters.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_name: Specifies the (HUAWEI Cloud meeting) user account name to which the
                default administrator belongs. Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_password: Specifies the user password.
@@ -368,6 +373,7 @@ class AdminAssignment(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] account: Specifies the user account to be assigned the administrator role.
                The value can contain **1** to **64** characters.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_name: Specifies the (HUAWEI Cloud meeting) user account name to which the
                default administrator belongs. Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_password: Specifies the user password.
@@ -394,6 +400,7 @@ class AdminAssignment(pulumi.CustomResource):
         """
         Specifies the user account to be assigned the administrator role.
         The value can contain **1** to **64** characters.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "account")
 

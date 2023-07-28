@@ -25,10 +25,10 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Environments can be imported using their `id` and the ID of the APIG instance to which the environment belongs, separated by a slash, e.g.
+ * Environments can be imported using their `name` and the ID of the related dedicated instance, separated by a slash, e.g.
  *
  * ```sh
- *  $ pulumi import huaweicloud:DedicatedApig/environment:Environment test <instance ID>/<id>
+ *  $ pulumi import huaweicloud:DedicatedApig/environment:Environment test &ltinstance_id&gt/&ltname&gt
  * ```
  */
 export class Environment extends pulumi.CustomResource {
@@ -60,28 +60,36 @@ export class Environment extends pulumi.CustomResource {
     }
 
     /**
-     * Time when the APIG environment was created, in RFC-3339 format.
+     * schema: Deprecated; The time when the environment was created.
+     *
+     * @deprecated Use 'created_at' instead
      */
     public /*out*/ readonly createTime!: pulumi.Output<string>;
     /**
-     * Specifies the description about the API environment. The description contain a
-     * maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-     * Unicode format.
+     * The time when the environment was created.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
+     * Specifies the environment description.  
+     * The value can contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
+     * Chinese characters must be in **UTF-8** or **Unicode** format.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies an ID of the APIG dedicated instance to which the API
-     * environment belongs to. Changing this will create a new APIG environment resource.
+     * Specifies the ID of the dedicated instance to which the environment
+     * belongs.
+     * Changing this will create a new resource.
      */
     public readonly instanceId!: pulumi.Output<string>;
     /**
-     * Specifies the name of the API environment. The API environment name consists of 3 to 64
-     * characters, starting with a letter. Only letters, digits and underscores (_) are allowed.
+     * Specifies the environment name.  
+     * The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+     * The name must start with a letter.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Specifies the region in which to create the APIG environment resource. If
-     * omitted, the provider-level region will be used. Changing this will create a new APIG environment resource.
+     * Specifies the region where the dedicated instance is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
 
@@ -99,6 +107,7 @@ export class Environment extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as EnvironmentState | undefined;
             resourceInputs["createTime"] = state ? state.createTime : undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["instanceId"] = state ? state.instanceId : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
@@ -113,6 +122,7 @@ export class Environment extends pulumi.CustomResource {
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["createTime"] = undefined /*out*/;
+            resourceInputs["createdAt"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Environment.__pulumiType, name, resourceInputs, opts);
@@ -124,28 +134,36 @@ export class Environment extends pulumi.CustomResource {
  */
 export interface EnvironmentState {
     /**
-     * Time when the APIG environment was created, in RFC-3339 format.
+     * schema: Deprecated; The time when the environment was created.
+     *
+     * @deprecated Use 'created_at' instead
      */
     createTime?: pulumi.Input<string>;
     /**
-     * Specifies the description about the API environment. The description contain a
-     * maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-     * Unicode format.
+     * The time when the environment was created.
+     */
+    createdAt?: pulumi.Input<string>;
+    /**
+     * Specifies the environment description.  
+     * The value can contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
+     * Chinese characters must be in **UTF-8** or **Unicode** format.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies an ID of the APIG dedicated instance to which the API
-     * environment belongs to. Changing this will create a new APIG environment resource.
+     * Specifies the ID of the dedicated instance to which the environment
+     * belongs.
+     * Changing this will create a new resource.
      */
     instanceId?: pulumi.Input<string>;
     /**
-     * Specifies the name of the API environment. The API environment name consists of 3 to 64
-     * characters, starting with a letter. Only letters, digits and underscores (_) are allowed.
+     * Specifies the environment name.  
+     * The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+     * The name must start with a letter.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to create the APIG environment resource. If
-     * omitted, the provider-level region will be used. Changing this will create a new APIG environment resource.
+     * Specifies the region where the dedicated instance is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
 }
@@ -155,24 +173,26 @@ export interface EnvironmentState {
  */
 export interface EnvironmentArgs {
     /**
-     * Specifies the description about the API environment. The description contain a
-     * maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-     * Unicode format.
+     * Specifies the environment description.  
+     * The value can contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
+     * Chinese characters must be in **UTF-8** or **Unicode** format.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies an ID of the APIG dedicated instance to which the API
-     * environment belongs to. Changing this will create a new APIG environment resource.
+     * Specifies the ID of the dedicated instance to which the environment
+     * belongs.
+     * Changing this will create a new resource.
      */
     instanceId: pulumi.Input<string>;
     /**
-     * Specifies the name of the API environment. The API environment name consists of 3 to 64
-     * characters, starting with a letter. Only letters, digits and underscores (_) are allowed.
+     * Specifies the environment name.  
+     * The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+     * The name must start with a letter.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to create the APIG environment resource. If
-     * omitted, the provider-level region will be used. Changing this will create a new APIG environment resource.
+     * Specifies the region where the dedicated instance is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
 }

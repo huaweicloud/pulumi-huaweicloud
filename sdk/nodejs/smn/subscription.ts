@@ -66,8 +66,8 @@ export class Subscription extends pulumi.CustomResource {
 
     /**
      * Message endpoint. Changing this parameter will create a new resource.
-     * + **For an HTTP subscription**, the endpoint starts with http://.
-     * + **For an HTTPS subscription**, the endpoint starts with https://.
+     * + **For an HTTP subscription**, the endpoint starts with `http://`.
+     * + **For an HTTPS subscription**, the endpoint starts with `https://`.
      * + **For an email subscription**, the endpoint is an mail address.
      * + **For an SMS message subscription**, the endpoint is a phone number,
      * the format is \[+\]\[country code\]\[phone number\], e.g. +86185xxxx0000.
@@ -91,12 +91,14 @@ export class Subscription extends pulumi.CustomResource {
     public readonly region!: pulumi.Output<string>;
     /**
      * Remark information. The remarks must be a UTF-8-coded character string
-     * containing 128 bytes.
+     * containing 128 bytes. Changing this parameter will create a new resource.
      */
     public readonly remark!: pulumi.Output<string | undefined>;
     /**
-     * Subscription status. 0 indicates that the subscription is not confirmed. 1 indicates that the subscription
-     * is confirmed. 3 indicates that the subscription is canceled.
+     * Subscription status.
+     * + **0**: indicates that the subscription is not confirmed.
+     * + **1**: indicates that the subscription is confirmed.
+     * + **3**: indicates that the subscription is canceled.
      */
     public /*out*/ readonly status!: pulumi.Output<number>;
     /**
@@ -161,8 +163,8 @@ export class Subscription extends pulumi.CustomResource {
 export interface SubscriptionState {
     /**
      * Message endpoint. Changing this parameter will create a new resource.
-     * + **For an HTTP subscription**, the endpoint starts with http://.
-     * + **For an HTTPS subscription**, the endpoint starts with https://.
+     * + **For an HTTP subscription**, the endpoint starts with `http://`.
+     * + **For an HTTPS subscription**, the endpoint starts with `https://`.
      * + **For an email subscription**, the endpoint is an mail address.
      * + **For an SMS message subscription**, the endpoint is a phone number,
      * the format is \[+\]\[country code\]\[phone number\], e.g. +86185xxxx0000.
@@ -186,12 +188,14 @@ export interface SubscriptionState {
     region?: pulumi.Input<string>;
     /**
      * Remark information. The remarks must be a UTF-8-coded character string
-     * containing 128 bytes.
+     * containing 128 bytes. Changing this parameter will create a new resource.
      */
     remark?: pulumi.Input<string>;
     /**
-     * Subscription status. 0 indicates that the subscription is not confirmed. 1 indicates that the subscription
-     * is confirmed. 3 indicates that the subscription is canceled.
+     * Subscription status.
+     * + **0**: indicates that the subscription is not confirmed.
+     * + **1**: indicates that the subscription is confirmed.
+     * + **3**: indicates that the subscription is canceled.
      */
     status?: pulumi.Input<number>;
     /**
@@ -211,8 +215,8 @@ export interface SubscriptionState {
 export interface SubscriptionArgs {
     /**
      * Message endpoint. Changing this parameter will create a new resource.
-     * + **For an HTTP subscription**, the endpoint starts with http://.
-     * + **For an HTTPS subscription**, the endpoint starts with https://.
+     * + **For an HTTP subscription**, the endpoint starts with `http://`.
+     * + **For an HTTPS subscription**, the endpoint starts with `https://`.
      * + **For an email subscription**, the endpoint is an mail address.
      * + **For an SMS message subscription**, the endpoint is a phone number,
      * the format is \[+\]\[country code\]\[phone number\], e.g. +86185xxxx0000.
@@ -232,7 +236,7 @@ export interface SubscriptionArgs {
     region?: pulumi.Input<string>;
     /**
      * Remark information. The remarks must be a UTF-8-coded character string
-     * containing 128 bytes.
+     * containing 128 bytes. Changing this parameter will create a new resource.
      */
     remark?: pulumi.Input<string>;
     /**

@@ -161,6 +161,13 @@ class _ExportableConfig(types.ModuleType):
         return __config__.get('region')
 
     @property
+    def regional(self) -> Optional[bool]:
+        """
+        Whether the service endpoints are regional
+        """
+        return __config__.get_bool('regional')
+
+    @property
     def secret_key(self) -> Optional[str]:
         """
         The secret key of the HuaweiCloud to use.

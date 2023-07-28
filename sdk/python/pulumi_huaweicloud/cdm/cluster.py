@@ -59,8 +59,7 @@ class ClusterArgs:
                The system shuts down directly at this time every day without waiting for unfinished jobs to complete.
                The scheduled startup/shutdown and auto shutdown function cannot be enabled at the same time.
                The time format is `hh:mm:ss`. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] version: Specifies cluster version. Default value is `2.8.6.2`.
-               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] version: Specifies the cluster version. Changing this parameter will create a new resource.
         """
         pulumi.set(__self__, "availability_zone", availability_zone)
         pulumi.set(__self__, "flavor_id", flavor_id)
@@ -260,8 +259,7 @@ class ClusterArgs:
     @pulumi.getter
     def version(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies cluster version. Default value is `2.8.6.2`.
-        Changing this parameter will create a new resource.
+        Specifies the cluster version. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "version")
 
@@ -325,8 +323,7 @@ class _ClusterState:
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] status: Status.
         :param pulumi.Input[str] subnet_id: Specifies subnet ID. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] version: Specifies cluster version. Default value is `2.8.6.2`.
-               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] version: Specifies the cluster version. Changing this parameter will create a new resource.
         :param pulumi.Input[str] vpc_id: Specifies VPC ID. Changing this parameter will create a new resource.
         """
         if availability_zone is not None:
@@ -590,8 +587,7 @@ class _ClusterState:
     @pulumi.getter
     def version(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies cluster version. Default value is `2.8.6.2`.
-        Changing this parameter will create a new resource.
+        Specifies the cluster version. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "version")
 
@@ -660,7 +656,7 @@ class Cluster(pulumi.CustomResource):
 
         ## Import
 
-        Clusters can be imported by `id`. For example,
+        Clusters can be imported by `id`. For example, bash
 
         ```sh
          $ pulumi import huaweicloud:Cdm/cluster:Cluster test b11b407c-e604-4e8d-8bc4-92398320b847
@@ -670,7 +666,7 @@ class Cluster(pulumi.CustomResource):
 
         It is generally recommended running `terraform plan` after importing a cluster.
 
-        You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. resource "huaweicloud_cdm_cluster" "test" {
+        You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_cdm_cluster" "test" {
 
          ...
 
@@ -712,8 +708,7 @@ class Cluster(pulumi.CustomResource):
         :param pulumi.Input[str] security_group_id: Specifies security group ID.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] subnet_id: Specifies subnet ID. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] version: Specifies cluster version. Default value is `2.8.6.2`.
-               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] version: Specifies the cluster version. Changing this parameter will create a new resource.
         :param pulumi.Input[str] vpc_id: Specifies VPC ID. Changing this parameter will create a new resource.
         """
         ...
@@ -750,7 +745,7 @@ class Cluster(pulumi.CustomResource):
 
         ## Import
 
-        Clusters can be imported by `id`. For example,
+        Clusters can be imported by `id`. For example, bash
 
         ```sh
          $ pulumi import huaweicloud:Cdm/cluster:Cluster test b11b407c-e604-4e8d-8bc4-92398320b847
@@ -760,7 +755,7 @@ class Cluster(pulumi.CustomResource):
 
         It is generally recommended running `terraform plan` after importing a cluster.
 
-        You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. resource "huaweicloud_cdm_cluster" "test" {
+        You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_cdm_cluster" "test" {
 
          ...
 
@@ -908,8 +903,7 @@ class Cluster(pulumi.CustomResource):
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] status: Status.
         :param pulumi.Input[str] subnet_id: Specifies subnet ID. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] version: Specifies cluster version. Default value is `2.8.6.2`.
-               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] version: Specifies the cluster version. Changing this parameter will create a new resource.
         :param pulumi.Input[str] vpc_id: Specifies VPC ID. Changing this parameter will create a new resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -1089,10 +1083,9 @@ class Cluster(pulumi.CustomResource):
 
     @property
     @pulumi.getter
-    def version(self) -> pulumi.Output[Optional[str]]:
+    def version(self) -> pulumi.Output[str]:
         """
-        Specifies cluster version. Default value is `2.8.6.2`.
-        Changing this parameter will create a new resource.
+        Specifies the cluster version. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "version")
 

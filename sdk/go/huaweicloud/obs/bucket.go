@@ -327,8 +327,8 @@ type Bucket struct {
 	CorsRules BucketCorsRuleArrayOutput `pulumi:"corsRules"`
 	// Whether enable default server-side encryption of the bucket in SSE-KMS mode.
 	Encryption pulumi.BoolPtrOutput `pulumi:"encryption"`
-	// Specifies the enterprise project id of the OBS bucket. Changing
-	// this will create a new bucket.
+	// Specifies the enterprise project id of the OBS bucket.
+	// Defaults to `0`.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
 	// A boolean that indicates all objects should be deleted from the bucket, so that the
 	// bucket can be destroyed without error. Default to `false`.
@@ -358,7 +358,6 @@ type Bucket struct {
 	// Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
 	// storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
 	// quota is not limited.
-	// <!-- markdownlint-enable MD033 -->
 	Quota pulumi.IntPtrOutput `pulumi:"quota"`
 	// Specifies the region where this bucket will be created. If not specified, used
 	// the region by the provider. Changing this will create a new bucket.
@@ -366,6 +365,9 @@ type Bucket struct {
 	// Specifies the storage class of the bucket. OBS provides three storage classes:
 	// "STANDARD", "WARM" (Infrequent Access) and "COLD" (Archive). Defaults to `STANDARD`.
 	StorageClass pulumi.StringPtrOutput `pulumi:"storageClass"`
+	// The OBS storage info of the bucket.
+	// The object structure is documented below.
+	StorageInfos BucketStorageInfoArrayOutput `pulumi:"storageInfos"`
 	// A mapping of tags to assign to the bucket. Each tag is represented by one key-value pair.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// Whether enable versioning. Once you version-enable a bucket, it can never return to an
@@ -430,8 +432,8 @@ type bucketState struct {
 	CorsRules []BucketCorsRule `pulumi:"corsRules"`
 	// Whether enable default server-side encryption of the bucket in SSE-KMS mode.
 	Encryption *bool `pulumi:"encryption"`
-	// Specifies the enterprise project id of the OBS bucket. Changing
-	// this will create a new bucket.
+	// Specifies the enterprise project id of the OBS bucket.
+	// Defaults to `0`.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// A boolean that indicates all objects should be deleted from the bucket, so that the
 	// bucket can be destroyed without error. Default to `false`.
@@ -461,7 +463,6 @@ type bucketState struct {
 	// Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
 	// storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
 	// quota is not limited.
-	// <!-- markdownlint-enable MD033 -->
 	Quota *int `pulumi:"quota"`
 	// Specifies the region where this bucket will be created. If not specified, used
 	// the region by the provider. Changing this will create a new bucket.
@@ -469,6 +470,9 @@ type bucketState struct {
 	// Specifies the storage class of the bucket. OBS provides three storage classes:
 	// "STANDARD", "WARM" (Infrequent Access) and "COLD" (Archive). Defaults to `STANDARD`.
 	StorageClass *string `pulumi:"storageClass"`
+	// The OBS storage info of the bucket.
+	// The object structure is documented below.
+	StorageInfos []BucketStorageInfo `pulumi:"storageInfos"`
 	// A mapping of tags to assign to the bucket. Each tag is represented by one key-value pair.
 	Tags map[string]string `pulumi:"tags"`
 	// Whether enable versioning. Once you version-enable a bucket, it can never return to an
@@ -501,8 +505,8 @@ type BucketState struct {
 	CorsRules BucketCorsRuleArrayInput
 	// Whether enable default server-side encryption of the bucket in SSE-KMS mode.
 	Encryption pulumi.BoolPtrInput
-	// Specifies the enterprise project id of the OBS bucket. Changing
-	// this will create a new bucket.
+	// Specifies the enterprise project id of the OBS bucket.
+	// Defaults to `0`.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// A boolean that indicates all objects should be deleted from the bucket, so that the
 	// bucket can be destroyed without error. Default to `false`.
@@ -532,7 +536,6 @@ type BucketState struct {
 	// Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
 	// storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
 	// quota is not limited.
-	// <!-- markdownlint-enable MD033 -->
 	Quota pulumi.IntPtrInput
 	// Specifies the region where this bucket will be created. If not specified, used
 	// the region by the provider. Changing this will create a new bucket.
@@ -540,6 +543,9 @@ type BucketState struct {
 	// Specifies the storage class of the bucket. OBS provides three storage classes:
 	// "STANDARD", "WARM" (Infrequent Access) and "COLD" (Archive). Defaults to `STANDARD`.
 	StorageClass pulumi.StringPtrInput
+	// The OBS storage info of the bucket.
+	// The object structure is documented below.
+	StorageInfos BucketStorageInfoArrayInput
 	// A mapping of tags to assign to the bucket. Each tag is represented by one key-value pair.
 	Tags pulumi.StringMapInput
 	// Whether enable versioning. Once you version-enable a bucket, it can never return to an
@@ -572,8 +578,8 @@ type bucketArgs struct {
 	CorsRules []BucketCorsRule `pulumi:"corsRules"`
 	// Whether enable default server-side encryption of the bucket in SSE-KMS mode.
 	Encryption *bool `pulumi:"encryption"`
-	// Specifies the enterprise project id of the OBS bucket. Changing
-	// this will create a new bucket.
+	// Specifies the enterprise project id of the OBS bucket.
+	// Defaults to `0`.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// A boolean that indicates all objects should be deleted from the bucket, so that the
 	// bucket can be destroyed without error. Default to `false`.
@@ -603,7 +609,6 @@ type bucketArgs struct {
 	// Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
 	// storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
 	// quota is not limited.
-	// <!-- markdownlint-enable MD033 -->
 	Quota *int `pulumi:"quota"`
 	// Specifies the region where this bucket will be created. If not specified, used
 	// the region by the provider. Changing this will create a new bucket.
@@ -640,8 +645,8 @@ type BucketArgs struct {
 	CorsRules BucketCorsRuleArrayInput
 	// Whether enable default server-side encryption of the bucket in SSE-KMS mode.
 	Encryption pulumi.BoolPtrInput
-	// Specifies the enterprise project id of the OBS bucket. Changing
-	// this will create a new bucket.
+	// Specifies the enterprise project id of the OBS bucket.
+	// Defaults to `0`.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// A boolean that indicates all objects should be deleted from the bucket, so that the
 	// bucket can be destroyed without error. Default to `false`.
@@ -671,7 +676,6 @@ type BucketArgs struct {
 	// Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
 	// storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
 	// quota is not limited.
-	// <!-- markdownlint-enable MD033 -->
 	Quota pulumi.IntPtrInput
 	// Specifies the region where this bucket will be created. If not specified, used
 	// the region by the provider. Changing this will create a new bucket.
@@ -815,8 +819,8 @@ func (o BucketOutput) Encryption() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Bucket) pulumi.BoolPtrOutput { return v.Encryption }).(pulumi.BoolPtrOutput)
 }
 
-// Specifies the enterprise project id of the OBS bucket. Changing
-// this will create a new bucket.
+// Specifies the enterprise project id of the OBS bucket.
+// Defaults to `0`.
 func (o BucketOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Bucket) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
@@ -876,7 +880,6 @@ func (o BucketOutput) PolicyFormat() pulumi.StringPtrOutput {
 // Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
 // storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
 // quota is not limited.
-// <!-- markdownlint-enable MD033 -->
 func (o BucketOutput) Quota() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *Bucket) pulumi.IntPtrOutput { return v.Quota }).(pulumi.IntPtrOutput)
 }
@@ -891,6 +894,12 @@ func (o BucketOutput) Region() pulumi.StringOutput {
 // "STANDARD", "WARM" (Infrequent Access) and "COLD" (Archive). Defaults to `STANDARD`.
 func (o BucketOutput) StorageClass() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Bucket) pulumi.StringPtrOutput { return v.StorageClass }).(pulumi.StringPtrOutput)
+}
+
+// The OBS storage info of the bucket.
+// The object structure is documented below.
+func (o BucketOutput) StorageInfos() BucketStorageInfoArrayOutput {
+	return o.ApplyT(func(v *Bucket) BucketStorageInfoArrayOutput { return v.StorageInfos }).(BucketStorageInfoArrayOutput)
 }
 
 // A mapping of tags to assign to the bucket. Each tag is represented by one key-value pair.

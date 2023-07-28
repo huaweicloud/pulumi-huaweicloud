@@ -84,7 +84,7 @@ import (
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:GaussDB/mysqlInstance:MysqlInstance instance_1 ee678f40-ce8e-4d0c-8221-38dead426f06
+//	$ pulumi import huaweicloud:GaussDB/mysqlInstance:MysqlInstance instance_1 1a801c1e01e6458d8eed810912e29d0cin07
 //
 // ```
 type MysqlInstance struct {
@@ -94,7 +94,7 @@ type MysqlInstance struct {
 	AuditLogEnabled pulumi.BoolOutput      `pulumi:"auditLogEnabled"`
 	AutoPay         pulumi.StringPtrOutput `pulumi:"autoPay"`
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false". Changing this will do nothing.
+	// Valid values are "true" and "false".
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
 	// Specifies the availability zone mode: "single" or "multi".
 	// Defaults to "single". Changing this parameter will create a new resource.
@@ -159,13 +159,13 @@ type MysqlInstance struct {
 	Port pulumi.IntOutput `pulumi:"port"`
 	// Indicates the private IP address of the DB instance.
 	PrivateWriteIp pulumi.StringOutput `pulumi:"privateWriteIp"`
-	// Indicates the address of the proxy.
+	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyAddress pulumi.StringOutput `pulumi:"proxyAddress"`
-	// Specifies the flavor of the proxy.
+	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyFlavor pulumi.StringOutput `pulumi:"proxyFlavor"`
-	// Specifies the node count of the proxy.
+	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyNodeNum pulumi.IntOutput `pulumi:"proxyNodeNum"`
-	// Indicates the port of the proxy.
+	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyPort pulumi.IntOutput `pulumi:"proxyPort"`
 	// Specifies the count of read replicas. Defaults to 1.
 	ReadReplicas pulumi.IntPtrOutput `pulumi:"readReplicas"`
@@ -175,6 +175,8 @@ type MysqlInstance struct {
 	// Specifies the security group ID. Required if the selected subnet
 	// doesn't enable network ACL. Changing this parameter will create a new resource.
 	SecurityGroupId pulumi.StringPtrOutput `pulumi:"securityGroupId"`
+	// Specifies whether sql filter is enabled. The default value is `false`.
+	SqlFilterEnabled pulumi.BoolOutput `pulumi:"sqlFilterEnabled"`
 	// Indicates the node status.
 	Status pulumi.StringOutput `pulumi:"status"`
 	// Specifies the network ID of a subnet. Changing this parameter will create a
@@ -183,8 +185,9 @@ type MysqlInstance struct {
 	// Whether the kernel table name is case sensitive. The value can
 	// be `true` (case sensitive) and `false` (case insensitive). Defaults to `false`. This parameter only works during
 	// creation.
-	TableNameCaseSensitivity pulumi.BoolPtrOutput   `pulumi:"tableNameCaseSensitivity"`
-	Tags                     pulumi.StringMapOutput `pulumi:"tags"`
+	TableNameCaseSensitivity pulumi.BoolPtrOutput `pulumi:"tableNameCaseSensitivity"`
+	// Specifies the key/value pairs to associate with the GaussDB Mysql instance.
+	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// Specifies the time zone. Defaults to "UTC+08:00". Changing this parameter
 	// will create a new resource.
 	TimeZone pulumi.StringPtrOutput `pulumi:"timeZone"`
@@ -241,7 +244,7 @@ type mysqlInstanceState struct {
 	AuditLogEnabled *bool   `pulumi:"auditLogEnabled"`
 	AutoPay         *string `pulumi:"autoPay"`
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false". Changing this will do nothing.
+	// Valid values are "true" and "false".
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the availability zone mode: "single" or "multi".
 	// Defaults to "single". Changing this parameter will create a new resource.
@@ -306,13 +309,13 @@ type mysqlInstanceState struct {
 	Port *int `pulumi:"port"`
 	// Indicates the private IP address of the DB instance.
 	PrivateWriteIp *string `pulumi:"privateWriteIp"`
-	// Indicates the address of the proxy.
+	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyAddress *string `pulumi:"proxyAddress"`
-	// Specifies the flavor of the proxy.
+	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyFlavor *string `pulumi:"proxyFlavor"`
-	// Specifies the node count of the proxy.
+	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyNodeNum *int `pulumi:"proxyNodeNum"`
-	// Indicates the port of the proxy.
+	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyPort *int `pulumi:"proxyPort"`
 	// Specifies the count of read replicas. Defaults to 1.
 	ReadReplicas *int `pulumi:"readReplicas"`
@@ -322,6 +325,8 @@ type mysqlInstanceState struct {
 	// Specifies the security group ID. Required if the selected subnet
 	// doesn't enable network ACL. Changing this parameter will create a new resource.
 	SecurityGroupId *string `pulumi:"securityGroupId"`
+	// Specifies whether sql filter is enabled. The default value is `false`.
+	SqlFilterEnabled *bool `pulumi:"sqlFilterEnabled"`
 	// Indicates the node status.
 	Status *string `pulumi:"status"`
 	// Specifies the network ID of a subnet. Changing this parameter will create a
@@ -330,8 +335,9 @@ type mysqlInstanceState struct {
 	// Whether the kernel table name is case sensitive. The value can
 	// be `true` (case sensitive) and `false` (case insensitive). Defaults to `false`. This parameter only works during
 	// creation.
-	TableNameCaseSensitivity *bool             `pulumi:"tableNameCaseSensitivity"`
-	Tags                     map[string]string `pulumi:"tags"`
+	TableNameCaseSensitivity *bool `pulumi:"tableNameCaseSensitivity"`
+	// Specifies the key/value pairs to associate with the GaussDB Mysql instance.
+	Tags map[string]string `pulumi:"tags"`
 	// Specifies the time zone. Defaults to "UTC+08:00". Changing this parameter
 	// will create a new resource.
 	TimeZone *string `pulumi:"timeZone"`
@@ -347,7 +353,7 @@ type MysqlInstanceState struct {
 	AuditLogEnabled pulumi.BoolPtrInput
 	AutoPay         pulumi.StringPtrInput
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false". Changing this will do nothing.
+	// Valid values are "true" and "false".
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the availability zone mode: "single" or "multi".
 	// Defaults to "single". Changing this parameter will create a new resource.
@@ -412,13 +418,13 @@ type MysqlInstanceState struct {
 	Port pulumi.IntPtrInput
 	// Indicates the private IP address of the DB instance.
 	PrivateWriteIp pulumi.StringPtrInput
-	// Indicates the address of the proxy.
+	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyAddress pulumi.StringPtrInput
-	// Specifies the flavor of the proxy.
+	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyFlavor pulumi.StringPtrInput
-	// Specifies the node count of the proxy.
+	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyNodeNum pulumi.IntPtrInput
-	// Indicates the port of the proxy.
+	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyPort pulumi.IntPtrInput
 	// Specifies the count of read replicas. Defaults to 1.
 	ReadReplicas pulumi.IntPtrInput
@@ -428,6 +434,8 @@ type MysqlInstanceState struct {
 	// Specifies the security group ID. Required if the selected subnet
 	// doesn't enable network ACL. Changing this parameter will create a new resource.
 	SecurityGroupId pulumi.StringPtrInput
+	// Specifies whether sql filter is enabled. The default value is `false`.
+	SqlFilterEnabled pulumi.BoolPtrInput
 	// Indicates the node status.
 	Status pulumi.StringPtrInput
 	// Specifies the network ID of a subnet. Changing this parameter will create a
@@ -437,7 +445,8 @@ type MysqlInstanceState struct {
 	// be `true` (case sensitive) and `false` (case insensitive). Defaults to `false`. This parameter only works during
 	// creation.
 	TableNameCaseSensitivity pulumi.BoolPtrInput
-	Tags                     pulumi.StringMapInput
+	// Specifies the key/value pairs to associate with the GaussDB Mysql instance.
+	Tags pulumi.StringMapInput
 	// Specifies the time zone. Defaults to "UTC+08:00". Changing this parameter
 	// will create a new resource.
 	TimeZone pulumi.StringPtrInput
@@ -457,7 +466,7 @@ type mysqlInstanceArgs struct {
 	AuditLogEnabled *bool   `pulumi:"auditLogEnabled"`
 	AutoPay         *string `pulumi:"autoPay"`
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false". Changing this will do nothing.
+	// Valid values are "true" and "false".
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the availability zone mode: "single" or "multi".
 	// Defaults to "single". Changing this parameter will create a new resource.
@@ -512,9 +521,9 @@ type mysqlInstanceArgs struct {
 	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
 	// Changing this will do nothing.
 	PeriodUnit *string `pulumi:"periodUnit"`
-	// Specifies the flavor of the proxy.
+	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyFlavor *string `pulumi:"proxyFlavor"`
-	// Specifies the node count of the proxy.
+	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyNodeNum *int `pulumi:"proxyNodeNum"`
 	// Specifies the count of read replicas. Defaults to 1.
 	ReadReplicas *int `pulumi:"readReplicas"`
@@ -524,14 +533,17 @@ type mysqlInstanceArgs struct {
 	// Specifies the security group ID. Required if the selected subnet
 	// doesn't enable network ACL. Changing this parameter will create a new resource.
 	SecurityGroupId *string `pulumi:"securityGroupId"`
+	// Specifies whether sql filter is enabled. The default value is `false`.
+	SqlFilterEnabled *bool `pulumi:"sqlFilterEnabled"`
 	// Specifies the network ID of a subnet. Changing this parameter will create a
 	// new resource.
 	SubnetId string `pulumi:"subnetId"`
 	// Whether the kernel table name is case sensitive. The value can
 	// be `true` (case sensitive) and `false` (case insensitive). Defaults to `false`. This parameter only works during
 	// creation.
-	TableNameCaseSensitivity *bool             `pulumi:"tableNameCaseSensitivity"`
-	Tags                     map[string]string `pulumi:"tags"`
+	TableNameCaseSensitivity *bool `pulumi:"tableNameCaseSensitivity"`
+	// Specifies the key/value pairs to associate with the GaussDB Mysql instance.
+	Tags map[string]string `pulumi:"tags"`
 	// Specifies the time zone. Defaults to "UTC+08:00". Changing this parameter
 	// will create a new resource.
 	TimeZone *string `pulumi:"timeZone"`
@@ -548,7 +560,7 @@ type MysqlInstanceArgs struct {
 	AuditLogEnabled pulumi.BoolPtrInput
 	AutoPay         pulumi.StringPtrInput
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false". Changing this will do nothing.
+	// Valid values are "true" and "false".
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the availability zone mode: "single" or "multi".
 	// Defaults to "single". Changing this parameter will create a new resource.
@@ -603,9 +615,9 @@ type MysqlInstanceArgs struct {
 	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
 	// Changing this will do nothing.
 	PeriodUnit pulumi.StringPtrInput
-	// Specifies the flavor of the proxy.
+	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyFlavor pulumi.StringPtrInput
-	// Specifies the node count of the proxy.
+	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyNodeNum pulumi.IntPtrInput
 	// Specifies the count of read replicas. Defaults to 1.
 	ReadReplicas pulumi.IntPtrInput
@@ -615,6 +627,8 @@ type MysqlInstanceArgs struct {
 	// Specifies the security group ID. Required if the selected subnet
 	// doesn't enable network ACL. Changing this parameter will create a new resource.
 	SecurityGroupId pulumi.StringPtrInput
+	// Specifies whether sql filter is enabled. The default value is `false`.
+	SqlFilterEnabled pulumi.BoolPtrInput
 	// Specifies the network ID of a subnet. Changing this parameter will create a
 	// new resource.
 	SubnetId pulumi.StringInput
@@ -622,7 +636,8 @@ type MysqlInstanceArgs struct {
 	// be `true` (case sensitive) and `false` (case insensitive). Defaults to `false`. This parameter only works during
 	// creation.
 	TableNameCaseSensitivity pulumi.BoolPtrInput
-	Tags                     pulumi.StringMapInput
+	// Specifies the key/value pairs to associate with the GaussDB Mysql instance.
+	Tags pulumi.StringMapInput
 	// Specifies the time zone. Defaults to "UTC+08:00". Changing this parameter
 	// will create a new resource.
 	TimeZone pulumi.StringPtrInput
@@ -730,7 +745,7 @@ func (o MysqlInstanceOutput) AutoPay() pulumi.StringPtrOutput {
 }
 
 // Specifies whether auto renew is enabled.
-// Valid values are "true" and "false". Changing this will do nothing.
+// Valid values are "true" and "false".
 func (o MysqlInstanceOutput) AutoRenew() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
 }
@@ -861,22 +876,22 @@ func (o MysqlInstanceOutput) PrivateWriteIp() pulumi.StringOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.PrivateWriteIp }).(pulumi.StringOutput)
 }
 
-// Indicates the address of the proxy.
+// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 func (o MysqlInstanceOutput) ProxyAddress() pulumi.StringOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.ProxyAddress }).(pulumi.StringOutput)
 }
 
-// Specifies the flavor of the proxy.
+// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 func (o MysqlInstanceOutput) ProxyFlavor() pulumi.StringOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.ProxyFlavor }).(pulumi.StringOutput)
 }
 
-// Specifies the node count of the proxy.
+// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 func (o MysqlInstanceOutput) ProxyNodeNum() pulumi.IntOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.IntOutput { return v.ProxyNodeNum }).(pulumi.IntOutput)
 }
 
-// Indicates the port of the proxy.
+// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 func (o MysqlInstanceOutput) ProxyPort() pulumi.IntOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.IntOutput { return v.ProxyPort }).(pulumi.IntOutput)
 }
@@ -898,6 +913,11 @@ func (o MysqlInstanceOutput) SecurityGroupId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringPtrOutput { return v.SecurityGroupId }).(pulumi.StringPtrOutput)
 }
 
+// Specifies whether sql filter is enabled. The default value is `false`.
+func (o MysqlInstanceOutput) SqlFilterEnabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v *MysqlInstance) pulumi.BoolOutput { return v.SqlFilterEnabled }).(pulumi.BoolOutput)
+}
+
 // Indicates the node status.
 func (o MysqlInstanceOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
@@ -916,6 +936,7 @@ func (o MysqlInstanceOutput) TableNameCaseSensitivity() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.BoolPtrOutput { return v.TableNameCaseSensitivity }).(pulumi.BoolPtrOutput)
 }
 
+// Specifies the key/value pairs to associate with the GaussDB Mysql instance.
 func (o MysqlInstanceOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }

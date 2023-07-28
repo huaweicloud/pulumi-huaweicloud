@@ -5,9 +5,10 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Manages an SMN Topic resource within HuaweiCloud.
+ * Manages an SMN topic resource within HuaweiCloud.
  *
  * ## Example Usage
+ * ### Basic Usage
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -15,6 +16,19 @@ import * as utilities from "../utilities";
  *
  * const topic1 = new huaweicloud.Smn.Topic("topic_1", {
  *     displayName: "The display name of topic_1",
+ * });
+ * ```
+ * ### Topic with policies
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as huaweicloud from "@pulumi/huaweicloud";
+ *
+ * const topic1 = new huaweicloud.Smn.Topic("topic_1", {
+ *     displayName: "The display name of topic_1",
+ *     introduction: "created by terraform",
+ *     servicesPublishAllowed: "obs,vod,cce",
+ *     usersPublishAllowed: "urn:csp:iam::0970d7b7d400f2470fbec00316a03560:root,urn:csp:iam::0970d7b7d400f2470fbec00316a03561:root",
  * });
  * ```
  *
@@ -69,14 +83,20 @@ export class Topic extends pulumi.CustomResource {
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
+     * Specifies the introduction of the topic,
+     * this will be contained in the subscription invitation.
+     */
+    public readonly introduction!: pulumi.Output<string | undefined>;
+    /**
      * Specifies the name of the topic to be created. The name can contains of 1 to 255
      * characters and must start with a letter or digit, and can only contain letters, digits, underscores (_), and hyphens (-).
      * Changing this parameter will create a new resource.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Message pushing policy. 0 indicates that the message sending fails and the message is cached in the
-     * queue. 1 indicates that the failed message is discarded.
+     * Message pushing policy.
+     * + **0**: indicates that the message sending fails and the message is cached in the queue.
+     * + **1**: indicates that the failed message is discarded.
      */
     public /*out*/ readonly pushPolicy!: pulumi.Output<number>;
     /**
@@ -84,6 +104,11 @@ export class Topic extends pulumi.CustomResource {
      * provider-level region will be used. Changing this parameter will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
+    /**
+     * Specifies the services that can publish messages to this topic
+     * separated by comma(,). If left empty, that means no service allowed.
+     */
+    public readonly servicesPublishAllowed!: pulumi.Output<string | undefined>;
     /**
      * Specifies the tags of the SMN topic, key/value pair format.
      */
@@ -96,6 +121,13 @@ export class Topic extends pulumi.CustomResource {
      * Time when the topic was updated.
      */
     public /*out*/ readonly updateTime!: pulumi.Output<string>;
+    /**
+     * Specifies the users who can publish messages to this topic.
+     * The value can be **\*** which indicates all users or user account URNs separated by comma(,). The format of
+     * user account URN is **urn:csp:iam::domainId:root**. **domainId** indicates the account ID of another user.
+     * If left empty, that means only the topic creator can publish messages.
+     */
+    public readonly usersPublishAllowed!: pulumi.Output<string | undefined>;
 
     /**
      * Create a Topic resource with the given unique name, arguments, and options.
@@ -113,19 +145,25 @@ export class Topic extends pulumi.CustomResource {
             resourceInputs["createTime"] = state ? state.createTime : undefined;
             resourceInputs["displayName"] = state ? state.displayName : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
+            resourceInputs["introduction"] = state ? state.introduction : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["pushPolicy"] = state ? state.pushPolicy : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["servicesPublishAllowed"] = state ? state.servicesPublishAllowed : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["topicUrn"] = state ? state.topicUrn : undefined;
             resourceInputs["updateTime"] = state ? state.updateTime : undefined;
+            resourceInputs["usersPublishAllowed"] = state ? state.usersPublishAllowed : undefined;
         } else {
             const args = argsOrState as TopicArgs | undefined;
             resourceInputs["displayName"] = args ? args.displayName : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
+            resourceInputs["introduction"] = args ? args.introduction : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["servicesPublishAllowed"] = args ? args.servicesPublishAllowed : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
+            resourceInputs["usersPublishAllowed"] = args ? args.usersPublishAllowed : undefined;
             resourceInputs["createTime"] = undefined /*out*/;
             resourceInputs["pushPolicy"] = undefined /*out*/;
             resourceInputs["topicUrn"] = undefined /*out*/;
@@ -155,14 +193,20 @@ export interface TopicState {
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
+     * Specifies the introduction of the topic,
+     * this will be contained in the subscription invitation.
+     */
+    introduction?: pulumi.Input<string>;
+    /**
      * Specifies the name of the topic to be created. The name can contains of 1 to 255
      * characters and must start with a letter or digit, and can only contain letters, digits, underscores (_), and hyphens (-).
      * Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;
     /**
-     * Message pushing policy. 0 indicates that the message sending fails and the message is cached in the
-     * queue. 1 indicates that the failed message is discarded.
+     * Message pushing policy.
+     * + **0**: indicates that the message sending fails and the message is cached in the queue.
+     * + **1**: indicates that the failed message is discarded.
      */
     pushPolicy?: pulumi.Input<number>;
     /**
@@ -170,6 +214,11 @@ export interface TopicState {
      * provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the services that can publish messages to this topic
+     * separated by comma(,). If left empty, that means no service allowed.
+     */
+    servicesPublishAllowed?: pulumi.Input<string>;
     /**
      * Specifies the tags of the SMN topic, key/value pair format.
      */
@@ -182,6 +231,13 @@ export interface TopicState {
      * Time when the topic was updated.
      */
     updateTime?: pulumi.Input<string>;
+    /**
+     * Specifies the users who can publish messages to this topic.
+     * The value can be **\*** which indicates all users or user account URNs separated by comma(,). The format of
+     * user account URN is **urn:csp:iam::domainId:root**. **domainId** indicates the account ID of another user.
+     * If left empty, that means only the topic creator can publish messages.
+     */
+    usersPublishAllowed?: pulumi.Input<string>;
 }
 
 /**
@@ -199,6 +255,11 @@ export interface TopicArgs {
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
+     * Specifies the introduction of the topic,
+     * this will be contained in the subscription invitation.
+     */
+    introduction?: pulumi.Input<string>;
+    /**
      * Specifies the name of the topic to be created. The name can contains of 1 to 255
      * characters and must start with a letter or digit, and can only contain letters, digits, underscores (_), and hyphens (-).
      * Changing this parameter will create a new resource.
@@ -210,7 +271,19 @@ export interface TopicArgs {
      */
     region?: pulumi.Input<string>;
     /**
+     * Specifies the services that can publish messages to this topic
+     * separated by comma(,). If left empty, that means no service allowed.
+     */
+    servicesPublishAllowed?: pulumi.Input<string>;
+    /**
      * Specifies the tags of the SMN topic, key/value pair format.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Specifies the users who can publish messages to this topic.
+     * The value can be **\*** which indicates all users or user account URNs separated by comma(,). The format of
+     * user account URN is **urn:csp:iam::domainId:root**. **domainId** indicates the account ID of another user.
+     * If left empty, that means only the topic creator can publish messages.
+     */
+    usersPublishAllowed?: pulumi.Input<string>;
 }

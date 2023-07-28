@@ -22,8 +22,8 @@ class SubscriptionArgs:
         """
         The set of arguments for constructing a Subscription resource.
         :param pulumi.Input[str] endpoint: Message endpoint. Changing this parameter will create a new resource.
-               + **For an HTTP subscription**, the endpoint starts with http://.
-               + **For an HTTPS subscription**, the endpoint starts with https://.
+               + **For an HTTP subscription**, the endpoint starts with `http://`.
+               + **For an HTTPS subscription**, the endpoint starts with `https://`.
                + **For an email subscription**, the endpoint is an mail address.
                + **For an SMS message subscription**, the endpoint is a phone number,
                the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
@@ -36,7 +36,7 @@ class SubscriptionArgs:
         :param pulumi.Input[str] region: The region in which to create the SMN subscription resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] remark: Remark information. The remarks must be a UTF-8-coded character string
-               containing 128 bytes.
+               containing 128 bytes. Changing this parameter will create a new resource.
         """
         pulumi.set(__self__, "endpoint", endpoint)
         pulumi.set(__self__, "protocol", protocol)
@@ -51,8 +51,8 @@ class SubscriptionArgs:
     def endpoint(self) -> pulumi.Input[str]:
         """
         Message endpoint. Changing this parameter will create a new resource.
-        + **For an HTTP subscription**, the endpoint starts with http://.
-        + **For an HTTPS subscription**, the endpoint starts with https://.
+        + **For an HTTP subscription**, the endpoint starts with `http://`.
+        + **For an HTTPS subscription**, the endpoint starts with `https://`.
         + **For an email subscription**, the endpoint is an mail address.
         + **For an SMS message subscription**, the endpoint is a phone number,
         the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
@@ -109,7 +109,7 @@ class SubscriptionArgs:
     def remark(self) -> Optional[pulumi.Input[str]]:
         """
         Remark information. The remarks must be a UTF-8-coded character string
-        containing 128 bytes.
+        containing 128 bytes. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "remark")
 
@@ -132,8 +132,8 @@ class _SubscriptionState:
         """
         Input properties used for looking up and filtering Subscription resources.
         :param pulumi.Input[str] endpoint: Message endpoint. Changing this parameter will create a new resource.
-               + **For an HTTP subscription**, the endpoint starts with http://.
-               + **For an HTTPS subscription**, the endpoint starts with https://.
+               + **For an HTTP subscription**, the endpoint starts with `http://`.
+               + **For an HTTPS subscription**, the endpoint starts with `https://`.
                + **For an email subscription**, the endpoint is an mail address.
                + **For an SMS message subscription**, the endpoint is a phone number,
                the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
@@ -145,9 +145,11 @@ class _SubscriptionState:
         :param pulumi.Input[str] region: The region in which to create the SMN subscription resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] remark: Remark information. The remarks must be a UTF-8-coded character string
-               containing 128 bytes.
-        :param pulumi.Input[int] status: Subscription status. 0 indicates that the subscription is not confirmed. 1 indicates that the subscription
-               is confirmed. 3 indicates that the subscription is canceled.
+               containing 128 bytes. Changing this parameter will create a new resource.
+        :param pulumi.Input[int] status: Subscription status.
+               + **0**: indicates that the subscription is not confirmed.
+               + **1**: indicates that the subscription is confirmed.
+               + **3**: indicates that the subscription is canceled.
         :param pulumi.Input[str] subscription_urn: Resource identifier of a subscription, which is unique.
         :param pulumi.Input[str] topic_urn: Specifies the resource identifier of a topic, which is unique.
                Changing this parameter will create a new resource.
@@ -174,8 +176,8 @@ class _SubscriptionState:
     def endpoint(self) -> Optional[pulumi.Input[str]]:
         """
         Message endpoint. Changing this parameter will create a new resource.
-        + **For an HTTP subscription**, the endpoint starts with http://.
-        + **For an HTTPS subscription**, the endpoint starts with https://.
+        + **For an HTTP subscription**, the endpoint starts with `http://`.
+        + **For an HTTPS subscription**, the endpoint starts with `https://`.
         + **For an email subscription**, the endpoint is an mail address.
         + **For an SMS message subscription**, the endpoint is a phone number,
         the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
@@ -231,7 +233,7 @@ class _SubscriptionState:
     def remark(self) -> Optional[pulumi.Input[str]]:
         """
         Remark information. The remarks must be a UTF-8-coded character string
-        containing 128 bytes.
+        containing 128 bytes. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "remark")
 
@@ -243,8 +245,10 @@ class _SubscriptionState:
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[int]]:
         """
-        Subscription status. 0 indicates that the subscription is not confirmed. 1 indicates that the subscription
-        is confirmed. 3 indicates that the subscription is canceled.
+        Subscription status.
+        + **0**: indicates that the subscription is not confirmed.
+        + **1**: indicates that the subscription is confirmed.
+        + **3**: indicates that the subscription is canceled.
         """
         return pulumi.get(self, "status")
 
@@ -322,8 +326,8 @@ class Subscription(pulumi.CustomResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] endpoint: Message endpoint. Changing this parameter will create a new resource.
-               + **For an HTTP subscription**, the endpoint starts with http://.
-               + **For an HTTPS subscription**, the endpoint starts with https://.
+               + **For an HTTP subscription**, the endpoint starts with `http://`.
+               + **For an HTTPS subscription**, the endpoint starts with `https://`.
                + **For an email subscription**, the endpoint is an mail address.
                + **For an SMS message subscription**, the endpoint is a phone number,
                the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
@@ -334,7 +338,7 @@ class Subscription(pulumi.CustomResource):
         :param pulumi.Input[str] region: The region in which to create the SMN subscription resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] remark: Remark information. The remarks must be a UTF-8-coded character string
-               containing 128 bytes.
+               containing 128 bytes. Changing this parameter will create a new resource.
         :param pulumi.Input[str] topic_urn: Specifies the resource identifier of a topic, which is unique.
                Changing this parameter will create a new resource.
         """
@@ -443,8 +447,8 @@ class Subscription(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] endpoint: Message endpoint. Changing this parameter will create a new resource.
-               + **For an HTTP subscription**, the endpoint starts with http://.
-               + **For an HTTPS subscription**, the endpoint starts with https://.
+               + **For an HTTP subscription**, the endpoint starts with `http://`.
+               + **For an HTTPS subscription**, the endpoint starts with `https://`.
                + **For an email subscription**, the endpoint is an mail address.
                + **For an SMS message subscription**, the endpoint is a phone number,
                the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
@@ -456,9 +460,11 @@ class Subscription(pulumi.CustomResource):
         :param pulumi.Input[str] region: The region in which to create the SMN subscription resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] remark: Remark information. The remarks must be a UTF-8-coded character string
-               containing 128 bytes.
-        :param pulumi.Input[int] status: Subscription status. 0 indicates that the subscription is not confirmed. 1 indicates that the subscription
-               is confirmed. 3 indicates that the subscription is canceled.
+               containing 128 bytes. Changing this parameter will create a new resource.
+        :param pulumi.Input[int] status: Subscription status.
+               + **0**: indicates that the subscription is not confirmed.
+               + **1**: indicates that the subscription is confirmed.
+               + **3**: indicates that the subscription is canceled.
         :param pulumi.Input[str] subscription_urn: Resource identifier of a subscription, which is unique.
         :param pulumi.Input[str] topic_urn: Specifies the resource identifier of a topic, which is unique.
                Changing this parameter will create a new resource.
@@ -482,8 +488,8 @@ class Subscription(pulumi.CustomResource):
     def endpoint(self) -> pulumi.Output[str]:
         """
         Message endpoint. Changing this parameter will create a new resource.
-        + **For an HTTP subscription**, the endpoint starts with http://.
-        + **For an HTTPS subscription**, the endpoint starts with https://.
+        + **For an HTTP subscription**, the endpoint starts with `http://`.
+        + **For an HTTPS subscription**, the endpoint starts with `https://`.
         + **For an email subscription**, the endpoint is an mail address.
         + **For an SMS message subscription**, the endpoint is a phone number,
         the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
@@ -523,7 +529,7 @@ class Subscription(pulumi.CustomResource):
     def remark(self) -> pulumi.Output[Optional[str]]:
         """
         Remark information. The remarks must be a UTF-8-coded character string
-        containing 128 bytes.
+        containing 128 bytes. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "remark")
 
@@ -531,8 +537,10 @@ class Subscription(pulumi.CustomResource):
     @pulumi.getter
     def status(self) -> pulumi.Output[int]:
         """
-        Subscription status. 0 indicates that the subscription is not confirmed. 1 indicates that the subscription
-        is confirmed. 3 indicates that the subscription is canceled.
+        Subscription status.
+        + **0**: indicates that the subscription is not confirmed.
+        + **1**: indicates that the subscription is confirmed.
+        + **3**: indicates that the subscription is canceled.
         """
         return pulumi.get(self, "status")
 

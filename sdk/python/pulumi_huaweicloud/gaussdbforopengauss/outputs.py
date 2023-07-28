@@ -499,7 +499,9 @@ class GetOpengaussInstancesInstanceResult(dict):
                  nodes: Sequence['outputs.GetOpengaussInstancesInstanceNodeResult'],
                  port: int,
                  private_ips: Sequence[str],
+                 public_ips: Sequence[str],
                  region: str,
+                 replica_num: int,
                  security_group_id: str,
                  sharding_num: int,
                  status: str,
@@ -524,8 +526,10 @@ class GetOpengaussInstancesInstanceResult(dict):
         :param Sequence['GetOpengaussInstancesInstanceNodeArgs'] nodes: Indicates the instance nodes information. Structure is documented below.
         :param int port: Indicates the database port.
         :param Sequence[str] private_ips: Indicates the list of private IP address of the nodes.
+        :param Sequence[str] public_ips: Indicates the public IP address of the DB instance.
         :param str region: The region in which to obtain the instance. If omitted, the provider-level region will
                be used.
+        :param int replica_num: Indicates the replica num.
         :param str security_group_id: Indicates the security group ID.
         :param int sharding_num: Indicates the sharding num.
         :param str status: Indicates the node status.
@@ -550,7 +554,9 @@ class GetOpengaussInstancesInstanceResult(dict):
         pulumi.set(__self__, "nodes", nodes)
         pulumi.set(__self__, "port", port)
         pulumi.set(__self__, "private_ips", private_ips)
+        pulumi.set(__self__, "public_ips", public_ips)
         pulumi.set(__self__, "region", region)
+        pulumi.set(__self__, "replica_num", replica_num)
         pulumi.set(__self__, "security_group_id", security_group_id)
         pulumi.set(__self__, "sharding_num", sharding_num)
         pulumi.set(__self__, "status", status)
@@ -674,6 +680,14 @@ class GetOpengaussInstancesInstanceResult(dict):
         return pulumi.get(self, "private_ips")
 
     @property
+    @pulumi.getter(name="publicIps")
+    def public_ips(self) -> Sequence[str]:
+        """
+        Indicates the public IP address of the DB instance.
+        """
+        return pulumi.get(self, "public_ips")
+
+    @property
     @pulumi.getter
     def region(self) -> str:
         """
@@ -681,6 +695,14 @@ class GetOpengaussInstancesInstanceResult(dict):
         be used.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter(name="replicaNum")
+    def replica_num(self) -> int:
+        """
+        Indicates the replica num.
+        """
+        return pulumi.get(self, "replica_num")
 
     @property
     @pulumi.getter(name="securityGroupId")

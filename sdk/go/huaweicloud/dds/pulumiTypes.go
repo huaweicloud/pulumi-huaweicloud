@@ -1300,18 +1300,140 @@ func (o InstanceBackupStrategyPtrOutput) StartTime() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
+type InstanceConfiguration struct {
+	// Specifies the ID of the template.
+	// Changing this creates a new instance.
+	Id string `pulumi:"id"`
+	// Specifies the node type. Valid value:
+	// + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+	// + For an Enhanced Edition cluster instance, the value is **shard**.
+	// + For a Community Edition replica set instance, the value is **replica**.
+	// + For a Community Edition single node instance, the value is **single**.
+	Type string `pulumi:"type"`
+}
+
+// InstanceConfigurationInput is an input type that accepts InstanceConfigurationArgs and InstanceConfigurationOutput values.
+// You can construct a concrete instance of `InstanceConfigurationInput` via:
+//
+//	InstanceConfigurationArgs{...}
+type InstanceConfigurationInput interface {
+	pulumi.Input
+
+	ToInstanceConfigurationOutput() InstanceConfigurationOutput
+	ToInstanceConfigurationOutputWithContext(context.Context) InstanceConfigurationOutput
+}
+
+type InstanceConfigurationArgs struct {
+	// Specifies the ID of the template.
+	// Changing this creates a new instance.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Specifies the node type. Valid value:
+	// + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+	// + For an Enhanced Edition cluster instance, the value is **shard**.
+	// + For a Community Edition replica set instance, the value is **replica**.
+	// + For a Community Edition single node instance, the value is **single**.
+	Type pulumi.StringInput `pulumi:"type"`
+}
+
+func (InstanceConfigurationArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*InstanceConfiguration)(nil)).Elem()
+}
+
+func (i InstanceConfigurationArgs) ToInstanceConfigurationOutput() InstanceConfigurationOutput {
+	return i.ToInstanceConfigurationOutputWithContext(context.Background())
+}
+
+func (i InstanceConfigurationArgs) ToInstanceConfigurationOutputWithContext(ctx context.Context) InstanceConfigurationOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(InstanceConfigurationOutput)
+}
+
+// InstanceConfigurationArrayInput is an input type that accepts InstanceConfigurationArray and InstanceConfigurationArrayOutput values.
+// You can construct a concrete instance of `InstanceConfigurationArrayInput` via:
+//
+//	InstanceConfigurationArray{ InstanceConfigurationArgs{...} }
+type InstanceConfigurationArrayInput interface {
+	pulumi.Input
+
+	ToInstanceConfigurationArrayOutput() InstanceConfigurationArrayOutput
+	ToInstanceConfigurationArrayOutputWithContext(context.Context) InstanceConfigurationArrayOutput
+}
+
+type InstanceConfigurationArray []InstanceConfigurationInput
+
+func (InstanceConfigurationArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]InstanceConfiguration)(nil)).Elem()
+}
+
+func (i InstanceConfigurationArray) ToInstanceConfigurationArrayOutput() InstanceConfigurationArrayOutput {
+	return i.ToInstanceConfigurationArrayOutputWithContext(context.Background())
+}
+
+func (i InstanceConfigurationArray) ToInstanceConfigurationArrayOutputWithContext(ctx context.Context) InstanceConfigurationArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(InstanceConfigurationArrayOutput)
+}
+
+type InstanceConfigurationOutput struct{ *pulumi.OutputState }
+
+func (InstanceConfigurationOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*InstanceConfiguration)(nil)).Elem()
+}
+
+func (o InstanceConfigurationOutput) ToInstanceConfigurationOutput() InstanceConfigurationOutput {
+	return o
+}
+
+func (o InstanceConfigurationOutput) ToInstanceConfigurationOutputWithContext(ctx context.Context) InstanceConfigurationOutput {
+	return o
+}
+
+// Specifies the ID of the template.
+// Changing this creates a new instance.
+func (o InstanceConfigurationOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v InstanceConfiguration) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Specifies the node type. Valid value:
+// + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+// + For an Enhanced Edition cluster instance, the value is **shard**.
+// + For a Community Edition replica set instance, the value is **replica**.
+// + For a Community Edition single node instance, the value is **single**.
+func (o InstanceConfigurationOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v InstanceConfiguration) string { return v.Type }).(pulumi.StringOutput)
+}
+
+type InstanceConfigurationArrayOutput struct{ *pulumi.OutputState }
+
+func (InstanceConfigurationArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]InstanceConfiguration)(nil)).Elem()
+}
+
+func (o InstanceConfigurationArrayOutput) ToInstanceConfigurationArrayOutput() InstanceConfigurationArrayOutput {
+	return o
+}
+
+func (o InstanceConfigurationArrayOutput) ToInstanceConfigurationArrayOutputWithContext(ctx context.Context) InstanceConfigurationArrayOutput {
+	return o
+}
+
+func (o InstanceConfigurationArrayOutput) Index(i pulumi.IntInput) InstanceConfigurationOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) InstanceConfiguration {
+		return vs[0].([]InstanceConfiguration)[vs[1].(int)]
+	}).(InstanceConfigurationOutput)
+}
+
 type InstanceDatastore struct {
-	// Specifies the storage engine of the DB instance. DDS Community Edition
-	// supports wiredTiger engine, and the Enhanced Edition supports rocksDB engine.
+	// Specifies the storage engine of the DB instance.
+	// If `version` is set to `3.2`, `3.4`, or `4.0`, the value is **wiredTiger**.
+	// If `version` is set to `4.2`, or `4.4`, the value is **rocksDB**.
 	StorageEngine *string `pulumi:"storageEngine"`
 	// Specifies the node type. Valid value:
-	// + For a Community Edition cluster instance, the value can be mongos, shard, or config.
-	// + For an Enhanced Edition cluster instance, the value is shard.
-	// + For a Community Edition replica set instance, the value is replica.
-	// + For a Community Edition single node instance, the value is single.
+	// + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+	// + For an Enhanced Edition cluster instance, the value is **shard**.
+	// + For a Community Edition replica set instance, the value is **replica**.
+	// + For a Community Edition single node instance, the value is **single**.
 	Type string `pulumi:"type"`
 	// Specifies the DB instance version. For the Community Edition, the valid
-	// values are 3.2, 3.4, or 4.0. For the Enhanced Edition, only 3.4 is supported now.
+	// values are `3.2`, `3.4`, `4.0`, `4.2`, or `4.4`.
 	Version string `pulumi:"version"`
 }
 
@@ -1327,17 +1449,18 @@ type InstanceDatastoreInput interface {
 }
 
 type InstanceDatastoreArgs struct {
-	// Specifies the storage engine of the DB instance. DDS Community Edition
-	// supports wiredTiger engine, and the Enhanced Edition supports rocksDB engine.
+	// Specifies the storage engine of the DB instance.
+	// If `version` is set to `3.2`, `3.4`, or `4.0`, the value is **wiredTiger**.
+	// If `version` is set to `4.2`, or `4.4`, the value is **rocksDB**.
 	StorageEngine pulumi.StringPtrInput `pulumi:"storageEngine"`
 	// Specifies the node type. Valid value:
-	// + For a Community Edition cluster instance, the value can be mongos, shard, or config.
-	// + For an Enhanced Edition cluster instance, the value is shard.
-	// + For a Community Edition replica set instance, the value is replica.
-	// + For a Community Edition single node instance, the value is single.
+	// + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+	// + For an Enhanced Edition cluster instance, the value is **shard**.
+	// + For a Community Edition replica set instance, the value is **replica**.
+	// + For a Community Edition single node instance, the value is **single**.
 	Type pulumi.StringInput `pulumi:"type"`
 	// Specifies the DB instance version. For the Community Edition, the valid
-	// values are 3.2, 3.4, or 4.0. For the Enhanced Edition, only 3.4 is supported now.
+	// values are `3.2`, `3.4`, `4.0`, `4.2`, or `4.4`.
 	Version pulumi.StringInput `pulumi:"version"`
 }
 
@@ -1418,23 +1541,24 @@ func (o InstanceDatastoreOutput) ToInstanceDatastorePtrOutputWithContext(ctx con
 	}).(InstanceDatastorePtrOutput)
 }
 
-// Specifies the storage engine of the DB instance. DDS Community Edition
-// supports wiredTiger engine, and the Enhanced Edition supports rocksDB engine.
+// Specifies the storage engine of the DB instance.
+// If `version` is set to `3.2`, `3.4`, or `4.0`, the value is **wiredTiger**.
+// If `version` is set to `4.2`, or `4.4`, the value is **rocksDB**.
 func (o InstanceDatastoreOutput) StorageEngine() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v InstanceDatastore) *string { return v.StorageEngine }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the node type. Valid value:
-// + For a Community Edition cluster instance, the value can be mongos, shard, or config.
-// + For an Enhanced Edition cluster instance, the value is shard.
-// + For a Community Edition replica set instance, the value is replica.
-// + For a Community Edition single node instance, the value is single.
+// + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+// + For an Enhanced Edition cluster instance, the value is **shard**.
+// + For a Community Edition replica set instance, the value is **replica**.
+// + For a Community Edition single node instance, the value is **single**.
 func (o InstanceDatastoreOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v InstanceDatastore) string { return v.Type }).(pulumi.StringOutput)
 }
 
 // Specifies the DB instance version. For the Community Edition, the valid
-// values are 3.2, 3.4, or 4.0. For the Enhanced Edition, only 3.4 is supported now.
+// values are `3.2`, `3.4`, `4.0`, `4.2`, or `4.4`.
 func (o InstanceDatastoreOutput) Version() pulumi.StringOutput {
 	return o.ApplyT(func(v InstanceDatastore) string { return v.Version }).(pulumi.StringOutput)
 }
@@ -1463,8 +1587,9 @@ func (o InstanceDatastorePtrOutput) Elem() InstanceDatastoreOutput {
 	}).(InstanceDatastoreOutput)
 }
 
-// Specifies the storage engine of the DB instance. DDS Community Edition
-// supports wiredTiger engine, and the Enhanced Edition supports rocksDB engine.
+// Specifies the storage engine of the DB instance.
+// If `version` is set to `3.2`, `3.4`, or `4.0`, the value is **wiredTiger**.
+// If `version` is set to `4.2`, or `4.4`, the value is **rocksDB**.
 func (o InstanceDatastorePtrOutput) StorageEngine() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *InstanceDatastore) *string {
 		if v == nil {
@@ -1475,10 +1600,10 @@ func (o InstanceDatastorePtrOutput) StorageEngine() pulumi.StringPtrOutput {
 }
 
 // Specifies the node type. Valid value:
-// + For a Community Edition cluster instance, the value can be mongos, shard, or config.
-// + For an Enhanced Edition cluster instance, the value is shard.
-// + For a Community Edition replica set instance, the value is replica.
-// + For a Community Edition single node instance, the value is single.
+// + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+// + For an Enhanced Edition cluster instance, the value is **shard**.
+// + For a Community Edition replica set instance, the value is **replica**.
+// + For a Community Edition single node instance, the value is **single**.
 func (o InstanceDatastorePtrOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *InstanceDatastore) *string {
 		if v == nil {
@@ -1489,7 +1614,7 @@ func (o InstanceDatastorePtrOutput) Type() pulumi.StringPtrOutput {
 }
 
 // Specifies the DB instance version. For the Community Edition, the valid
-// values are 3.2, 3.4, or 4.0. For the Enhanced Edition, only 3.4 is supported now.
+// values are `3.2`, `3.4`, `4.0`, `4.2`, or `4.4`.
 func (o InstanceDatastorePtrOutput) Version() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *InstanceDatastore) *string {
 		if v == nil {
@@ -1519,13 +1644,14 @@ type InstanceFlavor struct {
 	// + dds.mongodb.s6.large.4.mongos and dds.mongodb.c3.large.4.config are not of the same specifications. This parameter
 	//   can be updated when the value of `type` is mongos, shard, replica or single.
 	SpecCode string `pulumi:"specCode"`
-	// Specifies the disk type. Valid value: ULTRAHIGH which indicates the type SSD.
+	// Specifies the disk type.
+	// Valid value: **ULTRAHIGH** which indicates the type SSD.
 	Storage *string `pulumi:"storage"`
 	// Specifies the node type. Valid value:
-	// + For a Community Edition cluster instance, the value can be mongos, shard, or config.
-	// + For an Enhanced Edition cluster instance, the value is shard.
-	// + For a Community Edition replica set instance, the value is replica.
-	// + For a Community Edition single node instance, the value is single.
+	// + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+	// + For an Enhanced Edition cluster instance, the value is **shard**.
+	// + For a Community Edition replica set instance, the value is **replica**.
+	// + For a Community Edition single node instance, the value is **single**.
 	Type string `pulumi:"type"`
 }
 
@@ -1560,13 +1686,14 @@ type InstanceFlavorArgs struct {
 	// + dds.mongodb.s6.large.4.mongos and dds.mongodb.c3.large.4.config are not of the same specifications. This parameter
 	//   can be updated when the value of `type` is mongos, shard, replica or single.
 	SpecCode pulumi.StringInput `pulumi:"specCode"`
-	// Specifies the disk type. Valid value: ULTRAHIGH which indicates the type SSD.
+	// Specifies the disk type.
+	// Valid value: **ULTRAHIGH** which indicates the type SSD.
 	Storage pulumi.StringPtrInput `pulumi:"storage"`
 	// Specifies the node type. Valid value:
-	// + For a Community Edition cluster instance, the value can be mongos, shard, or config.
-	// + For an Enhanced Edition cluster instance, the value is shard.
-	// + For a Community Edition replica set instance, the value is replica.
-	// + For a Community Edition single node instance, the value is single.
+	// + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+	// + For an Enhanced Edition cluster instance, the value is **shard**.
+	// + For a Community Edition replica set instance, the value is **replica**.
+	// + For a Community Edition single node instance, the value is **single**.
 	Type pulumi.StringInput `pulumi:"type"`
 }
 
@@ -1649,16 +1776,17 @@ func (o InstanceFlavorOutput) SpecCode() pulumi.StringOutput {
 	return o.ApplyT(func(v InstanceFlavor) string { return v.SpecCode }).(pulumi.StringOutput)
 }
 
-// Specifies the disk type. Valid value: ULTRAHIGH which indicates the type SSD.
+// Specifies the disk type.
+// Valid value: **ULTRAHIGH** which indicates the type SSD.
 func (o InstanceFlavorOutput) Storage() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v InstanceFlavor) *string { return v.Storage }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the node type. Valid value:
-// + For a Community Edition cluster instance, the value can be mongos, shard, or config.
-// + For an Enhanced Edition cluster instance, the value is shard.
-// + For a Community Edition replica set instance, the value is replica.
-// + For a Community Edition single node instance, the value is single.
+// + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+// + For an Enhanced Edition cluster instance, the value is **shard**.
+// + For a Community Edition replica set instance, the value is **replica**.
+// + For a Community Edition single node instance, the value is **single**.
 func (o InstanceFlavorOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v InstanceFlavor) string { return v.Type }).(pulumi.StringOutput)
 }
@@ -1684,7 +1812,8 @@ func (o InstanceFlavorArrayOutput) Index(i pulumi.IntInput) InstanceFlavorOutput
 }
 
 type InstanceNode struct {
-	// Indicates the node ID.
+	// Specifies the ID of the template.
+	// Changing this creates a new instance.
 	Id *string `pulumi:"id"`
 	// Specifies the DB instance name. The DB instance name of the same type is unique in the
 	// same tenant.
@@ -1700,10 +1829,10 @@ type InstanceNode struct {
 	// Indicates the node status.
 	Status *string `pulumi:"status"`
 	// Specifies the node type. Valid value:
-	// + For a Community Edition cluster instance, the value can be mongos, shard, or config.
-	// + For an Enhanced Edition cluster instance, the value is shard.
-	// + For a Community Edition replica set instance, the value is replica.
-	// + For a Community Edition single node instance, the value is single.
+	// + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+	// + For an Enhanced Edition cluster instance, the value is **shard**.
+	// + For a Community Edition replica set instance, the value is **replica**.
+	// + For a Community Edition single node instance, the value is **single**.
 	Type *string `pulumi:"type"`
 }
 
@@ -1719,7 +1848,8 @@ type InstanceNodeInput interface {
 }
 
 type InstanceNodeArgs struct {
-	// Indicates the node ID.
+	// Specifies the ID of the template.
+	// Changing this creates a new instance.
 	Id pulumi.StringPtrInput `pulumi:"id"`
 	// Specifies the DB instance name. The DB instance name of the same type is unique in the
 	// same tenant.
@@ -1735,10 +1865,10 @@ type InstanceNodeArgs struct {
 	// Indicates the node status.
 	Status pulumi.StringPtrInput `pulumi:"status"`
 	// Specifies the node type. Valid value:
-	// + For a Community Edition cluster instance, the value can be mongos, shard, or config.
-	// + For an Enhanced Edition cluster instance, the value is shard.
-	// + For a Community Edition replica set instance, the value is replica.
-	// + For a Community Edition single node instance, the value is single.
+	// + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+	// + For an Enhanced Edition cluster instance, the value is **shard**.
+	// + For a Community Edition replica set instance, the value is **replica**.
+	// + For a Community Edition single node instance, the value is **single**.
 	Type pulumi.StringPtrInput `pulumi:"type"`
 }
 
@@ -1793,7 +1923,8 @@ func (o InstanceNodeOutput) ToInstanceNodeOutputWithContext(ctx context.Context)
 	return o
 }
 
-// Indicates the node ID.
+// Specifies the ID of the template.
+// Changing this creates a new instance.
 func (o InstanceNodeOutput) Id() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v InstanceNode) *string { return v.Id }).(pulumi.StringPtrOutput)
 }
@@ -1827,10 +1958,10 @@ func (o InstanceNodeOutput) Status() pulumi.StringPtrOutput {
 }
 
 // Specifies the node type. Valid value:
-// + For a Community Edition cluster instance, the value can be mongos, shard, or config.
-// + For an Enhanced Edition cluster instance, the value is shard.
-// + For a Community Edition replica set instance, the value is replica.
-// + For a Community Edition single node instance, the value is single.
+// + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
+// + For an Enhanced Edition cluster instance, the value is **shard**.
+// + For a Community Edition replica set instance, the value is **replica**.
+// + For a Community Edition single node instance, the value is **single**.
 func (o InstanceNodeOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v InstanceNode) *string { return v.Type }).(pulumi.StringPtrOutput)
 }
@@ -2005,6 +2136,8 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*DatabaseUserRoleArrayInput)(nil)).Elem(), DatabaseUserRoleArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceBackupStrategyInput)(nil)).Elem(), InstanceBackupStrategyArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceBackupStrategyPtrInput)(nil)).Elem(), InstanceBackupStrategyArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*InstanceConfigurationInput)(nil)).Elem(), InstanceConfigurationArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*InstanceConfigurationArrayInput)(nil)).Elem(), InstanceConfigurationArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceDatastoreInput)(nil)).Elem(), InstanceDatastoreArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceDatastorePtrInput)(nil)).Elem(), InstanceDatastoreArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceFlavorInput)(nil)).Elem(), InstanceFlavorArgs{})
@@ -2035,6 +2168,8 @@ func init() {
 	pulumi.RegisterOutputType(DatabaseUserRoleArrayOutput{})
 	pulumi.RegisterOutputType(InstanceBackupStrategyOutput{})
 	pulumi.RegisterOutputType(InstanceBackupStrategyPtrOutput{})
+	pulumi.RegisterOutputType(InstanceConfigurationOutput{})
+	pulumi.RegisterOutputType(InstanceConfigurationArrayOutput{})
 	pulumi.RegisterOutputType(InstanceDatastoreOutput{})
 	pulumi.RegisterOutputType(InstanceDatastorePtrOutput{})
 	pulumi.RegisterOutputType(InstanceFlavorOutput{})

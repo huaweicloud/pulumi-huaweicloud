@@ -17,7 +17,7 @@ __all__ = ['AlarmruleArgs', 'Alarmrule']
 class AlarmruleArgs:
     def __init__(__self__, *,
                  alarm_name: pulumi.Input[str],
-                 condition: pulumi.Input['AlarmruleConditionArgs'],
+                 conditions: pulumi.Input[Sequence[pulumi.Input['AlarmruleConditionArgs']]],
                  metric: pulumi.Input['AlarmruleMetricArgs'],
                  alarm_action_enabled: Optional[pulumi.Input[bool]] = None,
                  alarm_actions: Optional[pulumi.Input[Sequence[pulumi.Input['AlarmruleAlarmActionArgs']]]] = None,
@@ -27,35 +27,46 @@ class AlarmruleArgs:
                  alarm_type: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  insufficientdata_actions: Optional[pulumi.Input[Sequence[pulumi.Input['AlarmruleInsufficientdataActionArgs']]]] = None,
+                 notification_begin_time: Optional[pulumi.Input[str]] = None,
+                 notification_end_time: Optional[pulumi.Input[str]] = None,
                  ok_actions: Optional[pulumi.Input[Sequence[pulumi.Input['AlarmruleOkActionArgs']]]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
+                 region: Optional[pulumi.Input[str]] = None,
+                 resource_group_id: Optional[pulumi.Input[str]] = None,
+                 resources: Optional[pulumi.Input[Sequence[pulumi.Input['AlarmruleResourceArgs']]]] = None):
         """
         The set of arguments for constructing a Alarmrule resource.
         :param pulumi.Input[str] alarm_name: Specifies the name of an alarm rule. The value can be a string of 1 to 128
                characters that can consist of letters, digits, underscores (_), hyphens (-) and chinese characters.
-        :param pulumi.Input['AlarmruleConditionArgs'] condition: Specifies the alarm triggering condition. The structure is described below.
+        :param pulumi.Input[Sequence[pulumi.Input['AlarmruleConditionArgs']]] conditions: Specifies the alarm triggering condition. The structure is described below.
         :param pulumi.Input['AlarmruleMetricArgs'] metric: Specifies the alarm metrics. The structure is described below. Changing this
                creates a new resource.
         :param pulumi.Input[bool] alarm_action_enabled: Specifies whether to enable the action to be triggered by an alarm. The
                default value is true.
         :param pulumi.Input[Sequence[pulumi.Input['AlarmruleAlarmActionArgs']]] alarm_actions: Specifies the action triggered by an alarm. The structure is described
-               below. Changing this creates a new resource.
+               below.
         :param pulumi.Input[str] alarm_description: The value can be a string of 0 to 256 characters.
         :param pulumi.Input[bool] alarm_enabled: Specifies whether to enable the alarm. The default value is true.
-        :param pulumi.Input[int] alarm_level: Specifies the alarm severity. The value can be 1, 2, 3 or 4,
+        :param pulumi.Input[int] alarm_level: Specifies the alarm severity of the condition. The value can be 1, 2, 3 or 4,
                which indicates *critical*, *major*, *minor*, and *informational*, respectively.
                The default value is 2.
-        :param pulumi.Input[str] alarm_type: Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**
-               or **MULTI_INSTANCE**. Defaults to **MULTI_INSTANCE**.
+        :param pulumi.Input[str] alarm_type: Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**,
+               **MULTI_INSTANCE** and **ALL_INSTANCE**. Defaults to **MULTI_INSTANCE**.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the alarm rule. Changing
                this creates a new resource.
+        :param pulumi.Input[str] notification_begin_time: Specifies the alarm notification start time, for
+               example: **05:30**. Changing this creates a new resource.
+        :param pulumi.Input[str] notification_end_time: Specifies the alarm notification stop time, for
+               example: **22:10**. Changing this creates a new resource.
         :param pulumi.Input[Sequence[pulumi.Input['AlarmruleOkActionArgs']]] ok_actions: Specifies the action triggered by the clearing of an alarm. The structure is
-               described below. Changing this creates a new resource.
+               described below.
         :param pulumi.Input[str] region: The region in which to create the alarm rule resource. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
+        :param pulumi.Input[str] resource_group_id: schema: Internal
+        :param pulumi.Input[Sequence[pulumi.Input['AlarmruleResourceArgs']]] resources: Specifies the list of the resources to add into the alarm rule.
+               The structure is described below.
         """
         pulumi.set(__self__, "alarm_name", alarm_name)
-        pulumi.set(__self__, "condition", condition)
+        pulumi.set(__self__, "conditions", conditions)
         pulumi.set(__self__, "metric", metric)
         if alarm_action_enabled is not None:
             pulumi.set(__self__, "alarm_action_enabled", alarm_action_enabled)
@@ -76,10 +87,18 @@ class AlarmruleArgs:
             pulumi.log.warn("""insufficientdata_actions is deprecated: insufficientdata_actions is deprecated""")
         if insufficientdata_actions is not None:
             pulumi.set(__self__, "insufficientdata_actions", insufficientdata_actions)
+        if notification_begin_time is not None:
+            pulumi.set(__self__, "notification_begin_time", notification_begin_time)
+        if notification_end_time is not None:
+            pulumi.set(__self__, "notification_end_time", notification_end_time)
         if ok_actions is not None:
             pulumi.set(__self__, "ok_actions", ok_actions)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if resource_group_id is not None:
+            pulumi.set(__self__, "resource_group_id", resource_group_id)
+        if resources is not None:
+            pulumi.set(__self__, "resources", resources)
 
     @property
     @pulumi.getter(name="alarmName")
@@ -96,15 +115,15 @@ class AlarmruleArgs:
 
     @property
     @pulumi.getter
-    def condition(self) -> pulumi.Input['AlarmruleConditionArgs']:
+    def conditions(self) -> pulumi.Input[Sequence[pulumi.Input['AlarmruleConditionArgs']]]:
         """
         Specifies the alarm triggering condition. The structure is described below.
         """
-        return pulumi.get(self, "condition")
+        return pulumi.get(self, "conditions")
 
-    @condition.setter
-    def condition(self, value: pulumi.Input['AlarmruleConditionArgs']):
-        pulumi.set(self, "condition", value)
+    @conditions.setter
+    def conditions(self, value: pulumi.Input[Sequence[pulumi.Input['AlarmruleConditionArgs']]]):
+        pulumi.set(self, "conditions", value)
 
     @property
     @pulumi.getter
@@ -137,7 +156,7 @@ class AlarmruleArgs:
     def alarm_actions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['AlarmruleAlarmActionArgs']]]]:
         """
         Specifies the action triggered by an alarm. The structure is described
-        below. Changing this creates a new resource.
+        below.
         """
         return pulumi.get(self, "alarm_actions")
 
@@ -173,7 +192,7 @@ class AlarmruleArgs:
     @pulumi.getter(name="alarmLevel")
     def alarm_level(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the alarm severity. The value can be 1, 2, 3 or 4,
+        Specifies the alarm severity of the condition. The value can be 1, 2, 3 or 4,
         which indicates *critical*, *major*, *minor*, and *informational*, respectively.
         The default value is 2.
         """
@@ -187,8 +206,8 @@ class AlarmruleArgs:
     @pulumi.getter(name="alarmType")
     def alarm_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**
-        or **MULTI_INSTANCE**. Defaults to **MULTI_INSTANCE**.
+        Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**,
+        **MULTI_INSTANCE** and **ALL_INSTANCE**. Defaults to **MULTI_INSTANCE**.
         """
         return pulumi.get(self, "alarm_type")
 
@@ -219,11 +238,37 @@ class AlarmruleArgs:
         pulumi.set(self, "insufficientdata_actions", value)
 
     @property
+    @pulumi.getter(name="notificationBeginTime")
+    def notification_begin_time(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the alarm notification start time, for
+        example: **05:30**. Changing this creates a new resource.
+        """
+        return pulumi.get(self, "notification_begin_time")
+
+    @notification_begin_time.setter
+    def notification_begin_time(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "notification_begin_time", value)
+
+    @property
+    @pulumi.getter(name="notificationEndTime")
+    def notification_end_time(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the alarm notification stop time, for
+        example: **22:10**. Changing this creates a new resource.
+        """
+        return pulumi.get(self, "notification_end_time")
+
+    @notification_end_time.setter
+    def notification_end_time(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "notification_end_time", value)
+
+    @property
     @pulumi.getter(name="okActions")
     def ok_actions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['AlarmruleOkActionArgs']]]]:
         """
         Specifies the action triggered by the clearing of an alarm. The structure is
-        described below. Changing this creates a new resource.
+        described below.
         """
         return pulumi.get(self, "ok_actions")
 
@@ -244,6 +289,31 @@ class AlarmruleArgs:
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
 
+    @property
+    @pulumi.getter(name="resourceGroupId")
+    def resource_group_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "resource_group_id")
+
+    @resource_group_id.setter
+    def resource_group_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "resource_group_id", value)
+
+    @property
+    @pulumi.getter
+    def resources(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['AlarmruleResourceArgs']]]]:
+        """
+        Specifies the list of the resources to add into the alarm rule.
+        The structure is described below.
+        """
+        return pulumi.get(self, "resources")
+
+    @resources.setter
+    def resources(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['AlarmruleResourceArgs']]]]):
+        pulumi.set(self, "resources", value)
+
 
 @pulumi.input_type
 class _AlarmruleState:
@@ -256,22 +326,26 @@ class _AlarmruleState:
                  alarm_name: Optional[pulumi.Input[str]] = None,
                  alarm_state: Optional[pulumi.Input[str]] = None,
                  alarm_type: Optional[pulumi.Input[str]] = None,
-                 condition: Optional[pulumi.Input['AlarmruleConditionArgs']] = None,
+                 conditions: Optional[pulumi.Input[Sequence[pulumi.Input['AlarmruleConditionArgs']]]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  insufficientdata_actions: Optional[pulumi.Input[Sequence[pulumi.Input['AlarmruleInsufficientdataActionArgs']]]] = None,
                  metric: Optional[pulumi.Input['AlarmruleMetricArgs']] = None,
+                 notification_begin_time: Optional[pulumi.Input[str]] = None,
+                 notification_end_time: Optional[pulumi.Input[str]] = None,
                  ok_actions: Optional[pulumi.Input[Sequence[pulumi.Input['AlarmruleOkActionArgs']]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 resource_group_id: Optional[pulumi.Input[str]] = None,
+                 resources: Optional[pulumi.Input[Sequence[pulumi.Input['AlarmruleResourceArgs']]]] = None,
                  update_time: Optional[pulumi.Input[int]] = None):
         """
         Input properties used for looking up and filtering Alarmrule resources.
         :param pulumi.Input[bool] alarm_action_enabled: Specifies whether to enable the action to be triggered by an alarm. The
                default value is true.
         :param pulumi.Input[Sequence[pulumi.Input['AlarmruleAlarmActionArgs']]] alarm_actions: Specifies the action triggered by an alarm. The structure is described
-               below. Changing this creates a new resource.
+               below.
         :param pulumi.Input[str] alarm_description: The value can be a string of 0 to 256 characters.
         :param pulumi.Input[bool] alarm_enabled: Specifies whether to enable the alarm. The default value is true.
-        :param pulumi.Input[int] alarm_level: Specifies the alarm severity. The value can be 1, 2, 3 or 4,
+        :param pulumi.Input[int] alarm_level: Specifies the alarm severity of the condition. The value can be 1, 2, 3 or 4,
                which indicates *critical*, *major*, *minor*, and *informational*, respectively.
                The default value is 2.
         :param pulumi.Input[str] alarm_name: Specifies the name of an alarm rule. The value can be a string of 1 to 128
@@ -280,17 +354,24 @@ class _AlarmruleState:
                + ok: The alarm status is normal;
                + alarm: An alarm is generated;
                + insufficient_data: The required data is insufficient.
-        :param pulumi.Input[str] alarm_type: Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**
-               or **MULTI_INSTANCE**. Defaults to **MULTI_INSTANCE**.
-        :param pulumi.Input['AlarmruleConditionArgs'] condition: Specifies the alarm triggering condition. The structure is described below.
+        :param pulumi.Input[str] alarm_type: Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**,
+               **MULTI_INSTANCE** and **ALL_INSTANCE**. Defaults to **MULTI_INSTANCE**.
+        :param pulumi.Input[Sequence[pulumi.Input['AlarmruleConditionArgs']]] conditions: Specifies the alarm triggering condition. The structure is described below.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the alarm rule. Changing
                this creates a new resource.
         :param pulumi.Input['AlarmruleMetricArgs'] metric: Specifies the alarm metrics. The structure is described below. Changing this
                creates a new resource.
+        :param pulumi.Input[str] notification_begin_time: Specifies the alarm notification start time, for
+               example: **05:30**. Changing this creates a new resource.
+        :param pulumi.Input[str] notification_end_time: Specifies the alarm notification stop time, for
+               example: **22:10**. Changing this creates a new resource.
         :param pulumi.Input[Sequence[pulumi.Input['AlarmruleOkActionArgs']]] ok_actions: Specifies the action triggered by the clearing of an alarm. The structure is
-               described below. Changing this creates a new resource.
+               described below.
         :param pulumi.Input[str] region: The region in which to create the alarm rule resource. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
+        :param pulumi.Input[str] resource_group_id: schema: Internal
+        :param pulumi.Input[Sequence[pulumi.Input['AlarmruleResourceArgs']]] resources: Specifies the list of the resources to add into the alarm rule.
+               The structure is described below.
         :param pulumi.Input[int] update_time: Indicates the time when the alarm status changed. The value is a UNIX timestamp and the unit is ms.
         """
         if alarm_action_enabled is not None:
@@ -309,8 +390,8 @@ class _AlarmruleState:
             pulumi.set(__self__, "alarm_state", alarm_state)
         if alarm_type is not None:
             pulumi.set(__self__, "alarm_type", alarm_type)
-        if condition is not None:
-            pulumi.set(__self__, "condition", condition)
+        if conditions is not None:
+            pulumi.set(__self__, "conditions", conditions)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if insufficientdata_actions is not None:
@@ -320,10 +401,18 @@ class _AlarmruleState:
             pulumi.set(__self__, "insufficientdata_actions", insufficientdata_actions)
         if metric is not None:
             pulumi.set(__self__, "metric", metric)
+        if notification_begin_time is not None:
+            pulumi.set(__self__, "notification_begin_time", notification_begin_time)
+        if notification_end_time is not None:
+            pulumi.set(__self__, "notification_end_time", notification_end_time)
         if ok_actions is not None:
             pulumi.set(__self__, "ok_actions", ok_actions)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if resource_group_id is not None:
+            pulumi.set(__self__, "resource_group_id", resource_group_id)
+        if resources is not None:
+            pulumi.set(__self__, "resources", resources)
         if update_time is not None:
             pulumi.set(__self__, "update_time", update_time)
 
@@ -345,7 +434,7 @@ class _AlarmruleState:
     def alarm_actions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['AlarmruleAlarmActionArgs']]]]:
         """
         Specifies the action triggered by an alarm. The structure is described
-        below. Changing this creates a new resource.
+        below.
         """
         return pulumi.get(self, "alarm_actions")
 
@@ -381,7 +470,7 @@ class _AlarmruleState:
     @pulumi.getter(name="alarmLevel")
     def alarm_level(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the alarm severity. The value can be 1, 2, 3 or 4,
+        Specifies the alarm severity of the condition. The value can be 1, 2, 3 or 4,
         which indicates *critical*, *major*, *minor*, and *informational*, respectively.
         The default value is 2.
         """
@@ -423,8 +512,8 @@ class _AlarmruleState:
     @pulumi.getter(name="alarmType")
     def alarm_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**
-        or **MULTI_INSTANCE**. Defaults to **MULTI_INSTANCE**.
+        Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**,
+        **MULTI_INSTANCE** and **ALL_INSTANCE**. Defaults to **MULTI_INSTANCE**.
         """
         return pulumi.get(self, "alarm_type")
 
@@ -434,15 +523,15 @@ class _AlarmruleState:
 
     @property
     @pulumi.getter
-    def condition(self) -> Optional[pulumi.Input['AlarmruleConditionArgs']]:
+    def conditions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['AlarmruleConditionArgs']]]]:
         """
         Specifies the alarm triggering condition. The structure is described below.
         """
-        return pulumi.get(self, "condition")
+        return pulumi.get(self, "conditions")
 
-    @condition.setter
-    def condition(self, value: Optional[pulumi.Input['AlarmruleConditionArgs']]):
-        pulumi.set(self, "condition", value)
+    @conditions.setter
+    def conditions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['AlarmruleConditionArgs']]]]):
+        pulumi.set(self, "conditions", value)
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
@@ -480,11 +569,37 @@ class _AlarmruleState:
         pulumi.set(self, "metric", value)
 
     @property
+    @pulumi.getter(name="notificationBeginTime")
+    def notification_begin_time(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the alarm notification start time, for
+        example: **05:30**. Changing this creates a new resource.
+        """
+        return pulumi.get(self, "notification_begin_time")
+
+    @notification_begin_time.setter
+    def notification_begin_time(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "notification_begin_time", value)
+
+    @property
+    @pulumi.getter(name="notificationEndTime")
+    def notification_end_time(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the alarm notification stop time, for
+        example: **22:10**. Changing this creates a new resource.
+        """
+        return pulumi.get(self, "notification_end_time")
+
+    @notification_end_time.setter
+    def notification_end_time(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "notification_end_time", value)
+
+    @property
     @pulumi.getter(name="okActions")
     def ok_actions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['AlarmruleOkActionArgs']]]]:
         """
         Specifies the action triggered by the clearing of an alarm. The structure is
-        described below. Changing this creates a new resource.
+        described below.
         """
         return pulumi.get(self, "ok_actions")
 
@@ -504,6 +619,31 @@ class _AlarmruleState:
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter(name="resourceGroupId")
+    def resource_group_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "resource_group_id")
+
+    @resource_group_id.setter
+    def resource_group_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "resource_group_id", value)
+
+    @property
+    @pulumi.getter
+    def resources(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['AlarmruleResourceArgs']]]]:
+        """
+        Specifies the list of the resources to add into the alarm rule.
+        The structure is described below.
+        """
+        return pulumi.get(self, "resources")
+
+    @resources.setter
+    def resources(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['AlarmruleResourceArgs']]]]):
+        pulumi.set(self, "resources", value)
 
     @property
     @pulumi.getter(name="updateTime")
@@ -530,12 +670,16 @@ class Alarmrule(pulumi.CustomResource):
                  alarm_level: Optional[pulumi.Input[int]] = None,
                  alarm_name: Optional[pulumi.Input[str]] = None,
                  alarm_type: Optional[pulumi.Input[str]] = None,
-                 condition: Optional[pulumi.Input[pulumi.InputType['AlarmruleConditionArgs']]] = None,
+                 conditions: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleConditionArgs']]]]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  insufficientdata_actions: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleInsufficientdataActionArgs']]]]] = None,
                  metric: Optional[pulumi.Input[pulumi.InputType['AlarmruleMetricArgs']]] = None,
+                 notification_begin_time: Optional[pulumi.Input[str]] = None,
+                 notification_end_time: Optional[pulumi.Input[str]] = None,
                  ok_actions: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleOkActionArgs']]]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 resource_group_id: Optional[pulumi.Input[str]] = None,
+                 resources: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleResourceArgs']]]]] = None,
                  __props__=None):
         """
         Manages a Cloud Eye alarm rule resource within HuaweiCloud.
@@ -547,27 +691,59 @@ class Alarmrule(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        alarm_rule = huaweicloud.cse.Alarmrule("alarmRule",
-            alarm_name="alarm_rule",
+        config = pulumi.Config()
+        instance_id1 = config.require_object("instanceId1")
+        instance_id2 = config.require_object("instanceId2")
+        topic_urn = config.require_object("topicUrn")
+        test = huaweicloud.cse.Alarmrule("test",
+            alarm_name="rule-test",
+            alarm_action_enabled=True,
+            alarm_enabled=True,
+            alarm_type="MULTI_INSTANCE",
             metric=huaweicloud.cse.AlarmruleMetricArgs(
                 namespace="SYS.ECS",
-                metric_name="network_outgoing_bytes_rate_inband",
-                dimensions=[huaweicloud.cse.AlarmruleMetricDimensionArgs(
-                    name="instance_id",
-                    value=var["webserver_instance_id"],
-                )],
             ),
-            condition=huaweicloud.cse.AlarmruleConditionArgs(
-                period=300,
-                filter="average",
-                comparison_operator=">",
-                value=6,
-                unit="B/s",
-                count=1,
-            ),
+            resources=[
+                huaweicloud.cse.AlarmruleResourceArgs(
+                    dimensions=[huaweicloud.cse.AlarmruleResourceDimensionArgs(
+                        name="instance_id",
+                        value=instance_id1,
+                    )],
+                ),
+                huaweicloud.cse.AlarmruleResourceArgs(
+                    dimensions=[huaweicloud.cse.AlarmruleResourceDimensionArgs(
+                        name="instance_id",
+                        value=instance_id2,
+                    )],
+                ),
+            ],
+            conditions=[
+                huaweicloud.cse.AlarmruleConditionArgs(
+                    period=1200,
+                    filter="average",
+                    comparison_operator=">",
+                    value=6.5,
+                    unit="B/s",
+                    count=1,
+                    suppress_duration=300,
+                    metric_name="network_outgoing_bytes_rate_inband",
+                    alarm_level=4,
+                ),
+                huaweicloud.cse.AlarmruleConditionArgs(
+                    period=3600,
+                    filter="average",
+                    comparison_operator=">=",
+                    value=20,
+                    unit="B/s",
+                    count=1,
+                    suppress_duration=300,
+                    metric_name="network_outgoing_bytes_rate_inband",
+                    alarm_level=4,
+                ),
+            ],
             alarm_actions=[huaweicloud.cse.AlarmruleAlarmActionArgs(
                 type="notification",
-                notification_lists=[var["smn_topic_id"]],
+                notification_lists=[topic_urn],
             )])
         ```
         ## Alarm rule for event monitoring
@@ -576,25 +752,29 @@ class Alarmrule(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        alarm_rule = huaweicloud.cse.Alarmrule("alarmRule",
-            alarm_name="alarm_rule",
+        config = pulumi.Config()
+        topic_urn = config.require_object("topicUrn")
+        test = huaweicloud.cse.Alarmrule("test",
+            alarm_name="rule-test",
             alarm_action_enabled=True,
             alarm_type="EVENT.SYS",
             metric=huaweicloud.cse.AlarmruleMetricArgs(
                 namespace="SYS.ECS",
-                metric_name="stopServer",
             ),
-            condition=huaweicloud.cse.AlarmruleConditionArgs(
+            conditions=[huaweicloud.cse.AlarmruleConditionArgs(
+                metric_name="stopServer",
                 period=0,
                 filter="average",
                 comparison_operator=">=",
                 value=1,
                 unit="count",
                 count=1,
-            ),
+                suppress_duration=0,
+                alarm_level=2,
+            )],
             alarm_actions=[huaweicloud.cse.AlarmruleAlarmActionArgs(
                 type="notification",
-                notification_lists=[var["smn_topic_id"]],
+                notification_lists=[topic_urn],
             )])
         ```
 
@@ -611,25 +791,32 @@ class Alarmrule(pulumi.CustomResource):
         :param pulumi.Input[bool] alarm_action_enabled: Specifies whether to enable the action to be triggered by an alarm. The
                default value is true.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleAlarmActionArgs']]]] alarm_actions: Specifies the action triggered by an alarm. The structure is described
-               below. Changing this creates a new resource.
+               below.
         :param pulumi.Input[str] alarm_description: The value can be a string of 0 to 256 characters.
         :param pulumi.Input[bool] alarm_enabled: Specifies whether to enable the alarm. The default value is true.
-        :param pulumi.Input[int] alarm_level: Specifies the alarm severity. The value can be 1, 2, 3 or 4,
+        :param pulumi.Input[int] alarm_level: Specifies the alarm severity of the condition. The value can be 1, 2, 3 or 4,
                which indicates *critical*, *major*, *minor*, and *informational*, respectively.
                The default value is 2.
         :param pulumi.Input[str] alarm_name: Specifies the name of an alarm rule. The value can be a string of 1 to 128
                characters that can consist of letters, digits, underscores (_), hyphens (-) and chinese characters.
-        :param pulumi.Input[str] alarm_type: Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**
-               or **MULTI_INSTANCE**. Defaults to **MULTI_INSTANCE**.
-        :param pulumi.Input[pulumi.InputType['AlarmruleConditionArgs']] condition: Specifies the alarm triggering condition. The structure is described below.
+        :param pulumi.Input[str] alarm_type: Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**,
+               **MULTI_INSTANCE** and **ALL_INSTANCE**. Defaults to **MULTI_INSTANCE**.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleConditionArgs']]]] conditions: Specifies the alarm triggering condition. The structure is described below.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the alarm rule. Changing
                this creates a new resource.
         :param pulumi.Input[pulumi.InputType['AlarmruleMetricArgs']] metric: Specifies the alarm metrics. The structure is described below. Changing this
                creates a new resource.
+        :param pulumi.Input[str] notification_begin_time: Specifies the alarm notification start time, for
+               example: **05:30**. Changing this creates a new resource.
+        :param pulumi.Input[str] notification_end_time: Specifies the alarm notification stop time, for
+               example: **22:10**. Changing this creates a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleOkActionArgs']]]] ok_actions: Specifies the action triggered by the clearing of an alarm. The structure is
-               described below. Changing this creates a new resource.
+               described below.
         :param pulumi.Input[str] region: The region in which to create the alarm rule resource. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
+        :param pulumi.Input[str] resource_group_id: schema: Internal
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleResourceArgs']]]] resources: Specifies the list of the resources to add into the alarm rule.
+               The structure is described below.
         """
         ...
     @overload
@@ -647,27 +834,59 @@ class Alarmrule(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        alarm_rule = huaweicloud.cse.Alarmrule("alarmRule",
-            alarm_name="alarm_rule",
+        config = pulumi.Config()
+        instance_id1 = config.require_object("instanceId1")
+        instance_id2 = config.require_object("instanceId2")
+        topic_urn = config.require_object("topicUrn")
+        test = huaweicloud.cse.Alarmrule("test",
+            alarm_name="rule-test",
+            alarm_action_enabled=True,
+            alarm_enabled=True,
+            alarm_type="MULTI_INSTANCE",
             metric=huaweicloud.cse.AlarmruleMetricArgs(
                 namespace="SYS.ECS",
-                metric_name="network_outgoing_bytes_rate_inband",
-                dimensions=[huaweicloud.cse.AlarmruleMetricDimensionArgs(
-                    name="instance_id",
-                    value=var["webserver_instance_id"],
-                )],
             ),
-            condition=huaweicloud.cse.AlarmruleConditionArgs(
-                period=300,
-                filter="average",
-                comparison_operator=">",
-                value=6,
-                unit="B/s",
-                count=1,
-            ),
+            resources=[
+                huaweicloud.cse.AlarmruleResourceArgs(
+                    dimensions=[huaweicloud.cse.AlarmruleResourceDimensionArgs(
+                        name="instance_id",
+                        value=instance_id1,
+                    )],
+                ),
+                huaweicloud.cse.AlarmruleResourceArgs(
+                    dimensions=[huaweicloud.cse.AlarmruleResourceDimensionArgs(
+                        name="instance_id",
+                        value=instance_id2,
+                    )],
+                ),
+            ],
+            conditions=[
+                huaweicloud.cse.AlarmruleConditionArgs(
+                    period=1200,
+                    filter="average",
+                    comparison_operator=">",
+                    value=6.5,
+                    unit="B/s",
+                    count=1,
+                    suppress_duration=300,
+                    metric_name="network_outgoing_bytes_rate_inband",
+                    alarm_level=4,
+                ),
+                huaweicloud.cse.AlarmruleConditionArgs(
+                    period=3600,
+                    filter="average",
+                    comparison_operator=">=",
+                    value=20,
+                    unit="B/s",
+                    count=1,
+                    suppress_duration=300,
+                    metric_name="network_outgoing_bytes_rate_inband",
+                    alarm_level=4,
+                ),
+            ],
             alarm_actions=[huaweicloud.cse.AlarmruleAlarmActionArgs(
                 type="notification",
-                notification_lists=[var["smn_topic_id"]],
+                notification_lists=[topic_urn],
             )])
         ```
         ## Alarm rule for event monitoring
@@ -676,25 +895,29 @@ class Alarmrule(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        alarm_rule = huaweicloud.cse.Alarmrule("alarmRule",
-            alarm_name="alarm_rule",
+        config = pulumi.Config()
+        topic_urn = config.require_object("topicUrn")
+        test = huaweicloud.cse.Alarmrule("test",
+            alarm_name="rule-test",
             alarm_action_enabled=True,
             alarm_type="EVENT.SYS",
             metric=huaweicloud.cse.AlarmruleMetricArgs(
                 namespace="SYS.ECS",
-                metric_name="stopServer",
             ),
-            condition=huaweicloud.cse.AlarmruleConditionArgs(
+            conditions=[huaweicloud.cse.AlarmruleConditionArgs(
+                metric_name="stopServer",
                 period=0,
                 filter="average",
                 comparison_operator=">=",
                 value=1,
                 unit="count",
                 count=1,
-            ),
+                suppress_duration=0,
+                alarm_level=2,
+            )],
             alarm_actions=[huaweicloud.cse.AlarmruleAlarmActionArgs(
                 type="notification",
-                notification_lists=[var["smn_topic_id"]],
+                notification_lists=[topic_urn],
             )])
         ```
 
@@ -728,12 +951,16 @@ class Alarmrule(pulumi.CustomResource):
                  alarm_level: Optional[pulumi.Input[int]] = None,
                  alarm_name: Optional[pulumi.Input[str]] = None,
                  alarm_type: Optional[pulumi.Input[str]] = None,
-                 condition: Optional[pulumi.Input[pulumi.InputType['AlarmruleConditionArgs']]] = None,
+                 conditions: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleConditionArgs']]]]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  insufficientdata_actions: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleInsufficientdataActionArgs']]]]] = None,
                  metric: Optional[pulumi.Input[pulumi.InputType['AlarmruleMetricArgs']]] = None,
+                 notification_begin_time: Optional[pulumi.Input[str]] = None,
+                 notification_end_time: Optional[pulumi.Input[str]] = None,
                  ok_actions: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleOkActionArgs']]]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 resource_group_id: Optional[pulumi.Input[str]] = None,
+                 resources: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleResourceArgs']]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -752,9 +979,9 @@ class Alarmrule(pulumi.CustomResource):
                 raise TypeError("Missing required property 'alarm_name'")
             __props__.__dict__["alarm_name"] = alarm_name
             __props__.__dict__["alarm_type"] = alarm_type
-            if condition is None and not opts.urn:
-                raise TypeError("Missing required property 'condition'")
-            __props__.__dict__["condition"] = condition
+            if conditions is None and not opts.urn:
+                raise TypeError("Missing required property 'conditions'")
+            __props__.__dict__["conditions"] = conditions
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             if insufficientdata_actions is not None and not opts.urn:
                 warnings.warn("""insufficientdata_actions is deprecated""", DeprecationWarning)
@@ -763,8 +990,12 @@ class Alarmrule(pulumi.CustomResource):
             if metric is None and not opts.urn:
                 raise TypeError("Missing required property 'metric'")
             __props__.__dict__["metric"] = metric
+            __props__.__dict__["notification_begin_time"] = notification_begin_time
+            __props__.__dict__["notification_end_time"] = notification_end_time
             __props__.__dict__["ok_actions"] = ok_actions
             __props__.__dict__["region"] = region
+            __props__.__dict__["resource_group_id"] = resource_group_id
+            __props__.__dict__["resources"] = resources
             __props__.__dict__["alarm_state"] = None
             __props__.__dict__["update_time"] = None
         super(Alarmrule, __self__).__init__(
@@ -785,12 +1016,16 @@ class Alarmrule(pulumi.CustomResource):
             alarm_name: Optional[pulumi.Input[str]] = None,
             alarm_state: Optional[pulumi.Input[str]] = None,
             alarm_type: Optional[pulumi.Input[str]] = None,
-            condition: Optional[pulumi.Input[pulumi.InputType['AlarmruleConditionArgs']]] = None,
+            conditions: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleConditionArgs']]]]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             insufficientdata_actions: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleInsufficientdataActionArgs']]]]] = None,
             metric: Optional[pulumi.Input[pulumi.InputType['AlarmruleMetricArgs']]] = None,
+            notification_begin_time: Optional[pulumi.Input[str]] = None,
+            notification_end_time: Optional[pulumi.Input[str]] = None,
             ok_actions: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleOkActionArgs']]]]] = None,
             region: Optional[pulumi.Input[str]] = None,
+            resource_group_id: Optional[pulumi.Input[str]] = None,
+            resources: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleResourceArgs']]]]] = None,
             update_time: Optional[pulumi.Input[int]] = None) -> 'Alarmrule':
         """
         Get an existing Alarmrule resource's state with the given name, id, and optional extra
@@ -802,10 +1037,10 @@ class Alarmrule(pulumi.CustomResource):
         :param pulumi.Input[bool] alarm_action_enabled: Specifies whether to enable the action to be triggered by an alarm. The
                default value is true.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleAlarmActionArgs']]]] alarm_actions: Specifies the action triggered by an alarm. The structure is described
-               below. Changing this creates a new resource.
+               below.
         :param pulumi.Input[str] alarm_description: The value can be a string of 0 to 256 characters.
         :param pulumi.Input[bool] alarm_enabled: Specifies whether to enable the alarm. The default value is true.
-        :param pulumi.Input[int] alarm_level: Specifies the alarm severity. The value can be 1, 2, 3 or 4,
+        :param pulumi.Input[int] alarm_level: Specifies the alarm severity of the condition. The value can be 1, 2, 3 or 4,
                which indicates *critical*, *major*, *minor*, and *informational*, respectively.
                The default value is 2.
         :param pulumi.Input[str] alarm_name: Specifies the name of an alarm rule. The value can be a string of 1 to 128
@@ -814,17 +1049,24 @@ class Alarmrule(pulumi.CustomResource):
                + ok: The alarm status is normal;
                + alarm: An alarm is generated;
                + insufficient_data: The required data is insufficient.
-        :param pulumi.Input[str] alarm_type: Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**
-               or **MULTI_INSTANCE**. Defaults to **MULTI_INSTANCE**.
-        :param pulumi.Input[pulumi.InputType['AlarmruleConditionArgs']] condition: Specifies the alarm triggering condition. The structure is described below.
+        :param pulumi.Input[str] alarm_type: Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**,
+               **MULTI_INSTANCE** and **ALL_INSTANCE**. Defaults to **MULTI_INSTANCE**.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleConditionArgs']]]] conditions: Specifies the alarm triggering condition. The structure is described below.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the alarm rule. Changing
                this creates a new resource.
         :param pulumi.Input[pulumi.InputType['AlarmruleMetricArgs']] metric: Specifies the alarm metrics. The structure is described below. Changing this
                creates a new resource.
+        :param pulumi.Input[str] notification_begin_time: Specifies the alarm notification start time, for
+               example: **05:30**. Changing this creates a new resource.
+        :param pulumi.Input[str] notification_end_time: Specifies the alarm notification stop time, for
+               example: **22:10**. Changing this creates a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleOkActionArgs']]]] ok_actions: Specifies the action triggered by the clearing of an alarm. The structure is
-               described below. Changing this creates a new resource.
+               described below.
         :param pulumi.Input[str] region: The region in which to create the alarm rule resource. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
+        :param pulumi.Input[str] resource_group_id: schema: Internal
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleResourceArgs']]]] resources: Specifies the list of the resources to add into the alarm rule.
+               The structure is described below.
         :param pulumi.Input[int] update_time: Indicates the time when the alarm status changed. The value is a UNIX timestamp and the unit is ms.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -839,12 +1081,16 @@ class Alarmrule(pulumi.CustomResource):
         __props__.__dict__["alarm_name"] = alarm_name
         __props__.__dict__["alarm_state"] = alarm_state
         __props__.__dict__["alarm_type"] = alarm_type
-        __props__.__dict__["condition"] = condition
+        __props__.__dict__["conditions"] = conditions
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["insufficientdata_actions"] = insufficientdata_actions
         __props__.__dict__["metric"] = metric
+        __props__.__dict__["notification_begin_time"] = notification_begin_time
+        __props__.__dict__["notification_end_time"] = notification_end_time
         __props__.__dict__["ok_actions"] = ok_actions
         __props__.__dict__["region"] = region
+        __props__.__dict__["resource_group_id"] = resource_group_id
+        __props__.__dict__["resources"] = resources
         __props__.__dict__["update_time"] = update_time
         return Alarmrule(resource_name, opts=opts, __props__=__props__)
 
@@ -862,7 +1108,7 @@ class Alarmrule(pulumi.CustomResource):
     def alarm_actions(self) -> pulumi.Output[Optional[Sequence['outputs.AlarmruleAlarmAction']]]:
         """
         Specifies the action triggered by an alarm. The structure is described
-        below. Changing this creates a new resource.
+        below.
         """
         return pulumi.get(self, "alarm_actions")
 
@@ -884,9 +1130,9 @@ class Alarmrule(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="alarmLevel")
-    def alarm_level(self) -> pulumi.Output[Optional[int]]:
+    def alarm_level(self) -> pulumi.Output[int]:
         """
-        Specifies the alarm severity. The value can be 1, 2, 3 or 4,
+        Specifies the alarm severity of the condition. The value can be 1, 2, 3 or 4,
         which indicates *critical*, *major*, *minor*, and *informational*, respectively.
         The default value is 2.
         """
@@ -914,20 +1160,20 @@ class Alarmrule(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="alarmType")
-    def alarm_type(self) -> pulumi.Output[str]:
+    def alarm_type(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**
-        or **MULTI_INSTANCE**. Defaults to **MULTI_INSTANCE**.
+        Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**,
+        **MULTI_INSTANCE** and **ALL_INSTANCE**. Defaults to **MULTI_INSTANCE**.
         """
         return pulumi.get(self, "alarm_type")
 
     @property
     @pulumi.getter
-    def condition(self) -> pulumi.Output['outputs.AlarmruleCondition']:
+    def conditions(self) -> pulumi.Output[Sequence['outputs.AlarmruleCondition']]:
         """
         Specifies the alarm triggering condition. The structure is described below.
         """
-        return pulumi.get(self, "condition")
+        return pulumi.get(self, "conditions")
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
@@ -953,11 +1199,29 @@ class Alarmrule(pulumi.CustomResource):
         return pulumi.get(self, "metric")
 
     @property
+    @pulumi.getter(name="notificationBeginTime")
+    def notification_begin_time(self) -> pulumi.Output[str]:
+        """
+        Specifies the alarm notification start time, for
+        example: **05:30**. Changing this creates a new resource.
+        """
+        return pulumi.get(self, "notification_begin_time")
+
+    @property
+    @pulumi.getter(name="notificationEndTime")
+    def notification_end_time(self) -> pulumi.Output[str]:
+        """
+        Specifies the alarm notification stop time, for
+        example: **22:10**. Changing this creates a new resource.
+        """
+        return pulumi.get(self, "notification_end_time")
+
+    @property
     @pulumi.getter(name="okActions")
     def ok_actions(self) -> pulumi.Output[Optional[Sequence['outputs.AlarmruleOkAction']]]:
         """
         Specifies the action triggered by the clearing of an alarm. The structure is
-        described below. Changing this creates a new resource.
+        described below.
         """
         return pulumi.get(self, "ok_actions")
 
@@ -969,6 +1233,23 @@ class Alarmrule(pulumi.CustomResource):
         provider-level region will be used. Changing this creates a new resource.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter(name="resourceGroupId")
+    def resource_group_id(self) -> pulumi.Output[str]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "resource_group_id")
+
+    @property
+    @pulumi.getter
+    def resources(self) -> pulumi.Output[Sequence['outputs.AlarmruleResource']]:
+        """
+        Specifies the list of the resources to add into the alarm rule.
+        The structure is described below.
+        """
+        return pulumi.get(self, "resources")
 
     @property
     @pulumi.getter(name="updateTime")

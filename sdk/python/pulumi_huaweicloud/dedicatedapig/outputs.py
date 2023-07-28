@@ -38,24 +38,45 @@ __all__ = [
 
 @pulumi.output_type
 class ApiBackendParam(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "systemParamType":
+            suggest = "system_param_type"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ApiBackendParam. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ApiBackendParam.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ApiBackendParam.__key_warning(key)
+        return super().get(key, default)
+
     def __init__(__self__, *,
                  location: str,
                  name: str,
                  type: str,
                  value: str,
-                 description: Optional[str] = None):
+                 description: Optional[str] = None,
+                 system_param_type: Optional[str] = None):
         """
-        :param str location: Specifies the location of the backend parameter. The valid values are **PATH**,
-               **QUERY** and **HEADER**.
-        :param str name: Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-               a letter. Only letters, digits, and underscores (_) are allowed.
-        :param str type: Specifies the condition type of the backend policy. The valid values are **Equal**,
-               **Enumerated** and **Matching**, default to **Equal**.
-        :param str value: Specifies the condition type. For a condition with the input parameter source:
+        :param str location: Specifies the location of the backend parameter.  
+               The valid values are **PATH**, **QUERY** and **HEADER**.
+        :param str name: Specifies the backend policy name.  
+               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        :param str type: Specifies the condition type of the backend policy.  
+               The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+        :param str value: Specifies the value of the backend policy.  
+               For a condition with the input parameter source:
                + If the condition type is **Enumerated**, separate condition values with commas.
                + If the condition type is **Matching**, enter a regular expression compatible with PERL.
-        :param str description: Specifies the description of the constant or system parameter, which contain a
-               maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+        :param str description: Specifies the description of the constant or system parameter.  
+               The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
+        :param str system_param_type: Specifies the type of the system parameter.  
+               The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
         """
         pulumi.set(__self__, "location", location)
         pulumi.set(__self__, "name", name)
@@ -63,13 +84,15 @@ class ApiBackendParam(dict):
         pulumi.set(__self__, "value", value)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if system_param_type is not None:
+            pulumi.set(__self__, "system_param_type", system_param_type)
 
     @property
     @pulumi.getter
     def location(self) -> str:
         """
-        Specifies the location of the backend parameter. The valid values are **PATH**,
-        **QUERY** and **HEADER**.
+        Specifies the location of the backend parameter.  
+        The valid values are **PATH**, **QUERY** and **HEADER**.
         """
         return pulumi.get(self, "location")
 
@@ -77,8 +100,8 @@ class ApiBackendParam(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-        a letter. Only letters, digits, and underscores (_) are allowed.
+        Specifies the backend policy name.  
+        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -86,8 +109,8 @@ class ApiBackendParam(dict):
     @pulumi.getter
     def type(self) -> str:
         """
-        Specifies the condition type of the backend policy. The valid values are **Equal**,
-        **Enumerated** and **Matching**, default to **Equal**.
+        Specifies the condition type of the backend policy.  
+        The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
         """
         return pulumi.get(self, "type")
 
@@ -95,7 +118,8 @@ class ApiBackendParam(dict):
     @pulumi.getter
     def value(self) -> str:
         """
-        Specifies the condition type. For a condition with the input parameter source:
+        Specifies the value of the backend policy.  
+        For a condition with the input parameter source:
         + If the condition type is **Enumerated**, separate condition values with commas.
         + If the condition type is **Matching**, enter a regular expression compatible with PERL.
         """
@@ -105,10 +129,19 @@ class ApiBackendParam(dict):
     @pulumi.getter
     def description(self) -> Optional[str]:
         """
-        Specifies the description of the constant or system parameter, which contain a
-        maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+        Specifies the description of the constant or system parameter.  
+        The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="systemParamType")
+    def system_param_type(self) -> Optional[str]:
+        """
+        Specifies the type of the system parameter.  
+        The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+        """
+        return pulumi.get(self, "system_param_type")
 
 
 @pulumi.output_type
@@ -141,13 +174,13 @@ class ApiFuncGraph(dict):
                  timeout: Optional[int] = None,
                  version: Optional[str] = None):
         """
-        :param str function_urn: Specifies the URN of the function graph.
+        :param str function_urn: Specifies the URN of the FunctionGraph function.
         :param str authorizer_id: Specifies the ID of the backend custom authorization.
-        :param str invocation_type: Specifies the invocation mode. The valid values are **async** and **sync**,
-               default to **sync**.
+        :param str invocation_type: Specifies the invocation type.  
+               The valid values are **async** and **sync**, defaults to **sync**.
         :param int timeout: Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-               valid value is range from 1 to 600,000, default to 5,000.
-        :param str version: Specifies the version of the function graph.
+               valid value is range from `1` to `600,000`, defaults to `5,000`.
+        :param str version: Specifies the version of the FunctionGraph function.
         """
         pulumi.set(__self__, "function_urn", function_urn)
         if authorizer_id is not None:
@@ -163,7 +196,7 @@ class ApiFuncGraph(dict):
     @pulumi.getter(name="functionUrn")
     def function_urn(self) -> str:
         """
-        Specifies the URN of the function graph.
+        Specifies the URN of the FunctionGraph function.
         """
         return pulumi.get(self, "function_urn")
 
@@ -179,8 +212,8 @@ class ApiFuncGraph(dict):
     @pulumi.getter(name="invocationType")
     def invocation_type(self) -> Optional[str]:
         """
-        Specifies the invocation mode. The valid values are **async** and **sync**,
-        default to **sync**.
+        Specifies the invocation type.  
+        The valid values are **async** and **sync**, defaults to **sync**.
         """
         return pulumi.get(self, "invocation_type")
 
@@ -189,7 +222,7 @@ class ApiFuncGraph(dict):
     def timeout(self) -> Optional[int]:
         """
         Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-        valid value is range from 1 to 600,000, default to 5,000.
+        valid value is range from `1` to `600,000`, defaults to `5,000`.
         """
         return pulumi.get(self, "timeout")
 
@@ -197,7 +230,7 @@ class ApiFuncGraph(dict):
     @pulumi.getter
     def version(self) -> Optional[str]:
         """
-        Specifies the version of the function graph.
+        Specifies the version of the FunctionGraph function.
         """
         return pulumi.get(self, "version")
 
@@ -240,21 +273,22 @@ class ApiFuncGraphPolicy(dict):
                  timeout: Optional[int] = None,
                  version: Optional[str] = None):
         """
-        :param Sequence['ApiFuncGraphPolicyConditionArgs'] conditions: Specifies an array of one or more policy conditions. Up to five conditions can be set.
+        :param Sequence['ApiFuncGraphPolicyConditionArgs'] conditions: Specifies an array of one or more policy conditions.  
+               Up to five conditions can be set.
                The object structure is documented below.
-        :param str function_urn: Specifies the URN of the function graph.
-        :param str name: Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-               a letter. Only letters, digits, and underscores (_) are allowed.
+        :param str function_urn: Specifies the URN of the FunctionGraph function.
+        :param str name: Specifies the backend policy name.  
+               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
         :param str authorizer_id: Specifies the ID of the backend custom authorization.
         :param Sequence['ApiFuncGraphPolicyBackendParamArgs'] backend_params: Specifies an array of one or more backend parameters. The maximum of request
                parameters is 50. The object structure is documented above.
         :param str effective_mode: Specifies the effective mode of the backend policy. The valid values are **ALL**
-               and **ANY**, default to **ANY**.
-        :param str invocation_mode: Specifies the invocation mode of the function graph. The valid values are
-               **async** and **sync**, default to **sync**.
+               and **ANY**, defaults to **ANY**.
+        :param str invocation_mode: Specifies the invocation mode of the FunctionGraph function.  
+               The valid values are **async** and **sync**, defaults to **sync**.
         :param int timeout: Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-               valid value is range from 1 to 600,000, default to 5,000.
-        :param str version: Specifies the version of the function graph.
+               valid value is range from `1` to `600,000`, defaults to `5,000`.
+        :param str version: Specifies the version of the FunctionGraph function.
         """
         pulumi.set(__self__, "conditions", conditions)
         pulumi.set(__self__, "function_urn", function_urn)
@@ -276,7 +310,8 @@ class ApiFuncGraphPolicy(dict):
     @pulumi.getter
     def conditions(self) -> Sequence['outputs.ApiFuncGraphPolicyCondition']:
         """
-        Specifies an array of one or more policy conditions. Up to five conditions can be set.
+        Specifies an array of one or more policy conditions.  
+        Up to five conditions can be set.
         The object structure is documented below.
         """
         return pulumi.get(self, "conditions")
@@ -285,7 +320,7 @@ class ApiFuncGraphPolicy(dict):
     @pulumi.getter(name="functionUrn")
     def function_urn(self) -> str:
         """
-        Specifies the URN of the function graph.
+        Specifies the URN of the FunctionGraph function.
         """
         return pulumi.get(self, "function_urn")
 
@@ -293,8 +328,8 @@ class ApiFuncGraphPolicy(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-        a letter. Only letters, digits, and underscores (_) are allowed.
+        Specifies the backend policy name.  
+        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -320,7 +355,7 @@ class ApiFuncGraphPolicy(dict):
     def effective_mode(self) -> Optional[str]:
         """
         Specifies the effective mode of the backend policy. The valid values are **ALL**
-        and **ANY**, default to **ANY**.
+        and **ANY**, defaults to **ANY**.
         """
         return pulumi.get(self, "effective_mode")
 
@@ -328,8 +363,8 @@ class ApiFuncGraphPolicy(dict):
     @pulumi.getter(name="invocationMode")
     def invocation_mode(self) -> Optional[str]:
         """
-        Specifies the invocation mode of the function graph. The valid values are
-        **async** and **sync**, default to **sync**.
+        Specifies the invocation mode of the FunctionGraph function.  
+        The valid values are **async** and **sync**, defaults to **sync**.
         """
         return pulumi.get(self, "invocation_mode")
 
@@ -338,7 +373,7 @@ class ApiFuncGraphPolicy(dict):
     def timeout(self) -> Optional[int]:
         """
         Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-        valid value is range from 1 to 600,000, default to 5,000.
+        valid value is range from `1` to `600,000`, defaults to `5,000`.
         """
         return pulumi.get(self, "timeout")
 
@@ -346,31 +381,52 @@ class ApiFuncGraphPolicy(dict):
     @pulumi.getter
     def version(self) -> Optional[str]:
         """
-        Specifies the version of the function graph.
+        Specifies the version of the FunctionGraph function.
         """
         return pulumi.get(self, "version")
 
 
 @pulumi.output_type
 class ApiFuncGraphPolicyBackendParam(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "systemParamType":
+            suggest = "system_param_type"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ApiFuncGraphPolicyBackendParam. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ApiFuncGraphPolicyBackendParam.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ApiFuncGraphPolicyBackendParam.__key_warning(key)
+        return super().get(key, default)
+
     def __init__(__self__, *,
                  location: str,
                  name: str,
                  type: str,
                  value: str,
-                 description: Optional[str] = None):
+                 description: Optional[str] = None,
+                 system_param_type: Optional[str] = None):
         """
-        :param str location: Specifies the location of the backend parameter. The valid values are **PATH**,
-               **QUERY** and **HEADER**.
-        :param str name: Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-               a letter. Only letters, digits, and underscores (_) are allowed.
-        :param str type: Specifies the condition type of the backend policy. The valid values are **Equal**,
-               **Enumerated** and **Matching**, default to **Equal**.
-        :param str value: Specifies the condition type. For a condition with the input parameter source:
+        :param str location: Specifies the location of the backend parameter.  
+               The valid values are **PATH**, **QUERY** and **HEADER**.
+        :param str name: Specifies the backend policy name.  
+               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        :param str type: Specifies the condition type of the backend policy.  
+               The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+        :param str value: Specifies the value of the backend policy.  
+               For a condition with the input parameter source:
                + If the condition type is **Enumerated**, separate condition values with commas.
                + If the condition type is **Matching**, enter a regular expression compatible with PERL.
-        :param str description: Specifies the description of the constant or system parameter, which contain a
-               maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+        :param str description: Specifies the description of the constant or system parameter.  
+               The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
+        :param str system_param_type: Specifies the type of the system parameter.  
+               The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
         """
         pulumi.set(__self__, "location", location)
         pulumi.set(__self__, "name", name)
@@ -378,13 +434,15 @@ class ApiFuncGraphPolicyBackendParam(dict):
         pulumi.set(__self__, "value", value)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if system_param_type is not None:
+            pulumi.set(__self__, "system_param_type", system_param_type)
 
     @property
     @pulumi.getter
     def location(self) -> str:
         """
-        Specifies the location of the backend parameter. The valid values are **PATH**,
-        **QUERY** and **HEADER**.
+        Specifies the location of the backend parameter.  
+        The valid values are **PATH**, **QUERY** and **HEADER**.
         """
         return pulumi.get(self, "location")
 
@@ -392,8 +450,8 @@ class ApiFuncGraphPolicyBackendParam(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-        a letter. Only letters, digits, and underscores (_) are allowed.
+        Specifies the backend policy name.  
+        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -401,8 +459,8 @@ class ApiFuncGraphPolicyBackendParam(dict):
     @pulumi.getter
     def type(self) -> str:
         """
-        Specifies the condition type of the backend policy. The valid values are **Equal**,
-        **Enumerated** and **Matching**, default to **Equal**.
+        Specifies the condition type of the backend policy.  
+        The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
         """
         return pulumi.get(self, "type")
 
@@ -410,7 +468,8 @@ class ApiFuncGraphPolicyBackendParam(dict):
     @pulumi.getter
     def value(self) -> str:
         """
-        Specifies the condition type. For a condition with the input parameter source:
+        Specifies the value of the backend policy.  
+        For a condition with the input parameter source:
         + If the condition type is **Enumerated**, separate condition values with commas.
         + If the condition type is **Matching**, enter a regular expression compatible with PERL.
         """
@@ -420,10 +479,19 @@ class ApiFuncGraphPolicyBackendParam(dict):
     @pulumi.getter
     def description(self) -> Optional[str]:
         """
-        Specifies the description of the constant or system parameter, which contain a
-        maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+        Specifies the description of the constant or system parameter.  
+        The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="systemParamType")
+    def system_param_type(self) -> Optional[str]:
+        """
+        Specifies the type of the system parameter.  
+        The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+        """
+        return pulumi.get(self, "system_param_type")
 
 
 @pulumi.output_type
@@ -451,15 +519,16 @@ class ApiFuncGraphPolicyCondition(dict):
                  source: Optional[str] = None,
                  type: Optional[str] = None):
         """
-        :param str value: Specifies the condition type. For a condition with the input parameter source:
+        :param str value: Specifies the value of the backend policy.  
+               For a condition with the input parameter source:
                + If the condition type is **Enumerated**, separate condition values with commas.
                + If the condition type is **Matching**, enter a regular expression compatible with PERL.
-        :param str param_name: Specifies the request parameter name. This parameter is required if the policy type
-               is param.
-        :param str source: Specifies the policy type. The valid values are **param** and **source**, default to
-               **source**.
-        :param str type: Specifies the condition type of the backend policy. The valid values are **Equal**,
-               **Enumerated** and **Matching**, default to **Equal**.
+        :param str param_name: Specifies the request parameter name.
+               This parameter is required if the policy type is **param**.
+        :param str source: Specifies the backend policy type.  
+               The valid values are **param** and **source**, defaults to **source**.
+        :param str type: Specifies the condition type of the backend policy.  
+               The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
         """
         pulumi.set(__self__, "value", value)
         if param_name is not None:
@@ -473,7 +542,8 @@ class ApiFuncGraphPolicyCondition(dict):
     @pulumi.getter
     def value(self) -> str:
         """
-        Specifies the condition type. For a condition with the input parameter source:
+        Specifies the value of the backend policy.  
+        For a condition with the input parameter source:
         + If the condition type is **Enumerated**, separate condition values with commas.
         + If the condition type is **Matching**, enter a regular expression compatible with PERL.
         """
@@ -483,8 +553,8 @@ class ApiFuncGraphPolicyCondition(dict):
     @pulumi.getter(name="paramName")
     def param_name(self) -> Optional[str]:
         """
-        Specifies the request parameter name. This parameter is required if the policy type
-        is param.
+        Specifies the request parameter name.
+        This parameter is required if the policy type is **param**.
         """
         return pulumi.get(self, "param_name")
 
@@ -492,8 +562,8 @@ class ApiFuncGraphPolicyCondition(dict):
     @pulumi.getter
     def source(self) -> Optional[str]:
         """
-        Specifies the policy type. The valid values are **param** and **source**, default to
-        **source**.
+        Specifies the backend policy type.  
+        The valid values are **param** and **source**, defaults to **source**.
         """
         return pulumi.get(self, "source")
 
@@ -501,8 +571,8 @@ class ApiFuncGraphPolicyCondition(dict):
     @pulumi.getter
     def type(self) -> Optional[str]:
         """
-        Specifies the condition type of the backend policy. The valid values are **Equal**,
-        **Enumerated** and **Matching**, default to **Equal**.
+        Specifies the condition type of the backend policy.  
+        The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
         """
         return pulumi.get(self, "type")
 
@@ -531,8 +601,8 @@ class ApiMock(dict):
                  response: Optional[str] = None):
         """
         :param str authorizer_id: Specifies the ID of the backend custom authorization.
-        :param str response: Specifies the response of the backend policy, which contain a maximum of 2,048
-               characters, and the angle brackets (< and >) are not allowed.
+        :param str response: Specifies the response of the backend policy.  
+               The description contains a maximum of `2,048` characters and the angle brackets (< and >) are not allowed.
         """
         if authorizer_id is not None:
             pulumi.set(__self__, "authorizer_id", authorizer_id)
@@ -551,8 +621,8 @@ class ApiMock(dict):
     @pulumi.getter
     def response(self) -> Optional[str]:
         """
-        Specifies the response of the backend policy, which contain a maximum of 2,048
-        characters, and the angle brackets (< and >) are not allowed.
+        Specifies the response of the backend policy.  
+        The description contains a maximum of `2,048` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "response")
 
@@ -588,17 +658,18 @@ class ApiMockPolicy(dict):
                  effective_mode: Optional[str] = None,
                  response: Optional[str] = None):
         """
-        :param Sequence['ApiMockPolicyConditionArgs'] conditions: Specifies an array of one or more policy conditions. Up to five conditions can be set.
+        :param Sequence['ApiMockPolicyConditionArgs'] conditions: Specifies an array of one or more policy conditions.  
+               Up to five conditions can be set.
                The object structure is documented below.
-        :param str name: Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-               a letter. Only letters, digits, and underscores (_) are allowed.
+        :param str name: Specifies the backend policy name.  
+               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
         :param str authorizer_id: Specifies the ID of the backend custom authorization.
         :param Sequence['ApiMockPolicyBackendParamArgs'] backend_params: Specifies an array of one or more backend parameters. The maximum of request
                parameters is 50. The object structure is documented above.
         :param str effective_mode: Specifies the effective mode of the backend policy. The valid values are **ALL**
-               and **ANY**, default to **ANY**.
-        :param str response: Specifies the response of the backend policy, which contain a maximum of 2,048
-               characters, and the angle brackets (< and >) are not allowed.
+               and **ANY**, defaults to **ANY**.
+        :param str response: Specifies the response of the backend policy.  
+               The description contains a maximum of `2,048` characters and the angle brackets (< and >) are not allowed.
         """
         pulumi.set(__self__, "conditions", conditions)
         pulumi.set(__self__, "name", name)
@@ -615,7 +686,8 @@ class ApiMockPolicy(dict):
     @pulumi.getter
     def conditions(self) -> Sequence['outputs.ApiMockPolicyCondition']:
         """
-        Specifies an array of one or more policy conditions. Up to five conditions can be set.
+        Specifies an array of one or more policy conditions.  
+        Up to five conditions can be set.
         The object structure is documented below.
         """
         return pulumi.get(self, "conditions")
@@ -624,8 +696,8 @@ class ApiMockPolicy(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-        a letter. Only letters, digits, and underscores (_) are allowed.
+        Specifies the backend policy name.  
+        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -651,7 +723,7 @@ class ApiMockPolicy(dict):
     def effective_mode(self) -> Optional[str]:
         """
         Specifies the effective mode of the backend policy. The valid values are **ALL**
-        and **ANY**, default to **ANY**.
+        and **ANY**, defaults to **ANY**.
         """
         return pulumi.get(self, "effective_mode")
 
@@ -659,32 +731,53 @@ class ApiMockPolicy(dict):
     @pulumi.getter
     def response(self) -> Optional[str]:
         """
-        Specifies the response of the backend policy, which contain a maximum of 2,048
-        characters, and the angle brackets (< and >) are not allowed.
+        Specifies the response of the backend policy.  
+        The description contains a maximum of `2,048` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "response")
 
 
 @pulumi.output_type
 class ApiMockPolicyBackendParam(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "systemParamType":
+            suggest = "system_param_type"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ApiMockPolicyBackendParam. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ApiMockPolicyBackendParam.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ApiMockPolicyBackendParam.__key_warning(key)
+        return super().get(key, default)
+
     def __init__(__self__, *,
                  location: str,
                  name: str,
                  type: str,
                  value: str,
-                 description: Optional[str] = None):
+                 description: Optional[str] = None,
+                 system_param_type: Optional[str] = None):
         """
-        :param str location: Specifies the location of the backend parameter. The valid values are **PATH**,
-               **QUERY** and **HEADER**.
-        :param str name: Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-               a letter. Only letters, digits, and underscores (_) are allowed.
-        :param str type: Specifies the condition type of the backend policy. The valid values are **Equal**,
-               **Enumerated** and **Matching**, default to **Equal**.
-        :param str value: Specifies the condition type. For a condition with the input parameter source:
+        :param str location: Specifies the location of the backend parameter.  
+               The valid values are **PATH**, **QUERY** and **HEADER**.
+        :param str name: Specifies the backend policy name.  
+               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        :param str type: Specifies the condition type of the backend policy.  
+               The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+        :param str value: Specifies the value of the backend policy.  
+               For a condition with the input parameter source:
                + If the condition type is **Enumerated**, separate condition values with commas.
                + If the condition type is **Matching**, enter a regular expression compatible with PERL.
-        :param str description: Specifies the description of the constant or system parameter, which contain a
-               maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+        :param str description: Specifies the description of the constant or system parameter.  
+               The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
+        :param str system_param_type: Specifies the type of the system parameter.  
+               The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
         """
         pulumi.set(__self__, "location", location)
         pulumi.set(__self__, "name", name)
@@ -692,13 +785,15 @@ class ApiMockPolicyBackendParam(dict):
         pulumi.set(__self__, "value", value)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if system_param_type is not None:
+            pulumi.set(__self__, "system_param_type", system_param_type)
 
     @property
     @pulumi.getter
     def location(self) -> str:
         """
-        Specifies the location of the backend parameter. The valid values are **PATH**,
-        **QUERY** and **HEADER**.
+        Specifies the location of the backend parameter.  
+        The valid values are **PATH**, **QUERY** and **HEADER**.
         """
         return pulumi.get(self, "location")
 
@@ -706,8 +801,8 @@ class ApiMockPolicyBackendParam(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-        a letter. Only letters, digits, and underscores (_) are allowed.
+        Specifies the backend policy name.  
+        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -715,8 +810,8 @@ class ApiMockPolicyBackendParam(dict):
     @pulumi.getter
     def type(self) -> str:
         """
-        Specifies the condition type of the backend policy. The valid values are **Equal**,
-        **Enumerated** and **Matching**, default to **Equal**.
+        Specifies the condition type of the backend policy.  
+        The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
         """
         return pulumi.get(self, "type")
 
@@ -724,7 +819,8 @@ class ApiMockPolicyBackendParam(dict):
     @pulumi.getter
     def value(self) -> str:
         """
-        Specifies the condition type. For a condition with the input parameter source:
+        Specifies the value of the backend policy.  
+        For a condition with the input parameter source:
         + If the condition type is **Enumerated**, separate condition values with commas.
         + If the condition type is **Matching**, enter a regular expression compatible with PERL.
         """
@@ -734,10 +830,19 @@ class ApiMockPolicyBackendParam(dict):
     @pulumi.getter
     def description(self) -> Optional[str]:
         """
-        Specifies the description of the constant or system parameter, which contain a
-        maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+        Specifies the description of the constant or system parameter.  
+        The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="systemParamType")
+    def system_param_type(self) -> Optional[str]:
+        """
+        Specifies the type of the system parameter.  
+        The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+        """
+        return pulumi.get(self, "system_param_type")
 
 
 @pulumi.output_type
@@ -765,15 +870,16 @@ class ApiMockPolicyCondition(dict):
                  source: Optional[str] = None,
                  type: Optional[str] = None):
         """
-        :param str value: Specifies the condition type. For a condition with the input parameter source:
+        :param str value: Specifies the value of the backend policy.  
+               For a condition with the input parameter source:
                + If the condition type is **Enumerated**, separate condition values with commas.
                + If the condition type is **Matching**, enter a regular expression compatible with PERL.
-        :param str param_name: Specifies the request parameter name. This parameter is required if the policy type
-               is param.
-        :param str source: Specifies the policy type. The valid values are **param** and **source**, default to
-               **source**.
-        :param str type: Specifies the condition type of the backend policy. The valid values are **Equal**,
-               **Enumerated** and **Matching**, default to **Equal**.
+        :param str param_name: Specifies the request parameter name.
+               This parameter is required if the policy type is **param**.
+        :param str source: Specifies the backend policy type.  
+               The valid values are **param** and **source**, defaults to **source**.
+        :param str type: Specifies the condition type of the backend policy.  
+               The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
         """
         pulumi.set(__self__, "value", value)
         if param_name is not None:
@@ -787,7 +893,8 @@ class ApiMockPolicyCondition(dict):
     @pulumi.getter
     def value(self) -> str:
         """
-        Specifies the condition type. For a condition with the input parameter source:
+        Specifies the value of the backend policy.  
+        For a condition with the input parameter source:
         + If the condition type is **Enumerated**, separate condition values with commas.
         + If the condition type is **Matching**, enter a regular expression compatible with PERL.
         """
@@ -797,8 +904,8 @@ class ApiMockPolicyCondition(dict):
     @pulumi.getter(name="paramName")
     def param_name(self) -> Optional[str]:
         """
-        Specifies the request parameter name. This parameter is required if the policy type
-        is param.
+        Specifies the request parameter name.
+        This parameter is required if the policy type is **param**.
         """
         return pulumi.get(self, "param_name")
 
@@ -806,8 +913,8 @@ class ApiMockPolicyCondition(dict):
     @pulumi.getter
     def source(self) -> Optional[str]:
         """
-        Specifies the policy type. The valid values are **param** and **source**, default to
-        **source**.
+        Specifies the backend policy type.  
+        The valid values are **param** and **source**, defaults to **source**.
         """
         return pulumi.get(self, "source")
 
@@ -815,8 +922,8 @@ class ApiMockPolicyCondition(dict):
     @pulumi.getter
     def type(self) -> Optional[str]:
         """
-        Specifies the condition type of the backend policy. The valid values are **Equal**,
-        **Enumerated** and **Matching**, default to **Equal**.
+        Specifies the condition type of the backend policy.  
+        The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
         """
         return pulumi.get(self, "type")
 
@@ -882,22 +989,21 @@ class ApiRequestParam(dict):
                  minimum: Optional[int] = None,
                  type: Optional[str] = None):
         """
-        :param str name: Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-               a letter. Only letters, digits, and underscores (_) are allowed.
+        :param str name: Specifies the backend policy name.  
+               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
         :param bool required: Specifies whether the request parameter is required.
-        :param str default: Specifies the default value of the request parameter, which contain a maximum of 255
-               characters, and the angle brackets (< and >) are not allowed.
-        :param str description: Specifies the description of the constant or system parameter, which contain a
-               maximum of 255 characters, and the angle brackets (< and >) are not allowed.
-        :param str example: Specifies the example value of the request parameter, which contain a maximum of 255
-               characters, and the angle brackets (< and >) are not allowed.
-        :param str location: Specifies the location of the backend parameter. The valid values are **PATH**,
-               **QUERY** and **HEADER**.
+        :param str default: Specifies the default value of the request parameter.
+               The value contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
+        :param str description: Specifies the description of the constant or system parameter.  
+               The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
+        :param str example: Specifies the example value of the request parameter.  
+               The example contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
+        :param str location: Specifies the location of the backend parameter.  
+               The valid values are **PATH**, **QUERY** and **HEADER**.
         :param int maximum: Specifies the maximum value or size of the request parameter.
-        :param int minimum: Specifies the minimum value or size of the request parameter. For string type,
-               The `maximum` and `minimum` means size. For number type, they means value.
-        :param str type: Specifies the condition type of the backend policy. The valid values are **Equal**,
-               **Enumerated** and **Matching**, default to **Equal**.
+        :param int minimum: Specifies the minimum value or size of the request parameter.
+        :param str type: Specifies the condition type of the backend policy.  
+               The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
         """
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "required", required)
@@ -920,8 +1026,8 @@ class ApiRequestParam(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-        a letter. Only letters, digits, and underscores (_) are allowed.
+        Specifies the backend policy name.  
+        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -937,8 +1043,8 @@ class ApiRequestParam(dict):
     @pulumi.getter
     def default(self) -> Optional[str]:
         """
-        Specifies the default value of the request parameter, which contain a maximum of 255
-        characters, and the angle brackets (< and >) are not allowed.
+        Specifies the default value of the request parameter.
+        The value contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "default")
 
@@ -946,8 +1052,8 @@ class ApiRequestParam(dict):
     @pulumi.getter
     def description(self) -> Optional[str]:
         """
-        Specifies the description of the constant or system parameter, which contain a
-        maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+        Specifies the description of the constant or system parameter.  
+        The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -955,8 +1061,8 @@ class ApiRequestParam(dict):
     @pulumi.getter
     def example(self) -> Optional[str]:
         """
-        Specifies the example value of the request parameter, which contain a maximum of 255
-        characters, and the angle brackets (< and >) are not allowed.
+        Specifies the example value of the request parameter.  
+        The example contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "example")
 
@@ -964,8 +1070,8 @@ class ApiRequestParam(dict):
     @pulumi.getter
     def location(self) -> Optional[str]:
         """
-        Specifies the location of the backend parameter. The valid values are **PATH**,
-        **QUERY** and **HEADER**.
+        Specifies the location of the backend parameter.  
+        The valid values are **PATH**, **QUERY** and **HEADER**.
         """
         return pulumi.get(self, "location")
 
@@ -981,8 +1087,7 @@ class ApiRequestParam(dict):
     @pulumi.getter
     def minimum(self) -> Optional[int]:
         """
-        Specifies the minimum value or size of the request parameter. For string type,
-        The `maximum` and `minimum` means size. For number type, they means value.
+        Specifies the minimum value or size of the request parameter.
         """
         return pulumi.get(self, "minimum")
 
@@ -990,8 +1095,8 @@ class ApiRequestParam(dict):
     @pulumi.getter
     def type(self) -> Optional[str]:
         """
-        Specifies the condition type of the backend policy. The valid values are **Equal**,
-        **Enumerated** and **Matching**, default to **Equal**.
+        Specifies the condition type of the backend policy.  
+        The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
         """
         return pulumi.get(self, "type")
 
@@ -1038,30 +1143,32 @@ class ApiWeb(dict):
                  timeout: Optional[int] = None,
                  vpc_channel_id: Optional[str] = None):
         """
-        :param str path: Specifies the backend request address, which can contain a maximum of 512 characters and
+        :param str path: Specifies the backend request address, which can contain a maximum of `512` characters and
                must comply with URI specifications.
-               + The request address can contain request parameters enclosed with brackets ({}).
-               + The request address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
+               + The address can contain request parameters enclosed with brackets ({}).
+               + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
                underscores (_) and must comply with URI specifications.
-               + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
+               + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
                Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
         :param str authorizer_id: Specifies the ID of the backend custom authorization.
-        :param str backend_address: Specifies the backend service address, which consists of a domain name or IP
-               address, and a port number, with not more than 255 characters. The backend service address must be in the format "Host
-               name:Port number", for example, apig.example.com:7443. If the port number is not specified, the default HTTPS port 443
-               or the default HTTP port 80 is used. The backend service address can contain environment variables, each starting with
-               a letter and consisting of 3 to 32 characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
-        :param str host_header: Specifies the proxy host header. The host header can be customized for requests to
-               be forwarded to cloud servers through the VPC channel. By default, the original host header of the request is used.
-        :param str request_method: Specifies the backend request method of the API. The valid types are **GET**,
-               **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+        :param str backend_address: Specifies the backend service address.  
+               The value which consists of a domain name or IP address, and a port number, with not more than `255` characters.
+               The backend service address must be in the format "{host name}:{Port number}", for example, `apig.example.com:7443`.
+               If the port number is not specified, the default HTTPS port `443`, or the default HTTP port `80` is used.
+               The backend service address can contain environment variables, each starting with a letter and consisting of `3` to
+               `32` characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+        :param str host_header: Specifies the proxy host header.  
+               The host header can be customized for requests to be forwarded to cloud servers through the VPC channel.
+               By default, the original host header of the request is used.
+        :param str request_method: Specifies the backend request method of the API.  
+               The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
         :param str request_protocol: Specifies the backend request protocol. The valid values are **HTTP** and
-               **HTTPS**, default to **HTTPS**.
-        :param bool ssl_enable: Specifies the indicates whether to enable two-way authentication, default to false.
+               **HTTPS**, defaults to **HTTPS**.
+        :param bool ssl_enable: Specifies whether to enable two-way authentication, defaults to **false**.
         :param int timeout: Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-               valid value is range from 1 to 600,000, default to 5,000.
-        :param str vpc_channel_id: Specifies the VPC channel ID. This parameter and `backend_address` are
-               alternative.
+               valid value is range from `1` to `600,000`, defaults to `5,000`.
+        :param str vpc_channel_id: Specifies the VPC channel ID.  
+               This parameter and `backend_address` are alternative.
         """
         pulumi.set(__self__, "path", path)
         if authorizer_id is not None:
@@ -1085,12 +1192,12 @@ class ApiWeb(dict):
     @pulumi.getter
     def path(self) -> str:
         """
-        Specifies the backend request address, which can contain a maximum of 512 characters and
+        Specifies the backend request address, which can contain a maximum of `512` characters and
         must comply with URI specifications.
-        + The request address can contain request parameters enclosed with brackets ({}).
-        + The request address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
+        + The address can contain request parameters enclosed with brackets ({}).
+        + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
         underscores (_) and must comply with URI specifications.
-        + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
+        + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
         Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
         """
         return pulumi.get(self, "path")
@@ -1107,11 +1214,12 @@ class ApiWeb(dict):
     @pulumi.getter(name="backendAddress")
     def backend_address(self) -> Optional[str]:
         """
-        Specifies the backend service address, which consists of a domain name or IP
-        address, and a port number, with not more than 255 characters. The backend service address must be in the format "Host
-        name:Port number", for example, apig.example.com:7443. If the port number is not specified, the default HTTPS port 443
-        or the default HTTP port 80 is used. The backend service address can contain environment variables, each starting with
-        a letter and consisting of 3 to 32 characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+        Specifies the backend service address.  
+        The value which consists of a domain name or IP address, and a port number, with not more than `255` characters.
+        The backend service address must be in the format "{host name}:{Port number}", for example, `apig.example.com:7443`.
+        If the port number is not specified, the default HTTPS port `443`, or the default HTTP port `80` is used.
+        The backend service address can contain environment variables, each starting with a letter and consisting of `3` to
+        `32` characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
         """
         return pulumi.get(self, "backend_address")
 
@@ -1119,8 +1227,9 @@ class ApiWeb(dict):
     @pulumi.getter(name="hostHeader")
     def host_header(self) -> Optional[str]:
         """
-        Specifies the proxy host header. The host header can be customized for requests to
-        be forwarded to cloud servers through the VPC channel. By default, the original host header of the request is used.
+        Specifies the proxy host header.  
+        The host header can be customized for requests to be forwarded to cloud servers through the VPC channel.
+        By default, the original host header of the request is used.
         """
         return pulumi.get(self, "host_header")
 
@@ -1128,8 +1237,8 @@ class ApiWeb(dict):
     @pulumi.getter(name="requestMethod")
     def request_method(self) -> Optional[str]:
         """
-        Specifies the backend request method of the API. The valid types are **GET**,
-        **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+        Specifies the backend request method of the API.  
+        The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
         """
         return pulumi.get(self, "request_method")
 
@@ -1138,7 +1247,7 @@ class ApiWeb(dict):
     def request_protocol(self) -> Optional[str]:
         """
         Specifies the backend request protocol. The valid values are **HTTP** and
-        **HTTPS**, default to **HTTPS**.
+        **HTTPS**, defaults to **HTTPS**.
         """
         return pulumi.get(self, "request_protocol")
 
@@ -1146,7 +1255,7 @@ class ApiWeb(dict):
     @pulumi.getter(name="sslEnable")
     def ssl_enable(self) -> Optional[bool]:
         """
-        Specifies the indicates whether to enable two-way authentication, default to false.
+        Specifies whether to enable two-way authentication, defaults to **false**.
         """
         return pulumi.get(self, "ssl_enable")
 
@@ -1155,7 +1264,7 @@ class ApiWeb(dict):
     def timeout(self) -> Optional[int]:
         """
         Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-        valid value is range from 1 to 600,000, default to 5,000.
+        valid value is range from `1` to `600,000`, defaults to `5,000`.
         """
         return pulumi.get(self, "timeout")
 
@@ -1163,8 +1272,8 @@ class ApiWeb(dict):
     @pulumi.getter(name="vpcChannelId")
     def vpc_channel_id(self) -> Optional[str]:
         """
-        Specifies the VPC channel ID. This parameter and `backend_address` are
-        alternative.
+        Specifies the VPC channel ID.  
+        This parameter and `backend_address` are alternative.
         """
         return pulumi.get(self, "vpc_channel_id")
 
@@ -1216,37 +1325,40 @@ class ApiWebPolicy(dict):
                  timeout: Optional[int] = None,
                  vpc_channel_id: Optional[str] = None):
         """
-        :param Sequence['ApiWebPolicyConditionArgs'] conditions: Specifies an array of one or more policy conditions. Up to five conditions can be set.
+        :param Sequence['ApiWebPolicyConditionArgs'] conditions: Specifies an array of one or more policy conditions.  
+               Up to five conditions can be set.
                The object structure is documented below.
-        :param str name: Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-               a letter. Only letters, digits, and underscores (_) are allowed.
-        :param str path: Specifies the backend request address, which can contain a maximum of 512 characters and
+        :param str name: Specifies the backend policy name.  
+               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        :param str path: Specifies the backend request address, which can contain a maximum of `512` characters and
                must comply with URI specifications.
-               + The request address can contain request parameters enclosed with brackets ({}).
-               + The request address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
+               + The address can contain request parameters enclosed with brackets ({}).
+               + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
                underscores (_) and must comply with URI specifications.
-               + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
+               + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
                Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
-        :param str request_method: Specifies the backend request method of the API. The valid types are **GET**,
-               **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+        :param str request_method: Specifies the backend request method of the API.  
+               The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
         :param str authorizer_id: Specifies the ID of the backend custom authorization.
-        :param str backend_address: Specifies the backend service address, which consists of a domain name or IP
-               address, and a port number, with not more than 255 characters. The backend service address must be in the format "Host
-               name:Port number", for example, apig.example.com:7443. If the port number is not specified, the default HTTPS port 443
-               or the default HTTP port 80 is used. The backend service address can contain environment variables, each starting with
-               a letter and consisting of 3 to 32 characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+        :param str backend_address: Specifies the backend service address.  
+               The value which consists of a domain name or IP address, and a port number, with not more than `255` characters.
+               The backend service address must be in the format "{host name}:{Port number}", for example, `apig.example.com:7443`.
+               If the port number is not specified, the default HTTPS port `443`, or the default HTTP port `80` is used.
+               The backend service address can contain environment variables, each starting with a letter and consisting of `3` to
+               `32` characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
         :param Sequence['ApiWebPolicyBackendParamArgs'] backend_params: Specifies an array of one or more backend parameters. The maximum of request
                parameters is 50. The object structure is documented above.
         :param str effective_mode: Specifies the effective mode of the backend policy. The valid values are **ALL**
-               and **ANY**, default to **ANY**.
-        :param str host_header: Specifies the proxy host header. The host header can be customized for requests to
-               be forwarded to cloud servers through the VPC channel. By default, the original host header of the request is used.
+               and **ANY**, defaults to **ANY**.
+        :param str host_header: Specifies the proxy host header.  
+               The host header can be customized for requests to be forwarded to cloud servers through the VPC channel.
+               By default, the original host header of the request is used.
         :param str request_protocol: Specifies the backend request protocol. The valid values are **HTTP** and
-               **HTTPS**, default to **HTTPS**.
+               **HTTPS**, defaults to **HTTPS**.
         :param int timeout: Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-               valid value is range from 1 to 600,000, default to 5,000.
-        :param str vpc_channel_id: Specifies the VPC channel ID. This parameter and `backend_address` are
-               alternative.
+               valid value is range from `1` to `600,000`, defaults to `5,000`.
+        :param str vpc_channel_id: Specifies the VPC channel ID.  
+               This parameter and `backend_address` are alternative.
         """
         pulumi.set(__self__, "conditions", conditions)
         pulumi.set(__self__, "name", name)
@@ -1273,7 +1385,8 @@ class ApiWebPolicy(dict):
     @pulumi.getter
     def conditions(self) -> Sequence['outputs.ApiWebPolicyCondition']:
         """
-        Specifies an array of one or more policy conditions. Up to five conditions can be set.
+        Specifies an array of one or more policy conditions.  
+        Up to five conditions can be set.
         The object structure is documented below.
         """
         return pulumi.get(self, "conditions")
@@ -1282,8 +1395,8 @@ class ApiWebPolicy(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-        a letter. Only letters, digits, and underscores (_) are allowed.
+        Specifies the backend policy name.  
+        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -1291,12 +1404,12 @@ class ApiWebPolicy(dict):
     @pulumi.getter
     def path(self) -> str:
         """
-        Specifies the backend request address, which can contain a maximum of 512 characters and
+        Specifies the backend request address, which can contain a maximum of `512` characters and
         must comply with URI specifications.
-        + The request address can contain request parameters enclosed with brackets ({}).
-        + The request address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
+        + The address can contain request parameters enclosed with brackets ({}).
+        + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
         underscores (_) and must comply with URI specifications.
-        + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
+        + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
         Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
         """
         return pulumi.get(self, "path")
@@ -1305,8 +1418,8 @@ class ApiWebPolicy(dict):
     @pulumi.getter(name="requestMethod")
     def request_method(self) -> str:
         """
-        Specifies the backend request method of the API. The valid types are **GET**,
-        **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+        Specifies the backend request method of the API.  
+        The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
         """
         return pulumi.get(self, "request_method")
 
@@ -1322,11 +1435,12 @@ class ApiWebPolicy(dict):
     @pulumi.getter(name="backendAddress")
     def backend_address(self) -> Optional[str]:
         """
-        Specifies the backend service address, which consists of a domain name or IP
-        address, and a port number, with not more than 255 characters. The backend service address must be in the format "Host
-        name:Port number", for example, apig.example.com:7443. If the port number is not specified, the default HTTPS port 443
-        or the default HTTP port 80 is used. The backend service address can contain environment variables, each starting with
-        a letter and consisting of 3 to 32 characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+        Specifies the backend service address.  
+        The value which consists of a domain name or IP address, and a port number, with not more than `255` characters.
+        The backend service address must be in the format "{host name}:{Port number}", for example, `apig.example.com:7443`.
+        If the port number is not specified, the default HTTPS port `443`, or the default HTTP port `80` is used.
+        The backend service address can contain environment variables, each starting with a letter and consisting of `3` to
+        `32` characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
         """
         return pulumi.get(self, "backend_address")
 
@@ -1344,7 +1458,7 @@ class ApiWebPolicy(dict):
     def effective_mode(self) -> Optional[str]:
         """
         Specifies the effective mode of the backend policy. The valid values are **ALL**
-        and **ANY**, default to **ANY**.
+        and **ANY**, defaults to **ANY**.
         """
         return pulumi.get(self, "effective_mode")
 
@@ -1352,8 +1466,9 @@ class ApiWebPolicy(dict):
     @pulumi.getter(name="hostHeader")
     def host_header(self) -> Optional[str]:
         """
-        Specifies the proxy host header. The host header can be customized for requests to
-        be forwarded to cloud servers through the VPC channel. By default, the original host header of the request is used.
+        Specifies the proxy host header.  
+        The host header can be customized for requests to be forwarded to cloud servers through the VPC channel.
+        By default, the original host header of the request is used.
         """
         return pulumi.get(self, "host_header")
 
@@ -1362,7 +1477,7 @@ class ApiWebPolicy(dict):
     def request_protocol(self) -> Optional[str]:
         """
         Specifies the backend request protocol. The valid values are **HTTP** and
-        **HTTPS**, default to **HTTPS**.
+        **HTTPS**, defaults to **HTTPS**.
         """
         return pulumi.get(self, "request_protocol")
 
@@ -1371,7 +1486,7 @@ class ApiWebPolicy(dict):
     def timeout(self) -> Optional[int]:
         """
         Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-        valid value is range from 1 to 600,000, default to 5,000.
+        valid value is range from `1` to `600,000`, defaults to `5,000`.
         """
         return pulumi.get(self, "timeout")
 
@@ -1379,32 +1494,53 @@ class ApiWebPolicy(dict):
     @pulumi.getter(name="vpcChannelId")
     def vpc_channel_id(self) -> Optional[str]:
         """
-        Specifies the VPC channel ID. This parameter and `backend_address` are
-        alternative.
+        Specifies the VPC channel ID.  
+        This parameter and `backend_address` are alternative.
         """
         return pulumi.get(self, "vpc_channel_id")
 
 
 @pulumi.output_type
 class ApiWebPolicyBackendParam(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "systemParamType":
+            suggest = "system_param_type"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ApiWebPolicyBackendParam. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ApiWebPolicyBackendParam.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ApiWebPolicyBackendParam.__key_warning(key)
+        return super().get(key, default)
+
     def __init__(__self__, *,
                  location: str,
                  name: str,
                  type: str,
                  value: str,
-                 description: Optional[str] = None):
+                 description: Optional[str] = None,
+                 system_param_type: Optional[str] = None):
         """
-        :param str location: Specifies the location of the backend parameter. The valid values are **PATH**,
-               **QUERY** and **HEADER**.
-        :param str name: Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-               a letter. Only letters, digits, and underscores (_) are allowed.
-        :param str type: Specifies the condition type of the backend policy. The valid values are **Equal**,
-               **Enumerated** and **Matching**, default to **Equal**.
-        :param str value: Specifies the condition type. For a condition with the input parameter source:
+        :param str location: Specifies the location of the backend parameter.  
+               The valid values are **PATH**, **QUERY** and **HEADER**.
+        :param str name: Specifies the backend policy name.  
+               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        :param str type: Specifies the condition type of the backend policy.  
+               The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+        :param str value: Specifies the value of the backend policy.  
+               For a condition with the input parameter source:
                + If the condition type is **Enumerated**, separate condition values with commas.
                + If the condition type is **Matching**, enter a regular expression compatible with PERL.
-        :param str description: Specifies the description of the constant or system parameter, which contain a
-               maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+        :param str description: Specifies the description of the constant or system parameter.  
+               The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
+        :param str system_param_type: Specifies the type of the system parameter.  
+               The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
         """
         pulumi.set(__self__, "location", location)
         pulumi.set(__self__, "name", name)
@@ -1412,13 +1548,15 @@ class ApiWebPolicyBackendParam(dict):
         pulumi.set(__self__, "value", value)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if system_param_type is not None:
+            pulumi.set(__self__, "system_param_type", system_param_type)
 
     @property
     @pulumi.getter
     def location(self) -> str:
         """
-        Specifies the location of the backend parameter. The valid values are **PATH**,
-        **QUERY** and **HEADER**.
+        Specifies the location of the backend parameter.  
+        The valid values are **PATH**, **QUERY** and **HEADER**.
         """
         return pulumi.get(self, "location")
 
@@ -1426,8 +1564,8 @@ class ApiWebPolicyBackendParam(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-        a letter. Only letters, digits, and underscores (_) are allowed.
+        Specifies the backend policy name.  
+        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -1435,8 +1573,8 @@ class ApiWebPolicyBackendParam(dict):
     @pulumi.getter
     def type(self) -> str:
         """
-        Specifies the condition type of the backend policy. The valid values are **Equal**,
-        **Enumerated** and **Matching**, default to **Equal**.
+        Specifies the condition type of the backend policy.  
+        The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
         """
         return pulumi.get(self, "type")
 
@@ -1444,7 +1582,8 @@ class ApiWebPolicyBackendParam(dict):
     @pulumi.getter
     def value(self) -> str:
         """
-        Specifies the condition type. For a condition with the input parameter source:
+        Specifies the value of the backend policy.  
+        For a condition with the input parameter source:
         + If the condition type is **Enumerated**, separate condition values with commas.
         + If the condition type is **Matching**, enter a regular expression compatible with PERL.
         """
@@ -1454,10 +1593,19 @@ class ApiWebPolicyBackendParam(dict):
     @pulumi.getter
     def description(self) -> Optional[str]:
         """
-        Specifies the description of the constant or system parameter, which contain a
-        maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+        Specifies the description of the constant or system parameter.  
+        The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="systemParamType")
+    def system_param_type(self) -> Optional[str]:
+        """
+        Specifies the type of the system parameter.  
+        The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+        """
+        return pulumi.get(self, "system_param_type")
 
 
 @pulumi.output_type
@@ -1485,15 +1633,16 @@ class ApiWebPolicyCondition(dict):
                  source: Optional[str] = None,
                  type: Optional[str] = None):
         """
-        :param str value: Specifies the condition type. For a condition with the input parameter source:
+        :param str value: Specifies the value of the backend policy.  
+               For a condition with the input parameter source:
                + If the condition type is **Enumerated**, separate condition values with commas.
                + If the condition type is **Matching**, enter a regular expression compatible with PERL.
-        :param str param_name: Specifies the request parameter name. This parameter is required if the policy type
-               is param.
-        :param str source: Specifies the policy type. The valid values are **param** and **source**, default to
-               **source**.
-        :param str type: Specifies the condition type of the backend policy. The valid values are **Equal**,
-               **Enumerated** and **Matching**, default to **Equal**.
+        :param str param_name: Specifies the request parameter name.
+               This parameter is required if the policy type is **param**.
+        :param str source: Specifies the backend policy type.  
+               The valid values are **param** and **source**, defaults to **source**.
+        :param str type: Specifies the condition type of the backend policy.  
+               The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
         """
         pulumi.set(__self__, "value", value)
         if param_name is not None:
@@ -1507,7 +1656,8 @@ class ApiWebPolicyCondition(dict):
     @pulumi.getter
     def value(self) -> str:
         """
-        Specifies the condition type. For a condition with the input parameter source:
+        Specifies the value of the backend policy.  
+        For a condition with the input parameter source:
         + If the condition type is **Enumerated**, separate condition values with commas.
         + If the condition type is **Matching**, enter a regular expression compatible with PERL.
         """
@@ -1517,8 +1667,8 @@ class ApiWebPolicyCondition(dict):
     @pulumi.getter(name="paramName")
     def param_name(self) -> Optional[str]:
         """
-        Specifies the request parameter name. This parameter is required if the policy type
-        is param.
+        Specifies the request parameter name.
+        This parameter is required if the policy type is **param**.
         """
         return pulumi.get(self, "param_name")
 
@@ -1526,8 +1676,8 @@ class ApiWebPolicyCondition(dict):
     @pulumi.getter
     def source(self) -> Optional[str]:
         """
-        Specifies the policy type. The valid values are **param** and **source**, default to
-        **source**.
+        Specifies the backend policy type.  
+        The valid values are **param** and **source**, defaults to **source**.
         """
         return pulumi.get(self, "source")
 
@@ -1535,8 +1685,8 @@ class ApiWebPolicyCondition(dict):
     @pulumi.getter
     def type(self) -> Optional[str]:
         """
-        Specifies the condition type of the backend policy. The valid values are **Equal**,
-        **Enumerated** and **Matching**, default to **Equal**.
+        Specifies the condition type of the backend policy.  
+        The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
         """
         return pulumi.get(self, "type")
 
@@ -1548,15 +1698,12 @@ class CustomAuthorizerIdentity(dict):
                  name: str,
                  validation: Optional[str] = None):
         """
-        :param str location: Specifies the parameter location, which support 'HEADER' and 'QUERY'.
-               Changing this will create a new custom authorizer resource.
+        :param str location: Specifies the parameter location, which support **HEADER** and **QUERY**.
         :param str name: Specifies the name of the parameter to be verified.
                The parameter includes front-end and back-end parameters.
-               Changing this will create a new custom authorizer resource.
         :param str validation: Specifies the parameter verification expression.
                If omitted, the custom authorizer will not perform verification.
-               The valid value is range form 1 to 2,048.
-               Changing this will create a new custom authorizer resource.
+               The valid value is range form `1` to `2,048`.
         """
         pulumi.set(__self__, "location", location)
         pulumi.set(__self__, "name", name)
@@ -1567,8 +1714,7 @@ class CustomAuthorizerIdentity(dict):
     @pulumi.getter
     def location(self) -> str:
         """
-        Specifies the parameter location, which support 'HEADER' and 'QUERY'.
-        Changing this will create a new custom authorizer resource.
+        Specifies the parameter location, which support **HEADER** and **QUERY**.
         """
         return pulumi.get(self, "location")
 
@@ -1578,7 +1724,6 @@ class CustomAuthorizerIdentity(dict):
         """
         Specifies the name of the parameter to be verified.
         The parameter includes front-end and back-end parameters.
-        Changing this will create a new custom authorizer resource.
         """
         return pulumi.get(self, "name")
 
@@ -1588,8 +1733,7 @@ class CustomAuthorizerIdentity(dict):
         """
         Specifies the parameter verification expression.
         If omitted, the custom authorizer will not perform verification.
-        The valid value is range form 1 to 2,048.
-        Changing this will create a new custom authorizer resource.
+        The valid value is range form `1` to `2,048`.
         """
         return pulumi.get(self, "validation")
 
@@ -1617,9 +1761,9 @@ class GroupEnvironment(dict):
                  environment_id: str,
                  variables: Sequence['outputs.GroupEnvironmentVariable']):
         """
-        :param str environment_id: Specifies the APIG environment ID of the associated APIG group.
-        :param Sequence['GroupEnvironmentVariableArgs'] variables: Specifies an array of one or more APIG environment variables. The object structure is
-               documented below. The environment variables of different groups are isolated in the same environment.
+        :param str environment_id: Specifies the environment ID of the associated group.
+        :param Sequence['GroupEnvironmentVariableArgs'] variables: Specifies an array of one or more environment variables.  
+               The object structure is documented below.
         """
         pulumi.set(__self__, "environment_id", environment_id)
         pulumi.set(__self__, "variables", variables)
@@ -1628,7 +1772,7 @@ class GroupEnvironment(dict):
     @pulumi.getter(name="environmentId")
     def environment_id(self) -> str:
         """
-        Specifies the APIG environment ID of the associated APIG group.
+        Specifies the environment ID of the associated group.
         """
         return pulumi.get(self, "environment_id")
 
@@ -1636,8 +1780,8 @@ class GroupEnvironment(dict):
     @pulumi.getter
     def variables(self) -> Sequence['outputs.GroupEnvironmentVariable']:
         """
-        Specifies an array of one or more APIG environment variables. The object structure is
-        documented below. The environment variables of different groups are isolated in the same environment.
+        Specifies an array of one or more environment variables.  
+        The object structure is documented below.
         """
         return pulumi.get(self, "variables")
 
@@ -1664,17 +1808,24 @@ class GroupEnvironmentVariable(dict):
     def __init__(__self__, *,
                  name: str,
                  value: str,
+                 id: Optional[str] = None,
                  variable_id: Optional[str] = None):
         """
-        :param str name: Specifies the variable name, which can contains of 3 to 32 characters, starting with a
-               letter. Only letters, digits, hyphens (-), and underscores (_) are allowed. In the definition of an API, `name` (
-               case-sensitive) indicates a variable, such as #Name#. It is replaced by the actual value when the API is published in
-               an environment. The variable names are not allowed to be repeated for an API group.
-        :param str value: Specifies the environment ariable value, which can contains of 1 to 255 characters. Only
-               letters, digits and special characters (_-/.:) are allowed.
+        :param str name: Specifies the variable name.  
+               The valid length is limited from `3` to `32` characters.
+               Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
+               In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
+               It is replaced by the actual value when the API is published in an environment.
+               The variable names are not allowed to be repeated for an API group.
+        :param str value: Specifies the variable value.  
+               The valid length is limited from `1` to `255` characters.
+               Only letters, digits and special characters (_-/.:) are allowed.
+        :param str id: The variable ID.
         """
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "value", value)
+        if id is not None:
+            pulumi.set(__self__, "id", id)
         if variable_id is not None:
             pulumi.set(__self__, "variable_id", variable_id)
 
@@ -1682,10 +1833,12 @@ class GroupEnvironmentVariable(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the variable name, which can contains of 3 to 32 characters, starting with a
-        letter. Only letters, digits, hyphens (-), and underscores (_) are allowed. In the definition of an API, `name` (
-        case-sensitive) indicates a variable, such as #Name#. It is replaced by the actual value when the API is published in
-        an environment. The variable names are not allowed to be repeated for an API group.
+        Specifies the variable name.  
+        The valid length is limited from `3` to `32` characters.
+        Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
+        In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
+        It is replaced by the actual value when the API is published in an environment.
+        The variable names are not allowed to be repeated for an API group.
         """
         return pulumi.get(self, "name")
 
@@ -1693,10 +1846,19 @@ class GroupEnvironmentVariable(dict):
     @pulumi.getter
     def value(self) -> str:
         """
-        Specifies the environment ariable value, which can contains of 1 to 255 characters. Only
-        letters, digits and special characters (_-/.:) are allowed.
+        Specifies the variable value.  
+        The valid length is limited from `1` to `255` characters.
+        Only letters, digits and special characters (_-/.:) are allowed.
         """
         return pulumi.get(self, "value")
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[str]:
+        """
+        The variable ID.
+        """
+        return pulumi.get(self, "id")
 
     @property
     @pulumi.getter(name="variableId")
@@ -1732,7 +1894,7 @@ class ResponseRule(dict):
         """
         :param str body: Specifies the body template of the API response rule, e.g.
                `{\\"code\\":\\"$context.authorizer.frontend.code\\",\\"message\\":\\"$context.authorizer.frontend.message\\"}`
-        :param str error_type: Specifies the type of the API custom response rule.
+        :param str error_type: Specifies the error type of the API response rule.
                + **AUTH_FAILURE**: Authentication failed.
                + **AUTH_HEADER_MISSING**: The identity source is missing.
                + **AUTHORIZER_FAILURE**: Custom authentication failed.
@@ -1767,7 +1929,7 @@ class ResponseRule(dict):
     @pulumi.getter(name="errorType")
     def error_type(self) -> str:
         """
-        Specifies the type of the API custom response rule.
+        Specifies the error type of the API response rule.
         + **AUTH_FAILURE**: Authentication failed.
         + **AUTH_HEADER_MISSING**: The identity source is missing.
         + **AUTHORIZER_FAILURE**: Custom authentication failed.
@@ -1826,8 +1988,8 @@ class ThrottlingPolicyAppThrottle(dict):
         :param int max_api_requests: Specifies the maximum number of times an API can be accessed within a specified
                period.
         :param str throttling_object_id: Specifies the object ID which the special throttling policy belongs.
-        :param str id: ID of the special application throttling policy.
-        :param str throttling_object_name: The object name which the special application throttling policy belongs.
+        :param str id: ID of the special user/application throttling policy.
+        :param str throttling_object_name: The object name which the special user/application throttling policy belongs.
         """
         pulumi.set(__self__, "max_api_requests", max_api_requests)
         pulumi.set(__self__, "throttling_object_id", throttling_object_id)
@@ -1857,7 +2019,7 @@ class ThrottlingPolicyAppThrottle(dict):
     @pulumi.getter
     def id(self) -> Optional[str]:
         """
-        ID of the special application throttling policy.
+        ID of the special user/application throttling policy.
         """
         return pulumi.get(self, "id")
 
@@ -1865,7 +2027,7 @@ class ThrottlingPolicyAppThrottle(dict):
     @pulumi.getter(name="throttlingObjectName")
     def throttling_object_name(self) -> Optional[str]:
         """
-        The object name which the special application throttling policy belongs.
+        The object name which the special user/application throttling policy belongs.
         """
         return pulumi.get(self, "throttling_object_name")
 
@@ -1902,8 +2064,8 @@ class ThrottlingPolicyUserThrottle(dict):
         :param int max_api_requests: Specifies the maximum number of times an API can be accessed within a specified
                period.
         :param str throttling_object_id: Specifies the object ID which the special throttling policy belongs.
-        :param str id: ID of the special application throttling policy.
-        :param str throttling_object_name: The object name which the special application throttling policy belongs.
+        :param str id: ID of the special user/application throttling policy.
+        :param str throttling_object_name: The object name which the special user/application throttling policy belongs.
         """
         pulumi.set(__self__, "max_api_requests", max_api_requests)
         pulumi.set(__self__, "throttling_object_id", throttling_object_id)
@@ -1933,7 +2095,7 @@ class ThrottlingPolicyUserThrottle(dict):
     @pulumi.getter
     def id(self) -> Optional[str]:
         """
-        ID of the special application throttling policy.
+        ID of the special user/application throttling policy.
         """
         return pulumi.get(self, "id")
 
@@ -1941,7 +2103,7 @@ class ThrottlingPolicyUserThrottle(dict):
     @pulumi.getter(name="throttlingObjectName")
     def throttling_object_name(self) -> Optional[str]:
         """
-        The object name which the special application throttling policy belongs.
+        The object name which the special user/application throttling policy belongs.
         """
         return pulumi.get(self, "throttling_object_name")
 
@@ -1971,12 +2133,12 @@ class VpcChannelMember(dict):
                  weight: Optional[int] = None):
         """
         :param str id: Specifies the ECS ID for each backend servers.
-               Required if `member_type` is *ECS*.
+               Required if the `member_type` is **ECS**.
                This parameter and `ip_address` are alternative.
         :param str ip_address: Specifies the IP address each backend servers.
-               Required if `member_type` is *EIP*.
+               Required if the `member_type` is **EIP**.
         :param int weight: Specifies the backend server weight.
-               The valid values are range from 1 to 100, default to 1.
+               The valid value ranges from `1` to `100`, defaults to `1`.
         """
         if id is not None:
             pulumi.set(__self__, "id", id)
@@ -1990,7 +2152,7 @@ class VpcChannelMember(dict):
     def id(self) -> Optional[str]:
         """
         Specifies the ECS ID for each backend servers.
-        Required if `member_type` is *ECS*.
+        Required if the `member_type` is **ECS**.
         This parameter and `ip_address` are alternative.
         """
         return pulumi.get(self, "id")
@@ -2000,7 +2162,7 @@ class VpcChannelMember(dict):
     def ip_address(self) -> Optional[str]:
         """
         Specifies the IP address each backend servers.
-        Required if `member_type` is *EIP*.
+        Required if the `member_type` is **EIP**.
         """
         return pulumi.get(self, "ip_address")
 
@@ -2009,7 +2171,7 @@ class VpcChannelMember(dict):
     def weight(self) -> Optional[int]:
         """
         Specifies the backend server weight.
-        The valid values are range from 1 to 100, default to 1.
+        The valid value ranges from `1` to `100`, defaults to `1`.
         """
         return pulumi.get(self, "weight")
 

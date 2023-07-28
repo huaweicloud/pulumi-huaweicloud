@@ -33,9 +33,13 @@ export class PeeringConnectionAccepter extends pulumi.CustomResource {
     }
 
     /**
-     * - Whether or not to accept the peering request. Defaults to `false`.
+     * Whether or not to accept the peering request. Defaults to `false`.
      */
     public readonly accept!: pulumi.Output<boolean | undefined>;
+    /**
+     * The description of the VPC peering connection.
+     */
+    public /*out*/ readonly description!: pulumi.Output<string>;
     /**
      * The VPC peering connection name.
      */
@@ -62,7 +66,7 @@ export class PeeringConnectionAccepter extends pulumi.CustomResource {
      */
     public /*out*/ readonly vpcId!: pulumi.Output<string>;
     /**
-     * - The VPC Peering Connection ID to manage. Changing this
+     * The VPC Peering Connection ID to manage. Changing this
      * creates a new VPC peering connection accepter.
      */
     public readonly vpcPeeringConnectionId!: pulumi.Output<string>;
@@ -81,6 +85,7 @@ export class PeeringConnectionAccepter extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as PeeringConnectionAccepterState | undefined;
             resourceInputs["accept"] = state ? state.accept : undefined;
+            resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["peerTenantId"] = state ? state.peerTenantId : undefined;
             resourceInputs["peerVpcId"] = state ? state.peerVpcId : undefined;
@@ -96,6 +101,7 @@ export class PeeringConnectionAccepter extends pulumi.CustomResource {
             resourceInputs["accept"] = args ? args.accept : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["vpcPeeringConnectionId"] = args ? args.vpcPeeringConnectionId : undefined;
+            resourceInputs["description"] = undefined /*out*/;
             resourceInputs["name"] = undefined /*out*/;
             resourceInputs["peerTenantId"] = undefined /*out*/;
             resourceInputs["peerVpcId"] = undefined /*out*/;
@@ -112,9 +118,13 @@ export class PeeringConnectionAccepter extends pulumi.CustomResource {
  */
 export interface PeeringConnectionAccepterState {
     /**
-     * - Whether or not to accept the peering request. Defaults to `false`.
+     * Whether or not to accept the peering request. Defaults to `false`.
      */
     accept?: pulumi.Input<boolean>;
+    /**
+     * The description of the VPC peering connection.
+     */
+    description?: pulumi.Input<string>;
     /**
      * The VPC peering connection name.
      */
@@ -141,7 +151,7 @@ export interface PeeringConnectionAccepterState {
      */
     vpcId?: pulumi.Input<string>;
     /**
-     * - The VPC Peering Connection ID to manage. Changing this
+     * The VPC Peering Connection ID to manage. Changing this
      * creates a new VPC peering connection accepter.
      */
     vpcPeeringConnectionId?: pulumi.Input<string>;
@@ -152,7 +162,7 @@ export interface PeeringConnectionAccepterState {
  */
 export interface PeeringConnectionAccepterArgs {
     /**
-     * - Whether or not to accept the peering request. Defaults to `false`.
+     * Whether or not to accept the peering request. Defaults to `false`.
      */
     accept?: pulumi.Input<boolean>;
     /**
@@ -161,7 +171,7 @@ export interface PeeringConnectionAccepterArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * - The VPC Peering Connection ID to manage. Changing this
+     * The VPC Peering Connection ID to manage. Changing this
      * creates a new VPC peering connection accepter.
      */
     vpcPeeringConnectionId: pulumi.Input<string>;

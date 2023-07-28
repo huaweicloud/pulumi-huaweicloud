@@ -15,27 +15,59 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const alarmRule = new huaweicloud.cse.Alarmrule("alarmRule", {
- *     alarmName: "alarm_rule",
+ * const config = new pulumi.Config();
+ * const instanceId1 = config.requireObject("instanceId1");
+ * const instanceId2 = config.requireObject("instanceId2");
+ * const topicUrn = config.requireObject("topicUrn");
+ * const test = new huaweicloud.cse.Alarmrule("test", {
+ *     alarmName: "rule-test",
+ *     alarmActionEnabled: true,
+ *     alarmEnabled: true,
+ *     alarmType: "MULTI_INSTANCE",
  *     metric: {
  *         namespace: "SYS.ECS",
- *         metricName: "network_outgoing_bytes_rate_inband",
- *         dimensions: [{
- *             name: "instance_id",
- *             value: _var.webserver_instance_id,
- *         }],
  *     },
- *     condition: {
- *         period: 300,
- *         filter: "average",
- *         comparisonOperator: ">",
- *         value: 6,
- *         unit: "B/s",
- *         count: 1,
- *     },
+ *     resources: [
+ *         {
+ *             dimensions: [{
+ *                 name: "instance_id",
+ *                 value: instanceId1,
+ *             }],
+ *         },
+ *         {
+ *             dimensions: [{
+ *                 name: "instance_id",
+ *                 value: instanceId2,
+ *             }],
+ *         },
+ *     ],
+ *     conditions: [
+ *         {
+ *             period: 1200,
+ *             filter: "average",
+ *             comparisonOperator: ">",
+ *             value: 6.5,
+ *             unit: "B/s",
+ *             count: 1,
+ *             suppressDuration: 300,
+ *             metricName: "network_outgoing_bytes_rate_inband",
+ *             alarmLevel: 4,
+ *         },
+ *         {
+ *             period: 3600,
+ *             filter: "average",
+ *             comparisonOperator: ">=",
+ *             value: 20,
+ *             unit: "B/s",
+ *             count: 1,
+ *             suppressDuration: 300,
+ *             metricName: "network_outgoing_bytes_rate_inband",
+ *             alarmLevel: 4,
+ *         },
+ *     ],
  *     alarmActions: [{
  *         type: "notification",
- *         notificationLists: [_var.smn_topic_id],
+ *         notificationLists: [topicUrn],
  *     }],
  * });
  * ```
@@ -45,25 +77,29 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const alarmRule = new huaweicloud.cse.Alarmrule("alarmRule", {
- *     alarmName: "alarm_rule",
+ * const config = new pulumi.Config();
+ * const topicUrn = config.requireObject("topicUrn");
+ * const test = new huaweicloud.cse.Alarmrule("test", {
+ *     alarmName: "rule-test",
  *     alarmActionEnabled: true,
  *     alarmType: "EVENT.SYS",
  *     metric: {
  *         namespace: "SYS.ECS",
- *         metricName: "stopServer",
  *     },
- *     condition: {
+ *     conditions: [{
+ *         metricName: "stopServer",
  *         period: 0,
  *         filter: "average",
  *         comparisonOperator: ">=",
  *         value: 1,
  *         unit: "count",
  *         count: 1,
- *     },
+ *         suppressDuration: 0,
+ *         alarmLevel: 2,
+ *     }],
  *     alarmActions: [{
  *         type: "notification",
- *         notificationLists: [_var.smn_topic_id],
+ *         notificationLists: [topicUrn],
  *     }],
  * });
  * ```
@@ -111,7 +147,7 @@ export class Alarmrule extends pulumi.CustomResource {
     public readonly alarmActionEnabled!: pulumi.Output<boolean | undefined>;
     /**
      * Specifies the action triggered by an alarm. The structure is described
-     * below. Changing this creates a new resource.
+     * below.
      */
     public readonly alarmActions!: pulumi.Output<outputs.Cse.AlarmruleAlarmAction[] | undefined>;
     /**
@@ -123,11 +159,11 @@ export class Alarmrule extends pulumi.CustomResource {
      */
     public readonly alarmEnabled!: pulumi.Output<boolean | undefined>;
     /**
-     * Specifies the alarm severity. The value can be 1, 2, 3 or 4,
+     * Specifies the alarm severity of the condition. The value can be 1, 2, 3 or 4,
      * which indicates *critical*, *major*, *minor*, and *informational*, respectively.
      * The default value is 2.
      */
-    public readonly alarmLevel!: pulumi.Output<number | undefined>;
+    public readonly alarmLevel!: pulumi.Output<number>;
     /**
      * Specifies the name of an alarm rule. The value can be a string of 1 to 128
      * characters that can consist of letters, digits, underscores (_), hyphens (-) and chinese characters.
@@ -141,14 +177,14 @@ export class Alarmrule extends pulumi.CustomResource {
      */
     public /*out*/ readonly alarmState!: pulumi.Output<string>;
     /**
-     * Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**
-     * or **MULTI_INSTANCE**. Defaults to **MULTI_INSTANCE**.
+     * Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**,
+     * **MULTI_INSTANCE** and **ALL_INSTANCE**. Defaults to **MULTI_INSTANCE**.
      */
-    public readonly alarmType!: pulumi.Output<string>;
+    public readonly alarmType!: pulumi.Output<string | undefined>;
     /**
      * Specifies the alarm triggering condition. The structure is described below.
      */
-    public readonly condition!: pulumi.Output<outputs.Cse.AlarmruleCondition>;
+    public readonly conditions!: pulumi.Output<outputs.Cse.AlarmruleCondition[]>;
     /**
      * Specifies the enterprise project id of the alarm rule. Changing
      * this creates a new resource.
@@ -164,8 +200,18 @@ export class Alarmrule extends pulumi.CustomResource {
      */
     public readonly metric!: pulumi.Output<outputs.Cse.AlarmruleMetric>;
     /**
+     * Specifies the alarm notification start time, for
+     * example: **05:30**. Changing this creates a new resource.
+     */
+    public readonly notificationBeginTime!: pulumi.Output<string>;
+    /**
+     * Specifies the alarm notification stop time, for
+     * example: **22:10**. Changing this creates a new resource.
+     */
+    public readonly notificationEndTime!: pulumi.Output<string>;
+    /**
      * Specifies the action triggered by the clearing of an alarm. The structure is
-     * described below. Changing this creates a new resource.
+     * described below.
      */
     public readonly okActions!: pulumi.Output<outputs.Cse.AlarmruleOkAction[] | undefined>;
     /**
@@ -173,6 +219,15 @@ export class Alarmrule extends pulumi.CustomResource {
      * provider-level region will be used. Changing this creates a new resource.
      */
     public readonly region!: pulumi.Output<string>;
+    /**
+     * schema: Internal
+     */
+    public readonly resourceGroupId!: pulumi.Output<string>;
+    /**
+     * Specifies the list of the resources to add into the alarm rule.
+     * The structure is described below.
+     */
+    public readonly resources!: pulumi.Output<outputs.Cse.AlarmruleResource[]>;
     /**
      * Indicates the time when the alarm status changed. The value is a UNIX timestamp and the unit is ms.
      */
@@ -199,20 +254,24 @@ export class Alarmrule extends pulumi.CustomResource {
             resourceInputs["alarmName"] = state ? state.alarmName : undefined;
             resourceInputs["alarmState"] = state ? state.alarmState : undefined;
             resourceInputs["alarmType"] = state ? state.alarmType : undefined;
-            resourceInputs["condition"] = state ? state.condition : undefined;
+            resourceInputs["conditions"] = state ? state.conditions : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["insufficientdataActions"] = state ? state.insufficientdataActions : undefined;
             resourceInputs["metric"] = state ? state.metric : undefined;
+            resourceInputs["notificationBeginTime"] = state ? state.notificationBeginTime : undefined;
+            resourceInputs["notificationEndTime"] = state ? state.notificationEndTime : undefined;
             resourceInputs["okActions"] = state ? state.okActions : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["resourceGroupId"] = state ? state.resourceGroupId : undefined;
+            resourceInputs["resources"] = state ? state.resources : undefined;
             resourceInputs["updateTime"] = state ? state.updateTime : undefined;
         } else {
             const args = argsOrState as AlarmruleArgs | undefined;
             if ((!args || args.alarmName === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'alarmName'");
             }
-            if ((!args || args.condition === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'condition'");
+            if ((!args || args.conditions === undefined) && !opts.urn) {
+                throw new Error("Missing required property 'conditions'");
             }
             if ((!args || args.metric === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'metric'");
@@ -224,12 +283,16 @@ export class Alarmrule extends pulumi.CustomResource {
             resourceInputs["alarmLevel"] = args ? args.alarmLevel : undefined;
             resourceInputs["alarmName"] = args ? args.alarmName : undefined;
             resourceInputs["alarmType"] = args ? args.alarmType : undefined;
-            resourceInputs["condition"] = args ? args.condition : undefined;
+            resourceInputs["conditions"] = args ? args.conditions : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["insufficientdataActions"] = args ? args.insufficientdataActions : undefined;
             resourceInputs["metric"] = args ? args.metric : undefined;
+            resourceInputs["notificationBeginTime"] = args ? args.notificationBeginTime : undefined;
+            resourceInputs["notificationEndTime"] = args ? args.notificationEndTime : undefined;
             resourceInputs["okActions"] = args ? args.okActions : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["resourceGroupId"] = args ? args.resourceGroupId : undefined;
+            resourceInputs["resources"] = args ? args.resources : undefined;
             resourceInputs["alarmState"] = undefined /*out*/;
             resourceInputs["updateTime"] = undefined /*out*/;
         }
@@ -249,7 +312,7 @@ export interface AlarmruleState {
     alarmActionEnabled?: pulumi.Input<boolean>;
     /**
      * Specifies the action triggered by an alarm. The structure is described
-     * below. Changing this creates a new resource.
+     * below.
      */
     alarmActions?: pulumi.Input<pulumi.Input<inputs.Cse.AlarmruleAlarmAction>[]>;
     /**
@@ -261,7 +324,7 @@ export interface AlarmruleState {
      */
     alarmEnabled?: pulumi.Input<boolean>;
     /**
-     * Specifies the alarm severity. The value can be 1, 2, 3 or 4,
+     * Specifies the alarm severity of the condition. The value can be 1, 2, 3 or 4,
      * which indicates *critical*, *major*, *minor*, and *informational*, respectively.
      * The default value is 2.
      */
@@ -279,14 +342,14 @@ export interface AlarmruleState {
      */
     alarmState?: pulumi.Input<string>;
     /**
-     * Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**
-     * or **MULTI_INSTANCE**. Defaults to **MULTI_INSTANCE**.
+     * Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**,
+     * **MULTI_INSTANCE** and **ALL_INSTANCE**. Defaults to **MULTI_INSTANCE**.
      */
     alarmType?: pulumi.Input<string>;
     /**
      * Specifies the alarm triggering condition. The structure is described below.
      */
-    condition?: pulumi.Input<inputs.Cse.AlarmruleCondition>;
+    conditions?: pulumi.Input<pulumi.Input<inputs.Cse.AlarmruleCondition>[]>;
     /**
      * Specifies the enterprise project id of the alarm rule. Changing
      * this creates a new resource.
@@ -302,8 +365,18 @@ export interface AlarmruleState {
      */
     metric?: pulumi.Input<inputs.Cse.AlarmruleMetric>;
     /**
+     * Specifies the alarm notification start time, for
+     * example: **05:30**. Changing this creates a new resource.
+     */
+    notificationBeginTime?: pulumi.Input<string>;
+    /**
+     * Specifies the alarm notification stop time, for
+     * example: **22:10**. Changing this creates a new resource.
+     */
+    notificationEndTime?: pulumi.Input<string>;
+    /**
      * Specifies the action triggered by the clearing of an alarm. The structure is
-     * described below. Changing this creates a new resource.
+     * described below.
      */
     okActions?: pulumi.Input<pulumi.Input<inputs.Cse.AlarmruleOkAction>[]>;
     /**
@@ -311,6 +384,15 @@ export interface AlarmruleState {
      * provider-level region will be used. Changing this creates a new resource.
      */
     region?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
+    resourceGroupId?: pulumi.Input<string>;
+    /**
+     * Specifies the list of the resources to add into the alarm rule.
+     * The structure is described below.
+     */
+    resources?: pulumi.Input<pulumi.Input<inputs.Cse.AlarmruleResource>[]>;
     /**
      * Indicates the time when the alarm status changed. The value is a UNIX timestamp and the unit is ms.
      */
@@ -328,7 +410,7 @@ export interface AlarmruleArgs {
     alarmActionEnabled?: pulumi.Input<boolean>;
     /**
      * Specifies the action triggered by an alarm. The structure is described
-     * below. Changing this creates a new resource.
+     * below.
      */
     alarmActions?: pulumi.Input<pulumi.Input<inputs.Cse.AlarmruleAlarmAction>[]>;
     /**
@@ -340,7 +422,7 @@ export interface AlarmruleArgs {
      */
     alarmEnabled?: pulumi.Input<boolean>;
     /**
-     * Specifies the alarm severity. The value can be 1, 2, 3 or 4,
+     * Specifies the alarm severity of the condition. The value can be 1, 2, 3 or 4,
      * which indicates *critical*, *major*, *minor*, and *informational*, respectively.
      * The default value is 2.
      */
@@ -351,14 +433,14 @@ export interface AlarmruleArgs {
      */
     alarmName: pulumi.Input<string>;
     /**
-     * Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**
-     * or **MULTI_INSTANCE**. Defaults to **MULTI_INSTANCE**.
+     * Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**,
+     * **MULTI_INSTANCE** and **ALL_INSTANCE**. Defaults to **MULTI_INSTANCE**.
      */
     alarmType?: pulumi.Input<string>;
     /**
      * Specifies the alarm triggering condition. The structure is described below.
      */
-    condition: pulumi.Input<inputs.Cse.AlarmruleCondition>;
+    conditions: pulumi.Input<pulumi.Input<inputs.Cse.AlarmruleCondition>[]>;
     /**
      * Specifies the enterprise project id of the alarm rule. Changing
      * this creates a new resource.
@@ -374,8 +456,18 @@ export interface AlarmruleArgs {
      */
     metric: pulumi.Input<inputs.Cse.AlarmruleMetric>;
     /**
+     * Specifies the alarm notification start time, for
+     * example: **05:30**. Changing this creates a new resource.
+     */
+    notificationBeginTime?: pulumi.Input<string>;
+    /**
+     * Specifies the alarm notification stop time, for
+     * example: **22:10**. Changing this creates a new resource.
+     */
+    notificationEndTime?: pulumi.Input<string>;
+    /**
      * Specifies the action triggered by the clearing of an alarm. The structure is
-     * described below. Changing this creates a new resource.
+     * described below.
      */
     okActions?: pulumi.Input<pulumi.Input<inputs.Cse.AlarmruleOkAction>[]>;
     /**
@@ -383,4 +475,13 @@ export interface AlarmruleArgs {
      * provider-level region will be used. Changing this creates a new resource.
      */
     region?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
+    resourceGroupId?: pulumi.Input<string>;
+    /**
+     * Specifies the list of the resources to add into the alarm rule.
+     * The structure is described below.
+     */
+    resources?: pulumi.Input<pulumi.Input<inputs.Cse.AlarmruleResource>[]>;
 }

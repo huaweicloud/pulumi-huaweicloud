@@ -6,6 +6,8 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
+ * !> **WARNING:** It has been deprecated.
+ *
  * Manages a VPC channel resource within HuaweiCloud.
  *
  * ## Example Usage
@@ -40,10 +42,10 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * VPC Channels can be imported using their `name` and ID of the APIG dedicated instance to which the channel belongs, separated by a slash, e.g.
+ * VPC Channels can be imported using their `name` and the ID of the related dedicated instance, separated by a slash, e.g.
  *
  * ```sh
- *  $ pulumi import huaweicloud:DedicatedApig/vpcChannel:VpcChannel test <instance id>/<channel name>
+ *  $ pulumi import huaweicloud:DedicatedApig/vpcChannel:VpcChannel test <instance_id>/<name>
  * ```
  */
 export class VpcChannel extends pulumi.CustomResource {
@@ -75,86 +77,92 @@ export class VpcChannel extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies the type of the backend service.
-     * The valid types are *WRR*, *WLC*, *SH* and *URI hashing*, default to *WRR*.
+     * Specifies the distribution algorithm.  
+     * The valid types are **WRR**, **WLC**, **SH** and **URI hashing**, defaults to **WRR**.
      */
     public readonly algorithm!: pulumi.Output<string | undefined>;
     /**
-     * Time when the channel created, in UTC format.
+     * The time when the VPC channel was created.
      */
-    public /*out*/ readonly createTime!: pulumi.Output<string>;
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
     /**
      * Specifies the healthy threshold, which refers to the number of consecutive
      * successful checks required for a backend server to be considered healthy.
-     * The valid value is range from 2 to 10, default to 2.
+     * The valid value ranges from `2` to `10`, defaults to `2`.
      */
     public readonly healthyThreshold!: pulumi.Output<number | undefined>;
+    /**
+     * Specifies the response codes for determining a successful HTTP response.  
+     * The valid value ranges from `100` to `599` and the valid formats are as follows:
+     * + The multiple values, for example, **200,201,202**.
+     * + The range, for example, **200-299**.
+     * + Both multiple values and ranges, for example, **201,202,210-299**.
+     */
     public readonly httpCode!: pulumi.Output<string | undefined>;
     /**
-     * Specifies an ID of the APIG dedicated instance to which the APIG
-     * vpc channel belongs to.
-     * Changing this will create a new VPC channel resource.
+     * Specifies the ID of the dedicated instance to which the VPC channel
+     * belongs.
+     * Changing this will create a new resource.
      */
     public readonly instanceId!: pulumi.Output<string>;
     /**
-     * Specifies the interval between consecutive checks, in second.
-     * The valid value is range from 5 to 300, default to 10.
+     * Specifies the interval between consecutive checks, in second.  
+     * The valid value ranges from `5` to `300`, defaults to `10`.
      */
     public readonly interval!: pulumi.Output<number | undefined>;
     /**
-     * Specifies the type of the backend service.
-     * The valid types are *ECS* and *EIP*, default to *ECS*.
+     * Specifies the member type of the VPC channel.  
+     * The valid types are **ECS** and **EIP**, defaults to **ECS**.
      */
     public readonly memberType!: pulumi.Output<string | undefined>;
     /**
-     * Specifies an array of one or more backend server IDs or IP addresses that bind the VPC
-     * channel.
+     * Specifies the configuration of the backend servers that bind the VPC channel.  
      * The object structure is documented below.
      */
     public readonly members!: pulumi.Output<outputs.DedicatedApig.VpcChannelMember[]>;
     /**
-     * Specifies the name of the VPC channel.
-     * The channel name consists of 3 to 64 characters, starting with a letter.
-     * Only letters, digits and underscores (_) are allowed.
-     * Chinese characters must be in UTF-8 or Unicode format.
+     * Specifies the name of the VPC channel.  
+     * The valid length is limited from `3` to `64`, only chinese and english letters, digits, hyphens (-), underscores (_)
+     * and dots (.) are allowed.
+     * The name must start with a chinese or english letter, and the Chinese characters must be in **UTF-8** or **Unicode**
+     * format.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Specifies the destination path for health checks.
-     * Required if `protocol` is *HTTP* or *HTTPS*.
+     * Specifies the destination path for health checks.  
+     * Required if the `protocol` is **HTTP** or **HTTPS**.
      */
     public readonly path!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the host port of the VPC channel.
-     * The valid value is range from 1 to 65535.
+     * Specifies the host port of the VPC channel.  
+     * The valid value ranges from `1` to `65,535`.
      */
     public readonly port!: pulumi.Output<number>;
     /**
      * Specifies the protocol for performing health checks on backend servers in the VPC
      * channel.
-     * The valid values are *TCP*, *HTTP* and *HTTPS*, default to *TCP*.
+     * The valid values are **TCP**, **HTTP** and **HTTPS**, defaults to **TCP**.
      */
     public readonly protocol!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the region in which to create the VPC channel resource.
-     * If omitted, the provider-level region will be used.
-     * Changing this will create a new VPC channel resource.
+     * Specifies the region where the VPC channel is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * The status of VPC channel, supports *Normal* and *Abnormal*.
+     * The current status of the VPC channel, supports **Normal** and **Abnormal**.
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
-     * Specifies the timeout for determining whether a health check fails, in second.
-     * The value must be less than the value of time_interval.
-     * The valid value is range from 2 to 30, default to 5.
+     * Specifies the timeout for determining whether a health check fails, in second.  
+     * The value must be less than the value of the time `interval`.
+     * The valid value ranges from `2` to `30`, defaults to `5`.
      */
     public readonly timeout!: pulumi.Output<number | undefined>;
     /**
      * Specifies the unhealthy threshold, which refers to the number of consecutive
      * failed checks required for a backend server to be considered unhealthy.
-     * The valid value is range from 2 to 10, default to 5.
+     * The valid value ranges from `2` to `10`, defaults to `5`.
      */
     public readonly unhealthyThreshold!: pulumi.Output<number | undefined>;
 
@@ -172,7 +180,7 @@ export class VpcChannel extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as VpcChannelState | undefined;
             resourceInputs["algorithm"] = state ? state.algorithm : undefined;
-            resourceInputs["createTime"] = state ? state.createTime : undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["healthyThreshold"] = state ? state.healthyThreshold : undefined;
             resourceInputs["httpCode"] = state ? state.httpCode : undefined;
             resourceInputs["instanceId"] = state ? state.instanceId : undefined;
@@ -212,7 +220,7 @@ export class VpcChannel extends pulumi.CustomResource {
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["timeout"] = args ? args.timeout : undefined;
             resourceInputs["unhealthyThreshold"] = args ? args.unhealthyThreshold : undefined;
-            resourceInputs["createTime"] = undefined /*out*/;
+            resourceInputs["createdAt"] = undefined /*out*/;
             resourceInputs["status"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
@@ -225,86 +233,92 @@ export class VpcChannel extends pulumi.CustomResource {
  */
 export interface VpcChannelState {
     /**
-     * Specifies the type of the backend service.
-     * The valid types are *WRR*, *WLC*, *SH* and *URI hashing*, default to *WRR*.
+     * Specifies the distribution algorithm.  
+     * The valid types are **WRR**, **WLC**, **SH** and **URI hashing**, defaults to **WRR**.
      */
     algorithm?: pulumi.Input<string>;
     /**
-     * Time when the channel created, in UTC format.
+     * The time when the VPC channel was created.
      */
-    createTime?: pulumi.Input<string>;
+    createdAt?: pulumi.Input<string>;
     /**
      * Specifies the healthy threshold, which refers to the number of consecutive
      * successful checks required for a backend server to be considered healthy.
-     * The valid value is range from 2 to 10, default to 2.
+     * The valid value ranges from `2` to `10`, defaults to `2`.
      */
     healthyThreshold?: pulumi.Input<number>;
+    /**
+     * Specifies the response codes for determining a successful HTTP response.  
+     * The valid value ranges from `100` to `599` and the valid formats are as follows:
+     * + The multiple values, for example, **200,201,202**.
+     * + The range, for example, **200-299**.
+     * + Both multiple values and ranges, for example, **201,202,210-299**.
+     */
     httpCode?: pulumi.Input<string>;
     /**
-     * Specifies an ID of the APIG dedicated instance to which the APIG
-     * vpc channel belongs to.
-     * Changing this will create a new VPC channel resource.
+     * Specifies the ID of the dedicated instance to which the VPC channel
+     * belongs.
+     * Changing this will create a new resource.
      */
     instanceId?: pulumi.Input<string>;
     /**
-     * Specifies the interval between consecutive checks, in second.
-     * The valid value is range from 5 to 300, default to 10.
+     * Specifies the interval between consecutive checks, in second.  
+     * The valid value ranges from `5` to `300`, defaults to `10`.
      */
     interval?: pulumi.Input<number>;
     /**
-     * Specifies the type of the backend service.
-     * The valid types are *ECS* and *EIP*, default to *ECS*.
+     * Specifies the member type of the VPC channel.  
+     * The valid types are **ECS** and **EIP**, defaults to **ECS**.
      */
     memberType?: pulumi.Input<string>;
     /**
-     * Specifies an array of one or more backend server IDs or IP addresses that bind the VPC
-     * channel.
+     * Specifies the configuration of the backend servers that bind the VPC channel.  
      * The object structure is documented below.
      */
     members?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.VpcChannelMember>[]>;
     /**
-     * Specifies the name of the VPC channel.
-     * The channel name consists of 3 to 64 characters, starting with a letter.
-     * Only letters, digits and underscores (_) are allowed.
-     * Chinese characters must be in UTF-8 or Unicode format.
+     * Specifies the name of the VPC channel.  
+     * The valid length is limited from `3` to `64`, only chinese and english letters, digits, hyphens (-), underscores (_)
+     * and dots (.) are allowed.
+     * The name must start with a chinese or english letter, and the Chinese characters must be in **UTF-8** or **Unicode**
+     * format.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the destination path for health checks.
-     * Required if `protocol` is *HTTP* or *HTTPS*.
+     * Specifies the destination path for health checks.  
+     * Required if the `protocol` is **HTTP** or **HTTPS**.
      */
     path?: pulumi.Input<string>;
     /**
-     * Specifies the host port of the VPC channel.
-     * The valid value is range from 1 to 65535.
+     * Specifies the host port of the VPC channel.  
+     * The valid value ranges from `1` to `65,535`.
      */
     port?: pulumi.Input<number>;
     /**
      * Specifies the protocol for performing health checks on backend servers in the VPC
      * channel.
-     * The valid values are *TCP*, *HTTP* and *HTTPS*, default to *TCP*.
+     * The valid values are **TCP**, **HTTP** and **HTTPS**, defaults to **TCP**.
      */
     protocol?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to create the VPC channel resource.
-     * If omitted, the provider-level region will be used.
-     * Changing this will create a new VPC channel resource.
+     * Specifies the region where the VPC channel is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * The status of VPC channel, supports *Normal* and *Abnormal*.
+     * The current status of the VPC channel, supports **Normal** and **Abnormal**.
      */
     status?: pulumi.Input<string>;
     /**
-     * Specifies the timeout for determining whether a health check fails, in second.
-     * The value must be less than the value of time_interval.
-     * The valid value is range from 2 to 30, default to 5.
+     * Specifies the timeout for determining whether a health check fails, in second.  
+     * The value must be less than the value of the time `interval`.
+     * The valid value ranges from `2` to `30`, defaults to `5`.
      */
     timeout?: pulumi.Input<number>;
     /**
      * Specifies the unhealthy threshold, which refers to the number of consecutive
      * failed checks required for a backend server to be considered unhealthy.
-     * The valid value is range from 2 to 10, default to 5.
+     * The valid value ranges from `2` to `10`, defaults to `5`.
      */
     unhealthyThreshold?: pulumi.Input<number>;
 }
@@ -314,78 +328,84 @@ export interface VpcChannelState {
  */
 export interface VpcChannelArgs {
     /**
-     * Specifies the type of the backend service.
-     * The valid types are *WRR*, *WLC*, *SH* and *URI hashing*, default to *WRR*.
+     * Specifies the distribution algorithm.  
+     * The valid types are **WRR**, **WLC**, **SH** and **URI hashing**, defaults to **WRR**.
      */
     algorithm?: pulumi.Input<string>;
     /**
      * Specifies the healthy threshold, which refers to the number of consecutive
      * successful checks required for a backend server to be considered healthy.
-     * The valid value is range from 2 to 10, default to 2.
+     * The valid value ranges from `2` to `10`, defaults to `2`.
      */
     healthyThreshold?: pulumi.Input<number>;
+    /**
+     * Specifies the response codes for determining a successful HTTP response.  
+     * The valid value ranges from `100` to `599` and the valid formats are as follows:
+     * + The multiple values, for example, **200,201,202**.
+     * + The range, for example, **200-299**.
+     * + Both multiple values and ranges, for example, **201,202,210-299**.
+     */
     httpCode?: pulumi.Input<string>;
     /**
-     * Specifies an ID of the APIG dedicated instance to which the APIG
-     * vpc channel belongs to.
-     * Changing this will create a new VPC channel resource.
+     * Specifies the ID of the dedicated instance to which the VPC channel
+     * belongs.
+     * Changing this will create a new resource.
      */
     instanceId: pulumi.Input<string>;
     /**
-     * Specifies the interval between consecutive checks, in second.
-     * The valid value is range from 5 to 300, default to 10.
+     * Specifies the interval between consecutive checks, in second.  
+     * The valid value ranges from `5` to `300`, defaults to `10`.
      */
     interval?: pulumi.Input<number>;
     /**
-     * Specifies the type of the backend service.
-     * The valid types are *ECS* and *EIP*, default to *ECS*.
+     * Specifies the member type of the VPC channel.  
+     * The valid types are **ECS** and **EIP**, defaults to **ECS**.
      */
     memberType?: pulumi.Input<string>;
     /**
-     * Specifies an array of one or more backend server IDs or IP addresses that bind the VPC
-     * channel.
+     * Specifies the configuration of the backend servers that bind the VPC channel.  
      * The object structure is documented below.
      */
     members: pulumi.Input<pulumi.Input<inputs.DedicatedApig.VpcChannelMember>[]>;
     /**
-     * Specifies the name of the VPC channel.
-     * The channel name consists of 3 to 64 characters, starting with a letter.
-     * Only letters, digits and underscores (_) are allowed.
-     * Chinese characters must be in UTF-8 or Unicode format.
+     * Specifies the name of the VPC channel.  
+     * The valid length is limited from `3` to `64`, only chinese and english letters, digits, hyphens (-), underscores (_)
+     * and dots (.) are allowed.
+     * The name must start with a chinese or english letter, and the Chinese characters must be in **UTF-8** or **Unicode**
+     * format.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the destination path for health checks.
-     * Required if `protocol` is *HTTP* or *HTTPS*.
+     * Specifies the destination path for health checks.  
+     * Required if the `protocol` is **HTTP** or **HTTPS**.
      */
     path?: pulumi.Input<string>;
     /**
-     * Specifies the host port of the VPC channel.
-     * The valid value is range from 1 to 65535.
+     * Specifies the host port of the VPC channel.  
+     * The valid value ranges from `1` to `65,535`.
      */
     port: pulumi.Input<number>;
     /**
      * Specifies the protocol for performing health checks on backend servers in the VPC
      * channel.
-     * The valid values are *TCP*, *HTTP* and *HTTPS*, default to *TCP*.
+     * The valid values are **TCP**, **HTTP** and **HTTPS**, defaults to **TCP**.
      */
     protocol?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to create the VPC channel resource.
-     * If omitted, the provider-level region will be used.
-     * Changing this will create a new VPC channel resource.
+     * Specifies the region where the VPC channel is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the timeout for determining whether a health check fails, in second.
-     * The value must be less than the value of time_interval.
-     * The valid value is range from 2 to 30, default to 5.
+     * Specifies the timeout for determining whether a health check fails, in second.  
+     * The value must be less than the value of the time `interval`.
+     * The valid value ranges from `2` to `30`, defaults to `5`.
      */
     timeout?: pulumi.Input<number>;
     /**
      * Specifies the unhealthy threshold, which refers to the number of consecutive
      * failed checks required for a backend server to be considered unhealthy.
-     * The valid value is range from 2 to 10, default to 5.
+     * The valid value ranges from `2` to `10`, defaults to `5`.
      */
     unhealthyThreshold?: pulumi.Input<number>;
 }

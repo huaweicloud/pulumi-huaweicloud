@@ -75,6 +75,9 @@ class GetVpcResult:
     @property
     @pulumi.getter(name="subnetNum")
     def subnet_num(self) -> int:
+        """
+        Indicates the number of subnets.
+        """
         return pulumi.get(self, "subnet_num")
 
 

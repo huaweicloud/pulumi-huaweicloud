@@ -66,8 +66,6 @@ type LookupNodePoolArgs struct {
 	Region *string `pulumi:"region"`
 	// Specifies the state of the node pool.
 	Status *string `pulumi:"status"`
-	// Tags of a VM node, key/value pair format.
-	Tags map[string]string `pulumi:"tags"`
 }
 
 // A collection of values returned by getNodePool.
@@ -145,8 +143,6 @@ type LookupNodePoolOutputArgs struct {
 	Region pulumi.StringPtrInput `pulumi:"region"`
 	// Specifies the state of the node pool.
 	Status pulumi.StringPtrInput `pulumi:"status"`
-	// Tags of a VM node, key/value pair format.
-	Tags pulumi.StringMapInput `pulumi:"tags"`
 }
 
 func (LookupNodePoolOutputArgs) ElementType() reflect.Type {

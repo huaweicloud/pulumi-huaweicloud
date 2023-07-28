@@ -92,7 +92,8 @@ type LookupClusterResult struct {
 	Endpoints []GetClusterEndpoint `pulumi:"endpoints"`
 	// ENI network segment. Specified when creating a CCE Turbo cluster.
 	EniSubnetCidr string `pulumi:"eniSubnetCidr"`
-	// ENI subnet ID. Specified when creating a CCE Turbo cluster.
+	// The **IPv4 subnet ID** of the subnet where the ENI resides.
+	// Specified when creating a CCE Turbo cluster.
 	EniSubnetId string `pulumi:"eniSubnetId"`
 	// The enterprise project ID of the CCE cluster.
 	EnterpriseProjectId string `pulumi:"enterpriseProjectId"`
@@ -221,7 +222,8 @@ func (o LookupClusterResultOutput) EniSubnetCidr() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupClusterResult) string { return v.EniSubnetCidr }).(pulumi.StringOutput)
 }
 
-// ENI subnet ID. Specified when creating a CCE Turbo cluster.
+// The **IPv4 subnet ID** of the subnet where the ENI resides.
+// Specified when creating a CCE Turbo cluster.
 func (o LookupClusterResultOutput) EniSubnetId() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupClusterResult) string { return v.EniSubnetId }).(pulumi.StringOutput)
 }

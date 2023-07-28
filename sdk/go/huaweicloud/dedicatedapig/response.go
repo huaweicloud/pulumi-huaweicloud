@@ -57,35 +57,37 @@ import (
 //
 // ## Import
 //
-// API Responses can be imported using their `name` and IDs of the APIG dedicated instances and API groups to which the API response belongs, separated by a slash, e.g.
+// API Responses can be imported using their `name` and IDs of the APIG dedicated instances and API groups to which the API response belongs, separated by slashes, e.g.
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:DedicatedApig/response:Response test <instance id>/<group id>/<name>
+//	$ pulumi import huaweicloud:DedicatedApig/response:Response test <instance_id>/<group_id>/<name>
 //
 // ```
 type Response struct {
 	pulumi.CustomResourceState
 
-	// Time when the API custom response is created.
-	CreateTime pulumi.StringOutput `pulumi:"createTime"`
-	// Specifies the ID of the API group to which the API response belongs to.
-	// Changing this will create a new API custom response resource.
+	// The creation time of the API custom response.
+	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
+	// Specifies the ID of the API group to which the API custom response
+	// belongs.
+	// Changing this will create a new resource.
 	GroupId pulumi.StringOutput `pulumi:"groupId"`
-	// Specifies the ID of the APIG dedicated instance to which the API group
-	// where the API custom response belongs. Changing this will create a new API custom response resource.
+	// Specifies the ID of the dedicated instance to which the API group and the
+	// API custom response belong.
+	// Changing this will create a new resource.
 	InstanceId pulumi.StringOutput `pulumi:"instanceId"`
-	// Specifies the name of the API custom response. The name consists of 1 to 64 characters,
-	// and only letters, digits, hyphens(-), and underscores (_) are allowed.
+	// Specifies the name of the API custom response.\
+	// The valid length is limited from `1` to `64`, letters, digits, hyphens (-) and underscores (_) are allowed.
 	Name pulumi.StringOutput `pulumi:"name"`
-	// Specifies the region in which to create the API custom response resource. If
-	// omitted, the provider-level region will be used. Changing this will create a new API custom response resource.
+	// Specifies the region where the API custom response is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// Specifies the API custom response rules definition. The object structure is documented
-	// below.
+	// Specifies the API custom response rules definition.\
+	// The object structure is documented below.
 	Rules ResponseRuleArrayOutput `pulumi:"rules"`
-	// Time when the API custom response was last modified.
-	UpdateTime pulumi.StringOutput `pulumi:"updateTime"`
+	// The latest update time of the API custom response.
+	UpdatedAt pulumi.StringOutput `pulumi:"updatedAt"`
 }
 
 // NewResponse registers a new resource with the given unique name, arguments, and options.
@@ -124,47 +126,51 @@ func GetResponse(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Response resources.
 type responseState struct {
-	// Time when the API custom response is created.
-	CreateTime *string `pulumi:"createTime"`
-	// Specifies the ID of the API group to which the API response belongs to.
-	// Changing this will create a new API custom response resource.
+	// The creation time of the API custom response.
+	CreatedAt *string `pulumi:"createdAt"`
+	// Specifies the ID of the API group to which the API custom response
+	// belongs.
+	// Changing this will create a new resource.
 	GroupId *string `pulumi:"groupId"`
-	// Specifies the ID of the APIG dedicated instance to which the API group
-	// where the API custom response belongs. Changing this will create a new API custom response resource.
+	// Specifies the ID of the dedicated instance to which the API group and the
+	// API custom response belong.
+	// Changing this will create a new resource.
 	InstanceId *string `pulumi:"instanceId"`
-	// Specifies the name of the API custom response. The name consists of 1 to 64 characters,
-	// and only letters, digits, hyphens(-), and underscores (_) are allowed.
+	// Specifies the name of the API custom response.\
+	// The valid length is limited from `1` to `64`, letters, digits, hyphens (-) and underscores (_) are allowed.
 	Name *string `pulumi:"name"`
-	// Specifies the region in which to create the API custom response resource. If
-	// omitted, the provider-level region will be used. Changing this will create a new API custom response resource.
+	// Specifies the region where the API custom response is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies the API custom response rules definition. The object structure is documented
-	// below.
+	// Specifies the API custom response rules definition.\
+	// The object structure is documented below.
 	Rules []ResponseRule `pulumi:"rules"`
-	// Time when the API custom response was last modified.
-	UpdateTime *string `pulumi:"updateTime"`
+	// The latest update time of the API custom response.
+	UpdatedAt *string `pulumi:"updatedAt"`
 }
 
 type ResponseState struct {
-	// Time when the API custom response is created.
-	CreateTime pulumi.StringPtrInput
-	// Specifies the ID of the API group to which the API response belongs to.
-	// Changing this will create a new API custom response resource.
+	// The creation time of the API custom response.
+	CreatedAt pulumi.StringPtrInput
+	// Specifies the ID of the API group to which the API custom response
+	// belongs.
+	// Changing this will create a new resource.
 	GroupId pulumi.StringPtrInput
-	// Specifies the ID of the APIG dedicated instance to which the API group
-	// where the API custom response belongs. Changing this will create a new API custom response resource.
+	// Specifies the ID of the dedicated instance to which the API group and the
+	// API custom response belong.
+	// Changing this will create a new resource.
 	InstanceId pulumi.StringPtrInput
-	// Specifies the name of the API custom response. The name consists of 1 to 64 characters,
-	// and only letters, digits, hyphens(-), and underscores (_) are allowed.
+	// Specifies the name of the API custom response.\
+	// The valid length is limited from `1` to `64`, letters, digits, hyphens (-) and underscores (_) are allowed.
 	Name pulumi.StringPtrInput
-	// Specifies the region in which to create the API custom response resource. If
-	// omitted, the provider-level region will be used. Changing this will create a new API custom response resource.
+	// Specifies the region where the API custom response is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies the API custom response rules definition. The object structure is documented
-	// below.
+	// Specifies the API custom response rules definition.\
+	// The object structure is documented below.
 	Rules ResponseRuleArrayInput
-	// Time when the API custom response was last modified.
-	UpdateTime pulumi.StringPtrInput
+	// The latest update time of the API custom response.
+	UpdatedAt pulumi.StringPtrInput
 }
 
 func (ResponseState) ElementType() reflect.Type {
@@ -172,39 +178,43 @@ func (ResponseState) ElementType() reflect.Type {
 }
 
 type responseArgs struct {
-	// Specifies the ID of the API group to which the API response belongs to.
-	// Changing this will create a new API custom response resource.
+	// Specifies the ID of the API group to which the API custom response
+	// belongs.
+	// Changing this will create a new resource.
 	GroupId string `pulumi:"groupId"`
-	// Specifies the ID of the APIG dedicated instance to which the API group
-	// where the API custom response belongs. Changing this will create a new API custom response resource.
+	// Specifies the ID of the dedicated instance to which the API group and the
+	// API custom response belong.
+	// Changing this will create a new resource.
 	InstanceId string `pulumi:"instanceId"`
-	// Specifies the name of the API custom response. The name consists of 1 to 64 characters,
-	// and only letters, digits, hyphens(-), and underscores (_) are allowed.
+	// Specifies the name of the API custom response.\
+	// The valid length is limited from `1` to `64`, letters, digits, hyphens (-) and underscores (_) are allowed.
 	Name *string `pulumi:"name"`
-	// Specifies the region in which to create the API custom response resource. If
-	// omitted, the provider-level region will be used. Changing this will create a new API custom response resource.
+	// Specifies the region where the API custom response is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies the API custom response rules definition. The object structure is documented
-	// below.
+	// Specifies the API custom response rules definition.\
+	// The object structure is documented below.
 	Rules []ResponseRule `pulumi:"rules"`
 }
 
 // The set of arguments for constructing a Response resource.
 type ResponseArgs struct {
-	// Specifies the ID of the API group to which the API response belongs to.
-	// Changing this will create a new API custom response resource.
+	// Specifies the ID of the API group to which the API custom response
+	// belongs.
+	// Changing this will create a new resource.
 	GroupId pulumi.StringInput
-	// Specifies the ID of the APIG dedicated instance to which the API group
-	// where the API custom response belongs. Changing this will create a new API custom response resource.
+	// Specifies the ID of the dedicated instance to which the API group and the
+	// API custom response belong.
+	// Changing this will create a new resource.
 	InstanceId pulumi.StringInput
-	// Specifies the name of the API custom response. The name consists of 1 to 64 characters,
-	// and only letters, digits, hyphens(-), and underscores (_) are allowed.
+	// Specifies the name of the API custom response.\
+	// The valid length is limited from `1` to `64`, letters, digits, hyphens (-) and underscores (_) are allowed.
 	Name pulumi.StringPtrInput
-	// Specifies the region in which to create the API custom response resource. If
-	// omitted, the provider-level region will be used. Changing this will create a new API custom response resource.
+	// Specifies the region where the API custom response is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies the API custom response rules definition. The object structure is documented
-	// below.
+	// Specifies the API custom response rules definition.\
+	// The object structure is documented below.
 	Rules ResponseRuleArrayInput
 }
 
@@ -295,44 +305,46 @@ func (o ResponseOutput) ToResponseOutputWithContext(ctx context.Context) Respons
 	return o
 }
 
-// Time when the API custom response is created.
-func (o ResponseOutput) CreateTime() pulumi.StringOutput {
-	return o.ApplyT(func(v *Response) pulumi.StringOutput { return v.CreateTime }).(pulumi.StringOutput)
+// The creation time of the API custom response.
+func (o ResponseOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Response) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
 }
 
-// Specifies the ID of the API group to which the API response belongs to.
-// Changing this will create a new API custom response resource.
+// Specifies the ID of the API group to which the API custom response
+// belongs.
+// Changing this will create a new resource.
 func (o ResponseOutput) GroupId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Response) pulumi.StringOutput { return v.GroupId }).(pulumi.StringOutput)
 }
 
-// Specifies the ID of the APIG dedicated instance to which the API group
-// where the API custom response belongs. Changing this will create a new API custom response resource.
+// Specifies the ID of the dedicated instance to which the API group and the
+// API custom response belong.
+// Changing this will create a new resource.
 func (o ResponseOutput) InstanceId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Response) pulumi.StringOutput { return v.InstanceId }).(pulumi.StringOutput)
 }
 
-// Specifies the name of the API custom response. The name consists of 1 to 64 characters,
-// and only letters, digits, hyphens(-), and underscores (_) are allowed.
+// Specifies the name of the API custom response.\
+// The valid length is limited from `1` to `64`, letters, digits, hyphens (-) and underscores (_) are allowed.
 func (o ResponseOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Response) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the region in which to create the API custom response resource. If
-// omitted, the provider-level region will be used. Changing this will create a new API custom response resource.
+// Specifies the region where the API custom response is located.\
+// If omitted, the provider-level region will be used. Changing this will create a new resource.
 func (o ResponseOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Response) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Specifies the API custom response rules definition. The object structure is documented
-// below.
+// Specifies the API custom response rules definition.\
+// The object structure is documented below.
 func (o ResponseOutput) Rules() ResponseRuleArrayOutput {
 	return o.ApplyT(func(v *Response) ResponseRuleArrayOutput { return v.Rules }).(ResponseRuleArrayOutput)
 }
 
-// Time when the API custom response was last modified.
-func (o ResponseOutput) UpdateTime() pulumi.StringOutput {
-	return o.ApplyT(func(v *Response) pulumi.StringOutput { return v.UpdateTime }).(pulumi.StringOutput)
+// The latest update time of the API custom response.
+func (o ResponseOutput) UpdatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Response) pulumi.StringOutput { return v.UpdatedAt }).(pulumi.StringOutput)
 }
 
 type ResponseArrayOutput struct{ *pulumi.OutputState }

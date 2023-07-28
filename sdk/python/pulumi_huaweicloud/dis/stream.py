@@ -35,6 +35,7 @@ class StreamArgs:
                total of five times within one hour. After the stream is successfully scaled up or down, it cannot be scaled up or
                down again within the next one hour.
         :param pulumi.Input[str] stream_name: Name of the DIS stream to be created.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[int] auto_scale_max_partition_count: Maximum number of partition for automatic scaling.
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] auto_scale_min_partition_count: Minimum number of partition for automatic scaling.
@@ -101,6 +102,7 @@ class StreamArgs:
     def stream_name(self) -> pulumi.Input[str]:
         """
         Name of the DIS stream to be created.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "stream_name")
 
@@ -302,6 +304,7 @@ class _StreamState:
         :param pulumi.Input[str] status: The status of the partition.
         :param pulumi.Input[str] stream_id: Indicates a stream ID in UUID format.
         :param pulumi.Input[str] stream_name: Name of the DIS stream to be created.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] stream_type: Stream Type. The value is COMMON(means 1M bandwidth) or ADVANCED(means 5M
                bandwidth). Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the stream.
@@ -542,6 +545,7 @@ class _StreamState:
     def stream_name(self) -> Optional[pulumi.Input[str]]:
         """
         Name of the DIS stream to be created.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "stream_name")
 
@@ -665,6 +669,7 @@ class Stream(pulumi.CustomResource):
         :param pulumi.Input[int] retention_period: The number of hours for which data from the stream will be retained in DIS.
                Value range: `24` to `72`. Unit: `hour`. Default:`24`. Changing this parameter will create a new resource.
         :param pulumi.Input[str] stream_name: Name of the DIS stream to be created.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] stream_type: Stream Type. The value is COMMON(means 1M bandwidth) or ADVANCED(means 5M
                bandwidth). Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the stream.
@@ -833,6 +838,7 @@ class Stream(pulumi.CustomResource):
         :param pulumi.Input[str] status: The status of the partition.
         :param pulumi.Input[str] stream_id: Indicates a stream ID in UUID format.
         :param pulumi.Input[str] stream_name: Name of the DIS stream to be created.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] stream_type: Stream Type. The value is COMMON(means 1M bandwidth) or ADVANCED(means 5M
                bandwidth). Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the stream.
@@ -999,6 +1005,7 @@ class Stream(pulumi.CustomResource):
     def stream_name(self) -> pulumi.Output[str]:
         """
         Name of the DIS stream to be created.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "stream_name")
 

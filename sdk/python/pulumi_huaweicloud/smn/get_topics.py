@@ -79,7 +79,7 @@ class GetTopicsResult:
 
     @property
     @pulumi.getter
-    def region(self) -> Optional[str]:
+    def region(self) -> str:
         return pulumi.get(self, "region")
 
     @property

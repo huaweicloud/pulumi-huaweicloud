@@ -17,6 +17,8 @@ __all__ = [
     'AlarmruleMetric',
     'AlarmruleMetricDimension',
     'AlarmruleOkAction',
+    'AlarmruleResource',
+    'AlarmruleResourceDimension',
     'MicroserviceEngineConfigCenterAddress',
     'MicroserviceEngineServiceRegistryAddress',
     'MicroserviceInstanceDataCenter',
@@ -48,7 +50,7 @@ class AlarmruleAlarmAction(dict):
         """
         :param Sequence[str] notification_lists: specifies the list of objects to be notified if the alarm status changes, the
                maximum length is 5.
-        :param str type: specifies the type of action triggered by an alarm. the value is notification.
+        :param str type: Specifies the type of action triggered by an alarm. the value is notification.
                notification: indicates that a notification will be sent to the user.
         """
         pulumi.set(__self__, "notification_lists", notification_lists)
@@ -67,7 +69,7 @@ class AlarmruleAlarmAction(dict):
     @pulumi.getter
     def type(self) -> str:
         """
-        specifies the type of action triggered by an alarm. the value is notification.
+        Specifies the type of action triggered by an alarm. the value is notification.
         notification: indicates that a notification will be sent to the user.
         """
         return pulumi.get(self, "type")
@@ -80,6 +82,10 @@ class AlarmruleCondition(dict):
         suggest = None
         if key == "comparisonOperator":
             suggest = "comparison_operator"
+        elif key == "alarmLevel":
+            suggest = "alarm_level"
+        elif key == "metricName":
+            suggest = "metric_name"
         elif key == "suppressDuration":
             suggest = "suppress_duration"
 
@@ -99,7 +105,9 @@ class AlarmruleCondition(dict):
                  count: int,
                  filter: str,
                  period: int,
-                 value: int,
+                 value: float,
+                 alarm_level: Optional[int] = None,
+                 metric_name: Optional[str] = None,
                  suppress_duration: Optional[int] = None,
                  unit: Optional[str] = None):
         """
@@ -109,10 +117,16 @@ class AlarmruleCondition(dict):
         :param str filter: Specifies the data rollup methods. The value can be max, min, average, sum, and vaiance.
         :param int period: Specifies the alarm checking period in seconds. The value can be 0, 1, 300, 1200, 3600, 14400,
                and 86400.
-        :param int value: Specifies the alarm threshold. The value ranges from 0 to Number of
-               1.7976931348623157e+308.
+        :param float value: Specifies the alarm threshold. The value ranges from 0 to Number of
+               1.7976931348623157e+108.
+        :param int alarm_level: Specifies the alarm severity of the condition. The value can be 1, 2, 3 or 4,
+               which indicates *critical*, *major*, *minor*, and *informational*, respectively.
+               The default value is 2.
+        :param str metric_name: Specifies the metric name of the condition. The value can be a string of
+               1 to 64 characters that must start with a letter and contain only letters, digits, and underscores (_).
+               For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
         :param int suppress_duration: Specifies the interval for triggering an alarm if the alarm persists.
-               Changing this creates a new resource. Possible values are as follows:
+               Possible values are as follows:
                + **0**: Cloud Eye triggers the alarm only once;
                + **300**: Cloud Eye triggers the alarm every 5 minutes;
                + **600**: Cloud Eye triggers the alarm every 10 minutes;
@@ -123,7 +137,7 @@ class AlarmruleCondition(dict):
                + **21600**: Cloud Eye triggers the alarm every 6 hours;
                + **43200**: Cloud Eye triggers the alarm every 12 hour;
                + **86400**: Cloud Eye triggers the alarm every day.
-        :param str unit: Specifies the data unit. Changing this creates a new resource.
+        :param str unit: Specifies the data unit.
                For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
         """
         pulumi.set(__self__, "comparison_operator", comparison_operator)
@@ -131,6 +145,10 @@ class AlarmruleCondition(dict):
         pulumi.set(__self__, "filter", filter)
         pulumi.set(__self__, "period", period)
         pulumi.set(__self__, "value", value)
+        if alarm_level is not None:
+            pulumi.set(__self__, "alarm_level", alarm_level)
+        if metric_name is not None:
+            pulumi.set(__self__, "metric_name", metric_name)
         if suppress_duration is not None:
             pulumi.set(__self__, "suppress_duration", suppress_duration)
         if unit is not None:
@@ -172,19 +190,39 @@ class AlarmruleCondition(dict):
 
     @property
     @pulumi.getter
-    def value(self) -> int:
+    def value(self) -> float:
         """
         Specifies the alarm threshold. The value ranges from 0 to Number of
-        1.7976931348623157e+308.
+        1.7976931348623157e+108.
         """
         return pulumi.get(self, "value")
+
+    @property
+    @pulumi.getter(name="alarmLevel")
+    def alarm_level(self) -> Optional[int]:
+        """
+        Specifies the alarm severity of the condition. The value can be 1, 2, 3 or 4,
+        which indicates *critical*, *major*, *minor*, and *informational*, respectively.
+        The default value is 2.
+        """
+        return pulumi.get(self, "alarm_level")
+
+    @property
+    @pulumi.getter(name="metricName")
+    def metric_name(self) -> Optional[str]:
+        """
+        Specifies the metric name of the condition. The value can be a string of
+        1 to 64 characters that must start with a letter and contain only letters, digits, and underscores (_).
+        For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
+        """
+        return pulumi.get(self, "metric_name")
 
     @property
     @pulumi.getter(name="suppressDuration")
     def suppress_duration(self) -> Optional[int]:
         """
         Specifies the interval for triggering an alarm if the alarm persists.
-        Changing this creates a new resource. Possible values are as follows:
+        Possible values are as follows:
         + **0**: Cloud Eye triggers the alarm only once;
         + **300**: Cloud Eye triggers the alarm every 5 minutes;
         + **600**: Cloud Eye triggers the alarm every 10 minutes;
@@ -202,7 +240,7 @@ class AlarmruleCondition(dict):
     @pulumi.getter
     def unit(self) -> Optional[str]:
         """
-        Specifies the data unit. Changing this creates a new resource.
+        Specifies the data unit.
         For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
         """
         return pulumi.get(self, "unit")
@@ -233,7 +271,7 @@ class AlarmruleInsufficientdataAction(dict):
         """
         :param Sequence[str] notification_lists: specifies the list of objects to be notified if the alarm status changes, the
                maximum length is 5.
-        :param str type: specifies the type of action triggered by an alarm. the value is notification.
+        :param str type: Specifies the type of action triggered by an alarm. the value is notification.
                notification: indicates that a notification will be sent to the user.
         """
         pulumi.set(__self__, "notification_lists", notification_lists)
@@ -252,7 +290,7 @@ class AlarmruleInsufficientdataAction(dict):
     @pulumi.getter
     def type(self) -> str:
         """
-        specifies the type of action triggered by an alarm. the value is notification.
+        Specifies the type of action triggered by an alarm. the value is notification.
         notification: indicates that a notification will be sent to the user.
         """
         return pulumi.get(self, "type")
@@ -278,36 +316,24 @@ class AlarmruleMetric(dict):
         return super().get(key, default)
 
     def __init__(__self__, *,
-                 metric_name: str,
                  namespace: str,
-                 dimensions: Optional[Sequence['outputs.AlarmruleMetricDimension']] = None):
+                 dimensions: Optional[Sequence['outputs.AlarmruleMetricDimension']] = None,
+                 metric_name: Optional[str] = None):
         """
-        :param str metric_name: Specifies the metric name. The value can be a string of 1 to 64
-               characters that must start with a letter and contain only letters, digits, and underscores (_).
-               Changing this creates a new resource.
-               For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
         :param str namespace: Specifies the namespace in **service.item** format. **service** and **item**
                each must be a string that starts with a letter and contains only letters, digits, and underscores (_).
                Changing this creates a new resource.
                For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
         :param Sequence['AlarmruleMetricDimensionArgs'] dimensions: Specifies the list of metric dimensions. The structure is described below.
-               Changing this creates a new resource.
+        :param str metric_name: Specifies the metric name of the condition. The value can be a string of
+               1 to 64 characters that must start with a letter and contain only letters, digits, and underscores (_).
+               For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
         """
-        pulumi.set(__self__, "metric_name", metric_name)
         pulumi.set(__self__, "namespace", namespace)
         if dimensions is not None:
             pulumi.set(__self__, "dimensions", dimensions)
-
-    @property
-    @pulumi.getter(name="metricName")
-    def metric_name(self) -> str:
-        """
-        Specifies the metric name. The value can be a string of 1 to 64
-        characters that must start with a letter and contain only letters, digits, and underscores (_).
-        Changing this creates a new resource.
-        For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
-        """
-        return pulumi.get(self, "metric_name")
+        if metric_name is not None:
+            pulumi.set(__self__, "metric_name", metric_name)
 
     @property
     @pulumi.getter
@@ -325,25 +351,34 @@ class AlarmruleMetric(dict):
     def dimensions(self) -> Optional[Sequence['outputs.AlarmruleMetricDimension']]:
         """
         Specifies the list of metric dimensions. The structure is described below.
-        Changing this creates a new resource.
         """
         return pulumi.get(self, "dimensions")
+
+    @property
+    @pulumi.getter(name="metricName")
+    def metric_name(self) -> Optional[str]:
+        """
+        Specifies the metric name of the condition. The value can be a string of
+        1 to 64 characters that must start with a letter and contain only letters, digits, and underscores (_).
+        For details, see [Services Interconnected with Cloud Eye](https://support.huaweicloud.com/intl/en-us/api-ces/ces_03_0059.html).
+        """
+        return pulumi.get(self, "metric_name")
 
 
 @pulumi.output_type
 class AlarmruleMetricDimension(dict):
     def __init__(__self__, *,
                  name: str,
-                 value: str):
+                 value: Optional[str] = None):
         """
         :param str name: Specifies the dimension name. The value can be a string of 1 to 32 characters
                that must start with a letter and contain only letters, digits, underscores (_), and hyphens (-).
-               Changing this creates a new resource.
         :param str value: Specifies the alarm threshold. The value ranges from 0 to Number of
-               1.7976931348623157e+308.
+               1.7976931348623157e+108.
         """
         pulumi.set(__self__, "name", name)
-        pulumi.set(__self__, "value", value)
+        if value is not None:
+            pulumi.set(__self__, "value", value)
 
     @property
     @pulumi.getter
@@ -351,16 +386,15 @@ class AlarmruleMetricDimension(dict):
         """
         Specifies the dimension name. The value can be a string of 1 to 32 characters
         that must start with a letter and contain only letters, digits, underscores (_), and hyphens (-).
-        Changing this creates a new resource.
         """
         return pulumi.get(self, "name")
 
     @property
     @pulumi.getter
-    def value(self) -> str:
+    def value(self) -> Optional[str]:
         """
         Specifies the alarm threshold. The value ranges from 0 to Number of
-        1.7976931348623157e+308.
+        1.7976931348623157e+108.
         """
         return pulumi.get(self, "value")
 
@@ -390,7 +424,7 @@ class AlarmruleOkAction(dict):
         """
         :param Sequence[str] notification_lists: specifies the list of objects to be notified if the alarm status changes, the
                maximum length is 5.
-        :param str type: specifies the type of action triggered by an alarm. the value is notification.
+        :param str type: Specifies the type of action triggered by an alarm. the value is notification.
                notification: indicates that a notification will be sent to the user.
         """
         pulumi.set(__self__, "notification_lists", notification_lists)
@@ -409,10 +443,63 @@ class AlarmruleOkAction(dict):
     @pulumi.getter
     def type(self) -> str:
         """
-        specifies the type of action triggered by an alarm. the value is notification.
+        Specifies the type of action triggered by an alarm. the value is notification.
         notification: indicates that a notification will be sent to the user.
         """
         return pulumi.get(self, "type")
+
+
+@pulumi.output_type
+class AlarmruleResource(dict):
+    def __init__(__self__, *,
+                 dimensions: Optional[Sequence['outputs.AlarmruleResourceDimension']] = None):
+        """
+        :param Sequence['AlarmruleResourceDimensionArgs'] dimensions: Specifies the list of metric dimensions. The structure is described below.
+        """
+        if dimensions is not None:
+            pulumi.set(__self__, "dimensions", dimensions)
+
+    @property
+    @pulumi.getter
+    def dimensions(self) -> Optional[Sequence['outputs.AlarmruleResourceDimension']]:
+        """
+        Specifies the list of metric dimensions. The structure is described below.
+        """
+        return pulumi.get(self, "dimensions")
+
+
+@pulumi.output_type
+class AlarmruleResourceDimension(dict):
+    def __init__(__self__, *,
+                 name: str,
+                 value: Optional[str] = None):
+        """
+        :param str name: Specifies the dimension name. The value can be a string of 1 to 32 characters
+               that must start with a letter and contain only letters, digits, underscores (_), and hyphens (-).
+        :param str value: Specifies the alarm threshold. The value ranges from 0 to Number of
+               1.7976931348623157e+108.
+        """
+        pulumi.set(__self__, "name", name)
+        if value is not None:
+            pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the dimension name. The value can be a string of 1 to 32 characters
+        that must start with a letter and contain only letters, digits, underscores (_), and hyphens (-).
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def value(self) -> Optional[str]:
+        """
+        Specifies the alarm threshold. The value ranges from 0 to Number of
+        1.7976931348623157e+108.
+        """
+        return pulumi.get(self, "value")
 
 
 @pulumi.output_type

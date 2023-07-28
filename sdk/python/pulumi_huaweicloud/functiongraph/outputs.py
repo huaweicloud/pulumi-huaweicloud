@@ -28,7 +28,6 @@ class FunctionCustomImage(dict):
                  url: str):
         """
         :param str url: Specifies the URL of SWR image, the URL must start with `swr.`.
-               Changing this will create a new resource.
         """
         pulumi.set(__self__, "url", url)
 
@@ -37,7 +36,6 @@ class FunctionCustomImage(dict):
     def url(self) -> str:
         """
         Specifies the URL of SWR image, the URL must start with `swr.`.
-        Changing this will create a new resource.
         """
         return pulumi.get(self, "url")
 

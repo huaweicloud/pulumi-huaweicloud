@@ -10,7 +10,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Use this data source to get the ID of an available HuaweiCloud dms product.
+// Use this data source to get the ID of an available HuaweiCloud DMS product.
 //
 // ## Example Usage
 // ### Filter DMS kafka product list by I/O specification
@@ -109,8 +109,7 @@ type GetProductArgs struct {
 	Storage *string `pulumi:"storage"`
 	// Indicates an I/O specification.
 	// The valid values are **dms.physical.storage.high** and **dms.physical.storage.ultra**.
-	StorageSpecCode  *string  `pulumi:"storageSpecCode"`
-	StorageSpecCodes []string `pulumi:"storageSpecCodes"`
+	StorageSpecCode *string `pulumi:"storageSpecCode"`
 	// Indicates the version of a message engine.
 	Version *string `pulumi:"version"`
 	// Indicates underlying VM specification, such as **c6.large.2**.
@@ -126,12 +125,13 @@ type GetProductResult struct {
 	Id           string `pulumi:"id"`
 	InstanceType string `pulumi:"instanceType"`
 	// Deprecated: io_type has deprecated, please use storage_spec_code
-	IoType           string   `pulumi:"ioType"`
-	NodeNum          string   `pulumi:"nodeNum"`
-	PartitionNum     string   `pulumi:"partitionNum"`
-	Region           string   `pulumi:"region"`
-	Storage          string   `pulumi:"storage"`
-	StorageSpecCode  string   `pulumi:"storageSpecCode"`
+	IoType          string `pulumi:"ioType"`
+	NodeNum         string `pulumi:"nodeNum"`
+	PartitionNum    string `pulumi:"partitionNum"`
+	Region          string `pulumi:"region"`
+	Storage         string `pulumi:"storage"`
+	StorageSpecCode string `pulumi:"storageSpecCode"`
+	// The available I/O specifications.
 	StorageSpecCodes []string `pulumi:"storageSpecCodes"`
 	Version          string   `pulumi:"version"`
 	VmSpecification  string   `pulumi:"vmSpecification"`
@@ -176,8 +176,7 @@ type GetProductOutputArgs struct {
 	Storage pulumi.StringPtrInput `pulumi:"storage"`
 	// Indicates an I/O specification.
 	// The valid values are **dms.physical.storage.high** and **dms.physical.storage.ultra**.
-	StorageSpecCode  pulumi.StringPtrInput   `pulumi:"storageSpecCode"`
-	StorageSpecCodes pulumi.StringArrayInput `pulumi:"storageSpecCodes"`
+	StorageSpecCode pulumi.StringPtrInput `pulumi:"storageSpecCode"`
 	// Indicates the version of a message engine.
 	Version pulumi.StringPtrInput `pulumi:"version"`
 	// Indicates underlying VM specification, such as **c6.large.2**.
@@ -249,6 +248,7 @@ func (o GetProductResultOutput) StorageSpecCode() pulumi.StringOutput {
 	return o.ApplyT(func(v GetProductResult) string { return v.StorageSpecCode }).(pulumi.StringOutput)
 }
 
+// The available I/O specifications.
 func (o GetProductResultOutput) StorageSpecCodes() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v GetProductResult) []string { return v.StorageSpecCodes }).(pulumi.StringArrayOutput)
 }

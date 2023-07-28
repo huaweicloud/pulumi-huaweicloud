@@ -11,19 +11,23 @@ import (
 )
 
 type ApiBackendParam struct {
-	// Specifies the description of the constant or system parameter, which contain a
-	// maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+	// Specifies the description of the constant or system parameter.\
+	// The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description *string `pulumi:"description"`
-	// Specifies the location of the backend parameter. The valid values are **PATH**,
-	// **QUERY** and **HEADER**.
+	// Specifies the location of the backend parameter.\
+	// The valid values are **PATH**, **QUERY** and **HEADER**.
 	Location string `pulumi:"location"`
-	// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-	// a letter. Only letters, digits, and underscores (_) are allowed.
+	// Specifies the backend policy name.\
+	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 	Name string `pulumi:"name"`
-	// Specifies the condition type of the backend policy. The valid values are **Equal**,
-	// **Enumerated** and **Matching**, default to **Equal**.
+	// Specifies the type of the system parameter.\
+	// The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+	SystemParamType *string `pulumi:"systemParamType"`
+	// Specifies the condition type of the backend policy.\
+	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 	Type string `pulumi:"type"`
-	// Specifies the condition type. For a condition with the input parameter source:
+	// Specifies the value of the backend policy.\
+	// For a condition with the input parameter source:
 	// + If the condition type is **Enumerated**, separate condition values with commas.
 	// + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 	Value string `pulumi:"value"`
@@ -41,19 +45,23 @@ type ApiBackendParamInput interface {
 }
 
 type ApiBackendParamArgs struct {
-	// Specifies the description of the constant or system parameter, which contain a
-	// maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+	// Specifies the description of the constant or system parameter.\
+	// The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description pulumi.StringPtrInput `pulumi:"description"`
-	// Specifies the location of the backend parameter. The valid values are **PATH**,
-	// **QUERY** and **HEADER**.
+	// Specifies the location of the backend parameter.\
+	// The valid values are **PATH**, **QUERY** and **HEADER**.
 	Location pulumi.StringInput `pulumi:"location"`
-	// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-	// a letter. Only letters, digits, and underscores (_) are allowed.
+	// Specifies the backend policy name.\
+	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 	Name pulumi.StringInput `pulumi:"name"`
-	// Specifies the condition type of the backend policy. The valid values are **Equal**,
-	// **Enumerated** and **Matching**, default to **Equal**.
+	// Specifies the type of the system parameter.\
+	// The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+	SystemParamType pulumi.StringPtrInput `pulumi:"systemParamType"`
+	// Specifies the condition type of the backend policy.\
+	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 	Type pulumi.StringInput `pulumi:"type"`
-	// Specifies the condition type. For a condition with the input parameter source:
+	// Specifies the value of the backend policy.\
+	// For a condition with the input parameter source:
 	// + If the condition type is **Enumerated**, separate condition values with commas.
 	// + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 	Value pulumi.StringInput `pulumi:"value"`
@@ -110,31 +118,38 @@ func (o ApiBackendParamOutput) ToApiBackendParamOutputWithContext(ctx context.Co
 	return o
 }
 
-// Specifies the description of the constant or system parameter, which contain a
-// maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+// Specifies the description of the constant or system parameter.\
+// The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 func (o ApiBackendParamOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiBackendParam) *string { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the location of the backend parameter. The valid values are **PATH**,
-// **QUERY** and **HEADER**.
+// Specifies the location of the backend parameter.\
+// The valid values are **PATH**, **QUERY** and **HEADER**.
 func (o ApiBackendParamOutput) Location() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiBackendParam) string { return v.Location }).(pulumi.StringOutput)
 }
 
-// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-// a letter. Only letters, digits, and underscores (_) are allowed.
+// Specifies the backend policy name.\
+// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 func (o ApiBackendParamOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiBackendParam) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the condition type of the backend policy. The valid values are **Equal**,
-// **Enumerated** and **Matching**, default to **Equal**.
+// Specifies the type of the system parameter.\
+// The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+func (o ApiBackendParamOutput) SystemParamType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ApiBackendParam) *string { return v.SystemParamType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the condition type of the backend policy.\
+// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 func (o ApiBackendParamOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiBackendParam) string { return v.Type }).(pulumi.StringOutput)
 }
 
-// Specifies the condition type. For a condition with the input parameter source:
+// Specifies the value of the backend policy.\
+// For a condition with the input parameter source:
 // + If the condition type is **Enumerated**, separate condition values with commas.
 // + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 func (o ApiBackendParamOutput) Value() pulumi.StringOutput {
@@ -164,15 +179,15 @@ func (o ApiBackendParamArrayOutput) Index(i pulumi.IntInput) ApiBackendParamOutp
 type ApiFuncGraph struct {
 	// Specifies the ID of the backend custom authorization.
 	AuthorizerId *string `pulumi:"authorizerId"`
-	// Specifies the URN of the function graph.
+	// Specifies the URN of the FunctionGraph function.
 	FunctionUrn string `pulumi:"functionUrn"`
-	// Specifies the invocation mode. The valid values are **async** and **sync**,
-	// default to **sync**.
+	// Specifies the invocation type.\
+	// The valid values are **async** and **sync**, defaults to **sync**.
 	InvocationType *string `pulumi:"invocationType"`
 	// Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-	// valid value is range from 1 to 600,000, default to 5,000.
+	// valid value is range from `1` to `600,000`, defaults to `5,000`.
 	Timeout *int `pulumi:"timeout"`
-	// Specifies the version of the function graph.
+	// Specifies the version of the FunctionGraph function.
 	Version *string `pulumi:"version"`
 }
 
@@ -190,15 +205,15 @@ type ApiFuncGraphInput interface {
 type ApiFuncGraphArgs struct {
 	// Specifies the ID of the backend custom authorization.
 	AuthorizerId pulumi.StringPtrInput `pulumi:"authorizerId"`
-	// Specifies the URN of the function graph.
+	// Specifies the URN of the FunctionGraph function.
 	FunctionUrn pulumi.StringInput `pulumi:"functionUrn"`
-	// Specifies the invocation mode. The valid values are **async** and **sync**,
-	// default to **sync**.
+	// Specifies the invocation type.\
+	// The valid values are **async** and **sync**, defaults to **sync**.
 	InvocationType pulumi.StringPtrInput `pulumi:"invocationType"`
 	// Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-	// valid value is range from 1 to 600,000, default to 5,000.
+	// valid value is range from `1` to `600,000`, defaults to `5,000`.
 	Timeout pulumi.IntPtrInput `pulumi:"timeout"`
-	// Specifies the version of the function graph.
+	// Specifies the version of the FunctionGraph function.
 	Version pulumi.StringPtrInput `pulumi:"version"`
 }
 
@@ -284,24 +299,24 @@ func (o ApiFuncGraphOutput) AuthorizerId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiFuncGraph) *string { return v.AuthorizerId }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the URN of the function graph.
+// Specifies the URN of the FunctionGraph function.
 func (o ApiFuncGraphOutput) FunctionUrn() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiFuncGraph) string { return v.FunctionUrn }).(pulumi.StringOutput)
 }
 
-// Specifies the invocation mode. The valid values are **async** and **sync**,
-// default to **sync**.
+// Specifies the invocation type.\
+// The valid values are **async** and **sync**, defaults to **sync**.
 func (o ApiFuncGraphOutput) InvocationType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiFuncGraph) *string { return v.InvocationType }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-// valid value is range from 1 to 600,000, default to 5,000.
+// valid value is range from `1` to `600,000`, defaults to `5,000`.
 func (o ApiFuncGraphOutput) Timeout() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v ApiFuncGraph) *int { return v.Timeout }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the version of the function graph.
+// Specifies the version of the FunctionGraph function.
 func (o ApiFuncGraphOutput) Version() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiFuncGraph) *string { return v.Version }).(pulumi.StringPtrOutput)
 }
@@ -340,7 +355,7 @@ func (o ApiFuncGraphPtrOutput) AuthorizerId() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the URN of the function graph.
+// Specifies the URN of the FunctionGraph function.
 func (o ApiFuncGraphPtrOutput) FunctionUrn() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ApiFuncGraph) *string {
 		if v == nil {
@@ -350,8 +365,8 @@ func (o ApiFuncGraphPtrOutput) FunctionUrn() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the invocation mode. The valid values are **async** and **sync**,
-// default to **sync**.
+// Specifies the invocation type.\
+// The valid values are **async** and **sync**, defaults to **sync**.
 func (o ApiFuncGraphPtrOutput) InvocationType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ApiFuncGraph) *string {
 		if v == nil {
@@ -362,7 +377,7 @@ func (o ApiFuncGraphPtrOutput) InvocationType() pulumi.StringPtrOutput {
 }
 
 // Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-// valid value is range from 1 to 600,000, default to 5,000.
+// valid value is range from `1` to `600,000`, defaults to `5,000`.
 func (o ApiFuncGraphPtrOutput) Timeout() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ApiFuncGraph) *int {
 		if v == nil {
@@ -372,7 +387,7 @@ func (o ApiFuncGraphPtrOutput) Timeout() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the version of the function graph.
+// Specifies the version of the FunctionGraph function.
 func (o ApiFuncGraphPtrOutput) Version() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ApiFuncGraph) *string {
 		if v == nil {
@@ -388,24 +403,25 @@ type ApiFuncGraphPolicy struct {
 	// Specifies an array of one or more backend parameters. The maximum of request
 	// parameters is 50. The object structure is documented above.
 	BackendParams []ApiFuncGraphPolicyBackendParam `pulumi:"backendParams"`
-	// Specifies an array of one or more policy conditions. Up to five conditions can be set.
+	// Specifies an array of one or more policy conditions.\
+	// Up to five conditions can be set.
 	// The object structure is documented below.
 	Conditions []ApiFuncGraphPolicyCondition `pulumi:"conditions"`
 	// Specifies the effective mode of the backend policy. The valid values are **ALL**
-	// and **ANY**, default to **ANY**.
+	// and **ANY**, defaults to **ANY**.
 	EffectiveMode *string `pulumi:"effectiveMode"`
-	// Specifies the URN of the function graph.
+	// Specifies the URN of the FunctionGraph function.
 	FunctionUrn string `pulumi:"functionUrn"`
-	// Specifies the invocation mode of the function graph. The valid values are
-	// **async** and **sync**, default to **sync**.
+	// Specifies the invocation mode of the FunctionGraph function.\
+	// The valid values are **async** and **sync**, defaults to **sync**.
 	InvocationMode *string `pulumi:"invocationMode"`
-	// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-	// a letter. Only letters, digits, and underscores (_) are allowed.
+	// Specifies the backend policy name.\
+	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 	Name string `pulumi:"name"`
 	// Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-	// valid value is range from 1 to 600,000, default to 5,000.
+	// valid value is range from `1` to `600,000`, defaults to `5,000`.
 	Timeout *int `pulumi:"timeout"`
-	// Specifies the version of the function graph.
+	// Specifies the version of the FunctionGraph function.
 	Version *string `pulumi:"version"`
 }
 
@@ -426,24 +442,25 @@ type ApiFuncGraphPolicyArgs struct {
 	// Specifies an array of one or more backend parameters. The maximum of request
 	// parameters is 50. The object structure is documented above.
 	BackendParams ApiFuncGraphPolicyBackendParamArrayInput `pulumi:"backendParams"`
-	// Specifies an array of one or more policy conditions. Up to five conditions can be set.
+	// Specifies an array of one or more policy conditions.\
+	// Up to five conditions can be set.
 	// The object structure is documented below.
 	Conditions ApiFuncGraphPolicyConditionArrayInput `pulumi:"conditions"`
 	// Specifies the effective mode of the backend policy. The valid values are **ALL**
-	// and **ANY**, default to **ANY**.
+	// and **ANY**, defaults to **ANY**.
 	EffectiveMode pulumi.StringPtrInput `pulumi:"effectiveMode"`
-	// Specifies the URN of the function graph.
+	// Specifies the URN of the FunctionGraph function.
 	FunctionUrn pulumi.StringInput `pulumi:"functionUrn"`
-	// Specifies the invocation mode of the function graph. The valid values are
-	// **async** and **sync**, default to **sync**.
+	// Specifies the invocation mode of the FunctionGraph function.\
+	// The valid values are **async** and **sync**, defaults to **sync**.
 	InvocationMode pulumi.StringPtrInput `pulumi:"invocationMode"`
-	// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-	// a letter. Only letters, digits, and underscores (_) are allowed.
+	// Specifies the backend policy name.\
+	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 	Name pulumi.StringInput `pulumi:"name"`
 	// Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-	// valid value is range from 1 to 600,000, default to 5,000.
+	// valid value is range from `1` to `600,000`, defaults to `5,000`.
 	Timeout pulumi.IntPtrInput `pulumi:"timeout"`
-	// Specifies the version of the function graph.
+	// Specifies the version of the FunctionGraph function.
 	Version pulumi.StringPtrInput `pulumi:"version"`
 }
 
@@ -509,42 +526,43 @@ func (o ApiFuncGraphPolicyOutput) BackendParams() ApiFuncGraphPolicyBackendParam
 	return o.ApplyT(func(v ApiFuncGraphPolicy) []ApiFuncGraphPolicyBackendParam { return v.BackendParams }).(ApiFuncGraphPolicyBackendParamArrayOutput)
 }
 
-// Specifies an array of one or more policy conditions. Up to five conditions can be set.
+// Specifies an array of one or more policy conditions.\
+// Up to five conditions can be set.
 // The object structure is documented below.
 func (o ApiFuncGraphPolicyOutput) Conditions() ApiFuncGraphPolicyConditionArrayOutput {
 	return o.ApplyT(func(v ApiFuncGraphPolicy) []ApiFuncGraphPolicyCondition { return v.Conditions }).(ApiFuncGraphPolicyConditionArrayOutput)
 }
 
 // Specifies the effective mode of the backend policy. The valid values are **ALL**
-// and **ANY**, default to **ANY**.
+// and **ANY**, defaults to **ANY**.
 func (o ApiFuncGraphPolicyOutput) EffectiveMode() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiFuncGraphPolicy) *string { return v.EffectiveMode }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the URN of the function graph.
+// Specifies the URN of the FunctionGraph function.
 func (o ApiFuncGraphPolicyOutput) FunctionUrn() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiFuncGraphPolicy) string { return v.FunctionUrn }).(pulumi.StringOutput)
 }
 
-// Specifies the invocation mode of the function graph. The valid values are
-// **async** and **sync**, default to **sync**.
+// Specifies the invocation mode of the FunctionGraph function.\
+// The valid values are **async** and **sync**, defaults to **sync**.
 func (o ApiFuncGraphPolicyOutput) InvocationMode() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiFuncGraphPolicy) *string { return v.InvocationMode }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-// a letter. Only letters, digits, and underscores (_) are allowed.
+// Specifies the backend policy name.\
+// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 func (o ApiFuncGraphPolicyOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiFuncGraphPolicy) string { return v.Name }).(pulumi.StringOutput)
 }
 
 // Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-// valid value is range from 1 to 600,000, default to 5,000.
+// valid value is range from `1` to `600,000`, defaults to `5,000`.
 func (o ApiFuncGraphPolicyOutput) Timeout() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v ApiFuncGraphPolicy) *int { return v.Timeout }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the version of the function graph.
+// Specifies the version of the FunctionGraph function.
 func (o ApiFuncGraphPolicyOutput) Version() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiFuncGraphPolicy) *string { return v.Version }).(pulumi.StringPtrOutput)
 }
@@ -570,19 +588,23 @@ func (o ApiFuncGraphPolicyArrayOutput) Index(i pulumi.IntInput) ApiFuncGraphPoli
 }
 
 type ApiFuncGraphPolicyBackendParam struct {
-	// Specifies the description of the constant or system parameter, which contain a
-	// maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+	// Specifies the description of the constant or system parameter.\
+	// The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description *string `pulumi:"description"`
-	// Specifies the location of the backend parameter. The valid values are **PATH**,
-	// **QUERY** and **HEADER**.
+	// Specifies the location of the backend parameter.\
+	// The valid values are **PATH**, **QUERY** and **HEADER**.
 	Location string `pulumi:"location"`
-	// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-	// a letter. Only letters, digits, and underscores (_) are allowed.
+	// Specifies the backend policy name.\
+	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 	Name string `pulumi:"name"`
-	// Specifies the condition type of the backend policy. The valid values are **Equal**,
-	// **Enumerated** and **Matching**, default to **Equal**.
+	// Specifies the type of the system parameter.\
+	// The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+	SystemParamType *string `pulumi:"systemParamType"`
+	// Specifies the condition type of the backend policy.\
+	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 	Type string `pulumi:"type"`
-	// Specifies the condition type. For a condition with the input parameter source:
+	// Specifies the value of the backend policy.\
+	// For a condition with the input parameter source:
 	// + If the condition type is **Enumerated**, separate condition values with commas.
 	// + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 	Value string `pulumi:"value"`
@@ -600,19 +622,23 @@ type ApiFuncGraphPolicyBackendParamInput interface {
 }
 
 type ApiFuncGraphPolicyBackendParamArgs struct {
-	// Specifies the description of the constant or system parameter, which contain a
-	// maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+	// Specifies the description of the constant or system parameter.\
+	// The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description pulumi.StringPtrInput `pulumi:"description"`
-	// Specifies the location of the backend parameter. The valid values are **PATH**,
-	// **QUERY** and **HEADER**.
+	// Specifies the location of the backend parameter.\
+	// The valid values are **PATH**, **QUERY** and **HEADER**.
 	Location pulumi.StringInput `pulumi:"location"`
-	// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-	// a letter. Only letters, digits, and underscores (_) are allowed.
+	// Specifies the backend policy name.\
+	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 	Name pulumi.StringInput `pulumi:"name"`
-	// Specifies the condition type of the backend policy. The valid values are **Equal**,
-	// **Enumerated** and **Matching**, default to **Equal**.
+	// Specifies the type of the system parameter.\
+	// The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+	SystemParamType pulumi.StringPtrInput `pulumi:"systemParamType"`
+	// Specifies the condition type of the backend policy.\
+	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 	Type pulumi.StringInput `pulumi:"type"`
-	// Specifies the condition type. For a condition with the input parameter source:
+	// Specifies the value of the backend policy.\
+	// For a condition with the input parameter source:
 	// + If the condition type is **Enumerated**, separate condition values with commas.
 	// + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 	Value pulumi.StringInput `pulumi:"value"`
@@ -669,31 +695,38 @@ func (o ApiFuncGraphPolicyBackendParamOutput) ToApiFuncGraphPolicyBackendParamOu
 	return o
 }
 
-// Specifies the description of the constant or system parameter, which contain a
-// maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+// Specifies the description of the constant or system parameter.\
+// The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 func (o ApiFuncGraphPolicyBackendParamOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiFuncGraphPolicyBackendParam) *string { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the location of the backend parameter. The valid values are **PATH**,
-// **QUERY** and **HEADER**.
+// Specifies the location of the backend parameter.\
+// The valid values are **PATH**, **QUERY** and **HEADER**.
 func (o ApiFuncGraphPolicyBackendParamOutput) Location() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiFuncGraphPolicyBackendParam) string { return v.Location }).(pulumi.StringOutput)
 }
 
-// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-// a letter. Only letters, digits, and underscores (_) are allowed.
+// Specifies the backend policy name.\
+// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 func (o ApiFuncGraphPolicyBackendParamOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiFuncGraphPolicyBackendParam) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the condition type of the backend policy. The valid values are **Equal**,
-// **Enumerated** and **Matching**, default to **Equal**.
+// Specifies the type of the system parameter.\
+// The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+func (o ApiFuncGraphPolicyBackendParamOutput) SystemParamType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ApiFuncGraphPolicyBackendParam) *string { return v.SystemParamType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the condition type of the backend policy.\
+// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 func (o ApiFuncGraphPolicyBackendParamOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiFuncGraphPolicyBackendParam) string { return v.Type }).(pulumi.StringOutput)
 }
 
-// Specifies the condition type. For a condition with the input parameter source:
+// Specifies the value of the backend policy.\
+// For a condition with the input parameter source:
 // + If the condition type is **Enumerated**, separate condition values with commas.
 // + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 func (o ApiFuncGraphPolicyBackendParamOutput) Value() pulumi.StringOutput {
@@ -721,16 +754,17 @@ func (o ApiFuncGraphPolicyBackendParamArrayOutput) Index(i pulumi.IntInput) ApiF
 }
 
 type ApiFuncGraphPolicyCondition struct {
-	// Specifies the request parameter name. This parameter is required if the policy type
-	// is param.
+	// Specifies the request parameter name.
+	// This parameter is required if the policy type is **param**.
 	ParamName *string `pulumi:"paramName"`
-	// Specifies the policy type. The valid values are **param** and **source**, default to
-	// **source**.
+	// Specifies the backend policy type.\
+	// The valid values are **param** and **source**, defaults to **source**.
 	Source *string `pulumi:"source"`
-	// Specifies the condition type of the backend policy. The valid values are **Equal**,
-	// **Enumerated** and **Matching**, default to **Equal**.
+	// Specifies the condition type of the backend policy.\
+	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 	Type *string `pulumi:"type"`
-	// Specifies the condition type. For a condition with the input parameter source:
+	// Specifies the value of the backend policy.\
+	// For a condition with the input parameter source:
 	// + If the condition type is **Enumerated**, separate condition values with commas.
 	// + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 	Value string `pulumi:"value"`
@@ -748,16 +782,17 @@ type ApiFuncGraphPolicyConditionInput interface {
 }
 
 type ApiFuncGraphPolicyConditionArgs struct {
-	// Specifies the request parameter name. This parameter is required if the policy type
-	// is param.
+	// Specifies the request parameter name.
+	// This parameter is required if the policy type is **param**.
 	ParamName pulumi.StringPtrInput `pulumi:"paramName"`
-	// Specifies the policy type. The valid values are **param** and **source**, default to
-	// **source**.
+	// Specifies the backend policy type.\
+	// The valid values are **param** and **source**, defaults to **source**.
 	Source pulumi.StringPtrInput `pulumi:"source"`
-	// Specifies the condition type of the backend policy. The valid values are **Equal**,
-	// **Enumerated** and **Matching**, default to **Equal**.
+	// Specifies the condition type of the backend policy.\
+	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 	Type pulumi.StringPtrInput `pulumi:"type"`
-	// Specifies the condition type. For a condition with the input parameter source:
+	// Specifies the value of the backend policy.\
+	// For a condition with the input parameter source:
 	// + If the condition type is **Enumerated**, separate condition values with commas.
 	// + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 	Value pulumi.StringInput `pulumi:"value"`
@@ -814,25 +849,26 @@ func (o ApiFuncGraphPolicyConditionOutput) ToApiFuncGraphPolicyConditionOutputWi
 	return o
 }
 
-// Specifies the request parameter name. This parameter is required if the policy type
-// is param.
+// Specifies the request parameter name.
+// This parameter is required if the policy type is **param**.
 func (o ApiFuncGraphPolicyConditionOutput) ParamName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiFuncGraphPolicyCondition) *string { return v.ParamName }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the policy type. The valid values are **param** and **source**, default to
-// **source**.
+// Specifies the backend policy type.\
+// The valid values are **param** and **source**, defaults to **source**.
 func (o ApiFuncGraphPolicyConditionOutput) Source() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiFuncGraphPolicyCondition) *string { return v.Source }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the condition type of the backend policy. The valid values are **Equal**,
-// **Enumerated** and **Matching**, default to **Equal**.
+// Specifies the condition type of the backend policy.\
+// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 func (o ApiFuncGraphPolicyConditionOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiFuncGraphPolicyCondition) *string { return v.Type }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the condition type. For a condition with the input parameter source:
+// Specifies the value of the backend policy.\
+// For a condition with the input parameter source:
 // + If the condition type is **Enumerated**, separate condition values with commas.
 // + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 func (o ApiFuncGraphPolicyConditionOutput) Value() pulumi.StringOutput {
@@ -862,8 +898,8 @@ func (o ApiFuncGraphPolicyConditionArrayOutput) Index(i pulumi.IntInput) ApiFunc
 type ApiMock struct {
 	// Specifies the ID of the backend custom authorization.
 	AuthorizerId *string `pulumi:"authorizerId"`
-	// Specifies the response of the backend policy, which contain a maximum of 2,048
-	// characters, and the angle brackets (< and >) are not allowed.
+	// Specifies the response of the backend policy.\
+	// The description contains a maximum of `2,048` characters and the angle brackets (< and >) are not allowed.
 	Response *string `pulumi:"response"`
 }
 
@@ -881,8 +917,8 @@ type ApiMockInput interface {
 type ApiMockArgs struct {
 	// Specifies the ID of the backend custom authorization.
 	AuthorizerId pulumi.StringPtrInput `pulumi:"authorizerId"`
-	// Specifies the response of the backend policy, which contain a maximum of 2,048
-	// characters, and the angle brackets (< and >) are not allowed.
+	// Specifies the response of the backend policy.\
+	// The description contains a maximum of `2,048` characters and the angle brackets (< and >) are not allowed.
 	Response pulumi.StringPtrInput `pulumi:"response"`
 }
 
@@ -968,8 +1004,8 @@ func (o ApiMockOutput) AuthorizerId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiMock) *string { return v.AuthorizerId }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the response of the backend policy, which contain a maximum of 2,048
-// characters, and the angle brackets (< and >) are not allowed.
+// Specifies the response of the backend policy.\
+// The description contains a maximum of `2,048` characters and the angle brackets (< and >) are not allowed.
 func (o ApiMockOutput) Response() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiMock) *string { return v.Response }).(pulumi.StringPtrOutput)
 }
@@ -1008,8 +1044,8 @@ func (o ApiMockPtrOutput) AuthorizerId() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the response of the backend policy, which contain a maximum of 2,048
-// characters, and the angle brackets (< and >) are not allowed.
+// Specifies the response of the backend policy.\
+// The description contains a maximum of `2,048` characters and the angle brackets (< and >) are not allowed.
 func (o ApiMockPtrOutput) Response() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ApiMock) *string {
 		if v == nil {
@@ -1025,17 +1061,18 @@ type ApiMockPolicy struct {
 	// Specifies an array of one or more backend parameters. The maximum of request
 	// parameters is 50. The object structure is documented above.
 	BackendParams []ApiMockPolicyBackendParam `pulumi:"backendParams"`
-	// Specifies an array of one or more policy conditions. Up to five conditions can be set.
+	// Specifies an array of one or more policy conditions.\
+	// Up to five conditions can be set.
 	// The object structure is documented below.
 	Conditions []ApiMockPolicyCondition `pulumi:"conditions"`
 	// Specifies the effective mode of the backend policy. The valid values are **ALL**
-	// and **ANY**, default to **ANY**.
+	// and **ANY**, defaults to **ANY**.
 	EffectiveMode *string `pulumi:"effectiveMode"`
-	// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-	// a letter. Only letters, digits, and underscores (_) are allowed.
+	// Specifies the backend policy name.\
+	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 	Name string `pulumi:"name"`
-	// Specifies the response of the backend policy, which contain a maximum of 2,048
-	// characters, and the angle brackets (< and >) are not allowed.
+	// Specifies the response of the backend policy.\
+	// The description contains a maximum of `2,048` characters and the angle brackets (< and >) are not allowed.
 	Response *string `pulumi:"response"`
 }
 
@@ -1056,17 +1093,18 @@ type ApiMockPolicyArgs struct {
 	// Specifies an array of one or more backend parameters. The maximum of request
 	// parameters is 50. The object structure is documented above.
 	BackendParams ApiMockPolicyBackendParamArrayInput `pulumi:"backendParams"`
-	// Specifies an array of one or more policy conditions. Up to five conditions can be set.
+	// Specifies an array of one or more policy conditions.\
+	// Up to five conditions can be set.
 	// The object structure is documented below.
 	Conditions ApiMockPolicyConditionArrayInput `pulumi:"conditions"`
 	// Specifies the effective mode of the backend policy. The valid values are **ALL**
-	// and **ANY**, default to **ANY**.
+	// and **ANY**, defaults to **ANY**.
 	EffectiveMode pulumi.StringPtrInput `pulumi:"effectiveMode"`
-	// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-	// a letter. Only letters, digits, and underscores (_) are allowed.
+	// Specifies the backend policy name.\
+	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 	Name pulumi.StringInput `pulumi:"name"`
-	// Specifies the response of the backend policy, which contain a maximum of 2,048
-	// characters, and the angle brackets (< and >) are not allowed.
+	// Specifies the response of the backend policy.\
+	// The description contains a maximum of `2,048` characters and the angle brackets (< and >) are not allowed.
 	Response pulumi.StringPtrInput `pulumi:"response"`
 }
 
@@ -1132,26 +1170,27 @@ func (o ApiMockPolicyOutput) BackendParams() ApiMockPolicyBackendParamArrayOutpu
 	return o.ApplyT(func(v ApiMockPolicy) []ApiMockPolicyBackendParam { return v.BackendParams }).(ApiMockPolicyBackendParamArrayOutput)
 }
 
-// Specifies an array of one or more policy conditions. Up to five conditions can be set.
+// Specifies an array of one or more policy conditions.\
+// Up to five conditions can be set.
 // The object structure is documented below.
 func (o ApiMockPolicyOutput) Conditions() ApiMockPolicyConditionArrayOutput {
 	return o.ApplyT(func(v ApiMockPolicy) []ApiMockPolicyCondition { return v.Conditions }).(ApiMockPolicyConditionArrayOutput)
 }
 
 // Specifies the effective mode of the backend policy. The valid values are **ALL**
-// and **ANY**, default to **ANY**.
+// and **ANY**, defaults to **ANY**.
 func (o ApiMockPolicyOutput) EffectiveMode() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiMockPolicy) *string { return v.EffectiveMode }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-// a letter. Only letters, digits, and underscores (_) are allowed.
+// Specifies the backend policy name.\
+// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 func (o ApiMockPolicyOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiMockPolicy) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the response of the backend policy, which contain a maximum of 2,048
-// characters, and the angle brackets (< and >) are not allowed.
+// Specifies the response of the backend policy.\
+// The description contains a maximum of `2,048` characters and the angle brackets (< and >) are not allowed.
 func (o ApiMockPolicyOutput) Response() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiMockPolicy) *string { return v.Response }).(pulumi.StringPtrOutput)
 }
@@ -1177,19 +1216,23 @@ func (o ApiMockPolicyArrayOutput) Index(i pulumi.IntInput) ApiMockPolicyOutput {
 }
 
 type ApiMockPolicyBackendParam struct {
-	// Specifies the description of the constant or system parameter, which contain a
-	// maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+	// Specifies the description of the constant or system parameter.\
+	// The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description *string `pulumi:"description"`
-	// Specifies the location of the backend parameter. The valid values are **PATH**,
-	// **QUERY** and **HEADER**.
+	// Specifies the location of the backend parameter.\
+	// The valid values are **PATH**, **QUERY** and **HEADER**.
 	Location string `pulumi:"location"`
-	// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-	// a letter. Only letters, digits, and underscores (_) are allowed.
+	// Specifies the backend policy name.\
+	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 	Name string `pulumi:"name"`
-	// Specifies the condition type of the backend policy. The valid values are **Equal**,
-	// **Enumerated** and **Matching**, default to **Equal**.
+	// Specifies the type of the system parameter.\
+	// The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+	SystemParamType *string `pulumi:"systemParamType"`
+	// Specifies the condition type of the backend policy.\
+	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 	Type string `pulumi:"type"`
-	// Specifies the condition type. For a condition with the input parameter source:
+	// Specifies the value of the backend policy.\
+	// For a condition with the input parameter source:
 	// + If the condition type is **Enumerated**, separate condition values with commas.
 	// + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 	Value string `pulumi:"value"`
@@ -1207,19 +1250,23 @@ type ApiMockPolicyBackendParamInput interface {
 }
 
 type ApiMockPolicyBackendParamArgs struct {
-	// Specifies the description of the constant or system parameter, which contain a
-	// maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+	// Specifies the description of the constant or system parameter.\
+	// The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description pulumi.StringPtrInput `pulumi:"description"`
-	// Specifies the location of the backend parameter. The valid values are **PATH**,
-	// **QUERY** and **HEADER**.
+	// Specifies the location of the backend parameter.\
+	// The valid values are **PATH**, **QUERY** and **HEADER**.
 	Location pulumi.StringInput `pulumi:"location"`
-	// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-	// a letter. Only letters, digits, and underscores (_) are allowed.
+	// Specifies the backend policy name.\
+	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 	Name pulumi.StringInput `pulumi:"name"`
-	// Specifies the condition type of the backend policy. The valid values are **Equal**,
-	// **Enumerated** and **Matching**, default to **Equal**.
+	// Specifies the type of the system parameter.\
+	// The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+	SystemParamType pulumi.StringPtrInput `pulumi:"systemParamType"`
+	// Specifies the condition type of the backend policy.\
+	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 	Type pulumi.StringInput `pulumi:"type"`
-	// Specifies the condition type. For a condition with the input parameter source:
+	// Specifies the value of the backend policy.\
+	// For a condition with the input parameter source:
 	// + If the condition type is **Enumerated**, separate condition values with commas.
 	// + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 	Value pulumi.StringInput `pulumi:"value"`
@@ -1276,31 +1323,38 @@ func (o ApiMockPolicyBackendParamOutput) ToApiMockPolicyBackendParamOutputWithCo
 	return o
 }
 
-// Specifies the description of the constant or system parameter, which contain a
-// maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+// Specifies the description of the constant or system parameter.\
+// The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 func (o ApiMockPolicyBackendParamOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiMockPolicyBackendParam) *string { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the location of the backend parameter. The valid values are **PATH**,
-// **QUERY** and **HEADER**.
+// Specifies the location of the backend parameter.\
+// The valid values are **PATH**, **QUERY** and **HEADER**.
 func (o ApiMockPolicyBackendParamOutput) Location() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiMockPolicyBackendParam) string { return v.Location }).(pulumi.StringOutput)
 }
 
-// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-// a letter. Only letters, digits, and underscores (_) are allowed.
+// Specifies the backend policy name.\
+// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 func (o ApiMockPolicyBackendParamOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiMockPolicyBackendParam) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the condition type of the backend policy. The valid values are **Equal**,
-// **Enumerated** and **Matching**, default to **Equal**.
+// Specifies the type of the system parameter.\
+// The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+func (o ApiMockPolicyBackendParamOutput) SystemParamType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ApiMockPolicyBackendParam) *string { return v.SystemParamType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the condition type of the backend policy.\
+// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 func (o ApiMockPolicyBackendParamOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiMockPolicyBackendParam) string { return v.Type }).(pulumi.StringOutput)
 }
 
-// Specifies the condition type. For a condition with the input parameter source:
+// Specifies the value of the backend policy.\
+// For a condition with the input parameter source:
 // + If the condition type is **Enumerated**, separate condition values with commas.
 // + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 func (o ApiMockPolicyBackendParamOutput) Value() pulumi.StringOutput {
@@ -1328,16 +1382,17 @@ func (o ApiMockPolicyBackendParamArrayOutput) Index(i pulumi.IntInput) ApiMockPo
 }
 
 type ApiMockPolicyCondition struct {
-	// Specifies the request parameter name. This parameter is required if the policy type
-	// is param.
+	// Specifies the request parameter name.
+	// This parameter is required if the policy type is **param**.
 	ParamName *string `pulumi:"paramName"`
-	// Specifies the policy type. The valid values are **param** and **source**, default to
-	// **source**.
+	// Specifies the backend policy type.\
+	// The valid values are **param** and **source**, defaults to **source**.
 	Source *string `pulumi:"source"`
-	// Specifies the condition type of the backend policy. The valid values are **Equal**,
-	// **Enumerated** and **Matching**, default to **Equal**.
+	// Specifies the condition type of the backend policy.\
+	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 	Type *string `pulumi:"type"`
-	// Specifies the condition type. For a condition with the input parameter source:
+	// Specifies the value of the backend policy.\
+	// For a condition with the input parameter source:
 	// + If the condition type is **Enumerated**, separate condition values with commas.
 	// + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 	Value string `pulumi:"value"`
@@ -1355,16 +1410,17 @@ type ApiMockPolicyConditionInput interface {
 }
 
 type ApiMockPolicyConditionArgs struct {
-	// Specifies the request parameter name. This parameter is required if the policy type
-	// is param.
+	// Specifies the request parameter name.
+	// This parameter is required if the policy type is **param**.
 	ParamName pulumi.StringPtrInput `pulumi:"paramName"`
-	// Specifies the policy type. The valid values are **param** and **source**, default to
-	// **source**.
+	// Specifies the backend policy type.\
+	// The valid values are **param** and **source**, defaults to **source**.
 	Source pulumi.StringPtrInput `pulumi:"source"`
-	// Specifies the condition type of the backend policy. The valid values are **Equal**,
-	// **Enumerated** and **Matching**, default to **Equal**.
+	// Specifies the condition type of the backend policy.\
+	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 	Type pulumi.StringPtrInput `pulumi:"type"`
-	// Specifies the condition type. For a condition with the input parameter source:
+	// Specifies the value of the backend policy.\
+	// For a condition with the input parameter source:
 	// + If the condition type is **Enumerated**, separate condition values with commas.
 	// + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 	Value pulumi.StringInput `pulumi:"value"`
@@ -1421,25 +1477,26 @@ func (o ApiMockPolicyConditionOutput) ToApiMockPolicyConditionOutputWithContext(
 	return o
 }
 
-// Specifies the request parameter name. This parameter is required if the policy type
-// is param.
+// Specifies the request parameter name.
+// This parameter is required if the policy type is **param**.
 func (o ApiMockPolicyConditionOutput) ParamName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiMockPolicyCondition) *string { return v.ParamName }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the policy type. The valid values are **param** and **source**, default to
-// **source**.
+// Specifies the backend policy type.\
+// The valid values are **param** and **source**, defaults to **source**.
 func (o ApiMockPolicyConditionOutput) Source() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiMockPolicyCondition) *string { return v.Source }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the condition type of the backend policy. The valid values are **Equal**,
-// **Enumerated** and **Matching**, default to **Equal**.
+// Specifies the condition type of the backend policy.\
+// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 func (o ApiMockPolicyConditionOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiMockPolicyCondition) *string { return v.Type }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the condition type. For a condition with the input parameter source:
+// Specifies the value of the backend policy.\
+// For a condition with the input parameter source:
 // + If the condition type is **Enumerated**, separate condition values with commas.
 // + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 func (o ApiMockPolicyConditionOutput) Value() pulumi.StringOutput {
@@ -1573,30 +1630,29 @@ func (o ApiPublishmentHistoryArrayOutput) Index(i pulumi.IntInput) ApiPublishmen
 }
 
 type ApiRequestParam struct {
-	// Specifies the default value of the request parameter, which contain a maximum of 255
-	// characters, and the angle brackets (< and >) are not allowed.
+	// Specifies the default value of the request parameter.
+	// The value contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Default *string `pulumi:"default"`
-	// Specifies the description of the constant or system parameter, which contain a
-	// maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+	// Specifies the description of the constant or system parameter.\
+	// The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description *string `pulumi:"description"`
-	// Specifies the example value of the request parameter, which contain a maximum of 255
-	// characters, and the angle brackets (< and >) are not allowed.
+	// Specifies the example value of the request parameter.\
+	// The example contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Example *string `pulumi:"example"`
-	// Specifies the location of the backend parameter. The valid values are **PATH**,
-	// **QUERY** and **HEADER**.
+	// Specifies the location of the backend parameter.\
+	// The valid values are **PATH**, **QUERY** and **HEADER**.
 	Location *string `pulumi:"location"`
 	// Specifies the maximum value or size of the request parameter.
 	Maximum *int `pulumi:"maximum"`
-	// Specifies the minimum value or size of the request parameter. For string type,
-	// The `maximum` and `minimum` means size. For number type, they means value.
+	// Specifies the minimum value or size of the request parameter.
 	Minimum *int `pulumi:"minimum"`
-	// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-	// a letter. Only letters, digits, and underscores (_) are allowed.
+	// Specifies the backend policy name.\
+	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 	Name string `pulumi:"name"`
 	// Specifies whether the request parameter is required.
 	Required bool `pulumi:"required"`
-	// Specifies the condition type of the backend policy. The valid values are **Equal**,
-	// **Enumerated** and **Matching**, default to **Equal**.
+	// Specifies the condition type of the backend policy.\
+	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 	Type *string `pulumi:"type"`
 }
 
@@ -1612,30 +1668,29 @@ type ApiRequestParamInput interface {
 }
 
 type ApiRequestParamArgs struct {
-	// Specifies the default value of the request parameter, which contain a maximum of 255
-	// characters, and the angle brackets (< and >) are not allowed.
+	// Specifies the default value of the request parameter.
+	// The value contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Default pulumi.StringPtrInput `pulumi:"default"`
-	// Specifies the description of the constant or system parameter, which contain a
-	// maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+	// Specifies the description of the constant or system parameter.\
+	// The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description pulumi.StringPtrInput `pulumi:"description"`
-	// Specifies the example value of the request parameter, which contain a maximum of 255
-	// characters, and the angle brackets (< and >) are not allowed.
+	// Specifies the example value of the request parameter.\
+	// The example contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Example pulumi.StringPtrInput `pulumi:"example"`
-	// Specifies the location of the backend parameter. The valid values are **PATH**,
-	// **QUERY** and **HEADER**.
+	// Specifies the location of the backend parameter.\
+	// The valid values are **PATH**, **QUERY** and **HEADER**.
 	Location pulumi.StringPtrInput `pulumi:"location"`
 	// Specifies the maximum value or size of the request parameter.
 	Maximum pulumi.IntPtrInput `pulumi:"maximum"`
-	// Specifies the minimum value or size of the request parameter. For string type,
-	// The `maximum` and `minimum` means size. For number type, they means value.
+	// Specifies the minimum value or size of the request parameter.
 	Minimum pulumi.IntPtrInput `pulumi:"minimum"`
-	// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-	// a letter. Only letters, digits, and underscores (_) are allowed.
+	// Specifies the backend policy name.\
+	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 	Name pulumi.StringInput `pulumi:"name"`
 	// Specifies whether the request parameter is required.
 	Required pulumi.BoolInput `pulumi:"required"`
-	// Specifies the condition type of the backend policy. The valid values are **Equal**,
-	// **Enumerated** and **Matching**, default to **Equal**.
+	// Specifies the condition type of the backend policy.\
+	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 	Type pulumi.StringPtrInput `pulumi:"type"`
 }
 
@@ -1690,26 +1745,26 @@ func (o ApiRequestParamOutput) ToApiRequestParamOutputWithContext(ctx context.Co
 	return o
 }
 
-// Specifies the default value of the request parameter, which contain a maximum of 255
-// characters, and the angle brackets (< and >) are not allowed.
+// Specifies the default value of the request parameter.
+// The value contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 func (o ApiRequestParamOutput) Default() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiRequestParam) *string { return v.Default }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the description of the constant or system parameter, which contain a
-// maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+// Specifies the description of the constant or system parameter.\
+// The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 func (o ApiRequestParamOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiRequestParam) *string { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the example value of the request parameter, which contain a maximum of 255
-// characters, and the angle brackets (< and >) are not allowed.
+// Specifies the example value of the request parameter.\
+// The example contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 func (o ApiRequestParamOutput) Example() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiRequestParam) *string { return v.Example }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the location of the backend parameter. The valid values are **PATH**,
-// **QUERY** and **HEADER**.
+// Specifies the location of the backend parameter.\
+// The valid values are **PATH**, **QUERY** and **HEADER**.
 func (o ApiRequestParamOutput) Location() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiRequestParam) *string { return v.Location }).(pulumi.StringPtrOutput)
 }
@@ -1719,14 +1774,13 @@ func (o ApiRequestParamOutput) Maximum() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v ApiRequestParam) *int { return v.Maximum }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the minimum value or size of the request parameter. For string type,
-// The `maximum` and `minimum` means size. For number type, they means value.
+// Specifies the minimum value or size of the request parameter.
 func (o ApiRequestParamOutput) Minimum() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v ApiRequestParam) *int { return v.Minimum }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-// a letter. Only letters, digits, and underscores (_) are allowed.
+// Specifies the backend policy name.\
+// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 func (o ApiRequestParamOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiRequestParam) string { return v.Name }).(pulumi.StringOutput)
 }
@@ -1736,8 +1790,8 @@ func (o ApiRequestParamOutput) Required() pulumi.BoolOutput {
 	return o.ApplyT(func(v ApiRequestParam) bool { return v.Required }).(pulumi.BoolOutput)
 }
 
-// Specifies the condition type of the backend policy. The valid values are **Equal**,
-// **Enumerated** and **Matching**, default to **Equal**.
+// Specifies the condition type of the backend policy.\
+// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 func (o ApiRequestParamOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiRequestParam) *string { return v.Type }).(pulumi.StringPtrOutput)
 }
@@ -1765,36 +1819,38 @@ func (o ApiRequestParamArrayOutput) Index(i pulumi.IntInput) ApiRequestParamOutp
 type ApiWeb struct {
 	// Specifies the ID of the backend custom authorization.
 	AuthorizerId *string `pulumi:"authorizerId"`
-	// Specifies the backend service address, which consists of a domain name or IP
-	// address, and a port number, with not more than 255 characters. The backend service address must be in the format "Host
-	// name:Port number", for example, apig.example.com:7443. If the port number is not specified, the default HTTPS port 443
-	// or the default HTTP port 80 is used. The backend service address can contain environment variables, each starting with
-	// a letter and consisting of 3 to 32 characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+	// Specifies the backend service address.\
+	// The value which consists of a domain name or IP address, and a port number, with not more than `255` characters.
+	// The backend service address must be in the format "{host name}:{Port number}", for example, `apig.example.com:7443`.
+	// If the port number is not specified, the default HTTPS port `443`, or the default HTTP port `80` is used.
+	// The backend service address can contain environment variables, each starting with a letter and consisting of `3` to
+	// `32` characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
 	BackendAddress *string `pulumi:"backendAddress"`
-	// Specifies the proxy host header. The host header can be customized for requests to
-	// be forwarded to cloud servers through the VPC channel. By default, the original host header of the request is used.
+	// Specifies the proxy host header.\
+	// The host header can be customized for requests to be forwarded to cloud servers through the VPC channel.
+	// By default, the original host header of the request is used.
 	HostHeader *string `pulumi:"hostHeader"`
-	// Specifies the backend request address, which can contain a maximum of 512 characters and
+	// Specifies the backend request address, which can contain a maximum of `512` characters and
 	// must comply with URI specifications.
-	// + The request address can contain request parameters enclosed with brackets ({}).
-	// + The request address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
+	// + The address can contain request parameters enclosed with brackets ({}).
+	// + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
 	//   underscores (_) and must comply with URI specifications.
-	// + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
+	// + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
 	//   Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
 	Path string `pulumi:"path"`
-	// Specifies the backend request method of the API. The valid types are **GET**,
-	// **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+	// Specifies the backend request method of the API.\
+	// The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
 	RequestMethod *string `pulumi:"requestMethod"`
 	// Specifies the backend request protocol. The valid values are **HTTP** and
-	// **HTTPS**, default to **HTTPS**.
+	// **HTTPS**, defaults to **HTTPS**.
 	RequestProtocol *string `pulumi:"requestProtocol"`
-	// Specifies the indicates whether to enable two-way authentication, default to false.
+	// Specifies whether to enable two-way authentication, defaults to **false**.
 	SslEnable *bool `pulumi:"sslEnable"`
 	// Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-	// valid value is range from 1 to 600,000, default to 5,000.
+	// valid value is range from `1` to `600,000`, defaults to `5,000`.
 	Timeout *int `pulumi:"timeout"`
-	// Specifies the VPC channel ID. This parameter and `backendAddress` are
-	// alternative.
+	// Specifies the VPC channel ID.\
+	// This parameter and `backendAddress` are alternative.
 	VpcChannelId *string `pulumi:"vpcChannelId"`
 }
 
@@ -1812,36 +1868,38 @@ type ApiWebInput interface {
 type ApiWebArgs struct {
 	// Specifies the ID of the backend custom authorization.
 	AuthorizerId pulumi.StringPtrInput `pulumi:"authorizerId"`
-	// Specifies the backend service address, which consists of a domain name or IP
-	// address, and a port number, with not more than 255 characters. The backend service address must be in the format "Host
-	// name:Port number", for example, apig.example.com:7443. If the port number is not specified, the default HTTPS port 443
-	// or the default HTTP port 80 is used. The backend service address can contain environment variables, each starting with
-	// a letter and consisting of 3 to 32 characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+	// Specifies the backend service address.\
+	// The value which consists of a domain name or IP address, and a port number, with not more than `255` characters.
+	// The backend service address must be in the format "{host name}:{Port number}", for example, `apig.example.com:7443`.
+	// If the port number is not specified, the default HTTPS port `443`, or the default HTTP port `80` is used.
+	// The backend service address can contain environment variables, each starting with a letter and consisting of `3` to
+	// `32` characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
 	BackendAddress pulumi.StringPtrInput `pulumi:"backendAddress"`
-	// Specifies the proxy host header. The host header can be customized for requests to
-	// be forwarded to cloud servers through the VPC channel. By default, the original host header of the request is used.
+	// Specifies the proxy host header.\
+	// The host header can be customized for requests to be forwarded to cloud servers through the VPC channel.
+	// By default, the original host header of the request is used.
 	HostHeader pulumi.StringPtrInput `pulumi:"hostHeader"`
-	// Specifies the backend request address, which can contain a maximum of 512 characters and
+	// Specifies the backend request address, which can contain a maximum of `512` characters and
 	// must comply with URI specifications.
-	// + The request address can contain request parameters enclosed with brackets ({}).
-	// + The request address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
+	// + The address can contain request parameters enclosed with brackets ({}).
+	// + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
 	//   underscores (_) and must comply with URI specifications.
-	// + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
+	// + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
 	//   Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
 	Path pulumi.StringInput `pulumi:"path"`
-	// Specifies the backend request method of the API. The valid types are **GET**,
-	// **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+	// Specifies the backend request method of the API.\
+	// The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
 	RequestMethod pulumi.StringPtrInput `pulumi:"requestMethod"`
 	// Specifies the backend request protocol. The valid values are **HTTP** and
-	// **HTTPS**, default to **HTTPS**.
+	// **HTTPS**, defaults to **HTTPS**.
 	RequestProtocol pulumi.StringPtrInput `pulumi:"requestProtocol"`
-	// Specifies the indicates whether to enable two-way authentication, default to false.
+	// Specifies whether to enable two-way authentication, defaults to **false**.
 	SslEnable pulumi.BoolPtrInput `pulumi:"sslEnable"`
 	// Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-	// valid value is range from 1 to 600,000, default to 5,000.
+	// valid value is range from `1` to `600,000`, defaults to `5,000`.
 	Timeout pulumi.IntPtrInput `pulumi:"timeout"`
-	// Specifies the VPC channel ID. This parameter and `backendAddress` are
-	// alternative.
+	// Specifies the VPC channel ID.\
+	// This parameter and `backendAddress` are alternative.
 	VpcChannelId pulumi.StringPtrInput `pulumi:"vpcChannelId"`
 }
 
@@ -1927,57 +1985,59 @@ func (o ApiWebOutput) AuthorizerId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiWeb) *string { return v.AuthorizerId }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the backend service address, which consists of a domain name or IP
-// address, and a port number, with not more than 255 characters. The backend service address must be in the format "Host
-// name:Port number", for example, apig.example.com:7443. If the port number is not specified, the default HTTPS port 443
-// or the default HTTP port 80 is used. The backend service address can contain environment variables, each starting with
-// a letter and consisting of 3 to 32 characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+// Specifies the backend service address.\
+// The value which consists of a domain name or IP address, and a port number, with not more than `255` characters.
+// The backend service address must be in the format "{host name}:{Port number}", for example, `apig.example.com:7443`.
+// If the port number is not specified, the default HTTPS port `443`, or the default HTTP port `80` is used.
+// The backend service address can contain environment variables, each starting with a letter and consisting of `3` to
+// `32` characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
 func (o ApiWebOutput) BackendAddress() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiWeb) *string { return v.BackendAddress }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the proxy host header. The host header can be customized for requests to
-// be forwarded to cloud servers through the VPC channel. By default, the original host header of the request is used.
+// Specifies the proxy host header.\
+// The host header can be customized for requests to be forwarded to cloud servers through the VPC channel.
+// By default, the original host header of the request is used.
 func (o ApiWebOutput) HostHeader() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiWeb) *string { return v.HostHeader }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the backend request address, which can contain a maximum of 512 characters and
+// Specifies the backend request address, which can contain a maximum of `512` characters and
 // must comply with URI specifications.
-//   - The request address can contain request parameters enclosed with brackets ({}).
-//   - The request address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
+//   - The address can contain request parameters enclosed with brackets ({}).
+//   - The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
 //     underscores (_) and must comply with URI specifications.
-//   - The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
+//   - The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
 //     Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
 func (o ApiWebOutput) Path() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiWeb) string { return v.Path }).(pulumi.StringOutput)
 }
 
-// Specifies the backend request method of the API. The valid types are **GET**,
-// **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+// Specifies the backend request method of the API.\
+// The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
 func (o ApiWebOutput) RequestMethod() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiWeb) *string { return v.RequestMethod }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the backend request protocol. The valid values are **HTTP** and
-// **HTTPS**, default to **HTTPS**.
+// **HTTPS**, defaults to **HTTPS**.
 func (o ApiWebOutput) RequestProtocol() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiWeb) *string { return v.RequestProtocol }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the indicates whether to enable two-way authentication, default to false.
+// Specifies whether to enable two-way authentication, defaults to **false**.
 func (o ApiWebOutput) SslEnable() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v ApiWeb) *bool { return v.SslEnable }).(pulumi.BoolPtrOutput)
 }
 
 // Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-// valid value is range from 1 to 600,000, default to 5,000.
+// valid value is range from `1` to `600,000`, defaults to `5,000`.
 func (o ApiWebOutput) Timeout() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v ApiWeb) *int { return v.Timeout }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the VPC channel ID. This parameter and `backendAddress` are
-// alternative.
+// Specifies the VPC channel ID.\
+// This parameter and `backendAddress` are alternative.
 func (o ApiWebOutput) VpcChannelId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiWeb) *string { return v.VpcChannelId }).(pulumi.StringPtrOutput)
 }
@@ -2016,11 +2076,12 @@ func (o ApiWebPtrOutput) AuthorizerId() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the backend service address, which consists of a domain name or IP
-// address, and a port number, with not more than 255 characters. The backend service address must be in the format "Host
-// name:Port number", for example, apig.example.com:7443. If the port number is not specified, the default HTTPS port 443
-// or the default HTTP port 80 is used. The backend service address can contain environment variables, each starting with
-// a letter and consisting of 3 to 32 characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+// Specifies the backend service address.\
+// The value which consists of a domain name or IP address, and a port number, with not more than `255` characters.
+// The backend service address must be in the format "{host name}:{Port number}", for example, `apig.example.com:7443`.
+// If the port number is not specified, the default HTTPS port `443`, or the default HTTP port `80` is used.
+// The backend service address can contain environment variables, each starting with a letter and consisting of `3` to
+// `32` characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
 func (o ApiWebPtrOutput) BackendAddress() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ApiWeb) *string {
 		if v == nil {
@@ -2030,8 +2091,9 @@ func (o ApiWebPtrOutput) BackendAddress() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the proxy host header. The host header can be customized for requests to
-// be forwarded to cloud servers through the VPC channel. By default, the original host header of the request is used.
+// Specifies the proxy host header.\
+// The host header can be customized for requests to be forwarded to cloud servers through the VPC channel.
+// By default, the original host header of the request is used.
 func (o ApiWebPtrOutput) HostHeader() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ApiWeb) *string {
 		if v == nil {
@@ -2041,12 +2103,12 @@ func (o ApiWebPtrOutput) HostHeader() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the backend request address, which can contain a maximum of 512 characters and
+// Specifies the backend request address, which can contain a maximum of `512` characters and
 // must comply with URI specifications.
-//   - The request address can contain request parameters enclosed with brackets ({}).
-//   - The request address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
+//   - The address can contain request parameters enclosed with brackets ({}).
+//   - The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
 //     underscores (_) and must comply with URI specifications.
-//   - The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
+//   - The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
 //     Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
 func (o ApiWebPtrOutput) Path() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ApiWeb) *string {
@@ -2057,8 +2119,8 @@ func (o ApiWebPtrOutput) Path() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the backend request method of the API. The valid types are **GET**,
-// **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+// Specifies the backend request method of the API.\
+// The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
 func (o ApiWebPtrOutput) RequestMethod() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ApiWeb) *string {
 		if v == nil {
@@ -2069,7 +2131,7 @@ func (o ApiWebPtrOutput) RequestMethod() pulumi.StringPtrOutput {
 }
 
 // Specifies the backend request protocol. The valid values are **HTTP** and
-// **HTTPS**, default to **HTTPS**.
+// **HTTPS**, defaults to **HTTPS**.
 func (o ApiWebPtrOutput) RequestProtocol() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ApiWeb) *string {
 		if v == nil {
@@ -2079,7 +2141,7 @@ func (o ApiWebPtrOutput) RequestProtocol() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the indicates whether to enable two-way authentication, default to false.
+// Specifies whether to enable two-way authentication, defaults to **false**.
 func (o ApiWebPtrOutput) SslEnable() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *ApiWeb) *bool {
 		if v == nil {
@@ -2090,7 +2152,7 @@ func (o ApiWebPtrOutput) SslEnable() pulumi.BoolPtrOutput {
 }
 
 // Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-// valid value is range from 1 to 600,000, default to 5,000.
+// valid value is range from `1` to `600,000`, defaults to `5,000`.
 func (o ApiWebPtrOutput) Timeout() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ApiWeb) *int {
 		if v == nil {
@@ -2100,8 +2162,8 @@ func (o ApiWebPtrOutput) Timeout() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the VPC channel ID. This parameter and `backendAddress` are
-// alternative.
+// Specifies the VPC channel ID.\
+// This parameter and `backendAddress` are alternative.
 func (o ApiWebPtrOutput) VpcChannelId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ApiWeb) *string {
 		if v == nil {
@@ -2114,46 +2176,49 @@ func (o ApiWebPtrOutput) VpcChannelId() pulumi.StringPtrOutput {
 type ApiWebPolicy struct {
 	// Specifies the ID of the backend custom authorization.
 	AuthorizerId *string `pulumi:"authorizerId"`
-	// Specifies the backend service address, which consists of a domain name or IP
-	// address, and a port number, with not more than 255 characters. The backend service address must be in the format "Host
-	// name:Port number", for example, apig.example.com:7443. If the port number is not specified, the default HTTPS port 443
-	// or the default HTTP port 80 is used. The backend service address can contain environment variables, each starting with
-	// a letter and consisting of 3 to 32 characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+	// Specifies the backend service address.\
+	// The value which consists of a domain name or IP address, and a port number, with not more than `255` characters.
+	// The backend service address must be in the format "{host name}:{Port number}", for example, `apig.example.com:7443`.
+	// If the port number is not specified, the default HTTPS port `443`, or the default HTTP port `80` is used.
+	// The backend service address can contain environment variables, each starting with a letter and consisting of `3` to
+	// `32` characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
 	BackendAddress *string `pulumi:"backendAddress"`
 	// Specifies an array of one or more backend parameters. The maximum of request
 	// parameters is 50. The object structure is documented above.
 	BackendParams []ApiWebPolicyBackendParam `pulumi:"backendParams"`
-	// Specifies an array of one or more policy conditions. Up to five conditions can be set.
+	// Specifies an array of one or more policy conditions.\
+	// Up to five conditions can be set.
 	// The object structure is documented below.
 	Conditions []ApiWebPolicyCondition `pulumi:"conditions"`
 	// Specifies the effective mode of the backend policy. The valid values are **ALL**
-	// and **ANY**, default to **ANY**.
+	// and **ANY**, defaults to **ANY**.
 	EffectiveMode *string `pulumi:"effectiveMode"`
-	// Specifies the proxy host header. The host header can be customized for requests to
-	// be forwarded to cloud servers through the VPC channel. By default, the original host header of the request is used.
+	// Specifies the proxy host header.\
+	// The host header can be customized for requests to be forwarded to cloud servers through the VPC channel.
+	// By default, the original host header of the request is used.
 	HostHeader *string `pulumi:"hostHeader"`
-	// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-	// a letter. Only letters, digits, and underscores (_) are allowed.
+	// Specifies the backend policy name.\
+	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 	Name string `pulumi:"name"`
-	// Specifies the backend request address, which can contain a maximum of 512 characters and
+	// Specifies the backend request address, which can contain a maximum of `512` characters and
 	// must comply with URI specifications.
-	// + The request address can contain request parameters enclosed with brackets ({}).
-	// + The request address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
+	// + The address can contain request parameters enclosed with brackets ({}).
+	// + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
 	//   underscores (_) and must comply with URI specifications.
-	// + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
+	// + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
 	//   Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
 	Path string `pulumi:"path"`
-	// Specifies the backend request method of the API. The valid types are **GET**,
-	// **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+	// Specifies the backend request method of the API.\
+	// The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
 	RequestMethod string `pulumi:"requestMethod"`
 	// Specifies the backend request protocol. The valid values are **HTTP** and
-	// **HTTPS**, default to **HTTPS**.
+	// **HTTPS**, defaults to **HTTPS**.
 	RequestProtocol *string `pulumi:"requestProtocol"`
 	// Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-	// valid value is range from 1 to 600,000, default to 5,000.
+	// valid value is range from `1` to `600,000`, defaults to `5,000`.
 	Timeout *int `pulumi:"timeout"`
-	// Specifies the VPC channel ID. This parameter and `backendAddress` are
-	// alternative.
+	// Specifies the VPC channel ID.\
+	// This parameter and `backendAddress` are alternative.
 	VpcChannelId *string `pulumi:"vpcChannelId"`
 }
 
@@ -2171,46 +2236,49 @@ type ApiWebPolicyInput interface {
 type ApiWebPolicyArgs struct {
 	// Specifies the ID of the backend custom authorization.
 	AuthorizerId pulumi.StringPtrInput `pulumi:"authorizerId"`
-	// Specifies the backend service address, which consists of a domain name or IP
-	// address, and a port number, with not more than 255 characters. The backend service address must be in the format "Host
-	// name:Port number", for example, apig.example.com:7443. If the port number is not specified, the default HTTPS port 443
-	// or the default HTTP port 80 is used. The backend service address can contain environment variables, each starting with
-	// a letter and consisting of 3 to 32 characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+	// Specifies the backend service address.\
+	// The value which consists of a domain name or IP address, and a port number, with not more than `255` characters.
+	// The backend service address must be in the format "{host name}:{Port number}", for example, `apig.example.com:7443`.
+	// If the port number is not specified, the default HTTPS port `443`, or the default HTTP port `80` is used.
+	// The backend service address can contain environment variables, each starting with a letter and consisting of `3` to
+	// `32` characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
 	BackendAddress pulumi.StringPtrInput `pulumi:"backendAddress"`
 	// Specifies an array of one or more backend parameters. The maximum of request
 	// parameters is 50. The object structure is documented above.
 	BackendParams ApiWebPolicyBackendParamArrayInput `pulumi:"backendParams"`
-	// Specifies an array of one or more policy conditions. Up to five conditions can be set.
+	// Specifies an array of one or more policy conditions.\
+	// Up to five conditions can be set.
 	// The object structure is documented below.
 	Conditions ApiWebPolicyConditionArrayInput `pulumi:"conditions"`
 	// Specifies the effective mode of the backend policy. The valid values are **ALL**
-	// and **ANY**, default to **ANY**.
+	// and **ANY**, defaults to **ANY**.
 	EffectiveMode pulumi.StringPtrInput `pulumi:"effectiveMode"`
-	// Specifies the proxy host header. The host header can be customized for requests to
-	// be forwarded to cloud servers through the VPC channel. By default, the original host header of the request is used.
+	// Specifies the proxy host header.\
+	// The host header can be customized for requests to be forwarded to cloud servers through the VPC channel.
+	// By default, the original host header of the request is used.
 	HostHeader pulumi.StringPtrInput `pulumi:"hostHeader"`
-	// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-	// a letter. Only letters, digits, and underscores (_) are allowed.
+	// Specifies the backend policy name.\
+	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 	Name pulumi.StringInput `pulumi:"name"`
-	// Specifies the backend request address, which can contain a maximum of 512 characters and
+	// Specifies the backend request address, which can contain a maximum of `512` characters and
 	// must comply with URI specifications.
-	// + The request address can contain request parameters enclosed with brackets ({}).
-	// + The request address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
+	// + The address can contain request parameters enclosed with brackets ({}).
+	// + The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
 	//   underscores (_) and must comply with URI specifications.
-	// + The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
+	// + The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
 	//   Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
 	Path pulumi.StringInput `pulumi:"path"`
-	// Specifies the backend request method of the API. The valid types are **GET**,
-	// **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+	// Specifies the backend request method of the API.\
+	// The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
 	RequestMethod pulumi.StringInput `pulumi:"requestMethod"`
 	// Specifies the backend request protocol. The valid values are **HTTP** and
-	// **HTTPS**, default to **HTTPS**.
+	// **HTTPS**, defaults to **HTTPS**.
 	RequestProtocol pulumi.StringPtrInput `pulumi:"requestProtocol"`
 	// Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-	// valid value is range from 1 to 600,000, default to 5,000.
+	// valid value is range from `1` to `600,000`, defaults to `5,000`.
 	Timeout pulumi.IntPtrInput `pulumi:"timeout"`
-	// Specifies the VPC channel ID. This parameter and `backendAddress` are
-	// alternative.
+	// Specifies the VPC channel ID.\
+	// This parameter and `backendAddress` are alternative.
 	VpcChannelId pulumi.StringPtrInput `pulumi:"vpcChannelId"`
 }
 
@@ -2270,11 +2338,12 @@ func (o ApiWebPolicyOutput) AuthorizerId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiWebPolicy) *string { return v.AuthorizerId }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the backend service address, which consists of a domain name or IP
-// address, and a port number, with not more than 255 characters. The backend service address must be in the format "Host
-// name:Port number", for example, apig.example.com:7443. If the port number is not specified, the default HTTPS port 443
-// or the default HTTP port 80 is used. The backend service address can contain environment variables, each starting with
-// a letter and consisting of 3 to 32 characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+// Specifies the backend service address.\
+// The value which consists of a domain name or IP address, and a port number, with not more than `255` characters.
+// The backend service address must be in the format "{host name}:{Port number}", for example, `apig.example.com:7443`.
+// If the port number is not specified, the default HTTPS port `443`, or the default HTTP port `80` is used.
+// The backend service address can contain environment variables, each starting with a letter and consisting of `3` to
+// `32` characters. Only letters, digits, hyphens (-), and underscores (_) are allowed.
 func (o ApiWebPolicyOutput) BackendAddress() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiWebPolicy) *string { return v.BackendAddress }).(pulumi.StringPtrOutput)
 }
@@ -2285,61 +2354,63 @@ func (o ApiWebPolicyOutput) BackendParams() ApiWebPolicyBackendParamArrayOutput 
 	return o.ApplyT(func(v ApiWebPolicy) []ApiWebPolicyBackendParam { return v.BackendParams }).(ApiWebPolicyBackendParamArrayOutput)
 }
 
-// Specifies an array of one or more policy conditions. Up to five conditions can be set.
+// Specifies an array of one or more policy conditions.\
+// Up to five conditions can be set.
 // The object structure is documented below.
 func (o ApiWebPolicyOutput) Conditions() ApiWebPolicyConditionArrayOutput {
 	return o.ApplyT(func(v ApiWebPolicy) []ApiWebPolicyCondition { return v.Conditions }).(ApiWebPolicyConditionArrayOutput)
 }
 
 // Specifies the effective mode of the backend policy. The valid values are **ALL**
-// and **ANY**, default to **ANY**.
+// and **ANY**, defaults to **ANY**.
 func (o ApiWebPolicyOutput) EffectiveMode() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiWebPolicy) *string { return v.EffectiveMode }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the proxy host header. The host header can be customized for requests to
-// be forwarded to cloud servers through the VPC channel. By default, the original host header of the request is used.
+// Specifies the proxy host header.\
+// The host header can be customized for requests to be forwarded to cloud servers through the VPC channel.
+// By default, the original host header of the request is used.
 func (o ApiWebPolicyOutput) HostHeader() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiWebPolicy) *string { return v.HostHeader }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-// a letter. Only letters, digits, and underscores (_) are allowed.
+// Specifies the backend policy name.\
+// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 func (o ApiWebPolicyOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiWebPolicy) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the backend request address, which can contain a maximum of 512 characters and
+// Specifies the backend request address, which can contain a maximum of `512` characters and
 // must comply with URI specifications.
-//   - The request address can contain request parameters enclosed with brackets ({}).
-//   - The request address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
+//   - The address can contain request parameters enclosed with brackets ({}).
+//   - The address can contain special characters, such as asterisks (*), percent signs (%), hyphens (-) and
 //     underscores (_) and must comply with URI specifications.
-//   - The address can contain environment variables, each starting with a letter and consisting of 3 to 32 characters.
+//   - The address can contain environment variables, each starting with a letter and consisting of `3` to `32` characters.
 //     Only letters, digits, hyphens (-), and underscores (_) are allowed in environment variables.
 func (o ApiWebPolicyOutput) Path() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiWebPolicy) string { return v.Path }).(pulumi.StringOutput)
 }
 
-// Specifies the backend request method of the API. The valid types are **GET**,
-// **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
+// Specifies the backend request method of the API.\
+// The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
 func (o ApiWebPolicyOutput) RequestMethod() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiWebPolicy) string { return v.RequestMethod }).(pulumi.StringOutput)
 }
 
 // Specifies the backend request protocol. The valid values are **HTTP** and
-// **HTTPS**, default to **HTTPS**.
+// **HTTPS**, defaults to **HTTPS**.
 func (o ApiWebPolicyOutput) RequestProtocol() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiWebPolicy) *string { return v.RequestProtocol }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
-// valid value is range from 1 to 600,000, default to 5,000.
+// valid value is range from `1` to `600,000`, defaults to `5,000`.
 func (o ApiWebPolicyOutput) Timeout() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v ApiWebPolicy) *int { return v.Timeout }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the VPC channel ID. This parameter and `backendAddress` are
-// alternative.
+// Specifies the VPC channel ID.\
+// This parameter and `backendAddress` are alternative.
 func (o ApiWebPolicyOutput) VpcChannelId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiWebPolicy) *string { return v.VpcChannelId }).(pulumi.StringPtrOutput)
 }
@@ -2365,19 +2436,23 @@ func (o ApiWebPolicyArrayOutput) Index(i pulumi.IntInput) ApiWebPolicyOutput {
 }
 
 type ApiWebPolicyBackendParam struct {
-	// Specifies the description of the constant or system parameter, which contain a
-	// maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+	// Specifies the description of the constant or system parameter.\
+	// The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description *string `pulumi:"description"`
-	// Specifies the location of the backend parameter. The valid values are **PATH**,
-	// **QUERY** and **HEADER**.
+	// Specifies the location of the backend parameter.\
+	// The valid values are **PATH**, **QUERY** and **HEADER**.
 	Location string `pulumi:"location"`
-	// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-	// a letter. Only letters, digits, and underscores (_) are allowed.
+	// Specifies the backend policy name.\
+	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 	Name string `pulumi:"name"`
-	// Specifies the condition type of the backend policy. The valid values are **Equal**,
-	// **Enumerated** and **Matching**, default to **Equal**.
+	// Specifies the type of the system parameter.\
+	// The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+	SystemParamType *string `pulumi:"systemParamType"`
+	// Specifies the condition type of the backend policy.\
+	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 	Type string `pulumi:"type"`
-	// Specifies the condition type. For a condition with the input parameter source:
+	// Specifies the value of the backend policy.\
+	// For a condition with the input parameter source:
 	// + If the condition type is **Enumerated**, separate condition values with commas.
 	// + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 	Value string `pulumi:"value"`
@@ -2395,19 +2470,23 @@ type ApiWebPolicyBackendParamInput interface {
 }
 
 type ApiWebPolicyBackendParamArgs struct {
-	// Specifies the description of the constant or system parameter, which contain a
-	// maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+	// Specifies the description of the constant or system parameter.\
+	// The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description pulumi.StringPtrInput `pulumi:"description"`
-	// Specifies the location of the backend parameter. The valid values are **PATH**,
-	// **QUERY** and **HEADER**.
+	// Specifies the location of the backend parameter.\
+	// The valid values are **PATH**, **QUERY** and **HEADER**.
 	Location pulumi.StringInput `pulumi:"location"`
-	// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-	// a letter. Only letters, digits, and underscores (_) are allowed.
+	// Specifies the backend policy name.\
+	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 	Name pulumi.StringInput `pulumi:"name"`
-	// Specifies the condition type of the backend policy. The valid values are **Equal**,
-	// **Enumerated** and **Matching**, default to **Equal**.
+	// Specifies the type of the system parameter.\
+	// The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+	SystemParamType pulumi.StringPtrInput `pulumi:"systemParamType"`
+	// Specifies the condition type of the backend policy.\
+	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 	Type pulumi.StringInput `pulumi:"type"`
-	// Specifies the condition type. For a condition with the input parameter source:
+	// Specifies the value of the backend policy.\
+	// For a condition with the input parameter source:
 	// + If the condition type is **Enumerated**, separate condition values with commas.
 	// + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 	Value pulumi.StringInput `pulumi:"value"`
@@ -2464,31 +2543,38 @@ func (o ApiWebPolicyBackendParamOutput) ToApiWebPolicyBackendParamOutputWithCont
 	return o
 }
 
-// Specifies the description of the constant or system parameter, which contain a
-// maximum of 255 characters, and the angle brackets (< and >) are not allowed.
+// Specifies the description of the constant or system parameter.\
+// The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 func (o ApiWebPolicyBackendParamOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiWebPolicyBackendParam) *string { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the location of the backend parameter. The valid values are **PATH**,
-// **QUERY** and **HEADER**.
+// Specifies the location of the backend parameter.\
+// The valid values are **PATH**, **QUERY** and **HEADER**.
 func (o ApiWebPolicyBackendParamOutput) Location() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiWebPolicyBackendParam) string { return v.Location }).(pulumi.StringOutput)
 }
 
-// Specifies the backend policy name, which can contains of 3 to 64 characters and start with
-// a letter. Only letters, digits, and underscores (_) are allowed.
+// Specifies the backend policy name.\
+// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
 func (o ApiWebPolicyBackendParamOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiWebPolicyBackendParam) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the condition type of the backend policy. The valid values are **Equal**,
-// **Enumerated** and **Matching**, default to **Equal**.
+// Specifies the type of the system parameter.\
+// The valid values are **frontend**, **backend** and **internal**, defaults to **internal**.
+func (o ApiWebPolicyBackendParamOutput) SystemParamType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ApiWebPolicyBackendParam) *string { return v.SystemParamType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the condition type of the backend policy.\
+// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 func (o ApiWebPolicyBackendParamOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v ApiWebPolicyBackendParam) string { return v.Type }).(pulumi.StringOutput)
 }
 
-// Specifies the condition type. For a condition with the input parameter source:
+// Specifies the value of the backend policy.\
+// For a condition with the input parameter source:
 // + If the condition type is **Enumerated**, separate condition values with commas.
 // + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 func (o ApiWebPolicyBackendParamOutput) Value() pulumi.StringOutput {
@@ -2516,16 +2602,17 @@ func (o ApiWebPolicyBackendParamArrayOutput) Index(i pulumi.IntInput) ApiWebPoli
 }
 
 type ApiWebPolicyCondition struct {
-	// Specifies the request parameter name. This parameter is required if the policy type
-	// is param.
+	// Specifies the request parameter name.
+	// This parameter is required if the policy type is **param**.
 	ParamName *string `pulumi:"paramName"`
-	// Specifies the policy type. The valid values are **param** and **source**, default to
-	// **source**.
+	// Specifies the backend policy type.\
+	// The valid values are **param** and **source**, defaults to **source**.
 	Source *string `pulumi:"source"`
-	// Specifies the condition type of the backend policy. The valid values are **Equal**,
-	// **Enumerated** and **Matching**, default to **Equal**.
+	// Specifies the condition type of the backend policy.\
+	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 	Type *string `pulumi:"type"`
-	// Specifies the condition type. For a condition with the input parameter source:
+	// Specifies the value of the backend policy.\
+	// For a condition with the input parameter source:
 	// + If the condition type is **Enumerated**, separate condition values with commas.
 	// + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 	Value string `pulumi:"value"`
@@ -2543,16 +2630,17 @@ type ApiWebPolicyConditionInput interface {
 }
 
 type ApiWebPolicyConditionArgs struct {
-	// Specifies the request parameter name. This parameter is required if the policy type
-	// is param.
+	// Specifies the request parameter name.
+	// This parameter is required if the policy type is **param**.
 	ParamName pulumi.StringPtrInput `pulumi:"paramName"`
-	// Specifies the policy type. The valid values are **param** and **source**, default to
-	// **source**.
+	// Specifies the backend policy type.\
+	// The valid values are **param** and **source**, defaults to **source**.
 	Source pulumi.StringPtrInput `pulumi:"source"`
-	// Specifies the condition type of the backend policy. The valid values are **Equal**,
-	// **Enumerated** and **Matching**, default to **Equal**.
+	// Specifies the condition type of the backend policy.\
+	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 	Type pulumi.StringPtrInput `pulumi:"type"`
-	// Specifies the condition type. For a condition with the input parameter source:
+	// Specifies the value of the backend policy.\
+	// For a condition with the input parameter source:
 	// + If the condition type is **Enumerated**, separate condition values with commas.
 	// + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 	Value pulumi.StringInput `pulumi:"value"`
@@ -2609,25 +2697,26 @@ func (o ApiWebPolicyConditionOutput) ToApiWebPolicyConditionOutputWithContext(ct
 	return o
 }
 
-// Specifies the request parameter name. This parameter is required if the policy type
-// is param.
+// Specifies the request parameter name.
+// This parameter is required if the policy type is **param**.
 func (o ApiWebPolicyConditionOutput) ParamName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiWebPolicyCondition) *string { return v.ParamName }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the policy type. The valid values are **param** and **source**, default to
-// **source**.
+// Specifies the backend policy type.\
+// The valid values are **param** and **source**, defaults to **source**.
 func (o ApiWebPolicyConditionOutput) Source() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiWebPolicyCondition) *string { return v.Source }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the condition type of the backend policy. The valid values are **Equal**,
-// **Enumerated** and **Matching**, default to **Equal**.
+// Specifies the condition type of the backend policy.\
+// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
 func (o ApiWebPolicyConditionOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ApiWebPolicyCondition) *string { return v.Type }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the condition type. For a condition with the input parameter source:
+// Specifies the value of the backend policy.\
+// For a condition with the input parameter source:
 // + If the condition type is **Enumerated**, separate condition values with commas.
 // + If the condition type is **Matching**, enter a regular expression compatible with PERL.
 func (o ApiWebPolicyConditionOutput) Value() pulumi.StringOutput {
@@ -2655,17 +2744,14 @@ func (o ApiWebPolicyConditionArrayOutput) Index(i pulumi.IntInput) ApiWebPolicyC
 }
 
 type CustomAuthorizerIdentity struct {
-	// Specifies the parameter location, which support 'HEADER' and 'QUERY'.
-	// Changing this will create a new custom authorizer resource.
+	// Specifies the parameter location, which support **HEADER** and **QUERY**.
 	Location string `pulumi:"location"`
 	// Specifies the name of the parameter to be verified.
 	// The parameter includes front-end and back-end parameters.
-	// Changing this will create a new custom authorizer resource.
 	Name string `pulumi:"name"`
 	// Specifies the parameter verification expression.
 	// If omitted, the custom authorizer will not perform verification.
-	// The valid value is range form 1 to 2,048.
-	// Changing this will create a new custom authorizer resource.
+	// The valid value is range form `1` to `2,048`.
 	Validation *string `pulumi:"validation"`
 }
 
@@ -2681,17 +2767,14 @@ type CustomAuthorizerIdentityInput interface {
 }
 
 type CustomAuthorizerIdentityArgs struct {
-	// Specifies the parameter location, which support 'HEADER' and 'QUERY'.
-	// Changing this will create a new custom authorizer resource.
+	// Specifies the parameter location, which support **HEADER** and **QUERY**.
 	Location pulumi.StringInput `pulumi:"location"`
 	// Specifies the name of the parameter to be verified.
 	// The parameter includes front-end and back-end parameters.
-	// Changing this will create a new custom authorizer resource.
 	Name pulumi.StringInput `pulumi:"name"`
 	// Specifies the parameter verification expression.
 	// If omitted, the custom authorizer will not perform verification.
-	// The valid value is range form 1 to 2,048.
-	// Changing this will create a new custom authorizer resource.
+	// The valid value is range form `1` to `2,048`.
 	Validation pulumi.StringPtrInput `pulumi:"validation"`
 }
 
@@ -2746,23 +2829,20 @@ func (o CustomAuthorizerIdentityOutput) ToCustomAuthorizerIdentityOutputWithCont
 	return o
 }
 
-// Specifies the parameter location, which support 'HEADER' and 'QUERY'.
-// Changing this will create a new custom authorizer resource.
+// Specifies the parameter location, which support **HEADER** and **QUERY**.
 func (o CustomAuthorizerIdentityOutput) Location() pulumi.StringOutput {
 	return o.ApplyT(func(v CustomAuthorizerIdentity) string { return v.Location }).(pulumi.StringOutput)
 }
 
 // Specifies the name of the parameter to be verified.
 // The parameter includes front-end and back-end parameters.
-// Changing this will create a new custom authorizer resource.
 func (o CustomAuthorizerIdentityOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v CustomAuthorizerIdentity) string { return v.Name }).(pulumi.StringOutput)
 }
 
 // Specifies the parameter verification expression.
 // If omitted, the custom authorizer will not perform verification.
-// The valid value is range form 1 to 2,048.
-// Changing this will create a new custom authorizer resource.
+// The valid value is range form `1` to `2,048`.
 func (o CustomAuthorizerIdentityOutput) Validation() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v CustomAuthorizerIdentity) *string { return v.Validation }).(pulumi.StringPtrOutput)
 }
@@ -2788,10 +2868,10 @@ func (o CustomAuthorizerIdentityArrayOutput) Index(i pulumi.IntInput) CustomAuth
 }
 
 type GroupEnvironment struct {
-	// Specifies the APIG environment ID of the associated APIG group.
+	// Specifies the environment ID of the associated group.
 	EnvironmentId string `pulumi:"environmentId"`
-	// Specifies an array of one or more APIG environment variables. The object structure is
-	// documented below. The environment variables of different groups are isolated in the same environment.
+	// Specifies an array of one or more environment variables.\
+	// The object structure is documented below.
 	Variables []GroupEnvironmentVariable `pulumi:"variables"`
 }
 
@@ -2807,10 +2887,10 @@ type GroupEnvironmentInput interface {
 }
 
 type GroupEnvironmentArgs struct {
-	// Specifies the APIG environment ID of the associated APIG group.
+	// Specifies the environment ID of the associated group.
 	EnvironmentId pulumi.StringInput `pulumi:"environmentId"`
-	// Specifies an array of one or more APIG environment variables. The object structure is
-	// documented below. The environment variables of different groups are isolated in the same environment.
+	// Specifies an array of one or more environment variables.\
+	// The object structure is documented below.
 	Variables GroupEnvironmentVariableArrayInput `pulumi:"variables"`
 }
 
@@ -2865,13 +2945,13 @@ func (o GroupEnvironmentOutput) ToGroupEnvironmentOutputWithContext(ctx context.
 	return o
 }
 
-// Specifies the APIG environment ID of the associated APIG group.
+// Specifies the environment ID of the associated group.
 func (o GroupEnvironmentOutput) EnvironmentId() pulumi.StringOutput {
 	return o.ApplyT(func(v GroupEnvironment) string { return v.EnvironmentId }).(pulumi.StringOutput)
 }
 
-// Specifies an array of one or more APIG environment variables. The object structure is
-// documented below. The environment variables of different groups are isolated in the same environment.
+// Specifies an array of one or more environment variables.\
+// The object structure is documented below.
 func (o GroupEnvironmentOutput) Variables() GroupEnvironmentVariableArrayOutput {
 	return o.ApplyT(func(v GroupEnvironment) []GroupEnvironmentVariable { return v.Variables }).(GroupEnvironmentVariableArrayOutput)
 }
@@ -2897,14 +2977,20 @@ func (o GroupEnvironmentArrayOutput) Index(i pulumi.IntInput) GroupEnvironmentOu
 }
 
 type GroupEnvironmentVariable struct {
-	// Specifies the variable name, which can contains of 3 to 32 characters, starting with a
-	// letter. Only letters, digits, hyphens (-), and underscores (_) are allowed. In the definition of an API, `name` (
-	// case-sensitive) indicates a variable, such as #Name#. It is replaced by the actual value when the API is published in
-	// an environment. The variable names are not allowed to be repeated for an API group.
+	// The variable ID.
+	Id *string `pulumi:"id"`
+	// Specifies the variable name.\
+	// The valid length is limited from `3` to `32` characters.
+	// Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
+	// In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
+	// It is replaced by the actual value when the API is published in an environment.
+	// The variable names are not allowed to be repeated for an API group.
 	Name string `pulumi:"name"`
-	// Specifies the environment ariable value, which can contains of 1 to 255 characters. Only
-	// letters, digits and special characters (_-/.:) are allowed.
-	Value      string  `pulumi:"value"`
+	// Specifies the variable value.\
+	// The valid length is limited from `1` to `255` characters.
+	// Only letters, digits and special characters (_-/.:) are allowed.
+	Value string `pulumi:"value"`
+	// Deprecated: Use 'id' instead
 	VariableId *string `pulumi:"variableId"`
 }
 
@@ -2920,14 +3006,20 @@ type GroupEnvironmentVariableInput interface {
 }
 
 type GroupEnvironmentVariableArgs struct {
-	// Specifies the variable name, which can contains of 3 to 32 characters, starting with a
-	// letter. Only letters, digits, hyphens (-), and underscores (_) are allowed. In the definition of an API, `name` (
-	// case-sensitive) indicates a variable, such as #Name#. It is replaced by the actual value when the API is published in
-	// an environment. The variable names are not allowed to be repeated for an API group.
+	// The variable ID.
+	Id pulumi.StringPtrInput `pulumi:"id"`
+	// Specifies the variable name.\
+	// The valid length is limited from `3` to `32` characters.
+	// Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
+	// In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
+	// It is replaced by the actual value when the API is published in an environment.
+	// The variable names are not allowed to be repeated for an API group.
 	Name pulumi.StringInput `pulumi:"name"`
-	// Specifies the environment ariable value, which can contains of 1 to 255 characters. Only
-	// letters, digits and special characters (_-/.:) are allowed.
-	Value      pulumi.StringInput    `pulumi:"value"`
+	// Specifies the variable value.\
+	// The valid length is limited from `1` to `255` characters.
+	// Only letters, digits and special characters (_-/.:) are allowed.
+	Value pulumi.StringInput `pulumi:"value"`
+	// Deprecated: Use 'id' instead
 	VariableId pulumi.StringPtrInput `pulumi:"variableId"`
 }
 
@@ -2982,20 +3074,29 @@ func (o GroupEnvironmentVariableOutput) ToGroupEnvironmentVariableOutputWithCont
 	return o
 }
 
-// Specifies the variable name, which can contains of 3 to 32 characters, starting with a
-// letter. Only letters, digits, hyphens (-), and underscores (_) are allowed. In the definition of an API, `name` (
-// case-sensitive) indicates a variable, such as #Name#. It is replaced by the actual value when the API is published in
-// an environment. The variable names are not allowed to be repeated for an API group.
+// The variable ID.
+func (o GroupEnvironmentVariableOutput) Id() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v GroupEnvironmentVariable) *string { return v.Id }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the variable name.\
+// The valid length is limited from `3` to `32` characters.
+// Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
+// In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
+// It is replaced by the actual value when the API is published in an environment.
+// The variable names are not allowed to be repeated for an API group.
 func (o GroupEnvironmentVariableOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v GroupEnvironmentVariable) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the environment ariable value, which can contains of 1 to 255 characters. Only
-// letters, digits and special characters (_-/.:) are allowed.
+// Specifies the variable value.\
+// The valid length is limited from `1` to `255` characters.
+// Only letters, digits and special characters (_-/.:) are allowed.
 func (o GroupEnvironmentVariableOutput) Value() pulumi.StringOutput {
 	return o.ApplyT(func(v GroupEnvironmentVariable) string { return v.Value }).(pulumi.StringOutput)
 }
 
+// Deprecated: Use 'id' instead
 func (o GroupEnvironmentVariableOutput) VariableId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GroupEnvironmentVariable) *string { return v.VariableId }).(pulumi.StringPtrOutput)
 }
@@ -3024,7 +3125,7 @@ type ResponseRule struct {
 	// Specifies the body template of the API response rule, e.g.
 	// `{\"code\":\"$context.authorizer.frontend.code\",\"message\":\"$context.authorizer.frontend.message\"}`
 	Body string `pulumi:"body"`
-	// Specifies the type of the API custom response rule.
+	// Specifies the error type of the API response rule.
 	// + **AUTH_FAILURE**: Authentication failed.
 	// + **AUTH_HEADER_MISSING**: The identity source is missing.
 	// + **AUTHORIZER_FAILURE**: Custom authentication failed.
@@ -3059,7 +3160,7 @@ type ResponseRuleArgs struct {
 	// Specifies the body template of the API response rule, e.g.
 	// `{\"code\":\"$context.authorizer.frontend.code\",\"message\":\"$context.authorizer.frontend.message\"}`
 	Body pulumi.StringInput `pulumi:"body"`
-	// Specifies the type of the API custom response rule.
+	// Specifies the error type of the API response rule.
 	// + **AUTH_FAILURE**: Authentication failed.
 	// + **AUTH_HEADER_MISSING**: The identity source is missing.
 	// + **AUTHORIZER_FAILURE**: Custom authentication failed.
@@ -3136,7 +3237,7 @@ func (o ResponseRuleOutput) Body() pulumi.StringOutput {
 	return o.ApplyT(func(v ResponseRule) string { return v.Body }).(pulumi.StringOutput)
 }
 
-// Specifies the type of the API custom response rule.
+// Specifies the error type of the API response rule.
 // + **AUTH_FAILURE**: Authentication failed.
 // + **AUTH_HEADER_MISSING**: The identity source is missing.
 // + **AUTHORIZER_FAILURE**: Custom authentication failed.
@@ -3181,14 +3282,14 @@ func (o ResponseRuleArrayOutput) Index(i pulumi.IntInput) ResponseRuleOutput {
 }
 
 type ThrottlingPolicyAppThrottle struct {
-	// ID of the special application throttling policy.
+	// ID of the special user/application throttling policy.
 	Id *string `pulumi:"id"`
 	// Specifies the maximum number of times an API can be accessed within a specified
 	// period.
 	MaxApiRequests int `pulumi:"maxApiRequests"`
 	// Specifies the object ID which the special throttling policy belongs.
 	ThrottlingObjectId string `pulumi:"throttlingObjectId"`
-	// The object name which the special application throttling policy belongs.
+	// The object name which the special user/application throttling policy belongs.
 	ThrottlingObjectName *string `pulumi:"throttlingObjectName"`
 }
 
@@ -3204,14 +3305,14 @@ type ThrottlingPolicyAppThrottleInput interface {
 }
 
 type ThrottlingPolicyAppThrottleArgs struct {
-	// ID of the special application throttling policy.
+	// ID of the special user/application throttling policy.
 	Id pulumi.StringPtrInput `pulumi:"id"`
 	// Specifies the maximum number of times an API can be accessed within a specified
 	// period.
 	MaxApiRequests pulumi.IntInput `pulumi:"maxApiRequests"`
 	// Specifies the object ID which the special throttling policy belongs.
 	ThrottlingObjectId pulumi.StringInput `pulumi:"throttlingObjectId"`
-	// The object name which the special application throttling policy belongs.
+	// The object name which the special user/application throttling policy belongs.
 	ThrottlingObjectName pulumi.StringPtrInput `pulumi:"throttlingObjectName"`
 }
 
@@ -3266,7 +3367,7 @@ func (o ThrottlingPolicyAppThrottleOutput) ToThrottlingPolicyAppThrottleOutputWi
 	return o
 }
 
-// ID of the special application throttling policy.
+// ID of the special user/application throttling policy.
 func (o ThrottlingPolicyAppThrottleOutput) Id() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ThrottlingPolicyAppThrottle) *string { return v.Id }).(pulumi.StringPtrOutput)
 }
@@ -3282,7 +3383,7 @@ func (o ThrottlingPolicyAppThrottleOutput) ThrottlingObjectId() pulumi.StringOut
 	return o.ApplyT(func(v ThrottlingPolicyAppThrottle) string { return v.ThrottlingObjectId }).(pulumi.StringOutput)
 }
 
-// The object name which the special application throttling policy belongs.
+// The object name which the special user/application throttling policy belongs.
 func (o ThrottlingPolicyAppThrottleOutput) ThrottlingObjectName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ThrottlingPolicyAppThrottle) *string { return v.ThrottlingObjectName }).(pulumi.StringPtrOutput)
 }
@@ -3308,14 +3409,14 @@ func (o ThrottlingPolicyAppThrottleArrayOutput) Index(i pulumi.IntInput) Throttl
 }
 
 type ThrottlingPolicyUserThrottle struct {
-	// ID of the special application throttling policy.
+	// ID of the special user/application throttling policy.
 	Id *string `pulumi:"id"`
 	// Specifies the maximum number of times an API can be accessed within a specified
 	// period.
 	MaxApiRequests int `pulumi:"maxApiRequests"`
 	// Specifies the object ID which the special throttling policy belongs.
 	ThrottlingObjectId string `pulumi:"throttlingObjectId"`
-	// The object name which the special application throttling policy belongs.
+	// The object name which the special user/application throttling policy belongs.
 	ThrottlingObjectName *string `pulumi:"throttlingObjectName"`
 }
 
@@ -3331,14 +3432,14 @@ type ThrottlingPolicyUserThrottleInput interface {
 }
 
 type ThrottlingPolicyUserThrottleArgs struct {
-	// ID of the special application throttling policy.
+	// ID of the special user/application throttling policy.
 	Id pulumi.StringPtrInput `pulumi:"id"`
 	// Specifies the maximum number of times an API can be accessed within a specified
 	// period.
 	MaxApiRequests pulumi.IntInput `pulumi:"maxApiRequests"`
 	// Specifies the object ID which the special throttling policy belongs.
 	ThrottlingObjectId pulumi.StringInput `pulumi:"throttlingObjectId"`
-	// The object name which the special application throttling policy belongs.
+	// The object name which the special user/application throttling policy belongs.
 	ThrottlingObjectName pulumi.StringPtrInput `pulumi:"throttlingObjectName"`
 }
 
@@ -3393,7 +3494,7 @@ func (o ThrottlingPolicyUserThrottleOutput) ToThrottlingPolicyUserThrottleOutput
 	return o
 }
 
-// ID of the special application throttling policy.
+// ID of the special user/application throttling policy.
 func (o ThrottlingPolicyUserThrottleOutput) Id() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ThrottlingPolicyUserThrottle) *string { return v.Id }).(pulumi.StringPtrOutput)
 }
@@ -3409,7 +3510,7 @@ func (o ThrottlingPolicyUserThrottleOutput) ThrottlingObjectId() pulumi.StringOu
 	return o.ApplyT(func(v ThrottlingPolicyUserThrottle) string { return v.ThrottlingObjectId }).(pulumi.StringOutput)
 }
 
-// The object name which the special application throttling policy belongs.
+// The object name which the special user/application throttling policy belongs.
 func (o ThrottlingPolicyUserThrottleOutput) ThrottlingObjectName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ThrottlingPolicyUserThrottle) *string { return v.ThrottlingObjectName }).(pulumi.StringPtrOutput)
 }
@@ -3436,14 +3537,14 @@ func (o ThrottlingPolicyUserThrottleArrayOutput) Index(i pulumi.IntInput) Thrott
 
 type VpcChannelMember struct {
 	// Specifies the ECS ID for each backend servers.
-	// Required if `memberType` is *ECS*.
+	// Required if the `memberType` is **ECS**.
 	// This parameter and `ipAddress` are alternative.
 	Id *string `pulumi:"id"`
 	// Specifies the IP address each backend servers.
-	// Required if `memberType` is *EIP*.
+	// Required if the `memberType` is **EIP**.
 	IpAddress *string `pulumi:"ipAddress"`
 	// Specifies the backend server weight.
-	// The valid values are range from 1 to 100, default to 1.
+	// The valid value ranges from `1` to `100`, defaults to `1`.
 	Weight *int `pulumi:"weight"`
 }
 
@@ -3460,14 +3561,14 @@ type VpcChannelMemberInput interface {
 
 type VpcChannelMemberArgs struct {
 	// Specifies the ECS ID for each backend servers.
-	// Required if `memberType` is *ECS*.
+	// Required if the `memberType` is **ECS**.
 	// This parameter and `ipAddress` are alternative.
 	Id pulumi.StringPtrInput `pulumi:"id"`
 	// Specifies the IP address each backend servers.
-	// Required if `memberType` is *EIP*.
+	// Required if the `memberType` is **EIP**.
 	IpAddress pulumi.StringPtrInput `pulumi:"ipAddress"`
 	// Specifies the backend server weight.
-	// The valid values are range from 1 to 100, default to 1.
+	// The valid value ranges from `1` to `100`, defaults to `1`.
 	Weight pulumi.IntPtrInput `pulumi:"weight"`
 }
 
@@ -3523,20 +3624,20 @@ func (o VpcChannelMemberOutput) ToVpcChannelMemberOutputWithContext(ctx context.
 }
 
 // Specifies the ECS ID for each backend servers.
-// Required if `memberType` is *ECS*.
+// Required if the `memberType` is **ECS**.
 // This parameter and `ipAddress` are alternative.
 func (o VpcChannelMemberOutput) Id() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v VpcChannelMember) *string { return v.Id }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the IP address each backend servers.
-// Required if `memberType` is *EIP*.
+// Required if the `memberType` is **EIP**.
 func (o VpcChannelMemberOutput) IpAddress() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v VpcChannelMember) *string { return v.IpAddress }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the backend server weight.
-// The valid values are range from 1 to 100, default to 1.
+// The valid value ranges from `1` to `100`, defaults to `1`.
 func (o VpcChannelMemberOutput) Weight() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v VpcChannelMember) *int { return v.Weight }).(pulumi.IntPtrOutput)
 }

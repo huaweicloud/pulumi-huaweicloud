@@ -92,6 +92,8 @@ type LookupPeeringConnectionArgs struct {
 
 // A collection of values returned by getPeeringConnection.
 type LookupPeeringConnectionResult struct {
+	// The description of the VPC Peering Connection.
+	Description  string `pulumi:"description"`
 	Id           string `pulumi:"id"`
 	Name         string `pulumi:"name"`
 	PeerTenantId string `pulumi:"peerTenantId"`
@@ -151,6 +153,11 @@ func (o LookupPeeringConnectionResultOutput) ToLookupPeeringConnectionResultOutp
 
 func (o LookupPeeringConnectionResultOutput) ToLookupPeeringConnectionResultOutputWithContext(ctx context.Context) LookupPeeringConnectionResultOutput {
 	return o
+}
+
+// The description of the VPC Peering Connection.
+func (o LookupPeeringConnectionResultOutput) Description() pulumi.StringOutput {
+	return o.ApplyT(func(v LookupPeeringConnectionResult) string { return v.Description }).(pulumi.StringOutput)
 }
 
 func (o LookupPeeringConnectionResultOutput) Id() pulumi.StringOutput {

@@ -28,12 +28,16 @@ import (
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Waf"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Waf"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			enterpriseProjectId := cfg.RequireObject("enterpriseProjectId")
 //			certificate1, err := Waf.NewCertificate(ctx, "certificate1", &Waf.CertificateArgs{
+//				EnterpriseProjectId: pulumi.Any(enterpriseProjectId),
 //				Certificate: pulumi.String(fmt.Sprintf(`-----BEGIN CERTIFICATE-----
 //
 // MIIFmQl5dh2QUAeo39TIKtadgAgh4zHx09kSgayS9Wph9LEqq7MA+2042L3J9aOa
@@ -58,10 +62,11 @@ import (
 //				return err
 //			}
 //			_, err = Waf.NewDomain(ctx, "domain1", &Waf.DomainArgs{
-//				Domain:          pulumi.String("www.example.com"),
-//				CertificateId:   certificate1.ID(),
-//				CertificateName: certificate1.Name,
-//				Proxy:           pulumi.Bool(true),
+//				Domain:              pulumi.String("www.example.com"),
+//				CertificateId:       certificate1.ID(),
+//				CertificateName:     certificate1.Name,
+//				Proxy:               pulumi.Bool(true),
+//				EnterpriseProjectId: pulumi.Any(enterpriseProjectId),
 //				Servers: waf.DomainServerArray{
 //					&waf.DomainServerArgs{
 //						ClientProtocol: pulumi.String("HTTPS"),
@@ -82,11 +87,19 @@ import (
 //
 // ## Import
 //
-// Domains can be imported using the `id`, e.g.
+// There are two ways to import WAF domain state. * Using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Waf/domain:Domain domain_2 7902bd9e01104cb794dcb668f235e0c5
+//	$ pulumi import huaweicloud:Waf/domain:Domain test <id>
+//
+// ```
+//
+//   - Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+//
+// ```sh
+//
+//	$ pulumi import huaweicloud:Waf/domain:Domain test <id>/<enterprise_project_id>
 //
 // ```
 type Domain struct {
@@ -101,9 +114,15 @@ type Domain struct {
 	// Specifies the certificate name. This parameter is mandatory
 	// when `clientProtocol` is set to HTTPS.
 	CertificateName pulumi.StringPtrOutput `pulumi:"certificateName"`
-	// Specifies the domain name to be protected. For example, www.example.com or
-	// *.example.com. Changing this creates a new domain.
+	// Specifies the charging mode of the domain. Valid values are *prePaid*
+	// and *postPaid*, defaults to *prePaid*. Changing this creates a new instance.
+	ChargingMode pulumi.StringPtrOutput `pulumi:"chargingMode"`
+	// Specifies the domain name to be protected. For example, `www.example.com` or
+	// `*.example.com`. Changing this creates a new domain.
 	Domain pulumi.StringOutput `pulumi:"domain"`
+	// Specifies the enterprise project ID of WAF domain.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
 	// Specifies whether to retain the policy when deleting a domain name.
 	// Defaults to true.
 	KeepPolicy pulumi.BoolPtrOutput `pulumi:"keepPolicy"`
@@ -168,9 +187,15 @@ type domainState struct {
 	// Specifies the certificate name. This parameter is mandatory
 	// when `clientProtocol` is set to HTTPS.
 	CertificateName *string `pulumi:"certificateName"`
-	// Specifies the domain name to be protected. For example, www.example.com or
-	// *.example.com. Changing this creates a new domain.
+	// Specifies the charging mode of the domain. Valid values are *prePaid*
+	// and *postPaid*, defaults to *prePaid*. Changing this creates a new instance.
+	ChargingMode *string `pulumi:"chargingMode"`
+	// Specifies the domain name to be protected. For example, `www.example.com` or
+	// `*.example.com`. Changing this creates a new domain.
 	Domain *string `pulumi:"domain"`
+	// Specifies the enterprise project ID of WAF domain.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies whether to retain the policy when deleting a domain name.
 	// Defaults to true.
 	KeepPolicy *bool `pulumi:"keepPolicy"`
@@ -200,9 +225,15 @@ type DomainState struct {
 	// Specifies the certificate name. This parameter is mandatory
 	// when `clientProtocol` is set to HTTPS.
 	CertificateName pulumi.StringPtrInput
-	// Specifies the domain name to be protected. For example, www.example.com or
-	// *.example.com. Changing this creates a new domain.
+	// Specifies the charging mode of the domain. Valid values are *prePaid*
+	// and *postPaid*, defaults to *prePaid*. Changing this creates a new instance.
+	ChargingMode pulumi.StringPtrInput
+	// Specifies the domain name to be protected. For example, `www.example.com` or
+	// `*.example.com`. Changing this creates a new domain.
 	Domain pulumi.StringPtrInput
+	// Specifies the enterprise project ID of WAF domain.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies whether to retain the policy when deleting a domain name.
 	// Defaults to true.
 	KeepPolicy pulumi.BoolPtrInput
@@ -233,9 +264,15 @@ type domainArgs struct {
 	// Specifies the certificate name. This parameter is mandatory
 	// when `clientProtocol` is set to HTTPS.
 	CertificateName *string `pulumi:"certificateName"`
-	// Specifies the domain name to be protected. For example, www.example.com or
-	// *.example.com. Changing this creates a new domain.
+	// Specifies the charging mode of the domain. Valid values are *prePaid*
+	// and *postPaid*, defaults to *prePaid*. Changing this creates a new instance.
+	ChargingMode *string `pulumi:"chargingMode"`
+	// Specifies the domain name to be protected. For example, `www.example.com` or
+	// `*.example.com`. Changing this creates a new domain.
 	Domain string `pulumi:"domain"`
+	// Specifies the enterprise project ID of WAF domain.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies whether to retain the policy when deleting a domain name.
 	// Defaults to true.
 	KeepPolicy *bool `pulumi:"keepPolicy"`
@@ -259,9 +296,15 @@ type DomainArgs struct {
 	// Specifies the certificate name. This parameter is mandatory
 	// when `clientProtocol` is set to HTTPS.
 	CertificateName pulumi.StringPtrInput
-	// Specifies the domain name to be protected. For example, www.example.com or
-	// *.example.com. Changing this creates a new domain.
+	// Specifies the charging mode of the domain. Valid values are *prePaid*
+	// and *postPaid*, defaults to *prePaid*. Changing this creates a new instance.
+	ChargingMode pulumi.StringPtrInput
+	// Specifies the domain name to be protected. For example, `www.example.com` or
+	// `*.example.com`. Changing this creates a new domain.
 	Domain pulumi.StringInput
+	// Specifies the enterprise project ID of WAF domain.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies whether to retain the policy when deleting a domain name.
 	// Defaults to true.
 	KeepPolicy pulumi.BoolPtrInput
@@ -382,10 +425,22 @@ func (o DomainOutput) CertificateName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Domain) pulumi.StringPtrOutput { return v.CertificateName }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the domain name to be protected. For example, www.example.com or
-// *.example.com. Changing this creates a new domain.
+// Specifies the charging mode of the domain. Valid values are *prePaid*
+// and *postPaid*, defaults to *prePaid*. Changing this creates a new instance.
+func (o DomainOutput) ChargingMode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Domain) pulumi.StringPtrOutput { return v.ChargingMode }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the domain name to be protected. For example, `www.example.com` or
+// `*.example.com`. Changing this creates a new domain.
 func (o DomainOutput) Domain() pulumi.StringOutput {
 	return o.ApplyT(func(v *Domain) pulumi.StringOutput { return v.Domain }).(pulumi.StringOutput)
+}
+
+// Specifies the enterprise project ID of WAF domain.
+// Changing this parameter will create a new resource.
+func (o DomainOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Domain) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
 
 // Specifies whether to retain the policy when deleting a domain name.

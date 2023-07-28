@@ -92,17 +92,18 @@ import (
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:GaussDBforNoSQL/mongoInstance:MongoInstance instance_1 2e045d8b-b226-4aa2-91b9-7e76357655c06
+//	$ pulumi import huaweicloud:GaussDBforNoSQL/mongoInstance:MongoInstance instance_1 2d3cb29c73754417bbbf46b1f856b371in10
 //
 // ```
 type MongoInstance struct {
 	pulumi.CustomResourceState
 
 	// Specifies whether auto renew is enabled.
-	// Valid values are **true** and **false**. Changing this will do nothing.
+	// Valid values are **true** and **false**.
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
-	// Specifies the AZ name. Changing this parameter will create a new
-	// resource.
+	// Specifies the AZ name. For a three-AZ deployment instance,
+	// use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+	// Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringOutput `pulumi:"availabilityZone"`
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy MongoInstanceBackupStrategyOutput `pulumi:"backupStrategy"`
@@ -132,6 +133,10 @@ type MongoInstance struct {
 	// If specified, try to import the instance instead of creating if the name already
 	// existed.
 	ForceImport pulumi.BoolPtrOutput `pulumi:"forceImport"`
+	// Indicates the LB IP address of the db.
+	LbIpAddress pulumi.StringOutput `pulumi:"lbIpAddress"`
+	// Indicates the LB port of the db.
+	LbPort pulumi.StringOutput `pulumi:"lbPort"`
 	// Indicates the instance type.
 	Mode pulumi.StringOutput `pulumi:"mode"`
 	// Specifies the instance name, which can be the same as an existing instance name. The
@@ -234,10 +239,11 @@ func GetMongoInstance(ctx *pulumi.Context,
 // Input properties used for looking up and filtering MongoInstance resources.
 type mongoInstanceState struct {
 	// Specifies whether auto renew is enabled.
-	// Valid values are **true** and **false**. Changing this will do nothing.
+	// Valid values are **true** and **false**.
 	AutoRenew *string `pulumi:"autoRenew"`
-	// Specifies the AZ name. Changing this parameter will create a new
-	// resource.
+	// Specifies the AZ name. For a three-AZ deployment instance,
+	// use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+	// Changing this parameter will create a new resource.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy *MongoInstanceBackupStrategy `pulumi:"backupStrategy"`
@@ -267,6 +273,10 @@ type mongoInstanceState struct {
 	// If specified, try to import the instance instead of creating if the name already
 	// existed.
 	ForceImport *bool `pulumi:"forceImport"`
+	// Indicates the LB IP address of the db.
+	LbIpAddress *string `pulumi:"lbIpAddress"`
+	// Indicates the LB port of the db.
+	LbPort *string `pulumi:"lbPort"`
 	// Indicates the instance type.
 	Mode *string `pulumi:"mode"`
 	// Specifies the instance name, which can be the same as an existing instance name. The
@@ -322,10 +332,11 @@ type mongoInstanceState struct {
 
 type MongoInstanceState struct {
 	// Specifies whether auto renew is enabled.
-	// Valid values are **true** and **false**. Changing this will do nothing.
+	// Valid values are **true** and **false**.
 	AutoRenew pulumi.StringPtrInput
-	// Specifies the AZ name. Changing this parameter will create a new
-	// resource.
+	// Specifies the AZ name. For a three-AZ deployment instance,
+	// use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+	// Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringPtrInput
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy MongoInstanceBackupStrategyPtrInput
@@ -355,6 +366,10 @@ type MongoInstanceState struct {
 	// If specified, try to import the instance instead of creating if the name already
 	// existed.
 	ForceImport pulumi.BoolPtrInput
+	// Indicates the LB IP address of the db.
+	LbIpAddress pulumi.StringPtrInput
+	// Indicates the LB port of the db.
+	LbPort pulumi.StringPtrInput
 	// Indicates the instance type.
 	Mode pulumi.StringPtrInput
 	// Specifies the instance name, which can be the same as an existing instance name. The
@@ -414,10 +429,11 @@ func (MongoInstanceState) ElementType() reflect.Type {
 
 type mongoInstanceArgs struct {
 	// Specifies whether auto renew is enabled.
-	// Valid values are **true** and **false**. Changing this will do nothing.
+	// Valid values are **true** and **false**.
 	AutoRenew *string `pulumi:"autoRenew"`
-	// Specifies the AZ name. Changing this parameter will create a new
-	// resource.
+	// Specifies the AZ name. For a three-AZ deployment instance,
+	// use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+	// Changing this parameter will create a new resource.
 	AvailabilityZone string `pulumi:"availabilityZone"`
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy *MongoInstanceBackupStrategy `pulumi:"backupStrategy"`
@@ -491,10 +507,11 @@ type mongoInstanceArgs struct {
 // The set of arguments for constructing a MongoInstance resource.
 type MongoInstanceArgs struct {
 	// Specifies whether auto renew is enabled.
-	// Valid values are **true** and **false**. Changing this will do nothing.
+	// Valid values are **true** and **false**.
 	AutoRenew pulumi.StringPtrInput
-	// Specifies the AZ name. Changing this parameter will create a new
-	// resource.
+	// Specifies the AZ name. For a three-AZ deployment instance,
+	// use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+	// Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringInput
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy MongoInstanceBackupStrategyPtrInput
@@ -653,13 +670,14 @@ func (o MongoInstanceOutput) ToMongoInstanceOutputWithContext(ctx context.Contex
 }
 
 // Specifies whether auto renew is enabled.
-// Valid values are **true** and **false**. Changing this will do nothing.
+// Valid values are **true** and **false**.
 func (o MongoInstanceOutput) AutoRenew() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *MongoInstance) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the AZ name. Changing this parameter will create a new
-// resource.
+// Specifies the AZ name. For a three-AZ deployment instance,
+// use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+// Changing this parameter will create a new resource.
 func (o MongoInstanceOutput) AvailabilityZone() pulumi.StringOutput {
 	return o.ApplyT(func(v *MongoInstance) pulumi.StringOutput { return v.AvailabilityZone }).(pulumi.StringOutput)
 }
@@ -720,6 +738,16 @@ func (o MongoInstanceOutput) Flavor() pulumi.StringOutput {
 // existed.
 func (o MongoInstanceOutput) ForceImport() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *MongoInstance) pulumi.BoolPtrOutput { return v.ForceImport }).(pulumi.BoolPtrOutput)
+}
+
+// Indicates the LB IP address of the db.
+func (o MongoInstanceOutput) LbIpAddress() pulumi.StringOutput {
+	return o.ApplyT(func(v *MongoInstance) pulumi.StringOutput { return v.LbIpAddress }).(pulumi.StringOutput)
+}
+
+// Indicates the LB port of the db.
+func (o MongoInstanceOutput) LbPort() pulumi.StringOutput {
+	return o.ApplyT(func(v *MongoInstance) pulumi.StringOutput { return v.LbPort }).(pulumi.StringOutput)
 }
 
 // Indicates the instance type.

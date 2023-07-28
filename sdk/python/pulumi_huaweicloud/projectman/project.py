@@ -23,15 +23,10 @@ class ProjectArgs:
                  template_id: Optional[pulumi.Input[int]] = None):
         """
         The set of arguments for constructing a Project resource.
-        :param pulumi.Input[str] type: The type of project.  
-               The valid values are **scrum**, **xboard**, **basic**, **phoenix**.
+        :param pulumi.Input[str] type: The type of project.
         :param pulumi.Input[str] description: The description about the project.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of the project.  
-               Value 0 indicates the default enterprise project.
-        :param pulumi.Input[str] name: The project name.  
-               The name can contain 1 to 128 characters.
-        :param pulumi.Input[str] region: Specifies the region in which to create the resource.
-               If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of the project.
+        :param pulumi.Input[str] name: The project name.
         :param pulumi.Input[str] source: The source of project.
         :param pulumi.Input[int] template_id: The template id which used to create project.
         """
@@ -53,8 +48,7 @@ class ProjectArgs:
     @pulumi.getter
     def type(self) -> pulumi.Input[str]:
         """
-        The type of project.  
-        The valid values are **scrum**, **xboard**, **basic**, **phoenix**.
+        The type of project.
         """
         return pulumi.get(self, "type")
 
@@ -78,8 +72,7 @@ class ProjectArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The enterprise project ID of the project.  
-        Value 0 indicates the default enterprise project.
+        The enterprise project ID of the project.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -91,8 +84,7 @@ class ProjectArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        The project name.  
-        The name can contain 1 to 128 characters.
+        The project name.
         """
         return pulumi.get(self, "name")
 
@@ -103,10 +95,6 @@ class ProjectArgs:
     @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the region in which to create the resource.
-        If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        """
         return pulumi.get(self, "region")
 
     @region.setter
@@ -155,18 +143,13 @@ class _ProjectState:
         Input properties used for looking up and filtering Project resources.
         :param pulumi.Input[int] archive: Whether the project is archived.
         :param pulumi.Input[str] description: The description about the project.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of the project.  
-               Value 0 indicates the default enterprise project.
-        :param pulumi.Input[str] name: The project name.  
-               The name can contain 1 to 128 characters.
+        :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of the project.
+        :param pulumi.Input[str] name: The project name.
         :param pulumi.Input[str] project_code: The project code.
         :param pulumi.Input[int] project_num_id: The number id of project.
-        :param pulumi.Input[str] region: Specifies the region in which to create the resource.
-               If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] source: The source of project.
         :param pulumi.Input[int] template_id: The template id which used to create project.
-        :param pulumi.Input[str] type: The type of project.  
-               The valid values are **scrum**, **xboard**, **basic**, **phoenix**.
+        :param pulumi.Input[str] type: The type of project.
         """
         if archive is not None:
             pulumi.set(__self__, "archive", archive)
@@ -217,8 +200,7 @@ class _ProjectState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The enterprise project ID of the project.  
-        Value 0 indicates the default enterprise project.
+        The enterprise project ID of the project.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -230,8 +212,7 @@ class _ProjectState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        The project name.  
-        The name can contain 1 to 128 characters.
+        The project name.
         """
         return pulumi.get(self, "name")
 
@@ -266,10 +247,6 @@ class _ProjectState:
     @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the region in which to create the resource.
-        If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        """
         return pulumi.get(self, "region")
 
     @region.setter
@@ -304,8 +281,7 @@ class _ProjectState:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        The type of project.  
-        The valid values are **scrum**, **xboard**, **basic**, **phoenix**.
+        The type of project.
         """
         return pulumi.get(self, "type")
 
@@ -328,38 +304,15 @@ class Project(pulumi.CustomResource):
                  type: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages a Project resource within HuaweiCloud.
-
-        ## Example Usage
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        test = huaweicloud.project_man.Project("test", type="scrum")
-        ```
-
-        ## Import
-
-        The project can be imported using the `id`, e.g.
-
-        ```sh
-         $ pulumi import huaweicloud:ProjectMan/project:Project test 0ce123456a00f2591fabc00385ff1234
-        ```
-
+        Create a Project resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: The description about the project.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of the project.  
-               Value 0 indicates the default enterprise project.
-        :param pulumi.Input[str] name: The project name.  
-               The name can contain 1 to 128 characters.
-        :param pulumi.Input[str] region: Specifies the region in which to create the resource.
-               If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of the project.
+        :param pulumi.Input[str] name: The project name.
         :param pulumi.Input[str] source: The source of project.
         :param pulumi.Input[int] template_id: The template id which used to create project.
-        :param pulumi.Input[str] type: The type of project.  
-               The valid values are **scrum**, **xboard**, **basic**, **phoenix**.
+        :param pulumi.Input[str] type: The type of project.
         """
         ...
     @overload
@@ -368,25 +321,7 @@ class Project(pulumi.CustomResource):
                  args: ProjectArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a Project resource within HuaweiCloud.
-
-        ## Example Usage
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        test = huaweicloud.project_man.Project("test", type="scrum")
-        ```
-
-        ## Import
-
-        The project can be imported using the `id`, e.g.
-
-        ```sh
-         $ pulumi import huaweicloud:ProjectMan/project:Project test 0ce123456a00f2591fabc00385ff1234
-        ```
-
+        Create a Project resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param ProjectArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -459,18 +394,13 @@ class Project(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[int] archive: Whether the project is archived.
         :param pulumi.Input[str] description: The description about the project.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of the project.  
-               Value 0 indicates the default enterprise project.
-        :param pulumi.Input[str] name: The project name.  
-               The name can contain 1 to 128 characters.
+        :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of the project.
+        :param pulumi.Input[str] name: The project name.
         :param pulumi.Input[str] project_code: The project code.
         :param pulumi.Input[int] project_num_id: The number id of project.
-        :param pulumi.Input[str] region: Specifies the region in which to create the resource.
-               If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] source: The source of project.
         :param pulumi.Input[int] template_id: The template id which used to create project.
-        :param pulumi.Input[str] type: The type of project.  
-               The valid values are **scrum**, **xboard**, **basic**, **phoenix**.
+        :param pulumi.Input[str] type: The type of project.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -508,8 +438,7 @@ class Project(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        The enterprise project ID of the project.  
-        Value 0 indicates the default enterprise project.
+        The enterprise project ID of the project.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -517,8 +446,7 @@ class Project(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        The project name.  
-        The name can contain 1 to 128 characters.
+        The project name.
         """
         return pulumi.get(self, "name")
 
@@ -541,10 +469,6 @@ class Project(pulumi.CustomResource):
     @property
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
-        """
-        Specifies the region in which to create the resource.
-        If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        """
         return pulumi.get(self, "region")
 
     @property
@@ -567,8 +491,7 @@ class Project(pulumi.CustomResource):
     @pulumi.getter
     def type(self) -> pulumi.Output[str]:
         """
-        The type of project.  
-        The valid values are **scrum**, **xboard**, **basic**, **phoenix**.
+        The type of project.
         """
         return pulumi.get(self, "type")
 

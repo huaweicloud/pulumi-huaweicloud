@@ -20,12 +20,14 @@ class ThrottlingPolicyAssociateArgs:
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a ThrottlingPolicyAssociate resource.
-        :param pulumi.Input[str] instance_id: Specifies the ID of the APIG dedicated instance to which the APIs and the
-               throttling policy belongs. Changing this will create a new resource.
-        :param pulumi.Input[str] policy_id: Specifies the ID of the API group to which the API response belongs to.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the APIs and the
+               throttling policy belongs.
                Changing this will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] publish_ids: Specifies the publish ID corresponding to the API bound by the throttling policy.
-        :param pulumi.Input[str] region: Specifies the region where the API instance and throttling policy are located.
+        :param pulumi.Input[str] policy_id: Specifies the ID of the throttling policy.  
+               Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] publish_ids: Specifies the publish IDs corresponding to the APIs bound by the throttling policy.
+        :param pulumi.Input[str] region: Specifies the region where the dedicated instance and the throttling policy
+               are located.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         pulumi.set(__self__, "instance_id", instance_id)
@@ -38,8 +40,9 @@ class ThrottlingPolicyAssociateArgs:
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Input[str]:
         """
-        Specifies the ID of the APIG dedicated instance to which the APIs and the
-        throttling policy belongs. Changing this will create a new resource.
+        Specifies the ID of the dedicated instance to which the APIs and the
+        throttling policy belongs.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -51,7 +54,7 @@ class ThrottlingPolicyAssociateArgs:
     @pulumi.getter(name="policyId")
     def policy_id(self) -> pulumi.Input[str]:
         """
-        Specifies the ID of the API group to which the API response belongs to.
+        Specifies the ID of the throttling policy.  
         Changing this will create a new resource.
         """
         return pulumi.get(self, "policy_id")
@@ -64,7 +67,7 @@ class ThrottlingPolicyAssociateArgs:
     @pulumi.getter(name="publishIds")
     def publish_ids(self) -> pulumi.Input[Sequence[pulumi.Input[str]]]:
         """
-        Specifies the publish ID corresponding to the API bound by the throttling policy.
+        Specifies the publish IDs corresponding to the APIs bound by the throttling policy.
         """
         return pulumi.get(self, "publish_ids")
 
@@ -76,7 +79,8 @@ class ThrottlingPolicyAssociateArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region where the API instance and throttling policy are located.
+        Specifies the region where the dedicated instance and the throttling policy
+        are located.
         If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
@@ -95,12 +99,14 @@ class _ThrottlingPolicyAssociateState:
                  region: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering ThrottlingPolicyAssociate resources.
-        :param pulumi.Input[str] instance_id: Specifies the ID of the APIG dedicated instance to which the APIs and the
-               throttling policy belongs. Changing this will create a new resource.
-        :param pulumi.Input[str] policy_id: Specifies the ID of the API group to which the API response belongs to.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the APIs and the
+               throttling policy belongs.
                Changing this will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] publish_ids: Specifies the publish ID corresponding to the API bound by the throttling policy.
-        :param pulumi.Input[str] region: Specifies the region where the API instance and throttling policy are located.
+        :param pulumi.Input[str] policy_id: Specifies the ID of the throttling policy.  
+               Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] publish_ids: Specifies the publish IDs corresponding to the APIs bound by the throttling policy.
+        :param pulumi.Input[str] region: Specifies the region where the dedicated instance and the throttling policy
+               are located.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         if instance_id is not None:
@@ -116,8 +122,9 @@ class _ThrottlingPolicyAssociateState:
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ID of the APIG dedicated instance to which the APIs and the
-        throttling policy belongs. Changing this will create a new resource.
+        Specifies the ID of the dedicated instance to which the APIs and the
+        throttling policy belongs.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -129,7 +136,7 @@ class _ThrottlingPolicyAssociateState:
     @pulumi.getter(name="policyId")
     def policy_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ID of the API group to which the API response belongs to.
+        Specifies the ID of the throttling policy.  
         Changing this will create a new resource.
         """
         return pulumi.get(self, "policy_id")
@@ -142,7 +149,7 @@ class _ThrottlingPolicyAssociateState:
     @pulumi.getter(name="publishIds")
     def publish_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        Specifies the publish ID corresponding to the API bound by the throttling policy.
+        Specifies the publish IDs corresponding to the APIs bound by the throttling policy.
         """
         return pulumi.get(self, "publish_ids")
 
@@ -154,7 +161,8 @@ class _ThrottlingPolicyAssociateState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region where the API instance and throttling policy are located.
+        Specifies the region where the dedicated instance and the throttling policy
+        are located.
         If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
@@ -186,15 +194,11 @@ class ThrottlingPolicyAssociate(pulumi.CustomResource):
         config = pulumi.Config()
         instance_id = config.require_object("instanceId")
         policy_id = config.require_object("policyId")
-        api_publish_id1 = config.require_object("apiPublishId1")
-        api_publish_id2 = config.require_object("apiPublishId2")
+        api_publish_ids = config.require_object("apiPublishIds")
         test = huaweicloud.dedicated_apig.ThrottlingPolicyAssociate("test",
             instance_id=instance_id,
             policy_id=policy_id,
-            publish_ids=[
-                api_publish_id1,
-                api_publish_id2,
-            ])
+            publish_ids=api_publish_ids)
         ```
 
         ## Import
@@ -202,17 +206,19 @@ class ThrottlingPolicyAssociate(pulumi.CustomResource):
         Associate resources can be imported using their `policy_id` and the APIG dedicated instance ID to which the policy belongs, separated by a slash, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/throttlingPolicyAssociate:ThrottlingPolicyAssociate test &ltinstance id&gt/&ltpolicy_id&gt
+         $ pulumi import huaweicloud:DedicatedApig/throttlingPolicyAssociate:ThrottlingPolicyAssociate test <instance_id>/<policy_id>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] instance_id: Specifies the ID of the APIG dedicated instance to which the APIs and the
-               throttling policy belongs. Changing this will create a new resource.
-        :param pulumi.Input[str] policy_id: Specifies the ID of the API group to which the API response belongs to.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the APIs and the
+               throttling policy belongs.
                Changing this will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] publish_ids: Specifies the publish ID corresponding to the API bound by the throttling policy.
-        :param pulumi.Input[str] region: Specifies the region where the API instance and throttling policy are located.
+        :param pulumi.Input[str] policy_id: Specifies the ID of the throttling policy.  
+               Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] publish_ids: Specifies the publish IDs corresponding to the APIs bound by the throttling policy.
+        :param pulumi.Input[str] region: Specifies the region where the dedicated instance and the throttling policy
+               are located.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         ...
@@ -233,15 +239,11 @@ class ThrottlingPolicyAssociate(pulumi.CustomResource):
         config = pulumi.Config()
         instance_id = config.require_object("instanceId")
         policy_id = config.require_object("policyId")
-        api_publish_id1 = config.require_object("apiPublishId1")
-        api_publish_id2 = config.require_object("apiPublishId2")
+        api_publish_ids = config.require_object("apiPublishIds")
         test = huaweicloud.dedicated_apig.ThrottlingPolicyAssociate("test",
             instance_id=instance_id,
             policy_id=policy_id,
-            publish_ids=[
-                api_publish_id1,
-                api_publish_id2,
-            ])
+            publish_ids=api_publish_ids)
         ```
 
         ## Import
@@ -249,7 +251,7 @@ class ThrottlingPolicyAssociate(pulumi.CustomResource):
         Associate resources can be imported using their `policy_id` and the APIG dedicated instance ID to which the policy belongs, separated by a slash, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/throttlingPolicyAssociate:ThrottlingPolicyAssociate test &ltinstance id&gt/&ltpolicy_id&gt
+         $ pulumi import huaweicloud:DedicatedApig/throttlingPolicyAssociate:ThrottlingPolicyAssociate test <instance_id>/<policy_id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -311,12 +313,14 @@ class ThrottlingPolicyAssociate(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] instance_id: Specifies the ID of the APIG dedicated instance to which the APIs and the
-               throttling policy belongs. Changing this will create a new resource.
-        :param pulumi.Input[str] policy_id: Specifies the ID of the API group to which the API response belongs to.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the APIs and the
+               throttling policy belongs.
                Changing this will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] publish_ids: Specifies the publish ID corresponding to the API bound by the throttling policy.
-        :param pulumi.Input[str] region: Specifies the region where the API instance and throttling policy are located.
+        :param pulumi.Input[str] policy_id: Specifies the ID of the throttling policy.  
+               Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] publish_ids: Specifies the publish IDs corresponding to the APIs bound by the throttling policy.
+        :param pulumi.Input[str] region: Specifies the region where the dedicated instance and the throttling policy
+               are located.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -333,8 +337,9 @@ class ThrottlingPolicyAssociate(pulumi.CustomResource):
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Output[str]:
         """
-        Specifies the ID of the APIG dedicated instance to which the APIs and the
-        throttling policy belongs. Changing this will create a new resource.
+        Specifies the ID of the dedicated instance to which the APIs and the
+        throttling policy belongs.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -342,7 +347,7 @@ class ThrottlingPolicyAssociate(pulumi.CustomResource):
     @pulumi.getter(name="policyId")
     def policy_id(self) -> pulumi.Output[str]:
         """
-        Specifies the ID of the API group to which the API response belongs to.
+        Specifies the ID of the throttling policy.  
         Changing this will create a new resource.
         """
         return pulumi.get(self, "policy_id")
@@ -351,7 +356,7 @@ class ThrottlingPolicyAssociate(pulumi.CustomResource):
     @pulumi.getter(name="publishIds")
     def publish_ids(self) -> pulumi.Output[Sequence[str]]:
         """
-        Specifies the publish ID corresponding to the API bound by the throttling policy.
+        Specifies the publish IDs corresponding to the APIs bound by the throttling policy.
         """
         return pulumi.get(self, "publish_ids")
 
@@ -359,7 +364,8 @@ class ThrottlingPolicyAssociate(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        Specifies the region where the API instance and throttling policy are located.
+        Specifies the region where the dedicated instance and the throttling policy
+        are located.
         If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")

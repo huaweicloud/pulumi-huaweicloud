@@ -55,11 +55,11 @@ class ConferenceArgs:
         :param pulumi.Input[str] app_key: Specifies the Key information of the Third-party APP.
                Required if `app_id` is set. Changing this parameter will create a new resource.
         :param pulumi.Input[str] aux_address: Specifies the auxiliary streaming address, the maximum length is 255 characters.
-               Only availabe if `record_type` is **2** or **3**.
+               Only available if `record_type` is **2** or **3**.
         :param pulumi.Input['ConferenceConfigurationArgs'] configuration: Specifies the other conference configurations.
                The object structure is documented below.
         :param pulumi.Input[str] corp_id: Specifies the corporation ID.
-               Required if the application is used in multiple enterprises. Only availabe if `app_id` is set.
+               Required if the application is used in multiple enterprises. Only available if `app_id` is set.
                Changing this parameter will create a new resource.
         :param pulumi.Input['ConferenceCycleParamsArgs'] cycle_params: Specifies the configurations of the cyclical conference.
                The object structure is documented below.
@@ -80,7 +80,7 @@ class ConferenceArgs:
                + **zh-CN**: Simplified Chinese.
                + **en-US**: US English.
         :param pulumi.Input[str] live_address: Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-               Only availabe if `record_type` is **2** or **3**.
+               Only available if `record_type` is **2** or **3**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] media_types: Specifies the conference media type list.
                It consists of one or more enumerations, and the valid values are as follows:
                + **Voice**: Voice.
@@ -248,7 +248,7 @@ class ConferenceArgs:
     def aux_address(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the auxiliary streaming address, the maximum length is 255 characters.
-        Only availabe if `record_type` is **2** or **3**.
+        Only available if `record_type` is **2** or **3**.
         """
         return pulumi.get(self, "aux_address")
 
@@ -274,7 +274,7 @@ class ConferenceArgs:
     def corp_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the corporation ID.
-        Required if the application is used in multiple enterprises. Only availabe if `app_id` is set.
+        Required if the application is used in multiple enterprises. Only available if `app_id` is set.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "corp_id")
@@ -361,7 +361,7 @@ class ConferenceArgs:
     def live_address(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-        Only availabe if `record_type` is **2** or **3**.
+        Only available if `record_type` is **2** or **3**.
         """
         return pulumi.get(self, "live_address")
 
@@ -533,7 +533,7 @@ class _ConferenceState:
                Required if `app_id` is set. Changing this parameter will create a new resource.
         :param pulumi.Input[str] audience_join_uri: The audience meeting link address.
         :param pulumi.Input[str] aux_address: Specifies the auxiliary streaming address, the maximum length is 255 characters.
-               Only availabe if `record_type` is **2** or **3**.
+               Only available if `record_type` is **2** or **3**.
         :param pulumi.Input[str] chair_join_uri: The host meeting link address.
         :param pulumi.Input[str] conference_type: The conference type, the valid values are as follows:
                + **FUTURE**
@@ -543,7 +543,7 @@ class _ConferenceState:
         :param pulumi.Input['ConferenceConfigurationArgs'] configuration: Specifies the other conference configurations.
                The object structure is documented below.
         :param pulumi.Input[str] corp_id: Specifies the corporation ID.
-               Required if the application is used in multiple enterprises. Only availabe if `app_id` is set.
+               Required if the application is used in multiple enterprises. Only available if `app_id` is set.
                Changing this parameter will create a new resource.
         :param pulumi.Input['ConferenceCycleParamsArgs'] cycle_params: Specifies the configurations of the cyclical conference.
                The object structure is documented below.
@@ -561,13 +561,15 @@ class _ConferenceState:
         :param pulumi.Input[int] is_record_aux_stream: Specifies whether to record auxiliary stream.
                + **0**: Do not record.
                + **1**: Record.
+        :param pulumi.Input[Sequence[pulumi.Input['ConferenceJoinPasswordArgs']]] join_passwords: The meeting password.
+               The join_password structure is documented below.
         :param pulumi.Input[str] language: Specifies the default language of the conference, the default value is defined by the
                conference cloud service. For languages supported by the system, it is passed according to the RFC3066 specification.
                The valid values are as follows:
                + **zh-CN**: Simplified Chinese.
                + **en-US**: US English.
         :param pulumi.Input[str] live_address: Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-               Only availabe if `record_type` is **2** or **3**.
+               Only available if `record_type` is **2** or **3**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] media_types: Specifies the conference media type list.
                It consists of one or more enumerations, and the valid values are as follows:
                + **Voice**: Voice.
@@ -750,7 +752,7 @@ class _ConferenceState:
     def aux_address(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the auxiliary streaming address, the maximum length is 255 characters.
-        Only availabe if `record_type` is **2** or **3**.
+        Only available if `record_type` is **2** or **3**.
         """
         return pulumi.get(self, "aux_address")
 
@@ -815,7 +817,7 @@ class _ConferenceState:
     def corp_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the corporation ID.
-        Required if the application is used in multiple enterprises. Only availabe if `app_id` is set.
+        Required if the application is used in multiple enterprises. Only available if `app_id` is set.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "corp_id")
@@ -909,6 +911,10 @@ class _ConferenceState:
     @property
     @pulumi.getter(name="joinPasswords")
     def join_passwords(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ConferenceJoinPasswordArgs']]]]:
+        """
+        The meeting password.
+        The join_password structure is documented below.
+        """
         return pulumi.get(self, "join_passwords")
 
     @join_passwords.setter
@@ -936,7 +942,7 @@ class _ConferenceState:
     def live_address(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-        Only availabe if `record_type` is **2** or **3**.
+        Only available if `record_type` is **2** or **3**.
         """
         return pulumi.get(self, "live_address")
 
@@ -1266,11 +1272,11 @@ class Conference(pulumi.CustomResource):
         :param pulumi.Input[str] app_key: Specifies the Key information of the Third-party APP.
                Required if `app_id` is set. Changing this parameter will create a new resource.
         :param pulumi.Input[str] aux_address: Specifies the auxiliary streaming address, the maximum length is 255 characters.
-               Only availabe if `record_type` is **2** or **3**.
+               Only available if `record_type` is **2** or **3**.
         :param pulumi.Input[pulumi.InputType['ConferenceConfigurationArgs']] configuration: Specifies the other conference configurations.
                The object structure is documented below.
         :param pulumi.Input[str] corp_id: Specifies the corporation ID.
-               Required if the application is used in multiple enterprises. Only availabe if `app_id` is set.
+               Required if the application is used in multiple enterprises. Only available if `app_id` is set.
                Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['ConferenceCycleParamsArgs']] cycle_params: Specifies the configurations of the cyclical conference.
                The object structure is documented below.
@@ -1293,7 +1299,7 @@ class Conference(pulumi.CustomResource):
                + **zh-CN**: Simplified Chinese.
                + **en-US**: US English.
         :param pulumi.Input[str] live_address: Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-               Only availabe if `record_type` is **2** or **3**.
+               Only available if `record_type` is **2** or **3**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] media_types: Specifies the conference media type list.
                It consists of one or more enumerations, and the valid values are as follows:
                + **Voice**: Voice.
@@ -1592,7 +1598,7 @@ class Conference(pulumi.CustomResource):
                Required if `app_id` is set. Changing this parameter will create a new resource.
         :param pulumi.Input[str] audience_join_uri: The audience meeting link address.
         :param pulumi.Input[str] aux_address: Specifies the auxiliary streaming address, the maximum length is 255 characters.
-               Only availabe if `record_type` is **2** or **3**.
+               Only available if `record_type` is **2** or **3**.
         :param pulumi.Input[str] chair_join_uri: The host meeting link address.
         :param pulumi.Input[str] conference_type: The conference type, the valid values are as follows:
                + **FUTURE**
@@ -1602,7 +1608,7 @@ class Conference(pulumi.CustomResource):
         :param pulumi.Input[pulumi.InputType['ConferenceConfigurationArgs']] configuration: Specifies the other conference configurations.
                The object structure is documented below.
         :param pulumi.Input[str] corp_id: Specifies the corporation ID.
-               Required if the application is used in multiple enterprises. Only availabe if `app_id` is set.
+               Required if the application is used in multiple enterprises. Only available if `app_id` is set.
                Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['ConferenceCycleParamsArgs']] cycle_params: Specifies the configurations of the cyclical conference.
                The object structure is documented below.
@@ -1620,13 +1626,15 @@ class Conference(pulumi.CustomResource):
         :param pulumi.Input[int] is_record_aux_stream: Specifies whether to record auxiliary stream.
                + **0**: Do not record.
                + **1**: Record.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ConferenceJoinPasswordArgs']]]] join_passwords: The meeting password.
+               The join_password structure is documented below.
         :param pulumi.Input[str] language: Specifies the default language of the conference, the default value is defined by the
                conference cloud service. For languages supported by the system, it is passed according to the RFC3066 specification.
                The valid values are as follows:
                + **zh-CN**: Simplified Chinese.
                + **en-US**: US English.
         :param pulumi.Input[str] live_address: Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-               Only availabe if `record_type` is **2** or **3**.
+               Only available if `record_type` is **2** or **3**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] media_types: Specifies the conference media type list.
                It consists of one or more enumerations, and the valid values are as follows:
                + **Voice**: Voice.
@@ -1757,7 +1765,7 @@ class Conference(pulumi.CustomResource):
     def aux_address(self) -> pulumi.Output[str]:
         """
         Specifies the auxiliary streaming address, the maximum length is 255 characters.
-        Only availabe if `record_type` is **2** or **3**.
+        Only available if `record_type` is **2** or **3**.
         """
         return pulumi.get(self, "aux_address")
 
@@ -1802,7 +1810,7 @@ class Conference(pulumi.CustomResource):
     def corp_id(self) -> pulumi.Output[str]:
         """
         Specifies the corporation ID.
-        Required if the application is used in multiple enterprises. Only availabe if `app_id` is set.
+        Required if the application is used in multiple enterprises. Only available if `app_id` is set.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "corp_id")
@@ -1868,6 +1876,10 @@ class Conference(pulumi.CustomResource):
     @property
     @pulumi.getter(name="joinPasswords")
     def join_passwords(self) -> pulumi.Output[Sequence['outputs.ConferenceJoinPassword']]:
+        """
+        The meeting password.
+        The join_password structure is documented below.
+        """
         return pulumi.get(self, "join_passwords")
 
     @property
@@ -1887,7 +1899,7 @@ class Conference(pulumi.CustomResource):
     def live_address(self) -> pulumi.Output[str]:
         """
         Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-        Only availabe if `record_type` is **2** or **3**.
+        Only available if `record_type` is **2** or **3**.
         """
         return pulumi.get(self, "live_address")
 

@@ -29,7 +29,6 @@ export function getSites(args?: GetSitesArgs, opts?: pulumi.InvokeOptions): Prom
         "area": args.area,
         "city": args.city,
         "province": args.province,
-        "region": args.region,
     }, opts);
 }
 
@@ -49,7 +48,6 @@ export interface GetSitesArgs {
      * Specifies the province of the IEC sites located.
      */
     province?: string;
-    region?: string;
 }
 
 /**
@@ -72,7 +70,6 @@ export interface GetSitesResult {
      * The province of the IEC service site located.
      */
     readonly province?: string;
-    readonly region: string;
     /**
      * An array of one or more IEC service sites. The sites object structure is documented below.
      */
@@ -99,5 +96,4 @@ export interface GetSitesOutputArgs {
      * Specifies the province of the IEC sites located.
      */
     province?: pulumi.Input<string>;
-    region?: pulumi.Input<string>;
 }

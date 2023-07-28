@@ -9,6 +9,82 @@ import * as utilities from "../utilities";
  * Manages a dedicated microservice instance resource within HuaweiCloud.
  *
  * ## Example Usage
+ * ### Create a microservice instance under a microservice with RBAC authentication of engine disabled
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const engineConnAddr = config.requireObject("engineConnAddr");
+ * const microserviceId = config.requireObject("microserviceId");
+ * const regionName = config.requireObject("regionName");
+ * const azName = config.requireObject("azName");
+ * const test = new huaweicloud.cse.MicroserviceInstance("test", {
+ *     connectAddress: engineConnAddr,
+ *     microserviceId: microserviceId,
+ *     hostName: "localhost",
+ *     endpoints: [
+ *         "grpc://127.0.1.132:9980",
+ *         "rest://127.0.0.111:8081",
+ *     ],
+ *     version: "1.0.0",
+ *     properties: {
+ *         _TAGS: "A, B",
+ *         attr1: "a",
+ *         nodeIP: "127.0.0.1",
+ *     },
+ *     healthCheck: {
+ *         mode: "push",
+ *         interval: 30,
+ *         maxRetries: 3,
+ *     },
+ *     dataCenter: {
+ *         name: "dc",
+ *         region: regionName,
+ *         availabilityZone: azName,
+ *     },
+ * });
+ * ```
+ * ### Create a microservice instance under a microservice with RBAC authentication of engine enabled
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const engineConnAddr = config.requireObject("engineConnAddr");
+ * const microserviceId = config.requireObject("microserviceId");
+ * const regionName = config.requireObject("regionName");
+ * const azName = config.requireObject("azName");
+ * const test = new huaweicloud.cse.MicroserviceInstance("test", {
+ *     connectAddress: engineConnAddr,
+ *     microserviceId: microserviceId,
+ *     hostName: "localhost",
+ *     endpoints: [
+ *         "grpc://127.0.1.132:9980",
+ *         "rest://127.0.0.111:8081",
+ *     ],
+ *     version: "1.0.0",
+ *     properties: {
+ *         _TAGS: "A, B",
+ *         attr1: "a",
+ *         nodeIP: "127.0.0.1",
+ *     },
+ *     healthCheck: {
+ *         mode: "push",
+ *         interval: 30,
+ *         maxRetries: 3,
+ *     },
+ *     dataCenter: {
+ *         name: "dc",
+ *         region: regionName,
+ *         availabilityZone: azName,
+ *     },
+ *     adminUser: "root",
+ *     adminPass: "Huawei!123",
+ * });
+ * ```
  *
  * ## Import
  *
@@ -112,7 +188,7 @@ export class MicroserviceInstance extends pulumi.CustomResource {
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
-     * Specifies the verison of the dedicated microservice instance.
+     * Specifies the version of the dedicated microservice instance.
      * Changing this will create a new microservice instance.
      */
     public readonly version!: pulumi.Output<string>;
@@ -234,7 +310,7 @@ export interface MicroserviceInstanceState {
      */
     status?: pulumi.Input<string>;
     /**
-     * Specifies the verison of the dedicated microservice instance.
+     * Specifies the version of the dedicated microservice instance.
      * Changing this will create a new microservice instance.
      */
     version?: pulumi.Input<string>;
@@ -298,7 +374,7 @@ export interface MicroserviceInstanceArgs {
      */
     properties?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the verison of the dedicated microservice instance.
+     * Specifies the version of the dedicated microservice instance.
      * Changing this will create a new microservice instance.
      */
     version?: pulumi.Input<string>;

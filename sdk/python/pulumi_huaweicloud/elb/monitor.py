@@ -40,7 +40,6 @@ class MonitorArgs:
         :param pulumi.Input[str] type: Specifies the monitor protocol.
                The value can be *TCP*, *UDP_CONNECT*, or *HTTP*.
                If the listener protocol is UDP, the monitor protocol must be *UDP_CONNECT*. Changing this creates a new monitor.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the monitor.
         :param pulumi.Input[str] expected_codes: Specifies the expected HTTP status code. Required for HTTP type.
                You can either specify a single status like "200", or a range like "200-202".
         :param pulumi.Input[str] http_method: Specifies the HTTP request method. Required for HTTP type.
@@ -147,9 +146,6 @@ class MonitorArgs:
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> Optional[pulumi.Input[bool]]:
-        """
-        The administrative state of the monitor.
-        """
         return pulumi.get(self, "admin_state_up")
 
     @admin_state_up.setter
@@ -261,7 +257,6 @@ class _MonitorState:
                  url_path: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Monitor resources.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the monitor.
         :param pulumi.Input[int] delay: Specifies the maximum time between health checks in the unit of second. The value ranges
                from 1 to 50.
         :param pulumi.Input[str] expected_codes: Specifies the expected HTTP status code. Required for HTTP type.
@@ -318,9 +313,6 @@ class _MonitorState:
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> Optional[pulumi.Input[bool]]:
-        """
-        The administrative state of the monitor.
-        """
         return pulumi.get(self, "admin_state_up")
 
     @admin_state_up.setter
@@ -555,7 +547,6 @@ class Monitor(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the monitor.
         :param pulumi.Input[int] delay: Specifies the maximum time between health checks in the unit of second. The value ranges
                from 1 to 50.
         :param pulumi.Input[str] expected_codes: Specifies the expected HTTP status code. Required for HTTP type.
@@ -732,7 +723,6 @@ class Monitor(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[bool] admin_state_up: The administrative state of the monitor.
         :param pulumi.Input[int] delay: Specifies the maximum time between health checks in the unit of second. The value ranges
                from 1 to 50.
         :param pulumi.Input[str] expected_codes: Specifies the expected HTTP status code. Required for HTTP type.
@@ -778,9 +768,6 @@ class Monitor(pulumi.CustomResource):
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> pulumi.Output[Optional[bool]]:
-        """
-        The administrative state of the monitor.
-        """
         return pulumi.get(self, "admin_state_up")
 
     @property

@@ -21,10 +21,17 @@ class GetPortResult:
     """
     A collection of values returned by getPort.
     """
-    def __init__(__self__, admin_state_up=None, all_fixed_ips=None, all_security_group_ids=None, device_id=None, device_owner=None, fixed_ip=None, id=None, mac_address=None, name=None, network_id=None, port_id=None, project_id=None, region=None, security_group_ids=None, status=None, tenant_id=None):
+    def __init__(__self__, admin_state_up=None, all_allowed_ips=None, all_fixed_ips=None, all_security_group_ids=None, device_id=None, device_owner=None, fixed_ip=None, id=None, mac_address=None, name=None, network_id=None, port_id=None, project_id=None, region=None, security_group_ids=None, status=None, tenant_id=None):
         if admin_state_up and not isinstance(admin_state_up, bool):
             raise TypeError("Expected argument 'admin_state_up' to be a bool")
+        if admin_state_up is not None:
+            warnings.warn("""this field is deprecated""", DeprecationWarning)
+            pulumi.log.warn("""admin_state_up is deprecated: this field is deprecated""")
+
         pulumi.set(__self__, "admin_state_up", admin_state_up)
+        if all_allowed_ips and not isinstance(all_allowed_ips, list):
+            raise TypeError("Expected argument 'all_allowed_ips' to be a list")
+        pulumi.set(__self__, "all_allowed_ips", all_allowed_ips)
         if all_fixed_ips and not isinstance(all_fixed_ips, list):
             raise TypeError("Expected argument 'all_fixed_ips' to be a list")
         pulumi.set(__self__, "all_fixed_ips", all_fixed_ips)
@@ -57,6 +64,10 @@ class GetPortResult:
         pulumi.set(__self__, "port_id", port_id)
         if project_id and not isinstance(project_id, str):
             raise TypeError("Expected argument 'project_id' to be a str")
+        if project_id is not None:
+            warnings.warn("""this field is deprecated""", DeprecationWarning)
+            pulumi.log.warn("""project_id is deprecated: this field is deprecated""")
+
         pulumi.set(__self__, "project_id", project_id)
         if region and not isinstance(region, str):
             raise TypeError("Expected argument 'region' to be a str")
@@ -69,15 +80,24 @@ class GetPortResult:
         pulumi.set(__self__, "status", status)
         if tenant_id and not isinstance(tenant_id, str):
             raise TypeError("Expected argument 'tenant_id' to be a str")
+        if tenant_id is not None:
+            warnings.warn("""this field is deprecated""", DeprecationWarning)
+            pulumi.log.warn("""tenant_id is deprecated: this field is deprecated""")
+
         pulumi.set(__self__, "tenant_id", tenant_id)
 
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> bool:
-        """
-        The administrative state of the port.
-        """
         return pulumi.get(self, "admin_state_up")
+
+    @property
+    @pulumi.getter(name="allAllowedIps")
+    def all_allowed_ips(self) -> Sequence[str]:
+        """
+        The collection of allowed IP addresses on the port.
+        """
+        return pulumi.get(self, "all_allowed_ips")
 
     @property
     @pulumi.getter(name="allFixedIps")
@@ -180,6 +200,7 @@ class AwaitableGetPortResult(GetPortResult):
             yield self
         return GetPortResult(
             admin_state_up=self.admin_state_up,
+            all_allowed_ips=self.all_allowed_ips,
             all_fixed_ips=self.all_fixed_ips,
             all_security_group_ids=self.all_security_group_ids,
             device_id=self.device_id,
@@ -225,7 +246,6 @@ def get_port(admin_state_up: Optional[bool] = None,
     ```
 
 
-    :param bool admin_state_up: The administrative state of the port.
     :param str device_id: The ID of the device the port belongs to.
     :param str device_owner: The device owner of the port.
     :param str fixed_ip: Specifies the port IP address filter.
@@ -257,6 +277,7 @@ def get_port(admin_state_up: Optional[bool] = None,
 
     return AwaitableGetPortResult(
         admin_state_up=__ret__.admin_state_up,
+        all_allowed_ips=__ret__.all_allowed_ips,
         all_fixed_ips=__ret__.all_fixed_ips,
         all_security_group_ids=__ret__.all_security_group_ids,
         device_id=__ret__.device_id,
@@ -303,7 +324,6 @@ def get_port_output(admin_state_up: Optional[pulumi.Input[Optional[bool]]] = Non
     ```
 
 
-    :param bool admin_state_up: The administrative state of the port.
     :param str device_id: The ID of the device the port belongs to.
     :param str device_owner: The device owner of the port.
     :param str fixed_ip: Specifies the port IP address filter.

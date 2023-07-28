@@ -55,7 +55,7 @@ import * as utilities from "../utilities";
  * GaussDB Redis instance can be imported using the `id`, e.g.
  *
  * ```sh
- *  $ pulumi import huaweicloud:GaussDBforNoSQL/redisInstance:RedisInstance instance_1 2e045d8b-b226-4aa2-91b9-7e76357655c06
+ *  $ pulumi import huaweicloud:GaussDBforNoSQL/redisInstance:RedisInstance instance_1 d54b21f037ed447aad4bfd20927711c6in12
  * ```
  */
 export class RedisInstance extends pulumi.CustomResource {
@@ -94,6 +94,7 @@ export class RedisInstance extends pulumi.CustomResource {
     /**
      * Specifies the AZ name.
      * See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail.
+     * For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
      * Changing this parameter will create a new resource.
      */
     public readonly availabilityZone!: pulumi.Output<string>;
@@ -132,6 +133,14 @@ export class RedisInstance extends pulumi.CustomResource {
      */
     public readonly forceImport!: pulumi.Output<boolean | undefined>;
     /**
+     * Indicates the LB IP address of the db.
+     */
+    public /*out*/ readonly lbIpAddress!: pulumi.Output<string>;
+    /**
+     * Indicates the LB port of the db.
+     */
+    public /*out*/ readonly lbPort!: pulumi.Output<string>;
+    /**
      * Indicates the instance type.
      */
     public /*out*/ readonly mode!: pulumi.Output<string>;
@@ -168,9 +177,13 @@ export class RedisInstance extends pulumi.CustomResource {
      */
     public readonly periodUnit!: pulumi.Output<string | undefined>;
     /**
-     * Indicates the database port.
+     * Specifies the port number for accessing the instance. You can specify a port number
+     * based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
+     * **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
+     * **50069**. Defaults to **6379**.
+     * If you want to use this instance for dual-active DR, set the port to **8635**.
      */
-    public /*out*/ readonly port!: pulumi.Output<number>;
+    public readonly port!: pulumi.Output<number>;
     /**
      * Indicates the IP address list of the db.
      */
@@ -186,6 +199,10 @@ export class RedisInstance extends pulumi.CustomResource {
      * enable network ACL.
      */
     public readonly securityGroupId!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies whether SSL is enabled. Defaults to **false**.
+     */
+    public readonly ssl!: pulumi.Output<boolean | undefined>;
     /**
      * Indicates the node status.
      */
@@ -233,6 +250,8 @@ export class RedisInstance extends pulumi.CustomResource {
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["flavor"] = state ? state.flavor : undefined;
             resourceInputs["forceImport"] = state ? state.forceImport : undefined;
+            resourceInputs["lbIpAddress"] = state ? state.lbIpAddress : undefined;
+            resourceInputs["lbPort"] = state ? state.lbPort : undefined;
             resourceInputs["mode"] = state ? state.mode : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["nodeNum"] = state ? state.nodeNum : undefined;
@@ -244,6 +263,7 @@ export class RedisInstance extends pulumi.CustomResource {
             resourceInputs["privateIps"] = state ? state.privateIps : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["securityGroupId"] = state ? state.securityGroupId : undefined;
+            resourceInputs["ssl"] = state ? state.ssl : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["subnetId"] = state ? state.subnetId : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
@@ -283,16 +303,19 @@ export class RedisInstance extends pulumi.CustomResource {
             resourceInputs["password"] = args ? args.password : undefined;
             resourceInputs["period"] = args ? args.period : undefined;
             resourceInputs["periodUnit"] = args ? args.periodUnit : undefined;
+            resourceInputs["port"] = args ? args.port : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["securityGroupId"] = args ? args.securityGroupId : undefined;
+            resourceInputs["ssl"] = args ? args.ssl : undefined;
             resourceInputs["subnetId"] = args ? args.subnetId : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["volumeSize"] = args ? args.volumeSize : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
             resourceInputs["dbUserName"] = undefined /*out*/;
+            resourceInputs["lbIpAddress"] = undefined /*out*/;
+            resourceInputs["lbPort"] = undefined /*out*/;
             resourceInputs["mode"] = undefined /*out*/;
             resourceInputs["nodes"] = undefined /*out*/;
-            resourceInputs["port"] = undefined /*out*/;
             resourceInputs["privateIps"] = undefined /*out*/;
             resourceInputs["status"] = undefined /*out*/;
         }
@@ -313,6 +336,7 @@ export interface RedisInstanceState {
     /**
      * Specifies the AZ name.
      * See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail.
+     * For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
      * Changing this parameter will create a new resource.
      */
     availabilityZone?: pulumi.Input<string>;
@@ -351,6 +375,14 @@ export interface RedisInstanceState {
      */
     forceImport?: pulumi.Input<boolean>;
     /**
+     * Indicates the LB IP address of the db.
+     */
+    lbIpAddress?: pulumi.Input<string>;
+    /**
+     * Indicates the LB port of the db.
+     */
+    lbPort?: pulumi.Input<string>;
+    /**
      * Indicates the instance type.
      */
     mode?: pulumi.Input<string>;
@@ -387,7 +419,11 @@ export interface RedisInstanceState {
      */
     periodUnit?: pulumi.Input<string>;
     /**
-     * Indicates the database port.
+     * Specifies the port number for accessing the instance. You can specify a port number
+     * based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
+     * **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
+     * **50069**. Defaults to **6379**.
+     * If you want to use this instance for dual-active DR, set the port to **8635**.
      */
     port?: pulumi.Input<number>;
     /**
@@ -405,6 +441,10 @@ export interface RedisInstanceState {
      * enable network ACL.
      */
     securityGroupId?: pulumi.Input<string>;
+    /**
+     * Specifies whether SSL is enabled. Defaults to **false**.
+     */
+    ssl?: pulumi.Input<boolean>;
     /**
      * Indicates the node status.
      */
@@ -442,6 +482,7 @@ export interface RedisInstanceArgs {
     /**
      * Specifies the AZ name.
      * See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail.
+     * For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
      * Changing this parameter will create a new resource.
      */
     availabilityZone: pulumi.Input<string>;
@@ -504,6 +545,14 @@ export interface RedisInstanceArgs {
      */
     periodUnit?: pulumi.Input<string>;
     /**
+     * Specifies the port number for accessing the instance. You can specify a port number
+     * based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
+     * **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
+     * **50069**. Defaults to **6379**.
+     * If you want to use this instance for dual-active DR, set the port to **8635**.
+     */
+    port?: pulumi.Input<number>;
+    /**
      * The region in which to create the Redis instance resource.
      * See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail. If
      * omitted, the provider-level region will be used. Changing this creates a new Redis instance resource.
@@ -514,6 +563,10 @@ export interface RedisInstanceArgs {
      * enable network ACL.
      */
     securityGroupId?: pulumi.Input<string>;
+    /**
+     * Specifies whether SSL is enabled. Defaults to **false**.
+     */
+    ssl?: pulumi.Input<boolean>;
     /**
      * Specifies the network ID of a subnet. Changing this parameter will create a
      * new resource.

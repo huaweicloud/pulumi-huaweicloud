@@ -36,7 +36,7 @@ import (
 //				CrossVpcBackend:     pulumi.Bool(true),
 //				Description:         pulumi.String("basic example"),
 //				EnterpriseProjectId: pulumi.String("{{ eps_id }}"),
-//				Ipv4SubnetId:        pulumi.String("{{ subnet_id }}"),
+//				Ipv4SubnetId:        pulumi.String("{{ ipv4_subnet_id }}"),
 //				L4FlavorId:          pulumi.String("{{ l4_flavor_id }}"),
 //				L7FlavorId:          pulumi.String("{{ l7_flavor_id }}"),
 //				VpcId:               pulumi.String("{{ vpc_id }}"),
@@ -72,7 +72,7 @@ import (
 //				Description:         pulumi.String("basic example"),
 //				EnterpriseProjectId: pulumi.String("{{ eps_id }}"),
 //				Ipv4EipId:           pulumi.String("{{ eip_id }}"),
-//				Ipv4SubnetId:        pulumi.String("{{ subnet_id }}"),
+//				Ipv4SubnetId:        pulumi.String("{{ ipv4_subnet_id }}"),
 //				Ipv6BandwidthId:     pulumi.String("{{ ipv6_bandwidth_id }}"),
 //				Ipv6NetworkId:       pulumi.String("{{ ipv6_network_id }}"),
 //				L4FlavorId:          pulumi.String("{{ l4_flavor_id }}"),
@@ -112,7 +112,7 @@ import (
 //				Description:         pulumi.String("basic example"),
 //				EnterpriseProjectId: pulumi.String("{{ eps_id }}"),
 //				Iptype:              pulumi.String("5_bgp"),
-//				Ipv4SubnetId:        pulumi.String("{{ subnet_id }}"),
+//				Ipv4SubnetId:        pulumi.String("{{ ipv4_subnet_id }}"),
 //				Ipv6BandwidthId:     pulumi.String("{{ ipv6_bandwidth_id }}"),
 //				Ipv6NetworkId:       pulumi.String("{{ ipv6_network_id }}"),
 //				L4FlavorId:          pulumi.String("{{ l4_flavor_id }}"),
@@ -155,10 +155,13 @@ import (
 type Loadbalancer struct {
 	pulumi.CustomResourceState
 
+	// Deprecated: Deprecated
 	AutoPay pulumi.StringPtrOutput `pulumi:"autoPay"`
-	// Specifies whether auto renew is enabled. Valid values are **true** and
-	// **false**. Changing this parameter will create a new resource.
+	// Specifies whether auto renew is enabled. Valid values are **true** and **false**.
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
+	// Specifies whether autoscaling is enabled. Valid values are **true** and
+	// **false**.
+	AutoscalingEnabled pulumi.BoolOutput `pulumi:"autoscalingEnabled"`
 	// Specifies the list of AZ names. Changing this parameter will create a
 	// new resource.
 	AvailabilityZones pulumi.StringArrayOutput `pulumi:"availabilityZones"`
@@ -187,7 +190,8 @@ type Loadbalancer struct {
 	Ipv4Eip pulumi.StringOutput `pulumi:"ipv4Eip"`
 	// The ID of the EIP. Changing this parameter will create a new resource.
 	Ipv4EipId pulumi.StringOutput `pulumi:"ipv4EipId"`
-	// The subnet on which to allocate the loadbalancer's ipv4 address.
+	// The **IPv4 subnet ID** of the subnet on which to allocate the loadbalancer's
+	// ipv4 address.
 	Ipv4SubnetId pulumi.StringPtrOutput `pulumi:"ipv4SubnetId"`
 	// The ipv6 address of the Load Balancer.
 	Ipv6Address pulumi.StringOutput `pulumi:"ipv6Address"`
@@ -197,12 +201,15 @@ type Loadbalancer struct {
 	Ipv6Eip pulumi.StringOutput `pulumi:"ipv6Eip"`
 	// The ipv6 eip id of the Load Balancer.
 	Ipv6EipId pulumi.StringOutput `pulumi:"ipv6EipId"`
-	// The network on which to allocate the loadbalancer's ipv6 address.
+	// The **ID** of the subnet on which to allocate the loadbalancer's ipv6 address.
 	Ipv6NetworkId pulumi.StringPtrOutput `pulumi:"ipv6NetworkId"`
 	// The L4 flavor id of the load balancer.
 	L4FlavorId pulumi.StringOutput `pulumi:"l4FlavorId"`
 	// The L7 flavor id of the load balancer.
 	L7FlavorId pulumi.StringOutput `pulumi:"l7FlavorId"`
+	// Specifies the ID of the minimum Layer-7 flavor for elastic scaling.
+	// This parameter cannot be left blank if there are HTTP or HTTPS listeners.
+	MinL7FlavorId pulumi.StringOutput `pulumi:"minL7FlavorId"`
 	// Human-readable name for the loadbalancer.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the charging period of the ELB loadbalancer.
@@ -260,10 +267,13 @@ func GetLoadbalancer(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Loadbalancer resources.
 type loadbalancerState struct {
+	// Deprecated: Deprecated
 	AutoPay *string `pulumi:"autoPay"`
-	// Specifies whether auto renew is enabled. Valid values are **true** and
-	// **false**. Changing this parameter will create a new resource.
+	// Specifies whether auto renew is enabled. Valid values are **true** and **false**.
 	AutoRenew *string `pulumi:"autoRenew"`
+	// Specifies whether autoscaling is enabled. Valid values are **true** and
+	// **false**.
+	AutoscalingEnabled *bool `pulumi:"autoscalingEnabled"`
 	// Specifies the list of AZ names. Changing this parameter will create a
 	// new resource.
 	AvailabilityZones []string `pulumi:"availabilityZones"`
@@ -292,7 +302,8 @@ type loadbalancerState struct {
 	Ipv4Eip *string `pulumi:"ipv4Eip"`
 	// The ID of the EIP. Changing this parameter will create a new resource.
 	Ipv4EipId *string `pulumi:"ipv4EipId"`
-	// The subnet on which to allocate the loadbalancer's ipv4 address.
+	// The **IPv4 subnet ID** of the subnet on which to allocate the loadbalancer's
+	// ipv4 address.
 	Ipv4SubnetId *string `pulumi:"ipv4SubnetId"`
 	// The ipv6 address of the Load Balancer.
 	Ipv6Address *string `pulumi:"ipv6Address"`
@@ -302,12 +313,15 @@ type loadbalancerState struct {
 	Ipv6Eip *string `pulumi:"ipv6Eip"`
 	// The ipv6 eip id of the Load Balancer.
 	Ipv6EipId *string `pulumi:"ipv6EipId"`
-	// The network on which to allocate the loadbalancer's ipv6 address.
+	// The **ID** of the subnet on which to allocate the loadbalancer's ipv6 address.
 	Ipv6NetworkId *string `pulumi:"ipv6NetworkId"`
 	// The L4 flavor id of the load balancer.
 	L4FlavorId *string `pulumi:"l4FlavorId"`
 	// The L7 flavor id of the load balancer.
 	L7FlavorId *string `pulumi:"l7FlavorId"`
+	// Specifies the ID of the minimum Layer-7 flavor for elastic scaling.
+	// This parameter cannot be left blank if there are HTTP or HTTPS listeners.
+	MinL7FlavorId *string `pulumi:"minL7FlavorId"`
 	// Human-readable name for the loadbalancer.
 	Name *string `pulumi:"name"`
 	// Specifies the charging period of the ELB loadbalancer.
@@ -333,10 +347,13 @@ type loadbalancerState struct {
 }
 
 type LoadbalancerState struct {
+	// Deprecated: Deprecated
 	AutoPay pulumi.StringPtrInput
-	// Specifies whether auto renew is enabled. Valid values are **true** and
-	// **false**. Changing this parameter will create a new resource.
+	// Specifies whether auto renew is enabled. Valid values are **true** and **false**.
 	AutoRenew pulumi.StringPtrInput
+	// Specifies whether autoscaling is enabled. Valid values are **true** and
+	// **false**.
+	AutoscalingEnabled pulumi.BoolPtrInput
 	// Specifies the list of AZ names. Changing this parameter will create a
 	// new resource.
 	AvailabilityZones pulumi.StringArrayInput
@@ -365,7 +382,8 @@ type LoadbalancerState struct {
 	Ipv4Eip pulumi.StringPtrInput
 	// The ID of the EIP. Changing this parameter will create a new resource.
 	Ipv4EipId pulumi.StringPtrInput
-	// The subnet on which to allocate the loadbalancer's ipv4 address.
+	// The **IPv4 subnet ID** of the subnet on which to allocate the loadbalancer's
+	// ipv4 address.
 	Ipv4SubnetId pulumi.StringPtrInput
 	// The ipv6 address of the Load Balancer.
 	Ipv6Address pulumi.StringPtrInput
@@ -375,12 +393,15 @@ type LoadbalancerState struct {
 	Ipv6Eip pulumi.StringPtrInput
 	// The ipv6 eip id of the Load Balancer.
 	Ipv6EipId pulumi.StringPtrInput
-	// The network on which to allocate the loadbalancer's ipv6 address.
+	// The **ID** of the subnet on which to allocate the loadbalancer's ipv6 address.
 	Ipv6NetworkId pulumi.StringPtrInput
 	// The L4 flavor id of the load balancer.
 	L4FlavorId pulumi.StringPtrInput
 	// The L7 flavor id of the load balancer.
 	L7FlavorId pulumi.StringPtrInput
+	// Specifies the ID of the minimum Layer-7 flavor for elastic scaling.
+	// This parameter cannot be left blank if there are HTTP or HTTPS listeners.
+	MinL7FlavorId pulumi.StringPtrInput
 	// Human-readable name for the loadbalancer.
 	Name pulumi.StringPtrInput
 	// Specifies the charging period of the ELB loadbalancer.
@@ -410,10 +431,13 @@ func (LoadbalancerState) ElementType() reflect.Type {
 }
 
 type loadbalancerArgs struct {
+	// Deprecated: Deprecated
 	AutoPay *string `pulumi:"autoPay"`
-	// Specifies whether auto renew is enabled. Valid values are **true** and
-	// **false**. Changing this parameter will create a new resource.
+	// Specifies whether auto renew is enabled. Valid values are **true** and **false**.
 	AutoRenew *string `pulumi:"autoRenew"`
+	// Specifies whether autoscaling is enabled. Valid values are **true** and
+	// **false**.
+	AutoscalingEnabled *bool `pulumi:"autoscalingEnabled"`
 	// Specifies the list of AZ names. Changing this parameter will create a
 	// new resource.
 	AvailabilityZones []string `pulumi:"availabilityZones"`
@@ -440,16 +464,20 @@ type loadbalancerArgs struct {
 	Ipv4Address *string `pulumi:"ipv4Address"`
 	// The ID of the EIP. Changing this parameter will create a new resource.
 	Ipv4EipId *string `pulumi:"ipv4EipId"`
-	// The subnet on which to allocate the loadbalancer's ipv4 address.
+	// The **IPv4 subnet ID** of the subnet on which to allocate the loadbalancer's
+	// ipv4 address.
 	Ipv4SubnetId *string `pulumi:"ipv4SubnetId"`
 	// The ipv6 bandwidth id. Only support shared bandwidth.
 	Ipv6BandwidthId *string `pulumi:"ipv6BandwidthId"`
-	// The network on which to allocate the loadbalancer's ipv6 address.
+	// The **ID** of the subnet on which to allocate the loadbalancer's ipv6 address.
 	Ipv6NetworkId *string `pulumi:"ipv6NetworkId"`
 	// The L4 flavor id of the load balancer.
 	L4FlavorId *string `pulumi:"l4FlavorId"`
 	// The L7 flavor id of the load balancer.
 	L7FlavorId *string `pulumi:"l7FlavorId"`
+	// Specifies the ID of the minimum Layer-7 flavor for elastic scaling.
+	// This parameter cannot be left blank if there are HTTP or HTTPS listeners.
+	MinL7FlavorId *string `pulumi:"minL7FlavorId"`
 	// Human-readable name for the loadbalancer.
 	Name *string `pulumi:"name"`
 	// Specifies the charging period of the ELB loadbalancer.
@@ -476,10 +504,13 @@ type loadbalancerArgs struct {
 
 // The set of arguments for constructing a Loadbalancer resource.
 type LoadbalancerArgs struct {
+	// Deprecated: Deprecated
 	AutoPay pulumi.StringPtrInput
-	// Specifies whether auto renew is enabled. Valid values are **true** and
-	// **false**. Changing this parameter will create a new resource.
+	// Specifies whether auto renew is enabled. Valid values are **true** and **false**.
 	AutoRenew pulumi.StringPtrInput
+	// Specifies whether autoscaling is enabled. Valid values are **true** and
+	// **false**.
+	AutoscalingEnabled pulumi.BoolPtrInput
 	// Specifies the list of AZ names. Changing this parameter will create a
 	// new resource.
 	AvailabilityZones pulumi.StringArrayInput
@@ -506,16 +537,20 @@ type LoadbalancerArgs struct {
 	Ipv4Address pulumi.StringPtrInput
 	// The ID of the EIP. Changing this parameter will create a new resource.
 	Ipv4EipId pulumi.StringPtrInput
-	// The subnet on which to allocate the loadbalancer's ipv4 address.
+	// The **IPv4 subnet ID** of the subnet on which to allocate the loadbalancer's
+	// ipv4 address.
 	Ipv4SubnetId pulumi.StringPtrInput
 	// The ipv6 bandwidth id. Only support shared bandwidth.
 	Ipv6BandwidthId pulumi.StringPtrInput
-	// The network on which to allocate the loadbalancer's ipv6 address.
+	// The **ID** of the subnet on which to allocate the loadbalancer's ipv6 address.
 	Ipv6NetworkId pulumi.StringPtrInput
 	// The L4 flavor id of the load balancer.
 	L4FlavorId pulumi.StringPtrInput
 	// The L7 flavor id of the load balancer.
 	L7FlavorId pulumi.StringPtrInput
+	// Specifies the ID of the minimum Layer-7 flavor for elastic scaling.
+	// This parameter cannot be left blank if there are HTTP or HTTPS listeners.
+	MinL7FlavorId pulumi.StringPtrInput
 	// Human-readable name for the loadbalancer.
 	Name pulumi.StringPtrInput
 	// Specifies the charging period of the ELB loadbalancer.
@@ -627,14 +662,20 @@ func (o LoadbalancerOutput) ToLoadbalancerOutputWithContext(ctx context.Context)
 	return o
 }
 
+// Deprecated: Deprecated
 func (o LoadbalancerOutput) AutoPay() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringPtrOutput { return v.AutoPay }).(pulumi.StringPtrOutput)
 }
 
-// Specifies whether auto renew is enabled. Valid values are **true** and
-// **false**. Changing this parameter will create a new resource.
+// Specifies whether auto renew is enabled. Valid values are **true** and **false**.
 func (o LoadbalancerOutput) AutoRenew() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether autoscaling is enabled. Valid values are **true** and
+// **false**.
+func (o LoadbalancerOutput) AutoscalingEnabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Loadbalancer) pulumi.BoolOutput { return v.AutoscalingEnabled }).(pulumi.BoolOutput)
 }
 
 // Specifies the list of AZ names. Changing this parameter will create a
@@ -698,7 +739,8 @@ func (o LoadbalancerOutput) Ipv4EipId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.Ipv4EipId }).(pulumi.StringOutput)
 }
 
-// The subnet on which to allocate the loadbalancer's ipv4 address.
+// The **IPv4 subnet ID** of the subnet on which to allocate the loadbalancer's
+// ipv4 address.
 func (o LoadbalancerOutput) Ipv4SubnetId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringPtrOutput { return v.Ipv4SubnetId }).(pulumi.StringPtrOutput)
 }
@@ -723,7 +765,7 @@ func (o LoadbalancerOutput) Ipv6EipId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.Ipv6EipId }).(pulumi.StringOutput)
 }
 
-// The network on which to allocate the loadbalancer's ipv6 address.
+// The **ID** of the subnet on which to allocate the loadbalancer's ipv6 address.
 func (o LoadbalancerOutput) Ipv6NetworkId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringPtrOutput { return v.Ipv6NetworkId }).(pulumi.StringPtrOutput)
 }
@@ -736,6 +778,12 @@ func (o LoadbalancerOutput) L4FlavorId() pulumi.StringOutput {
 // The L7 flavor id of the load balancer.
 func (o LoadbalancerOutput) L7FlavorId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.L7FlavorId }).(pulumi.StringOutput)
+}
+
+// Specifies the ID of the minimum Layer-7 flavor for elastic scaling.
+// This parameter cannot be left blank if there are HTTP or HTTPS listeners.
+func (o LoadbalancerOutput) MinL7FlavorId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.MinL7FlavorId }).(pulumi.StringOutput)
 }
 
 // Human-readable name for the loadbalancer.

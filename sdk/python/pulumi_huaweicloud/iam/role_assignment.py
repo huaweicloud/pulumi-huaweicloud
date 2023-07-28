@@ -17,20 +17,25 @@ class RoleAssignmentArgs:
                  group_id: pulumi.Input[str],
                  role_id: pulumi.Input[str],
                  domain_id: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  project_id: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a RoleAssignment resource.
         :param pulumi.Input[str] group_id: Specifies the group to assign the role to.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] role_id: Specifies the role to assign.
-        :param pulumi.Input[str] domain_id: Specifies the domain to assign the role
-               in.
-        :param pulumi.Input[str] project_id: Specifies the project to assign the role
-               in.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] domain_id: Specifies the domain to assign the role in.
+               Required if `project_id` is empty. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] project_id: Specifies the project to assign the role in.
+               Required if `domain_id` is empty. Changing this parameter will create a new resource.
         """
         pulumi.set(__self__, "group_id", group_id)
         pulumi.set(__self__, "role_id", role_id)
         if domain_id is not None:
             pulumi.set(__self__, "domain_id", domain_id)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if project_id is not None:
             pulumi.set(__self__, "project_id", project_id)
 
@@ -39,6 +44,7 @@ class RoleAssignmentArgs:
     def group_id(self) -> pulumi.Input[str]:
         """
         Specifies the group to assign the role to.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "group_id")
 
@@ -51,6 +57,7 @@ class RoleAssignmentArgs:
     def role_id(self) -> pulumi.Input[str]:
         """
         Specifies the role to assign.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "role_id")
 
@@ -62,8 +69,8 @@ class RoleAssignmentArgs:
     @pulumi.getter(name="domainId")
     def domain_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the domain to assign the role
-        in.
+        Specifies the domain to assign the role in.
+        Required if `project_id` is empty. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "domain_id")
 
@@ -72,11 +79,20 @@ class RoleAssignmentArgs:
         pulumi.set(self, "domain_id", value)
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
     @pulumi.getter(name="projectId")
     def project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the project to assign the role
-        in.
+        Specifies the project to assign the role in.
+        Required if `domain_id` is empty. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "project_id")
 
@@ -89,20 +105,25 @@ class RoleAssignmentArgs:
 class _RoleAssignmentState:
     def __init__(__self__, *,
                  domain_id: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  group_id: Optional[pulumi.Input[str]] = None,
                  project_id: Optional[pulumi.Input[str]] = None,
                  role_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering RoleAssignment resources.
-        :param pulumi.Input[str] domain_id: Specifies the domain to assign the role
-               in.
+        :param pulumi.Input[str] domain_id: Specifies the domain to assign the role in.
+               Required if `project_id` is empty. Changing this parameter will create a new resource.
         :param pulumi.Input[str] group_id: Specifies the group to assign the role to.
-        :param pulumi.Input[str] project_id: Specifies the project to assign the role
-               in.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] project_id: Specifies the project to assign the role in.
+               Required if `domain_id` is empty. Changing this parameter will create a new resource.
         :param pulumi.Input[str] role_id: Specifies the role to assign.
+               Changing this parameter will create a new resource.
         """
         if domain_id is not None:
             pulumi.set(__self__, "domain_id", domain_id)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if group_id is not None:
             pulumi.set(__self__, "group_id", group_id)
         if project_id is not None:
@@ -114,8 +135,8 @@ class _RoleAssignmentState:
     @pulumi.getter(name="domainId")
     def domain_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the domain to assign the role
-        in.
+        Specifies the domain to assign the role in.
+        Required if `project_id` is empty. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "domain_id")
 
@@ -124,10 +145,20 @@ class _RoleAssignmentState:
         pulumi.set(self, "domain_id", value)
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
     @pulumi.getter(name="groupId")
     def group_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the group to assign the role to.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "group_id")
 
@@ -139,8 +170,8 @@ class _RoleAssignmentState:
     @pulumi.getter(name="projectId")
     def project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the project to assign the role
-        in.
+        Specifies the project to assign the role in.
+        Required if `domain_id` is empty. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "project_id")
 
@@ -153,6 +184,7 @@ class _RoleAssignmentState:
     def role_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the role to assign.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "role_id")
 
@@ -167,6 +199,7 @@ class RoleAssignment(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  domain_id: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  group_id: Optional[pulumi.Input[str]] = None,
                  project_id: Optional[pulumi.Input[str]] = None,
                  role_id: Optional[pulumi.Input[str]] = None,
@@ -206,12 +239,14 @@ class RoleAssignment(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] domain_id: Specifies the domain to assign the role
-               in.
+        :param pulumi.Input[str] domain_id: Specifies the domain to assign the role in.
+               Required if `project_id` is empty. Changing this parameter will create a new resource.
         :param pulumi.Input[str] group_id: Specifies the group to assign the role to.
-        :param pulumi.Input[str] project_id: Specifies the project to assign the role
-               in.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] project_id: Specifies the project to assign the role in.
+               Required if `domain_id` is empty. Changing this parameter will create a new resource.
         :param pulumi.Input[str] role_id: Specifies the role to assign.
+               Changing this parameter will create a new resource.
         """
         ...
     @overload
@@ -268,6 +303,7 @@ class RoleAssignment(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  domain_id: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  group_id: Optional[pulumi.Input[str]] = None,
                  project_id: Optional[pulumi.Input[str]] = None,
                  role_id: Optional[pulumi.Input[str]] = None,
@@ -281,6 +317,7 @@ class RoleAssignment(pulumi.CustomResource):
             __props__ = RoleAssignmentArgs.__new__(RoleAssignmentArgs)
 
             __props__.__dict__["domain_id"] = domain_id
+            __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             if group_id is None and not opts.urn:
                 raise TypeError("Missing required property 'group_id'")
             __props__.__dict__["group_id"] = group_id
@@ -299,6 +336,7 @@ class RoleAssignment(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             domain_id: Optional[pulumi.Input[str]] = None,
+            enterprise_project_id: Optional[pulumi.Input[str]] = None,
             group_id: Optional[pulumi.Input[str]] = None,
             project_id: Optional[pulumi.Input[str]] = None,
             role_id: Optional[pulumi.Input[str]] = None) -> 'RoleAssignment':
@@ -309,18 +347,21 @@ class RoleAssignment(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] domain_id: Specifies the domain to assign the role
-               in.
+        :param pulumi.Input[str] domain_id: Specifies the domain to assign the role in.
+               Required if `project_id` is empty. Changing this parameter will create a new resource.
         :param pulumi.Input[str] group_id: Specifies the group to assign the role to.
-        :param pulumi.Input[str] project_id: Specifies the project to assign the role
-               in.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] project_id: Specifies the project to assign the role in.
+               Required if `domain_id` is empty. Changing this parameter will create a new resource.
         :param pulumi.Input[str] role_id: Specifies the role to assign.
+               Changing this parameter will create a new resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _RoleAssignmentState.__new__(_RoleAssignmentState)
 
         __props__.__dict__["domain_id"] = domain_id
+        __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["group_id"] = group_id
         __props__.__dict__["project_id"] = project_id
         __props__.__dict__["role_id"] = role_id
@@ -330,16 +371,22 @@ class RoleAssignment(pulumi.CustomResource):
     @pulumi.getter(name="domainId")
     def domain_id(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the domain to assign the role
-        in.
+        Specifies the domain to assign the role in.
+        Required if `project_id` is empty. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "domain_id")
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
+        return pulumi.get(self, "enterprise_project_id")
 
     @property
     @pulumi.getter(name="groupId")
     def group_id(self) -> pulumi.Output[str]:
         """
         Specifies the group to assign the role to.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "group_id")
 
@@ -347,8 +394,8 @@ class RoleAssignment(pulumi.CustomResource):
     @pulumi.getter(name="projectId")
     def project_id(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the project to assign the role
-        in.
+        Specifies the project to assign the role in.
+        Required if `domain_id` is empty. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "project_id")
 
@@ -357,6 +404,7 @@ class RoleAssignment(pulumi.CustomResource):
     def role_id(self) -> pulumi.Output[str]:
         """
         Specifies the role to assign.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "role_id")
 

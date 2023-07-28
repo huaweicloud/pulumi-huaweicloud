@@ -15,7 +15,7 @@ import * as utilities from "../utilities";
  * OpenGaussDB instance can be imported using the `id`, e.g.
  *
  * ```sh
- *  $ pulumi import huaweicloud:GaussDBforOpenGauss/opengaussInstance:OpengaussInstance test ee678f40-ce8e-4d0c-8221-38dead426f06
+ *  $ pulumi import huaweicloud:GaussDBforOpenGauss/opengaussInstance:OpengaussInstance test 1f2c4f48adea4ae684c8edd8818fa349in14
  * ```
  */
 export class OpengaussInstance extends pulumi.CustomResource {
@@ -76,7 +76,6 @@ export class OpengaussInstance extends pulumi.CustomResource {
     /**
      * Specifies the coordinator number. Values: 1~9. The default value is 3.
      * The value must not be greater than twice value of `shardingNum`.
-     * This parameter is valid only when the HA mode is set to **enterprise**.
      */
     public readonly coordinatorNum!: pulumi.Output<number | undefined>;
     /**
@@ -170,7 +169,6 @@ export class OpengaussInstance extends pulumi.CustomResource {
     /**
      * The replica number. The valid values are **2** and **3**, defaults to **3**.
      * Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
-     * This parameter is valid only when the HA mode is set to **centralization_standard**.
      * Changing this parameter will create a new resource.
      */
     public readonly replicaNum!: pulumi.Output<number | undefined>;
@@ -183,7 +181,7 @@ export class OpengaussInstance extends pulumi.CustomResource {
     public readonly securityGroupId!: pulumi.Output<string | undefined>;
     /**
      * Specifies the sharding number. The valid value is range form `1` to `9`.
-     * The default value is 3. This parameter is valid only when the HA mode is set to **enterprise**.
+     * The default value is 3.
      */
     public readonly shardingNum!: pulumi.Output<number | undefined>;
     /**
@@ -362,7 +360,6 @@ export interface OpengaussInstanceState {
     /**
      * Specifies the coordinator number. Values: 1~9. The default value is 3.
      * The value must not be greater than twice value of `shardingNum`.
-     * This parameter is valid only when the HA mode is set to **enterprise**.
      */
     coordinatorNum?: pulumi.Input<number>;
     /**
@@ -456,7 +453,6 @@ export interface OpengaussInstanceState {
     /**
      * The replica number. The valid values are **2** and **3**, defaults to **3**.
      * Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
-     * This parameter is valid only when the HA mode is set to **centralization_standard**.
      * Changing this parameter will create a new resource.
      */
     replicaNum?: pulumi.Input<number>;
@@ -469,7 +465,7 @@ export interface OpengaussInstanceState {
     securityGroupId?: pulumi.Input<string>;
     /**
      * Specifies the sharding number. The valid value is range form `1` to `9`.
-     * The default value is 3. This parameter is valid only when the HA mode is set to **enterprise**.
+     * The default value is 3.
      */
     shardingNum?: pulumi.Input<number>;
     /**
@@ -541,7 +537,6 @@ export interface OpengaussInstanceArgs {
     /**
      * Specifies the coordinator number. Values: 1~9. The default value is 3.
      * The value must not be greater than twice value of `shardingNum`.
-     * This parameter is valid only when the HA mode is set to **enterprise**.
      */
     coordinatorNum?: pulumi.Input<number>;
     /**
@@ -611,7 +606,6 @@ export interface OpengaussInstanceArgs {
     /**
      * The replica number. The valid values are **2** and **3**, defaults to **3**.
      * Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
-     * This parameter is valid only when the HA mode is set to **centralization_standard**.
      * Changing this parameter will create a new resource.
      */
     replicaNum?: pulumi.Input<number>;
@@ -624,7 +618,7 @@ export interface OpengaussInstanceArgs {
     securityGroupId?: pulumi.Input<string>;
     /**
      * Specifies the sharding number. The valid value is range form `1` to `9`.
-     * The default value is 3. This parameter is valid only when the HA mode is set to **enterprise**.
+     * The default value is 3.
      */
     shardingNum?: pulumi.Input<number>;
     /**

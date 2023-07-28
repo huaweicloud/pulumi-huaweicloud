@@ -56,7 +56,9 @@ type LookupFileSystemArgs struct {
 	// The UUID of the shared file system.
 	Id *string `pulumi:"id"`
 	// The name of the shared file system.
-	Name   *string `pulumi:"name"`
+	Name *string `pulumi:"name"`
+	// Specifies the region in which to obtain the shared file system.
+	// If omitted, the provider-level region will be used.
 	Region *string `pulumi:"region"`
 	// The status of the shared file system.
 	Status *string `pulumi:"status"`
@@ -72,7 +74,8 @@ type LookupFileSystemResult struct {
 	AccessType string `pulumi:"accessType"`
 	// The availability zone name.
 	AvailabilityZone string `pulumi:"availabilityZone"`
-	Description      string `pulumi:"description"`
+	// The description of the shared file system.
+	Description string `pulumi:"description"`
 	// The path for accessing the shared file system.
 	ExportLocation string `pulumi:"exportLocation"`
 	Id             string `pulumi:"id"`
@@ -94,7 +97,8 @@ type LookupFileSystemResult struct {
 	// The protocol for sharing file systems.
 	ShareProto string `pulumi:"shareProto"`
 	// The size (GB) of the shared file system.
-	Size   int    `pulumi:"size"`
+	Size int `pulumi:"size"`
+	// The state of the shared file system.
 	State  string `pulumi:"state"`
 	Status string `pulumi:"status"`
 }
@@ -117,7 +121,9 @@ type LookupFileSystemOutputArgs struct {
 	// The UUID of the shared file system.
 	Id pulumi.StringPtrInput `pulumi:"id"`
 	// The name of the shared file system.
-	Name   pulumi.StringPtrInput `pulumi:"name"`
+	Name pulumi.StringPtrInput `pulumi:"name"`
+	// Specifies the region in which to obtain the shared file system.
+	// If omitted, the provider-level region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
 	// The status of the shared file system.
 	Status pulumi.StringPtrInput `pulumi:"status"`
@@ -162,6 +168,7 @@ func (o LookupFileSystemResultOutput) AvailabilityZone() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupFileSystemResult) string { return v.AvailabilityZone }).(pulumi.StringOutput)
 }
 
+// The description of the shared file system.
 func (o LookupFileSystemResultOutput) Description() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupFileSystemResult) string { return v.Description }).(pulumi.StringOutput)
 }
@@ -224,6 +231,7 @@ func (o LookupFileSystemResultOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v LookupFileSystemResult) int { return v.Size }).(pulumi.IntOutput)
 }
 
+// The state of the shared file system.
 func (o LookupFileSystemResultOutput) State() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupFileSystemResult) string { return v.State }).(pulumi.StringOutput)
 }

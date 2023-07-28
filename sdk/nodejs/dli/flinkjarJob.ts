@@ -186,6 +186,9 @@ export class FlinkjarJob extends pulumi.CustomResource {
      * subscribed to the SMN topic.
      */
     public readonly smnTopic!: pulumi.Output<string | undefined>;
+    /**
+     * The Job status.
+     */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
      * Specifies the key/value pairs to associate with the resource.
@@ -396,6 +399,9 @@ export interface FlinkjarJobState {
      * subscribed to the SMN topic.
      */
     smnTopic?: pulumi.Input<string>;
+    /**
+     * The Job status.
+     */
     status?: pulumi.Input<string>;
     /**
      * Specifies the key/value pairs to associate with the resource.

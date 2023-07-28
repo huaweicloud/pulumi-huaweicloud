@@ -18,6 +18,7 @@ class RuleDataMaskingArgs:
                  path: pulumi.Input[str],
                  policy_id: pulumi.Input[str],
                  subfield: pulumi.Input[str],
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a RuleDataMasking resource.
@@ -29,6 +30,8 @@ class RuleDataMaskingArgs:
         :param pulumi.Input[str] path: Specifies the URL to which the data masking rule applies (exact match by default).
         :param pulumi.Input[str] policy_id: Specifies the WAF policy ID. Changing this creates a new rule.
         :param pulumi.Input[str] subfield: Specifies the name of the masked field, e.g.: password.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF data masking rule.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: The region in which to create the WAF Data Masking rule resource. If omitted,
                the provider-level region will be used. Changing this setting will create a new rule.
         """
@@ -36,6 +39,8 @@ class RuleDataMaskingArgs:
         pulumi.set(__self__, "path", path)
         pulumi.set(__self__, "policy_id", policy_id)
         pulumi.set(__self__, "subfield", subfield)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if region is not None:
             pulumi.set(__self__, "region", region)
 
@@ -92,6 +97,19 @@ class RuleDataMaskingArgs:
         pulumi.set(self, "subfield", value)
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID of WAF data masking rule.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
@@ -108,6 +126,7 @@ class RuleDataMaskingArgs:
 @pulumi.input_type
 class _RuleDataMaskingState:
     def __init__(__self__, *,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  field: Optional[pulumi.Input[str]] = None,
                  path: Optional[pulumi.Input[str]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
@@ -115,6 +134,8 @@ class _RuleDataMaskingState:
                  subfield: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering RuleDataMasking resources.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF data masking rule.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] field: The position where the masked field stored. Valid values are:
                + `params`: The field in the parameter.
                + `header`: The field in the header.
@@ -126,6 +147,8 @@ class _RuleDataMaskingState:
                the provider-level region will be used. Changing this setting will create a new rule.
         :param pulumi.Input[str] subfield: Specifies the name of the masked field, e.g.: password.
         """
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if field is not None:
             pulumi.set(__self__, "field", field)
         if path is not None:
@@ -136,6 +159,19 @@ class _RuleDataMaskingState:
             pulumi.set(__self__, "region", region)
         if subfield is not None:
             pulumi.set(__self__, "subfield", subfield)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID of WAF data masking rule.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
 
     @property
     @pulumi.getter
@@ -208,6 +244,7 @@ class RuleDataMasking(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  field: Optional[pulumi.Input[str]] = None,
                  path: Optional[pulumi.Input[str]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
@@ -226,9 +263,12 @@ class RuleDataMasking(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        policy1 = huaweicloud.waf.Policy("policy1")
+        config = pulumi.Config()
+        enterprise_project_id = config.require_object("enterpriseProjectId")
+        policy_id = config.require_object("policyId")
         rule1 = huaweicloud.waf.RuleDataMasking("rule1",
-            policy_id=policy1.id,
+            policy_id=policy_id,
+            enterprise_project_id=enterprise_project_id,
             path="/login",
             field="params",
             subfield="password")
@@ -236,14 +276,22 @@ class RuleDataMasking(pulumi.CustomResource):
 
         ## Import
 
-        Data Masking Rules can be imported using the policy ID and rule ID separated by a slash, e.g.
+        There are two ways to import WAF rule data masking state. * Using `policy_id` and `rule_id`, separated by a slash, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Waf/ruleDataMasking:RuleDataMasking rule_1 d78b439fd5e54ea08886e5f63ee7b3f5/ac01a092d50e4e6ba3cd622c1128ba2c
+         $ pulumi import huaweicloud:Waf/ruleDataMasking:RuleDataMasking test <policy_id>/<rule_id>
+        ```
+
+         * Using `policy_id`, `rule_id` and `enterprise_project_id`, separated by slashes, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Waf/ruleDataMasking:RuleDataMasking test <policy_id>/<rule_id>/<enterprise_project_id>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF data masking rule.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] field: The position where the masked field stored. Valid values are:
                + `params`: The field in the parameter.
                + `header`: The field in the header.
@@ -273,9 +321,12 @@ class RuleDataMasking(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        policy1 = huaweicloud.waf.Policy("policy1")
+        config = pulumi.Config()
+        enterprise_project_id = config.require_object("enterpriseProjectId")
+        policy_id = config.require_object("policyId")
         rule1 = huaweicloud.waf.RuleDataMasking("rule1",
-            policy_id=policy1.id,
+            policy_id=policy_id,
+            enterprise_project_id=enterprise_project_id,
             path="/login",
             field="params",
             subfield="password")
@@ -283,10 +334,16 @@ class RuleDataMasking(pulumi.CustomResource):
 
         ## Import
 
-        Data Masking Rules can be imported using the policy ID and rule ID separated by a slash, e.g.
+        There are two ways to import WAF rule data masking state. * Using `policy_id` and `rule_id`, separated by a slash, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Waf/ruleDataMasking:RuleDataMasking rule_1 d78b439fd5e54ea08886e5f63ee7b3f5/ac01a092d50e4e6ba3cd622c1128ba2c
+         $ pulumi import huaweicloud:Waf/ruleDataMasking:RuleDataMasking test <policy_id>/<rule_id>
+        ```
+
+         * Using `policy_id`, `rule_id` and `enterprise_project_id`, separated by slashes, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Waf/ruleDataMasking:RuleDataMasking test <policy_id>/<rule_id>/<enterprise_project_id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -304,6 +361,7 @@ class RuleDataMasking(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  field: Optional[pulumi.Input[str]] = None,
                  path: Optional[pulumi.Input[str]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
@@ -318,6 +376,7 @@ class RuleDataMasking(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = RuleDataMaskingArgs.__new__(RuleDataMaskingArgs)
 
+            __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             if field is None and not opts.urn:
                 raise TypeError("Missing required property 'field'")
             __props__.__dict__["field"] = field
@@ -341,6 +400,7 @@ class RuleDataMasking(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            enterprise_project_id: Optional[pulumi.Input[str]] = None,
             field: Optional[pulumi.Input[str]] = None,
             path: Optional[pulumi.Input[str]] = None,
             policy_id: Optional[pulumi.Input[str]] = None,
@@ -353,6 +413,8 @@ class RuleDataMasking(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF data masking rule.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] field: The position where the masked field stored. Valid values are:
                + `params`: The field in the parameter.
                + `header`: The field in the header.
@@ -368,12 +430,22 @@ class RuleDataMasking(pulumi.CustomResource):
 
         __props__ = _RuleDataMaskingState.__new__(_RuleDataMaskingState)
 
+        __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["field"] = field
         __props__.__dict__["path"] = path
         __props__.__dict__["policy_id"] = policy_id
         __props__.__dict__["region"] = region
         __props__.__dict__["subfield"] = subfield
         return RuleDataMasking(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the enterprise project ID of WAF data masking rule.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
 
     @property
     @pulumi.getter

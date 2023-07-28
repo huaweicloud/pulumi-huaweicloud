@@ -74,7 +74,7 @@ export interface GetLoadbalancerArgs {
      */
     vipAddress?: string;
     /**
-     * Specifies the ID of the subnet where the load balancer works.
+     * Specifies the **IPv4 subnet ID** of the subnet where the load balancer works.
      */
     vipSubnetId?: string;
 }
@@ -87,6 +87,10 @@ export interface GetLoadbalancerResult {
     readonly enterpriseProjectId: string;
     readonly id: string;
     readonly name: string;
+    /**
+     * The EIP address that is associated to the Load Balancer instance.
+     */
+    readonly publicIp: string;
     readonly region: string;
     readonly status: string;
     /**
@@ -140,7 +144,7 @@ export interface GetLoadbalancerOutputArgs {
      */
     vipAddress?: pulumi.Input<string>;
     /**
-     * Specifies the ID of the subnet where the load balancer works.
+     * Specifies the **IPv4 subnet ID** of the subnet where the load balancer works.
      */
     vipSubnetId?: pulumi.Input<string>;
 }

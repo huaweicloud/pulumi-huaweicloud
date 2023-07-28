@@ -71,10 +71,8 @@ type Addon struct {
 	TemplateName pulumi.StringOutput `pulumi:"templateName"`
 	// Specifies the add-on template installation parameters.
 	// These parameters vary depending on the add-on. Structure is documented below.
-	// Changing this parameter will create a new resource.
 	Values AddonValuesPtrOutput `pulumi:"values"`
 	// Specifies the version of the add-on.
-	// Changing this parameter will create a new resource.
 	Version pulumi.StringOutput `pulumi:"version"`
 }
 
@@ -90,9 +88,6 @@ func NewAddon(ctx *pulumi.Context,
 	}
 	if args.TemplateName == nil {
 		return nil, errors.New("invalid value for required argument 'TemplateName'")
-	}
-	if args.Version == nil {
-		return nil, errors.New("invalid value for required argument 'Version'")
 	}
 	opts = pkgResourceDefaultOpts(opts)
 	var resource Addon
@@ -132,10 +127,8 @@ type addonState struct {
 	TemplateName *string `pulumi:"templateName"`
 	// Specifies the add-on template installation parameters.
 	// These parameters vary depending on the add-on. Structure is documented below.
-	// Changing this parameter will create a new resource.
 	Values *AddonValues `pulumi:"values"`
 	// Specifies the version of the add-on.
-	// Changing this parameter will create a new resource.
 	Version *string `pulumi:"version"`
 }
 
@@ -155,10 +148,8 @@ type AddonState struct {
 	TemplateName pulumi.StringPtrInput
 	// Specifies the add-on template installation parameters.
 	// These parameters vary depending on the add-on. Structure is documented below.
-	// Changing this parameter will create a new resource.
 	Values AddonValuesPtrInput
 	// Specifies the version of the add-on.
-	// Changing this parameter will create a new resource.
 	Version pulumi.StringPtrInput
 }
 
@@ -178,11 +169,9 @@ type addonArgs struct {
 	TemplateName string `pulumi:"templateName"`
 	// Specifies the add-on template installation parameters.
 	// These parameters vary depending on the add-on. Structure is documented below.
-	// Changing this parameter will create a new resource.
 	Values *AddonValues `pulumi:"values"`
 	// Specifies the version of the add-on.
-	// Changing this parameter will create a new resource.
-	Version string `pulumi:"version"`
+	Version *string `pulumi:"version"`
 }
 
 // The set of arguments for constructing a Addon resource.
@@ -198,11 +187,9 @@ type AddonArgs struct {
 	TemplateName pulumi.StringInput
 	// Specifies the add-on template installation parameters.
 	// These parameters vary depending on the add-on. Structure is documented below.
-	// Changing this parameter will create a new resource.
 	Values AddonValuesPtrInput
 	// Specifies the version of the add-on.
-	// Changing this parameter will create a new resource.
-	Version pulumi.StringInput
+	Version pulumi.StringPtrInput
 }
 
 func (AddonArgs) ElementType() reflect.Type {
@@ -322,13 +309,11 @@ func (o AddonOutput) TemplateName() pulumi.StringOutput {
 
 // Specifies the add-on template installation parameters.
 // These parameters vary depending on the add-on. Structure is documented below.
-// Changing this parameter will create a new resource.
 func (o AddonOutput) Values() AddonValuesPtrOutput {
 	return o.ApplyT(func(v *Addon) AddonValuesPtrOutput { return v.Values }).(AddonValuesPtrOutput)
 }
 
 // Specifies the version of the add-on.
-// Changing this parameter will create a new resource.
 func (o AddonOutput) Version() pulumi.StringOutput {
 	return o.ApplyT(func(v *Addon) pulumi.StringOutput { return v.Version }).(pulumi.StringOutput)
 }

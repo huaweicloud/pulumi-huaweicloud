@@ -56,13 +56,17 @@ import (
 type Eip struct {
 	pulumi.CustomResourceState
 
-	BandwidthId        pulumi.StringOutput `pulumi:"bandwidthId"`
-	BandwidthName      pulumi.StringOutput `pulumi:"bandwidthName"`
+	// The id of bandwidth.
+	BandwidthId pulumi.StringOutput `pulumi:"bandwidthId"`
+	// The name of bandwidth.
+	BandwidthName pulumi.StringOutput `pulumi:"bandwidthName"`
+	// Whether the bandwidth is shared or exclusive.
 	BandwidthShareType pulumi.StringOutput `pulumi:"bandwidthShareType"`
-	BandwidthSize      pulumi.IntOutput    `pulumi:"bandwidthSize"`
+	// The size of bandwidth.
+	BandwidthSize pulumi.IntOutput `pulumi:"bandwidthSize"`
 	// The version of elastic IP address.
 	IpVersion pulumi.IntOutput `pulumi:"ipVersion"`
-	// Specifies the line ID of IEC sevice site.
+	// Specifies the line ID of IEC service site.
 	// Changing this parameter creates a new resource.
 	LineId pulumi.StringOutput `pulumi:"lineId"`
 	// Specifies the port ID which this eip will associate with.
@@ -71,8 +75,10 @@ type Eip struct {
 	PrivateIp pulumi.StringOutput `pulumi:"privateIp"`
 	// The address of elastic IP.
 	PublicIp pulumi.StringOutput `pulumi:"publicIp"`
-	Region   pulumi.StringOutput `pulumi:"region"`
-	// Specifies the ID of IEC sevice site. Changing this parameter creates a new
+	// The region in which to create the resource. If omitted, the
+	// provider-level region will be used. Changing this creates a new resource.
+	Region pulumi.StringOutput `pulumi:"region"`
+	// Specifies the ID of IEC service site. Changing this parameter creates a new
 	// resource.
 	SiteId pulumi.StringOutput `pulumi:"siteId"`
 	// The located information of the IEC site. It contains area, province and city.
@@ -114,13 +120,17 @@ func GetEip(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Eip resources.
 type eipState struct {
-	BandwidthId        *string `pulumi:"bandwidthId"`
-	BandwidthName      *string `pulumi:"bandwidthName"`
+	// The id of bandwidth.
+	BandwidthId *string `pulumi:"bandwidthId"`
+	// The name of bandwidth.
+	BandwidthName *string `pulumi:"bandwidthName"`
+	// Whether the bandwidth is shared or exclusive.
 	BandwidthShareType *string `pulumi:"bandwidthShareType"`
-	BandwidthSize      *int    `pulumi:"bandwidthSize"`
+	// The size of bandwidth.
+	BandwidthSize *int `pulumi:"bandwidthSize"`
 	// The version of elastic IP address.
 	IpVersion *int `pulumi:"ipVersion"`
-	// Specifies the line ID of IEC sevice site.
+	// Specifies the line ID of IEC service site.
 	// Changing this parameter creates a new resource.
 	LineId *string `pulumi:"lineId"`
 	// Specifies the port ID which this eip will associate with.
@@ -129,8 +139,10 @@ type eipState struct {
 	PrivateIp *string `pulumi:"privateIp"`
 	// The address of elastic IP.
 	PublicIp *string `pulumi:"publicIp"`
-	Region   *string `pulumi:"region"`
-	// Specifies the ID of IEC sevice site. Changing this parameter creates a new
+	// The region in which to create the resource. If omitted, the
+	// provider-level region will be used. Changing this creates a new resource.
+	Region *string `pulumi:"region"`
+	// Specifies the ID of IEC service site. Changing this parameter creates a new
 	// resource.
 	SiteId *string `pulumi:"siteId"`
 	// The located information of the IEC site. It contains area, province and city.
@@ -140,13 +152,17 @@ type eipState struct {
 }
 
 type EipState struct {
-	BandwidthId        pulumi.StringPtrInput
-	BandwidthName      pulumi.StringPtrInput
+	// The id of bandwidth.
+	BandwidthId pulumi.StringPtrInput
+	// The name of bandwidth.
+	BandwidthName pulumi.StringPtrInput
+	// Whether the bandwidth is shared or exclusive.
 	BandwidthShareType pulumi.StringPtrInput
-	BandwidthSize      pulumi.IntPtrInput
+	// The size of bandwidth.
+	BandwidthSize pulumi.IntPtrInput
 	// The version of elastic IP address.
 	IpVersion pulumi.IntPtrInput
-	// Specifies the line ID of IEC sevice site.
+	// Specifies the line ID of IEC service site.
 	// Changing this parameter creates a new resource.
 	LineId pulumi.StringPtrInput
 	// Specifies the port ID which this eip will associate with.
@@ -155,8 +171,10 @@ type EipState struct {
 	PrivateIp pulumi.StringPtrInput
 	// The address of elastic IP.
 	PublicIp pulumi.StringPtrInput
-	Region   pulumi.StringPtrInput
-	// Specifies the ID of IEC sevice site. Changing this parameter creates a new
+	// The region in which to create the resource. If omitted, the
+	// provider-level region will be used. Changing this creates a new resource.
+	Region pulumi.StringPtrInput
+	// Specifies the ID of IEC service site. Changing this parameter creates a new
 	// resource.
 	SiteId pulumi.StringPtrInput
 	// The located information of the IEC site. It contains area, province and city.
@@ -172,13 +190,15 @@ func (EipState) ElementType() reflect.Type {
 type eipArgs struct {
 	// The version of elastic IP address.
 	IpVersion *int `pulumi:"ipVersion"`
-	// Specifies the line ID of IEC sevice site.
+	// Specifies the line ID of IEC service site.
 	// Changing this parameter creates a new resource.
 	LineId *string `pulumi:"lineId"`
 	// Specifies the port ID which this eip will associate with.
 	PortId *string `pulumi:"portId"`
+	// The region in which to create the resource. If omitted, the
+	// provider-level region will be used. Changing this creates a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies the ID of IEC sevice site. Changing this parameter creates a new
+	// Specifies the ID of IEC service site. Changing this parameter creates a new
 	// resource.
 	SiteId string `pulumi:"siteId"`
 }
@@ -187,13 +207,15 @@ type eipArgs struct {
 type EipArgs struct {
 	// The version of elastic IP address.
 	IpVersion pulumi.IntPtrInput
-	// Specifies the line ID of IEC sevice site.
+	// Specifies the line ID of IEC service site.
 	// Changing this parameter creates a new resource.
 	LineId pulumi.StringPtrInput
 	// Specifies the port ID which this eip will associate with.
 	PortId pulumi.StringPtrInput
+	// The region in which to create the resource. If omitted, the
+	// provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies the ID of IEC sevice site. Changing this parameter creates a new
+	// Specifies the ID of IEC service site. Changing this parameter creates a new
 	// resource.
 	SiteId pulumi.StringInput
 }
@@ -285,18 +307,22 @@ func (o EipOutput) ToEipOutputWithContext(ctx context.Context) EipOutput {
 	return o
 }
 
+// The id of bandwidth.
 func (o EipOutput) BandwidthId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Eip) pulumi.StringOutput { return v.BandwidthId }).(pulumi.StringOutput)
 }
 
+// The name of bandwidth.
 func (o EipOutput) BandwidthName() pulumi.StringOutput {
 	return o.ApplyT(func(v *Eip) pulumi.StringOutput { return v.BandwidthName }).(pulumi.StringOutput)
 }
 
+// Whether the bandwidth is shared or exclusive.
 func (o EipOutput) BandwidthShareType() pulumi.StringOutput {
 	return o.ApplyT(func(v *Eip) pulumi.StringOutput { return v.BandwidthShareType }).(pulumi.StringOutput)
 }
 
+// The size of bandwidth.
 func (o EipOutput) BandwidthSize() pulumi.IntOutput {
 	return o.ApplyT(func(v *Eip) pulumi.IntOutput { return v.BandwidthSize }).(pulumi.IntOutput)
 }
@@ -306,7 +332,7 @@ func (o EipOutput) IpVersion() pulumi.IntOutput {
 	return o.ApplyT(func(v *Eip) pulumi.IntOutput { return v.IpVersion }).(pulumi.IntOutput)
 }
 
-// Specifies the line ID of IEC sevice site.
+// Specifies the line ID of IEC service site.
 // Changing this parameter creates a new resource.
 func (o EipOutput) LineId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Eip) pulumi.StringOutput { return v.LineId }).(pulumi.StringOutput)
@@ -327,11 +353,13 @@ func (o EipOutput) PublicIp() pulumi.StringOutput {
 	return o.ApplyT(func(v *Eip) pulumi.StringOutput { return v.PublicIp }).(pulumi.StringOutput)
 }
 
+// The region in which to create the resource. If omitted, the
+// provider-level region will be used. Changing this creates a new resource.
 func (o EipOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Eip) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Specifies the ID of IEC sevice site. Changing this parameter creates a new
+// Specifies the ID of IEC service site. Changing this parameter creates a new
 // resource.
 func (o EipOutput) SiteId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Eip) pulumi.StringOutput { return v.SiteId }).(pulumi.StringOutput)

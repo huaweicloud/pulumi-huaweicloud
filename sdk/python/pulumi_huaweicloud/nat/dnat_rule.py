@@ -14,45 +14,63 @@ __all__ = ['DnatRuleArgs', 'DnatRule']
 @pulumi.input_type
 class DnatRuleArgs:
     def __init__(__self__, *,
-                 external_service_port: pulumi.Input[int],
                  floating_ip_id: pulumi.Input[str],
-                 internal_service_port: pulumi.Input[int],
                  nat_gateway_id: pulumi.Input[str],
                  protocol: pulumi.Input[str],
                  description: Optional[pulumi.Input[str]] = None,
+                 external_service_port: Optional[pulumi.Input[int]] = None,
+                 external_service_port_range: Optional[pulumi.Input[str]] = None,
+                 internal_service_port: Optional[pulumi.Input[int]] = None,
+                 internal_service_port_range: Optional[pulumi.Input[str]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
                  private_ip: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a DnatRule resource.
+        :param pulumi.Input[str] floating_ip_id: Specifies the ID of the floating IP address.
+        :param pulumi.Input[str] nat_gateway_id: Specifies the ID of the NAT gateway to which the DNAT rule belongs.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] protocol: Specifies the protocol type.  
+               The valid values are **tcp**, **udp**, and **any**.
+        :param pulumi.Input[str] description: Specifies the description of the DNAT rule.  
+               The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
         :param pulumi.Input[int] external_service_port: Specifies port used by ECSs or BMSs to provide services for
-               external systems. Changing this creates a new dnat rule.
-        :param pulumi.Input[str] floating_ip_id: Specifies the ID of the floating IP address. Changing this creates a
-               new dnat rule.
-        :param pulumi.Input[int] internal_service_port: Specifies port used by ECSs or BMSs to provide services for
-               external systems. Changing this creates a new dnat rule.
-        :param pulumi.Input[str] nat_gateway_id: ID of the nat gateway this dnat rule belongs to. Changing this creates
-               a new dnat rule.
-        :param pulumi.Input[str] protocol: Specifies the protocol type. Currently, TCP, UDP, and ANY are supported.
-               Changing this creates a new dnat rule.
-        :param pulumi.Input[str] description: Specifies the description of the dnat rule.
-               The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
-               Changing this creates a new dnat rule.
-        :param pulumi.Input[str] port_id: Specifies the port ID of network. This parameter is mandatory in VPC
-               scenario. Use Vpc.Port to get the port if just know a fixed IP
-               addresses on the port. Changing this creates a new dnat rule.
+               external systems.
+               Exactly one of `external_service_port` and `external_service_port_range` must be set.
+               Required if `internal_service_port` is set.
+        :param pulumi.Input[str] external_service_port_range: Specifies port range used by ECSs or BMSs to provide
+               services for external systems.
+               This parameter and `internal_service_port_range` are mapped **1:1** in sequence(, ranges must have the same length).
+               The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+               Required if `internal_service_port_range` is set.
+        :param pulumi.Input[int] internal_service_port: Specifies port used by Floating IP provide services for external
+               systems.
+               Exactly one of `internal_service_port` and `internal_service_port_range` must be set.
+        :param pulumi.Input[str] internal_service_port_range: Specifies port range used by Floating IP provide services
+               for external systems.
+               This parameter and `external_service_port_range` are mapped **1:1** in sequence(, ranges must have the same length).
+               The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+        :param pulumi.Input[str] port_id: Specifies the port ID of network. This parameter is mandatory in VPC scenario.  
+               Use Vpc.Port to get the port if just know a fixed IP addresses
+               on the port.
         :param pulumi.Input[str] private_ip: Specifies the private IP address of a user. This parameter is mandatory in
-               Direct Connect scenario. Changing this creates a new dnat rule.
-        :param pulumi.Input[str] region: The region in which to create the dnat rule resource. If omitted, the
-               provider-level region will be used. Changing this creates a new dnat rule.
+               Direct Connect scenario.
+        :param pulumi.Input[str] region: Specifies the region where the DNAT rule is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
-        pulumi.set(__self__, "external_service_port", external_service_port)
         pulumi.set(__self__, "floating_ip_id", floating_ip_id)
-        pulumi.set(__self__, "internal_service_port", internal_service_port)
         pulumi.set(__self__, "nat_gateway_id", nat_gateway_id)
         pulumi.set(__self__, "protocol", protocol)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if external_service_port is not None:
+            pulumi.set(__self__, "external_service_port", external_service_port)
+        if external_service_port_range is not None:
+            pulumi.set(__self__, "external_service_port_range", external_service_port_range)
+        if internal_service_port is not None:
+            pulumi.set(__self__, "internal_service_port", internal_service_port)
+        if internal_service_port_range is not None:
+            pulumi.set(__self__, "internal_service_port_range", internal_service_port_range)
         if port_id is not None:
             pulumi.set(__self__, "port_id", port_id)
         if private_ip is not None:
@@ -61,24 +79,10 @@ class DnatRuleArgs:
             pulumi.set(__self__, "region", region)
 
     @property
-    @pulumi.getter(name="externalServicePort")
-    def external_service_port(self) -> pulumi.Input[int]:
-        """
-        Specifies port used by ECSs or BMSs to provide services for
-        external systems. Changing this creates a new dnat rule.
-        """
-        return pulumi.get(self, "external_service_port")
-
-    @external_service_port.setter
-    def external_service_port(self, value: pulumi.Input[int]):
-        pulumi.set(self, "external_service_port", value)
-
-    @property
     @pulumi.getter(name="floatingIpId")
     def floating_ip_id(self) -> pulumi.Input[str]:
         """
-        Specifies the ID of the floating IP address. Changing this creates a
-        new dnat rule.
+        Specifies the ID of the floating IP address.
         """
         return pulumi.get(self, "floating_ip_id")
 
@@ -87,24 +91,11 @@ class DnatRuleArgs:
         pulumi.set(self, "floating_ip_id", value)
 
     @property
-    @pulumi.getter(name="internalServicePort")
-    def internal_service_port(self) -> pulumi.Input[int]:
-        """
-        Specifies port used by ECSs or BMSs to provide services for
-        external systems. Changing this creates a new dnat rule.
-        """
-        return pulumi.get(self, "internal_service_port")
-
-    @internal_service_port.setter
-    def internal_service_port(self, value: pulumi.Input[int]):
-        pulumi.set(self, "internal_service_port", value)
-
-    @property
     @pulumi.getter(name="natGatewayId")
     def nat_gateway_id(self) -> pulumi.Input[str]:
         """
-        ID of the nat gateway this dnat rule belongs to. Changing this creates
-        a new dnat rule.
+        Specifies the ID of the NAT gateway to which the DNAT rule belongs.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "nat_gateway_id")
 
@@ -116,8 +107,8 @@ class DnatRuleArgs:
     @pulumi.getter
     def protocol(self) -> pulumi.Input[str]:
         """
-        Specifies the protocol type. Currently, TCP, UDP, and ANY are supported.
-        Changing this creates a new dnat rule.
+        Specifies the protocol type.  
+        The valid values are **tcp**, **udp**, and **any**.
         """
         return pulumi.get(self, "protocol")
 
@@ -129,9 +120,8 @@ class DnatRuleArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of the dnat rule.
-        The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
-        Changing this creates a new dnat rule.
+        Specifies the description of the DNAT rule.  
+        The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -140,12 +130,72 @@ class DnatRuleArgs:
         pulumi.set(self, "description", value)
 
     @property
+    @pulumi.getter(name="externalServicePort")
+    def external_service_port(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies port used by ECSs or BMSs to provide services for
+        external systems.
+        Exactly one of `external_service_port` and `external_service_port_range` must be set.
+        Required if `internal_service_port` is set.
+        """
+        return pulumi.get(self, "external_service_port")
+
+    @external_service_port.setter
+    def external_service_port(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "external_service_port", value)
+
+    @property
+    @pulumi.getter(name="externalServicePortRange")
+    def external_service_port_range(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies port range used by ECSs or BMSs to provide
+        services for external systems.
+        This parameter and `internal_service_port_range` are mapped **1:1** in sequence(, ranges must have the same length).
+        The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+        Required if `internal_service_port_range` is set.
+        """
+        return pulumi.get(self, "external_service_port_range")
+
+    @external_service_port_range.setter
+    def external_service_port_range(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "external_service_port_range", value)
+
+    @property
+    @pulumi.getter(name="internalServicePort")
+    def internal_service_port(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies port used by Floating IP provide services for external
+        systems.
+        Exactly one of `internal_service_port` and `internal_service_port_range` must be set.
+        """
+        return pulumi.get(self, "internal_service_port")
+
+    @internal_service_port.setter
+    def internal_service_port(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "internal_service_port", value)
+
+    @property
+    @pulumi.getter(name="internalServicePortRange")
+    def internal_service_port_range(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies port range used by Floating IP provide services
+        for external systems.
+        This parameter and `external_service_port_range` are mapped **1:1** in sequence(, ranges must have the same length).
+        The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+        """
+        return pulumi.get(self, "internal_service_port_range")
+
+    @internal_service_port_range.setter
+    def internal_service_port_range(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "internal_service_port_range", value)
+
+    @property
     @pulumi.getter(name="portId")
     def port_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the port ID of network. This parameter is mandatory in VPC
-        scenario. Use Vpc.Port to get the port if just know a fixed IP
-        addresses on the port. Changing this creates a new dnat rule.
+        Specifies the port ID of network. This parameter is mandatory in VPC scenario.  
+        Use Vpc.Port to get the port if just know a fixed IP addresses
+        on the port.
         """
         return pulumi.get(self, "port_id")
 
@@ -158,7 +208,7 @@ class DnatRuleArgs:
     def private_ip(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the private IP address of a user. This parameter is mandatory in
-        Direct Connect scenario. Changing this creates a new dnat rule.
+        Direct Connect scenario.
         """
         return pulumi.get(self, "private_ip")
 
@@ -170,8 +220,8 @@ class DnatRuleArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the dnat rule resource. If omitted, the
-        provider-level region will be used. Changing this creates a new dnat rule.
+        Specifies the region where the DNAT rule is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -186,9 +236,11 @@ class _DnatRuleState:
                  created_at: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  external_service_port: Optional[pulumi.Input[int]] = None,
+                 external_service_port_range: Optional[pulumi.Input[str]] = None,
                  floating_ip_address: Optional[pulumi.Input[str]] = None,
                  floating_ip_id: Optional[pulumi.Input[str]] = None,
                  internal_service_port: Optional[pulumi.Input[int]] = None,
+                 internal_service_port_range: Optional[pulumi.Input[str]] = None,
                  nat_gateway_id: Optional[pulumi.Input[str]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
                  private_ip: Optional[pulumi.Input[str]] = None,
@@ -197,29 +249,39 @@ class _DnatRuleState:
                  status: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering DnatRule resources.
-        :param pulumi.Input[str] created_at: Dnat rule creation time.
-        :param pulumi.Input[str] description: Specifies the description of the dnat rule.
-               The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
-               Changing this creates a new dnat rule.
+        :param pulumi.Input[str] created_at: The creation time of the DNAT rule.
+        :param pulumi.Input[str] description: Specifies the description of the DNAT rule.  
+               The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
         :param pulumi.Input[int] external_service_port: Specifies port used by ECSs or BMSs to provide services for
-               external systems. Changing this creates a new dnat rule.
+               external systems.
+               Exactly one of `external_service_port` and `external_service_port_range` must be set.
+               Required if `internal_service_port` is set.
+        :param pulumi.Input[str] external_service_port_range: Specifies port range used by ECSs or BMSs to provide
+               services for external systems.
+               This parameter and `internal_service_port_range` are mapped **1:1** in sequence(, ranges must have the same length).
+               The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+               Required if `internal_service_port_range` is set.
         :param pulumi.Input[str] floating_ip_address: The actual floating IP address.
-        :param pulumi.Input[str] floating_ip_id: Specifies the ID of the floating IP address. Changing this creates a
-               new dnat rule.
-        :param pulumi.Input[int] internal_service_port: Specifies port used by ECSs or BMSs to provide services for
-               external systems. Changing this creates a new dnat rule.
-        :param pulumi.Input[str] nat_gateway_id: ID of the nat gateway this dnat rule belongs to. Changing this creates
-               a new dnat rule.
-        :param pulumi.Input[str] port_id: Specifies the port ID of network. This parameter is mandatory in VPC
-               scenario. Use Vpc.Port to get the port if just know a fixed IP
-               addresses on the port. Changing this creates a new dnat rule.
+        :param pulumi.Input[str] floating_ip_id: Specifies the ID of the floating IP address.
+        :param pulumi.Input[int] internal_service_port: Specifies port used by Floating IP provide services for external
+               systems.
+               Exactly one of `internal_service_port` and `internal_service_port_range` must be set.
+        :param pulumi.Input[str] internal_service_port_range: Specifies port range used by Floating IP provide services
+               for external systems.
+               This parameter and `external_service_port_range` are mapped **1:1** in sequence(, ranges must have the same length).
+               The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+        :param pulumi.Input[str] nat_gateway_id: Specifies the ID of the NAT gateway to which the DNAT rule belongs.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] port_id: Specifies the port ID of network. This parameter is mandatory in VPC scenario.  
+               Use Vpc.Port to get the port if just know a fixed IP addresses
+               on the port.
         :param pulumi.Input[str] private_ip: Specifies the private IP address of a user. This parameter is mandatory in
-               Direct Connect scenario. Changing this creates a new dnat rule.
-        :param pulumi.Input[str] protocol: Specifies the protocol type. Currently, TCP, UDP, and ANY are supported.
-               Changing this creates a new dnat rule.
-        :param pulumi.Input[str] region: The region in which to create the dnat rule resource. If omitted, the
-               provider-level region will be used. Changing this creates a new dnat rule.
-        :param pulumi.Input[str] status: Dnat rule status.
+               Direct Connect scenario.
+        :param pulumi.Input[str] protocol: Specifies the protocol type.  
+               The valid values are **tcp**, **udp**, and **any**.
+        :param pulumi.Input[str] region: Specifies the region where the DNAT rule is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[str] status: The current status of the DNAT rule.
         """
         if created_at is not None:
             pulumi.set(__self__, "created_at", created_at)
@@ -227,12 +289,16 @@ class _DnatRuleState:
             pulumi.set(__self__, "description", description)
         if external_service_port is not None:
             pulumi.set(__self__, "external_service_port", external_service_port)
+        if external_service_port_range is not None:
+            pulumi.set(__self__, "external_service_port_range", external_service_port_range)
         if floating_ip_address is not None:
             pulumi.set(__self__, "floating_ip_address", floating_ip_address)
         if floating_ip_id is not None:
             pulumi.set(__self__, "floating_ip_id", floating_ip_id)
         if internal_service_port is not None:
             pulumi.set(__self__, "internal_service_port", internal_service_port)
+        if internal_service_port_range is not None:
+            pulumi.set(__self__, "internal_service_port_range", internal_service_port_range)
         if nat_gateway_id is not None:
             pulumi.set(__self__, "nat_gateway_id", nat_gateway_id)
         if port_id is not None:
@@ -250,7 +316,7 @@ class _DnatRuleState:
     @pulumi.getter(name="createdAt")
     def created_at(self) -> Optional[pulumi.Input[str]]:
         """
-        Dnat rule creation time.
+        The creation time of the DNAT rule.
         """
         return pulumi.get(self, "created_at")
 
@@ -262,9 +328,8 @@ class _DnatRuleState:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of the dnat rule.
-        The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
-        Changing this creates a new dnat rule.
+        Specifies the description of the DNAT rule.  
+        The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -277,13 +342,31 @@ class _DnatRuleState:
     def external_service_port(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies port used by ECSs or BMSs to provide services for
-        external systems. Changing this creates a new dnat rule.
+        external systems.
+        Exactly one of `external_service_port` and `external_service_port_range` must be set.
+        Required if `internal_service_port` is set.
         """
         return pulumi.get(self, "external_service_port")
 
     @external_service_port.setter
     def external_service_port(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "external_service_port", value)
+
+    @property
+    @pulumi.getter(name="externalServicePortRange")
+    def external_service_port_range(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies port range used by ECSs or BMSs to provide
+        services for external systems.
+        This parameter and `internal_service_port_range` are mapped **1:1** in sequence(, ranges must have the same length).
+        The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+        Required if `internal_service_port_range` is set.
+        """
+        return pulumi.get(self, "external_service_port_range")
+
+    @external_service_port_range.setter
+    def external_service_port_range(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "external_service_port_range", value)
 
     @property
     @pulumi.getter(name="floatingIpAddress")
@@ -301,8 +384,7 @@ class _DnatRuleState:
     @pulumi.getter(name="floatingIpId")
     def floating_ip_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ID of the floating IP address. Changing this creates a
-        new dnat rule.
+        Specifies the ID of the floating IP address.
         """
         return pulumi.get(self, "floating_ip_id")
 
@@ -314,8 +396,9 @@ class _DnatRuleState:
     @pulumi.getter(name="internalServicePort")
     def internal_service_port(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies port used by ECSs or BMSs to provide services for
-        external systems. Changing this creates a new dnat rule.
+        Specifies port used by Floating IP provide services for external
+        systems.
+        Exactly one of `internal_service_port` and `internal_service_port_range` must be set.
         """
         return pulumi.get(self, "internal_service_port")
 
@@ -324,11 +407,26 @@ class _DnatRuleState:
         pulumi.set(self, "internal_service_port", value)
 
     @property
+    @pulumi.getter(name="internalServicePortRange")
+    def internal_service_port_range(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies port range used by Floating IP provide services
+        for external systems.
+        This parameter and `external_service_port_range` are mapped **1:1** in sequence(, ranges must have the same length).
+        The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+        """
+        return pulumi.get(self, "internal_service_port_range")
+
+    @internal_service_port_range.setter
+    def internal_service_port_range(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "internal_service_port_range", value)
+
+    @property
     @pulumi.getter(name="natGatewayId")
     def nat_gateway_id(self) -> Optional[pulumi.Input[str]]:
         """
-        ID of the nat gateway this dnat rule belongs to. Changing this creates
-        a new dnat rule.
+        Specifies the ID of the NAT gateway to which the DNAT rule belongs.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "nat_gateway_id")
 
@@ -340,9 +438,9 @@ class _DnatRuleState:
     @pulumi.getter(name="portId")
     def port_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the port ID of network. This parameter is mandatory in VPC
-        scenario. Use Vpc.Port to get the port if just know a fixed IP
-        addresses on the port. Changing this creates a new dnat rule.
+        Specifies the port ID of network. This parameter is mandatory in VPC scenario.  
+        Use Vpc.Port to get the port if just know a fixed IP addresses
+        on the port.
         """
         return pulumi.get(self, "port_id")
 
@@ -355,7 +453,7 @@ class _DnatRuleState:
     def private_ip(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the private IP address of a user. This parameter is mandatory in
-        Direct Connect scenario. Changing this creates a new dnat rule.
+        Direct Connect scenario.
         """
         return pulumi.get(self, "private_ip")
 
@@ -367,8 +465,8 @@ class _DnatRuleState:
     @pulumi.getter
     def protocol(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the protocol type. Currently, TCP, UDP, and ANY are supported.
-        Changing this creates a new dnat rule.
+        Specifies the protocol type.  
+        The valid values are **tcp**, **udp**, and **any**.
         """
         return pulumi.get(self, "protocol")
 
@@ -380,8 +478,8 @@ class _DnatRuleState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the dnat rule resource. If omitted, the
-        provider-level region will be used. Changing this creates a new dnat rule.
+        Specifies the region where the DNAT rule is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -393,7 +491,7 @@ class _DnatRuleState:
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
         """
-        Dnat rule status.
+        The current status of the DNAT rule.
         """
         return pulumi.get(self, "status")
 
@@ -409,8 +507,10 @@ class DnatRule(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  external_service_port: Optional[pulumi.Input[int]] = None,
+                 external_service_port_range: Optional[pulumi.Input[str]] = None,
                  floating_ip_id: Optional[pulumi.Input[str]] = None,
                  internal_service_port: Optional[pulumi.Input[int]] = None,
+                 internal_service_port_range: Optional[pulumi.Input[str]] = None,
                  nat_gateway_id: Optional[pulumi.Input[str]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
                  private_ip: Optional[pulumi.Input[str]] = None,
@@ -418,7 +518,7 @@ class DnatRule(pulumi.CustomResource):
                  region: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages a DNAT rule resource within HuaweiCloud.
+        Manages a DNAT rule resource of the **public** NAT within HuaweiCloud.
 
         ## Example Usage
         ### DNAT rule in Direct Connect scenario
@@ -427,45 +527,58 @@ class DnatRule(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        dnat2 = huaweicloud.nat.DnatRule("dnat2",
-            nat_gateway_id=var["natgw_id"],
-            floating_ip_id=var["publicip_id"],
+        config = pulumi.Config()
+        gateway_id = config.require_object("gatewayId")
+        publicip_id = config.require_object("publicipId")
+        test = huaweicloud.nat.DnatRule("test",
+            nat_gateway_id=gateway_id,
+            floating_ip_id=publicip_id,
             private_ip="10.0.0.12",
-            protocol="tcp",
-            internal_service_port=80,
-            external_service_port=8080)
+            protocol="any",
+            internal_service_port=0,
+            external_service_port=0)
         ```
 
         ## Import
 
-        DNAT rules can be imported using the following format
+        DNAT rules can be imported using their `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Nat/dnatRule:DnatRule dnat_1 f4f783a7-b908-4215-b018-724960e5df4a
+         $ pulumi import huaweicloud:Nat/dnatRule:DnatRule test f4f783a7-b908-4215-b018-724960e5df4a
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] description: Specifies the description of the dnat rule.
-               The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
-               Changing this creates a new dnat rule.
+        :param pulumi.Input[str] description: Specifies the description of the DNAT rule.  
+               The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
         :param pulumi.Input[int] external_service_port: Specifies port used by ECSs or BMSs to provide services for
-               external systems. Changing this creates a new dnat rule.
-        :param pulumi.Input[str] floating_ip_id: Specifies the ID of the floating IP address. Changing this creates a
-               new dnat rule.
-        :param pulumi.Input[int] internal_service_port: Specifies port used by ECSs or BMSs to provide services for
-               external systems. Changing this creates a new dnat rule.
-        :param pulumi.Input[str] nat_gateway_id: ID of the nat gateway this dnat rule belongs to. Changing this creates
-               a new dnat rule.
-        :param pulumi.Input[str] port_id: Specifies the port ID of network. This parameter is mandatory in VPC
-               scenario. Use Vpc.Port to get the port if just know a fixed IP
-               addresses on the port. Changing this creates a new dnat rule.
+               external systems.
+               Exactly one of `external_service_port` and `external_service_port_range` must be set.
+               Required if `internal_service_port` is set.
+        :param pulumi.Input[str] external_service_port_range: Specifies port range used by ECSs or BMSs to provide
+               services for external systems.
+               This parameter and `internal_service_port_range` are mapped **1:1** in sequence(, ranges must have the same length).
+               The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+               Required if `internal_service_port_range` is set.
+        :param pulumi.Input[str] floating_ip_id: Specifies the ID of the floating IP address.
+        :param pulumi.Input[int] internal_service_port: Specifies port used by Floating IP provide services for external
+               systems.
+               Exactly one of `internal_service_port` and `internal_service_port_range` must be set.
+        :param pulumi.Input[str] internal_service_port_range: Specifies port range used by Floating IP provide services
+               for external systems.
+               This parameter and `external_service_port_range` are mapped **1:1** in sequence(, ranges must have the same length).
+               The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+        :param pulumi.Input[str] nat_gateway_id: Specifies the ID of the NAT gateway to which the DNAT rule belongs.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] port_id: Specifies the port ID of network. This parameter is mandatory in VPC scenario.  
+               Use Vpc.Port to get the port if just know a fixed IP addresses
+               on the port.
         :param pulumi.Input[str] private_ip: Specifies the private IP address of a user. This parameter is mandatory in
-               Direct Connect scenario. Changing this creates a new dnat rule.
-        :param pulumi.Input[str] protocol: Specifies the protocol type. Currently, TCP, UDP, and ANY are supported.
-               Changing this creates a new dnat rule.
-        :param pulumi.Input[str] region: The region in which to create the dnat rule resource. If omitted, the
-               provider-level region will be used. Changing this creates a new dnat rule.
+               Direct Connect scenario.
+        :param pulumi.Input[str] protocol: Specifies the protocol type.  
+               The valid values are **tcp**, **udp**, and **any**.
+        :param pulumi.Input[str] region: Specifies the region where the DNAT rule is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         ...
     @overload
@@ -474,7 +587,7 @@ class DnatRule(pulumi.CustomResource):
                  args: DnatRuleArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a DNAT rule resource within HuaweiCloud.
+        Manages a DNAT rule resource of the **public** NAT within HuaweiCloud.
 
         ## Example Usage
         ### DNAT rule in Direct Connect scenario
@@ -483,21 +596,24 @@ class DnatRule(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        dnat2 = huaweicloud.nat.DnatRule("dnat2",
-            nat_gateway_id=var["natgw_id"],
-            floating_ip_id=var["publicip_id"],
+        config = pulumi.Config()
+        gateway_id = config.require_object("gatewayId")
+        publicip_id = config.require_object("publicipId")
+        test = huaweicloud.nat.DnatRule("test",
+            nat_gateway_id=gateway_id,
+            floating_ip_id=publicip_id,
             private_ip="10.0.0.12",
-            protocol="tcp",
-            internal_service_port=80,
-            external_service_port=8080)
+            protocol="any",
+            internal_service_port=0,
+            external_service_port=0)
         ```
 
         ## Import
 
-        DNAT rules can be imported using the following format
+        DNAT rules can be imported using their `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Nat/dnatRule:DnatRule dnat_1 f4f783a7-b908-4215-b018-724960e5df4a
+         $ pulumi import huaweicloud:Nat/dnatRule:DnatRule test f4f783a7-b908-4215-b018-724960e5df4a
         ```
 
         :param str resource_name: The name of the resource.
@@ -517,8 +633,10 @@ class DnatRule(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  external_service_port: Optional[pulumi.Input[int]] = None,
+                 external_service_port_range: Optional[pulumi.Input[str]] = None,
                  floating_ip_id: Optional[pulumi.Input[str]] = None,
                  internal_service_port: Optional[pulumi.Input[int]] = None,
+                 internal_service_port_range: Optional[pulumi.Input[str]] = None,
                  nat_gateway_id: Optional[pulumi.Input[str]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
                  private_ip: Optional[pulumi.Input[str]] = None,
@@ -534,15 +652,13 @@ class DnatRule(pulumi.CustomResource):
             __props__ = DnatRuleArgs.__new__(DnatRuleArgs)
 
             __props__.__dict__["description"] = description
-            if external_service_port is None and not opts.urn:
-                raise TypeError("Missing required property 'external_service_port'")
             __props__.__dict__["external_service_port"] = external_service_port
+            __props__.__dict__["external_service_port_range"] = external_service_port_range
             if floating_ip_id is None and not opts.urn:
                 raise TypeError("Missing required property 'floating_ip_id'")
             __props__.__dict__["floating_ip_id"] = floating_ip_id
-            if internal_service_port is None and not opts.urn:
-                raise TypeError("Missing required property 'internal_service_port'")
             __props__.__dict__["internal_service_port"] = internal_service_port
+            __props__.__dict__["internal_service_port_range"] = internal_service_port_range
             if nat_gateway_id is None and not opts.urn:
                 raise TypeError("Missing required property 'nat_gateway_id'")
             __props__.__dict__["nat_gateway_id"] = nat_gateway_id
@@ -568,9 +684,11 @@ class DnatRule(pulumi.CustomResource):
             created_at: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
             external_service_port: Optional[pulumi.Input[int]] = None,
+            external_service_port_range: Optional[pulumi.Input[str]] = None,
             floating_ip_address: Optional[pulumi.Input[str]] = None,
             floating_ip_id: Optional[pulumi.Input[str]] = None,
             internal_service_port: Optional[pulumi.Input[int]] = None,
+            internal_service_port_range: Optional[pulumi.Input[str]] = None,
             nat_gateway_id: Optional[pulumi.Input[str]] = None,
             port_id: Optional[pulumi.Input[str]] = None,
             private_ip: Optional[pulumi.Input[str]] = None,
@@ -584,29 +702,39 @@ class DnatRule(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] created_at: Dnat rule creation time.
-        :param pulumi.Input[str] description: Specifies the description of the dnat rule.
-               The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
-               Changing this creates a new dnat rule.
+        :param pulumi.Input[str] created_at: The creation time of the DNAT rule.
+        :param pulumi.Input[str] description: Specifies the description of the DNAT rule.  
+               The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
         :param pulumi.Input[int] external_service_port: Specifies port used by ECSs or BMSs to provide services for
-               external systems. Changing this creates a new dnat rule.
+               external systems.
+               Exactly one of `external_service_port` and `external_service_port_range` must be set.
+               Required if `internal_service_port` is set.
+        :param pulumi.Input[str] external_service_port_range: Specifies port range used by ECSs or BMSs to provide
+               services for external systems.
+               This parameter and `internal_service_port_range` are mapped **1:1** in sequence(, ranges must have the same length).
+               The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+               Required if `internal_service_port_range` is set.
         :param pulumi.Input[str] floating_ip_address: The actual floating IP address.
-        :param pulumi.Input[str] floating_ip_id: Specifies the ID of the floating IP address. Changing this creates a
-               new dnat rule.
-        :param pulumi.Input[int] internal_service_port: Specifies port used by ECSs or BMSs to provide services for
-               external systems. Changing this creates a new dnat rule.
-        :param pulumi.Input[str] nat_gateway_id: ID of the nat gateway this dnat rule belongs to. Changing this creates
-               a new dnat rule.
-        :param pulumi.Input[str] port_id: Specifies the port ID of network. This parameter is mandatory in VPC
-               scenario. Use Vpc.Port to get the port if just know a fixed IP
-               addresses on the port. Changing this creates a new dnat rule.
+        :param pulumi.Input[str] floating_ip_id: Specifies the ID of the floating IP address.
+        :param pulumi.Input[int] internal_service_port: Specifies port used by Floating IP provide services for external
+               systems.
+               Exactly one of `internal_service_port` and `internal_service_port_range` must be set.
+        :param pulumi.Input[str] internal_service_port_range: Specifies port range used by Floating IP provide services
+               for external systems.
+               This parameter and `external_service_port_range` are mapped **1:1** in sequence(, ranges must have the same length).
+               The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+        :param pulumi.Input[str] nat_gateway_id: Specifies the ID of the NAT gateway to which the DNAT rule belongs.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] port_id: Specifies the port ID of network. This parameter is mandatory in VPC scenario.  
+               Use Vpc.Port to get the port if just know a fixed IP addresses
+               on the port.
         :param pulumi.Input[str] private_ip: Specifies the private IP address of a user. This parameter is mandatory in
-               Direct Connect scenario. Changing this creates a new dnat rule.
-        :param pulumi.Input[str] protocol: Specifies the protocol type. Currently, TCP, UDP, and ANY are supported.
-               Changing this creates a new dnat rule.
-        :param pulumi.Input[str] region: The region in which to create the dnat rule resource. If omitted, the
-               provider-level region will be used. Changing this creates a new dnat rule.
-        :param pulumi.Input[str] status: Dnat rule status.
+               Direct Connect scenario.
+        :param pulumi.Input[str] protocol: Specifies the protocol type.  
+               The valid values are **tcp**, **udp**, and **any**.
+        :param pulumi.Input[str] region: Specifies the region where the DNAT rule is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[str] status: The current status of the DNAT rule.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -615,9 +743,11 @@ class DnatRule(pulumi.CustomResource):
         __props__.__dict__["created_at"] = created_at
         __props__.__dict__["description"] = description
         __props__.__dict__["external_service_port"] = external_service_port
+        __props__.__dict__["external_service_port_range"] = external_service_port_range
         __props__.__dict__["floating_ip_address"] = floating_ip_address
         __props__.__dict__["floating_ip_id"] = floating_ip_id
         __props__.__dict__["internal_service_port"] = internal_service_port
+        __props__.__dict__["internal_service_port_range"] = internal_service_port_range
         __props__.__dict__["nat_gateway_id"] = nat_gateway_id
         __props__.__dict__["port_id"] = port_id
         __props__.__dict__["private_ip"] = private_ip
@@ -630,28 +760,41 @@ class DnatRule(pulumi.CustomResource):
     @pulumi.getter(name="createdAt")
     def created_at(self) -> pulumi.Output[str]:
         """
-        Dnat rule creation time.
+        The creation time of the DNAT rule.
         """
         return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter
-    def description(self) -> pulumi.Output[str]:
+    def description(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the description of the dnat rule.
-        The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
-        Changing this creates a new dnat rule.
+        Specifies the description of the DNAT rule.  
+        The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
         """
         return pulumi.get(self, "description")
 
     @property
     @pulumi.getter(name="externalServicePort")
-    def external_service_port(self) -> pulumi.Output[int]:
+    def external_service_port(self) -> pulumi.Output[Optional[int]]:
         """
         Specifies port used by ECSs or BMSs to provide services for
-        external systems. Changing this creates a new dnat rule.
+        external systems.
+        Exactly one of `external_service_port` and `external_service_port_range` must be set.
+        Required if `internal_service_port` is set.
         """
         return pulumi.get(self, "external_service_port")
+
+    @property
+    @pulumi.getter(name="externalServicePortRange")
+    def external_service_port_range(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies port range used by ECSs or BMSs to provide
+        services for external systems.
+        This parameter and `internal_service_port_range` are mapped **1:1** in sequence(, ranges must have the same length).
+        The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+        Required if `internal_service_port_range` is set.
+        """
+        return pulumi.get(self, "external_service_port_range")
 
     @property
     @pulumi.getter(name="floatingIpAddress")
@@ -665,26 +808,37 @@ class DnatRule(pulumi.CustomResource):
     @pulumi.getter(name="floatingIpId")
     def floating_ip_id(self) -> pulumi.Output[str]:
         """
-        Specifies the ID of the floating IP address. Changing this creates a
-        new dnat rule.
+        Specifies the ID of the floating IP address.
         """
         return pulumi.get(self, "floating_ip_id")
 
     @property
     @pulumi.getter(name="internalServicePort")
-    def internal_service_port(self) -> pulumi.Output[int]:
+    def internal_service_port(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies port used by ECSs or BMSs to provide services for
-        external systems. Changing this creates a new dnat rule.
+        Specifies port used by Floating IP provide services for external
+        systems.
+        Exactly one of `internal_service_port` and `internal_service_port_range` must be set.
         """
         return pulumi.get(self, "internal_service_port")
+
+    @property
+    @pulumi.getter(name="internalServicePortRange")
+    def internal_service_port_range(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies port range used by Floating IP provide services
+        for external systems.
+        This parameter and `external_service_port_range` are mapped **1:1** in sequence(, ranges must have the same length).
+        The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
+        """
+        return pulumi.get(self, "internal_service_port_range")
 
     @property
     @pulumi.getter(name="natGatewayId")
     def nat_gateway_id(self) -> pulumi.Output[str]:
         """
-        ID of the nat gateway this dnat rule belongs to. Changing this creates
-        a new dnat rule.
+        Specifies the ID of the NAT gateway to which the DNAT rule belongs.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "nat_gateway_id")
 
@@ -692,9 +846,9 @@ class DnatRule(pulumi.CustomResource):
     @pulumi.getter(name="portId")
     def port_id(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the port ID of network. This parameter is mandatory in VPC
-        scenario. Use Vpc.Port to get the port if just know a fixed IP
-        addresses on the port. Changing this creates a new dnat rule.
+        Specifies the port ID of network. This parameter is mandatory in VPC scenario.  
+        Use Vpc.Port to get the port if just know a fixed IP addresses
+        on the port.
         """
         return pulumi.get(self, "port_id")
 
@@ -703,7 +857,7 @@ class DnatRule(pulumi.CustomResource):
     def private_ip(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the private IP address of a user. This parameter is mandatory in
-        Direct Connect scenario. Changing this creates a new dnat rule.
+        Direct Connect scenario.
         """
         return pulumi.get(self, "private_ip")
 
@@ -711,8 +865,8 @@ class DnatRule(pulumi.CustomResource):
     @pulumi.getter
     def protocol(self) -> pulumi.Output[str]:
         """
-        Specifies the protocol type. Currently, TCP, UDP, and ANY are supported.
-        Changing this creates a new dnat rule.
+        Specifies the protocol type.  
+        The valid values are **tcp**, **udp**, and **any**.
         """
         return pulumi.get(self, "protocol")
 
@@ -720,8 +874,8 @@ class DnatRule(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        The region in which to create the dnat rule resource. If omitted, the
-        provider-level region will be used. Changing this creates a new dnat rule.
+        Specifies the region where the DNAT rule is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -729,7 +883,7 @@ class DnatRule(pulumi.CustomResource):
     @pulumi.getter
     def status(self) -> pulumi.Output[str]:
         """
-        Dnat rule status.
+        The current status of the DNAT rule.
         """
         return pulumi.get(self, "status")
 

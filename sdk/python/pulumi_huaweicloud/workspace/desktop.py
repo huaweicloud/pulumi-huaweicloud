@@ -65,7 +65,8 @@ class DesktopArgs:
         :param pulumi.Input[bool] delete_user: Specifies whether to delete user associated with this desktop after deleting it.
                The user can only be successfully deleted if the user has no other desktops.
         :param pulumi.Input[bool] email_notification: Specifies whether to send emails to user mailbox during important
-               operations. Changing this will create a new resource.
+               operations.
+               Defaults to **false**. Changing this will create a new resource.
         :param pulumi.Input[str] name: Specifies the desktop name.
                The name can contain `1` to `15` characters, only letters, digits and hyphens (-) are allowed.
                The name must start with a letter or digit and cannot end with a hyphen.
@@ -262,7 +263,8 @@ class DesktopArgs:
     def email_notification(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to send emails to user mailbox during important
-        operations. Changing this will create a new resource.
+        operations.
+        Defaults to **false**. Changing this will create a new resource.
         """
         return pulumi.get(self, "email_notification")
 
@@ -368,7 +370,8 @@ class _DesktopState:
         :param pulumi.Input[bool] delete_user: Specifies whether to delete user associated with this desktop after deleting it.
                The user can only be successfully deleted if the user has no other desktops.
         :param pulumi.Input[bool] email_notification: Specifies whether to send emails to user mailbox during important
-               operations. Changing this will create a new resource.
+               operations.
+               Defaults to **false**. Changing this will create a new resource.
         :param pulumi.Input[str] flavor_id: Specifies the flavor ID of desktop.
         :param pulumi.Input[str] image_id: Specifies the image ID to create the desktop.
                Changing this will create a new resource.
@@ -485,7 +488,8 @@ class _DesktopState:
     def email_notification(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to send emails to user mailbox during important
-        operations. Changing this will create a new resource.
+        operations.
+        Defaults to **false**. Changing this will create a new resource.
         """
         return pulumi.get(self, "email_notification")
 
@@ -732,7 +736,8 @@ class Desktop(pulumi.CustomResource):
         :param pulumi.Input[bool] delete_user: Specifies whether to delete user associated with this desktop after deleting it.
                The user can only be successfully deleted if the user has no other desktops.
         :param pulumi.Input[bool] email_notification: Specifies whether to send emails to user mailbox during important
-               operations. Changing this will create a new resource.
+               operations.
+               Defaults to **false**. Changing this will create a new resource.
         :param pulumi.Input[str] flavor_id: Specifies the flavor ID of desktop.
         :param pulumi.Input[str] image_id: Specifies the image ID to create the desktop.
                Changing this will create a new resource.
@@ -918,7 +923,8 @@ class Desktop(pulumi.CustomResource):
         :param pulumi.Input[bool] delete_user: Specifies whether to delete user associated with this desktop after deleting it.
                The user can only be successfully deleted if the user has no other desktops.
         :param pulumi.Input[bool] email_notification: Specifies whether to send emails to user mailbox during important
-               operations. Changing this will create a new resource.
+               operations.
+               Defaults to **false**. Changing this will create a new resource.
         :param pulumi.Input[str] flavor_id: Specifies the flavor ID of desktop.
         :param pulumi.Input[str] image_id: Specifies the image ID to create the desktop.
                Changing this will create a new resource.
@@ -1011,7 +1017,8 @@ class Desktop(pulumi.CustomResource):
     def email_notification(self) -> pulumi.Output[Optional[bool]]:
         """
         Specifies whether to send emails to user mailbox during important
-        operations. Changing this will create a new resource.
+        operations.
+        Defaults to **false**. Changing this will create a new resource.
         """
         return pulumi.get(self, "email_notification")
 

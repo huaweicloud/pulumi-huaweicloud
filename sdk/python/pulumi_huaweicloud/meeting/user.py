@@ -47,6 +47,7 @@ class UserArgs:
                (**`~!@#$%^&*()-_=+|[{}];:",'<.>/?**).
         :param pulumi.Input[str] account: Specifies the user account. The value can contain **1** to **64** characters.
                If omitted, the service will automatically generate a value.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_name: Specifies the (HUAWEI Cloud meeting) user account name to which the
                administrator belongs. Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_password: Specifies the user password.
@@ -56,7 +57,7 @@ class UserArgs:
         :param pulumi.Input[str] app_key: Specifies the Key information of the Third-party APP.
                Required if `app_id` is set. Changing this parameter will create a new resource.
         :param pulumi.Input[str] corp_id: Specifies the corporation ID.
-               Required if the application is used in multiple enterprises. Only availabe if `app_id` is set.
+               Required if the application is used in multiple enterprises. Only available if `app_id` is set.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] country: Specifies the country to which the phone number belongs to.
         :param pulumi.Input[str] department_code: Specifies the department code. Defaults to **1** (Root department).
@@ -81,7 +82,7 @@ class UserArgs:
         :param pulumi.Input[str] third_account: Specifies the third-party account name.
         :param pulumi.Input[str] title: Specifies the title name. The value can contain **0** to **32** characters.
         :param pulumi.Input[str] user_id: Specifies the user ID of the administrator.
-               Only availabe if `app_id` is set. If omitted, the user ID of default administrator will be used.
+               Only available if `app_id` is set. If omitted, the user ID of default administrator will be used.
                Changing this parameter will create a new resource.
         """
         pulumi.set(__self__, "password", password)
@@ -153,6 +154,7 @@ class UserArgs:
         """
         Specifies the user account. The value can contain **1** to **64** characters.
         If omitted, the service will automatically generate a value.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "account")
 
@@ -217,7 +219,7 @@ class UserArgs:
     def corp_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the corporation ID.
-        Required if the application is used in multiple enterprises. Only availabe if `app_id` is set.
+        Required if the application is used in multiple enterprises. Only available if `app_id` is set.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "corp_id")
@@ -418,7 +420,7 @@ class UserArgs:
     def user_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the user ID of the administrator.
-        Only availabe if `app_id` is set. If omitted, the user ID of default administrator will be used.
+        Only available if `app_id` is set. If omitted, the user ID of default administrator will be used.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "user_id")
@@ -462,6 +464,7 @@ class _UserState:
         Input properties used for looking up and filtering User resources.
         :param pulumi.Input[str] account: Specifies the user account. The value can contain **1** to **64** characters.
                If omitted, the service will automatically generate a value.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_name: Specifies the (HUAWEI Cloud meeting) user account name to which the
                administrator belongs. Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_password: Specifies the user password.
@@ -471,7 +474,7 @@ class _UserState:
         :param pulumi.Input[str] app_key: Specifies the Key information of the Third-party APP.
                Required if `app_id` is set. Changing this parameter will create a new resource.
         :param pulumi.Input[str] corp_id: Specifies the corporation ID.
-               Required if the application is used in multiple enterprises. Only availabe if `app_id` is set.
+               Required if the application is used in multiple enterprises. Only available if `app_id` is set.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] country: Specifies the country to which the phone number belongs to.
         :param pulumi.Input[str] department_code: Specifies the department code. Defaults to **1** (Root department).
@@ -507,7 +510,7 @@ class _UserState:
         :param pulumi.Input[int] type: The user type.
                + **2**: Enterprise member account.
         :param pulumi.Input[str] user_id: Specifies the user ID of the administrator.
-               Only availabe if `app_id` is set. If omitted, the user ID of default administrator will be used.
+               Only available if `app_id` is set. If omitted, the user ID of default administrator will be used.
                Changing this parameter will create a new resource.
         """
         if account is not None:
@@ -571,6 +574,7 @@ class _UserState:
         """
         Specifies the user account. The value can contain **1** to **64** characters.
         If omitted, the service will automatically generate a value.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "account")
 
@@ -635,7 +639,7 @@ class _UserState:
     def corp_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the corporation ID.
-        Required if the application is used in multiple enterprises. Only availabe if `app_id` is set.
+        Required if the application is used in multiple enterprises. Only available if `app_id` is set.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "corp_id")
@@ -902,7 +906,7 @@ class _UserState:
     def user_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the user ID of the administrator.
-        Only availabe if `app_id` is set. If omitted, the user ID of default administrator will be used.
+        Only available if `app_id` is set. If omitted, the user ID of default administrator will be used.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "user_id")
@@ -1211,6 +1215,7 @@ class User(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] account: Specifies the user account. The value can contain **1** to **64** characters.
                If omitted, the service will automatically generate a value.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_name: Specifies the (HUAWEI Cloud meeting) user account name to which the
                administrator belongs. Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_password: Specifies the user password.
@@ -1220,7 +1225,7 @@ class User(pulumi.CustomResource):
         :param pulumi.Input[str] app_key: Specifies the Key information of the Third-party APP.
                Required if `app_id` is set. Changing this parameter will create a new resource.
         :param pulumi.Input[str] corp_id: Specifies the corporation ID.
-               Required if the application is used in multiple enterprises. Only availabe if `app_id` is set.
+               Required if the application is used in multiple enterprises. Only available if `app_id` is set.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] country: Specifies the country to which the phone number belongs to.
         :param pulumi.Input[str] department_code: Specifies the department code. Defaults to **1** (Root department).
@@ -1251,7 +1256,7 @@ class User(pulumi.CustomResource):
         :param pulumi.Input[str] third_account: Specifies the third-party account name.
         :param pulumi.Input[str] title: Specifies the title name. The value can contain **0** to **32** characters.
         :param pulumi.Input[str] user_id: Specifies the user ID of the administrator.
-               Only availabe if `app_id` is set. If omitted, the user ID of default administrator will be used.
+               Only available if `app_id` is set. If omitted, the user ID of default administrator will be used.
                Changing this parameter will create a new resource.
         """
         ...
@@ -1648,6 +1653,7 @@ class User(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] account: Specifies the user account. The value can contain **1** to **64** characters.
                If omitted, the service will automatically generate a value.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_name: Specifies the (HUAWEI Cloud meeting) user account name to which the
                administrator belongs. Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_password: Specifies the user password.
@@ -1657,7 +1663,7 @@ class User(pulumi.CustomResource):
         :param pulumi.Input[str] app_key: Specifies the Key information of the Third-party APP.
                Required if `app_id` is set. Changing this parameter will create a new resource.
         :param pulumi.Input[str] corp_id: Specifies the corporation ID.
-               Required if the application is used in multiple enterprises. Only availabe if `app_id` is set.
+               Required if the application is used in multiple enterprises. Only available if `app_id` is set.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] country: Specifies the country to which the phone number belongs to.
         :param pulumi.Input[str] department_code: Specifies the department code. Defaults to **1** (Root department).
@@ -1693,7 +1699,7 @@ class User(pulumi.CustomResource):
         :param pulumi.Input[int] type: The user type.
                + **2**: Enterprise member account.
         :param pulumi.Input[str] user_id: Specifies the user ID of the administrator.
-               Only availabe if `app_id` is set. If omitted, the user ID of default administrator will be used.
+               Only available if `app_id` is set. If omitted, the user ID of default administrator will be used.
                Changing this parameter will create a new resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -1735,6 +1741,7 @@ class User(pulumi.CustomResource):
         """
         Specifies the user account. The value can contain **1** to **64** characters.
         If omitted, the service will automatically generate a value.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "account")
 
@@ -1779,7 +1786,7 @@ class User(pulumi.CustomResource):
     def corp_id(self) -> pulumi.Output[str]:
         """
         Specifies the corporation ID.
-        Required if the application is used in multiple enterprises. Only availabe if `app_id` is set.
+        Required if the application is used in multiple enterprises. Only available if `app_id` is set.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "corp_id")
@@ -1962,7 +1969,7 @@ class User(pulumi.CustomResource):
     def user_id(self) -> pulumi.Output[str]:
         """
         Specifies the user ID of the administrator.
-        Only availabe if `app_id` is set. If omitted, the user ID of default administrator will be used.
+        Only available if `app_id` is set. If omitted, the user ID of default administrator will be used.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "user_id")

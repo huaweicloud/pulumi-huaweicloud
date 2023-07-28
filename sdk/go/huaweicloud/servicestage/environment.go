@@ -73,7 +73,7 @@ type Environment struct {
 	// The object structure is documented below.
 	BasicResources EnvironmentBasicResourceArrayOutput `pulumi:"basicResources"`
 	// Specifies the environment description.
-	// The description can contian a maximum of 128 characters.
+	// The description can contain a maximum of 128 characters.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the enterprise projcet ID to which the application
 	// belongs. Changing this will create a new resource.
@@ -133,7 +133,7 @@ type environmentState struct {
 	// The object structure is documented below.
 	BasicResources []EnvironmentBasicResource `pulumi:"basicResources"`
 	// Specifies the environment description.
-	// The description can contian a maximum of 128 characters.
+	// The description can contain a maximum of 128 characters.
 	Description *string `pulumi:"description"`
 	// Specifies the enterprise projcet ID to which the application
 	// belongs. Changing this will create a new resource.
@@ -158,7 +158,7 @@ type EnvironmentState struct {
 	// The object structure is documented below.
 	BasicResources EnvironmentBasicResourceArrayInput
 	// Specifies the environment description.
-	// The description can contian a maximum of 128 characters.
+	// The description can contain a maximum of 128 characters.
 	Description pulumi.StringPtrInput
 	// Specifies the enterprise projcet ID to which the application
 	// belongs. Changing this will create a new resource.
@@ -187,7 +187,7 @@ type environmentArgs struct {
 	// The object structure is documented below.
 	BasicResources []EnvironmentBasicResource `pulumi:"basicResources"`
 	// Specifies the environment description.
-	// The description can contian a maximum of 128 characters.
+	// The description can contain a maximum of 128 characters.
 	Description *string `pulumi:"description"`
 	// Specifies the enterprise projcet ID to which the application
 	// belongs. Changing this will create a new resource.
@@ -213,7 +213,7 @@ type EnvironmentArgs struct {
 	// The object structure is documented below.
 	BasicResources EnvironmentBasicResourceArrayInput
 	// Specifies the environment description.
-	// The description can contian a maximum of 128 characters.
+	// The description can contain a maximum of 128 characters.
 	Description pulumi.StringPtrInput
 	// Specifies the enterprise projcet ID to which the application
 	// belongs. Changing this will create a new resource.
@@ -327,7 +327,7 @@ func (o EnvironmentOutput) BasicResources() EnvironmentBasicResourceArrayOutput 
 }
 
 // Specifies the environment description.
-// The description can contian a maximum of 128 characters.
+// The description can contain a maximum of 128 characters.
 func (o EnvironmentOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Environment) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }

@@ -86,7 +86,6 @@ import (
 type L7rule struct {
 	pulumi.CustomResourceState
 
-	// The administrative state of the L7 Rule. The value can only be true (UP).
 	AdminStateUp pulumi.BoolPtrOutput `pulumi:"adminStateUp"`
 	// The comparison type for the L7 rule - can either be STARTS_WITH, EQUAL_TO or REGEX
 	CompareType pulumi.StringOutput `pulumi:"compareType"`
@@ -151,7 +150,6 @@ func GetL7rule(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering L7rule resources.
 type l7ruleState struct {
-	// The administrative state of the L7 Rule. The value can only be true (UP).
 	AdminStateUp *bool `pulumi:"adminStateUp"`
 	// The comparison type for the L7 rule - can either be STARTS_WITH, EQUAL_TO or REGEX
 	CompareType *string `pulumi:"compareType"`
@@ -175,7 +173,6 @@ type l7ruleState struct {
 }
 
 type L7ruleState struct {
-	// The administrative state of the L7 Rule. The value can only be true (UP).
 	AdminStateUp pulumi.BoolPtrInput
 	// The comparison type for the L7 rule - can either be STARTS_WITH, EQUAL_TO or REGEX
 	CompareType pulumi.StringPtrInput
@@ -203,7 +200,6 @@ func (L7ruleState) ElementType() reflect.Type {
 }
 
 type l7ruleArgs struct {
-	// The administrative state of the L7 Rule. The value can only be true (UP).
 	AdminStateUp *bool `pulumi:"adminStateUp"`
 	// The comparison type for the L7 rule - can either be STARTS_WITH, EQUAL_TO or REGEX
 	CompareType string `pulumi:"compareType"`
@@ -226,7 +222,6 @@ type l7ruleArgs struct {
 
 // The set of arguments for constructing a L7rule resource.
 type L7ruleArgs struct {
-	// The administrative state of the L7 Rule. The value can only be true (UP).
 	AdminStateUp pulumi.BoolPtrInput
 	// The comparison type for the L7 rule - can either be STARTS_WITH, EQUAL_TO or REGEX
 	CompareType pulumi.StringInput
@@ -334,7 +329,6 @@ func (o L7ruleOutput) ToL7ruleOutputWithContext(ctx context.Context) L7ruleOutpu
 	return o
 }
 
-// The administrative state of the L7 Rule. The value can only be true (UP).
 func (o L7ruleOutput) AdminStateUp() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *L7rule) pulumi.BoolPtrOutput { return v.AdminStateUp }).(pulumi.BoolPtrOutput)
 }

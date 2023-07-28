@@ -20,16 +20,6 @@ class AccountArgs:
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Account resource.
-        :param pulumi.Input[str] instance_id: Specifies the rds instance id. Changing this will create a new resource.
-        :param pulumi.Input[str] password: Specifies the password of the db account. The parameter must be 8 to 32 characters
-               long and contain only letters(case-sensitive), digits, and special characters(~!@#$%^*-_=+?,()&). The value must be
-               different from name or name spelled backwards.
-        :param pulumi.Input[str] name: Specifies the username of the db account. Only lowercase letters, digits,
-               hyphens (-), and userscores (_) are allowed. Changing this will create a new resource.
-               + If the database version is MySQL 5.6, the username consists of 1 to 16 characters.
-               + If the database version is MySQL 5.7 or 8.0, the username consists of 1 to 32 characters.
-        :param pulumi.Input[str] region: The region in which to create the rds account resource. If omitted, the
-               provider-level region will be used. Changing this creates a new resource.
         """
         pulumi.set(__self__, "instance_id", instance_id)
         pulumi.set(__self__, "password", password)
@@ -41,9 +31,6 @@ class AccountArgs:
     @property
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Input[str]:
-        """
-        Specifies the rds instance id. Changing this will create a new resource.
-        """
         return pulumi.get(self, "instance_id")
 
     @instance_id.setter
@@ -53,11 +40,6 @@ class AccountArgs:
     @property
     @pulumi.getter
     def password(self) -> pulumi.Input[str]:
-        """
-        Specifies the password of the db account. The parameter must be 8 to 32 characters
-        long and contain only letters(case-sensitive), digits, and special characters(~!@#$%^*-_=+?,()&). The value must be
-        different from name or name spelled backwards.
-        """
         return pulumi.get(self, "password")
 
     @password.setter
@@ -67,12 +49,6 @@ class AccountArgs:
     @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the username of the db account. Only lowercase letters, digits,
-        hyphens (-), and userscores (_) are allowed. Changing this will create a new resource.
-        + If the database version is MySQL 5.6, the username consists of 1 to 16 characters.
-        + If the database version is MySQL 5.7 or 8.0, the username consists of 1 to 32 characters.
-        """
         return pulumi.get(self, "name")
 
     @name.setter
@@ -82,10 +58,6 @@ class AccountArgs:
     @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
-        """
-        The region in which to create the rds account resource. If omitted, the
-        provider-level region will be used. Changing this creates a new resource.
-        """
         return pulumi.get(self, "region")
 
     @region.setter
@@ -102,16 +74,6 @@ class _AccountState:
                  region: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Account resources.
-        :param pulumi.Input[str] instance_id: Specifies the rds instance id. Changing this will create a new resource.
-        :param pulumi.Input[str] name: Specifies the username of the db account. Only lowercase letters, digits,
-               hyphens (-), and userscores (_) are allowed. Changing this will create a new resource.
-               + If the database version is MySQL 5.6, the username consists of 1 to 16 characters.
-               + If the database version is MySQL 5.7 or 8.0, the username consists of 1 to 32 characters.
-        :param pulumi.Input[str] password: Specifies the password of the db account. The parameter must be 8 to 32 characters
-               long and contain only letters(case-sensitive), digits, and special characters(~!@#$%^*-_=+?,()&). The value must be
-               different from name or name spelled backwards.
-        :param pulumi.Input[str] region: The region in which to create the rds account resource. If omitted, the
-               provider-level region will be used. Changing this creates a new resource.
         """
         if instance_id is not None:
             pulumi.set(__self__, "instance_id", instance_id)
@@ -125,9 +87,6 @@ class _AccountState:
     @property
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the rds instance id. Changing this will create a new resource.
-        """
         return pulumi.get(self, "instance_id")
 
     @instance_id.setter
@@ -137,12 +96,6 @@ class _AccountState:
     @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the username of the db account. Only lowercase letters, digits,
-        hyphens (-), and userscores (_) are allowed. Changing this will create a new resource.
-        + If the database version is MySQL 5.6, the username consists of 1 to 16 characters.
-        + If the database version is MySQL 5.7 or 8.0, the username consists of 1 to 32 characters.
-        """
         return pulumi.get(self, "name")
 
     @name.setter
@@ -152,11 +105,6 @@ class _AccountState:
     @property
     @pulumi.getter
     def password(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the password of the db account. The parameter must be 8 to 32 characters
-        long and contain only letters(case-sensitive), digits, and special characters(~!@#$%^*-_=+?,()&). The value must be
-        different from name or name spelled backwards.
-        """
         return pulumi.get(self, "password")
 
     @password.setter
@@ -166,10 +114,6 @@ class _AccountState:
     @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
-        """
-        The region in which to create the rds account resource. If omitted, the
-        provider-level region will be used. Changing this creates a new resource.
-        """
         return pulumi.get(self, "region")
 
     @region.setter
@@ -188,41 +132,9 @@ class Account(pulumi.CustomResource):
                  region: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages RDS Mysql account resource within HuaweiCloud.
-
-        ## Example Usage
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        instance_id = config.require_object("instanceId")
-        test = huaweicloud.rds.Account("test",
-            instance_id=instance_id,
-            password="Test@12345678")
-        ```
-
-        ## Import
-
-        RDS account can be imported using the `instance id` and `account name`, e.g.
-
-        ```sh
-         $ pulumi import huaweicloud:Rds/account:Account user_1 instance_id/account_name
-        ```
-
+        Create a Account resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] instance_id: Specifies the rds instance id. Changing this will create a new resource.
-        :param pulumi.Input[str] name: Specifies the username of the db account. Only lowercase letters, digits,
-               hyphens (-), and userscores (_) are allowed. Changing this will create a new resource.
-               + If the database version is MySQL 5.6, the username consists of 1 to 16 characters.
-               + If the database version is MySQL 5.7 or 8.0, the username consists of 1 to 32 characters.
-        :param pulumi.Input[str] password: Specifies the password of the db account. The parameter must be 8 to 32 characters
-               long and contain only letters(case-sensitive), digits, and special characters(~!@#$%^*-_=+?,()&). The value must be
-               different from name or name spelled backwards.
-        :param pulumi.Input[str] region: The region in which to create the rds account resource. If omitted, the
-               provider-level region will be used. Changing this creates a new resource.
         """
         ...
     @overload
@@ -231,29 +143,7 @@ class Account(pulumi.CustomResource):
                  args: AccountArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages RDS Mysql account resource within HuaweiCloud.
-
-        ## Example Usage
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        instance_id = config.require_object("instanceId")
-        test = huaweicloud.rds.Account("test",
-            instance_id=instance_id,
-            password="Test@12345678")
-        ```
-
-        ## Import
-
-        RDS account can be imported using the `instance id` and `account name`, e.g.
-
-        ```sh
-         $ pulumi import huaweicloud:Rds/account:Account user_1 instance_id/account_name
-        ```
-
+        Create a Account resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param AccountArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -311,16 +201,6 @@ class Account(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] instance_id: Specifies the rds instance id. Changing this will create a new resource.
-        :param pulumi.Input[str] name: Specifies the username of the db account. Only lowercase letters, digits,
-               hyphens (-), and userscores (_) are allowed. Changing this will create a new resource.
-               + If the database version is MySQL 5.6, the username consists of 1 to 16 characters.
-               + If the database version is MySQL 5.7 or 8.0, the username consists of 1 to 32 characters.
-        :param pulumi.Input[str] password: Specifies the password of the db account. The parameter must be 8 to 32 characters
-               long and contain only letters(case-sensitive), digits, and special characters(~!@#$%^*-_=+?,()&). The value must be
-               different from name or name spelled backwards.
-        :param pulumi.Input[str] region: The region in which to create the rds account resource. If omitted, the
-               provider-level region will be used. Changing this creates a new resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -335,38 +215,20 @@ class Account(pulumi.CustomResource):
     @property
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Output[str]:
-        """
-        Specifies the rds instance id. Changing this will create a new resource.
-        """
         return pulumi.get(self, "instance_id")
 
     @property
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
-        """
-        Specifies the username of the db account. Only lowercase letters, digits,
-        hyphens (-), and userscores (_) are allowed. Changing this will create a new resource.
-        + If the database version is MySQL 5.6, the username consists of 1 to 16 characters.
-        + If the database version is MySQL 5.7 or 8.0, the username consists of 1 to 32 characters.
-        """
         return pulumi.get(self, "name")
 
     @property
     @pulumi.getter
     def password(self) -> pulumi.Output[str]:
-        """
-        Specifies the password of the db account. The parameter must be 8 to 32 characters
-        long and contain only letters(case-sensitive), digits, and special characters(~!@#$%^*-_=+?,()&). The value must be
-        different from name or name spelled backwards.
-        """
         return pulumi.get(self, "password")
 
     @property
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
-        """
-        The region in which to create the rds account resource. If omitted, the
-        provider-level region will be used. Changing this creates a new resource.
-        """
         return pulumi.get(self, "region")
 

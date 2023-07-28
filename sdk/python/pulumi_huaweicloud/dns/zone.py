@@ -24,7 +24,6 @@ class ZoneArgs:
                  routers: Optional[pulumi.Input[Sequence[pulumi.Input['ZoneRouterArgs']]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  ttl: Optional[pulumi.Input[int]] = None,
-                 value_specs: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  zone_type: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Zone resource.
@@ -40,7 +39,6 @@ class ZoneArgs:
                structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the zone.
         :param pulumi.Input[int] ttl: The time to live (TTL) of the zone.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] value_specs: Map of additional options. Changing this creates a new DNS zone.
         :param pulumi.Input[str] zone_type: The type of zone. Can either be `public` or `private`. Changing this
                creates a new DNS zone.
         """
@@ -60,8 +58,6 @@ class ZoneArgs:
             pulumi.set(__self__, "tags", tags)
         if ttl is not None:
             pulumi.set(__self__, "ttl", ttl)
-        if value_specs is not None:
-            pulumi.set(__self__, "value_specs", value_specs)
         if zone_type is not None:
             pulumi.set(__self__, "zone_type", zone_type)
 
@@ -166,18 +162,6 @@ class ZoneArgs:
         pulumi.set(self, "ttl", value)
 
     @property
-    @pulumi.getter(name="valueSpecs")
-    def value_specs(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
-        """
-        Map of additional options. Changing this creates a new DNS zone.
-        """
-        return pulumi.get(self, "value_specs")
-
-    @value_specs.setter
-    def value_specs(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
-        pulumi.set(self, "value_specs", value)
-
-    @property
     @pulumi.getter(name="zoneType")
     def zone_type(self) -> Optional[pulumi.Input[str]]:
         """
@@ -203,7 +187,6 @@ class _ZoneState:
                  routers: Optional[pulumi.Input[Sequence[pulumi.Input['ZoneRouterArgs']]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  ttl: Optional[pulumi.Input[int]] = None,
-                 value_specs: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  zone_type: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Zone resources.
@@ -220,7 +203,6 @@ class _ZoneState:
                structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the zone.
         :param pulumi.Input[int] ttl: The time to live (TTL) of the zone.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] value_specs: Map of additional options. Changing this creates a new DNS zone.
         :param pulumi.Input[str] zone_type: The type of zone. Can either be `public` or `private`. Changing this
                creates a new DNS zone.
         """
@@ -242,8 +224,6 @@ class _ZoneState:
             pulumi.set(__self__, "tags", tags)
         if ttl is not None:
             pulumi.set(__self__, "ttl", ttl)
-        if value_specs is not None:
-            pulumi.set(__self__, "value_specs", value_specs)
         if zone_type is not None:
             pulumi.set(__self__, "zone_type", zone_type)
 
@@ -360,18 +340,6 @@ class _ZoneState:
         pulumi.set(self, "ttl", value)
 
     @property
-    @pulumi.getter(name="valueSpecs")
-    def value_specs(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
-        """
-        Map of additional options. Changing this creates a new DNS zone.
-        """
-        return pulumi.get(self, "value_specs")
-
-    @value_specs.setter
-    def value_specs(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
-        pulumi.set(self, "value_specs", value)
-
-    @property
     @pulumi.getter(name="zoneType")
     def zone_type(self) -> Optional[pulumi.Input[str]]:
         """
@@ -398,7 +366,6 @@ class Zone(pulumi.CustomResource):
                  routers: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ZoneRouterArgs']]]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  ttl: Optional[pulumi.Input[int]] = None,
-                 value_specs: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  zone_type: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
@@ -455,7 +422,6 @@ class Zone(pulumi.CustomResource):
                structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the zone.
         :param pulumi.Input[int] ttl: The time to live (TTL) of the zone.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] value_specs: Map of additional options. Changing this creates a new DNS zone.
         :param pulumi.Input[str] zone_type: The type of zone. Can either be `public` or `private`. Changing this
                creates a new DNS zone.
         """
@@ -528,7 +494,6 @@ class Zone(pulumi.CustomResource):
                  routers: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ZoneRouterArgs']]]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  ttl: Optional[pulumi.Input[int]] = None,
-                 value_specs: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  zone_type: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
@@ -547,7 +512,6 @@ class Zone(pulumi.CustomResource):
             __props__.__dict__["routers"] = routers
             __props__.__dict__["tags"] = tags
             __props__.__dict__["ttl"] = ttl
-            __props__.__dict__["value_specs"] = value_specs
             __props__.__dict__["zone_type"] = zone_type
             __props__.__dict__["masters"] = None
         super(Zone, __self__).__init__(
@@ -569,7 +533,6 @@ class Zone(pulumi.CustomResource):
             routers: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ZoneRouterArgs']]]]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             ttl: Optional[pulumi.Input[int]] = None,
-            value_specs: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             zone_type: Optional[pulumi.Input[str]] = None) -> 'Zone':
         """
         Get an existing Zone resource's state with the given name, id, and optional extra
@@ -591,7 +554,6 @@ class Zone(pulumi.CustomResource):
                structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the zone.
         :param pulumi.Input[int] ttl: The time to live (TTL) of the zone.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] value_specs: Map of additional options. Changing this creates a new DNS zone.
         :param pulumi.Input[str] zone_type: The type of zone. Can either be `public` or `private`. Changing this
                creates a new DNS zone.
         """
@@ -608,7 +570,6 @@ class Zone(pulumi.CustomResource):
         __props__.__dict__["routers"] = routers
         __props__.__dict__["tags"] = tags
         __props__.__dict__["ttl"] = ttl
-        __props__.__dict__["value_specs"] = value_specs
         __props__.__dict__["zone_type"] = zone_type
         return Zone(resource_name, opts=opts, __props__=__props__)
 
@@ -687,14 +648,6 @@ class Zone(pulumi.CustomResource):
         The time to live (TTL) of the zone.
         """
         return pulumi.get(self, "ttl")
-
-    @property
-    @pulumi.getter(name="valueSpecs")
-    def value_specs(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
-        """
-        Map of additional options. Changing this creates a new DNS zone.
-        """
-        return pulumi.get(self, "value_specs")
 
     @property
     @pulumi.getter(name="zoneType")

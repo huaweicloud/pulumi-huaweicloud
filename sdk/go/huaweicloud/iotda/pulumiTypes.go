@@ -3058,11 +3058,11 @@ type ProductService struct {
 	// The commands structure is documented below.
 	Commands []ProductServiceCommand `pulumi:"commands"`
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	Description *string `pulumi:"description"`
 	// Specifies the service ID. The ID contains a maximum of 64 characters. Only letters,
-	// Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are allowed: `?'#().,&%@!`.
+	// Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
 	Id string `pulumi:"id"`
 	// Specifies the list of properties for the service.
 	// The properties structure is documented below.
@@ -3088,11 +3088,11 @@ type ProductServiceArgs struct {
 	// The commands structure is documented below.
 	Commands ProductServiceCommandArrayInput `pulumi:"commands"`
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	Description pulumi.StringPtrInput `pulumi:"description"`
 	// Specifies the service ID. The ID contains a maximum of 64 characters. Only letters,
-	// Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are allowed: `?'#().,&%@!`.
+	// Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
 	Id pulumi.StringInput `pulumi:"id"`
 	// Specifies the list of properties for the service.
 	// The properties structure is documented below.
@@ -3160,14 +3160,14 @@ func (o ProductServiceOutput) Commands() ProductServiceCommandArrayOutput {
 }
 
 // Specifies the description of the parameter. The description contains a maximum of
-// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 // characters are allowed: `?'#().,&%@!`.
 func (o ProductServiceOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ProductService) *string { return v.Description }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the service ID. The ID contains a maximum of 64 characters. Only letters,
-// Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are allowed: `?'#().,&%@!`.
+// Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
 func (o ProductServiceOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v ProductService) string { return v.Id }).(pulumi.StringOutput)
 }
@@ -3206,7 +3206,7 @@ func (o ProductServiceArrayOutput) Index(i pulumi.IntInput) ProductServiceOutput
 
 type ProductServiceCommand struct {
 	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
-	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name string `pulumi:"name"`
 	// Specifies the list of parameters for the command.
@@ -3230,7 +3230,7 @@ type ProductServiceCommandInput interface {
 
 type ProductServiceCommandArgs struct {
 	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
-	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name pulumi.StringInput `pulumi:"name"`
 	// Specifies the list of parameters for the command.
@@ -3293,7 +3293,7 @@ func (o ProductServiceCommandOutput) ToProductServiceCommandOutputWithContext(ct
 }
 
 // Specifies the name of the parameter. The name contains a maximum of 64 characters.
-// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 // allowed: `?'#().,&%@!`.
 func (o ProductServiceCommandOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v ProductServiceCommand) string { return v.Name }).(pulumi.StringOutput)
@@ -3333,10 +3333,11 @@ func (o ProductServiceCommandArrayOutput) Index(i pulumi.IntInput) ProductServic
 
 type ProductServiceCommandPara struct {
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
-	Description *string  `pulumi:"description"`
-	EnumLists   []string `pulumi:"enumLists"`
+	Description *string `pulumi:"description"`
+	// Specifies the list of enumerated values of the parameter.
+	EnumLists []string `pulumi:"enumLists"`
 	// Specifies the max value of the parameter when the `type` is **int** or **decimal**.
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"65535"**.
 	Max *string `pulumi:"max"`
@@ -3347,7 +3348,7 @@ type ProductServiceCommandPara struct {
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"0"**.
 	Min *string `pulumi:"min"`
 	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
-	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name string `pulumi:"name"`
 	// Specifies the step of the parameter when the `type` is **int** or **decimal**.
@@ -3374,10 +3375,11 @@ type ProductServiceCommandParaInput interface {
 
 type ProductServiceCommandParaArgs struct {
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
-	Description pulumi.StringPtrInput   `pulumi:"description"`
-	EnumLists   pulumi.StringArrayInput `pulumi:"enumLists"`
+	Description pulumi.StringPtrInput `pulumi:"description"`
+	// Specifies the list of enumerated values of the parameter.
+	EnumLists pulumi.StringArrayInput `pulumi:"enumLists"`
 	// Specifies the max value of the parameter when the `type` is **int** or **decimal**.
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"65535"**.
 	Max pulumi.StringPtrInput `pulumi:"max"`
@@ -3388,7 +3390,7 @@ type ProductServiceCommandParaArgs struct {
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"0"**.
 	Min pulumi.StringPtrInput `pulumi:"min"`
 	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
-	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name pulumi.StringInput `pulumi:"name"`
 	// Specifies the step of the parameter when the `type` is **int** or **decimal**.
@@ -3454,12 +3456,13 @@ func (o ProductServiceCommandParaOutput) ToProductServiceCommandParaOutputWithCo
 }
 
 // Specifies the description of the parameter. The description contains a maximum of
-// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 // characters are allowed: `?'#().,&%@!`.
 func (o ProductServiceCommandParaOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ProductServiceCommandPara) *string { return v.Description }).(pulumi.StringPtrOutput)
 }
 
+// Specifies the list of enumerated values of the parameter.
 func (o ProductServiceCommandParaOutput) EnumLists() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ProductServiceCommandPara) []string { return v.EnumLists }).(pulumi.StringArrayOutput)
 }
@@ -3483,7 +3486,7 @@ func (o ProductServiceCommandParaOutput) Min() pulumi.StringPtrOutput {
 }
 
 // Specifies the name of the parameter. The name contains a maximum of 64 characters.
-// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 // allowed: `?'#().,&%@!`.
 func (o ProductServiceCommandParaOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v ProductServiceCommandPara) string { return v.Name }).(pulumi.StringOutput)
@@ -3529,10 +3532,11 @@ func (o ProductServiceCommandParaArrayOutput) Index(i pulumi.IntInput) ProductSe
 
 type ProductServiceCommandResponse struct {
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
-	Description *string  `pulumi:"description"`
-	EnumLists   []string `pulumi:"enumLists"`
+	Description *string `pulumi:"description"`
+	// Specifies the list of enumerated values of the parameter.
+	EnumLists []string `pulumi:"enumLists"`
 	// Specifies the max value of the parameter when the `type` is **int** or **decimal**.
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"65535"**.
 	Max *string `pulumi:"max"`
@@ -3543,7 +3547,7 @@ type ProductServiceCommandResponse struct {
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"0"**.
 	Min *string `pulumi:"min"`
 	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
-	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name string `pulumi:"name"`
 	// Specifies the step of the parameter when the `type` is **int** or **decimal**.
@@ -3570,10 +3574,11 @@ type ProductServiceCommandResponseInput interface {
 
 type ProductServiceCommandResponseArgs struct {
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
-	Description pulumi.StringPtrInput   `pulumi:"description"`
-	EnumLists   pulumi.StringArrayInput `pulumi:"enumLists"`
+	Description pulumi.StringPtrInput `pulumi:"description"`
+	// Specifies the list of enumerated values of the parameter.
+	EnumLists pulumi.StringArrayInput `pulumi:"enumLists"`
 	// Specifies the max value of the parameter when the `type` is **int** or **decimal**.
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"65535"**.
 	Max pulumi.StringPtrInput `pulumi:"max"`
@@ -3584,7 +3589,7 @@ type ProductServiceCommandResponseArgs struct {
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"0"**.
 	Min pulumi.StringPtrInput `pulumi:"min"`
 	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
-	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name pulumi.StringInput `pulumi:"name"`
 	// Specifies the step of the parameter when the `type` is **int** or **decimal**.
@@ -3650,12 +3655,13 @@ func (o ProductServiceCommandResponseOutput) ToProductServiceCommandResponseOutp
 }
 
 // Specifies the description of the parameter. The description contains a maximum of
-// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 // characters are allowed: `?'#().,&%@!`.
 func (o ProductServiceCommandResponseOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ProductServiceCommandResponse) *string { return v.Description }).(pulumi.StringPtrOutput)
 }
 
+// Specifies the list of enumerated values of the parameter.
 func (o ProductServiceCommandResponseOutput) EnumLists() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ProductServiceCommandResponse) []string { return v.EnumLists }).(pulumi.StringArrayOutput)
 }
@@ -3679,7 +3685,7 @@ func (o ProductServiceCommandResponseOutput) Min() pulumi.StringPtrOutput {
 }
 
 // Specifies the name of the parameter. The name contains a maximum of 64 characters.
-// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 // allowed: `?'#().,&%@!`.
 func (o ProductServiceCommandResponseOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v ProductServiceCommandResponse) string { return v.Name }).(pulumi.StringOutput)
@@ -3725,22 +3731,25 @@ func (o ProductServiceCommandResponseArrayOutput) Index(i pulumi.IntInput) Produ
 
 type ProductServiceProperty struct {
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
-	Description *string  `pulumi:"description"`
-	EnumLists   []string `pulumi:"enumLists"`
+	Description *string `pulumi:"description"`
+	// Specifies the list of enumerated values of the parameter.
+	EnumLists []string `pulumi:"enumLists"`
 	// Specifies the max value of the parameter when the `type` is **int** or **decimal**.
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"65535"**.
 	Max *string `pulumi:"max"`
 	// Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
 	// **jsonObject** or **string list**. Value range: 0 ~ 2147483647. Defaults to **0**.
-	MaxLength *int   `pulumi:"maxLength"`
-	Method    string `pulumi:"method"`
+	MaxLength *int `pulumi:"maxLength"`
+	// Specifies the access mode of the device property.
+	// Options: **RW**, **W**, **R**.
+	Method string `pulumi:"method"`
 	// Specifies the min value of the parameter when the `type` is **int** or **decimal**.
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"0"**.
 	Min *string `pulumi:"min"`
 	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
-	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name string `pulumi:"name"`
 	// Specifies the step of the parameter when the `type` is **int** or **decimal**.
@@ -3767,22 +3776,25 @@ type ProductServicePropertyInput interface {
 
 type ProductServicePropertyArgs struct {
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
-	Description pulumi.StringPtrInput   `pulumi:"description"`
-	EnumLists   pulumi.StringArrayInput `pulumi:"enumLists"`
+	Description pulumi.StringPtrInput `pulumi:"description"`
+	// Specifies the list of enumerated values of the parameter.
+	EnumLists pulumi.StringArrayInput `pulumi:"enumLists"`
 	// Specifies the max value of the parameter when the `type` is **int** or **decimal**.
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"65535"**.
 	Max pulumi.StringPtrInput `pulumi:"max"`
 	// Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
 	// **jsonObject** or **string list**. Value range: 0 ~ 2147483647. Defaults to **0**.
 	MaxLength pulumi.IntPtrInput `pulumi:"maxLength"`
-	Method    pulumi.StringInput `pulumi:"method"`
+	// Specifies the access mode of the device property.
+	// Options: **RW**, **W**, **R**.
+	Method pulumi.StringInput `pulumi:"method"`
 	// Specifies the min value of the parameter when the `type` is **int** or **decimal**.
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"0"**.
 	Min pulumi.StringPtrInput `pulumi:"min"`
 	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
-	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name pulumi.StringInput `pulumi:"name"`
 	// Specifies the step of the parameter when the `type` is **int** or **decimal**.
@@ -3848,12 +3860,13 @@ func (o ProductServicePropertyOutput) ToProductServicePropertyOutputWithContext(
 }
 
 // Specifies the description of the parameter. The description contains a maximum of
-// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 // characters are allowed: `?'#().,&%@!`.
 func (o ProductServicePropertyOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ProductServiceProperty) *string { return v.Description }).(pulumi.StringPtrOutput)
 }
 
+// Specifies the list of enumerated values of the parameter.
 func (o ProductServicePropertyOutput) EnumLists() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ProductServiceProperty) []string { return v.EnumLists }).(pulumi.StringArrayOutput)
 }
@@ -3870,6 +3883,8 @@ func (o ProductServicePropertyOutput) MaxLength() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v ProductServiceProperty) *int { return v.MaxLength }).(pulumi.IntPtrOutput)
 }
 
+// Specifies the access mode of the device property.
+// Options: **RW**, **W**, **R**.
 func (o ProductServicePropertyOutput) Method() pulumi.StringOutput {
 	return o.ApplyT(func(v ProductServiceProperty) string { return v.Method }).(pulumi.StringOutput)
 }
@@ -3881,7 +3896,7 @@ func (o ProductServicePropertyOutput) Min() pulumi.StringPtrOutput {
 }
 
 // Specifies the name of the parameter. The name contains a maximum of 64 characters.
-// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 // allowed: `?'#().,&%@!`.
 func (o ProductServicePropertyOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v ProductServiceProperty) string { return v.Name }).(pulumi.StringOutput)

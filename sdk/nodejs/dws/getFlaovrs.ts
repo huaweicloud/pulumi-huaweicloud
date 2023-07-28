@@ -6,7 +6,7 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Use this data source to get available flavors of HuaweiCloud dws cluster node.
+ * Use this data source to get available flavors of DWS cluster node.
  *
  * ## Example Usage
  *
@@ -28,6 +28,7 @@ export function getFlaovrs(args?: GetFlaovrsArgs, opts?: pulumi.InvokeOptions): 
     opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
     return pulumi.runtime.invoke("huaweicloud:Dws/getFlaovrs:getFlaovrs", {
         "availabilityZone": args.availabilityZone,
+        "datastoreType": args.datastoreType,
         "memory": args.memory,
         "region": args.region,
         "vcpus": args.vcpus,
@@ -39,20 +40,29 @@ export function getFlaovrs(args?: GetFlaovrsArgs, opts?: pulumi.InvokeOptions): 
  */
 export interface GetFlaovrsArgs {
     /**
-     * Specifies the availability zone name.
+     * The availability zone name.
      */
     availabilityZone?: string;
     /**
-     * Specifies the ram of the dws node flavor in GB.
+     * The type of datastore.  
+     * The options are as follows:
+     * - **dws**: OLAP, elastic scaling, unlimited scaling of compute and storage capacity.
+     * - **hybrid**: a single data warehouse used for transaction and analytics workloads,
+     * in single-node or cluster mode.
+     * - **stream**: built-in time series operators; up to 40:1 compression ratio; applicable to IoT services.
+     */
+    datastoreType?: string;
+    /**
+     * The ram of the dws node flavor in GB.
      */
     memory?: number;
     /**
-     * Specifies the region in which to obtain the dws cluster client. If omitted, the
-     * provider-level region will be used.
+     * Specifies the region in which to query the data source.
+     * If omitted, the provider-level region will be used.
      */
     region?: string;
     /**
-     * Specifies the vcpus of the dws node flavor.
+     * The vcpus of the dws node flavor.
      */
     vcpus?: number;
 }
@@ -61,12 +71,19 @@ export interface GetFlaovrsArgs {
  * A collection of values returned by getFlaovrs.
  */
 export interface GetFlaovrsResult {
-    /**
-     * Indicates the availability zone where the node resides.
-     */
     readonly availabilityZone?: string;
     /**
-     * Indicates the flavors information. Structure is documented below.
+     * The type of datastore.  
+     * The options are as follows:
+     * - **dws**: OLAP, elastic scaling, unlimited scaling of compute and storage capacity.
+     * - **hybrid**: a single data warehouse used for transaction and analytics workloads,
+     * in single-node or cluster mode.
+     * - **stream**: built-in time series operators; up to 40:1 compression ratio; applicable to IoT services.
+     */
+    readonly datastoreType?: string;
+    /**
+     * The list of flavor detail.
+     * The Flavors structure is documented below.
      */
     readonly flavors: outputs.Dws.GetFlaovrsFlavor[];
     /**
@@ -74,12 +91,12 @@ export interface GetFlaovrsResult {
      */
     readonly id: string;
     /**
-     * Indicates the ram of the dws node flavor in GB.
+     * The ram of the dws node flavor in GB.
      */
     readonly memory?: number;
     readonly region: string;
     /**
-     * Indicates the vcpus of the dws node flavor.
+     * The vcpus of the dws node flavor.
      */
     readonly vcpus?: number;
 }
@@ -93,20 +110,29 @@ export function getFlaovrsOutput(args?: GetFlaovrsOutputArgs, opts?: pulumi.Invo
  */
 export interface GetFlaovrsOutputArgs {
     /**
-     * Specifies the availability zone name.
+     * The availability zone name.
      */
     availabilityZone?: pulumi.Input<string>;
     /**
-     * Specifies the ram of the dws node flavor in GB.
+     * The type of datastore.  
+     * The options are as follows:
+     * - **dws**: OLAP, elastic scaling, unlimited scaling of compute and storage capacity.
+     * - **hybrid**: a single data warehouse used for transaction and analytics workloads,
+     * in single-node or cluster mode.
+     * - **stream**: built-in time series operators; up to 40:1 compression ratio; applicable to IoT services.
+     */
+    datastoreType?: pulumi.Input<string>;
+    /**
+     * The ram of the dws node flavor in GB.
      */
     memory?: pulumi.Input<number>;
     /**
-     * Specifies the region in which to obtain the dws cluster client. If omitted, the
-     * provider-level region will be used.
+     * Specifies the region in which to query the data source.
+     * If omitted, the provider-level region will be used.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the vcpus of the dws node flavor.
+     * The vcpus of the dws node flavor.
      */
     vcpus?: pulumi.Input<number>;
 }

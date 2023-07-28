@@ -59,8 +59,9 @@ import (
 type NotebookMountStorage struct {
 	pulumi.CustomResourceState
 
-	// Specifies the local mount directory. Only the sub directory of `/data/`
-	// can be mounted. The format is : `/data/dir1/`. Changing this parameter will create a new resource.
+	// Specifies the local mount directory.
+	// Only the subdirectory of `/data/` can be mounted. The format is : `/data/dir1/`.
+	// Changing this parameter will create a new resource.
 	LocalMountDirectory pulumi.StringOutput `pulumi:"localMountDirectory"`
 	// The mount ID.
 	MountId pulumi.StringOutput `pulumi:"mountId"`
@@ -119,8 +120,9 @@ func GetNotebookMountStorage(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering NotebookMountStorage resources.
 type notebookMountStorageState struct {
-	// Specifies the local mount directory. Only the sub directory of `/data/`
-	// can be mounted. The format is : `/data/dir1/`. Changing this parameter will create a new resource.
+	// Specifies the local mount directory.
+	// Only the subdirectory of `/data/` can be mounted. The format is : `/data/dir1/`.
+	// Changing this parameter will create a new resource.
 	LocalMountDirectory *string `pulumi:"localMountDirectory"`
 	// The mount ID.
 	MountId *string `pulumi:"mountId"`
@@ -141,8 +143,9 @@ type notebookMountStorageState struct {
 }
 
 type NotebookMountStorageState struct {
-	// Specifies the local mount directory. Only the sub directory of `/data/`
-	// can be mounted. The format is : `/data/dir1/`. Changing this parameter will create a new resource.
+	// Specifies the local mount directory.
+	// Only the subdirectory of `/data/` can be mounted. The format is : `/data/dir1/`.
+	// Changing this parameter will create a new resource.
 	LocalMountDirectory pulumi.StringPtrInput
 	// The mount ID.
 	MountId pulumi.StringPtrInput
@@ -167,8 +170,9 @@ func (NotebookMountStorageState) ElementType() reflect.Type {
 }
 
 type notebookMountStorageArgs struct {
-	// Specifies the local mount directory. Only the sub directory of `/data/`
-	// can be mounted. The format is : `/data/dir1/`. Changing this parameter will create a new resource.
+	// Specifies the local mount directory.
+	// Only the subdirectory of `/data/` can be mounted. The format is : `/data/dir1/`.
+	// Changing this parameter will create a new resource.
 	LocalMountDirectory string `pulumi:"localMountDirectory"`
 	// Specifies ID of notebook which the storage be mounted to.
 	// Changing this parameter will create a new resource.
@@ -183,8 +187,9 @@ type notebookMountStorageArgs struct {
 
 // The set of arguments for constructing a NotebookMountStorage resource.
 type NotebookMountStorageArgs struct {
-	// Specifies the local mount directory. Only the sub directory of `/data/`
-	// can be mounted. The format is : `/data/dir1/`. Changing this parameter will create a new resource.
+	// Specifies the local mount directory.
+	// Only the subdirectory of `/data/` can be mounted. The format is : `/data/dir1/`.
+	// Changing this parameter will create a new resource.
 	LocalMountDirectory pulumi.StringInput
 	// Specifies ID of notebook which the storage be mounted to.
 	// Changing this parameter will create a new resource.
@@ -284,8 +289,9 @@ func (o NotebookMountStorageOutput) ToNotebookMountStorageOutputWithContext(ctx 
 	return o
 }
 
-// Specifies the local mount directory. Only the sub directory of `/data/`
-// can be mounted. The format is : `/data/dir1/`. Changing this parameter will create a new resource.
+// Specifies the local mount directory.
+// Only the subdirectory of `/data/` can be mounted. The format is : `/data/dir1/`.
+// Changing this parameter will create a new resource.
 func (o NotebookMountStorageOutput) LocalMountDirectory() pulumi.StringOutput {
 	return o.ApplyT(func(v *NotebookMountStorage) pulumi.StringOutput { return v.LocalMountDirectory }).(pulumi.StringOutput)
 }

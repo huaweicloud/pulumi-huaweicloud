@@ -22,16 +22,20 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/DedicatedElb"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			elbPoolId := cfg.RequireObject("elbPoolId")
+//			ipv4SubnetId := cfg.RequireObject("ipv4SubnetId")
 //			_, err := DedicatedElb.NewMember(ctx, "member1", &DedicatedElb.MemberArgs{
 //				Address:      pulumi.String("192.168.199.23"),
 //				ProtocolPort: pulumi.Int(8080),
-//				PoolId:       pulumi.Any(_var.Pool_id),
-//				SubnetId:     pulumi.Any(_var.Subnet_id),
+//				PoolId:       pulumi.Any(elbPoolId),
+//				SubnetId:     pulumi.Any(ipv4SubnetId),
 //			})
 //			if err != nil {
 //				return err
@@ -67,8 +71,12 @@ type Member struct {
 	// The region in which to create the ELB member resource. If omitted, the the
 	// provider-level region will be used. Changing this creates a new member.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// The subnet in which to access the member
-	SubnetId pulumi.StringOutput `pulumi:"subnetId"`
+	// The **IPv4 or IPv6 subnet ID** of the subnet in which to access the member.
+	// + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+	// + If this parameter is not specified, **cross-VPC backend** has been enabled for the load balancer.
+	//   In this case, cross-VPC backend servers must use private IPv4 addresses,
+	//   and the protocol of the backend server group must be TCP, HTTP, or HTTPS.
+	SubnetId pulumi.StringPtrOutput `pulumi:"subnetId"`
 	// A positive integer value that indicates the relative portion of traffic that this member
 	// should receive from the pool. For example, a member with a weight of 10 receives five times as much traffic as a
 	// member with a weight of 2.
@@ -90,9 +98,6 @@ func NewMember(ctx *pulumi.Context,
 	}
 	if args.ProtocolPort == nil {
 		return nil, errors.New("invalid value for required argument 'ProtocolPort'")
-	}
-	if args.SubnetId == nil {
-		return nil, errors.New("invalid value for required argument 'SubnetId'")
 	}
 	opts = pkgResourceDefaultOpts(opts)
 	var resource Member
@@ -130,7 +135,11 @@ type memberState struct {
 	// The region in which to create the ELB member resource. If omitted, the the
 	// provider-level region will be used. Changing this creates a new member.
 	Region *string `pulumi:"region"`
-	// The subnet in which to access the member
+	// The **IPv4 or IPv6 subnet ID** of the subnet in which to access the member.
+	// + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+	// + If this parameter is not specified, **cross-VPC backend** has been enabled for the load balancer.
+	//   In this case, cross-VPC backend servers must use private IPv4 addresses,
+	//   and the protocol of the backend server group must be TCP, HTTP, or HTTPS.
 	SubnetId *string `pulumi:"subnetId"`
 	// A positive integer value that indicates the relative portion of traffic that this member
 	// should receive from the pool. For example, a member with a weight of 10 receives five times as much traffic as a
@@ -152,7 +161,11 @@ type MemberState struct {
 	// The region in which to create the ELB member resource. If omitted, the the
 	// provider-level region will be used. Changing this creates a new member.
 	Region pulumi.StringPtrInput
-	// The subnet in which to access the member
+	// The **IPv4 or IPv6 subnet ID** of the subnet in which to access the member.
+	// + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+	// + If this parameter is not specified, **cross-VPC backend** has been enabled for the load balancer.
+	//   In this case, cross-VPC backend servers must use private IPv4 addresses,
+	//   and the protocol of the backend server group must be TCP, HTTP, or HTTPS.
 	SubnetId pulumi.StringPtrInput
 	// A positive integer value that indicates the relative portion of traffic that this member
 	// should receive from the pool. For example, a member with a weight of 10 receives five times as much traffic as a
@@ -178,8 +191,12 @@ type memberArgs struct {
 	// The region in which to create the ELB member resource. If omitted, the the
 	// provider-level region will be used. Changing this creates a new member.
 	Region *string `pulumi:"region"`
-	// The subnet in which to access the member
-	SubnetId string `pulumi:"subnetId"`
+	// The **IPv4 or IPv6 subnet ID** of the subnet in which to access the member.
+	// + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+	// + If this parameter is not specified, **cross-VPC backend** has been enabled for the load balancer.
+	//   In this case, cross-VPC backend servers must use private IPv4 addresses,
+	//   and the protocol of the backend server group must be TCP, HTTP, or HTTPS.
+	SubnetId *string `pulumi:"subnetId"`
 	// A positive integer value that indicates the relative portion of traffic that this member
 	// should receive from the pool. For example, a member with a weight of 10 receives five times as much traffic as a
 	// member with a weight of 2.
@@ -201,8 +218,12 @@ type MemberArgs struct {
 	// The region in which to create the ELB member resource. If omitted, the the
 	// provider-level region will be used. Changing this creates a new member.
 	Region pulumi.StringPtrInput
-	// The subnet in which to access the member
-	SubnetId pulumi.StringInput
+	// The **IPv4 or IPv6 subnet ID** of the subnet in which to access the member.
+	// + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+	// + If this parameter is not specified, **cross-VPC backend** has been enabled for the load balancer.
+	//   In this case, cross-VPC backend servers must use private IPv4 addresses,
+	//   and the protocol of the backend server group must be TCP, HTTP, or HTTPS.
+	SubnetId pulumi.StringPtrInput
 	// A positive integer value that indicates the relative portion of traffic that this member
 	// should receive from the pool. For example, a member with a weight of 10 receives five times as much traffic as a
 	// member with a weight of 2.
@@ -324,9 +345,13 @@ func (o MemberOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Member) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// The subnet in which to access the member
-func (o MemberOutput) SubnetId() pulumi.StringOutput {
-	return o.ApplyT(func(v *Member) pulumi.StringOutput { return v.SubnetId }).(pulumi.StringOutput)
+// The **IPv4 or IPv6 subnet ID** of the subnet in which to access the member.
+//   - The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+//   - If this parameter is not specified, **cross-VPC backend** has been enabled for the load balancer.
+//     In this case, cross-VPC backend servers must use private IPv4 addresses,
+//     and the protocol of the backend server group must be TCP, HTTP, or HTTPS.
+func (o MemberOutput) SubnetId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Member) pulumi.StringPtrOutput { return v.SubnetId }).(pulumi.StringPtrOutput)
 }
 
 // A positive integer value that indicates the relative portion of traffic that this member

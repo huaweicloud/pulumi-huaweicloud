@@ -5,7 +5,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Use this data source to get the ID of an available Huaweicloud dcs maintainwindow.
+ * Use this data source to get the ID of an available DCS maintainwindow.
  *
  * ## Example Usage
  *
@@ -39,15 +39,15 @@ export function getMaintainwindow(args?: GetMaintainwindowArgs, opts?: pulumi.In
  */
 export interface GetMaintainwindowArgs {
     /**
-     * Indicates the time at which a maintenance time window starts.
+     * Specifies the time at which a maintenance time window starts.
      */
     begin?: string;
     /**
-     * Indicates whether a maintenance time window is set to the default time segment.
+     * Specifies whether a maintenance time window is set to the default time segment.
      */
     default?: boolean;
     /**
-     * Indicates the time at which a maintenance time window ends.
+     * Specifies the time at which a maintenance time window ends.
      */
     end?: string;
     /**
@@ -56,7 +56,7 @@ export interface GetMaintainwindowArgs {
      */
     region?: string;
     /**
-     * Indicates the sequential number of a maintenance time window.
+     * Specifies the sequential number of a maintenance time window.
      */
     seq?: number;
 }
@@ -85,15 +85,15 @@ export function getMaintainwindowOutput(args?: GetMaintainwindowOutputArgs, opts
  */
 export interface GetMaintainwindowOutputArgs {
     /**
-     * Indicates the time at which a maintenance time window starts.
+     * Specifies the time at which a maintenance time window starts.
      */
     begin?: pulumi.Input<string>;
     /**
-     * Indicates whether a maintenance time window is set to the default time segment.
+     * Specifies whether a maintenance time window is set to the default time segment.
      */
     default?: pulumi.Input<boolean>;
     /**
-     * Indicates the time at which a maintenance time window ends.
+     * Specifies the time at which a maintenance time window ends.
      */
     end?: pulumi.Input<string>;
     /**
@@ -102,7 +102,7 @@ export interface GetMaintainwindowOutputArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * Indicates the sequential number of a maintenance time window.
+     * Specifies the sequential number of a maintenance time window.
      */
     seq?: pulumi.Input<number>;
 }

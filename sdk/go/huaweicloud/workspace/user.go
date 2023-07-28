@@ -69,12 +69,12 @@ type User struct {
 	// Specifies the description of user. The maximum length is `255` characters.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies whether the user is disabled.
-	// Defualts to **false**.
+	// Defaults to **false**.
 	Disabled pulumi.BoolPtrOutput `pulumi:"disabled"`
 	// Specifies the email address of user. The value can contain `1` to `64` characters.
 	Email pulumi.StringOutput `pulumi:"email"`
 	// Specifies whether to allow password modification.
-	// Defualts to **true**.
+	// Defaults to **true**.
 	EnableChangePassword pulumi.BoolPtrOutput `pulumi:"enableChangePassword"`
 	// Whether the user is locked.
 	Locked pulumi.BoolOutput `pulumi:"locked"`
@@ -84,10 +84,10 @@ type User struct {
 	//   dots (.) are allowed. The name must start with a letter.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies whether the next login requires a password reset.
-	// Defualts to **true**.
+	// Defaults to **true**.
 	NextLoginChangePassword pulumi.BoolPtrOutput `pulumi:"nextLoginChangePassword"`
 	// Specifies whether the password will never expires.
-	// Defualts to **false**.
+	// Defaults to **false**.
 	PasswordNeverExpires pulumi.BoolPtrOutput `pulumi:"passwordNeverExpires"`
 	// The region in which to create the Workspace user resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
@@ -137,12 +137,12 @@ type userState struct {
 	// Specifies the description of user. The maximum length is `255` characters.
 	Description *string `pulumi:"description"`
 	// Specifies whether the user is disabled.
-	// Defualts to **false**.
+	// Defaults to **false**.
 	Disabled *bool `pulumi:"disabled"`
 	// Specifies the email address of user. The value can contain `1` to `64` characters.
 	Email *string `pulumi:"email"`
 	// Specifies whether to allow password modification.
-	// Defualts to **true**.
+	// Defaults to **true**.
 	EnableChangePassword *bool `pulumi:"enableChangePassword"`
 	// Whether the user is locked.
 	Locked *bool `pulumi:"locked"`
@@ -152,10 +152,10 @@ type userState struct {
 	//   dots (.) are allowed. The name must start with a letter.
 	Name *string `pulumi:"name"`
 	// Specifies whether the next login requires a password reset.
-	// Defualts to **true**.
+	// Defaults to **true**.
 	NextLoginChangePassword *bool `pulumi:"nextLoginChangePassword"`
 	// Specifies whether the password will never expires.
-	// Defualts to **false**.
+	// Defaults to **false**.
 	PasswordNeverExpires *bool `pulumi:"passwordNeverExpires"`
 	// The region in which to create the Workspace user resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
@@ -173,12 +173,12 @@ type UserState struct {
 	// Specifies the description of user. The maximum length is `255` characters.
 	Description pulumi.StringPtrInput
 	// Specifies whether the user is disabled.
-	// Defualts to **false**.
+	// Defaults to **false**.
 	Disabled pulumi.BoolPtrInput
 	// Specifies the email address of user. The value can contain `1` to `64` characters.
 	Email pulumi.StringPtrInput
 	// Specifies whether to allow password modification.
-	// Defualts to **true**.
+	// Defaults to **true**.
 	EnableChangePassword pulumi.BoolPtrInput
 	// Whether the user is locked.
 	Locked pulumi.BoolPtrInput
@@ -188,10 +188,10 @@ type UserState struct {
 	//   dots (.) are allowed. The name must start with a letter.
 	Name pulumi.StringPtrInput
 	// Specifies whether the next login requires a password reset.
-	// Defualts to **true**.
+	// Defaults to **true**.
 	NextLoginChangePassword pulumi.BoolPtrInput
 	// Specifies whether the password will never expires.
-	// Defualts to **false**.
+	// Defaults to **false**.
 	PasswordNeverExpires pulumi.BoolPtrInput
 	// The region in which to create the Workspace user resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
@@ -213,12 +213,12 @@ type userArgs struct {
 	// Specifies the description of user. The maximum length is `255` characters.
 	Description *string `pulumi:"description"`
 	// Specifies whether the user is disabled.
-	// Defualts to **false**.
+	// Defaults to **false**.
 	Disabled *bool `pulumi:"disabled"`
 	// Specifies the email address of user. The value can contain `1` to `64` characters.
 	Email string `pulumi:"email"`
 	// Specifies whether to allow password modification.
-	// Defualts to **true**.
+	// Defaults to **true**.
 	EnableChangePassword *bool `pulumi:"enableChangePassword"`
 	// Specifies the user name.
 	// + Pure numeric: the valid length is between `1` and `20`.
@@ -226,10 +226,10 @@ type userArgs struct {
 	//   dots (.) are allowed. The name must start with a letter.
 	Name *string `pulumi:"name"`
 	// Specifies whether the next login requires a password reset.
-	// Defualts to **true**.
+	// Defaults to **true**.
 	NextLoginChangePassword *bool `pulumi:"nextLoginChangePassword"`
 	// Specifies whether the password will never expires.
-	// Defualts to **false**.
+	// Defaults to **false**.
 	PasswordNeverExpires *bool `pulumi:"passwordNeverExpires"`
 	// The region in which to create the Workspace user resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
@@ -246,12 +246,12 @@ type UserArgs struct {
 	// Specifies the description of user. The maximum length is `255` characters.
 	Description pulumi.StringPtrInput
 	// Specifies whether the user is disabled.
-	// Defualts to **false**.
+	// Defaults to **false**.
 	Disabled pulumi.BoolPtrInput
 	// Specifies the email address of user. The value can contain `1` to `64` characters.
 	Email pulumi.StringInput
 	// Specifies whether to allow password modification.
-	// Defualts to **true**.
+	// Defaults to **true**.
 	EnableChangePassword pulumi.BoolPtrInput
 	// Specifies the user name.
 	// + Pure numeric: the valid length is between `1` and `20`.
@@ -259,10 +259,10 @@ type UserArgs struct {
 	//   dots (.) are allowed. The name must start with a letter.
 	Name pulumi.StringPtrInput
 	// Specifies whether the next login requires a password reset.
-	// Defualts to **true**.
+	// Defaults to **true**.
 	NextLoginChangePassword pulumi.BoolPtrInput
 	// Specifies whether the password will never expires.
-	// Defualts to **false**.
+	// Defaults to **false**.
 	PasswordNeverExpires pulumi.BoolPtrInput
 	// The region in which to create the Workspace user resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
@@ -370,7 +370,7 @@ func (o UserOutput) Description() pulumi.StringPtrOutput {
 }
 
 // Specifies whether the user is disabled.
-// Defualts to **false**.
+// Defaults to **false**.
 func (o UserOutput) Disabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *User) pulumi.BoolPtrOutput { return v.Disabled }).(pulumi.BoolPtrOutput)
 }
@@ -381,7 +381,7 @@ func (o UserOutput) Email() pulumi.StringOutput {
 }
 
 // Specifies whether to allow password modification.
-// Defualts to **true**.
+// Defaults to **true**.
 func (o UserOutput) EnableChangePassword() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *User) pulumi.BoolPtrOutput { return v.EnableChangePassword }).(pulumi.BoolPtrOutput)
 }
@@ -400,13 +400,13 @@ func (o UserOutput) Name() pulumi.StringOutput {
 }
 
 // Specifies whether the next login requires a password reset.
-// Defualts to **true**.
+// Defaults to **true**.
 func (o UserOutput) NextLoginChangePassword() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *User) pulumi.BoolPtrOutput { return v.NextLoginChangePassword }).(pulumi.BoolPtrOutput)
 }
 
 // Specifies whether the password will never expires.
-// Defualts to **false**.
+// Defaults to **false**.
 func (o UserOutput) PasswordNeverExpires() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *User) pulumi.BoolPtrOutput { return v.PasswordNeverExpires }).(pulumi.BoolPtrOutput)
 }

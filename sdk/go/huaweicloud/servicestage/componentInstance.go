@@ -195,7 +195,7 @@ type ComponentInstance struct {
 	// The object structure is documented below.
 	Configuration ComponentInstanceConfigurationOutput `pulumi:"configuration"`
 	// Specifies the description of the instance.
-	// The description can contian a maximum of `128` characters.
+	// The description can contain a maximum of `128` characters.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the environment ID in which the component to build (deployed).
 	// Changing this will create a new instance.
@@ -211,7 +211,7 @@ type ComponentInstance struct {
 	// + **xxC-xxC**: the maximum and minimum number of CPU cores allocated to a component instance.
 	// + **xxGi-xxGi**: the maximum and minimum memory allocated to a component instance.
 	FlavorId pulumi.StringOutput `pulumi:"flavorId"`
-	// Specifies the name of a configuration item or secret.
+	// Specifies the configuration item.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the deployed resources.
 	// The object structure is documented below.
@@ -300,7 +300,7 @@ type componentInstanceState struct {
 	// The object structure is documented below.
 	Configuration *ComponentInstanceConfiguration `pulumi:"configuration"`
 	// Specifies the description of the instance.
-	// The description can contian a maximum of `128` characters.
+	// The description can contain a maximum of `128` characters.
 	Description *string `pulumi:"description"`
 	// Specifies the environment ID in which the component to build (deployed).
 	// Changing this will create a new instance.
@@ -316,7 +316,7 @@ type componentInstanceState struct {
 	// + **xxC-xxC**: the maximum and minimum number of CPU cores allocated to a component instance.
 	// + **xxGi-xxGi**: the maximum and minimum memory allocated to a component instance.
 	FlavorId *string `pulumi:"flavorId"`
-	// Specifies the name of a configuration item or secret.
+	// Specifies the configuration item.
 	Name *string `pulumi:"name"`
 	// Specifies the deployed resources.
 	// The object structure is documented below.
@@ -355,7 +355,7 @@ type ComponentInstanceState struct {
 	// The object structure is documented below.
 	Configuration ComponentInstanceConfigurationPtrInput
 	// Specifies the description of the instance.
-	// The description can contian a maximum of `128` characters.
+	// The description can contain a maximum of `128` characters.
 	Description pulumi.StringPtrInput
 	// Specifies the environment ID in which the component to build (deployed).
 	// Changing this will create a new instance.
@@ -371,7 +371,7 @@ type ComponentInstanceState struct {
 	// + **xxC-xxC**: the maximum and minimum number of CPU cores allocated to a component instance.
 	// + **xxGi-xxGi**: the maximum and minimum memory allocated to a component instance.
 	FlavorId pulumi.StringPtrInput
-	// Specifies the name of a configuration item or secret.
+	// Specifies the configuration item.
 	Name pulumi.StringPtrInput
 	// Specifies the deployed resources.
 	// The object structure is documented below.
@@ -414,7 +414,7 @@ type componentInstanceArgs struct {
 	// The object structure is documented below.
 	Configuration *ComponentInstanceConfiguration `pulumi:"configuration"`
 	// Specifies the description of the instance.
-	// The description can contian a maximum of `128` characters.
+	// The description can contain a maximum of `128` characters.
 	Description *string `pulumi:"description"`
 	// Specifies the environment ID in which the component to build (deployed).
 	// Changing this will create a new instance.
@@ -430,7 +430,7 @@ type componentInstanceArgs struct {
 	// + **xxC-xxC**: the maximum and minimum number of CPU cores allocated to a component instance.
 	// + **xxGi-xxGi**: the maximum and minimum memory allocated to a component instance.
 	FlavorId string `pulumi:"flavorId"`
-	// Specifies the name of a configuration item or secret.
+	// Specifies the configuration item.
 	Name *string `pulumi:"name"`
 	// Specifies the deployed resources.
 	// The object structure is documented below.
@@ -462,7 +462,7 @@ type ComponentInstanceArgs struct {
 	// The object structure is documented below.
 	Configuration ComponentInstanceConfigurationPtrInput
 	// Specifies the description of the instance.
-	// The description can contian a maximum of `128` characters.
+	// The description can contain a maximum of `128` characters.
 	Description pulumi.StringPtrInput
 	// Specifies the environment ID in which the component to build (deployed).
 	// Changing this will create a new instance.
@@ -478,7 +478,7 @@ type ComponentInstanceArgs struct {
 	// + **xxC-xxC**: the maximum and minimum number of CPU cores allocated to a component instance.
 	// + **xxGi-xxGi**: the maximum and minimum memory allocated to a component instance.
 	FlavorId pulumi.StringInput
-	// Specifies the name of a configuration item or secret.
+	// Specifies the configuration item.
 	Name pulumi.StringPtrInput
 	// Specifies the deployed resources.
 	// The object structure is documented below.
@@ -607,7 +607,7 @@ func (o ComponentInstanceOutput) Configuration() ComponentInstanceConfigurationO
 }
 
 // Specifies the description of the instance.
-// The description can contian a maximum of `128` characters.
+// The description can contain a maximum of `128` characters.
 func (o ComponentInstanceOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ComponentInstance) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
@@ -635,7 +635,7 @@ func (o ComponentInstanceOutput) FlavorId() pulumi.StringOutput {
 	return o.ApplyT(func(v *ComponentInstance) pulumi.StringOutput { return v.FlavorId }).(pulumi.StringOutput)
 }
 
-// Specifies the name of a configuration item or secret.
+// Specifies the configuration item.
 func (o ComponentInstanceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *ComponentInstance) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }

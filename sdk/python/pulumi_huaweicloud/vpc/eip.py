@@ -29,28 +29,34 @@ class EipArgs:
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Eip resource.
-        :param pulumi.Input['EipBandwidthArgs'] bandwidth: The bandwidth object.
-        :param pulumi.Input['EipPublicipArgs'] publicip: The elastic IP address object.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are *true* and *false*. Defaults to *false*. Changing this creates a new resource.
-        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the elastic IP. Valid values are
-               *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new eip.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the elastic IP. Changing this
-               creates a new eip.
-        :param pulumi.Input[str] name: The bandwidth name, which is a string of 1 to 64 characters that contain letters, digits,
-               underscores (_), and hyphens (-). This parameter is mandatory when `share_type` is set to **PER**.
-        :param pulumi.Input[int] period: Specifies the charging period of the elastic IP. If `period_unit` is set to
-               *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This parameter
-               is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
-        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the elastic IP. Valid values are
-               *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new
-               eip.
-        :param pulumi.Input[str] region: The region in which to create the EIP resource. If omitted, the provider-level
-               region will be used. Changing this creates a new resource.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the elastic IP.
+        :param pulumi.Input['EipBandwidthArgs'] bandwidth: Specifies the bandwidth configuration.  
+               The object structure is documented below.
+        :param pulumi.Input['EipPublicipArgs'] publicip: Specifies the EIP configuration.  
+               The object structure is documented below.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.  
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the EIP.  
+               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the EIP belongs.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the bandwidth name.  
+               The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
+               This parameter is mandatory when `share_type` is set to **PER**.
+        :param pulumi.Input[int] period: Specifies the charging period of the EIP.
+               + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the EIP.  
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] region: Specifies the region in which to create the EIP resource.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the EIP.
         """
         pulumi.set(__self__, "bandwidth", bandwidth)
         pulumi.set(__self__, "publicip", publicip)
+        if auto_pay is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
         if auto_pay is not None:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
@@ -74,7 +80,8 @@ class EipArgs:
     @pulumi.getter
     def bandwidth(self) -> pulumi.Input['EipBandwidthArgs']:
         """
-        The bandwidth object.
+        Specifies the bandwidth configuration.  
+        The object structure is documented below.
         """
         return pulumi.get(self, "bandwidth")
 
@@ -86,7 +93,8 @@ class EipArgs:
     @pulumi.getter
     def publicip(self) -> pulumi.Input['EipPublicipArgs']:
         """
-        The elastic IP address object.
+        Specifies the EIP configuration.  
+        The object structure is documented below.
         """
         return pulumi.get(self, "publicip")
 
@@ -107,8 +115,8 @@ class EipArgs:
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies whether auto renew is enabled.
-        Valid values are *true* and *false*. Defaults to *false*. Changing this creates a new resource.
+        Specifies whether auto renew is enabled.  
+        Valid values are **true** and **false**. Defaults to **false**.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -120,8 +128,8 @@ class EipArgs:
     @pulumi.getter(name="chargingMode")
     def charging_mode(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the charging mode of the elastic IP. Valid values are
-        *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new eip.
+        Specifies the charging mode of the EIP.  
+        The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -133,8 +141,8 @@ class EipArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The enterprise project id of the elastic IP. Changing this
-        creates a new eip.
+        Specifies the enterprise project ID to which the EIP belongs.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -146,8 +154,9 @@ class EipArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        The bandwidth name, which is a string of 1 to 64 characters that contain letters, digits,
-        underscores (_), and hyphens (-). This parameter is mandatory when `share_type` is set to **PER**.
+        Specifies the bandwidth name.  
+        The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
+        This parameter is mandatory when `share_type` is set to **PER**.
         """
         return pulumi.get(self, "name")
 
@@ -159,9 +168,9 @@ class EipArgs:
     @pulumi.getter
     def period(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the charging period of the elastic IP. If `period_unit` is set to
-        *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This parameter
-        is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
+        Specifies the charging period of the EIP.
+        + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
         """
         return pulumi.get(self, "period")
 
@@ -173,9 +182,9 @@ class EipArgs:
     @pulumi.getter(name="periodUnit")
     def period_unit(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the charging period unit of the elastic IP. Valid values are
-        *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new
-        eip.
+        Specifies the charging period unit of the EIP.  
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "period_unit")
 
@@ -187,8 +196,8 @@ class EipArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the EIP resource. If omitted, the provider-level
-        region will be used. Changing this creates a new resource.
+        Specifies the region in which to create the EIP resource.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -200,7 +209,7 @@ class EipArgs:
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
-        Specifies the key/value pairs to associate with the elastic IP.
+        Specifies the key/value pairs to associate with the EIP.
         """
         return pulumi.get(self, "tags")
 
@@ -231,32 +240,38 @@ class _EipState:
         """
         Input properties used for looking up and filtering Eip resources.
         :param pulumi.Input[str] address: The IPv4 address of the EIP.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are *true* and *false*. Defaults to *false*. Changing this creates a new resource.
-        :param pulumi.Input['EipBandwidthArgs'] bandwidth: The bandwidth object.
-        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the elastic IP. Valid values are
-               *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new eip.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the elastic IP. Changing this
-               creates a new eip.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.  
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input['EipBandwidthArgs'] bandwidth: Specifies the bandwidth configuration.  
+               The object structure is documented below.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the EIP.  
+               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the EIP belongs.  
+               Changing this will create a new resource.
         :param pulumi.Input[str] ipv6_address: The IPv6 address of the EIP.
-        :param pulumi.Input[str] name: The bandwidth name, which is a string of 1 to 64 characters that contain letters, digits,
-               underscores (_), and hyphens (-). This parameter is mandatory when `share_type` is set to **PER**.
-        :param pulumi.Input[int] period: Specifies the charging period of the elastic IP. If `period_unit` is set to
-               *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This parameter
-               is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
-        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the elastic IP. Valid values are
-               *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new
-               eip.
+        :param pulumi.Input[str] name: Specifies the bandwidth name.  
+               The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
+               This parameter is mandatory when `share_type` is set to **PER**.
+        :param pulumi.Input[int] period: Specifies the charging period of the EIP.
+               + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the EIP.  
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will create a new resource.
         :param pulumi.Input[str] port_id: The port ID which the EIP associated with.
         :param pulumi.Input[str] private_ip: The private IP address bound to the EIP.
-        :param pulumi.Input['EipPublicipArgs'] publicip: The elastic IP address object.
-        :param pulumi.Input[str] region: The region in which to create the EIP resource. If omitted, the provider-level
-               region will be used. Changing this creates a new resource.
+        :param pulumi.Input['EipPublicipArgs'] publicip: Specifies the EIP configuration.  
+               The object structure is documented below.
+        :param pulumi.Input[str] region: Specifies the region in which to create the EIP resource.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] status: The status of EIP.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the elastic IP.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the EIP.
         """
         if address is not None:
             pulumi.set(__self__, "address", address)
+        if auto_pay is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
         if auto_pay is not None:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
@@ -313,8 +328,8 @@ class _EipState:
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies whether auto renew is enabled.
-        Valid values are *true* and *false*. Defaults to *false*. Changing this creates a new resource.
+        Specifies whether auto renew is enabled.  
+        Valid values are **true** and **false**. Defaults to **false**.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -326,7 +341,8 @@ class _EipState:
     @pulumi.getter
     def bandwidth(self) -> Optional[pulumi.Input['EipBandwidthArgs']]:
         """
-        The bandwidth object.
+        Specifies the bandwidth configuration.  
+        The object structure is documented below.
         """
         return pulumi.get(self, "bandwidth")
 
@@ -338,8 +354,8 @@ class _EipState:
     @pulumi.getter(name="chargingMode")
     def charging_mode(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the charging mode of the elastic IP. Valid values are
-        *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new eip.
+        Specifies the charging mode of the EIP.  
+        The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -351,8 +367,8 @@ class _EipState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The enterprise project id of the elastic IP. Changing this
-        creates a new eip.
+        Specifies the enterprise project ID to which the EIP belongs.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -376,8 +392,9 @@ class _EipState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        The bandwidth name, which is a string of 1 to 64 characters that contain letters, digits,
-        underscores (_), and hyphens (-). This parameter is mandatory when `share_type` is set to **PER**.
+        Specifies the bandwidth name.  
+        The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
+        This parameter is mandatory when `share_type` is set to **PER**.
         """
         return pulumi.get(self, "name")
 
@@ -389,9 +406,9 @@ class _EipState:
     @pulumi.getter
     def period(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the charging period of the elastic IP. If `period_unit` is set to
-        *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This parameter
-        is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
+        Specifies the charging period of the EIP.
+        + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
         """
         return pulumi.get(self, "period")
 
@@ -403,9 +420,9 @@ class _EipState:
     @pulumi.getter(name="periodUnit")
     def period_unit(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the charging period unit of the elastic IP. Valid values are
-        *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new
-        eip.
+        Specifies the charging period unit of the EIP.  
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "period_unit")
 
@@ -441,7 +458,8 @@ class _EipState:
     @pulumi.getter
     def publicip(self) -> Optional[pulumi.Input['EipPublicipArgs']]:
         """
-        The elastic IP address object.
+        Specifies the EIP configuration.  
+        The object structure is documented below.
         """
         return pulumi.get(self, "publicip")
 
@@ -453,8 +471,8 @@ class _EipState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the EIP resource. If omitted, the provider-level
-        region will be used. Changing this creates a new resource.
+        Specifies the region in which to create the EIP resource.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -478,7 +496,7 @@ class _EipState:
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
-        Specifies the key/value pairs to associate with the elastic IP.
+        Specifies the key/value pairs to associate with the EIP.
         """
         return pulumi.get(self, "tags")
 
@@ -508,37 +526,37 @@ class Eip(pulumi.CustomResource):
         Manages an EIP resource within HuaweiCloud.
 
         ## Example Usage
-        ### EIP with Dedicated Bandwidth
+        ### Create an EIP with Dedicated Bandwidth
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        eip1 = huaweicloud.vpc.Eip("eip1",
-            bandwidth=huaweicloud.vpc.EipBandwidthArgs(
-                charge_mode="traffic",
-                name="test",
-                share_type="PER",
-                size=10,
-            ),
+        dedicated = huaweicloud.vpc.Eip("dedicated",
             publicip=huaweicloud.vpc.EipPublicipArgs(
                 type="5_bgp",
+            ),
+            bandwidth=huaweicloud.vpc.EipBandwidthArgs(
+                share_type="PER",
+                name=var["bandwidth_name"],
+                size=10,
+                charge_mode="traffic",
             ))
         ```
-        ### EIP with Shared Bandwidth
+        ### Create an EIP with Shared Bandwidth
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        bandwidth1 = huaweicloud.vpc.Bandwidth("bandwidth1", size=5)
-        eip1 = huaweicloud.vpc.Eip("eip1",
+        test = huaweicloud.vpc.Bandwidth("test", size=5)
+        shared = huaweicloud.vpc.Eip("shared",
             publicip=huaweicloud.vpc.EipPublicipArgs(
                 type="5_bgp",
             ),
             bandwidth=huaweicloud.vpc.EipBandwidthArgs(
                 share_type="WHOLE",
-                id=bandwidth1.id,
+                id=test.id,
             ))
         ```
 
@@ -547,30 +565,33 @@ class Eip(pulumi.CustomResource):
         EIPs can be imported using the `id`, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:Vpc/eip:Eip eip_1 2c7f39f3-702b-48d1-940c-b50384177ee1
+         $ pulumi import huaweicloud:Vpc/eip:Eip test 2c7f39f3-702b-48d1-940c-b50384177ee1
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are *true* and *false*. Defaults to *false*. Changing this creates a new resource.
-        :param pulumi.Input[pulumi.InputType['EipBandwidthArgs']] bandwidth: The bandwidth object.
-        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the elastic IP. Valid values are
-               *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new eip.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the elastic IP. Changing this
-               creates a new eip.
-        :param pulumi.Input[str] name: The bandwidth name, which is a string of 1 to 64 characters that contain letters, digits,
-               underscores (_), and hyphens (-). This parameter is mandatory when `share_type` is set to **PER**.
-        :param pulumi.Input[int] period: Specifies the charging period of the elastic IP. If `period_unit` is set to
-               *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This parameter
-               is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
-        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the elastic IP. Valid values are
-               *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new
-               eip.
-        :param pulumi.Input[pulumi.InputType['EipPublicipArgs']] publicip: The elastic IP address object.
-        :param pulumi.Input[str] region: The region in which to create the EIP resource. If omitted, the provider-level
-               region will be used. Changing this creates a new resource.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the elastic IP.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.  
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[pulumi.InputType['EipBandwidthArgs']] bandwidth: Specifies the bandwidth configuration.  
+               The object structure is documented below.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the EIP.  
+               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the EIP belongs.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the bandwidth name.  
+               The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
+               This parameter is mandatory when `share_type` is set to **PER**.
+        :param pulumi.Input[int] period: Specifies the charging period of the EIP.
+               + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the EIP.  
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will create a new resource.
+        :param pulumi.Input[pulumi.InputType['EipPublicipArgs']] publicip: Specifies the EIP configuration.  
+               The object structure is documented below.
+        :param pulumi.Input[str] region: Specifies the region in which to create the EIP resource.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the EIP.
         """
         ...
     @overload
@@ -582,37 +603,37 @@ class Eip(pulumi.CustomResource):
         Manages an EIP resource within HuaweiCloud.
 
         ## Example Usage
-        ### EIP with Dedicated Bandwidth
+        ### Create an EIP with Dedicated Bandwidth
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        eip1 = huaweicloud.vpc.Eip("eip1",
-            bandwidth=huaweicloud.vpc.EipBandwidthArgs(
-                charge_mode="traffic",
-                name="test",
-                share_type="PER",
-                size=10,
-            ),
+        dedicated = huaweicloud.vpc.Eip("dedicated",
             publicip=huaweicloud.vpc.EipPublicipArgs(
                 type="5_bgp",
+            ),
+            bandwidth=huaweicloud.vpc.EipBandwidthArgs(
+                share_type="PER",
+                name=var["bandwidth_name"],
+                size=10,
+                charge_mode="traffic",
             ))
         ```
-        ### EIP with Shared Bandwidth
+        ### Create an EIP with Shared Bandwidth
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        bandwidth1 = huaweicloud.vpc.Bandwidth("bandwidth1", size=5)
-        eip1 = huaweicloud.vpc.Eip("eip1",
+        test = huaweicloud.vpc.Bandwidth("test", size=5)
+        shared = huaweicloud.vpc.Eip("shared",
             publicip=huaweicloud.vpc.EipPublicipArgs(
                 type="5_bgp",
             ),
             bandwidth=huaweicloud.vpc.EipBandwidthArgs(
                 share_type="WHOLE",
-                id=bandwidth1.id,
+                id=test.id,
             ))
         ```
 
@@ -621,7 +642,7 @@ class Eip(pulumi.CustomResource):
         EIPs can be imported using the `id`, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:Vpc/eip:Eip eip_1 2c7f39f3-702b-48d1-940c-b50384177ee1
+         $ pulumi import huaweicloud:Vpc/eip:Eip test 2c7f39f3-702b-48d1-940c-b50384177ee1
         ```
 
         :param str resource_name: The name of the resource.
@@ -659,6 +680,9 @@ class Eip(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = EipArgs.__new__(EipArgs)
 
+            if auto_pay is not None and not opts.urn:
+                warnings.warn("""Deprecated""", DeprecationWarning)
+                pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
             __props__.__dict__["auto_pay"] = auto_pay
             __props__.__dict__["auto_renew"] = auto_renew
             if bandwidth is None and not opts.urn:
@@ -713,29 +737,32 @@ class Eip(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] address: The IPv4 address of the EIP.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are *true* and *false*. Defaults to *false*. Changing this creates a new resource.
-        :param pulumi.Input[pulumi.InputType['EipBandwidthArgs']] bandwidth: The bandwidth object.
-        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the elastic IP. Valid values are
-               *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new eip.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the elastic IP. Changing this
-               creates a new eip.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.  
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[pulumi.InputType['EipBandwidthArgs']] bandwidth: Specifies the bandwidth configuration.  
+               The object structure is documented below.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the EIP.  
+               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the EIP belongs.  
+               Changing this will create a new resource.
         :param pulumi.Input[str] ipv6_address: The IPv6 address of the EIP.
-        :param pulumi.Input[str] name: The bandwidth name, which is a string of 1 to 64 characters that contain letters, digits,
-               underscores (_), and hyphens (-). This parameter is mandatory when `share_type` is set to **PER**.
-        :param pulumi.Input[int] period: Specifies the charging period of the elastic IP. If `period_unit` is set to
-               *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This parameter
-               is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
-        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the elastic IP. Valid values are
-               *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new
-               eip.
+        :param pulumi.Input[str] name: Specifies the bandwidth name.  
+               The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
+               This parameter is mandatory when `share_type` is set to **PER**.
+        :param pulumi.Input[int] period: Specifies the charging period of the EIP.
+               + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the EIP.  
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will create a new resource.
         :param pulumi.Input[str] port_id: The port ID which the EIP associated with.
         :param pulumi.Input[str] private_ip: The private IP address bound to the EIP.
-        :param pulumi.Input[pulumi.InputType['EipPublicipArgs']] publicip: The elastic IP address object.
-        :param pulumi.Input[str] region: The region in which to create the EIP resource. If omitted, the provider-level
-               region will be used. Changing this creates a new resource.
+        :param pulumi.Input[pulumi.InputType['EipPublicipArgs']] publicip: Specifies the EIP configuration.  
+               The object structure is documented below.
+        :param pulumi.Input[str] region: Specifies the region in which to create the EIP resource.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] status: The status of EIP.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the elastic IP.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the EIP.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -776,8 +803,8 @@ class Eip(pulumi.CustomResource):
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies whether auto renew is enabled.
-        Valid values are *true* and *false*. Defaults to *false*. Changing this creates a new resource.
+        Specifies whether auto renew is enabled.  
+        Valid values are **true** and **false**. Defaults to **false**.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -785,7 +812,8 @@ class Eip(pulumi.CustomResource):
     @pulumi.getter
     def bandwidth(self) -> pulumi.Output['outputs.EipBandwidth']:
         """
-        The bandwidth object.
+        Specifies the bandwidth configuration.  
+        The object structure is documented below.
         """
         return pulumi.get(self, "bandwidth")
 
@@ -793,8 +821,8 @@ class Eip(pulumi.CustomResource):
     @pulumi.getter(name="chargingMode")
     def charging_mode(self) -> pulumi.Output[str]:
         """
-        Specifies the charging mode of the elastic IP. Valid values are
-        *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new eip.
+        Specifies the charging mode of the EIP.  
+        The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -802,8 +830,8 @@ class Eip(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        The enterprise project id of the elastic IP. Changing this
-        creates a new eip.
+        Specifies the enterprise project ID to which the EIP belongs.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -819,8 +847,9 @@ class Eip(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        The bandwidth name, which is a string of 1 to 64 characters that contain letters, digits,
-        underscores (_), and hyphens (-). This parameter is mandatory when `share_type` is set to **PER**.
+        Specifies the bandwidth name.  
+        The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
+        This parameter is mandatory when `share_type` is set to **PER**.
         """
         return pulumi.get(self, "name")
 
@@ -828,9 +857,9 @@ class Eip(pulumi.CustomResource):
     @pulumi.getter
     def period(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the charging period of the elastic IP. If `period_unit` is set to
-        *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This parameter
-        is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
+        Specifies the charging period of the EIP.
+        + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
         """
         return pulumi.get(self, "period")
 
@@ -838,9 +867,9 @@ class Eip(pulumi.CustomResource):
     @pulumi.getter(name="periodUnit")
     def period_unit(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the charging period unit of the elastic IP. Valid values are
-        *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new
-        eip.
+        Specifies the charging period unit of the EIP.  
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "period_unit")
 
@@ -864,7 +893,8 @@ class Eip(pulumi.CustomResource):
     @pulumi.getter
     def publicip(self) -> pulumi.Output['outputs.EipPublicip']:
         """
-        The elastic IP address object.
+        Specifies the EIP configuration.  
+        The object structure is documented below.
         """
         return pulumi.get(self, "publicip")
 
@@ -872,8 +902,8 @@ class Eip(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        The region in which to create the EIP resource. If omitted, the provider-level
-        region will be used. Changing this creates a new resource.
+        Specifies the region in which to create the EIP resource.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -889,7 +919,7 @@ class Eip(pulumi.CustomResource):
     @pulumi.getter
     def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
         """
-        Specifies the key/value pairs to associate with the elastic IP.
+        Specifies the key/value pairs to associate with the EIP.
         """
         return pulumi.get(self, "tags")
 

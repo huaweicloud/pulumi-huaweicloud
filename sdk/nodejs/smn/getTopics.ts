@@ -84,7 +84,7 @@ export interface GetTopicsResult {
      * The name of the topic.
      */
     readonly name?: string;
-    readonly region?: string;
+    readonly region: string;
     /**
      * The topic URN.
      */

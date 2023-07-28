@@ -25,19 +25,20 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Waf"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			policy1, err := Waf.NewPolicy(ctx, "policy1", nil)
-//			if err != nil {
-//				return err
-//			}
-//			_, err = Waf.NewRuleWebTamperProtection(ctx, "rule1", &Waf.RuleWebTamperProtectionArgs{
-//				PolicyId: policy1.ID(),
-//				Domain:   pulumi.String("www.your-domain.com"),
-//				Path:     pulumi.String("/payment"),
+//			cfg := config.New(ctx, "")
+//			enterpriseProjectId := cfg.RequireObject("enterpriseProjectId")
+//			policyId := cfg.RequireObject("policyId")
+//			_, err := Waf.NewRuleWebTamperProtection(ctx, "rule1", &Waf.RuleWebTamperProtectionArgs{
+//				PolicyId:            pulumi.Any(policyId),
+//				EnterpriseProjectId: pulumi.Any(enterpriseProjectId),
+//				Domain:              pulumi.String("www.your-domain.com"),
+//				Path:                pulumi.String("/payment"),
 //			})
 //			if err != nil {
 //				return err
@@ -50,11 +51,19 @@ import (
 //
 // ## Import
 //
-// Web Tamper Protection Rules can be imported using the policy ID and rule ID separated by a slash, e.g.
+// There are two ways to import WAF rule web tamper protection state. * Using `policy_id` and `rule_id`, separated by a slash, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Waf/ruleWebTamperProtection:RuleWebTamperProtection rule_1 840c6dfdd5604c1781eea033eae2004f/c6dbc13bb7e74788ae53ecc9254b3ea8
+//	$ pulumi import huaweicloud:Waf/ruleWebTamperProtection:RuleWebTamperProtection test <policy_id>/<rule_id>
+//
+// ```
+//
+//   - Using `policy_id`, `rule_id` and `enterprise_project_id`, separated by slashes, e.g. bash
+//
+// ```sh
+//
+//	$ pulumi import huaweicloud:Waf/ruleWebTamperProtection:RuleWebTamperProtection test <policy_id>/<rule_id>/<enterprise_project_id>
 //
 // ```
 type RuleWebTamperProtection struct {
@@ -62,6 +71,9 @@ type RuleWebTamperProtection struct {
 
 	// Specifies the domain name. Changing this creates a new rule.
 	Domain pulumi.StringOutput `pulumi:"domain"`
+	// Specifies the enterprise project ID of WAF tamper protection
+	// rule. Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
 	// Specifies the URL protected by the web tamper protection rule, excluding a
 	// domain name. Changing this creates a new rule.
 	Path pulumi.StringOutput `pulumi:"path"`
@@ -113,6 +125,9 @@ func GetRuleWebTamperProtection(ctx *pulumi.Context,
 type ruleWebTamperProtectionState struct {
 	// Specifies the domain name. Changing this creates a new rule.
 	Domain *string `pulumi:"domain"`
+	// Specifies the enterprise project ID of WAF tamper protection
+	// rule. Changing this parameter will create a new resource.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the URL protected by the web tamper protection rule, excluding a
 	// domain name. Changing this creates a new rule.
 	Path *string `pulumi:"path"`
@@ -126,6 +141,9 @@ type ruleWebTamperProtectionState struct {
 type RuleWebTamperProtectionState struct {
 	// Specifies the domain name. Changing this creates a new rule.
 	Domain pulumi.StringPtrInput
+	// Specifies the enterprise project ID of WAF tamper protection
+	// rule. Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the URL protected by the web tamper protection rule, excluding a
 	// domain name. Changing this creates a new rule.
 	Path pulumi.StringPtrInput
@@ -143,6 +161,9 @@ func (RuleWebTamperProtectionState) ElementType() reflect.Type {
 type ruleWebTamperProtectionArgs struct {
 	// Specifies the domain name. Changing this creates a new rule.
 	Domain string `pulumi:"domain"`
+	// Specifies the enterprise project ID of WAF tamper protection
+	// rule. Changing this parameter will create a new resource.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the URL protected by the web tamper protection rule, excluding a
 	// domain name. Changing this creates a new rule.
 	Path string `pulumi:"path"`
@@ -157,6 +178,9 @@ type ruleWebTamperProtectionArgs struct {
 type RuleWebTamperProtectionArgs struct {
 	// Specifies the domain name. Changing this creates a new rule.
 	Domain pulumi.StringInput
+	// Specifies the enterprise project ID of WAF tamper protection
+	// rule. Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the URL protected by the web tamper protection rule, excluding a
 	// domain name. Changing this creates a new rule.
 	Path pulumi.StringInput
@@ -257,6 +281,12 @@ func (o RuleWebTamperProtectionOutput) ToRuleWebTamperProtectionOutputWithContex
 // Specifies the domain name. Changing this creates a new rule.
 func (o RuleWebTamperProtectionOutput) Domain() pulumi.StringOutput {
 	return o.ApplyT(func(v *RuleWebTamperProtection) pulumi.StringOutput { return v.Domain }).(pulumi.StringOutput)
+}
+
+// Specifies the enterprise project ID of WAF tamper protection
+// rule. Changing this parameter will create a new resource.
+func (o RuleWebTamperProtectionOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *RuleWebTamperProtection) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the URL protected by the web tamper protection rule, excluding a

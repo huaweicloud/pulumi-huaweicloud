@@ -27,7 +27,7 @@ class ConfigurationArgs:
                The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
                Changing this will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the AS configuration.
-               If omitted, the `region` argument of the provider is used. Changing this will create a new resource.
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         pulumi.set(__self__, "instance_config", instance_config)
         pulumi.set(__self__, "scaling_configuration_name", scaling_configuration_name)
@@ -66,7 +66,7 @@ class ConfigurationArgs:
     def region(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the region in which to create the AS configuration.
-        If omitted, the `region` argument of the provider is used. Changing this will create a new resource.
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -80,16 +80,18 @@ class _ConfigurationState:
     def __init__(__self__, *,
                  instance_config: Optional[pulumi.Input['ConfigurationInstanceConfigArgs']] = None,
                  region: Optional[pulumi.Input[str]] = None,
-                 scaling_configuration_name: Optional[pulumi.Input[str]] = None):
+                 scaling_configuration_name: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Configuration resources.
         :param pulumi.Input['ConfigurationInstanceConfigArgs'] instance_config: Specifies the information about instance configuration.
                The object structure is documented below. Changing this will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the AS configuration.
-               If omitted, the `region` argument of the provider is used. Changing this will create a new resource.
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] scaling_configuration_name: Specifies the AS configuration name.
                The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
                Changing this will create a new resource.
+        :param pulumi.Input[str] status: The AS configuration status, the value can be **Bound** or **Unbound**.
         """
         if instance_config is not None:
             pulumi.set(__self__, "instance_config", instance_config)
@@ -97,6 +99,8 @@ class _ConfigurationState:
             pulumi.set(__self__, "region", region)
         if scaling_configuration_name is not None:
             pulumi.set(__self__, "scaling_configuration_name", scaling_configuration_name)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
 
     @property
     @pulumi.getter(name="instanceConfig")
@@ -116,7 +120,7 @@ class _ConfigurationState:
     def region(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the region in which to create the AS configuration.
-        If omitted, the `region` argument of the provider is used. Changing this will create a new resource.
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -138,6 +142,18 @@ class _ConfigurationState:
     def scaling_configuration_name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "scaling_configuration_name", value)
 
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input[str]]:
+        """
+        The AS configuration status, the value can be **Bound** or **Unbound**.
+        """
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "status", value)
+
 
 class Configuration(pulumi.CustomResource):
     @overload
@@ -149,7 +165,7 @@ class Configuration(pulumi.CustomResource):
                  scaling_configuration_name: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages an AS Configuration resource within HuaweiCloud.
+        Manages an AS configuration resource within HuaweiCloud.
 
         ## Example Usage
         ### Basic AS Configuration
@@ -158,18 +174,23 @@ class Configuration(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        flavor_id = config.require_object("flavorId")
+        image_id = config.require_object("imageId")
+        ssh_key = config.require_object("sshKey")
+        security_group_id = config.require_object("securityGroupId")
         my_as_config = huaweicloud.as_.Configuration("myAsConfig",
             scaling_configuration_name="my_as_config",
             instance_config=huaweicloud.as_.ConfigurationInstanceConfigArgs(
-                flavor=var["flavor"],
-                image=var["image_id"],
+                flavor=flavor_id,
+                image=image_id,
+                key_name=ssh_key,
+                security_group_ids=[security_group_id],
                 disks=[huaweicloud.as_.ConfigurationInstanceConfigDiskArgs(
                     size=40,
                     volume_type="SSD",
                     disk_type="SYS",
                 )],
-                key_name=var["keyname"],
-                user_data=(lambda path: open(path).read())("userdata.txt"),
             ))
         ```
         ### AS Configuration With Encrypted Data Disk
@@ -178,11 +199,19 @@ class Configuration(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        flavor_id = config.require_object("flavorId")
+        image_id = config.require_object("imageId")
+        ssh_key = config.require_object("sshKey")
+        kms_id = config.require_object("kmsId")
+        security_group_id = config.require_object("securityGroupId")
         my_as_config = huaweicloud.as_.Configuration("myAsConfig",
             scaling_configuration_name="my_as_config",
             instance_config=huaweicloud.as_.ConfigurationInstanceConfigArgs(
-                flavor=var["flavor"],
-                image=var["image_id"],
+                flavor=flavor_id,
+                image=image_id,
+                key_name=ssh_key,
+                security_group_ids=[security_group_id],
                 disks=[
                     huaweicloud.as_.ConfigurationInstanceConfigDiskArgs(
                         size=40,
@@ -193,11 +222,9 @@ class Configuration(pulumi.CustomResource):
                         size=100,
                         volume_type="SSD",
                         disk_type="DATA",
-                        kms_id=var["kms_id"],
+                        kms_id=kms_id,
                     ),
                 ],
-                key_name=var["keyname"],
-                user_data=(lambda path: open(path).read())("userdata.txt"),
             ))
         ```
         ### AS Configuration With User Data and Metadata
@@ -206,18 +233,24 @@ class Configuration(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        flavor_id = config.require_object("flavorId")
+        image_id = config.require_object("imageId")
+        ssh_key = config.require_object("sshKey")
+        security_group_id = config.require_object("securityGroupId")
         my_as_config = huaweicloud.as_.Configuration("myAsConfig",
             scaling_configuration_name="my_as_config",
             instance_config=huaweicloud.as_.ConfigurationInstanceConfigArgs(
-                flavor=var["flavor"],
-                image=var["image_id"],
+                flavor=flavor_id,
+                image=image_id,
+                key_name=ssh_key,
+                security_group_ids=[security_group_id],
+                user_data=(lambda path: open(path).read())("userdata.txt"),
                 disks=[huaweicloud.as_.ConfigurationInstanceConfigDiskArgs(
                     size=40,
                     volume_type="SSD",
                     disk_type="SYS",
                 )],
-                key_name=var["keyname"],
-                user_data=(lambda path: open(path).read())("userdata.txt"),
                 metadata={
                     "some_key": "some_value",
                 },
@@ -229,20 +262,43 @@ class Configuration(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        instance_id = config.require_object("instanceId")
+        ssh_key = config.require_object("sshKey")
+        security_group_id = config.require_object("securityGroupId")
         my_as_config = huaweicloud.as_.Configuration("myAsConfig",
             scaling_configuration_name="my_as_config",
             instance_config=huaweicloud.as_.ConfigurationInstanceConfigArgs(
-                instance_id="4579f2f5-cbe8-425a-8f32-53dcb9d9053a",
-                key_name=var["keyname"],
+                instance_id=instance_id,
+                key_name=ssh_key,
+                security_group_ids=[security_group_id],
             ))
         ```
+
+        ## Import
+
+        AS configurations can be imported by their `id`, e.g.
+
+        ```sh
+         $ pulumi import huaweicloud:As/configuration:Configuration test 18518c8a-9d15-416b-8add-2ee874751d18
+        ```
+
+         Note that the imported state may not be identical to your resource definition, due to `instance_config.0.instance_id` is missing from the API response. You can ignore changes after importing an AS configuration as below. resource "huaweicloud_as_configuration" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [ instance_config.0.instance_id ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[pulumi.InputType['ConfigurationInstanceConfigArgs']] instance_config: Specifies the information about instance configuration.
                The object structure is documented below. Changing this will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the AS configuration.
-               If omitted, the `region` argument of the provider is used. Changing this will create a new resource.
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] scaling_configuration_name: Specifies the AS configuration name.
                The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
                Changing this will create a new resource.
@@ -254,7 +310,7 @@ class Configuration(pulumi.CustomResource):
                  args: ConfigurationArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages an AS Configuration resource within HuaweiCloud.
+        Manages an AS configuration resource within HuaweiCloud.
 
         ## Example Usage
         ### Basic AS Configuration
@@ -263,18 +319,23 @@ class Configuration(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        flavor_id = config.require_object("flavorId")
+        image_id = config.require_object("imageId")
+        ssh_key = config.require_object("sshKey")
+        security_group_id = config.require_object("securityGroupId")
         my_as_config = huaweicloud.as_.Configuration("myAsConfig",
             scaling_configuration_name="my_as_config",
             instance_config=huaweicloud.as_.ConfigurationInstanceConfigArgs(
-                flavor=var["flavor"],
-                image=var["image_id"],
+                flavor=flavor_id,
+                image=image_id,
+                key_name=ssh_key,
+                security_group_ids=[security_group_id],
                 disks=[huaweicloud.as_.ConfigurationInstanceConfigDiskArgs(
                     size=40,
                     volume_type="SSD",
                     disk_type="SYS",
                 )],
-                key_name=var["keyname"],
-                user_data=(lambda path: open(path).read())("userdata.txt"),
             ))
         ```
         ### AS Configuration With Encrypted Data Disk
@@ -283,11 +344,19 @@ class Configuration(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        flavor_id = config.require_object("flavorId")
+        image_id = config.require_object("imageId")
+        ssh_key = config.require_object("sshKey")
+        kms_id = config.require_object("kmsId")
+        security_group_id = config.require_object("securityGroupId")
         my_as_config = huaweicloud.as_.Configuration("myAsConfig",
             scaling_configuration_name="my_as_config",
             instance_config=huaweicloud.as_.ConfigurationInstanceConfigArgs(
-                flavor=var["flavor"],
-                image=var["image_id"],
+                flavor=flavor_id,
+                image=image_id,
+                key_name=ssh_key,
+                security_group_ids=[security_group_id],
                 disks=[
                     huaweicloud.as_.ConfigurationInstanceConfigDiskArgs(
                         size=40,
@@ -298,11 +367,9 @@ class Configuration(pulumi.CustomResource):
                         size=100,
                         volume_type="SSD",
                         disk_type="DATA",
-                        kms_id=var["kms_id"],
+                        kms_id=kms_id,
                     ),
                 ],
-                key_name=var["keyname"],
-                user_data=(lambda path: open(path).read())("userdata.txt"),
             ))
         ```
         ### AS Configuration With User Data and Metadata
@@ -311,18 +378,24 @@ class Configuration(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        flavor_id = config.require_object("flavorId")
+        image_id = config.require_object("imageId")
+        ssh_key = config.require_object("sshKey")
+        security_group_id = config.require_object("securityGroupId")
         my_as_config = huaweicloud.as_.Configuration("myAsConfig",
             scaling_configuration_name="my_as_config",
             instance_config=huaweicloud.as_.ConfigurationInstanceConfigArgs(
-                flavor=var["flavor"],
-                image=var["image_id"],
+                flavor=flavor_id,
+                image=image_id,
+                key_name=ssh_key,
+                security_group_ids=[security_group_id],
+                user_data=(lambda path: open(path).read())("userdata.txt"),
                 disks=[huaweicloud.as_.ConfigurationInstanceConfigDiskArgs(
                     size=40,
                     volume_type="SSD",
                     disk_type="SYS",
                 )],
-                key_name=var["keyname"],
-                user_data=(lambda path: open(path).read())("userdata.txt"),
                 metadata={
                     "some_key": "some_value",
                 },
@@ -334,13 +407,36 @@ class Configuration(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        instance_id = config.require_object("instanceId")
+        ssh_key = config.require_object("sshKey")
+        security_group_id = config.require_object("securityGroupId")
         my_as_config = huaweicloud.as_.Configuration("myAsConfig",
             scaling_configuration_name="my_as_config",
             instance_config=huaweicloud.as_.ConfigurationInstanceConfigArgs(
-                instance_id="4579f2f5-cbe8-425a-8f32-53dcb9d9053a",
-                key_name=var["keyname"],
+                instance_id=instance_id,
+                key_name=ssh_key,
+                security_group_ids=[security_group_id],
             ))
         ```
+
+        ## Import
+
+        AS configurations can be imported by their `id`, e.g.
+
+        ```sh
+         $ pulumi import huaweicloud:As/configuration:Configuration test 18518c8a-9d15-416b-8add-2ee874751d18
+        ```
+
+         Note that the imported state may not be identical to your resource definition, due to `instance_config.0.instance_id` is missing from the API response. You can ignore changes after importing an AS configuration as below. resource "huaweicloud_as_configuration" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [ instance_config.0.instance_id ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param ConfigurationArgs args: The arguments to use to populate this resource's properties.
@@ -376,6 +472,7 @@ class Configuration(pulumi.CustomResource):
             if scaling_configuration_name is None and not opts.urn:
                 raise TypeError("Missing required property 'scaling_configuration_name'")
             __props__.__dict__["scaling_configuration_name"] = scaling_configuration_name
+            __props__.__dict__["status"] = None
         super(Configuration, __self__).__init__(
             'huaweicloud:As/configuration:Configuration',
             resource_name,
@@ -388,7 +485,8 @@ class Configuration(pulumi.CustomResource):
             opts: Optional[pulumi.ResourceOptions] = None,
             instance_config: Optional[pulumi.Input[pulumi.InputType['ConfigurationInstanceConfigArgs']]] = None,
             region: Optional[pulumi.Input[str]] = None,
-            scaling_configuration_name: Optional[pulumi.Input[str]] = None) -> 'Configuration':
+            scaling_configuration_name: Optional[pulumi.Input[str]] = None,
+            status: Optional[pulumi.Input[str]] = None) -> 'Configuration':
         """
         Get an existing Configuration resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -399,10 +497,11 @@ class Configuration(pulumi.CustomResource):
         :param pulumi.Input[pulumi.InputType['ConfigurationInstanceConfigArgs']] instance_config: Specifies the information about instance configuration.
                The object structure is documented below. Changing this will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the AS configuration.
-               If omitted, the `region` argument of the provider is used. Changing this will create a new resource.
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] scaling_configuration_name: Specifies the AS configuration name.
                The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
                Changing this will create a new resource.
+        :param pulumi.Input[str] status: The AS configuration status, the value can be **Bound** or **Unbound**.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -411,6 +510,7 @@ class Configuration(pulumi.CustomResource):
         __props__.__dict__["instance_config"] = instance_config
         __props__.__dict__["region"] = region
         __props__.__dict__["scaling_configuration_name"] = scaling_configuration_name
+        __props__.__dict__["status"] = status
         return Configuration(resource_name, opts=opts, __props__=__props__)
 
     @property
@@ -427,7 +527,7 @@ class Configuration(pulumi.CustomResource):
     def region(self) -> pulumi.Output[str]:
         """
         Specifies the region in which to create the AS configuration.
-        If omitted, the `region` argument of the provider is used. Changing this will create a new resource.
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -440,4 +540,12 @@ class Configuration(pulumi.CustomResource):
         Changing this will create a new resource.
         """
         return pulumi.get(self, "scaling_configuration_name")
+
+    @property
+    @pulumi.getter
+    def status(self) -> pulumi.Output[str]:
+        """
+        The AS configuration status, the value can be **Bound** or **Unbound**.
+        """
+        return pulumi.get(self, "status")
 

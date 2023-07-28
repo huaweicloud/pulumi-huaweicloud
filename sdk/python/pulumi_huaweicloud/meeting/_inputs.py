@@ -350,6 +350,10 @@ class ConferenceJoinPasswordArgs:
     def __init__(__self__, *,
                  guest: Optional[pulumi.Input[str]] = None,
                  host: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] guest: The password of the common participant.
+        :param pulumi.Input[str] host: The password of the meeting host.
+        """
         if guest is not None:
             pulumi.set(__self__, "guest", guest)
         if host is not None:
@@ -358,6 +362,9 @@ class ConferenceJoinPasswordArgs:
     @property
     @pulumi.getter
     def guest(self) -> Optional[pulumi.Input[str]]:
+        """
+        The password of the common participant.
+        """
         return pulumi.get(self, "guest")
 
     @guest.setter
@@ -367,6 +374,9 @@ class ConferenceJoinPasswordArgs:
     @property
     @pulumi.getter
     def host(self) -> Optional[pulumi.Input[str]]:
+        """
+        The password of the meeting host.
+        """
         return pulumi.get(self, "host")
 
     @host.setter
@@ -735,6 +745,8 @@ class ConferenceSubconferenceSubconfigurationArgs:
                + **0**: All users.
                + **2**: Users within the enterprise.
                + **3**: The invited user.
+        :param pulumi.Input[Sequence[pulumi.Input['ConferenceSubconferenceSubconfigurationShowAudiencePolicyArgs']]] show_audience_policies: The webinar Audience Display Strategy.
+               The object structure is documented below.
         :param pulumi.Input[bool] waiting_room_enabled: Specifies whether to open the waiting room (only valid for RTC enterprises).
         """
         if allow_guest_start is not None:
@@ -794,6 +806,10 @@ class ConferenceSubconferenceSubconfigurationArgs:
     @property
     @pulumi.getter(name="showAudiencePolicies")
     def show_audience_policies(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ConferenceSubconferenceSubconfigurationShowAudiencePolicyArgs']]]]:
+        """
+        The webinar Audience Display Strategy.
+        The object structure is documented below.
+        """
         return pulumi.get(self, "show_audience_policies")
 
     @show_audience_policies.setter

@@ -78,7 +78,7 @@ export class Environment extends pulumi.CustomResource {
     public readonly basicResources!: pulumi.Output<outputs.ServiceStage.EnvironmentBasicResource[]>;
     /**
      * Specifies the environment description.
-     * The description can contian a maximum of 128 characters.
+     * The description can contain a maximum of 128 characters.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
@@ -160,7 +160,7 @@ export interface EnvironmentState {
     basicResources?: pulumi.Input<pulumi.Input<inputs.ServiceStage.EnvironmentBasicResource>[]>;
     /**
      * Specifies the environment description.
-     * The description can contian a maximum of 128 characters.
+     * The description can contain a maximum of 128 characters.
      */
     description?: pulumi.Input<string>;
     /**
@@ -202,7 +202,7 @@ export interface EnvironmentArgs {
     basicResources: pulumi.Input<pulumi.Input<inputs.ServiceStage.EnvironmentBasicResource>[]>;
     /**
      * Specifies the environment description.
-     * The description can contian a maximum of 128 characters.
+     * The description can contain a maximum of 128 characters.
      */
     description?: pulumi.Input<string>;
     /**

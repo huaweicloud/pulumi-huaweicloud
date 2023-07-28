@@ -146,7 +146,8 @@ type FlinkjarJob struct {
 	// Specifies SMN topic. If a job fails, the system will send a message to users
 	// subscribed to the SMN topic.
 	SmnTopic pulumi.StringPtrOutput `pulumi:"smnTopic"`
-	Status   pulumi.StringOutput    `pulumi:"status"`
+	// The Job status.
+	Status pulumi.StringOutput `pulumi:"status"`
 	// Specifies the key/value pairs to associate with the resource.
 	// Changing this parameter will create a new resource.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
@@ -256,7 +257,8 @@ type flinkjarJobState struct {
 	// Specifies SMN topic. If a job fails, the system will send a message to users
 	// subscribed to the SMN topic.
 	SmnTopic *string `pulumi:"smnTopic"`
-	Status   *string `pulumi:"status"`
+	// The Job status.
+	Status *string `pulumi:"status"`
 	// Specifies the key/value pairs to associate with the resource.
 	// Changing this parameter will create a new resource.
 	Tags map[string]string `pulumi:"tags"`
@@ -337,7 +339,8 @@ type FlinkjarJobState struct {
 	// Specifies SMN topic. If a job fails, the system will send a message to users
 	// subscribed to the SMN topic.
 	SmnTopic pulumi.StringPtrInput
-	Status   pulumi.StringPtrInput
+	// The Job status.
+	Status pulumi.StringPtrInput
 	// Specifies the key/value pairs to associate with the resource.
 	// Changing this parameter will create a new resource.
 	Tags pulumi.StringMapInput
@@ -738,6 +741,7 @@ func (o FlinkjarJobOutput) SmnTopic() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *FlinkjarJob) pulumi.StringPtrOutput { return v.SmnTopic }).(pulumi.StringPtrOutput)
 }
 
+// The Job status.
 func (o FlinkjarJobOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *FlinkjarJob) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
 }

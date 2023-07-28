@@ -22,22 +22,24 @@ class ApplicationArgs:
                  secret_action: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Application resource.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the APIG
-               application belongs to. Changing this will create a new APIG application resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] app_codes: Specifies an array of one or more application codes which the APIG application belongs
-               to. Up to five application codes can be created. The code consists of 64 to 180 characters, starting with a letter,
-               digit, plus sign (+) or slash (/). Only letters, digits and following special special characters are allowed: !@#$%+-_
-               /=
-        :param pulumi.Input[str] description: Specifies the description about the APIG application. The description contain a
-               maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-               Unicode format.
-        :param pulumi.Input[str] name: Specifies the name of the API application. The API group name consists of 3 to 64
-               characters, starting with a letter. Only letters, digits and underscores (_) are allowed. Chinese characters must be
-               in UTF-8 or Unicode format.
-        :param pulumi.Input[str] region: Specifies the region in which to create the APIG application resource. If
-               omitted, the provider-level region will be used. Changing this will create a new APIG application resource.
-        :param pulumi.Input[str] secret_action: Specifies the secret action to be done for the APIG application. The valid action
-               is *RESET*.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the application
+               belongs.
+               Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] app_codes: Specifies an array of one or more application codes that the application has.  
+               Up to five application codes can be created.
+               The valid length of each application code is limited from can contain `64` to `180`.
+               The application code must start with a letter, digit, plus sign (+) or slash (/).
+               Only letters, digits and following special special characters are allowed: `!@#$%+-_/=`.
+        :param pulumi.Input[str] description: Specifies the application description.  
+               The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+        :param pulumi.Input[str] name: Specifies the application name.  
+               The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+               are allowed.
+               The name must start with a Chinese or English letter.
+        :param pulumi.Input[str] region: Specifies the region where the application is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[str] secret_action: Specifies the secret action to be done for the application.  
+               The valid action is **RESET**.
         """
         pulumi.set(__self__, "instance_id", instance_id)
         if app_codes is not None:
@@ -55,8 +57,9 @@ class ApplicationArgs:
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Input[str]:
         """
-        Specifies an ID of the APIG dedicated instance to which the APIG
-        application belongs to. Changing this will create a new APIG application resource.
+        Specifies the ID of the dedicated instance to which the application
+        belongs.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -68,10 +71,11 @@ class ApplicationArgs:
     @pulumi.getter(name="appCodes")
     def app_codes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        Specifies an array of one or more application codes which the APIG application belongs
-        to. Up to five application codes can be created. The code consists of 64 to 180 characters, starting with a letter,
-        digit, plus sign (+) or slash (/). Only letters, digits and following special special characters are allowed: !@#$%+-_
-        /=
+        Specifies an array of one or more application codes that the application has.  
+        Up to five application codes can be created.
+        The valid length of each application code is limited from can contain `64` to `180`.
+        The application code must start with a letter, digit, plus sign (+) or slash (/).
+        Only letters, digits and following special special characters are allowed: `!@#$%+-_/=`.
         """
         return pulumi.get(self, "app_codes")
 
@@ -83,9 +87,8 @@ class ApplicationArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description about the APIG application. The description contain a
-        maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-        Unicode format.
+        Specifies the application description.  
+        The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -97,9 +100,10 @@ class ApplicationArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the API application. The API group name consists of 3 to 64
-        characters, starting with a letter. Only letters, digits and underscores (_) are allowed. Chinese characters must be
-        in UTF-8 or Unicode format.
+        Specifies the application name.  
+        The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+        are allowed.
+        The name must start with a Chinese or English letter.
         """
         return pulumi.get(self, "name")
 
@@ -111,8 +115,8 @@ class ApplicationArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create the APIG application resource. If
-        omitted, the provider-level region will be used. Changing this will create a new APIG application resource.
+        Specifies the region where the application is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -124,8 +128,8 @@ class ApplicationArgs:
     @pulumi.getter(name="secretAction")
     def secret_action(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the secret action to be done for the APIG application. The valid action
-        is *RESET*.
+        Specifies the secret action to be done for the application.  
+        The valid action is **RESET**.
         """
         return pulumi.get(self, "secret_action")
 
@@ -144,31 +148,33 @@ class _ApplicationState:
                  instance_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
-                 registraion_time: Optional[pulumi.Input[str]] = None,
+                 registration_time: Optional[pulumi.Input[str]] = None,
                  secret_action: Optional[pulumi.Input[str]] = None,
-                 update_time: Optional[pulumi.Input[str]] = None):
+                 updated_at: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Application resources.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] app_codes: Specifies an array of one or more application codes which the APIG application belongs
-               to. Up to five application codes can be created. The code consists of 64 to 180 characters, starting with a letter,
-               digit, plus sign (+) or slash (/). Only letters, digits and following special special characters are allowed: !@#$%+-_
-               /=
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] app_codes: Specifies an array of one or more application codes that the application has.  
+               Up to five application codes can be created.
+               The valid length of each application code is limited from can contain `64` to `180`.
+               The application code must start with a letter, digit, plus sign (+) or slash (/).
+               Only letters, digits and following special special characters are allowed: `!@#$%+-_/=`.
         :param pulumi.Input[str] app_key: App key.
         :param pulumi.Input[str] app_secret: App secret.
-        :param pulumi.Input[str] description: Specifies the description about the APIG application. The description contain a
-               maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-               Unicode format.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the APIG
-               application belongs to. Changing this will create a new APIG application resource.
-        :param pulumi.Input[str] name: Specifies the name of the API application. The API group name consists of 3 to 64
-               characters, starting with a letter. Only letters, digits and underscores (_) are allowed. Chinese characters must be
-               in UTF-8 or Unicode format.
-        :param pulumi.Input[str] region: Specifies the region in which to create the APIG application resource. If
-               omitted, the provider-level region will be used. Changing this will create a new APIG application resource.
-        :param pulumi.Input[str] registraion_time: Registration time, in RFC-3339 format.
-        :param pulumi.Input[str] secret_action: Specifies the secret action to be done for the APIG application. The valid action
-               is *RESET*.
-        :param pulumi.Input[str] update_time: Time when the API group was last modified, in RFC-3339 format.
+        :param pulumi.Input[str] description: Specifies the application description.  
+               The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the application
+               belongs.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the application name.  
+               The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+               are allowed.
+               The name must start with a Chinese or English letter.
+        :param pulumi.Input[str] region: Specifies the region where the application is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[str] registration_time: the registration time.
+        :param pulumi.Input[str] secret_action: Specifies the secret action to be done for the application.  
+               The valid action is **RESET**.
+        :param pulumi.Input[str] updated_at: The latest update time of the application.
         """
         if app_codes is not None:
             pulumi.set(__self__, "app_codes", app_codes)
@@ -184,21 +190,22 @@ class _ApplicationState:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
-        if registraion_time is not None:
-            pulumi.set(__self__, "registraion_time", registraion_time)
+        if registration_time is not None:
+            pulumi.set(__self__, "registration_time", registration_time)
         if secret_action is not None:
             pulumi.set(__self__, "secret_action", secret_action)
-        if update_time is not None:
-            pulumi.set(__self__, "update_time", update_time)
+        if updated_at is not None:
+            pulumi.set(__self__, "updated_at", updated_at)
 
     @property
     @pulumi.getter(name="appCodes")
     def app_codes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        Specifies an array of one or more application codes which the APIG application belongs
-        to. Up to five application codes can be created. The code consists of 64 to 180 characters, starting with a letter,
-        digit, plus sign (+) or slash (/). Only letters, digits and following special special characters are allowed: !@#$%+-_
-        /=
+        Specifies an array of one or more application codes that the application has.  
+        Up to five application codes can be created.
+        The valid length of each application code is limited from can contain `64` to `180`.
+        The application code must start with a letter, digit, plus sign (+) or slash (/).
+        Only letters, digits and following special special characters are allowed: `!@#$%+-_/=`.
         """
         return pulumi.get(self, "app_codes")
 
@@ -234,9 +241,8 @@ class _ApplicationState:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description about the APIG application. The description contain a
-        maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-        Unicode format.
+        Specifies the application description.  
+        The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -248,8 +254,9 @@ class _ApplicationState:
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies an ID of the APIG dedicated instance to which the APIG
-        application belongs to. Changing this will create a new APIG application resource.
+        Specifies the ID of the dedicated instance to which the application
+        belongs.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -261,9 +268,10 @@ class _ApplicationState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the API application. The API group name consists of 3 to 64
-        characters, starting with a letter. Only letters, digits and underscores (_) are allowed. Chinese characters must be
-        in UTF-8 or Unicode format.
+        Specifies the application name.  
+        The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+        are allowed.
+        The name must start with a Chinese or English letter.
         """
         return pulumi.get(self, "name")
 
@@ -275,8 +283,8 @@ class _ApplicationState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create the APIG application resource. If
-        omitted, the provider-level region will be used. Changing this will create a new APIG application resource.
+        Specifies the region where the application is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -285,23 +293,23 @@ class _ApplicationState:
         pulumi.set(self, "region", value)
 
     @property
-    @pulumi.getter(name="registraionTime")
-    def registraion_time(self) -> Optional[pulumi.Input[str]]:
+    @pulumi.getter(name="registrationTime")
+    def registration_time(self) -> Optional[pulumi.Input[str]]:
         """
-        Registration time, in RFC-3339 format.
+        the registration time.
         """
-        return pulumi.get(self, "registraion_time")
+        return pulumi.get(self, "registration_time")
 
-    @registraion_time.setter
-    def registraion_time(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "registraion_time", value)
+    @registration_time.setter
+    def registration_time(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "registration_time", value)
 
     @property
     @pulumi.getter(name="secretAction")
     def secret_action(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the secret action to be done for the APIG application. The valid action
-        is *RESET*.
+        Specifies the secret action to be done for the application.  
+        The valid action is **RESET**.
         """
         return pulumi.get(self, "secret_action")
 
@@ -310,16 +318,16 @@ class _ApplicationState:
         pulumi.set(self, "secret_action", value)
 
     @property
-    @pulumi.getter(name="updateTime")
-    def update_time(self) -> Optional[pulumi.Input[str]]:
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> Optional[pulumi.Input[str]]:
         """
-        Time when the API group was last modified, in RFC-3339 format.
+        The latest update time of the application.
         """
-        return pulumi.get(self, "update_time")
+        return pulumi.get(self, "updated_at")
 
-    @update_time.setter
-    def update_time(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "update_time", value)
+    @updated_at.setter
+    def updated_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "updated_at", value)
 
 
 class Application(pulumi.CustomResource):
@@ -355,30 +363,32 @@ class Application(pulumi.CustomResource):
 
         ## Import
 
-        APIG Applications can be imported using their `id` and ID of the APIG dedicated instance to which the application belongs, separated by a slash, e.g.
+        Applications can be imported using their `id` and the ID of the related dedicated instance, separated by a slash, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/application:Application test <instance id>/<id>
+         $ pulumi import huaweicloud:DedicatedApig/application:Application test <instance_id>/<id>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] app_codes: Specifies an array of one or more application codes which the APIG application belongs
-               to. Up to five application codes can be created. The code consists of 64 to 180 characters, starting with a letter,
-               digit, plus sign (+) or slash (/). Only letters, digits and following special special characters are allowed: !@#$%+-_
-               /=
-        :param pulumi.Input[str] description: Specifies the description about the APIG application. The description contain a
-               maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-               Unicode format.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the APIG
-               application belongs to. Changing this will create a new APIG application resource.
-        :param pulumi.Input[str] name: Specifies the name of the API application. The API group name consists of 3 to 64
-               characters, starting with a letter. Only letters, digits and underscores (_) are allowed. Chinese characters must be
-               in UTF-8 or Unicode format.
-        :param pulumi.Input[str] region: Specifies the region in which to create the APIG application resource. If
-               omitted, the provider-level region will be used. Changing this will create a new APIG application resource.
-        :param pulumi.Input[str] secret_action: Specifies the secret action to be done for the APIG application. The valid action
-               is *RESET*.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] app_codes: Specifies an array of one or more application codes that the application has.  
+               Up to five application codes can be created.
+               The valid length of each application code is limited from can contain `64` to `180`.
+               The application code must start with a letter, digit, plus sign (+) or slash (/).
+               Only letters, digits and following special special characters are allowed: `!@#$%+-_/=`.
+        :param pulumi.Input[str] description: Specifies the application description.  
+               The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the application
+               belongs.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the application name.  
+               The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+               are allowed.
+               The name must start with a Chinese or English letter.
+        :param pulumi.Input[str] region: Specifies the region where the application is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[str] secret_action: Specifies the secret action to be done for the application.  
+               The valid action is **RESET**.
         """
         ...
     @overload
@@ -407,10 +417,10 @@ class Application(pulumi.CustomResource):
 
         ## Import
 
-        APIG Applications can be imported using their `id` and ID of the APIG dedicated instance to which the application belongs, separated by a slash, e.g.
+        Applications can be imported using their `id` and the ID of the related dedicated instance, separated by a slash, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/application:Application test <instance id>/<id>
+         $ pulumi import huaweicloud:DedicatedApig/application:Application test <instance_id>/<id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -453,8 +463,8 @@ class Application(pulumi.CustomResource):
             __props__.__dict__["secret_action"] = secret_action
             __props__.__dict__["app_key"] = None
             __props__.__dict__["app_secret"] = None
-            __props__.__dict__["registraion_time"] = None
-            __props__.__dict__["update_time"] = None
+            __props__.__dict__["registration_time"] = None
+            __props__.__dict__["updated_at"] = None
         super(Application, __self__).__init__(
             'huaweicloud:DedicatedApig/application:Application',
             resource_name,
@@ -472,9 +482,9 @@ class Application(pulumi.CustomResource):
             instance_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
-            registraion_time: Optional[pulumi.Input[str]] = None,
+            registration_time: Optional[pulumi.Input[str]] = None,
             secret_action: Optional[pulumi.Input[str]] = None,
-            update_time: Optional[pulumi.Input[str]] = None) -> 'Application':
+            updated_at: Optional[pulumi.Input[str]] = None) -> 'Application':
         """
         Get an existing Application resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -482,26 +492,28 @@ class Application(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] app_codes: Specifies an array of one or more application codes which the APIG application belongs
-               to. Up to five application codes can be created. The code consists of 64 to 180 characters, starting with a letter,
-               digit, plus sign (+) or slash (/). Only letters, digits and following special special characters are allowed: !@#$%+-_
-               /=
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] app_codes: Specifies an array of one or more application codes that the application has.  
+               Up to five application codes can be created.
+               The valid length of each application code is limited from can contain `64` to `180`.
+               The application code must start with a letter, digit, plus sign (+) or slash (/).
+               Only letters, digits and following special special characters are allowed: `!@#$%+-_/=`.
         :param pulumi.Input[str] app_key: App key.
         :param pulumi.Input[str] app_secret: App secret.
-        :param pulumi.Input[str] description: Specifies the description about the APIG application. The description contain a
-               maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-               Unicode format.
-        :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the APIG
-               application belongs to. Changing this will create a new APIG application resource.
-        :param pulumi.Input[str] name: Specifies the name of the API application. The API group name consists of 3 to 64
-               characters, starting with a letter. Only letters, digits and underscores (_) are allowed. Chinese characters must be
-               in UTF-8 or Unicode format.
-        :param pulumi.Input[str] region: Specifies the region in which to create the APIG application resource. If
-               omitted, the provider-level region will be used. Changing this will create a new APIG application resource.
-        :param pulumi.Input[str] registraion_time: Registration time, in RFC-3339 format.
-        :param pulumi.Input[str] secret_action: Specifies the secret action to be done for the APIG application. The valid action
-               is *RESET*.
-        :param pulumi.Input[str] update_time: Time when the API group was last modified, in RFC-3339 format.
+        :param pulumi.Input[str] description: Specifies the application description.  
+               The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the application
+               belongs.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the application name.  
+               The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+               are allowed.
+               The name must start with a Chinese or English letter.
+        :param pulumi.Input[str] region: Specifies the region where the application is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[str] registration_time: the registration time.
+        :param pulumi.Input[str] secret_action: Specifies the secret action to be done for the application.  
+               The valid action is **RESET**.
+        :param pulumi.Input[str] updated_at: The latest update time of the application.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -514,19 +526,20 @@ class Application(pulumi.CustomResource):
         __props__.__dict__["instance_id"] = instance_id
         __props__.__dict__["name"] = name
         __props__.__dict__["region"] = region
-        __props__.__dict__["registraion_time"] = registraion_time
+        __props__.__dict__["registration_time"] = registration_time
         __props__.__dict__["secret_action"] = secret_action
-        __props__.__dict__["update_time"] = update_time
+        __props__.__dict__["updated_at"] = updated_at
         return Application(resource_name, opts=opts, __props__=__props__)
 
     @property
     @pulumi.getter(name="appCodes")
     def app_codes(self) -> pulumi.Output[Optional[Sequence[str]]]:
         """
-        Specifies an array of one or more application codes which the APIG application belongs
-        to. Up to five application codes can be created. The code consists of 64 to 180 characters, starting with a letter,
-        digit, plus sign (+) or slash (/). Only letters, digits and following special special characters are allowed: !@#$%+-_
-        /=
+        Specifies an array of one or more application codes that the application has.  
+        Up to five application codes can be created.
+        The valid length of each application code is limited from can contain `64` to `180`.
+        The application code must start with a letter, digit, plus sign (+) or slash (/).
+        Only letters, digits and following special special characters are allowed: `!@#$%+-_/=`.
         """
         return pulumi.get(self, "app_codes")
 
@@ -548,11 +561,10 @@ class Application(pulumi.CustomResource):
 
     @property
     @pulumi.getter
-    def description(self) -> pulumi.Output[Optional[str]]:
+    def description(self) -> pulumi.Output[str]:
         """
-        Specifies the description about the APIG application. The description contain a
-        maximum of 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or
-        Unicode format.
+        Specifies the application description.  
+        The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -560,8 +572,9 @@ class Application(pulumi.CustomResource):
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Output[str]:
         """
-        Specifies an ID of the APIG dedicated instance to which the APIG
-        application belongs to. Changing this will create a new APIG application resource.
+        Specifies the ID of the dedicated instance to which the application
+        belongs.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -569,9 +582,10 @@ class Application(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of the API application. The API group name consists of 3 to 64
-        characters, starting with a letter. Only letters, digits and underscores (_) are allowed. Chinese characters must be
-        in UTF-8 or Unicode format.
+        Specifies the application name.  
+        The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+        are allowed.
+        The name must start with a Chinese or English letter.
         """
         return pulumi.get(self, "name")
 
@@ -579,33 +593,33 @@ class Application(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        Specifies the region in which to create the APIG application resource. If
-        omitted, the provider-level region will be used. Changing this will create a new APIG application resource.
+        Specifies the region where the application is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
     @property
-    @pulumi.getter(name="registraionTime")
-    def registraion_time(self) -> pulumi.Output[str]:
+    @pulumi.getter(name="registrationTime")
+    def registration_time(self) -> pulumi.Output[str]:
         """
-        Registration time, in RFC-3339 format.
+        the registration time.
         """
-        return pulumi.get(self, "registraion_time")
+        return pulumi.get(self, "registration_time")
 
     @property
     @pulumi.getter(name="secretAction")
     def secret_action(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the secret action to be done for the APIG application. The valid action
-        is *RESET*.
+        Specifies the secret action to be done for the application.  
+        The valid action is **RESET**.
         """
         return pulumi.get(self, "secret_action")
 
     @property
-    @pulumi.getter(name="updateTime")
-    def update_time(self) -> pulumi.Output[str]:
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> pulumi.Output[str]:
         """
-        Time when the API group was last modified, in RFC-3339 format.
+        The latest update time of the application.
         """
-        return pulumi.get(self, "update_time")
+        return pulumi.get(self, "updated_at")
 

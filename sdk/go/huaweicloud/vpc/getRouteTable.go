@@ -60,27 +60,31 @@ func LookupRouteTable(ctx *pulumi.Context, args *LookupRouteTableArgs, opts ...p
 
 // A collection of arguments for invoking getRouteTable.
 type LookupRouteTableArgs struct {
-	// - Specifies the ID of the route table.
+	// Specifies the ID of the route table.
 	Id *string `pulumi:"id"`
-	// - Specifies the name of the route table.
+	// Specifies the name of the route table.
 	Name *string `pulumi:"name"`
 	// The region in which to query the vpc route table.
 	// If omitted, the provider-level region will be used.
 	Region *string `pulumi:"region"`
-	// - Specifies the VPC ID where the route table resides.
+	// Specifies the VPC ID where the route table resides.
 	VpcId string `pulumi:"vpcId"`
 }
 
 // A collection of values returned by getRouteTable.
 type LookupRouteTableResult struct {
-	Default     bool                 `pulumi:"default"`
-	Description string               `pulumi:"description"`
-	Id          string               `pulumi:"id"`
-	Name        string               `pulumi:"name"`
-	Region      string               `pulumi:"region"`
-	Routes      []GetRouteTableRoute `pulumi:"routes"`
-	Subnets     []string             `pulumi:"subnets"`
-	VpcId       string               `pulumi:"vpcId"`
+	// Whether the route table is default or not.
+	Default bool `pulumi:"default"`
+	// The description about the route.
+	Description string `pulumi:"description"`
+	Id          string `pulumi:"id"`
+	Name        string `pulumi:"name"`
+	Region      string `pulumi:"region"`
+	// The route object list. The route object is documented below.
+	Routes []GetRouteTableRoute `pulumi:"routes"`
+	// An array of one or more subnets associating with the route table.
+	Subnets []string `pulumi:"subnets"`
+	VpcId   string   `pulumi:"vpcId"`
 }
 
 func LookupRouteTableOutput(ctx *pulumi.Context, args LookupRouteTableOutputArgs, opts ...pulumi.InvokeOption) LookupRouteTableResultOutput {
@@ -98,14 +102,14 @@ func LookupRouteTableOutput(ctx *pulumi.Context, args LookupRouteTableOutputArgs
 
 // A collection of arguments for invoking getRouteTable.
 type LookupRouteTableOutputArgs struct {
-	// - Specifies the ID of the route table.
+	// Specifies the ID of the route table.
 	Id pulumi.StringPtrInput `pulumi:"id"`
-	// - Specifies the name of the route table.
+	// Specifies the name of the route table.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// The region in which to query the vpc route table.
 	// If omitted, the provider-level region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
-	// - Specifies the VPC ID where the route table resides.
+	// Specifies the VPC ID where the route table resides.
 	VpcId pulumi.StringInput `pulumi:"vpcId"`
 }
 
@@ -128,10 +132,12 @@ func (o LookupRouteTableResultOutput) ToLookupRouteTableResultOutputWithContext(
 	return o
 }
 
+// Whether the route table is default or not.
 func (o LookupRouteTableResultOutput) Default() pulumi.BoolOutput {
 	return o.ApplyT(func(v LookupRouteTableResult) bool { return v.Default }).(pulumi.BoolOutput)
 }
 
+// The description about the route.
 func (o LookupRouteTableResultOutput) Description() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupRouteTableResult) string { return v.Description }).(pulumi.StringOutput)
 }
@@ -148,10 +154,12 @@ func (o LookupRouteTableResultOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupRouteTableResult) string { return v.Region }).(pulumi.StringOutput)
 }
 
+// The route object list. The route object is documented below.
 func (o LookupRouteTableResultOutput) Routes() GetRouteTableRouteArrayOutput {
 	return o.ApplyT(func(v LookupRouteTableResult) []GetRouteTableRoute { return v.Routes }).(GetRouteTableRouteArrayOutput)
 }
 
+// An array of one or more subnets associating with the route table.
 func (o LookupRouteTableResultOutput) Subnets() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v LookupRouteTableResult) []string { return v.Subnets }).(pulumi.StringArrayOutput)
 }

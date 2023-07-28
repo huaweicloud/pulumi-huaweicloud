@@ -45,6 +45,7 @@ __all__ = [
     'ComponentInstanceExternalAccess',
     'ComponentInstanceReferResource',
     'ComponentSource',
+    'ComponentSourceProperties',
     'EnvironmentBasicResource',
     'EnvironmentOptionalResource',
     'GetComponentRuntimesRuntimeResult',
@@ -89,7 +90,7 @@ class ApplicationEnvironmentVariable(dict):
         """
         :param str name: Specifies the variable name. The name can contain `1` to `64` characters, only letters,
                digits, underscores (_), hyphens (-) and dots (.) are allowed. The name cannot start with a digit or dot.
-        :param str value: Specifies the variable value. The value can contian a maximum of `2,048` characters.
+        :param str value: Specifies the variable value. The value can contain a maximum of `2,048` characters.
         """
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "value", value)
@@ -107,7 +108,7 @@ class ApplicationEnvironmentVariable(dict):
     @pulumi.getter
     def value(self) -> str:
         """
-        Specifies the variable value. The value can contian a maximum of `2,048` characters.
+        Specifies the variable value. The value can contain a maximum of `2,048` characters.
         """
         return pulumi.get(self, "value")
 
@@ -119,8 +120,16 @@ class ComponentBuilder(dict):
         suggest = None
         if key == "clusterId":
             suggest = "cluster_id"
+        elif key == "clusterName":
+            suggest = "cluster_name"
+        elif key == "clusterType":
+            suggest = "cluster_type"
+        elif key == "dockerfilePath":
+            suggest = "dockerfile_path"
         elif key == "nodeLabel":
             suggest = "node_label"
+        elif key == "usePublicCluster":
+            suggest = "use_public_cluster"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in ComponentBuilder. Access the value via the '{suggest}' property getter instead.")
@@ -136,26 +145,42 @@ class ComponentBuilder(dict):
     def __init__(__self__, *,
                  cluster_id: str,
                  organization: str,
+                 cluster_name: Optional[str] = None,
+                 cluster_type: Optional[str] = None,
                  cmd: Optional[str] = None,
-                 node_label: Optional[Mapping[str, str]] = None):
+                 dockerfile_path: Optional[str] = None,
+                 node_label: Optional[Mapping[str, str]] = None,
+                 use_public_cluster: Optional[bool] = None):
         """
         :param str cluster_id: Specifies the cluster ID.
         :param str organization: Specifies the organization name.
                The organization is usually **domain name**. You can find out in the organization management of SWR.
+        :param str cluster_name: Specifies the cluster Name.
+        :param str cluster_type: Specifies the cluster type.
         :param str cmd: Specifies the build command. If omitted, the default command will be used.
                + About the  default command or script: build.sh in the root directory will be preferentially executed.
                If build.sh does not exist, the code will be compiled using the common method of the selected language,
                for example, mvn clean package for Java.
                + About the custom command: Commands will be customized using the selected language.
                Alternatively, the default command or script will be used after build.sh is modified.
+        :param str dockerfile_path: Specifies the file path for dockerfile.
         :param Mapping[str, str] node_label: Specifies the filter labels for CCE nodes.
+        :param bool use_public_cluster: Specifies whether to use the public cluster.
         """
         pulumi.set(__self__, "cluster_id", cluster_id)
         pulumi.set(__self__, "organization", organization)
+        if cluster_name is not None:
+            pulumi.set(__self__, "cluster_name", cluster_name)
+        if cluster_type is not None:
+            pulumi.set(__self__, "cluster_type", cluster_type)
         if cmd is not None:
             pulumi.set(__self__, "cmd", cmd)
+        if dockerfile_path is not None:
+            pulumi.set(__self__, "dockerfile_path", dockerfile_path)
         if node_label is not None:
             pulumi.set(__self__, "node_label", node_label)
+        if use_public_cluster is not None:
+            pulumi.set(__self__, "use_public_cluster", use_public_cluster)
 
     @property
     @pulumi.getter(name="clusterId")
@@ -175,6 +200,22 @@ class ComponentBuilder(dict):
         return pulumi.get(self, "organization")
 
     @property
+    @pulumi.getter(name="clusterName")
+    def cluster_name(self) -> Optional[str]:
+        """
+        Specifies the cluster Name.
+        """
+        return pulumi.get(self, "cluster_name")
+
+    @property
+    @pulumi.getter(name="clusterType")
+    def cluster_type(self) -> Optional[str]:
+        """
+        Specifies the cluster type.
+        """
+        return pulumi.get(self, "cluster_type")
+
+    @property
     @pulumi.getter
     def cmd(self) -> Optional[str]:
         """
@@ -188,12 +229,28 @@ class ComponentBuilder(dict):
         return pulumi.get(self, "cmd")
 
     @property
+    @pulumi.getter(name="dockerfilePath")
+    def dockerfile_path(self) -> Optional[str]:
+        """
+        Specifies the file path for dockerfile.
+        """
+        return pulumi.get(self, "dockerfile_path")
+
+    @property
     @pulumi.getter(name="nodeLabel")
     def node_label(self) -> Optional[Mapping[str, str]]:
         """
         Specifies the filter labels for CCE nodes.
         """
         return pulumi.get(self, "node_label")
+
+    @property
+    @pulumi.getter(name="usePublicCluster")
+    def use_public_cluster(self) -> Optional[bool]:
+        """
+        Specifies whether to use the public cluster.
+        """
+        return pulumi.get(self, "use_public_cluster")
 
 
 @pulumi.output_type
@@ -224,7 +281,7 @@ class ComponentInstanceArtifact(dict):
                  properties: Optional['outputs.ComponentInstanceArtifactProperties'] = None,
                  version: Optional[str] = None):
         """
-        :param str name: Specifies the name of a configuration item or secret.
+        :param str name: Specifies the configuration item.
         :param str storage: Specifies the data storage configuration.
                The object structure is documented below.
         :param str type: Specifies the probe type. The valid values are as follows:
@@ -258,7 +315,7 @@ class ComponentInstanceArtifact(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the name of a configuration item or secret.
+        Specifies the configuration item.
         """
         return pulumi.get(self, "name")
 
@@ -501,7 +558,7 @@ class ComponentInstanceConfigurationEnvVariable(dict):
                  name: str,
                  value: str):
         """
-        :param str name: Specifies the name of a configuration item or secret.
+        :param str name: Specifies the configuration item.
         :param str value: Specifies the variable value.
         """
         pulumi.set(__self__, "name", name)
@@ -511,7 +568,7 @@ class ComponentInstanceConfigurationEnvVariable(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the name of a configuration item or secret.
+        Specifies the configuration item.
         """
         return pulumi.get(self, "name")
 
@@ -661,25 +718,28 @@ class ComponentInstanceConfigurationLifecyclePostStart(dict):
 @pulumi.output_type
 class ComponentInstanceConfigurationLifecyclePostStartParameters(dict):
     def __init__(__self__, *,
-                 commands: Sequence[str],
-                 path: str,
-                 port: int,
-                 host: Optional[str] = None):
+                 commands: Optional[Sequence[str]] = None,
+                 host: Optional[str] = None,
+                 path: Optional[str] = None,
+                 port: Optional[int] = None):
         """
         :param Sequence[str] commands: Specifies the command list.
+        :param str host: Specifies the custom IP address. The default address is pod IP address.
         :param str path: Specifies the request path.
         :param int port: Specifies the listening port of the application component process.
-        :param str host: Specifies the custom IP address. The defualt address is pod IP address.
         """
-        pulumi.set(__self__, "commands", commands)
-        pulumi.set(__self__, "path", path)
-        pulumi.set(__self__, "port", port)
+        if commands is not None:
+            pulumi.set(__self__, "commands", commands)
         if host is not None:
             pulumi.set(__self__, "host", host)
+        if path is not None:
+            pulumi.set(__self__, "path", path)
+        if port is not None:
+            pulumi.set(__self__, "port", port)
 
     @property
     @pulumi.getter
-    def commands(self) -> Sequence[str]:
+    def commands(self) -> Optional[Sequence[str]]:
         """
         Specifies the command list.
         """
@@ -687,7 +747,15 @@ class ComponentInstanceConfigurationLifecyclePostStartParameters(dict):
 
     @property
     @pulumi.getter
-    def path(self) -> str:
+    def host(self) -> Optional[str]:
+        """
+        Specifies the custom IP address. The default address is pod IP address.
+        """
+        return pulumi.get(self, "host")
+
+    @property
+    @pulumi.getter
+    def path(self) -> Optional[str]:
         """
         Specifies the request path.
         """
@@ -695,19 +763,11 @@ class ComponentInstanceConfigurationLifecyclePostStartParameters(dict):
 
     @property
     @pulumi.getter
-    def port(self) -> int:
+    def port(self) -> Optional[int]:
         """
         Specifies the listening port of the application component process.
         """
         return pulumi.get(self, "port")
-
-    @property
-    @pulumi.getter
-    def host(self) -> Optional[str]:
-        """
-        Specifies the custom IP address. The defualt address is pod IP address.
-        """
-        return pulumi.get(self, "host")
 
 
 @pulumi.output_type
@@ -750,25 +810,28 @@ class ComponentInstanceConfigurationLifecyclePreStop(dict):
 @pulumi.output_type
 class ComponentInstanceConfigurationLifecyclePreStopParameters(dict):
     def __init__(__self__, *,
-                 commands: Sequence[str],
-                 path: str,
-                 port: int,
-                 host: Optional[str] = None):
+                 commands: Optional[Sequence[str]] = None,
+                 host: Optional[str] = None,
+                 path: Optional[str] = None,
+                 port: Optional[int] = None):
         """
         :param Sequence[str] commands: Specifies the command list.
+        :param str host: Specifies the custom IP address. The default address is pod IP address.
         :param str path: Specifies the request path.
         :param int port: Specifies the listening port of the application component process.
-        :param str host: Specifies the custom IP address. The defualt address is pod IP address.
         """
-        pulumi.set(__self__, "commands", commands)
-        pulumi.set(__self__, "path", path)
-        pulumi.set(__self__, "port", port)
+        if commands is not None:
+            pulumi.set(__self__, "commands", commands)
         if host is not None:
             pulumi.set(__self__, "host", host)
+        if path is not None:
+            pulumi.set(__self__, "path", path)
+        if port is not None:
+            pulumi.set(__self__, "port", port)
 
     @property
     @pulumi.getter
-    def commands(self) -> Sequence[str]:
+    def commands(self) -> Optional[Sequence[str]]:
         """
         Specifies the command list.
         """
@@ -776,7 +839,15 @@ class ComponentInstanceConfigurationLifecyclePreStopParameters(dict):
 
     @property
     @pulumi.getter
-    def path(self) -> str:
+    def host(self) -> Optional[str]:
+        """
+        Specifies the custom IP address. The default address is pod IP address.
+        """
+        return pulumi.get(self, "host")
+
+    @property
+    @pulumi.getter
+    def path(self) -> Optional[str]:
         """
         Specifies the request path.
         """
@@ -784,19 +855,11 @@ class ComponentInstanceConfigurationLifecyclePreStopParameters(dict):
 
     @property
     @pulumi.getter
-    def port(self) -> int:
+    def port(self) -> Optional[int]:
         """
         Specifies the listening port of the application component process.
         """
         return pulumi.get(self, "port")
-
-    @property
-    @pulumi.getter
-    def host(self) -> Optional[str]:
-        """
-        Specifies the custom IP address. The defualt address is pod IP address.
-        """
-        return pulumi.get(self, "host")
 
 
 @pulumi.output_type
@@ -1100,7 +1163,7 @@ class ComponentInstanceConfigurationProbeLivenessHttpParam(dict):
         :param str path: Specifies the request path.
         :param int port: Specifies the listening port of the application component process.
         :param str scheme: Specifies the protocol scheme. The valid values are **HTTP** and **HTTPS**.
-        :param str host: Specifies the custom IP address. The defualt address is pod IP address.
+        :param str host: Specifies the custom IP address. The default address is pod IP address.
         """
         pulumi.set(__self__, "path", path)
         pulumi.set(__self__, "port", port)
@@ -1136,7 +1199,7 @@ class ComponentInstanceConfigurationProbeLivenessHttpParam(dict):
     @pulumi.getter
     def host(self) -> Optional[str]:
         """
-        Specifies the custom IP address. The defualt address is pod IP address.
+        Specifies the custom IP address. The default address is pod IP address.
         """
         return pulumi.get(self, "host")
 
@@ -1299,7 +1362,7 @@ class ComponentInstanceConfigurationProbeReadinessHttpParam(dict):
         :param str path: Specifies the request path.
         :param int port: Specifies the listening port of the application component process.
         :param str scheme: Specifies the protocol scheme. The valid values are **HTTP** and **HTTPS**.
-        :param str host: Specifies the custom IP address. The defualt address is pod IP address.
+        :param str host: Specifies the custom IP address. The default address is pod IP address.
         """
         pulumi.set(__self__, "path", path)
         pulumi.set(__self__, "port", port)
@@ -1335,7 +1398,7 @@ class ComponentInstanceConfigurationProbeReadinessHttpParam(dict):
     @pulumi.getter
     def host(self) -> Optional[str]:
         """
-        Specifies the custom IP address. The defualt address is pod IP address.
+        Specifies the custom IP address. The default address is pod IP address.
         """
         return pulumi.get(self, "host")
 
@@ -1642,6 +1705,8 @@ class ComponentInstanceConfigurationStorageParameter(dict):
         suggest = None
         if key == "claimName":
             suggest = "claim_name"
+        elif key == "secretName":
+            suggest = "secret_name"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in ComponentInstanceConfigurationStorageParameter. Access the value via the '{suggest}' property getter instead.")
@@ -1657,11 +1722,13 @@ class ComponentInstanceConfigurationStorageParameter(dict):
     def __init__(__self__, *,
                  claim_name: Optional[str] = None,
                  name: Optional[str] = None,
-                 path: Optional[str] = None):
+                 path: Optional[str] = None,
+                 secret_name: Optional[str] = None):
         """
         :param str claim_name: Specifies the PVC name.
-        :param str name: Specifies the name of a configuration item or secret.
+        :param str name: Specifies the configuration item.
         :param str path: Specifies the request path.
+        :param str secret_name: Specifies the Secret name. Required if the storage `type` is **Secret**.
         """
         if claim_name is not None:
             pulumi.set(__self__, "claim_name", claim_name)
@@ -1669,6 +1736,8 @@ class ComponentInstanceConfigurationStorageParameter(dict):
             pulumi.set(__self__, "name", name)
         if path is not None:
             pulumi.set(__self__, "path", path)
+        if secret_name is not None:
+            pulumi.set(__self__, "secret_name", secret_name)
 
     @property
     @pulumi.getter(name="claimName")
@@ -1682,7 +1751,7 @@ class ComponentInstanceConfigurationStorageParameter(dict):
     @pulumi.getter
     def name(self) -> Optional[str]:
         """
-        Specifies the name of a configuration item or secret.
+        Specifies the configuration item.
         """
         return pulumi.get(self, "name")
 
@@ -1693,6 +1762,14 @@ class ComponentInstanceConfigurationStorageParameter(dict):
         Specifies the request path.
         """
         return pulumi.get(self, "path")
+
+    @property
+    @pulumi.getter(name="secretName")
+    def secret_name(self) -> Optional[str]:
+        """
+        Specifies the Secret name. Required if the storage `type` is **Secret**.
+        """
+        return pulumi.get(self, "secret_name")
 
 
 @pulumi.output_type
@@ -1725,7 +1802,7 @@ class ComponentInstanceExternalAccess(dict):
                  port: Optional[int] = None,
                  protocol: Optional[str] = None):
         """
-        :param str address: Specifies the access address. For example: www.example.com.
+        :param str address: Specifies the access address. For example: `www.example.com`.
         :param int port: Specifies the listening port of the application component process.
         :param str protocol: Specifies the protocol. The valid values are **HTTP** and **HTTPS**.
         """
@@ -1740,7 +1817,7 @@ class ComponentInstanceExternalAccess(dict):
     @pulumi.getter
     def address(self) -> Optional[str]:
         """
-        Specifies the access address. For example: www.example.com.
+        Specifies the access address. For example: `www.example.com`.
         """
         return pulumi.get(self, "address")
 
@@ -1855,6 +1932,7 @@ class ComponentSource(dict):
                  type: str,
                  url: str,
                  authorization: Optional[str] = None,
+                 properties: Optional['outputs.ComponentSourceProperties'] = None,
                  repo_namespace: Optional[str] = None,
                  repo_ref: Optional[str] = None,
                  storage_type: Optional[str] = None):
@@ -1864,6 +1942,8 @@ class ComponentSource(dict):
         :param str url: Specifies the URL of the repository or package storage.
         :param str authorization: Specifies the authorization name.
                This parameter and `storage_type` are alternative.
+        :param 'ComponentSourcePropertiesArgs' properties: Specifies the component builder's properties.
+               The object structure is documented below.
         :param str repo_namespace: Specifies the namespace name.
         :param str repo_ref: Specifies the name of the branch of the code repository.
                The default value is `master`.
@@ -1874,6 +1954,8 @@ class ComponentSource(dict):
         pulumi.set(__self__, "url", url)
         if authorization is not None:
             pulumi.set(__self__, "authorization", authorization)
+        if properties is not None:
+            pulumi.set(__self__, "properties", properties)
         if repo_namespace is not None:
             pulumi.set(__self__, "repo_namespace", repo_namespace)
         if repo_ref is not None:
@@ -1908,6 +1990,15 @@ class ComponentSource(dict):
         return pulumi.get(self, "authorization")
 
     @property
+    @pulumi.getter
+    def properties(self) -> Optional['outputs.ComponentSourceProperties']:
+        """
+        Specifies the component builder's properties.
+        The object structure is documented below.
+        """
+        return pulumi.get(self, "properties")
+
+    @property
     @pulumi.getter(name="repoNamespace")
     def repo_namespace(self) -> Optional[str]:
         """
@@ -1932,6 +2023,49 @@ class ComponentSource(dict):
         This parameter is conflict with `repo_ref` and `repo_namespace`.
         """
         return pulumi.get(self, "storage_type")
+
+
+@pulumi.output_type
+class ComponentSourceProperties(dict):
+    def __init__(__self__, *,
+                 bucket: Optional[str] = None,
+                 endpoint: Optional[str] = None,
+                 key: Optional[str] = None):
+        """
+        :param str bucket: Specifies the bucket name of obs.
+        :param str endpoint: Specifies the endpoint of obs.
+        :param str key: Specifies the key of obs.
+        """
+        if bucket is not None:
+            pulumi.set(__self__, "bucket", bucket)
+        if endpoint is not None:
+            pulumi.set(__self__, "endpoint", endpoint)
+        if key is not None:
+            pulumi.set(__self__, "key", key)
+
+    @property
+    @pulumi.getter
+    def bucket(self) -> Optional[str]:
+        """
+        Specifies the bucket name of obs.
+        """
+        return pulumi.get(self, "bucket")
+
+    @property
+    @pulumi.getter
+    def endpoint(self) -> Optional[str]:
+        """
+        Specifies the endpoint of obs.
+        """
+        return pulumi.get(self, "endpoint")
+
+    @property
+    @pulumi.getter
+    def key(self) -> Optional[str]:
+        """
+        Specifies the key of obs.
+        """
+        return pulumi.get(self, "key")
 
 
 @pulumi.output_type

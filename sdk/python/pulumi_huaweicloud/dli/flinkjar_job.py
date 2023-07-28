@@ -563,6 +563,7 @@ class _FlinkjarJobState:
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] runtime_config: Specifies customizes optimization parameters when a Flink job is running.
         :param pulumi.Input[str] smn_topic: Specifies SMN topic. If a job fails, the system will send a message to users
                subscribed to the SMN topic.
+        :param pulumi.Input[str] status: The Job status.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the resource.
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] tm_cu_num: Specifies number of CUs for each TaskManager. The default value is `1`.
@@ -926,6 +927,9 @@ class _FlinkjarJobState:
     @property
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
+        """
+        The Job status.
+        """
         return pulumi.get(self, "status")
 
     @status.setter
@@ -1304,6 +1308,7 @@ class FlinkjarJob(pulumi.CustomResource):
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] runtime_config: Specifies customizes optimization parameters when a Flink job is running.
         :param pulumi.Input[str] smn_topic: Specifies SMN topic. If a job fails, the system will send a message to users
                subscribed to the SMN topic.
+        :param pulumi.Input[str] status: The Job status.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the resource.
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] tm_cu_num: Specifies number of CUs for each TaskManager. The default value is `1`.
@@ -1553,6 +1558,9 @@ class FlinkjarJob(pulumi.CustomResource):
     @property
     @pulumi.getter
     def status(self) -> pulumi.Output[str]:
+        """
+        The Job status.
+        """
         return pulumi.get(self, "status")
 
     @property

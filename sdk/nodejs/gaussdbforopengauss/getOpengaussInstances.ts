@@ -65,6 +65,9 @@ export interface GetOpengaussInstancesResult {
      * The provider-assigned unique ID for this managed resource.
      */
     readonly id: string;
+    /**
+     * An array of available instances.
+     */
     readonly instances: outputs.GaussDBforOpenGauss.GetOpengaussInstancesInstance[];
     /**
      * Indicates the node name.

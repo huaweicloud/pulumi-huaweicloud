@@ -43,8 +43,8 @@ class JobDestinationDbArgs:
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] instance_id: Specifies the instance id of database when it is a RDS database.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the job name. The name consists of 4 to 50 characters, starting with
-               a letter. Only letters, digits, underscores (\\_) and hyphens (-) are allowed.
+        :param pulumi.Input[str] name: Specifies the name of database.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region which the database belongs when it is a RDS database.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] ssl_cert_check_sum: Specifies the checksum of SSL certificate content.
@@ -164,8 +164,8 @@ class JobDestinationDbArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the job name. The name consists of 4 to 50 characters, starting with
-        a letter. Only letters, digits, underscores (\\_) and hyphens (-) are allowed.
+        Specifies the name of database.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
 
@@ -353,8 +353,8 @@ class JobSourceDbArgs:
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] instance_id: Specifies the instance id of database when it is a RDS database.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the job name. The name consists of 4 to 50 characters, starting with
-               a letter. Only letters, digits, underscores (\\_) and hyphens (-) are allowed.
+        :param pulumi.Input[str] name: Specifies the name of database.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region which the database belongs when it is a RDS database.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] ssl_cert_check_sum: Specifies the checksum of SSL certificate content.
@@ -474,8 +474,8 @@ class JobSourceDbArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the job name. The name consists of 4 to 50 characters, starting with
-        a letter. Only letters, digits, underscores (\\_) and hyphens (-) are allowed.
+        Specifies the name of database.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
 

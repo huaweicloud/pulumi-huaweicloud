@@ -86,8 +86,7 @@ type StudioInstance struct {
 	pulumi.CustomResourceState
 
 	// Specifies whether auto renew is enabled.
-	// Valid values are `true` and `false`, defaults to `false`.
-	// Changing this creates a new instance.
+	// Valid values are `true` and `false`, defaults to `false`. Changing this parameter will create a new resource.
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
 	// Specifies the AZ name. Changing this creates a new instance.
 	AvailabilityZone pulumi.StringOutput `pulumi:"availabilityZone"`
@@ -183,8 +182,7 @@ func GetStudioInstance(ctx *pulumi.Context,
 // Input properties used for looking up and filtering StudioInstance resources.
 type studioInstanceState struct {
 	// Specifies whether auto renew is enabled.
-	// Valid values are `true` and `false`, defaults to `false`.
-	// Changing this creates a new instance.
+	// Valid values are `true` and `false`, defaults to `false`. Changing this parameter will create a new resource.
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the AZ name. Changing this creates a new instance.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
@@ -230,8 +228,7 @@ type studioInstanceState struct {
 
 type StudioInstanceState struct {
 	// Specifies whether auto renew is enabled.
-	// Valid values are `true` and `false`, defaults to `false`.
-	// Changing this creates a new instance.
+	// Valid values are `true` and `false`, defaults to `false`. Changing this parameter will create a new resource.
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the AZ name. Changing this creates a new instance.
 	AvailabilityZone pulumi.StringPtrInput
@@ -281,8 +278,7 @@ func (StudioInstanceState) ElementType() reflect.Type {
 
 type studioInstanceArgs struct {
 	// Specifies whether auto renew is enabled.
-	// Valid values are `true` and `false`, defaults to `false`.
-	// Changing this creates a new instance.
+	// Valid values are `true` and `false`, defaults to `false`. Changing this parameter will create a new resource.
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the AZ name. Changing this creates a new instance.
 	AvailabilityZone string `pulumi:"availabilityZone"`
@@ -321,8 +317,7 @@ type studioInstanceArgs struct {
 // The set of arguments for constructing a StudioInstance resource.
 type StudioInstanceArgs struct {
 	// Specifies whether auto renew is enabled.
-	// Valid values are `true` and `false`, defaults to `false`.
-	// Changing this creates a new instance.
+	// Valid values are `true` and `false`, defaults to `false`. Changing this parameter will create a new resource.
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the AZ name. Changing this creates a new instance.
 	AvailabilityZone pulumi.StringInput
@@ -446,8 +441,7 @@ func (o StudioInstanceOutput) ToStudioInstanceOutputWithContext(ctx context.Cont
 }
 
 // Specifies whether auto renew is enabled.
-// Valid values are `true` and `false`, defaults to `false`.
-// Changing this creates a new instance.
+// Valid values are `true` and `false`, defaults to `false`. Changing this parameter will create a new resource.
 func (o StudioInstanceOutput) AutoRenew() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *StudioInstance) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
 }

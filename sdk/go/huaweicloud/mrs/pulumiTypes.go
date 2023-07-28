@@ -12,15 +12,15 @@ import (
 
 type ClusterAnalysisCoreNodes struct {
 	// Specifies the roles deployed in a node group.This argument is mandatory
-	// when the cluster type is CUSTOM. Each character string represents a role expression.
+	// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 	AssignedRoles []string `pulumi:"assignedRoles"`
 	// Specifies the data disk number of the nodes. The number configuration
 	// of each node are as follows:
-	// + master_nodes: 1.
-	// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+	// + **master_nodes**: 1.
+	// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 	DataVolumeCount int `pulumi:"dataVolumeCount"`
 	// Specifies the data disk size of the nodes,in GB. The value range is 10
 	// to 32768. Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce
@@ -29,9 +29,9 @@ type ClusterAnalysisCoreNodes struct {
 	// Specifies the data disk flavor of the nodes.
 	// Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 	// The following disk types are supported:
-	// + `SATA`: common I/O disk
-	// + `SAS`: high I/O disk
-	// + `SSD`: ultra-high I/O disk
+	// + **SATA**: common I/O disk.
+	// + **SAS**: high I/O disk.
+	// + **SSD**: ultra-high I/O disk.
 	DataVolumeType *string `pulumi:"dataVolumeType"`
 	// Specifies the instance specifications for each nodes in node group.
 	// Changing this will create a new MapReduce cluster resource.
@@ -61,15 +61,15 @@ type ClusterAnalysisCoreNodesInput interface {
 
 type ClusterAnalysisCoreNodesArgs struct {
 	// Specifies the roles deployed in a node group.This argument is mandatory
-	// when the cluster type is CUSTOM. Each character string represents a role expression.
+	// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 	AssignedRoles pulumi.StringArrayInput `pulumi:"assignedRoles"`
 	// Specifies the data disk number of the nodes. The number configuration
 	// of each node are as follows:
-	// + master_nodes: 1.
-	// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+	// + **master_nodes**: 1.
+	// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 	DataVolumeCount pulumi.IntInput `pulumi:"dataVolumeCount"`
 	// Specifies the data disk size of the nodes,in GB. The value range is 10
 	// to 32768. Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce
@@ -78,9 +78,9 @@ type ClusterAnalysisCoreNodesArgs struct {
 	// Specifies the data disk flavor of the nodes.
 	// Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 	// The following disk types are supported:
-	// + `SATA`: common I/O disk
-	// + `SAS`: high I/O disk
-	// + `SSD`: ultra-high I/O disk
+	// + **SATA**: common I/O disk.
+	// + **SAS**: high I/O disk.
+	// + **SSD**: ultra-high I/O disk.
 	DataVolumeType pulumi.StringPtrInput `pulumi:"dataVolumeType"`
 	// Specifies the instance specifications for each nodes in node group.
 	// Changing this will create a new MapReduce cluster resource.
@@ -175,18 +175,18 @@ func (o ClusterAnalysisCoreNodesOutput) ToClusterAnalysisCoreNodesPtrOutputWithC
 }
 
 // Specifies the roles deployed in a node group.This argument is mandatory
-// when the cluster type is CUSTOM. Each character string represents a role expression.
+// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 func (o ClusterAnalysisCoreNodesOutput) AssignedRoles() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ClusterAnalysisCoreNodes) []string { return v.AssignedRoles }).(pulumi.StringArrayOutput)
 }
 
 // Specifies the data disk number of the nodes. The number configuration
 // of each node are as follows:
-// + master_nodes: 1.
-// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+// + **master_nodes**: 1.
+// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 func (o ClusterAnalysisCoreNodesOutput) DataVolumeCount() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterAnalysisCoreNodes) int { return v.DataVolumeCount }).(pulumi.IntOutput)
 }
@@ -201,9 +201,9 @@ func (o ClusterAnalysisCoreNodesOutput) DataVolumeSize() pulumi.IntPtrOutput {
 // Specifies the data disk flavor of the nodes.
 // Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 // The following disk types are supported:
-// + `SATA`: common I/O disk
-// + `SAS`: high I/O disk
-// + `SSD`: ultra-high I/O disk
+// + **SATA**: common I/O disk.
+// + **SAS**: high I/O disk.
+// + **SSD**: ultra-high I/O disk.
 func (o ClusterAnalysisCoreNodesOutput) DataVolumeType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterAnalysisCoreNodes) *string { return v.DataVolumeType }).(pulumi.StringPtrOutput)
 }
@@ -261,7 +261,7 @@ func (o ClusterAnalysisCoreNodesPtrOutput) Elem() ClusterAnalysisCoreNodesOutput
 }
 
 // Specifies the roles deployed in a node group.This argument is mandatory
-// when the cluster type is CUSTOM. Each character string represents a role expression.
+// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 func (o ClusterAnalysisCoreNodesPtrOutput) AssignedRoles() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *ClusterAnalysisCoreNodes) []string {
 		if v == nil {
@@ -273,11 +273,11 @@ func (o ClusterAnalysisCoreNodesPtrOutput) AssignedRoles() pulumi.StringArrayOut
 
 // Specifies the data disk number of the nodes. The number configuration
 // of each node are as follows:
-// + master_nodes: 1.
-// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+// + **master_nodes**: 1.
+// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 func (o ClusterAnalysisCoreNodesPtrOutput) DataVolumeCount() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterAnalysisCoreNodes) *int {
 		if v == nil {
@@ -302,9 +302,9 @@ func (o ClusterAnalysisCoreNodesPtrOutput) DataVolumeSize() pulumi.IntPtrOutput 
 // Specifies the data disk flavor of the nodes.
 // Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 // The following disk types are supported:
-// + `SATA`: common I/O disk
-// + `SAS`: high I/O disk
-// + `SSD`: ultra-high I/O disk
+// + **SATA**: common I/O disk.
+// + **SAS**: high I/O disk.
+// + **SSD**: ultra-high I/O disk.
 func (o ClusterAnalysisCoreNodesPtrOutput) DataVolumeType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterAnalysisCoreNodes) *string {
 		if v == nil {
@@ -369,15 +369,15 @@ func (o ClusterAnalysisCoreNodesPtrOutput) RootVolumeType() pulumi.StringPtrOutp
 
 type ClusterAnalysisTaskNodes struct {
 	// Specifies the roles deployed in a node group.This argument is mandatory
-	// when the cluster type is CUSTOM. Each character string represents a role expression.
+	// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 	AssignedRoles []string `pulumi:"assignedRoles"`
 	// Specifies the data disk number of the nodes. The number configuration
 	// of each node are as follows:
-	// + master_nodes: 1.
-	// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+	// + **master_nodes**: 1.
+	// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 	DataVolumeCount int `pulumi:"dataVolumeCount"`
 	// Specifies the data disk size of the nodes,in GB. The value range is 10
 	// to 32768. Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce
@@ -386,9 +386,9 @@ type ClusterAnalysisTaskNodes struct {
 	// Specifies the data disk flavor of the nodes.
 	// Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 	// The following disk types are supported:
-	// + `SATA`: common I/O disk
-	// + `SAS`: high I/O disk
-	// + `SSD`: ultra-high I/O disk
+	// + **SATA**: common I/O disk.
+	// + **SAS**: high I/O disk.
+	// + **SSD**: ultra-high I/O disk.
 	DataVolumeType *string `pulumi:"dataVolumeType"`
 	// Specifies the instance specifications for each nodes in node group.
 	// Changing this will create a new MapReduce cluster resource.
@@ -418,15 +418,15 @@ type ClusterAnalysisTaskNodesInput interface {
 
 type ClusterAnalysisTaskNodesArgs struct {
 	// Specifies the roles deployed in a node group.This argument is mandatory
-	// when the cluster type is CUSTOM. Each character string represents a role expression.
+	// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 	AssignedRoles pulumi.StringArrayInput `pulumi:"assignedRoles"`
 	// Specifies the data disk number of the nodes. The number configuration
 	// of each node are as follows:
-	// + master_nodes: 1.
-	// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+	// + **master_nodes**: 1.
+	// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 	DataVolumeCount pulumi.IntInput `pulumi:"dataVolumeCount"`
 	// Specifies the data disk size of the nodes,in GB. The value range is 10
 	// to 32768. Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce
@@ -435,9 +435,9 @@ type ClusterAnalysisTaskNodesArgs struct {
 	// Specifies the data disk flavor of the nodes.
 	// Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 	// The following disk types are supported:
-	// + `SATA`: common I/O disk
-	// + `SAS`: high I/O disk
-	// + `SSD`: ultra-high I/O disk
+	// + **SATA**: common I/O disk.
+	// + **SAS**: high I/O disk.
+	// + **SSD**: ultra-high I/O disk.
 	DataVolumeType pulumi.StringPtrInput `pulumi:"dataVolumeType"`
 	// Specifies the instance specifications for each nodes in node group.
 	// Changing this will create a new MapReduce cluster resource.
@@ -532,18 +532,18 @@ func (o ClusterAnalysisTaskNodesOutput) ToClusterAnalysisTaskNodesPtrOutputWithC
 }
 
 // Specifies the roles deployed in a node group.This argument is mandatory
-// when the cluster type is CUSTOM. Each character string represents a role expression.
+// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 func (o ClusterAnalysisTaskNodesOutput) AssignedRoles() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ClusterAnalysisTaskNodes) []string { return v.AssignedRoles }).(pulumi.StringArrayOutput)
 }
 
 // Specifies the data disk number of the nodes. The number configuration
 // of each node are as follows:
-// + master_nodes: 1.
-// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+// + **master_nodes**: 1.
+// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 func (o ClusterAnalysisTaskNodesOutput) DataVolumeCount() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterAnalysisTaskNodes) int { return v.DataVolumeCount }).(pulumi.IntOutput)
 }
@@ -558,9 +558,9 @@ func (o ClusterAnalysisTaskNodesOutput) DataVolumeSize() pulumi.IntPtrOutput {
 // Specifies the data disk flavor of the nodes.
 // Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 // The following disk types are supported:
-// + `SATA`: common I/O disk
-// + `SAS`: high I/O disk
-// + `SSD`: ultra-high I/O disk
+// + **SATA**: common I/O disk.
+// + **SAS**: high I/O disk.
+// + **SSD**: ultra-high I/O disk.
 func (o ClusterAnalysisTaskNodesOutput) DataVolumeType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterAnalysisTaskNodes) *string { return v.DataVolumeType }).(pulumi.StringPtrOutput)
 }
@@ -618,7 +618,7 @@ func (o ClusterAnalysisTaskNodesPtrOutput) Elem() ClusterAnalysisTaskNodesOutput
 }
 
 // Specifies the roles deployed in a node group.This argument is mandatory
-// when the cluster type is CUSTOM. Each character string represents a role expression.
+// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 func (o ClusterAnalysisTaskNodesPtrOutput) AssignedRoles() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *ClusterAnalysisTaskNodes) []string {
 		if v == nil {
@@ -630,11 +630,11 @@ func (o ClusterAnalysisTaskNodesPtrOutput) AssignedRoles() pulumi.StringArrayOut
 
 // Specifies the data disk number of the nodes. The number configuration
 // of each node are as follows:
-// + master_nodes: 1.
-// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+// + **master_nodes**: 1.
+// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 func (o ClusterAnalysisTaskNodesPtrOutput) DataVolumeCount() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterAnalysisTaskNodes) *int {
 		if v == nil {
@@ -659,9 +659,9 @@ func (o ClusterAnalysisTaskNodesPtrOutput) DataVolumeSize() pulumi.IntPtrOutput 
 // Specifies the data disk flavor of the nodes.
 // Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 // The following disk types are supported:
-// + `SATA`: common I/O disk
-// + `SAS`: high I/O disk
-// + `SSD`: ultra-high I/O disk
+// + **SATA**: common I/O disk.
+// + **SAS**: high I/O disk.
+// + **SSD**: ultra-high I/O disk.
 func (o ClusterAnalysisTaskNodesPtrOutput) DataVolumeType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterAnalysisTaskNodes) *string {
 		if v == nil {
@@ -724,17 +724,253 @@ func (o ClusterAnalysisTaskNodesPtrOutput) RootVolumeType() pulumi.StringPtrOutp
 	}).(pulumi.StringPtrOutput)
 }
 
+type ClusterComponentConfig struct {
+	// Specifies the configuration of component installed.
+	// The object structure is documented below.
+	Configs []ClusterComponentConfigConfig `pulumi:"configs"`
+	// Specifies the component name of the cluster which has installed.
+	// Changing this will create a new MapReduce cluster resource.
+	Name string `pulumi:"name"`
+}
+
+// ClusterComponentConfigInput is an input type that accepts ClusterComponentConfigArgs and ClusterComponentConfigOutput values.
+// You can construct a concrete instance of `ClusterComponentConfigInput` via:
+//
+//	ClusterComponentConfigArgs{...}
+type ClusterComponentConfigInput interface {
+	pulumi.Input
+
+	ToClusterComponentConfigOutput() ClusterComponentConfigOutput
+	ToClusterComponentConfigOutputWithContext(context.Context) ClusterComponentConfigOutput
+}
+
+type ClusterComponentConfigArgs struct {
+	// Specifies the configuration of component installed.
+	// The object structure is documented below.
+	Configs ClusterComponentConfigConfigArrayInput `pulumi:"configs"`
+	// Specifies the component name of the cluster which has installed.
+	// Changing this will create a new MapReduce cluster resource.
+	Name pulumi.StringInput `pulumi:"name"`
+}
+
+func (ClusterComponentConfigArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterComponentConfig)(nil)).Elem()
+}
+
+func (i ClusterComponentConfigArgs) ToClusterComponentConfigOutput() ClusterComponentConfigOutput {
+	return i.ToClusterComponentConfigOutputWithContext(context.Background())
+}
+
+func (i ClusterComponentConfigArgs) ToClusterComponentConfigOutputWithContext(ctx context.Context) ClusterComponentConfigOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterComponentConfigOutput)
+}
+
+// ClusterComponentConfigArrayInput is an input type that accepts ClusterComponentConfigArray and ClusterComponentConfigArrayOutput values.
+// You can construct a concrete instance of `ClusterComponentConfigArrayInput` via:
+//
+//	ClusterComponentConfigArray{ ClusterComponentConfigArgs{...} }
+type ClusterComponentConfigArrayInput interface {
+	pulumi.Input
+
+	ToClusterComponentConfigArrayOutput() ClusterComponentConfigArrayOutput
+	ToClusterComponentConfigArrayOutputWithContext(context.Context) ClusterComponentConfigArrayOutput
+}
+
+type ClusterComponentConfigArray []ClusterComponentConfigInput
+
+func (ClusterComponentConfigArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterComponentConfig)(nil)).Elem()
+}
+
+func (i ClusterComponentConfigArray) ToClusterComponentConfigArrayOutput() ClusterComponentConfigArrayOutput {
+	return i.ToClusterComponentConfigArrayOutputWithContext(context.Background())
+}
+
+func (i ClusterComponentConfigArray) ToClusterComponentConfigArrayOutputWithContext(ctx context.Context) ClusterComponentConfigArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterComponentConfigArrayOutput)
+}
+
+type ClusterComponentConfigOutput struct{ *pulumi.OutputState }
+
+func (ClusterComponentConfigOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterComponentConfig)(nil)).Elem()
+}
+
+func (o ClusterComponentConfigOutput) ToClusterComponentConfigOutput() ClusterComponentConfigOutput {
+	return o
+}
+
+func (o ClusterComponentConfigOutput) ToClusterComponentConfigOutputWithContext(ctx context.Context) ClusterComponentConfigOutput {
+	return o
+}
+
+// Specifies the configuration of component installed.
+// The object structure is documented below.
+func (o ClusterComponentConfigOutput) Configs() ClusterComponentConfigConfigArrayOutput {
+	return o.ApplyT(func(v ClusterComponentConfig) []ClusterComponentConfigConfig { return v.Configs }).(ClusterComponentConfigConfigArrayOutput)
+}
+
+// Specifies the component name of the cluster which has installed.
+// Changing this will create a new MapReduce cluster resource.
+func (o ClusterComponentConfigOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v ClusterComponentConfig) string { return v.Name }).(pulumi.StringOutput)
+}
+
+type ClusterComponentConfigArrayOutput struct{ *pulumi.OutputState }
+
+func (ClusterComponentConfigArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterComponentConfig)(nil)).Elem()
+}
+
+func (o ClusterComponentConfigArrayOutput) ToClusterComponentConfigArrayOutput() ClusterComponentConfigArrayOutput {
+	return o
+}
+
+func (o ClusterComponentConfigArrayOutput) ToClusterComponentConfigArrayOutputWithContext(ctx context.Context) ClusterComponentConfigArrayOutput {
+	return o
+}
+
+func (o ClusterComponentConfigArrayOutput) Index(i pulumi.IntInput) ClusterComponentConfigOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) ClusterComponentConfig {
+		return vs[0].([]ClusterComponentConfig)[vs[1].(int)]
+	}).(ClusterComponentConfigOutput)
+}
+
+type ClusterComponentConfigConfig struct {
+	// Specifies the configuration file name of component installed.
+	// Changing this will create a new MapReduce cluster resource.
+	ConfigFileName string `pulumi:"configFileName"`
+	// Specifies the configuration item key of component installed.
+	// Changing this will create a new MapReduce cluster resource.
+	Key string `pulumi:"key"`
+	// Specifies the configuration item value of component installed.
+	// Changing this will create a new MapReduce cluster resource.
+	Value string `pulumi:"value"`
+}
+
+// ClusterComponentConfigConfigInput is an input type that accepts ClusterComponentConfigConfigArgs and ClusterComponentConfigConfigOutput values.
+// You can construct a concrete instance of `ClusterComponentConfigConfigInput` via:
+//
+//	ClusterComponentConfigConfigArgs{...}
+type ClusterComponentConfigConfigInput interface {
+	pulumi.Input
+
+	ToClusterComponentConfigConfigOutput() ClusterComponentConfigConfigOutput
+	ToClusterComponentConfigConfigOutputWithContext(context.Context) ClusterComponentConfigConfigOutput
+}
+
+type ClusterComponentConfigConfigArgs struct {
+	// Specifies the configuration file name of component installed.
+	// Changing this will create a new MapReduce cluster resource.
+	ConfigFileName pulumi.StringInput `pulumi:"configFileName"`
+	// Specifies the configuration item key of component installed.
+	// Changing this will create a new MapReduce cluster resource.
+	Key pulumi.StringInput `pulumi:"key"`
+	// Specifies the configuration item value of component installed.
+	// Changing this will create a new MapReduce cluster resource.
+	Value pulumi.StringInput `pulumi:"value"`
+}
+
+func (ClusterComponentConfigConfigArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterComponentConfigConfig)(nil)).Elem()
+}
+
+func (i ClusterComponentConfigConfigArgs) ToClusterComponentConfigConfigOutput() ClusterComponentConfigConfigOutput {
+	return i.ToClusterComponentConfigConfigOutputWithContext(context.Background())
+}
+
+func (i ClusterComponentConfigConfigArgs) ToClusterComponentConfigConfigOutputWithContext(ctx context.Context) ClusterComponentConfigConfigOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterComponentConfigConfigOutput)
+}
+
+// ClusterComponentConfigConfigArrayInput is an input type that accepts ClusterComponentConfigConfigArray and ClusterComponentConfigConfigArrayOutput values.
+// You can construct a concrete instance of `ClusterComponentConfigConfigArrayInput` via:
+//
+//	ClusterComponentConfigConfigArray{ ClusterComponentConfigConfigArgs{...} }
+type ClusterComponentConfigConfigArrayInput interface {
+	pulumi.Input
+
+	ToClusterComponentConfigConfigArrayOutput() ClusterComponentConfigConfigArrayOutput
+	ToClusterComponentConfigConfigArrayOutputWithContext(context.Context) ClusterComponentConfigConfigArrayOutput
+}
+
+type ClusterComponentConfigConfigArray []ClusterComponentConfigConfigInput
+
+func (ClusterComponentConfigConfigArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterComponentConfigConfig)(nil)).Elem()
+}
+
+func (i ClusterComponentConfigConfigArray) ToClusterComponentConfigConfigArrayOutput() ClusterComponentConfigConfigArrayOutput {
+	return i.ToClusterComponentConfigConfigArrayOutputWithContext(context.Background())
+}
+
+func (i ClusterComponentConfigConfigArray) ToClusterComponentConfigConfigArrayOutputWithContext(ctx context.Context) ClusterComponentConfigConfigArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterComponentConfigConfigArrayOutput)
+}
+
+type ClusterComponentConfigConfigOutput struct{ *pulumi.OutputState }
+
+func (ClusterComponentConfigConfigOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterComponentConfigConfig)(nil)).Elem()
+}
+
+func (o ClusterComponentConfigConfigOutput) ToClusterComponentConfigConfigOutput() ClusterComponentConfigConfigOutput {
+	return o
+}
+
+func (o ClusterComponentConfigConfigOutput) ToClusterComponentConfigConfigOutputWithContext(ctx context.Context) ClusterComponentConfigConfigOutput {
+	return o
+}
+
+// Specifies the configuration file name of component installed.
+// Changing this will create a new MapReduce cluster resource.
+func (o ClusterComponentConfigConfigOutput) ConfigFileName() pulumi.StringOutput {
+	return o.ApplyT(func(v ClusterComponentConfigConfig) string { return v.ConfigFileName }).(pulumi.StringOutput)
+}
+
+// Specifies the configuration item key of component installed.
+// Changing this will create a new MapReduce cluster resource.
+func (o ClusterComponentConfigConfigOutput) Key() pulumi.StringOutput {
+	return o.ApplyT(func(v ClusterComponentConfigConfig) string { return v.Key }).(pulumi.StringOutput)
+}
+
+// Specifies the configuration item value of component installed.
+// Changing this will create a new MapReduce cluster resource.
+func (o ClusterComponentConfigConfigOutput) Value() pulumi.StringOutput {
+	return o.ApplyT(func(v ClusterComponentConfigConfig) string { return v.Value }).(pulumi.StringOutput)
+}
+
+type ClusterComponentConfigConfigArrayOutput struct{ *pulumi.OutputState }
+
+func (ClusterComponentConfigConfigArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterComponentConfigConfig)(nil)).Elem()
+}
+
+func (o ClusterComponentConfigConfigArrayOutput) ToClusterComponentConfigConfigArrayOutput() ClusterComponentConfigConfigArrayOutput {
+	return o
+}
+
+func (o ClusterComponentConfigConfigArrayOutput) ToClusterComponentConfigConfigArrayOutputWithContext(ctx context.Context) ClusterComponentConfigConfigArrayOutput {
+	return o
+}
+
+func (o ClusterComponentConfigConfigArrayOutput) Index(i pulumi.IntInput) ClusterComponentConfigConfigOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) ClusterComponentConfigConfig {
+		return vs[0].([]ClusterComponentConfigConfig)[vs[1].(int)]
+	}).(ClusterComponentConfigConfigOutput)
+}
+
 type ClusterCustomNode struct {
 	// Specifies the roles deployed in a node group.This argument is mandatory
-	// when the cluster type is CUSTOM. Each character string represents a role expression.
+	// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 	AssignedRoles []string `pulumi:"assignedRoles"`
 	// Specifies the data disk number of the nodes. The number configuration
 	// of each node are as follows:
-	// + master_nodes: 1.
-	// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+	// + **master_nodes**: 1.
+	// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 	DataVolumeCount int `pulumi:"dataVolumeCount"`
 	// Specifies the data disk size of the nodes,in GB. The value range is 10
 	// to 32768. Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce
@@ -743,9 +979,9 @@ type ClusterCustomNode struct {
 	// Specifies the data disk flavor of the nodes.
 	// Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 	// The following disk types are supported:
-	// + `SATA`: common I/O disk
-	// + `SAS`: high I/O disk
-	// + `SSD`: ultra-high I/O disk
+	// + **SATA**: common I/O disk.
+	// + **SAS**: high I/O disk.
+	// + **SSD**: ultra-high I/O disk.
 	DataVolumeType *string `pulumi:"dataVolumeType"`
 	// Specifies the instance specifications for each nodes in node group.
 	// Changing this will create a new MapReduce cluster resource.
@@ -777,15 +1013,15 @@ type ClusterCustomNodeInput interface {
 
 type ClusterCustomNodeArgs struct {
 	// Specifies the roles deployed in a node group.This argument is mandatory
-	// when the cluster type is CUSTOM. Each character string represents a role expression.
+	// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 	AssignedRoles pulumi.StringArrayInput `pulumi:"assignedRoles"`
 	// Specifies the data disk number of the nodes. The number configuration
 	// of each node are as follows:
-	// + master_nodes: 1.
-	// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+	// + **master_nodes**: 1.
+	// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 	DataVolumeCount pulumi.IntInput `pulumi:"dataVolumeCount"`
 	// Specifies the data disk size of the nodes,in GB. The value range is 10
 	// to 32768. Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce
@@ -794,9 +1030,9 @@ type ClusterCustomNodeArgs struct {
 	// Specifies the data disk flavor of the nodes.
 	// Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 	// The following disk types are supported:
-	// + `SATA`: common I/O disk
-	// + `SAS`: high I/O disk
-	// + `SSD`: ultra-high I/O disk
+	// + **SATA**: common I/O disk.
+	// + **SAS**: high I/O disk.
+	// + **SSD**: ultra-high I/O disk.
 	DataVolumeType pulumi.StringPtrInput `pulumi:"dataVolumeType"`
 	// Specifies the instance specifications for each nodes in node group.
 	// Changing this will create a new MapReduce cluster resource.
@@ -867,18 +1103,18 @@ func (o ClusterCustomNodeOutput) ToClusterCustomNodeOutputWithContext(ctx contex
 }
 
 // Specifies the roles deployed in a node group.This argument is mandatory
-// when the cluster type is CUSTOM. Each character string represents a role expression.
+// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 func (o ClusterCustomNodeOutput) AssignedRoles() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ClusterCustomNode) []string { return v.AssignedRoles }).(pulumi.StringArrayOutput)
 }
 
 // Specifies the data disk number of the nodes. The number configuration
 // of each node are as follows:
-// + master_nodes: 1.
-// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+// + **master_nodes**: 1.
+// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 func (o ClusterCustomNodeOutput) DataVolumeCount() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterCustomNode) int { return v.DataVolumeCount }).(pulumi.IntOutput)
 }
@@ -893,9 +1129,9 @@ func (o ClusterCustomNodeOutput) DataVolumeSize() pulumi.IntPtrOutput {
 // Specifies the data disk flavor of the nodes.
 // Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 // The following disk types are supported:
-// + `SATA`: common I/O disk
-// + `SAS`: high I/O disk
-// + `SSD`: ultra-high I/O disk
+// + **SATA**: common I/O disk.
+// + **SAS**: high I/O disk.
+// + **SSD**: ultra-high I/O disk.
 func (o ClusterCustomNodeOutput) DataVolumeType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterCustomNode) *string { return v.DataVolumeType }).(pulumi.StringPtrOutput)
 }
@@ -955,15 +1191,15 @@ func (o ClusterCustomNodeArrayOutput) Index(i pulumi.IntInput) ClusterCustomNode
 
 type ClusterMasterNodes struct {
 	// Specifies the roles deployed in a node group.This argument is mandatory
-	// when the cluster type is CUSTOM. Each character string represents a role expression.
+	// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 	AssignedRoles []string `pulumi:"assignedRoles"`
 	// Specifies the data disk number of the nodes. The number configuration
 	// of each node are as follows:
-	// + master_nodes: 1.
-	// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+	// + **master_nodes**: 1.
+	// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 	DataVolumeCount int `pulumi:"dataVolumeCount"`
 	// Specifies the data disk size of the nodes,in GB. The value range is 10
 	// to 32768. Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce
@@ -972,9 +1208,9 @@ type ClusterMasterNodes struct {
 	// Specifies the data disk flavor of the nodes.
 	// Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 	// The following disk types are supported:
-	// + `SATA`: common I/O disk
-	// + `SAS`: high I/O disk
-	// + `SSD`: ultra-high I/O disk
+	// + **SATA**: common I/O disk.
+	// + **SAS**: high I/O disk.
+	// + **SSD**: ultra-high I/O disk.
 	DataVolumeType *string `pulumi:"dataVolumeType"`
 	// Specifies the instance specifications for each nodes in node group.
 	// Changing this will create a new MapReduce cluster resource.
@@ -1004,15 +1240,15 @@ type ClusterMasterNodesInput interface {
 
 type ClusterMasterNodesArgs struct {
 	// Specifies the roles deployed in a node group.This argument is mandatory
-	// when the cluster type is CUSTOM. Each character string represents a role expression.
+	// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 	AssignedRoles pulumi.StringArrayInput `pulumi:"assignedRoles"`
 	// Specifies the data disk number of the nodes. The number configuration
 	// of each node are as follows:
-	// + master_nodes: 1.
-	// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+	// + **master_nodes**: 1.
+	// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 	DataVolumeCount pulumi.IntInput `pulumi:"dataVolumeCount"`
 	// Specifies the data disk size of the nodes,in GB. The value range is 10
 	// to 32768. Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce
@@ -1021,9 +1257,9 @@ type ClusterMasterNodesArgs struct {
 	// Specifies the data disk flavor of the nodes.
 	// Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 	// The following disk types are supported:
-	// + `SATA`: common I/O disk
-	// + `SAS`: high I/O disk
-	// + `SSD`: ultra-high I/O disk
+	// + **SATA**: common I/O disk.
+	// + **SAS**: high I/O disk.
+	// + **SSD**: ultra-high I/O disk.
 	DataVolumeType pulumi.StringPtrInput `pulumi:"dataVolumeType"`
 	// Specifies the instance specifications for each nodes in node group.
 	// Changing this will create a new MapReduce cluster resource.
@@ -1118,18 +1354,18 @@ func (o ClusterMasterNodesOutput) ToClusterMasterNodesPtrOutputWithContext(ctx c
 }
 
 // Specifies the roles deployed in a node group.This argument is mandatory
-// when the cluster type is CUSTOM. Each character string represents a role expression.
+// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 func (o ClusterMasterNodesOutput) AssignedRoles() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ClusterMasterNodes) []string { return v.AssignedRoles }).(pulumi.StringArrayOutput)
 }
 
 // Specifies the data disk number of the nodes. The number configuration
 // of each node are as follows:
-// + master_nodes: 1.
-// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+// + **master_nodes**: 1.
+// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 func (o ClusterMasterNodesOutput) DataVolumeCount() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterMasterNodes) int { return v.DataVolumeCount }).(pulumi.IntOutput)
 }
@@ -1144,9 +1380,9 @@ func (o ClusterMasterNodesOutput) DataVolumeSize() pulumi.IntPtrOutput {
 // Specifies the data disk flavor of the nodes.
 // Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 // The following disk types are supported:
-// + `SATA`: common I/O disk
-// + `SAS`: high I/O disk
-// + `SSD`: ultra-high I/O disk
+// + **SATA**: common I/O disk.
+// + **SAS**: high I/O disk.
+// + **SSD**: ultra-high I/O disk.
 func (o ClusterMasterNodesOutput) DataVolumeType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterMasterNodes) *string { return v.DataVolumeType }).(pulumi.StringPtrOutput)
 }
@@ -1204,7 +1440,7 @@ func (o ClusterMasterNodesPtrOutput) Elem() ClusterMasterNodesOutput {
 }
 
 // Specifies the roles deployed in a node group.This argument is mandatory
-// when the cluster type is CUSTOM. Each character string represents a role expression.
+// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 func (o ClusterMasterNodesPtrOutput) AssignedRoles() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *ClusterMasterNodes) []string {
 		if v == nil {
@@ -1216,11 +1452,11 @@ func (o ClusterMasterNodesPtrOutput) AssignedRoles() pulumi.StringArrayOutput {
 
 // Specifies the data disk number of the nodes. The number configuration
 // of each node are as follows:
-// + master_nodes: 1.
-// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+// + **master_nodes**: 1.
+// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 func (o ClusterMasterNodesPtrOutput) DataVolumeCount() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterMasterNodes) *int {
 		if v == nil {
@@ -1245,9 +1481,9 @@ func (o ClusterMasterNodesPtrOutput) DataVolumeSize() pulumi.IntPtrOutput {
 // Specifies the data disk flavor of the nodes.
 // Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 // The following disk types are supported:
-// + `SATA`: common I/O disk
-// + `SAS`: high I/O disk
-// + `SSD`: ultra-high I/O disk
+// + **SATA**: common I/O disk.
+// + **SAS**: high I/O disk.
+// + **SSD**: ultra-high I/O disk.
 func (o ClusterMasterNodesPtrOutput) DataVolumeType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterMasterNodes) *string {
 		if v == nil {
@@ -1312,15 +1548,15 @@ func (o ClusterMasterNodesPtrOutput) RootVolumeType() pulumi.StringPtrOutput {
 
 type ClusterStreamingCoreNodes struct {
 	// Specifies the roles deployed in a node group.This argument is mandatory
-	// when the cluster type is CUSTOM. Each character string represents a role expression.
+	// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 	AssignedRoles []string `pulumi:"assignedRoles"`
 	// Specifies the data disk number of the nodes. The number configuration
 	// of each node are as follows:
-	// + master_nodes: 1.
-	// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+	// + **master_nodes**: 1.
+	// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 	DataVolumeCount int `pulumi:"dataVolumeCount"`
 	// Specifies the data disk size of the nodes,in GB. The value range is 10
 	// to 32768. Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce
@@ -1329,9 +1565,9 @@ type ClusterStreamingCoreNodes struct {
 	// Specifies the data disk flavor of the nodes.
 	// Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 	// The following disk types are supported:
-	// + `SATA`: common I/O disk
-	// + `SAS`: high I/O disk
-	// + `SSD`: ultra-high I/O disk
+	// + **SATA**: common I/O disk.
+	// + **SAS**: high I/O disk.
+	// + **SSD**: ultra-high I/O disk.
 	DataVolumeType *string `pulumi:"dataVolumeType"`
 	// Specifies the instance specifications for each nodes in node group.
 	// Changing this will create a new MapReduce cluster resource.
@@ -1361,15 +1597,15 @@ type ClusterStreamingCoreNodesInput interface {
 
 type ClusterStreamingCoreNodesArgs struct {
 	// Specifies the roles deployed in a node group.This argument is mandatory
-	// when the cluster type is CUSTOM. Each character string represents a role expression.
+	// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 	AssignedRoles pulumi.StringArrayInput `pulumi:"assignedRoles"`
 	// Specifies the data disk number of the nodes. The number configuration
 	// of each node are as follows:
-	// + master_nodes: 1.
-	// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+	// + **master_nodes**: 1.
+	// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 	DataVolumeCount pulumi.IntInput `pulumi:"dataVolumeCount"`
 	// Specifies the data disk size of the nodes,in GB. The value range is 10
 	// to 32768. Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce
@@ -1378,9 +1614,9 @@ type ClusterStreamingCoreNodesArgs struct {
 	// Specifies the data disk flavor of the nodes.
 	// Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 	// The following disk types are supported:
-	// + `SATA`: common I/O disk
-	// + `SAS`: high I/O disk
-	// + `SSD`: ultra-high I/O disk
+	// + **SATA**: common I/O disk.
+	// + **SAS**: high I/O disk.
+	// + **SSD**: ultra-high I/O disk.
 	DataVolumeType pulumi.StringPtrInput `pulumi:"dataVolumeType"`
 	// Specifies the instance specifications for each nodes in node group.
 	// Changing this will create a new MapReduce cluster resource.
@@ -1475,18 +1711,18 @@ func (o ClusterStreamingCoreNodesOutput) ToClusterStreamingCoreNodesPtrOutputWit
 }
 
 // Specifies the roles deployed in a node group.This argument is mandatory
-// when the cluster type is CUSTOM. Each character string represents a role expression.
+// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 func (o ClusterStreamingCoreNodesOutput) AssignedRoles() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ClusterStreamingCoreNodes) []string { return v.AssignedRoles }).(pulumi.StringArrayOutput)
 }
 
 // Specifies the data disk number of the nodes. The number configuration
 // of each node are as follows:
-// + master_nodes: 1.
-// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+// + **master_nodes**: 1.
+// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 func (o ClusterStreamingCoreNodesOutput) DataVolumeCount() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterStreamingCoreNodes) int { return v.DataVolumeCount }).(pulumi.IntOutput)
 }
@@ -1501,9 +1737,9 @@ func (o ClusterStreamingCoreNodesOutput) DataVolumeSize() pulumi.IntPtrOutput {
 // Specifies the data disk flavor of the nodes.
 // Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 // The following disk types are supported:
-// + `SATA`: common I/O disk
-// + `SAS`: high I/O disk
-// + `SSD`: ultra-high I/O disk
+// + **SATA**: common I/O disk.
+// + **SAS**: high I/O disk.
+// + **SSD**: ultra-high I/O disk.
 func (o ClusterStreamingCoreNodesOutput) DataVolumeType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterStreamingCoreNodes) *string { return v.DataVolumeType }).(pulumi.StringPtrOutput)
 }
@@ -1561,7 +1797,7 @@ func (o ClusterStreamingCoreNodesPtrOutput) Elem() ClusterStreamingCoreNodesOutp
 }
 
 // Specifies the roles deployed in a node group.This argument is mandatory
-// when the cluster type is CUSTOM. Each character string represents a role expression.
+// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 func (o ClusterStreamingCoreNodesPtrOutput) AssignedRoles() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *ClusterStreamingCoreNodes) []string {
 		if v == nil {
@@ -1573,11 +1809,11 @@ func (o ClusterStreamingCoreNodesPtrOutput) AssignedRoles() pulumi.StringArrayOu
 
 // Specifies the data disk number of the nodes. The number configuration
 // of each node are as follows:
-// + master_nodes: 1.
-// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+// + **master_nodes**: 1.
+// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 func (o ClusterStreamingCoreNodesPtrOutput) DataVolumeCount() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterStreamingCoreNodes) *int {
 		if v == nil {
@@ -1602,9 +1838,9 @@ func (o ClusterStreamingCoreNodesPtrOutput) DataVolumeSize() pulumi.IntPtrOutput
 // Specifies the data disk flavor of the nodes.
 // Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 // The following disk types are supported:
-// + `SATA`: common I/O disk
-// + `SAS`: high I/O disk
-// + `SSD`: ultra-high I/O disk
+// + **SATA**: common I/O disk.
+// + **SAS**: high I/O disk.
+// + **SSD**: ultra-high I/O disk.
 func (o ClusterStreamingCoreNodesPtrOutput) DataVolumeType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterStreamingCoreNodes) *string {
 		if v == nil {
@@ -1669,15 +1905,15 @@ func (o ClusterStreamingCoreNodesPtrOutput) RootVolumeType() pulumi.StringPtrOut
 
 type ClusterStreamingTaskNodes struct {
 	// Specifies the roles deployed in a node group.This argument is mandatory
-	// when the cluster type is CUSTOM. Each character string represents a role expression.
+	// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 	AssignedRoles []string `pulumi:"assignedRoles"`
 	// Specifies the data disk number of the nodes. The number configuration
 	// of each node are as follows:
-	// + master_nodes: 1.
-	// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+	// + **master_nodes**: 1.
+	// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 	DataVolumeCount int `pulumi:"dataVolumeCount"`
 	// Specifies the data disk size of the nodes,in GB. The value range is 10
 	// to 32768. Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce
@@ -1686,9 +1922,9 @@ type ClusterStreamingTaskNodes struct {
 	// Specifies the data disk flavor of the nodes.
 	// Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 	// The following disk types are supported:
-	// + `SATA`: common I/O disk
-	// + `SAS`: high I/O disk
-	// + `SSD`: ultra-high I/O disk
+	// + **SATA**: common I/O disk.
+	// + **SAS**: high I/O disk.
+	// + **SSD**: ultra-high I/O disk.
 	DataVolumeType *string `pulumi:"dataVolumeType"`
 	// Specifies the instance specifications for each nodes in node group.
 	// Changing this will create a new MapReduce cluster resource.
@@ -1718,15 +1954,15 @@ type ClusterStreamingTaskNodesInput interface {
 
 type ClusterStreamingTaskNodesArgs struct {
 	// Specifies the roles deployed in a node group.This argument is mandatory
-	// when the cluster type is CUSTOM. Each character string represents a role expression.
+	// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 	AssignedRoles pulumi.StringArrayInput `pulumi:"assignedRoles"`
 	// Specifies the data disk number of the nodes. The number configuration
 	// of each node are as follows:
-	// + master_nodes: 1.
-	// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-	// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-	// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+	// + **master_nodes**: 1.
+	// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+	// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 	DataVolumeCount pulumi.IntInput `pulumi:"dataVolumeCount"`
 	// Specifies the data disk size of the nodes,in GB. The value range is 10
 	// to 32768. Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce
@@ -1735,9 +1971,9 @@ type ClusterStreamingTaskNodesArgs struct {
 	// Specifies the data disk flavor of the nodes.
 	// Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 	// The following disk types are supported:
-	// + `SATA`: common I/O disk
-	// + `SAS`: high I/O disk
-	// + `SSD`: ultra-high I/O disk
+	// + **SATA**: common I/O disk.
+	// + **SAS**: high I/O disk.
+	// + **SSD**: ultra-high I/O disk.
 	DataVolumeType pulumi.StringPtrInput `pulumi:"dataVolumeType"`
 	// Specifies the instance specifications for each nodes in node group.
 	// Changing this will create a new MapReduce cluster resource.
@@ -1832,18 +2068,18 @@ func (o ClusterStreamingTaskNodesOutput) ToClusterStreamingTaskNodesPtrOutputWit
 }
 
 // Specifies the roles deployed in a node group.This argument is mandatory
-// when the cluster type is CUSTOM. Each character string represents a role expression.
+// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 func (o ClusterStreamingTaskNodesOutput) AssignedRoles() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ClusterStreamingTaskNodes) []string { return v.AssignedRoles }).(pulumi.StringArrayOutput)
 }
 
 // Specifies the data disk number of the nodes. The number configuration
 // of each node are as follows:
-// + master_nodes: 1.
-// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+// + **master_nodes**: 1.
+// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 func (o ClusterStreamingTaskNodesOutput) DataVolumeCount() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterStreamingTaskNodes) int { return v.DataVolumeCount }).(pulumi.IntOutput)
 }
@@ -1858,9 +2094,9 @@ func (o ClusterStreamingTaskNodesOutput) DataVolumeSize() pulumi.IntPtrOutput {
 // Specifies the data disk flavor of the nodes.
 // Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 // The following disk types are supported:
-// + `SATA`: common I/O disk
-// + `SAS`: high I/O disk
-// + `SSD`: ultra-high I/O disk
+// + **SATA**: common I/O disk.
+// + **SAS**: high I/O disk.
+// + **SSD**: ultra-high I/O disk.
 func (o ClusterStreamingTaskNodesOutput) DataVolumeType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterStreamingTaskNodes) *string { return v.DataVolumeType }).(pulumi.StringPtrOutput)
 }
@@ -1918,7 +2154,7 @@ func (o ClusterStreamingTaskNodesPtrOutput) Elem() ClusterStreamingTaskNodesOutp
 }
 
 // Specifies the roles deployed in a node group.This argument is mandatory
-// when the cluster type is CUSTOM. Each character string represents a role expression.
+// when the cluster type is **CUSTOM**. Each character string represents a role expression.
 func (o ClusterStreamingTaskNodesPtrOutput) AssignedRoles() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *ClusterStreamingTaskNodes) []string {
 		if v == nil {
@@ -1930,11 +2166,11 @@ func (o ClusterStreamingTaskNodesPtrOutput) AssignedRoles() pulumi.StringArrayOu
 
 // Specifies the data disk number of the nodes. The number configuration
 // of each node are as follows:
-// + master_nodes: 1.
-// + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-// + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-// + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+// + **master_nodes**: 1.
+// + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+// + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
 func (o ClusterStreamingTaskNodesPtrOutput) DataVolumeCount() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterStreamingTaskNodes) *int {
 		if v == nil {
@@ -1959,9 +2195,9 @@ func (o ClusterStreamingTaskNodesPtrOutput) DataVolumeSize() pulumi.IntPtrOutput
 // Specifies the data disk flavor of the nodes.
 // Required if `dataVolumeCount` is greater than zero. Changing this will create a new MapReduce cluster resource.
 // The following disk types are supported:
-// + `SATA`: common I/O disk
-// + `SAS`: high I/O disk
-// + `SSD`: ultra-high I/O disk
+// + **SATA**: common I/O disk.
+// + **SAS**: high I/O disk.
+// + **SSD**: ultra-high I/O disk.
 func (o ClusterStreamingTaskNodesPtrOutput) DataVolumeType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterStreamingTaskNodes) *string {
 		if v == nil {
@@ -2029,6 +2265,10 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterAnalysisCoreNodesPtrInput)(nil)).Elem(), ClusterAnalysisCoreNodesArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterAnalysisTaskNodesInput)(nil)).Elem(), ClusterAnalysisTaskNodesArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterAnalysisTaskNodesPtrInput)(nil)).Elem(), ClusterAnalysisTaskNodesArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterComponentConfigInput)(nil)).Elem(), ClusterComponentConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterComponentConfigArrayInput)(nil)).Elem(), ClusterComponentConfigArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterComponentConfigConfigInput)(nil)).Elem(), ClusterComponentConfigConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterComponentConfigConfigArrayInput)(nil)).Elem(), ClusterComponentConfigConfigArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterCustomNodeInput)(nil)).Elem(), ClusterCustomNodeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterCustomNodeArrayInput)(nil)).Elem(), ClusterCustomNodeArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterMasterNodesInput)(nil)).Elem(), ClusterMasterNodesArgs{})
@@ -2041,6 +2281,10 @@ func init() {
 	pulumi.RegisterOutputType(ClusterAnalysisCoreNodesPtrOutput{})
 	pulumi.RegisterOutputType(ClusterAnalysisTaskNodesOutput{})
 	pulumi.RegisterOutputType(ClusterAnalysisTaskNodesPtrOutput{})
+	pulumi.RegisterOutputType(ClusterComponentConfigOutput{})
+	pulumi.RegisterOutputType(ClusterComponentConfigArrayOutput{})
+	pulumi.RegisterOutputType(ClusterComponentConfigConfigOutput{})
+	pulumi.RegisterOutputType(ClusterComponentConfigConfigArrayOutput{})
 	pulumi.RegisterOutputType(ClusterCustomNodeOutput{})
 	pulumi.RegisterOutputType(ClusterCustomNodeArrayOutput{})
 	pulumi.RegisterOutputType(ClusterMasterNodesOutput{})

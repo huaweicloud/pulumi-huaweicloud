@@ -40,18 +40,13 @@ import * as utilities from "../utilities";
  * const config = new pulumi.Config();
  * const instanceId = config.requireObject("instanceId");
  * const policyName = config.requireObject("policyName");
- * const description = config.requireObject("description");
  * const applicationId = config.requireObject("applicationId");
  * const test = new huaweicloud.dedicatedapig.ThrottlingPolicy("test", {
  *     instanceId: instanceId,
- *     description: description,
  *     type: "API-based",
  *     period: 10,
  *     periodUnit: "MINUTE",
  *     maxApiRequests: 70,
- *     maxUserRequests: 45,
- *     maxAppRequests: 45,
- *     maxIpRequests: 45,
  *     appThrottles: [{
  *         maxApiRequests: 40,
  *         throttlingObjectId: applicationId,
@@ -61,10 +56,10 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * API Throttling Policies of APIG can be imported using their `name` and the ID of the APIG instances to which the environment belongs, separated by a slash, e.g.
+ * API Throttling Policies can be imported using their `name` and related dedicated instance ID, separated by a slash, e.g.
  *
  * ```sh
- *  $ pulumi import huaweicloud:DedicatedApig/throttlingPolicy:ThrottlingPolicy test <instance ID>/<name>
+ *  $ pulumi import huaweicloud:DedicatedApig/throttlingPolicy:ThrottlingPolicy test <instance_id>/<name>
  * ```
  */
 export class ThrottlingPolicy extends pulumi.CustomResource {
@@ -96,23 +91,23 @@ export class ThrottlingPolicy extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies an array of one or more special throttling policies for APP limit.
-     * The `throttle` object of the `userThrottles` structure is documented below.
+     * Specifies the array of one or more special throttling policies for APP limit.
+     * The object structure is documented below.
      */
     public readonly appThrottles!: pulumi.Output<outputs.DedicatedApig.ThrottlingPolicyAppThrottle[] | undefined>;
     /**
-     * Time when the API throttling policy was created.
+     * The creation time of the throttling policy.
      */
-    public /*out*/ readonly createTime!: pulumi.Output<string>;
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
     /**
      * Specifies the description about the API throttling policy.
-     * The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
-     * Chinese characters must be in UTF-8 or Unicode format.
+     * The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies an ID of the APIG dedicated instance to which the API
-     * throttling policy belongs to. Changing this will create a new API throttling policy resource.
+     * Specifies the ID of the dedicated instance to which the throttling
+     * policy belongs.
+     * Changing this will create a new resource.
      */
     public readonly instanceId!: pulumi.Output<string>;
     /**
@@ -122,23 +117,27 @@ export class ThrottlingPolicy extends pulumi.CustomResource {
     public readonly maxApiRequests!: pulumi.Output<number>;
     /**
      * Specifies the maximum number of times the API can be accessed by an app within
-     * the same period. The value of this parameter must be less than or equal to the value of `maxUserRequests`.
+     * the same period.
+     * The value of this parameter must be less than or equal to the value of `maxUserRequests`.
      */
     public readonly maxAppRequests!: pulumi.Output<number | undefined>;
     /**
      * Specifies the maximum number of times the API can be accessed by an IP address
-     * within the same period. The value of this parameter must be less than or equal to the value of `maxApiRequests`.
+     * within the same period.
+     * The value of this parameter must be less than or equal to the value of `maxApiRequests`.
      */
     public readonly maxIpRequests!: pulumi.Output<number | undefined>;
     /**
      * Specifies the maximum number of times the API can be accessed by a user within
-     * the same period. The value of this parameter must be less than or equal to the value of `maxApiRequests`.
+     * the same period.
+     * The value of this parameter must be less than or equal to the value of `maxApiRequests`.
      */
     public readonly maxUserRequests!: pulumi.Output<number | undefined>;
     /**
-     * Specifies the name of the API throttling policy.
-     * The policy name consists of 3 to 64 characters, starting with a letter.
-     * Only letters, digits and underscores (_) are allowed.
+     * Specifies the name of the throttling policy.  
+     * The valid length is limited from `3` to `64`, only Chinese and English letters, digits and underscores (_) are
+     * allowed.
+     * The name must start with a Chinese or English letter.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -149,26 +148,26 @@ export class ThrottlingPolicy extends pulumi.CustomResource {
     public readonly period!: pulumi.Output<number>;
     /**
      * Specifies the time unit for limiting the number of API calls.
-     * The valid values are *SECOND*, *MINUTE*, *HOUR* and *DAY*, default to *MINUTE*.
+     * The valid values are **SECOND**, **MINUTE**, **HOUR** and **DAY**, defaults to **MINUTE**.
      */
     public readonly periodUnit!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the region in which to create the API throttling policy resource.
-     * If omitted, the provider-level region will be used. Changing this will create a new API throttling policy resource.
+     * Specifies the region where the throttling policy is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Specifies the type of the request throttling policy.
+     * Specifies the type of the request throttling policy.  
      * The valid values are as follows:
-     * + API-based: limiting the maximum number of times a single API bound to the policy can be called within the
+     * + **API-based**: limiting the maximum number of times a single API bound to the policy can be called within the
      * specified period.
-     * + API-shared: limiting the maximum number of times all APIs bound to the policy can be called within the specified
+     * + **API-shared**: limiting the maximum number of times all APIs bound to the policy can be called within the specified
      * period.
      */
     public readonly type!: pulumi.Output<string | undefined>;
     /**
-     * Specifies an array of one or more special throttling policies for IAM user limit.
-     * The `throttle` object of the `userThrottles` structure is documented below.
+     * Specifies the array of one or more special throttling policies for IAM user limit.
+     * The object structure is documented below.
      */
     public readonly userThrottles!: pulumi.Output<outputs.DedicatedApig.ThrottlingPolicyUserThrottle[] | undefined>;
 
@@ -186,7 +185,7 @@ export class ThrottlingPolicy extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as ThrottlingPolicyState | undefined;
             resourceInputs["appThrottles"] = state ? state.appThrottles : undefined;
-            resourceInputs["createTime"] = state ? state.createTime : undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["instanceId"] = state ? state.instanceId : undefined;
             resourceInputs["maxApiRequests"] = state ? state.maxApiRequests : undefined;
@@ -223,7 +222,7 @@ export class ThrottlingPolicy extends pulumi.CustomResource {
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["type"] = args ? args.type : undefined;
             resourceInputs["userThrottles"] = args ? args.userThrottles : undefined;
-            resourceInputs["createTime"] = undefined /*out*/;
+            resourceInputs["createdAt"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(ThrottlingPolicy.__pulumiType, name, resourceInputs, opts);
@@ -235,23 +234,23 @@ export class ThrottlingPolicy extends pulumi.CustomResource {
  */
 export interface ThrottlingPolicyState {
     /**
-     * Specifies an array of one or more special throttling policies for APP limit.
-     * The `throttle` object of the `userThrottles` structure is documented below.
+     * Specifies the array of one or more special throttling policies for APP limit.
+     * The object structure is documented below.
      */
     appThrottles?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ThrottlingPolicyAppThrottle>[]>;
     /**
-     * Time when the API throttling policy was created.
+     * The creation time of the throttling policy.
      */
-    createTime?: pulumi.Input<string>;
+    createdAt?: pulumi.Input<string>;
     /**
      * Specifies the description about the API throttling policy.
-     * The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
-     * Chinese characters must be in UTF-8 or Unicode format.
+     * The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies an ID of the APIG dedicated instance to which the API
-     * throttling policy belongs to. Changing this will create a new API throttling policy resource.
+     * Specifies the ID of the dedicated instance to which the throttling
+     * policy belongs.
+     * Changing this will create a new resource.
      */
     instanceId?: pulumi.Input<string>;
     /**
@@ -261,23 +260,27 @@ export interface ThrottlingPolicyState {
     maxApiRequests?: pulumi.Input<number>;
     /**
      * Specifies the maximum number of times the API can be accessed by an app within
-     * the same period. The value of this parameter must be less than or equal to the value of `maxUserRequests`.
+     * the same period.
+     * The value of this parameter must be less than or equal to the value of `maxUserRequests`.
      */
     maxAppRequests?: pulumi.Input<number>;
     /**
      * Specifies the maximum number of times the API can be accessed by an IP address
-     * within the same period. The value of this parameter must be less than or equal to the value of `maxApiRequests`.
+     * within the same period.
+     * The value of this parameter must be less than or equal to the value of `maxApiRequests`.
      */
     maxIpRequests?: pulumi.Input<number>;
     /**
      * Specifies the maximum number of times the API can be accessed by a user within
-     * the same period. The value of this parameter must be less than or equal to the value of `maxApiRequests`.
+     * the same period.
+     * The value of this parameter must be less than or equal to the value of `maxApiRequests`.
      */
     maxUserRequests?: pulumi.Input<number>;
     /**
-     * Specifies the name of the API throttling policy.
-     * The policy name consists of 3 to 64 characters, starting with a letter.
-     * Only letters, digits and underscores (_) are allowed.
+     * Specifies the name of the throttling policy.  
+     * The valid length is limited from `3` to `64`, only Chinese and English letters, digits and underscores (_) are
+     * allowed.
+     * The name must start with a Chinese or English letter.
      */
     name?: pulumi.Input<string>;
     /**
@@ -288,26 +291,26 @@ export interface ThrottlingPolicyState {
     period?: pulumi.Input<number>;
     /**
      * Specifies the time unit for limiting the number of API calls.
-     * The valid values are *SECOND*, *MINUTE*, *HOUR* and *DAY*, default to *MINUTE*.
+     * The valid values are **SECOND**, **MINUTE**, **HOUR** and **DAY**, defaults to **MINUTE**.
      */
     periodUnit?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to create the API throttling policy resource.
-     * If omitted, the provider-level region will be used. Changing this will create a new API throttling policy resource.
+     * Specifies the region where the throttling policy is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the type of the request throttling policy.
+     * Specifies the type of the request throttling policy.  
      * The valid values are as follows:
-     * + API-based: limiting the maximum number of times a single API bound to the policy can be called within the
+     * + **API-based**: limiting the maximum number of times a single API bound to the policy can be called within the
      * specified period.
-     * + API-shared: limiting the maximum number of times all APIs bound to the policy can be called within the specified
+     * + **API-shared**: limiting the maximum number of times all APIs bound to the policy can be called within the specified
      * period.
      */
     type?: pulumi.Input<string>;
     /**
-     * Specifies an array of one or more special throttling policies for IAM user limit.
-     * The `throttle` object of the `userThrottles` structure is documented below.
+     * Specifies the array of one or more special throttling policies for IAM user limit.
+     * The object structure is documented below.
      */
     userThrottles?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ThrottlingPolicyUserThrottle>[]>;
 }
@@ -317,19 +320,19 @@ export interface ThrottlingPolicyState {
  */
 export interface ThrottlingPolicyArgs {
     /**
-     * Specifies an array of one or more special throttling policies for APP limit.
-     * The `throttle` object of the `userThrottles` structure is documented below.
+     * Specifies the array of one or more special throttling policies for APP limit.
+     * The object structure is documented below.
      */
     appThrottles?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ThrottlingPolicyAppThrottle>[]>;
     /**
      * Specifies the description about the API throttling policy.
-     * The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
-     * Chinese characters must be in UTF-8 or Unicode format.
+     * The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies an ID of the APIG dedicated instance to which the API
-     * throttling policy belongs to. Changing this will create a new API throttling policy resource.
+     * Specifies the ID of the dedicated instance to which the throttling
+     * policy belongs.
+     * Changing this will create a new resource.
      */
     instanceId: pulumi.Input<string>;
     /**
@@ -339,23 +342,27 @@ export interface ThrottlingPolicyArgs {
     maxApiRequests: pulumi.Input<number>;
     /**
      * Specifies the maximum number of times the API can be accessed by an app within
-     * the same period. The value of this parameter must be less than or equal to the value of `maxUserRequests`.
+     * the same period.
+     * The value of this parameter must be less than or equal to the value of `maxUserRequests`.
      */
     maxAppRequests?: pulumi.Input<number>;
     /**
      * Specifies the maximum number of times the API can be accessed by an IP address
-     * within the same period. The value of this parameter must be less than or equal to the value of `maxApiRequests`.
+     * within the same period.
+     * The value of this parameter must be less than or equal to the value of `maxApiRequests`.
      */
     maxIpRequests?: pulumi.Input<number>;
     /**
      * Specifies the maximum number of times the API can be accessed by a user within
-     * the same period. The value of this parameter must be less than or equal to the value of `maxApiRequests`.
+     * the same period.
+     * The value of this parameter must be less than or equal to the value of `maxApiRequests`.
      */
     maxUserRequests?: pulumi.Input<number>;
     /**
-     * Specifies the name of the API throttling policy.
-     * The policy name consists of 3 to 64 characters, starting with a letter.
-     * Only letters, digits and underscores (_) are allowed.
+     * Specifies the name of the throttling policy.  
+     * The valid length is limited from `3` to `64`, only Chinese and English letters, digits and underscores (_) are
+     * allowed.
+     * The name must start with a Chinese or English letter.
      */
     name?: pulumi.Input<string>;
     /**
@@ -366,26 +373,26 @@ export interface ThrottlingPolicyArgs {
     period: pulumi.Input<number>;
     /**
      * Specifies the time unit for limiting the number of API calls.
-     * The valid values are *SECOND*, *MINUTE*, *HOUR* and *DAY*, default to *MINUTE*.
+     * The valid values are **SECOND**, **MINUTE**, **HOUR** and **DAY**, defaults to **MINUTE**.
      */
     periodUnit?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to create the API throttling policy resource.
-     * If omitted, the provider-level region will be used. Changing this will create a new API throttling policy resource.
+     * Specifies the region where the throttling policy is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the type of the request throttling policy.
+     * Specifies the type of the request throttling policy.  
      * The valid values are as follows:
-     * + API-based: limiting the maximum number of times a single API bound to the policy can be called within the
+     * + **API-based**: limiting the maximum number of times a single API bound to the policy can be called within the
      * specified period.
-     * + API-shared: limiting the maximum number of times all APIs bound to the policy can be called within the specified
+     * + **API-shared**: limiting the maximum number of times all APIs bound to the policy can be called within the specified
      * period.
      */
     type?: pulumi.Input<string>;
     /**
-     * Specifies an array of one or more special throttling policies for IAM user limit.
-     * The `throttle` object of the `userThrottles` structure is documented below.
+     * Specifies the array of one or more special throttling policies for IAM user limit.
+     * The object structure is documented below.
      */
     userThrottles?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ThrottlingPolicyUserThrottle>[]>;
 }

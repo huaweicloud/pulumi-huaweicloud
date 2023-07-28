@@ -29,9 +29,9 @@ import (
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
 //			cfg := config.New(ctx, "")
-//			subentId := cfg.RequireObject("subentId")
+//			subnetId := cfg.RequireObject("subnetId")
 //			_, err := Iec.GetPort(ctx, &iec.GetPortArgs{
-//				SubnetId: pulumi.StringRef(subentId),
+//				SubnetId: pulumi.StringRef(subnetId),
 //				FixedIp:  pulumi.StringRef("192.168.1.123"),
 //			}, nil)
 //			if err != nil {

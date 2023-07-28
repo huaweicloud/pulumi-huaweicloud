@@ -28,28 +28,23 @@ class CustomAuthorizerArgs:
         """
         The set of arguments for constructing a CustomAuthorizer resource.
         :param pulumi.Input[str] function_urn: Specifies the uniform function URN of the function graph resource.
-               Changing this will create a new custom authorizer resource.
         :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the
                custom authorizer belongs to.
                Changing this will create a new custom authorizer resource.
         :param pulumi.Input[int] cache_age: Specifies the maximum cache age.
-               Changing this will create a new custom authorizer resource.
         :param pulumi.Input[Sequence[pulumi.Input['CustomAuthorizerIdentityArgs']]] identities: Specifies an array of one or more parameter identities of the custom authorizer.
                The object structure is documented below.
         :param pulumi.Input[bool] is_body_send: Specifies whether to send the body.
-               Changing this will create a new custom authorizer resource.
         :param pulumi.Input[str] name: Specifies the name of the parameter to be verified.
                The parameter includes front-end and back-end parameters.
-               Changing this will create a new custom authorizer resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the custom authorizer resource.
                If omitted, the provider-level region will be used.
                Changing this will create a new custom authorizer resource.
         :param pulumi.Input[str] type: Specifies the custom authoriz type.
-               The valid values are *FRONTEND* and *BACKEND*.
+               The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
                Changing this will create a new custom authorizer resource.
-        :param pulumi.Input[str] user_data: Specifies the user data, which can contain a maximum of 2,048 characters.
+        :param pulumi.Input[str] user_data: Specifies the user data, which can contain a maximum of `2,048` characters.
                The user data is used by APIG to invoke the specified authentication function when accessing the backend service.
-               Changing this will create a new custom authorizer resource.
         """
         pulumi.set(__self__, "function_urn", function_urn)
         pulumi.set(__self__, "instance_id", instance_id)
@@ -73,7 +68,6 @@ class CustomAuthorizerArgs:
     def function_urn(self) -> pulumi.Input[str]:
         """
         Specifies the uniform function URN of the function graph resource.
-        Changing this will create a new custom authorizer resource.
         """
         return pulumi.get(self, "function_urn")
 
@@ -100,7 +94,6 @@ class CustomAuthorizerArgs:
     def cache_age(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the maximum cache age.
-        Changing this will create a new custom authorizer resource.
         """
         return pulumi.get(self, "cache_age")
 
@@ -126,7 +119,6 @@ class CustomAuthorizerArgs:
     def is_body_send(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to send the body.
-        Changing this will create a new custom authorizer resource.
         """
         return pulumi.get(self, "is_body_send")
 
@@ -140,7 +132,6 @@ class CustomAuthorizerArgs:
         """
         Specifies the name of the parameter to be verified.
         The parameter includes front-end and back-end parameters.
-        Changing this will create a new custom authorizer resource.
         """
         return pulumi.get(self, "name")
 
@@ -167,7 +158,7 @@ class CustomAuthorizerArgs:
     def type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the custom authoriz type.
-        The valid values are *FRONTEND* and *BACKEND*.
+        The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
         Changing this will create a new custom authorizer resource.
         """
         return pulumi.get(self, "type")
@@ -180,9 +171,8 @@ class CustomAuthorizerArgs:
     @pulumi.getter(name="userData")
     def user_data(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the user data, which can contain a maximum of 2,048 characters.
+        Specifies the user data, which can contain a maximum of `2,048` characters.
         The user data is used by APIG to invoke the specified authentication function when accessing the backend service.
-        Changing this will create a new custom authorizer resource.
         """
         return pulumi.get(self, "user_data")
 
@@ -195,7 +185,7 @@ class CustomAuthorizerArgs:
 class _CustomAuthorizerState:
     def __init__(__self__, *,
                  cache_age: Optional[pulumi.Input[int]] = None,
-                 create_time: Optional[pulumi.Input[str]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  function_urn: Optional[pulumi.Input[str]] = None,
                  identities: Optional[pulumi.Input[Sequence[pulumi.Input['CustomAuthorizerIdentityArgs']]]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
@@ -207,34 +197,29 @@ class _CustomAuthorizerState:
         """
         Input properties used for looking up and filtering CustomAuthorizer resources.
         :param pulumi.Input[int] cache_age: Specifies the maximum cache age.
-               Changing this will create a new custom authorizer resource.
-        :param pulumi.Input[str] create_time: Time when the APIG custom authorizer was created.
+        :param pulumi.Input[str] created_at: The creation time of the custom authorizer.
         :param pulumi.Input[str] function_urn: Specifies the uniform function URN of the function graph resource.
-               Changing this will create a new custom authorizer resource.
         :param pulumi.Input[Sequence[pulumi.Input['CustomAuthorizerIdentityArgs']]] identities: Specifies an array of one or more parameter identities of the custom authorizer.
                The object structure is documented below.
         :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the
                custom authorizer belongs to.
                Changing this will create a new custom authorizer resource.
         :param pulumi.Input[bool] is_body_send: Specifies whether to send the body.
-               Changing this will create a new custom authorizer resource.
         :param pulumi.Input[str] name: Specifies the name of the parameter to be verified.
                The parameter includes front-end and back-end parameters.
-               Changing this will create a new custom authorizer resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the custom authorizer resource.
                If omitted, the provider-level region will be used.
                Changing this will create a new custom authorizer resource.
         :param pulumi.Input[str] type: Specifies the custom authoriz type.
-               The valid values are *FRONTEND* and *BACKEND*.
+               The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
                Changing this will create a new custom authorizer resource.
-        :param pulumi.Input[str] user_data: Specifies the user data, which can contain a maximum of 2,048 characters.
+        :param pulumi.Input[str] user_data: Specifies the user data, which can contain a maximum of `2,048` characters.
                The user data is used by APIG to invoke the specified authentication function when accessing the backend service.
-               Changing this will create a new custom authorizer resource.
         """
         if cache_age is not None:
             pulumi.set(__self__, "cache_age", cache_age)
-        if create_time is not None:
-            pulumi.set(__self__, "create_time", create_time)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if function_urn is not None:
             pulumi.set(__self__, "function_urn", function_urn)
         if identities is not None:
@@ -257,7 +242,6 @@ class _CustomAuthorizerState:
     def cache_age(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the maximum cache age.
-        Changing this will create a new custom authorizer resource.
         """
         return pulumi.get(self, "cache_age")
 
@@ -266,23 +250,22 @@ class _CustomAuthorizerState:
         pulumi.set(self, "cache_age", value)
 
     @property
-    @pulumi.getter(name="createTime")
-    def create_time(self) -> Optional[pulumi.Input[str]]:
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
         """
-        Time when the APIG custom authorizer was created.
+        The creation time of the custom authorizer.
         """
-        return pulumi.get(self, "create_time")
+        return pulumi.get(self, "created_at")
 
-    @create_time.setter
-    def create_time(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "create_time", value)
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
 
     @property
     @pulumi.getter(name="functionUrn")
     def function_urn(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the uniform function URN of the function graph resource.
-        Changing this will create a new custom authorizer resource.
         """
         return pulumi.get(self, "function_urn")
 
@@ -322,7 +305,6 @@ class _CustomAuthorizerState:
     def is_body_send(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to send the body.
-        Changing this will create a new custom authorizer resource.
         """
         return pulumi.get(self, "is_body_send")
 
@@ -336,7 +318,6 @@ class _CustomAuthorizerState:
         """
         Specifies the name of the parameter to be verified.
         The parameter includes front-end and back-end parameters.
-        Changing this will create a new custom authorizer resource.
         """
         return pulumi.get(self, "name")
 
@@ -363,7 +344,7 @@ class _CustomAuthorizerState:
     def type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the custom authoriz type.
-        The valid values are *FRONTEND* and *BACKEND*.
+        The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
         Changing this will create a new custom authorizer resource.
         """
         return pulumi.get(self, "type")
@@ -376,9 +357,8 @@ class _CustomAuthorizerState:
     @pulumi.getter(name="userData")
     def user_data(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the user data, which can contain a maximum of 2,048 characters.
+        Specifies the user data, which can contain a maximum of `2,048` characters.
         The user data is used by APIG to invoke the specified authentication function when accessing the backend service.
-        Changing this will create a new custom authorizer resource.
         """
         return pulumi.get(self, "user_data")
 
@@ -428,37 +408,32 @@ class CustomAuthorizer(pulumi.CustomResource):
 
         ## Import
 
-        Custom Authorizers of the APIG can be imported using their `name` and the ID of the APIG instance to which the group belongs, separated by a slash, e.g.
+        Custom Authorizers of the APIG can be imported using their `name` and related dedicated instance IDs, separated by a slash, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/customAuthorizer:CustomAuthorizer test <instance id>/<name>
+         $ pulumi import huaweicloud:DedicatedApig/customAuthorizer:CustomAuthorizer test <instance_id>/<name>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[int] cache_age: Specifies the maximum cache age.
-               Changing this will create a new custom authorizer resource.
         :param pulumi.Input[str] function_urn: Specifies the uniform function URN of the function graph resource.
-               Changing this will create a new custom authorizer resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['CustomAuthorizerIdentityArgs']]]] identities: Specifies an array of one or more parameter identities of the custom authorizer.
                The object structure is documented below.
         :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the
                custom authorizer belongs to.
                Changing this will create a new custom authorizer resource.
         :param pulumi.Input[bool] is_body_send: Specifies whether to send the body.
-               Changing this will create a new custom authorizer resource.
         :param pulumi.Input[str] name: Specifies the name of the parameter to be verified.
                The parameter includes front-end and back-end parameters.
-               Changing this will create a new custom authorizer resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the custom authorizer resource.
                If omitted, the provider-level region will be used.
                Changing this will create a new custom authorizer resource.
         :param pulumi.Input[str] type: Specifies the custom authoriz type.
-               The valid values are *FRONTEND* and *BACKEND*.
+               The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
                Changing this will create a new custom authorizer resource.
-        :param pulumi.Input[str] user_data: Specifies the user data, which can contain a maximum of 2,048 characters.
+        :param pulumi.Input[str] user_data: Specifies the user data, which can contain a maximum of `2,048` characters.
                The user data is used by APIG to invoke the specified authentication function when accessing the backend service.
-               Changing this will create a new custom authorizer resource.
         """
         ...
     @overload
@@ -492,10 +467,10 @@ class CustomAuthorizer(pulumi.CustomResource):
 
         ## Import
 
-        Custom Authorizers of the APIG can be imported using their `name` and the ID of the APIG instance to which the group belongs, separated by a slash, e.g.
+        Custom Authorizers of the APIG can be imported using their `name` and related dedicated instance IDs, separated by a slash, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/customAuthorizer:CustomAuthorizer test <instance id>/<name>
+         $ pulumi import huaweicloud:DedicatedApig/customAuthorizer:CustomAuthorizer test <instance_id>/<name>
         ```
 
         :param str resource_name: The name of the resource.
@@ -544,7 +519,7 @@ class CustomAuthorizer(pulumi.CustomResource):
             __props__.__dict__["region"] = region
             __props__.__dict__["type"] = type
             __props__.__dict__["user_data"] = user_data
-            __props__.__dict__["create_time"] = None
+            __props__.__dict__["created_at"] = None
         super(CustomAuthorizer, __self__).__init__(
             'huaweicloud:DedicatedApig/customAuthorizer:CustomAuthorizer',
             resource_name,
@@ -556,7 +531,7 @@ class CustomAuthorizer(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             cache_age: Optional[pulumi.Input[int]] = None,
-            create_time: Optional[pulumi.Input[str]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             function_urn: Optional[pulumi.Input[str]] = None,
             identities: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['CustomAuthorizerIdentityArgs']]]]] = None,
             instance_id: Optional[pulumi.Input[str]] = None,
@@ -573,36 +548,31 @@ class CustomAuthorizer(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[int] cache_age: Specifies the maximum cache age.
-               Changing this will create a new custom authorizer resource.
-        :param pulumi.Input[str] create_time: Time when the APIG custom authorizer was created.
+        :param pulumi.Input[str] created_at: The creation time of the custom authorizer.
         :param pulumi.Input[str] function_urn: Specifies the uniform function URN of the function graph resource.
-               Changing this will create a new custom authorizer resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['CustomAuthorizerIdentityArgs']]]] identities: Specifies an array of one or more parameter identities of the custom authorizer.
                The object structure is documented below.
         :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the
                custom authorizer belongs to.
                Changing this will create a new custom authorizer resource.
         :param pulumi.Input[bool] is_body_send: Specifies whether to send the body.
-               Changing this will create a new custom authorizer resource.
         :param pulumi.Input[str] name: Specifies the name of the parameter to be verified.
                The parameter includes front-end and back-end parameters.
-               Changing this will create a new custom authorizer resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the custom authorizer resource.
                If omitted, the provider-level region will be used.
                Changing this will create a new custom authorizer resource.
         :param pulumi.Input[str] type: Specifies the custom authoriz type.
-               The valid values are *FRONTEND* and *BACKEND*.
+               The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
                Changing this will create a new custom authorizer resource.
-        :param pulumi.Input[str] user_data: Specifies the user data, which can contain a maximum of 2,048 characters.
+        :param pulumi.Input[str] user_data: Specifies the user data, which can contain a maximum of `2,048` characters.
                The user data is used by APIG to invoke the specified authentication function when accessing the backend service.
-               Changing this will create a new custom authorizer resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _CustomAuthorizerState.__new__(_CustomAuthorizerState)
 
         __props__.__dict__["cache_age"] = cache_age
-        __props__.__dict__["create_time"] = create_time
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["function_urn"] = function_urn
         __props__.__dict__["identities"] = identities
         __props__.__dict__["instance_id"] = instance_id
@@ -618,24 +588,22 @@ class CustomAuthorizer(pulumi.CustomResource):
     def cache_age(self) -> pulumi.Output[Optional[int]]:
         """
         Specifies the maximum cache age.
-        Changing this will create a new custom authorizer resource.
         """
         return pulumi.get(self, "cache_age")
 
     @property
-    @pulumi.getter(name="createTime")
-    def create_time(self) -> pulumi.Output[str]:
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
         """
-        Time when the APIG custom authorizer was created.
+        The creation time of the custom authorizer.
         """
-        return pulumi.get(self, "create_time")
+        return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter(name="functionUrn")
     def function_urn(self) -> pulumi.Output[str]:
         """
         Specifies the uniform function URN of the function graph resource.
-        Changing this will create a new custom authorizer resource.
         """
         return pulumi.get(self, "function_urn")
 
@@ -663,7 +631,6 @@ class CustomAuthorizer(pulumi.CustomResource):
     def is_body_send(self) -> pulumi.Output[Optional[bool]]:
         """
         Specifies whether to send the body.
-        Changing this will create a new custom authorizer resource.
         """
         return pulumi.get(self, "is_body_send")
 
@@ -673,7 +640,6 @@ class CustomAuthorizer(pulumi.CustomResource):
         """
         Specifies the name of the parameter to be verified.
         The parameter includes front-end and back-end parameters.
-        Changing this will create a new custom authorizer resource.
         """
         return pulumi.get(self, "name")
 
@@ -692,7 +658,7 @@ class CustomAuthorizer(pulumi.CustomResource):
     def type(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the custom authoriz type.
-        The valid values are *FRONTEND* and *BACKEND*.
+        The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
         Changing this will create a new custom authorizer resource.
         """
         return pulumi.get(self, "type")
@@ -701,9 +667,8 @@ class CustomAuthorizer(pulumi.CustomResource):
     @pulumi.getter(name="userData")
     def user_data(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the user data, which can contain a maximum of 2,048 characters.
+        Specifies the user data, which can contain a maximum of `2,048` characters.
         The user data is used by APIG to invoke the specified authentication function when accessing the backend service.
-        Changing this will create a new custom authorizer resource.
         """
         return pulumi.get(self, "user_data")
 

@@ -56,23 +56,21 @@ import (
 //
 // ## Import
 //
-// Custom Authorizers of the APIG can be imported using their `name` and the ID of the APIG instance to which the group belongs, separated by a slash, e.g.
+// Custom Authorizers of the APIG can be imported using their `name` and related dedicated instance IDs, separated by a slash, e.g.
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:DedicatedApig/customAuthorizer:CustomAuthorizer test <instance id>/<name>
+//	$ pulumi import huaweicloud:DedicatedApig/customAuthorizer:CustomAuthorizer test <instance_id>/<name>
 //
 // ```
 type CustomAuthorizer struct {
 	pulumi.CustomResourceState
 
 	// Specifies the maximum cache age.
-	// Changing this will create a new custom authorizer resource.
 	CacheAge pulumi.IntPtrOutput `pulumi:"cacheAge"`
-	// Time when the APIG custom authorizer was created.
-	CreateTime pulumi.StringOutput `pulumi:"createTime"`
+	// The creation time of the custom authorizer.
+	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
 	// Specifies the uniform function URN of the function graph resource.
-	// Changing this will create a new custom authorizer resource.
 	FunctionUrn pulumi.StringOutput `pulumi:"functionUrn"`
 	// Specifies an array of one or more parameter identities of the custom authorizer.
 	// The object structure is documented below.
@@ -82,23 +80,20 @@ type CustomAuthorizer struct {
 	// Changing this will create a new custom authorizer resource.
 	InstanceId pulumi.StringOutput `pulumi:"instanceId"`
 	// Specifies whether to send the body.
-	// Changing this will create a new custom authorizer resource.
 	IsBodySend pulumi.BoolPtrOutput `pulumi:"isBodySend"`
 	// Specifies the name of the parameter to be verified.
 	// The parameter includes front-end and back-end parameters.
-	// Changing this will create a new custom authorizer resource.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the region in which to create the custom authorizer resource.
 	// If omitted, the provider-level region will be used.
 	// Changing this will create a new custom authorizer resource.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Specifies the custom authoriz type.
-	// The valid values are *FRONTEND* and *BACKEND*.
+	// The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
 	// Changing this will create a new custom authorizer resource.
 	Type pulumi.StringPtrOutput `pulumi:"type"`
-	// Specifies the user data, which can contain a maximum of 2,048 characters.
+	// Specifies the user data, which can contain a maximum of `2,048` characters.
 	// The user data is used by APIG to invoke the specified authentication function when accessing the backend service.
-	// Changing this will create a new custom authorizer resource.
 	UserData pulumi.StringPtrOutput `pulumi:"userData"`
 }
 
@@ -139,12 +134,10 @@ func GetCustomAuthorizer(ctx *pulumi.Context,
 // Input properties used for looking up and filtering CustomAuthorizer resources.
 type customAuthorizerState struct {
 	// Specifies the maximum cache age.
-	// Changing this will create a new custom authorizer resource.
 	CacheAge *int `pulumi:"cacheAge"`
-	// Time when the APIG custom authorizer was created.
-	CreateTime *string `pulumi:"createTime"`
+	// The creation time of the custom authorizer.
+	CreatedAt *string `pulumi:"createdAt"`
 	// Specifies the uniform function URN of the function graph resource.
-	// Changing this will create a new custom authorizer resource.
 	FunctionUrn *string `pulumi:"functionUrn"`
 	// Specifies an array of one or more parameter identities of the custom authorizer.
 	// The object structure is documented below.
@@ -154,34 +147,29 @@ type customAuthorizerState struct {
 	// Changing this will create a new custom authorizer resource.
 	InstanceId *string `pulumi:"instanceId"`
 	// Specifies whether to send the body.
-	// Changing this will create a new custom authorizer resource.
 	IsBodySend *bool `pulumi:"isBodySend"`
 	// Specifies the name of the parameter to be verified.
 	// The parameter includes front-end and back-end parameters.
-	// Changing this will create a new custom authorizer resource.
 	Name *string `pulumi:"name"`
 	// Specifies the region in which to create the custom authorizer resource.
 	// If omitted, the provider-level region will be used.
 	// Changing this will create a new custom authorizer resource.
 	Region *string `pulumi:"region"`
 	// Specifies the custom authoriz type.
-	// The valid values are *FRONTEND* and *BACKEND*.
+	// The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
 	// Changing this will create a new custom authorizer resource.
 	Type *string `pulumi:"type"`
-	// Specifies the user data, which can contain a maximum of 2,048 characters.
+	// Specifies the user data, which can contain a maximum of `2,048` characters.
 	// The user data is used by APIG to invoke the specified authentication function when accessing the backend service.
-	// Changing this will create a new custom authorizer resource.
 	UserData *string `pulumi:"userData"`
 }
 
 type CustomAuthorizerState struct {
 	// Specifies the maximum cache age.
-	// Changing this will create a new custom authorizer resource.
 	CacheAge pulumi.IntPtrInput
-	// Time when the APIG custom authorizer was created.
-	CreateTime pulumi.StringPtrInput
+	// The creation time of the custom authorizer.
+	CreatedAt pulumi.StringPtrInput
 	// Specifies the uniform function URN of the function graph resource.
-	// Changing this will create a new custom authorizer resource.
 	FunctionUrn pulumi.StringPtrInput
 	// Specifies an array of one or more parameter identities of the custom authorizer.
 	// The object structure is documented below.
@@ -191,23 +179,20 @@ type CustomAuthorizerState struct {
 	// Changing this will create a new custom authorizer resource.
 	InstanceId pulumi.StringPtrInput
 	// Specifies whether to send the body.
-	// Changing this will create a new custom authorizer resource.
 	IsBodySend pulumi.BoolPtrInput
 	// Specifies the name of the parameter to be verified.
 	// The parameter includes front-end and back-end parameters.
-	// Changing this will create a new custom authorizer resource.
 	Name pulumi.StringPtrInput
 	// Specifies the region in which to create the custom authorizer resource.
 	// If omitted, the provider-level region will be used.
 	// Changing this will create a new custom authorizer resource.
 	Region pulumi.StringPtrInput
 	// Specifies the custom authoriz type.
-	// The valid values are *FRONTEND* and *BACKEND*.
+	// The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
 	// Changing this will create a new custom authorizer resource.
 	Type pulumi.StringPtrInput
-	// Specifies the user data, which can contain a maximum of 2,048 characters.
+	// Specifies the user data, which can contain a maximum of `2,048` characters.
 	// The user data is used by APIG to invoke the specified authentication function when accessing the backend service.
-	// Changing this will create a new custom authorizer resource.
 	UserData pulumi.StringPtrInput
 }
 
@@ -217,10 +202,8 @@ func (CustomAuthorizerState) ElementType() reflect.Type {
 
 type customAuthorizerArgs struct {
 	// Specifies the maximum cache age.
-	// Changing this will create a new custom authorizer resource.
 	CacheAge *int `pulumi:"cacheAge"`
 	// Specifies the uniform function URN of the function graph resource.
-	// Changing this will create a new custom authorizer resource.
 	FunctionUrn string `pulumi:"functionUrn"`
 	// Specifies an array of one or more parameter identities of the custom authorizer.
 	// The object structure is documented below.
@@ -230,33 +213,28 @@ type customAuthorizerArgs struct {
 	// Changing this will create a new custom authorizer resource.
 	InstanceId string `pulumi:"instanceId"`
 	// Specifies whether to send the body.
-	// Changing this will create a new custom authorizer resource.
 	IsBodySend *bool `pulumi:"isBodySend"`
 	// Specifies the name of the parameter to be verified.
 	// The parameter includes front-end and back-end parameters.
-	// Changing this will create a new custom authorizer resource.
 	Name *string `pulumi:"name"`
 	// Specifies the region in which to create the custom authorizer resource.
 	// If omitted, the provider-level region will be used.
 	// Changing this will create a new custom authorizer resource.
 	Region *string `pulumi:"region"`
 	// Specifies the custom authoriz type.
-	// The valid values are *FRONTEND* and *BACKEND*.
+	// The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
 	// Changing this will create a new custom authorizer resource.
 	Type *string `pulumi:"type"`
-	// Specifies the user data, which can contain a maximum of 2,048 characters.
+	// Specifies the user data, which can contain a maximum of `2,048` characters.
 	// The user data is used by APIG to invoke the specified authentication function when accessing the backend service.
-	// Changing this will create a new custom authorizer resource.
 	UserData *string `pulumi:"userData"`
 }
 
 // The set of arguments for constructing a CustomAuthorizer resource.
 type CustomAuthorizerArgs struct {
 	// Specifies the maximum cache age.
-	// Changing this will create a new custom authorizer resource.
 	CacheAge pulumi.IntPtrInput
 	// Specifies the uniform function URN of the function graph resource.
-	// Changing this will create a new custom authorizer resource.
 	FunctionUrn pulumi.StringInput
 	// Specifies an array of one or more parameter identities of the custom authorizer.
 	// The object structure is documented below.
@@ -266,23 +244,20 @@ type CustomAuthorizerArgs struct {
 	// Changing this will create a new custom authorizer resource.
 	InstanceId pulumi.StringInput
 	// Specifies whether to send the body.
-	// Changing this will create a new custom authorizer resource.
 	IsBodySend pulumi.BoolPtrInput
 	// Specifies the name of the parameter to be verified.
 	// The parameter includes front-end and back-end parameters.
-	// Changing this will create a new custom authorizer resource.
 	Name pulumi.StringPtrInput
 	// Specifies the region in which to create the custom authorizer resource.
 	// If omitted, the provider-level region will be used.
 	// Changing this will create a new custom authorizer resource.
 	Region pulumi.StringPtrInput
 	// Specifies the custom authoriz type.
-	// The valid values are *FRONTEND* and *BACKEND*.
+	// The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
 	// Changing this will create a new custom authorizer resource.
 	Type pulumi.StringPtrInput
-	// Specifies the user data, which can contain a maximum of 2,048 characters.
+	// Specifies the user data, which can contain a maximum of `2,048` characters.
 	// The user data is used by APIG to invoke the specified authentication function when accessing the backend service.
-	// Changing this will create a new custom authorizer resource.
 	UserData pulumi.StringPtrInput
 }
 
@@ -374,18 +349,16 @@ func (o CustomAuthorizerOutput) ToCustomAuthorizerOutputWithContext(ctx context.
 }
 
 // Specifies the maximum cache age.
-// Changing this will create a new custom authorizer resource.
 func (o CustomAuthorizerOutput) CacheAge() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *CustomAuthorizer) pulumi.IntPtrOutput { return v.CacheAge }).(pulumi.IntPtrOutput)
 }
 
-// Time when the APIG custom authorizer was created.
-func (o CustomAuthorizerOutput) CreateTime() pulumi.StringOutput {
-	return o.ApplyT(func(v *CustomAuthorizer) pulumi.StringOutput { return v.CreateTime }).(pulumi.StringOutput)
+// The creation time of the custom authorizer.
+func (o CustomAuthorizerOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *CustomAuthorizer) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
 }
 
 // Specifies the uniform function URN of the function graph resource.
-// Changing this will create a new custom authorizer resource.
 func (o CustomAuthorizerOutput) FunctionUrn() pulumi.StringOutput {
 	return o.ApplyT(func(v *CustomAuthorizer) pulumi.StringOutput { return v.FunctionUrn }).(pulumi.StringOutput)
 }
@@ -404,14 +377,12 @@ func (o CustomAuthorizerOutput) InstanceId() pulumi.StringOutput {
 }
 
 // Specifies whether to send the body.
-// Changing this will create a new custom authorizer resource.
 func (o CustomAuthorizerOutput) IsBodySend() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *CustomAuthorizer) pulumi.BoolPtrOutput { return v.IsBodySend }).(pulumi.BoolPtrOutput)
 }
 
 // Specifies the name of the parameter to be verified.
 // The parameter includes front-end and back-end parameters.
-// Changing this will create a new custom authorizer resource.
 func (o CustomAuthorizerOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *CustomAuthorizer) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
@@ -424,15 +395,14 @@ func (o CustomAuthorizerOutput) Region() pulumi.StringOutput {
 }
 
 // Specifies the custom authoriz type.
-// The valid values are *FRONTEND* and *BACKEND*.
+// The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
 // Changing this will create a new custom authorizer resource.
 func (o CustomAuthorizerOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *CustomAuthorizer) pulumi.StringPtrOutput { return v.Type }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the user data, which can contain a maximum of 2,048 characters.
+// Specifies the user data, which can contain a maximum of `2,048` characters.
 // The user data is used by APIG to invoke the specified authentication function when accessing the backend service.
-// Changing this will create a new custom authorizer resource.
 func (o CustomAuthorizerOutput) UserData() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *CustomAuthorizer) pulumi.StringPtrOutput { return v.UserData }).(pulumi.StringPtrOutput)
 }

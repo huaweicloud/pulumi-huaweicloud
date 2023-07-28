@@ -19,18 +19,24 @@ class KafkaInstanceCrossVpcAccessArgs:
     def __init__(__self__, *,
                  advertised_ip: Optional[pulumi.Input[str]] = None,
                  lisenter_ip: Optional[pulumi.Input[str]] = None,
+                 listener_ip: Optional[pulumi.Input[str]] = None,
                  port: Optional[pulumi.Input[int]] = None,
                  port_id: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[str] advertised_ip: -(Optional, String) The advertised IP Address or domain name.
-        :param pulumi.Input[str] lisenter_ip: The listener IP address.
+        :param pulumi.Input[str] advertised_ip: The advertised IP Address or domain name.
+        :param pulumi.Input[str] listener_ip: The listener IP address.
         :param pulumi.Input[int] port: The port number.
         :param pulumi.Input[str] port_id: The port ID associated with the address.
         """
         if advertised_ip is not None:
             pulumi.set(__self__, "advertised_ip", advertised_ip)
         if lisenter_ip is not None:
+            warnings.warn("""typo in lisenter_ip, please use \"listener_ip\" instead.""", DeprecationWarning)
+            pulumi.log.warn("""lisenter_ip is deprecated: typo in lisenter_ip, please use \"listener_ip\" instead.""")
+        if lisenter_ip is not None:
             pulumi.set(__self__, "lisenter_ip", lisenter_ip)
+        if listener_ip is not None:
+            pulumi.set(__self__, "listener_ip", listener_ip)
         if port is not None:
             pulumi.set(__self__, "port", port)
         if port_id is not None:
@@ -40,7 +46,7 @@ class KafkaInstanceCrossVpcAccessArgs:
     @pulumi.getter(name="advertisedIp")
     def advertised_ip(self) -> Optional[pulumi.Input[str]]:
         """
-        -(Optional, String) The advertised IP Address or domain name.
+        The advertised IP Address or domain name.
         """
         return pulumi.get(self, "advertised_ip")
 
@@ -51,14 +57,23 @@ class KafkaInstanceCrossVpcAccessArgs:
     @property
     @pulumi.getter(name="lisenterIp")
     def lisenter_ip(self) -> Optional[pulumi.Input[str]]:
-        """
-        The listener IP address.
-        """
         return pulumi.get(self, "lisenter_ip")
 
     @lisenter_ip.setter
     def lisenter_ip(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "lisenter_ip", value)
+
+    @property
+    @pulumi.getter(name="listenerIp")
+    def listener_ip(self) -> Optional[pulumi.Input[str]]:
+        """
+        The listener IP address.
+        """
+        return pulumi.get(self, "listener_ip")
+
+    @listener_ip.setter
+    def listener_ip(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "listener_ip", value)
 
     @property
     @pulumi.getter
@@ -91,11 +106,11 @@ class KafkaPermissionsPolicyArgs:
                  access_policy: pulumi.Input[str],
                  user_name: pulumi.Input[str]):
         """
-        :param pulumi.Input[str] access_policy: -(Required, String) Specifies the permissions type. The value can be:
+        :param pulumi.Input[str] access_policy: Specifies the permissions type. The value can be:
                + **all**: publish and subscribe permissions.
                + **pub**: publish permissions.
                + **sub**: subscribe permissions.
-        :param pulumi.Input[str] user_name: -(Required, String) Specifies the user name.
+        :param pulumi.Input[str] user_name: Specifies the username.
         """
         pulumi.set(__self__, "access_policy", access_policy)
         pulumi.set(__self__, "user_name", user_name)
@@ -104,7 +119,7 @@ class KafkaPermissionsPolicyArgs:
     @pulumi.getter(name="accessPolicy")
     def access_policy(self) -> pulumi.Input[str]:
         """
-        -(Required, String) Specifies the permissions type. The value can be:
+        Specifies the permissions type. The value can be:
         + **all**: publish and subscribe permissions.
         + **pub**: publish permissions.
         + **sub**: subscribe permissions.
@@ -119,7 +134,7 @@ class KafkaPermissionsPolicyArgs:
     @pulumi.getter(name="userName")
     def user_name(self) -> pulumi.Input[str]:
         """
-        -(Required, String) Specifies the user name.
+        Specifies the username.
         """
         return pulumi.get(self, "user_name")
 

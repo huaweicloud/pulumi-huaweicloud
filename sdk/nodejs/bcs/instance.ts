@@ -43,6 +43,7 @@ export class Instance extends pulumi.CustomResource {
      * `Isdeleting`, `Normal`, `AbNormal` and `Unknown`.
      * * `peer_orgs/status_detail` - The peer status in the format like `1/1`. The denominator is the total number of peers in
      * the organization, and the numerator is the number of normal peers.
+     * * `peer_orgs/address` - The peer domain name or IP address of the cluster.
      * * `peer_orgs/address/domain_port` - The domain name address.
      * * `peer_orgs/address/ip_port` - The IP address.
      * * `kafka/name` - The Kafka instance name.
@@ -70,6 +71,9 @@ export class Instance extends pulumi.CustomResource {
      * instance. The channels object structure is documented below.
      */
     public readonly channels!: pulumi.Output<outputs.Bcs.InstanceChannel[]>;
+    /**
+     * The type of the cluster where the BCS service is deployed.
+     */
     public /*out*/ readonly clusterType!: pulumi.Output<string>;
     /**
      * Specifies the consensus algorithm used by the BCS instance. The valid
@@ -79,14 +83,19 @@ export class Instance extends pulumi.CustomResource {
     public readonly consensus!: pulumi.Output<string>;
     /**
      * Specifies the NoSQL database used by BCS instance. If omitted, the bcs instance
-     * will create a `goleveldb`(File Database) database by default. Changing this will create a new instance. The couchdb
-     * object structure is documented below.
+     * will create a `goleveldb`(File Database) database by default. This field is required when databaseType is `couchdb`.
+     * Changing this will create a new instance. The couchdb object structure is documented below.
      */
     public readonly couchdb!: pulumi.Output<outputs.Bcs.InstanceCouchdb | undefined>;
     /**
      * Whether the BCS instance is deployed across regions.
      */
     public /*out*/ readonly crossRegionSupport!: pulumi.Output<boolean>;
+    /**
+     * Specifies the type of the database used by the BCS service.
+     * Valid values are `goleveldb` and `couchdb`. The default value is `goleveldb`.
+     * If `couchdb` is used, specify the couchdb field. Changing this will create a new instance.
+     */
     public readonly databaseType!: pulumi.Output<string>;
     /**
      * Specified whether to delete the associated OBS bucket when deleting BCS instance.
@@ -146,7 +155,7 @@ export class Instance extends pulumi.CustomResource {
     /**
      * Specifies the password of the couch datebase. The password consists of 8 to
      * 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-     * charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+     * characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
      */
     public readonly password!: pulumi.Output<string>;
     /**
@@ -194,7 +203,7 @@ export class Instance extends pulumi.CustomResource {
      */
     public readonly tc3Need!: pulumi.Output<boolean>;
     /**
-     * The service verison of the BCS instance.
+     * The service version of the BCS instance.
      */
     public /*out*/ readonly version!: pulumi.Output<string>;
     /**
@@ -328,6 +337,7 @@ export interface InstanceState {
      * `Isdeleting`, `Normal`, `AbNormal` and `Unknown`.
      * * `peer_orgs/status_detail` - The peer status in the format like `1/1`. The denominator is the total number of peers in
      * the organization, and the numerator is the number of normal peers.
+     * * `peer_orgs/address` - The peer domain name or IP address of the cluster.
      * * `peer_orgs/address/domain_port` - The domain name address.
      * * `peer_orgs/address/ip_port` - The IP address.
      * * `kafka/name` - The Kafka instance name.
@@ -355,6 +365,9 @@ export interface InstanceState {
      * instance. The channels object structure is documented below.
      */
     channels?: pulumi.Input<pulumi.Input<inputs.Bcs.InstanceChannel>[]>;
+    /**
+     * The type of the cluster where the BCS service is deployed.
+     */
     clusterType?: pulumi.Input<string>;
     /**
      * Specifies the consensus algorithm used by the BCS instance. The valid
@@ -364,14 +377,19 @@ export interface InstanceState {
     consensus?: pulumi.Input<string>;
     /**
      * Specifies the NoSQL database used by BCS instance. If omitted, the bcs instance
-     * will create a `goleveldb`(File Database) database by default. Changing this will create a new instance. The couchdb
-     * object structure is documented below.
+     * will create a `goleveldb`(File Database) database by default. This field is required when databaseType is `couchdb`.
+     * Changing this will create a new instance. The couchdb object structure is documented below.
      */
     couchdb?: pulumi.Input<inputs.Bcs.InstanceCouchdb>;
     /**
      * Whether the BCS instance is deployed across regions.
      */
     crossRegionSupport?: pulumi.Input<boolean>;
+    /**
+     * Specifies the type of the database used by the BCS service.
+     * Valid values are `goleveldb` and `couchdb`. The default value is `goleveldb`.
+     * If `couchdb` is used, specify the couchdb field. Changing this will create a new instance.
+     */
     databaseType?: pulumi.Input<string>;
     /**
      * Specified whether to delete the associated OBS bucket when deleting BCS instance.
@@ -431,7 +449,7 @@ export interface InstanceState {
     /**
      * Specifies the password of the couch datebase. The password consists of 8 to
      * 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-     * charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+     * characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
      */
     password?: pulumi.Input<string>;
     /**
@@ -479,7 +497,7 @@ export interface InstanceState {
      */
     tc3Need?: pulumi.Input<boolean>;
     /**
-     * The service verison of the BCS instance.
+     * The service version of the BCS instance.
      */
     version?: pulumi.Input<string>;
     /**
@@ -523,10 +541,15 @@ export interface InstanceArgs {
     consensus: pulumi.Input<string>;
     /**
      * Specifies the NoSQL database used by BCS instance. If omitted, the bcs instance
-     * will create a `goleveldb`(File Database) database by default. Changing this will create a new instance. The couchdb
-     * object structure is documented below.
+     * will create a `goleveldb`(File Database) database by default. This field is required when databaseType is `couchdb`.
+     * Changing this will create a new instance. The couchdb object structure is documented below.
      */
     couchdb?: pulumi.Input<inputs.Bcs.InstanceCouchdb>;
+    /**
+     * Specifies the type of the database used by the BCS service.
+     * Valid values are `goleveldb` and `couchdb`. The default value is `goleveldb`.
+     * If `couchdb` is used, specify the couchdb field. Changing this will create a new instance.
+     */
     databaseType?: pulumi.Input<string>;
     /**
      * Specified whether to delete the associated OBS bucket when deleting BCS instance.
@@ -582,7 +605,7 @@ export interface InstanceArgs {
     /**
      * Specifies the password of the couch datebase. The password consists of 8 to
      * 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
-     * charactors(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
+     * characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
      */
     password: pulumi.Input<string>;
     /**

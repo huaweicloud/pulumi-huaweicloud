@@ -36,12 +36,14 @@ class FunctionArgs:
                  handler: Optional[pulumi.Input[str]] = None,
                  initializer_handler: Optional[pulumi.Input[str]] = None,
                  initializer_timeout: Optional[pulumi.Input[int]] = None,
+                 max_instance_num: Optional[pulumi.Input[str]] = None,
                  mount_user_group_id: Optional[pulumi.Input[int]] = None,
                  mount_user_id: Optional[pulumi.Input[int]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  network_id: Optional[pulumi.Input[str]] = None,
                  package: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  user_data: Optional[pulumi.Input[str]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  xrole: Optional[pulumi.Input[str]] = None):
@@ -49,7 +51,7 @@ class FunctionArgs:
         The set of arguments for constructing a Function resource.
         :param pulumi.Input[int] memory_size: Specifies the memory size(MB) allocated to the function.
         :param pulumi.Input[str] runtime: Specifies the environment for executing the function.
-               If the function is created using a SWR image, set this parameter to `Custom Image`.
+               If the function is created using an SWR image, set this parameter to `Custom Image`.
                Changing this will create a new resource.
         :param pulumi.Input[int] timeout: Specifies the timeout interval of the function, ranges from 3s to 900s.
         :param pulumi.Input[str] agency: Specifies the agency. This parameter is mandatory if the function needs to access other
@@ -67,7 +69,6 @@ class FunctionArgs:
         :param pulumi.Input[str] code_url: Specifies the code url. This parameter is mandatory when code_type is set to obs.
         :param pulumi.Input['FunctionCustomImageArgs'] custom_image: Specifies the custom image configuration for creating function.
                The object structure is documented below.
-               Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] depend_lists: Specifies the ID list of the dependencies.
         :param pulumi.Input[str] description: Specifies the description of the function.
         :param pulumi.Input[str] encrypted_user_data: Specifies the key/value information defined to be encrypted for the
@@ -85,6 +86,9 @@ class FunctionArgs:
         :param pulumi.Input[str] initializer_handler: Specifies the initializer of the function.
         :param pulumi.Input[int] initializer_timeout: Specifies the maximum duration the function can be initialized. Value range:
                1s to 300s.
+        :param pulumi.Input[str] max_instance_num: Specifies the maximum number of instances of the function.  
+               The valid value ranges from `-1` to `1000`, defaults to `400`.
+               + The minimum value is `-1` and means the number of instances is unlimited.
         :param pulumi.Input[int] mount_user_group_id: Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
                -1.
         :param pulumi.Input[int] mount_user_id: Specifies the user ID, a non-0 integer from –1 to 65534. Default to -1.
@@ -93,6 +97,7 @@ class FunctionArgs:
         :param pulumi.Input[str] network_id: Specifies the network ID of subnet.
         :param pulumi.Input[str] region: Specifies the region in which to create the Function resource. If omitted, the
                provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the function.
         :param pulumi.Input[str] vpc_id: Specifies the ID of VPC.
         """
         pulumi.set(__self__, "memory_size", memory_size)
@@ -132,6 +137,8 @@ class FunctionArgs:
             pulumi.set(__self__, "initializer_handler", initializer_handler)
         if initializer_timeout is not None:
             pulumi.set(__self__, "initializer_timeout", initializer_timeout)
+        if max_instance_num is not None:
+            pulumi.set(__self__, "max_instance_num", max_instance_num)
         if mount_user_group_id is not None:
             pulumi.set(__self__, "mount_user_group_id", mount_user_group_id)
         if mount_user_id is not None:
@@ -147,6 +154,8 @@ class FunctionArgs:
             pulumi.set(__self__, "package", package)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
         if user_data is not None:
             pulumi.set(__self__, "user_data", user_data)
         if vpc_id is not None:
@@ -174,7 +183,7 @@ class FunctionArgs:
     def runtime(self) -> pulumi.Input[str]:
         """
         Specifies the environment for executing the function.
-        If the function is created using a SWR image, set this parameter to `Custom Image`.
+        If the function is created using an SWR image, set this parameter to `Custom Image`.
         Changing this will create a new resource.
         """
         return pulumi.get(self, "runtime")
@@ -280,7 +289,6 @@ class FunctionArgs:
         """
         Specifies the custom image configuration for creating function.
         The object structure is documented below.
-        Changing this will create a new resource.
         """
         return pulumi.get(self, "custom_image")
 
@@ -416,6 +424,20 @@ class FunctionArgs:
         pulumi.set(self, "initializer_timeout", value)
 
     @property
+    @pulumi.getter(name="maxInstanceNum")
+    def max_instance_num(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the maximum number of instances of the function.  
+        The valid value ranges from `-1` to `1000`, defaults to `400`.
+        + The minimum value is `-1` and means the number of instances is unlimited.
+        """
+        return pulumi.get(self, "max_instance_num")
+
+    @max_instance_num.setter
+    def max_instance_num(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "max_instance_num", value)
+
+    @property
     @pulumi.getter(name="mountUserGroupId")
     def mount_user_group_id(self) -> Optional[pulumi.Input[int]]:
         """
@@ -488,6 +510,18 @@ class FunctionArgs:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the function.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
+
+    @property
     @pulumi.getter(name="userData")
     def user_data(self) -> Optional[pulumi.Input[str]]:
         return pulumi.get(self, "user_data")
@@ -538,6 +572,7 @@ class _FunctionState:
                  handler: Optional[pulumi.Input[str]] = None,
                  initializer_handler: Optional[pulumi.Input[str]] = None,
                  initializer_timeout: Optional[pulumi.Input[int]] = None,
+                 max_instance_num: Optional[pulumi.Input[str]] = None,
                  memory_size: Optional[pulumi.Input[int]] = None,
                  mount_user_group_id: Optional[pulumi.Input[int]] = None,
                  mount_user_id: Optional[pulumi.Input[int]] = None,
@@ -546,6 +581,7 @@ class _FunctionState:
                  package: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  runtime: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  timeout: Optional[pulumi.Input[int]] = None,
                  urn: Optional[pulumi.Input[str]] = None,
                  user_data: Optional[pulumi.Input[str]] = None,
@@ -569,7 +605,6 @@ class _FunctionState:
         :param pulumi.Input[str] code_url: Specifies the code url. This parameter is mandatory when code_type is set to obs.
         :param pulumi.Input['FunctionCustomImageArgs'] custom_image: Specifies the custom image configuration for creating function.
                The object structure is documented below.
-               Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] depend_lists: Specifies the ID list of the dependencies.
         :param pulumi.Input[str] description: Specifies the description of the function.
         :param pulumi.Input[str] encrypted_user_data: Specifies the key/value information defined to be encrypted for the
@@ -587,6 +622,9 @@ class _FunctionState:
         :param pulumi.Input[str] initializer_handler: Specifies the initializer of the function.
         :param pulumi.Input[int] initializer_timeout: Specifies the maximum duration the function can be initialized. Value range:
                1s to 300s.
+        :param pulumi.Input[str] max_instance_num: Specifies the maximum number of instances of the function.  
+               The valid value ranges from `-1` to `1000`, defaults to `400`.
+               + The minimum value is `-1` and means the number of instances is unlimited.
         :param pulumi.Input[int] memory_size: Specifies the memory size(MB) allocated to the function.
         :param pulumi.Input[int] mount_user_group_id: Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
                -1.
@@ -597,8 +635,9 @@ class _FunctionState:
         :param pulumi.Input[str] region: Specifies the region in which to create the Function resource. If omitted, the
                provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] runtime: Specifies the environment for executing the function.
-               If the function is created using a SWR image, set this parameter to `Custom Image`.
+               If the function is created using an SWR image, set this parameter to `Custom Image`.
                Changing this will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the function.
         :param pulumi.Input[int] timeout: Specifies the timeout interval of the function, ranges from 3s to 900s.
         :param pulumi.Input[str] urn: Uniform Resource Name
         :param pulumi.Input[str] version: The version of the function
@@ -638,6 +677,8 @@ class _FunctionState:
             pulumi.set(__self__, "initializer_handler", initializer_handler)
         if initializer_timeout is not None:
             pulumi.set(__self__, "initializer_timeout", initializer_timeout)
+        if max_instance_num is not None:
+            pulumi.set(__self__, "max_instance_num", max_instance_num)
         if memory_size is not None:
             pulumi.set(__self__, "memory_size", memory_size)
         if mount_user_group_id is not None:
@@ -657,6 +698,8 @@ class _FunctionState:
             pulumi.set(__self__, "region", region)
         if runtime is not None:
             pulumi.set(__self__, "runtime", runtime)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
         if timeout is not None:
             pulumi.set(__self__, "timeout", timeout)
         if urn is not None:
@@ -758,7 +801,6 @@ class _FunctionState:
         """
         Specifies the custom image configuration for creating function.
         The object structure is documented below.
-        Changing this will create a new resource.
         """
         return pulumi.get(self, "custom_image")
 
@@ -894,6 +936,20 @@ class _FunctionState:
         pulumi.set(self, "initializer_timeout", value)
 
     @property
+    @pulumi.getter(name="maxInstanceNum")
+    def max_instance_num(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the maximum number of instances of the function.  
+        The valid value ranges from `-1` to `1000`, defaults to `400`.
+        + The minimum value is `-1` and means the number of instances is unlimited.
+        """
+        return pulumi.get(self, "max_instance_num")
+
+    @max_instance_num.setter
+    def max_instance_num(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "max_instance_num", value)
+
+    @property
     @pulumi.getter(name="memorySize")
     def memory_size(self) -> Optional[pulumi.Input[int]]:
         """
@@ -982,7 +1038,7 @@ class _FunctionState:
     def runtime(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the environment for executing the function.
-        If the function is created using a SWR image, set this parameter to `Custom Image`.
+        If the function is created using an SWR image, set this parameter to `Custom Image`.
         Changing this will create a new resource.
         """
         return pulumi.get(self, "runtime")
@@ -990,6 +1046,18 @@ class _FunctionState:
     @runtime.setter
     def runtime(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "runtime", value)
+
+    @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the function.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
 
     @property
     @pulumi.getter
@@ -1080,6 +1148,7 @@ class Function(pulumi.CustomResource):
                  handler: Optional[pulumi.Input[str]] = None,
                  initializer_handler: Optional[pulumi.Input[str]] = None,
                  initializer_timeout: Optional[pulumi.Input[int]] = None,
+                 max_instance_num: Optional[pulumi.Input[str]] = None,
                  memory_size: Optional[pulumi.Input[int]] = None,
                  mount_user_group_id: Optional[pulumi.Input[int]] = None,
                  mount_user_id: Optional[pulumi.Input[int]] = None,
@@ -1088,6 +1157,7 @@ class Function(pulumi.CustomResource):
                  package: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  runtime: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  timeout: Optional[pulumi.Input[int]] = None,
                  user_data: Optional[pulumi.Input[str]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
@@ -1155,6 +1225,7 @@ class Function(pulumi.CustomResource):
         image_url = config.require_object("imageUrl")
         by_swr_image = huaweicloud.function_graph.Function("bySwrImage",
             agency=agency_name,
+            handler="-",
             app="default",
             runtime="Custom Image",
             memory_size=128,
@@ -1171,6 +1242,20 @@ class Function(pulumi.CustomResource):
         ```sh
          $ pulumi import huaweicloud:FunctionGraph/function:Function my-func 7117d38e-4c8f-4624-a505-bd96b97d024c
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attributes are`app`, `func_code`, `agency`, `tags"`. It is generally recommended running `terraform plan` after importing a function. You can then decide if changes should be applied to the function, or the resource definition should be updated to align with the function. Also you can ignore changes as below. hcl resource "huaweicloud_fgs_function" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         app, func_code, agency, tags,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -1189,7 +1274,6 @@ class Function(pulumi.CustomResource):
         :param pulumi.Input[str] code_url: Specifies the code url. This parameter is mandatory when code_type is set to obs.
         :param pulumi.Input[pulumi.InputType['FunctionCustomImageArgs']] custom_image: Specifies the custom image configuration for creating function.
                The object structure is documented below.
-               Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] depend_lists: Specifies the ID list of the dependencies.
         :param pulumi.Input[str] description: Specifies the description of the function.
         :param pulumi.Input[str] encrypted_user_data: Specifies the key/value information defined to be encrypted for the
@@ -1207,6 +1291,9 @@ class Function(pulumi.CustomResource):
         :param pulumi.Input[str] initializer_handler: Specifies the initializer of the function.
         :param pulumi.Input[int] initializer_timeout: Specifies the maximum duration the function can be initialized. Value range:
                1s to 300s.
+        :param pulumi.Input[str] max_instance_num: Specifies the maximum number of instances of the function.  
+               The valid value ranges from `-1` to `1000`, defaults to `400`.
+               + The minimum value is `-1` and means the number of instances is unlimited.
         :param pulumi.Input[int] memory_size: Specifies the memory size(MB) allocated to the function.
         :param pulumi.Input[int] mount_user_group_id: Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
                -1.
@@ -1217,8 +1304,9 @@ class Function(pulumi.CustomResource):
         :param pulumi.Input[str] region: Specifies the region in which to create the Function resource. If omitted, the
                provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] runtime: Specifies the environment for executing the function.
-               If the function is created using a SWR image, set this parameter to `Custom Image`.
+               If the function is created using an SWR image, set this parameter to `Custom Image`.
                Changing this will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the function.
         :param pulumi.Input[int] timeout: Specifies the timeout interval of the function, ranges from 3s to 900s.
         :param pulumi.Input[str] vpc_id: Specifies the ID of VPC.
         """
@@ -1290,6 +1378,7 @@ class Function(pulumi.CustomResource):
         image_url = config.require_object("imageUrl")
         by_swr_image = huaweicloud.function_graph.Function("bySwrImage",
             agency=agency_name,
+            handler="-",
             app="default",
             runtime="Custom Image",
             memory_size=128,
@@ -1306,6 +1395,20 @@ class Function(pulumi.CustomResource):
         ```sh
          $ pulumi import huaweicloud:FunctionGraph/function:Function my-func 7117d38e-4c8f-4624-a505-bd96b97d024c
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attributes are`app`, `func_code`, `agency`, `tags"`. It is generally recommended running `terraform plan` after importing a function. You can then decide if changes should be applied to the function, or the resource definition should be updated to align with the function. Also you can ignore changes as below. hcl resource "huaweicloud_fgs_function" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         app, func_code, agency, tags,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param FunctionArgs args: The arguments to use to populate this resource's properties.
@@ -1339,6 +1442,7 @@ class Function(pulumi.CustomResource):
                  handler: Optional[pulumi.Input[str]] = None,
                  initializer_handler: Optional[pulumi.Input[str]] = None,
                  initializer_timeout: Optional[pulumi.Input[int]] = None,
+                 max_instance_num: Optional[pulumi.Input[str]] = None,
                  memory_size: Optional[pulumi.Input[int]] = None,
                  mount_user_group_id: Optional[pulumi.Input[int]] = None,
                  mount_user_id: Optional[pulumi.Input[int]] = None,
@@ -1347,6 +1451,7 @@ class Function(pulumi.CustomResource):
                  package: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  runtime: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  timeout: Optional[pulumi.Input[int]] = None,
                  user_data: Optional[pulumi.Input[str]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
@@ -1377,6 +1482,7 @@ class Function(pulumi.CustomResource):
             __props__.__dict__["handler"] = handler
             __props__.__dict__["initializer_handler"] = initializer_handler
             __props__.__dict__["initializer_timeout"] = initializer_timeout
+            __props__.__dict__["max_instance_num"] = max_instance_num
             if memory_size is None and not opts.urn:
                 raise TypeError("Missing required property 'memory_size'")
             __props__.__dict__["memory_size"] = memory_size
@@ -1392,6 +1498,7 @@ class Function(pulumi.CustomResource):
             if runtime is None and not opts.urn:
                 raise TypeError("Missing required property 'runtime'")
             __props__.__dict__["runtime"] = runtime
+            __props__.__dict__["tags"] = tags
             if timeout is None and not opts.urn:
                 raise TypeError("Missing required property 'timeout'")
             __props__.__dict__["timeout"] = timeout
@@ -1430,6 +1537,7 @@ class Function(pulumi.CustomResource):
             handler: Optional[pulumi.Input[str]] = None,
             initializer_handler: Optional[pulumi.Input[str]] = None,
             initializer_timeout: Optional[pulumi.Input[int]] = None,
+            max_instance_num: Optional[pulumi.Input[str]] = None,
             memory_size: Optional[pulumi.Input[int]] = None,
             mount_user_group_id: Optional[pulumi.Input[int]] = None,
             mount_user_id: Optional[pulumi.Input[int]] = None,
@@ -1438,6 +1546,7 @@ class Function(pulumi.CustomResource):
             package: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             runtime: Optional[pulumi.Input[str]] = None,
+            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             timeout: Optional[pulumi.Input[int]] = None,
             urn: Optional[pulumi.Input[str]] = None,
             user_data: Optional[pulumi.Input[str]] = None,
@@ -1466,7 +1575,6 @@ class Function(pulumi.CustomResource):
         :param pulumi.Input[str] code_url: Specifies the code url. This parameter is mandatory when code_type is set to obs.
         :param pulumi.Input[pulumi.InputType['FunctionCustomImageArgs']] custom_image: Specifies the custom image configuration for creating function.
                The object structure is documented below.
-               Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] depend_lists: Specifies the ID list of the dependencies.
         :param pulumi.Input[str] description: Specifies the description of the function.
         :param pulumi.Input[str] encrypted_user_data: Specifies the key/value information defined to be encrypted for the
@@ -1484,6 +1592,9 @@ class Function(pulumi.CustomResource):
         :param pulumi.Input[str] initializer_handler: Specifies the initializer of the function.
         :param pulumi.Input[int] initializer_timeout: Specifies the maximum duration the function can be initialized. Value range:
                1s to 300s.
+        :param pulumi.Input[str] max_instance_num: Specifies the maximum number of instances of the function.  
+               The valid value ranges from `-1` to `1000`, defaults to `400`.
+               + The minimum value is `-1` and means the number of instances is unlimited.
         :param pulumi.Input[int] memory_size: Specifies the memory size(MB) allocated to the function.
         :param pulumi.Input[int] mount_user_group_id: Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
                -1.
@@ -1494,8 +1605,9 @@ class Function(pulumi.CustomResource):
         :param pulumi.Input[str] region: Specifies the region in which to create the Function resource. If omitted, the
                provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] runtime: Specifies the environment for executing the function.
-               If the function is created using a SWR image, set this parameter to `Custom Image`.
+               If the function is created using an SWR image, set this parameter to `Custom Image`.
                Changing this will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the function.
         :param pulumi.Input[int] timeout: Specifies the timeout interval of the function, ranges from 3s to 900s.
         :param pulumi.Input[str] urn: Uniform Resource Name
         :param pulumi.Input[str] version: The version of the function
@@ -1522,6 +1634,7 @@ class Function(pulumi.CustomResource):
         __props__.__dict__["handler"] = handler
         __props__.__dict__["initializer_handler"] = initializer_handler
         __props__.__dict__["initializer_timeout"] = initializer_timeout
+        __props__.__dict__["max_instance_num"] = max_instance_num
         __props__.__dict__["memory_size"] = memory_size
         __props__.__dict__["mount_user_group_id"] = mount_user_group_id
         __props__.__dict__["mount_user_id"] = mount_user_id
@@ -1530,6 +1643,7 @@ class Function(pulumi.CustomResource):
         __props__.__dict__["package"] = package
         __props__.__dict__["region"] = region
         __props__.__dict__["runtime"] = runtime
+        __props__.__dict__["tags"] = tags
         __props__.__dict__["timeout"] = timeout
         __props__.__dict__["urn"] = urn
         __props__.__dict__["user_data"] = user_data
@@ -1599,7 +1713,6 @@ class Function(pulumi.CustomResource):
         """
         Specifies the custom image configuration for creating function.
         The object structure is documented below.
-        Changing this will create a new resource.
         """
         return pulumi.get(self, "custom_image")
 
@@ -1691,6 +1804,16 @@ class Function(pulumi.CustomResource):
         return pulumi.get(self, "initializer_timeout")
 
     @property
+    @pulumi.getter(name="maxInstanceNum")
+    def max_instance_num(self) -> pulumi.Output[str]:
+        """
+        Specifies the maximum number of instances of the function.  
+        The valid value ranges from `-1` to `1000`, defaults to `400`.
+        + The minimum value is `-1` and means the number of instances is unlimited.
+        """
+        return pulumi.get(self, "max_instance_num")
+
+    @property
     @pulumi.getter(name="memorySize")
     def memory_size(self) -> pulumi.Output[int]:
         """
@@ -1751,10 +1874,18 @@ class Function(pulumi.CustomResource):
     def runtime(self) -> pulumi.Output[str]:
         """
         Specifies the environment for executing the function.
-        If the function is created using a SWR image, set this parameter to `Custom Image`.
+        If the function is created using an SWR image, set this parameter to `Custom Image`.
         Changing this will create a new resource.
         """
         return pulumi.get(self, "runtime")
+
+    @property
+    @pulumi.getter
+    def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
+        """
+        Specifies the key/value pairs to associate with the function.
+        """
+        return pulumi.get(self, "tags")
 
     @property
     @pulumi.getter

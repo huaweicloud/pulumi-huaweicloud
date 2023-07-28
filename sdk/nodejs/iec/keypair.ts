@@ -67,6 +67,10 @@ export class Keypair extends pulumi.CustomResource {
      * parameter creates a new keypair resource.
      */
     public readonly publicKey!: pulumi.Output<string>;
+    /**
+     * The region in which to create the keypair resource. If omitted, the
+     * provider-level region will be used. Changing this creates a new resource.
+     */
     public readonly region!: pulumi.Output<string>;
 
     /**
@@ -117,6 +121,10 @@ export interface KeypairState {
      * parameter creates a new keypair resource.
      */
     publicKey?: pulumi.Input<string>;
+    /**
+     * The region in which to create the keypair resource. If omitted, the
+     * provider-level region will be used. Changing this creates a new resource.
+     */
     region?: pulumi.Input<string>;
 }
 
@@ -135,5 +143,9 @@ export interface KeypairArgs {
      * parameter creates a new keypair resource.
      */
     publicKey?: pulumi.Input<string>;
+    /**
+     * The region in which to create the keypair resource. If omitted, the
+     * provider-level region will be used. Changing this creates a new resource.
+     */
     region?: pulumi.Input<string>;
 }

@@ -40,16 +40,20 @@ class ApprovalConnection(dict):
         return super().get(key, default)
 
     def __init__(__self__, *,
+                 description: Optional[str] = None,
                  domain_id: Optional[str] = None,
                  endpoint_id: Optional[str] = None,
                  packet_id: Optional[int] = None,
                  status: Optional[str] = None):
         """
+        :param str description: The description of the VPC endpoint service connection.
         :param str domain_id: The user's domain ID.
         :param str endpoint_id: The unique ID of the VPC endpoint.
         :param int packet_id: The packet ID of the VPC endpoint.
         :param str status: The connection status of the VPC endpoint.
         """
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if domain_id is not None:
             pulumi.set(__self__, "domain_id", domain_id)
         if endpoint_id is not None:
@@ -58,6 +62,14 @@ class ApprovalConnection(dict):
             pulumi.set(__self__, "packet_id", packet_id)
         if status is not None:
             pulumi.set(__self__, "status", status)
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[str]:
+        """
+        The description of the VPC endpoint service connection.
+        """
+        return pulumi.get(self, "description")
 
     @property
     @pulumi.getter(name="domainId")
@@ -116,16 +128,20 @@ class ServiceConnection(dict):
         return super().get(key, default)
 
     def __init__(__self__, *,
+                 description: Optional[str] = None,
                  domain_id: Optional[str] = None,
                  endpoint_id: Optional[str] = None,
                  packet_id: Optional[int] = None,
                  status: Optional[str] = None):
         """
+        :param str description: Specifies the description of the VPC endpoint service.
         :param str domain_id: The user's domain ID.
         :param str endpoint_id: The unique ID of the VPC endpoint.
         :param int packet_id: The packet ID of the VPC endpoint.
         :param str status: The connection status of the VPC endpoint.
         """
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if domain_id is not None:
             pulumi.set(__self__, "domain_id", domain_id)
         if endpoint_id is not None:
@@ -134,6 +150,14 @@ class ServiceConnection(dict):
             pulumi.set(__self__, "packet_id", packet_id)
         if status is not None:
             pulumi.set(__self__, "status", status)
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[str]:
+        """
+        Specifies the description of the VPC endpoint service.
+        """
+        return pulumi.get(self, "description")
 
     @property
     @pulumi.getter(name="domainId")
@@ -194,8 +218,7 @@ class ServicePortMapping(dict):
                  service_port: Optional[int] = None,
                  terminal_port: Optional[int] = None):
         """
-        :param str protocol: Specifies the protocol used in port mappings. The value can be **TCP** or **UDP**. The
-               default value is **TCP**.
+        :param str protocol: Specifies the protocol used in port mappings. Only **TCP** is supported.
         :param int service_port: Specifies the port for accessing the VPC endpoint service. This port is provided by
                the backend service to provide services. The value ranges from 1 to 65535.
         :param int terminal_port: Specifies the port for accessing the VPC endpoint. This port is provided by the VPC
@@ -212,8 +235,7 @@ class ServicePortMapping(dict):
     @pulumi.getter
     def protocol(self) -> Optional[str]:
         """
-        Specifies the protocol used in port mappings. The value can be **TCP** or **UDP**. The
-        default value is **TCP**.
+        Specifies the protocol used in port mappings. Only **TCP** is supported.
         """
         return pulumi.get(self, "protocol")
 

@@ -35,7 +35,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Clusters can be imported by `id`. For example,
+ * Clusters can be imported by `id`. For example, bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Cdm/cluster:Cluster test b11b407c-e604-4e8d-8bc4-92398320b847
@@ -45,7 +45,7 @@ import * as utilities from "../utilities";
  *
  * It is generally recommended running `terraform plan` after importing a cluster.
  *
- * You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. resource "huaweicloud_cdm_cluster" "test" {
+ * You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_cdm_cluster" "test" {
  *
  *  ...
  *
@@ -170,10 +170,9 @@ export class Cluster extends pulumi.CustomResource {
      */
     public readonly subnetId!: pulumi.Output<string>;
     /**
-     * Specifies cluster version. Default value is `2.8.6.2`.
-     * Changing this parameter will create a new resource.
+     * Specifies the cluster version. Changing this parameter will create a new resource.
      */
-    public readonly version!: pulumi.Output<string | undefined>;
+    public readonly version!: pulumi.Output<string>;
     /**
      * Specifies VPC ID. Changing this parameter will create a new resource.
      */
@@ -340,8 +339,7 @@ export interface ClusterState {
      */
     subnetId?: pulumi.Input<string>;
     /**
-     * Specifies cluster version. Default value is `2.8.6.2`.
-     * Changing this parameter will create a new resource.
+     * Specifies the cluster version. Changing this parameter will create a new resource.
      */
     version?: pulumi.Input<string>;
     /**
@@ -417,8 +415,7 @@ export interface ClusterArgs {
      */
     subnetId: pulumi.Input<string>;
     /**
-     * Specifies cluster version. Default value is `2.8.6.2`.
-     * Changing this parameter will create a new resource.
+     * Specifies the cluster version. Changing this parameter will create a new resource.
      */
     version?: pulumi.Input<string>;
     /**

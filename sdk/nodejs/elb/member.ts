@@ -13,11 +13,14 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
+ * const config = new pulumi.Config();
+ * const lbPoolId = config.requireObject("lbPoolId");
+ * const ipv4SubnetId = config.requireObject("ipv4SubnetId");
  * const member1 = new huaweicloud.elb.Member("member1", {
  *     address: "192.168.199.23",
  *     protocolPort: 8080,
- *     poolId: _var.pool_id,
- *     subnetId: _var.subnet_id,
+ *     poolId: lbPoolId,
+ *     subnetId: ipv4SubnetId,
  * });
  * ```
  *
@@ -62,10 +65,6 @@ export class Member extends pulumi.CustomResource {
      * Changing this creates a new member.
      */
     public readonly address!: pulumi.Output<string>;
-    /**
-     * The administrative state of the member.
-     * A valid value is true (UP) or false (DOWN).
-     */
     public readonly adminStateUp!: pulumi.Output<boolean | undefined>;
     /**
      * Human-readable name for the member.
@@ -86,7 +85,7 @@ export class Member extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * The subnet in which to access the member
+     * The **IPv4 subnet ID** of the subnet in which to access the member.
      */
     public readonly subnetId!: pulumi.Output<string>;
     /**
@@ -160,10 +159,6 @@ export interface MemberState {
      * Changing this creates a new member.
      */
     address?: pulumi.Input<string>;
-    /**
-     * The administrative state of the member.
-     * A valid value is true (UP) or false (DOWN).
-     */
     adminStateUp?: pulumi.Input<boolean>;
     /**
      * Human-readable name for the member.
@@ -184,7 +179,7 @@ export interface MemberState {
      */
     region?: pulumi.Input<string>;
     /**
-     * The subnet in which to access the member
+     * The **IPv4 subnet ID** of the subnet in which to access the member.
      */
     subnetId?: pulumi.Input<string>;
     /**
@@ -208,10 +203,6 @@ export interface MemberArgs {
      * Changing this creates a new member.
      */
     address: pulumi.Input<string>;
-    /**
-     * The administrative state of the member.
-     * A valid value is true (UP) or false (DOWN).
-     */
     adminStateUp?: pulumi.Input<boolean>;
     /**
      * Human-readable name for the member.
@@ -232,7 +223,7 @@ export interface MemberArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * The subnet in which to access the member
+     * The **IPv4 subnet ID** of the subnet in which to access the member.
      */
     subnetId: pulumi.Input<string>;
     /**

@@ -89,7 +89,7 @@ export class Role extends pulumi.CustomResource {
     public readonly name!: pulumi.Output<string>;
     /**
      * Document of the custom policy in JSON format. For more details, please refer to the
-     * [offical document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+     * [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
      */
     public readonly policy!: pulumi.Output<string>;
     /**
@@ -155,7 +155,7 @@ export interface RoleState {
     name?: pulumi.Input<string>;
     /**
      * Document of the custom policy in JSON format. For more details, please refer to the
-     * [offical document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+     * [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
      */
     policy?: pulumi.Input<string>;
     /**
@@ -182,7 +182,7 @@ export interface RoleArgs {
     name?: pulumi.Input<string>;
     /**
      * Document of the custom policy in JSON format. For more details, please refer to the
-     * [offical document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+     * [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
      */
     policy: pulumi.Input<string>;
     /**

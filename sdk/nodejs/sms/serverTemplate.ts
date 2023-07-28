@@ -117,7 +117,7 @@ export class ServerTemplate extends pulumi.CustomResource {
     public readonly targetServerName!: pulumi.Output<string>;
     /**
      * Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-     * **GPSSD** and **ESSD**, defaults to **SAS**.
+     * defaults to **SAS**.
      */
     public readonly volumeType!: pulumi.Output<string | undefined>;
     /**
@@ -225,7 +225,7 @@ export interface ServerTemplateState {
     targetServerName?: pulumi.Input<string>;
     /**
      * Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-     * **GPSSD** and **ESSD**, defaults to **SAS**.
+     * defaults to **SAS**.
      */
     volumeType?: pulumi.Input<string>;
     /**
@@ -286,7 +286,7 @@ export interface ServerTemplateArgs {
     targetServerName?: pulumi.Input<string>;
     /**
      * Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-     * **GPSSD** and **ESSD**, defaults to **SAS**.
+     * defaults to **SAS**.
      */
     volumeType?: pulumi.Input<string>;
     /**

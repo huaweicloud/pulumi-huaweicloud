@@ -14,62 +14,6 @@ import (
 // Manage DMS RabbitMQ instance resources within HuaweiCloud.
 //
 // ## Example Usage
-// ### Basic Instance
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud"
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Dms"
-//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud"
-//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Dms"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			cfg := config.New(ctx, "")
-//			vpcId := cfg.RequireObject("vpcId")
-//			subnetId := cfg.RequireObject("subnetId")
-//			securityGroupId := cfg.RequireObject("securityGroupId")
-//			zones, err := huaweicloud.GetAvailabilityZones(ctx, nil, nil)
-//			if err != nil {
-//				return err
-//			}
-//			testProduct, err := Dms.GetProduct(ctx, &dms.GetProductArgs{
-//				Engine:       "rabbitmq",
-//				InstanceType: "cluster",
-//				Version:      pulumi.StringRef("3.7.17"),
-//				NodeNum:      pulumi.StringRef("3"),
-//			}, nil)
-//			if err != nil {
-//				return err
-//			}
-//			_, err = Dms.NewRabbitmqInstance(ctx, "testRabbitmqInstance", &Dms.RabbitmqInstanceArgs{
-//				ProductId:       pulumi.String(testProduct.Id),
-//				EngineVersion:   pulumi.String(testProduct.Version),
-//				StorageSpecCode: pulumi.String(testProduct.StorageSpecCode),
-//				VpcId:           pulumi.Any(vpcId),
-//				NetworkId:       pulumi.Any(subnetId),
-//				SecurityGroupId: pulumi.Any(securityGroupId),
-//				AvailabilityZones: pulumi.StringArray{
-//					pulumi.String(zones.Names[0]),
-//				},
-//				AccessUser: pulumi.String("user"),
-//				Password:   pulumi.String("Rabbitmqtest@123"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
 //
 // ## Import
 //
@@ -81,7 +25,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`. It is generally recommended running `terraform plan` after importing a DMS RabbitMQ instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dms_rabbitmq_instance" "instance_1" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `auto_renew`, `period` and `period_unit`. It is generally recommended running `terraform plan` after importing a DMS RabbitMQ instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dms_rabbitmq_instance" "instance_1" {
 //
 //	...
 //
@@ -89,7 +33,7 @@ import (
 //
 //	ignore_changes = [
 //
-//	password
+//	password, auto_renew, period, period_unit,
 //
 //	]
 //
@@ -100,12 +44,20 @@ type RabbitmqInstance struct {
 	// Specifies a username. A username consists of 4 to 64 characters and
 	// supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
 	AccessUser pulumi.StringOutput `pulumi:"accessUser"`
+	// Specifies whether auto renew is enabled. Valid values are **true** and **false**.
+	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
 	// Specifies the names of an AZ.
 	// The parameter value can not be left blank or an empty array.
 	// Changing this creates a new instance resource.
 	AvailabilityZones pulumi.StringArrayOutput `pulumi:"availabilityZones"`
 	// Deprecated: available_zones has deprecated, please use "availability_zones" instead.
 	AvailableZones pulumi.StringArrayOutput `pulumi:"availableZones"`
+	// Specifies the broker numbers.
+	// It is required when creating a cluster instance with `flavorId`.
+	BrokerNum pulumi.IntOutput `pulumi:"brokerNum"`
+	// Specifies the charging mode of the instance. Valid values are
+	// **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
+	ChargingMode pulumi.StringOutput `pulumi:"chargingMode"`
 	// Indicates the IP address of the DMS RabbitMQ instance.
 	ConnectAddress pulumi.StringOutput `pulumi:"connectAddress"`
 	// Specifies the description of the DMS RabbitMQ instance.
@@ -120,6 +72,9 @@ type RabbitmqInstance struct {
 	EngineVersion pulumi.StringPtrOutput `pulumi:"engineVersion"`
 	// Specifies the enterprise project ID of the RabbitMQ instance.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
+	// Specifies a flavor ID.
+	// It is mandatory when the `chargingMode` is **prePaid**.
+	FlavorId pulumi.StringPtrOutput `pulumi:"flavorId"`
 	// Specifies the time at which a maintenance time window starts. Format: HH:mm.
 	// The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
 	// time window.
@@ -136,6 +91,8 @@ type RabbitmqInstance struct {
 	// In this case, the system automatically allocates the default end time 06:00.
 	MaintainEnd pulumi.StringOutput `pulumi:"maintainEnd"`
 	// Indicates the management address of the DMS RabbitMQ instance.
+	ManagementConnectAddress pulumi.StringOutput `pulumi:"managementConnectAddress"`
+	// Deprecated: typo in manegement_connect_address, please use "management_connect_address" instead.
 	ManegementConnectAddress pulumi.StringOutput `pulumi:"manegementConnectAddress"`
 	// Specifies the name of the DMS RabbitMQ instance. An instance name starts with a letter,
 	// consists of 4 to 64 characters, and supports only letters, digits, hyphens (-) and underscores (_).
@@ -149,10 +106,18 @@ type RabbitmqInstance struct {
 	// and special characters (`~!@#$%^&*()-_=+\\|[{}]:'",<.>/?).
 	// Changing this creates a new instance resource.
 	Password pulumi.StringOutput `pulumi:"password"`
+	// Specifies the charging period of the instance. If `periodUnit` is set to
+	// **month**, the value ranges from 1 to 9. If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this creates a new resource.
+	Period pulumi.IntPtrOutput `pulumi:"period"`
+	// Specifies the charging period unit of the instance.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this creates a new resource.
+	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
 	// Indicates the port number of the DMS RabbitMQ instance.
 	Port pulumi.IntOutput `pulumi:"port"`
-	// Specifies a product ID. Changing this creates a new instance resource.
-	ProductId pulumi.StringOutput `pulumi:"productId"`
+	// Deprecated: product_id has deprecated, please use "flavor_id" instead.
+	ProductId pulumi.StringPtrOutput `pulumi:"productId"`
 	// Specifies the ID of the elastic IP address (EIP)
 	// bound to the DMS RabbitMQ instance.
 	PublicIpId pulumi.StringPtrOutput `pulumi:"publicIpId"`
@@ -171,7 +136,8 @@ type RabbitmqInstance struct {
 	SslEnable pulumi.BoolPtrOutput `pulumi:"sslEnable"`
 	// Indicates the status of the DMS RabbitMQ instance.
 	Status pulumi.StringOutput `pulumi:"status"`
-	// Specifies the message storage space, unit is GB. Value range:
+	// Specifies the message storage space, unit is GB.
+	// It is required when creating a instance with `flavorId`. Value range:
 	// + Single-node RabbitMQ instance: 100–90,000 GB
 	// + Cluster RabbitMQ instance: 100 GB x number of nodes to 90,000 GB, 200 GB x number of nodes to 90,000 GB,
 	//   and 300 GB x number of nodes to 90,000 GB
@@ -210,9 +176,6 @@ func NewRabbitmqInstance(ctx *pulumi.Context,
 	if args.Password == nil {
 		return nil, errors.New("invalid value for required argument 'Password'")
 	}
-	if args.ProductId == nil {
-		return nil, errors.New("invalid value for required argument 'ProductId'")
-	}
 	if args.SecurityGroupId == nil {
 		return nil, errors.New("invalid value for required argument 'SecurityGroupId'")
 	}
@@ -248,12 +211,20 @@ type rabbitmqInstanceState struct {
 	// Specifies a username. A username consists of 4 to 64 characters and
 	// supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
 	AccessUser *string `pulumi:"accessUser"`
+	// Specifies whether auto renew is enabled. Valid values are **true** and **false**.
+	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the names of an AZ.
 	// The parameter value can not be left blank or an empty array.
 	// Changing this creates a new instance resource.
 	AvailabilityZones []string `pulumi:"availabilityZones"`
 	// Deprecated: available_zones has deprecated, please use "availability_zones" instead.
 	AvailableZones []string `pulumi:"availableZones"`
+	// Specifies the broker numbers.
+	// It is required when creating a cluster instance with `flavorId`.
+	BrokerNum *int `pulumi:"brokerNum"`
+	// Specifies the charging mode of the instance. Valid values are
+	// **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
+	ChargingMode *string `pulumi:"chargingMode"`
 	// Indicates the IP address of the DMS RabbitMQ instance.
 	ConnectAddress *string `pulumi:"connectAddress"`
 	// Specifies the description of the DMS RabbitMQ instance.
@@ -268,6 +239,9 @@ type rabbitmqInstanceState struct {
 	EngineVersion *string `pulumi:"engineVersion"`
 	// Specifies the enterprise project ID of the RabbitMQ instance.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies a flavor ID.
+	// It is mandatory when the `chargingMode` is **prePaid**.
+	FlavorId *string `pulumi:"flavorId"`
 	// Specifies the time at which a maintenance time window starts. Format: HH:mm.
 	// The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
 	// time window.
@@ -284,6 +258,8 @@ type rabbitmqInstanceState struct {
 	// In this case, the system automatically allocates the default end time 06:00.
 	MaintainEnd *string `pulumi:"maintainEnd"`
 	// Indicates the management address of the DMS RabbitMQ instance.
+	ManagementConnectAddress *string `pulumi:"managementConnectAddress"`
+	// Deprecated: typo in manegement_connect_address, please use "management_connect_address" instead.
 	ManegementConnectAddress *string `pulumi:"manegementConnectAddress"`
 	// Specifies the name of the DMS RabbitMQ instance. An instance name starts with a letter,
 	// consists of 4 to 64 characters, and supports only letters, digits, hyphens (-) and underscores (_).
@@ -297,9 +273,17 @@ type rabbitmqInstanceState struct {
 	// and special characters (`~!@#$%^&*()-_=+\\|[{}]:'",<.>/?).
 	// Changing this creates a new instance resource.
 	Password *string `pulumi:"password"`
+	// Specifies the charging period of the instance. If `periodUnit` is set to
+	// **month**, the value ranges from 1 to 9. If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this creates a new resource.
+	Period *int `pulumi:"period"`
+	// Specifies the charging period unit of the instance.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this creates a new resource.
+	PeriodUnit *string `pulumi:"periodUnit"`
 	// Indicates the port number of the DMS RabbitMQ instance.
 	Port *int `pulumi:"port"`
-	// Specifies a product ID. Changing this creates a new instance resource.
+	// Deprecated: product_id has deprecated, please use "flavor_id" instead.
 	ProductId *string `pulumi:"productId"`
 	// Specifies the ID of the elastic IP address (EIP)
 	// bound to the DMS RabbitMQ instance.
@@ -319,7 +303,8 @@ type rabbitmqInstanceState struct {
 	SslEnable *bool `pulumi:"sslEnable"`
 	// Indicates the status of the DMS RabbitMQ instance.
 	Status *string `pulumi:"status"`
-	// Specifies the message storage space, unit is GB. Value range:
+	// Specifies the message storage space, unit is GB.
+	// It is required when creating a instance with `flavorId`. Value range:
 	// + Single-node RabbitMQ instance: 100–90,000 GB
 	// + Cluster RabbitMQ instance: 100 GB x number of nodes to 90,000 GB, 200 GB x number of nodes to 90,000 GB,
 	//   and 300 GB x number of nodes to 90,000 GB
@@ -346,12 +331,20 @@ type RabbitmqInstanceState struct {
 	// Specifies a username. A username consists of 4 to 64 characters and
 	// supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
 	AccessUser pulumi.StringPtrInput
+	// Specifies whether auto renew is enabled. Valid values are **true** and **false**.
+	AutoRenew pulumi.StringPtrInput
 	// Specifies the names of an AZ.
 	// The parameter value can not be left blank or an empty array.
 	// Changing this creates a new instance resource.
 	AvailabilityZones pulumi.StringArrayInput
 	// Deprecated: available_zones has deprecated, please use "availability_zones" instead.
 	AvailableZones pulumi.StringArrayInput
+	// Specifies the broker numbers.
+	// It is required when creating a cluster instance with `flavorId`.
+	BrokerNum pulumi.IntPtrInput
+	// Specifies the charging mode of the instance. Valid values are
+	// **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
+	ChargingMode pulumi.StringPtrInput
 	// Indicates the IP address of the DMS RabbitMQ instance.
 	ConnectAddress pulumi.StringPtrInput
 	// Specifies the description of the DMS RabbitMQ instance.
@@ -366,6 +359,9 @@ type RabbitmqInstanceState struct {
 	EngineVersion pulumi.StringPtrInput
 	// Specifies the enterprise project ID of the RabbitMQ instance.
 	EnterpriseProjectId pulumi.StringPtrInput
+	// Specifies a flavor ID.
+	// It is mandatory when the `chargingMode` is **prePaid**.
+	FlavorId pulumi.StringPtrInput
 	// Specifies the time at which a maintenance time window starts. Format: HH:mm.
 	// The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
 	// time window.
@@ -382,6 +378,8 @@ type RabbitmqInstanceState struct {
 	// In this case, the system automatically allocates the default end time 06:00.
 	MaintainEnd pulumi.StringPtrInput
 	// Indicates the management address of the DMS RabbitMQ instance.
+	ManagementConnectAddress pulumi.StringPtrInput
+	// Deprecated: typo in manegement_connect_address, please use "management_connect_address" instead.
 	ManegementConnectAddress pulumi.StringPtrInput
 	// Specifies the name of the DMS RabbitMQ instance. An instance name starts with a letter,
 	// consists of 4 to 64 characters, and supports only letters, digits, hyphens (-) and underscores (_).
@@ -395,9 +393,17 @@ type RabbitmqInstanceState struct {
 	// and special characters (`~!@#$%^&*()-_=+\\|[{}]:'",<.>/?).
 	// Changing this creates a new instance resource.
 	Password pulumi.StringPtrInput
+	// Specifies the charging period of the instance. If `periodUnit` is set to
+	// **month**, the value ranges from 1 to 9. If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this creates a new resource.
+	Period pulumi.IntPtrInput
+	// Specifies the charging period unit of the instance.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this creates a new resource.
+	PeriodUnit pulumi.StringPtrInput
 	// Indicates the port number of the DMS RabbitMQ instance.
 	Port pulumi.IntPtrInput
-	// Specifies a product ID. Changing this creates a new instance resource.
+	// Deprecated: product_id has deprecated, please use "flavor_id" instead.
 	ProductId pulumi.StringPtrInput
 	// Specifies the ID of the elastic IP address (EIP)
 	// bound to the DMS RabbitMQ instance.
@@ -417,7 +423,8 @@ type RabbitmqInstanceState struct {
 	SslEnable pulumi.BoolPtrInput
 	// Indicates the status of the DMS RabbitMQ instance.
 	Status pulumi.StringPtrInput
-	// Specifies the message storage space, unit is GB. Value range:
+	// Specifies the message storage space, unit is GB.
+	// It is required when creating a instance with `flavorId`. Value range:
 	// + Single-node RabbitMQ instance: 100–90,000 GB
 	// + Cluster RabbitMQ instance: 100 GB x number of nodes to 90,000 GB, 200 GB x number of nodes to 90,000 GB,
 	//   and 300 GB x number of nodes to 90,000 GB
@@ -448,12 +455,20 @@ type rabbitmqInstanceArgs struct {
 	// Specifies a username. A username consists of 4 to 64 characters and
 	// supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
 	AccessUser string `pulumi:"accessUser"`
+	// Specifies whether auto renew is enabled. Valid values are **true** and **false**.
+	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the names of an AZ.
 	// The parameter value can not be left blank or an empty array.
 	// Changing this creates a new instance resource.
 	AvailabilityZones []string `pulumi:"availabilityZones"`
 	// Deprecated: available_zones has deprecated, please use "availability_zones" instead.
 	AvailableZones []string `pulumi:"availableZones"`
+	// Specifies the broker numbers.
+	// It is required when creating a cluster instance with `flavorId`.
+	BrokerNum *int `pulumi:"brokerNum"`
+	// Specifies the charging mode of the instance. Valid values are
+	// **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
+	ChargingMode *string `pulumi:"chargingMode"`
 	// Specifies the description of the DMS RabbitMQ instance.
 	// It is a character string containing not more than 1,024 characters.
 	Description *string `pulumi:"description"`
@@ -462,6 +477,9 @@ type rabbitmqInstanceArgs struct {
 	EngineVersion *string `pulumi:"engineVersion"`
 	// Specifies the enterprise project ID of the RabbitMQ instance.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies a flavor ID.
+	// It is mandatory when the `chargingMode` is **prePaid**.
+	FlavorId *string `pulumi:"flavorId"`
 	// Specifies the time at which a maintenance time window starts. Format: HH:mm.
 	// The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
 	// time window.
@@ -489,8 +507,16 @@ type rabbitmqInstanceArgs struct {
 	// and special characters (`~!@#$%^&*()-_=+\\|[{}]:'",<.>/?).
 	// Changing this creates a new instance resource.
 	Password string `pulumi:"password"`
-	// Specifies a product ID. Changing this creates a new instance resource.
-	ProductId string `pulumi:"productId"`
+	// Specifies the charging period of the instance. If `periodUnit` is set to
+	// **month**, the value ranges from 1 to 9. If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this creates a new resource.
+	Period *int `pulumi:"period"`
+	// Specifies the charging period unit of the instance.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this creates a new resource.
+	PeriodUnit *string `pulumi:"periodUnit"`
+	// Deprecated: product_id has deprecated, please use "flavor_id" instead.
+	ProductId *string `pulumi:"productId"`
 	// Specifies the ID of the elastic IP address (EIP)
 	// bound to the DMS RabbitMQ instance.
 	PublicIpId *string `pulumi:"publicIpId"`
@@ -502,7 +528,8 @@ type rabbitmqInstanceArgs struct {
 	// Specifies whether to enable public access for the DMS RabbitMQ instance.
 	// Changing this creates a new instance resource.
 	SslEnable *bool `pulumi:"sslEnable"`
-	// Specifies the message storage space, unit is GB. Value range:
+	// Specifies the message storage space, unit is GB.
+	// It is required when creating a instance with `flavorId`. Value range:
 	// + Single-node RabbitMQ instance: 100–90,000 GB
 	// + Cluster RabbitMQ instance: 100 GB x number of nodes to 90,000 GB, 200 GB x number of nodes to 90,000 GB,
 	//   and 300 GB x number of nodes to 90,000 GB
@@ -522,12 +549,20 @@ type RabbitmqInstanceArgs struct {
 	// Specifies a username. A username consists of 4 to 64 characters and
 	// supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
 	AccessUser pulumi.StringInput
+	// Specifies whether auto renew is enabled. Valid values are **true** and **false**.
+	AutoRenew pulumi.StringPtrInput
 	// Specifies the names of an AZ.
 	// The parameter value can not be left blank or an empty array.
 	// Changing this creates a new instance resource.
 	AvailabilityZones pulumi.StringArrayInput
 	// Deprecated: available_zones has deprecated, please use "availability_zones" instead.
 	AvailableZones pulumi.StringArrayInput
+	// Specifies the broker numbers.
+	// It is required when creating a cluster instance with `flavorId`.
+	BrokerNum pulumi.IntPtrInput
+	// Specifies the charging mode of the instance. Valid values are
+	// **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
+	ChargingMode pulumi.StringPtrInput
 	// Specifies the description of the DMS RabbitMQ instance.
 	// It is a character string containing not more than 1,024 characters.
 	Description pulumi.StringPtrInput
@@ -536,6 +571,9 @@ type RabbitmqInstanceArgs struct {
 	EngineVersion pulumi.StringPtrInput
 	// Specifies the enterprise project ID of the RabbitMQ instance.
 	EnterpriseProjectId pulumi.StringPtrInput
+	// Specifies a flavor ID.
+	// It is mandatory when the `chargingMode` is **prePaid**.
+	FlavorId pulumi.StringPtrInput
 	// Specifies the time at which a maintenance time window starts. Format: HH:mm.
 	// The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
 	// time window.
@@ -563,8 +601,16 @@ type RabbitmqInstanceArgs struct {
 	// and special characters (`~!@#$%^&*()-_=+\\|[{}]:'",<.>/?).
 	// Changing this creates a new instance resource.
 	Password pulumi.StringInput
-	// Specifies a product ID. Changing this creates a new instance resource.
-	ProductId pulumi.StringInput
+	// Specifies the charging period of the instance. If `periodUnit` is set to
+	// **month**, the value ranges from 1 to 9. If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this creates a new resource.
+	Period pulumi.IntPtrInput
+	// Specifies the charging period unit of the instance.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this creates a new resource.
+	PeriodUnit pulumi.StringPtrInput
+	// Deprecated: product_id has deprecated, please use "flavor_id" instead.
+	ProductId pulumi.StringPtrInput
 	// Specifies the ID of the elastic IP address (EIP)
 	// bound to the DMS RabbitMQ instance.
 	PublicIpId pulumi.StringPtrInput
@@ -576,7 +622,8 @@ type RabbitmqInstanceArgs struct {
 	// Specifies whether to enable public access for the DMS RabbitMQ instance.
 	// Changing this creates a new instance resource.
 	SslEnable pulumi.BoolPtrInput
-	// Specifies the message storage space, unit is GB. Value range:
+	// Specifies the message storage space, unit is GB.
+	// It is required when creating a instance with `flavorId`. Value range:
 	// + Single-node RabbitMQ instance: 100–90,000 GB
 	// + Cluster RabbitMQ instance: 100 GB x number of nodes to 90,000 GB, 200 GB x number of nodes to 90,000 GB,
 	//   and 300 GB x number of nodes to 90,000 GB
@@ -684,6 +731,11 @@ func (o RabbitmqInstanceOutput) AccessUser() pulumi.StringOutput {
 	return o.ApplyT(func(v *RabbitmqInstance) pulumi.StringOutput { return v.AccessUser }).(pulumi.StringOutput)
 }
 
+// Specifies whether auto renew is enabled. Valid values are **true** and **false**.
+func (o RabbitmqInstanceOutput) AutoRenew() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *RabbitmqInstance) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the names of an AZ.
 // The parameter value can not be left blank or an empty array.
 // Changing this creates a new instance resource.
@@ -694,6 +746,18 @@ func (o RabbitmqInstanceOutput) AvailabilityZones() pulumi.StringArrayOutput {
 // Deprecated: available_zones has deprecated, please use "availability_zones" instead.
 func (o RabbitmqInstanceOutput) AvailableZones() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *RabbitmqInstance) pulumi.StringArrayOutput { return v.AvailableZones }).(pulumi.StringArrayOutput)
+}
+
+// Specifies the broker numbers.
+// It is required when creating a cluster instance with `flavorId`.
+func (o RabbitmqInstanceOutput) BrokerNum() pulumi.IntOutput {
+	return o.ApplyT(func(v *RabbitmqInstance) pulumi.IntOutput { return v.BrokerNum }).(pulumi.IntOutput)
+}
+
+// Specifies the charging mode of the instance. Valid values are
+// **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
+func (o RabbitmqInstanceOutput) ChargingMode() pulumi.StringOutput {
+	return o.ApplyT(func(v *RabbitmqInstance) pulumi.StringOutput { return v.ChargingMode }).(pulumi.StringOutput)
 }
 
 // Indicates the IP address of the DMS RabbitMQ instance.
@@ -728,6 +792,12 @@ func (o RabbitmqInstanceOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *RabbitmqInstance) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
 
+// Specifies a flavor ID.
+// It is mandatory when the `chargingMode` is **prePaid**.
+func (o RabbitmqInstanceOutput) FlavorId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *RabbitmqInstance) pulumi.StringPtrOutput { return v.FlavorId }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the time at which a maintenance time window starts. Format: HH:mm.
 // The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
 // time window.
@@ -750,6 +820,11 @@ func (o RabbitmqInstanceOutput) MaintainEnd() pulumi.StringOutput {
 }
 
 // Indicates the management address of the DMS RabbitMQ instance.
+func (o RabbitmqInstanceOutput) ManagementConnectAddress() pulumi.StringOutput {
+	return o.ApplyT(func(v *RabbitmqInstance) pulumi.StringOutput { return v.ManagementConnectAddress }).(pulumi.StringOutput)
+}
+
+// Deprecated: typo in manegement_connect_address, please use "management_connect_address" instead.
 func (o RabbitmqInstanceOutput) ManegementConnectAddress() pulumi.StringOutput {
 	return o.ApplyT(func(v *RabbitmqInstance) pulumi.StringOutput { return v.ManegementConnectAddress }).(pulumi.StringOutput)
 }
@@ -775,14 +850,28 @@ func (o RabbitmqInstanceOutput) Password() pulumi.StringOutput {
 	return o.ApplyT(func(v *RabbitmqInstance) pulumi.StringOutput { return v.Password }).(pulumi.StringOutput)
 }
 
+// Specifies the charging period of the instance. If `periodUnit` is set to
+// **month**, the value ranges from 1 to 9. If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+// This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this creates a new resource.
+func (o RabbitmqInstanceOutput) Period() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *RabbitmqInstance) pulumi.IntPtrOutput { return v.Period }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the charging period unit of the instance.
+// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+// Changing this creates a new resource.
+func (o RabbitmqInstanceOutput) PeriodUnit() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *RabbitmqInstance) pulumi.StringPtrOutput { return v.PeriodUnit }).(pulumi.StringPtrOutput)
+}
+
 // Indicates the port number of the DMS RabbitMQ instance.
 func (o RabbitmqInstanceOutput) Port() pulumi.IntOutput {
 	return o.ApplyT(func(v *RabbitmqInstance) pulumi.IntOutput { return v.Port }).(pulumi.IntOutput)
 }
 
-// Specifies a product ID. Changing this creates a new instance resource.
-func (o RabbitmqInstanceOutput) ProductId() pulumi.StringOutput {
-	return o.ApplyT(func(v *RabbitmqInstance) pulumi.StringOutput { return v.ProductId }).(pulumi.StringOutput)
+// Deprecated: product_id has deprecated, please use "flavor_id" instead.
+func (o RabbitmqInstanceOutput) ProductId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *RabbitmqInstance) pulumi.StringPtrOutput { return v.ProductId }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the ID of the elastic IP address (EIP)
@@ -824,7 +913,8 @@ func (o RabbitmqInstanceOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *RabbitmqInstance) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
 }
 
-// Specifies the message storage space, unit is GB. Value range:
+// Specifies the message storage space, unit is GB.
+// It is required when creating a instance with `flavorId`. Value range:
 //   - Single-node RabbitMQ instance: 100–90,000 GB
 //   - Cluster RabbitMQ instance: 100 GB x number of nodes to 90,000 GB, 200 GB x number of nodes to 90,000 GB,
 //     and 300 GB x number of nodes to 90,000 GB

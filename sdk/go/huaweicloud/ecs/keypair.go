@@ -10,8 +10,6 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages a keypair resource within HuaweiCloud.
-//
 // ## Example Usage
 // ### Create a new keypair and export private key to current folder
 //

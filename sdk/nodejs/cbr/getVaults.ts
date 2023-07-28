@@ -38,7 +38,6 @@ export function getVaults(args?: GetVaultsArgs, opts?: pulumi.InvokeOptions): Pr
         "size": args.size,
         "status": args.status,
         "type": args.type,
-        "vaults": args.vaults,
     }, opts);
 }
 
@@ -48,37 +47,37 @@ export function getVaults(args?: GetVaultsArgs, opts?: pulumi.InvokeOptions): Pr
 export interface GetVaultsArgs {
     /**
      * Specifies whether to enable automatic expansion of the backup protection
-     * type vault. Default to **false**.
+     * type vault. Defaults to **false**.
      */
     autoExpandEnabled?: boolean;
     /**
-     * Specifies the backup specifications.
+     * Specifies the consistent level (specification) of the vault.
      * The valid values are as follows:
      * + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
      * + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
      */
     consistentLevel?: string;
     /**
-     * Specifies a unique ID in UUID format of enterprise project.
+     * Specifies the ID of the enterprise project to which the vault belongs.
      */
     enterpriseProjectId?: string;
     /**
-     * Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
+     * Specifies the vault name. This parameter can contain a maximum of 64
      * characters, which may consist of letters, digits, underscores(_) and hyphens (-).
      */
     name?: string;
     /**
-     * Specifies a policy to associate with the CBR vault.
+     * Specifies the ID of the policy associated with the vault.
      * The `policyId` cannot be used with the vault of replicate protection type.
      */
     policyId?: string;
     /**
-     * Specifies the protection type of the CBR vault.
+     * Specifies the protection type of the vault.
      * The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
      */
     protectionType?: string;
     /**
-     * Specifies the region in which to query the CBR vaults.
+     * Specifies the region in which to query the vaults.
      * If omitted, the provider-level region will be used.
      */
     region?: string;
@@ -87,20 +86,16 @@ export interface GetVaultsArgs {
      */
     size?: number;
     /**
-     * Specifies the CBR vault status, including **available**, **lock**, **frozen** and **error**.
+     * Specifies the vault status, including **available**, **lock**, **frozen** and **error**.
      */
     status?: string;
     /**
-     * Specifies the object type of the CBR vault. The vaild values are as follows:
+     * Specifies the object type of the vault. The vaild values are as follows:
      * + **server** (Cloud Servers)
      * + **disk** (EVS Disks)
      * + **turbo** (SFS Turbo file systems)
      */
     type?: string;
-    /**
-     * List of CBR vault details. The object structure of each CBR vault is documented below.
-     */
-    vaults?: inputs.Cbr.GetVaultsVault[];
 }
 
 /**
@@ -112,7 +107,7 @@ export interface GetVaultsResult {
      */
     readonly autoExpandEnabled?: boolean;
     /**
-     * The backup specifications.
+     * The consistent level (specification) of the vault.
      */
     readonly consistentLevel?: string;
     /**
@@ -124,15 +119,15 @@ export interface GetVaultsResult {
      */
     readonly id: string;
     /**
-     * The CBR vault name.
+     * The vault name.
      */
     readonly name?: string;
     /**
-     * The policy associated with the CBR vault.
+     * The ID of the policy associated with the vault.
      */
     readonly policyId?: string;
     /**
-     * The protection type of the CBR vault.
+     * The protection type of the vault.
      */
     readonly protectionType?: string;
     readonly region?: string;
@@ -145,13 +140,13 @@ export interface GetVaultsResult {
      */
     readonly status?: string;
     /**
-     * The object type of the CBR vault.
+     * The object type of the vault.
      */
     readonly type?: string;
     /**
-     * List of CBR vault details. The object structure of each CBR vault is documented below.
+     * List of vault details. The object structure of each vault is documented below.
      */
-    readonly vaults?: outputs.Cbr.GetVaultsVault[];
+    readonly vaults: outputs.Cbr.GetVaultsVault[];
 }
 
 export function getVaultsOutput(args?: GetVaultsOutputArgs, opts?: pulumi.InvokeOptions): pulumi.Output<GetVaultsResult> {
@@ -164,37 +159,37 @@ export function getVaultsOutput(args?: GetVaultsOutputArgs, opts?: pulumi.Invoke
 export interface GetVaultsOutputArgs {
     /**
      * Specifies whether to enable automatic expansion of the backup protection
-     * type vault. Default to **false**.
+     * type vault. Defaults to **false**.
      */
     autoExpandEnabled?: pulumi.Input<boolean>;
     /**
-     * Specifies the backup specifications.
+     * Specifies the consistent level (specification) of the vault.
      * The valid values are as follows:
      * + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
      * + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
      */
     consistentLevel?: pulumi.Input<string>;
     /**
-     * Specifies a unique ID in UUID format of enterprise project.
+     * Specifies the ID of the enterprise project to which the vault belongs.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
+     * Specifies the vault name. This parameter can contain a maximum of 64
      * characters, which may consist of letters, digits, underscores(_) and hyphens (-).
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies a policy to associate with the CBR vault.
+     * Specifies the ID of the policy associated with the vault.
      * The `policyId` cannot be used with the vault of replicate protection type.
      */
     policyId?: pulumi.Input<string>;
     /**
-     * Specifies the protection type of the CBR vault.
+     * Specifies the protection type of the vault.
      * The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
      */
     protectionType?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to query the CBR vaults.
+     * Specifies the region in which to query the vaults.
      * If omitted, the provider-level region will be used.
      */
     region?: pulumi.Input<string>;
@@ -203,18 +198,14 @@ export interface GetVaultsOutputArgs {
      */
     size?: pulumi.Input<number>;
     /**
-     * Specifies the CBR vault status, including **available**, **lock**, **frozen** and **error**.
+     * Specifies the vault status, including **available**, **lock**, **frozen** and **error**.
      */
     status?: pulumi.Input<string>;
     /**
-     * Specifies the object type of the CBR vault. The vaild values are as follows:
+     * Specifies the object type of the vault. The vaild values are as follows:
      * + **server** (Cloud Servers)
      * + **disk** (EVS Disks)
      * + **turbo** (SFS Turbo file systems)
      */
     type?: pulumi.Input<string>;
-    /**
-     * List of CBR vault details. The object structure of each CBR vault is documented below.
-     */
-    vaults?: pulumi.Input<pulumi.Input<inputs.Cbr.GetVaultsVaultArgs>[]>;
 }

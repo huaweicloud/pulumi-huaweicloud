@@ -23,6 +23,7 @@ class VolumeArgs:
                  backup_id: Optional[pulumi.Input[str]] = None,
                  cascade: Optional[pulumi.Input[bool]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 dedicated_storage_id: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  device_type: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -48,7 +49,6 @@ class VolumeArgs:
                + ESSD: Extreme SSD type.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
                Valid values are **true** and **false**.
-               Changing this creates a new disk.
         :param pulumi.Input[str] backup_id: Specifies the backup ID from which to create the disk. Changing this
                creates a new disk.
         :param pulumi.Input[bool] cascade: Specifies the delete mode of snapshot. The default value is false. All snapshot
@@ -58,6 +58,7 @@ class VolumeArgs:
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
                Changing this creates a new disk.
+        :param pulumi.Input[str] dedicated_storage_id: Specifies the ID of the DSS storage pool accommodating the disk.
         :param pulumi.Input[str] description: Specifies the disk description. The value can contain a maximum of 255 bytes.
         :param pulumi.Input[str] device_type: Specifies the device type of disk to create. Valid options are VBD and
                SCSI. Defaults to VBD. Changing this creates a new disk.
@@ -90,6 +91,9 @@ class VolumeArgs:
         pulumi.set(__self__, "availability_zone", availability_zone)
         pulumi.set(__self__, "volume_type", volume_type)
         if auto_pay is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
+        if auto_pay is not None:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
             pulumi.set(__self__, "auto_renew", auto_renew)
@@ -99,6 +103,8 @@ class VolumeArgs:
             pulumi.set(__self__, "cascade", cascade)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
+        if dedicated_storage_id is not None:
+            pulumi.set(__self__, "dedicated_storage_id", dedicated_storage_id)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if device_type is not None:
@@ -171,7 +177,6 @@ class VolumeArgs:
         """
         Specifies whether auto renew is enabled.
         Valid values are **true** and **false**.
-        Changing this creates a new disk.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -220,6 +225,18 @@ class VolumeArgs:
     @charging_mode.setter
     def charging_mode(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "charging_mode", value)
+
+    @property
+    @pulumi.getter(name="dedicatedStorageId")
+    def dedicated_storage_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the DSS storage pool accommodating the disk.
+        """
+        return pulumi.get(self, "dedicated_storage_id")
+
+    @dedicated_storage_id.setter
+    def dedicated_storage_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "dedicated_storage_id", value)
 
     @property
     @pulumi.getter
@@ -403,6 +420,8 @@ class _VolumeState:
                  backup_id: Optional[pulumi.Input[str]] = None,
                  cascade: Optional[pulumi.Input[bool]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 dedicated_storage_id: Optional[pulumi.Input[str]] = None,
+                 dedicated_storage_name: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  device_type: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -421,10 +440,9 @@ class _VolumeState:
         """
         Input properties used for looking up and filtering Volume resources.
         :param pulumi.Input[Sequence[pulumi.Input['VolumeAttachmentArgs']]] attachments: If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-               the Device as the Instance sees it.
+               the Device as the Instance sees it. The object structure is documented below.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
                Valid values are **true** and **false**.
-               Changing this creates a new disk.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone for the disk. Changing this creates
                a new disk.
         :param pulumi.Input[str] backup_id: Specifies the backup ID from which to create the disk. Changing this
@@ -436,6 +454,8 @@ class _VolumeState:
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
                Changing this creates a new disk.
+        :param pulumi.Input[str] dedicated_storage_id: Specifies the ID of the DSS storage pool accommodating the disk.
+        :param pulumi.Input[str] dedicated_storage_name: The name of the DSS storage pool accommodating the disk.
         :param pulumi.Input[str] description: Specifies the disk description. The value can contain a maximum of 255 bytes.
         :param pulumi.Input[str] device_type: Specifies the device type of disk to create. Valid options are VBD and
                SCSI. Defaults to VBD. Changing this creates a new disk.
@@ -475,6 +495,9 @@ class _VolumeState:
         if attachments is not None:
             pulumi.set(__self__, "attachments", attachments)
         if auto_pay is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
+        if auto_pay is not None:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
             pulumi.set(__self__, "auto_renew", auto_renew)
@@ -486,6 +509,10 @@ class _VolumeState:
             pulumi.set(__self__, "cascade", cascade)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
+        if dedicated_storage_id is not None:
+            pulumi.set(__self__, "dedicated_storage_id", dedicated_storage_id)
+        if dedicated_storage_name is not None:
+            pulumi.set(__self__, "dedicated_storage_name", dedicated_storage_name)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if device_type is not None:
@@ -522,7 +549,7 @@ class _VolumeState:
     def attachments(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['VolumeAttachmentArgs']]]]:
         """
         If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-        the Device as the Instance sees it.
+        the Device as the Instance sees it. The object structure is documented below.
         """
         return pulumi.get(self, "attachments")
 
@@ -545,7 +572,6 @@ class _VolumeState:
         """
         Specifies whether auto renew is enabled.
         Valid values are **true** and **false**.
-        Changing this creates a new disk.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -607,6 +633,30 @@ class _VolumeState:
     @charging_mode.setter
     def charging_mode(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "charging_mode", value)
+
+    @property
+    @pulumi.getter(name="dedicatedStorageId")
+    def dedicated_storage_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the DSS storage pool accommodating the disk.
+        """
+        return pulumi.get(self, "dedicated_storage_id")
+
+    @dedicated_storage_id.setter
+    def dedicated_storage_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "dedicated_storage_id", value)
+
+    @property
+    @pulumi.getter(name="dedicatedStorageName")
+    def dedicated_storage_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        The name of the DSS storage pool accommodating the disk.
+        """
+        return pulumi.get(self, "dedicated_storage_name")
+
+    @dedicated_storage_name.setter
+    def dedicated_storage_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "dedicated_storage_name", value)
 
     @property
     @pulumi.getter
@@ -820,6 +870,7 @@ class Volume(pulumi.CustomResource):
                  backup_id: Optional[pulumi.Input[str]] = None,
                  cascade: Optional[pulumi.Input[bool]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 dedicated_storage_id: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  device_type: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -898,7 +949,6 @@ class Volume(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
                Valid values are **true** and **false**.
-               Changing this creates a new disk.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone for the disk. Changing this creates
                a new disk.
         :param pulumi.Input[str] backup_id: Specifies the backup ID from which to create the disk. Changing this
@@ -910,6 +960,7 @@ class Volume(pulumi.CustomResource):
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
                Changing this creates a new disk.
+        :param pulumi.Input[str] dedicated_storage_id: Specifies the ID of the DSS storage pool accommodating the disk.
         :param pulumi.Input[str] description: Specifies the disk description. The value can contain a maximum of 255 bytes.
         :param pulumi.Input[str] device_type: Specifies the device type of disk to create. Valid options are VBD and
                SCSI. Defaults to VBD. Changing this creates a new disk.
@@ -1031,6 +1082,7 @@ class Volume(pulumi.CustomResource):
                  backup_id: Optional[pulumi.Input[str]] = None,
                  cascade: Optional[pulumi.Input[bool]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 dedicated_storage_id: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  device_type: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -1054,6 +1106,9 @@ class Volume(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = VolumeArgs.__new__(VolumeArgs)
 
+            if auto_pay is not None and not opts.urn:
+                warnings.warn("""Deprecated""", DeprecationWarning)
+                pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
             __props__.__dict__["auto_pay"] = auto_pay
             __props__.__dict__["auto_renew"] = auto_renew
             if availability_zone is None and not opts.urn:
@@ -1062,6 +1117,7 @@ class Volume(pulumi.CustomResource):
             __props__.__dict__["backup_id"] = backup_id
             __props__.__dict__["cascade"] = cascade
             __props__.__dict__["charging_mode"] = charging_mode
+            __props__.__dict__["dedicated_storage_id"] = dedicated_storage_id
             __props__.__dict__["description"] = description
             __props__.__dict__["device_type"] = device_type
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
@@ -1079,6 +1135,7 @@ class Volume(pulumi.CustomResource):
                 raise TypeError("Missing required property 'volume_type'")
             __props__.__dict__["volume_type"] = volume_type
             __props__.__dict__["attachments"] = None
+            __props__.__dict__["dedicated_storage_name"] = None
             __props__.__dict__["wwn"] = None
         super(Volume, __self__).__init__(
             'huaweicloud:Evs/volume:Volume',
@@ -1097,6 +1154,8 @@ class Volume(pulumi.CustomResource):
             backup_id: Optional[pulumi.Input[str]] = None,
             cascade: Optional[pulumi.Input[bool]] = None,
             charging_mode: Optional[pulumi.Input[str]] = None,
+            dedicated_storage_id: Optional[pulumi.Input[str]] = None,
+            dedicated_storage_name: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
             device_type: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -1120,10 +1179,9 @@ class Volume(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['VolumeAttachmentArgs']]]] attachments: If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-               the Device as the Instance sees it.
+               the Device as the Instance sees it. The object structure is documented below.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
                Valid values are **true** and **false**.
-               Changing this creates a new disk.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone for the disk. Changing this creates
                a new disk.
         :param pulumi.Input[str] backup_id: Specifies the backup ID from which to create the disk. Changing this
@@ -1135,6 +1193,8 @@ class Volume(pulumi.CustomResource):
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
                Changing this creates a new disk.
+        :param pulumi.Input[str] dedicated_storage_id: Specifies the ID of the DSS storage pool accommodating the disk.
+        :param pulumi.Input[str] dedicated_storage_name: The name of the DSS storage pool accommodating the disk.
         :param pulumi.Input[str] description: Specifies the disk description. The value can contain a maximum of 255 bytes.
         :param pulumi.Input[str] device_type: Specifies the device type of disk to create. Valid options are VBD and
                SCSI. Defaults to VBD. Changing this creates a new disk.
@@ -1182,6 +1242,8 @@ class Volume(pulumi.CustomResource):
         __props__.__dict__["backup_id"] = backup_id
         __props__.__dict__["cascade"] = cascade
         __props__.__dict__["charging_mode"] = charging_mode
+        __props__.__dict__["dedicated_storage_id"] = dedicated_storage_id
+        __props__.__dict__["dedicated_storage_name"] = dedicated_storage_name
         __props__.__dict__["description"] = description
         __props__.__dict__["device_type"] = device_type
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
@@ -1204,7 +1266,7 @@ class Volume(pulumi.CustomResource):
     def attachments(self) -> pulumi.Output[Sequence['outputs.VolumeAttachment']]:
         """
         If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-        the Device as the Instance sees it.
+        the Device as the Instance sees it. The object structure is documented below.
         """
         return pulumi.get(self, "attachments")
 
@@ -1219,7 +1281,6 @@ class Volume(pulumi.CustomResource):
         """
         Specifies whether auto renew is enabled.
         Valid values are **true** and **false**.
-        Changing this creates a new disk.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -1261,6 +1322,22 @@ class Volume(pulumi.CustomResource):
         Changing this creates a new disk.
         """
         return pulumi.get(self, "charging_mode")
+
+    @property
+    @pulumi.getter(name="dedicatedStorageId")
+    def dedicated_storage_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the ID of the DSS storage pool accommodating the disk.
+        """
+        return pulumi.get(self, "dedicated_storage_id")
+
+    @property
+    @pulumi.getter(name="dedicatedStorageName")
+    def dedicated_storage_name(self) -> pulumi.Output[str]:
+        """
+        The name of the DSS storage pool accommodating the disk.
+        """
+        return pulumi.get(self, "dedicated_storage_name")
 
     @property
     @pulumi.getter

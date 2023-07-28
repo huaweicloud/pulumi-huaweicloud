@@ -42,7 +42,7 @@ class MicroserviceArgs:
         :param pulumi.Input[str] admin_user: Specifies the account name. The initial account name is **root**.
                Required if the `auth_type` of engine is **RBAC**. Changing this will create a new microservice.
         :param pulumi.Input[str] description: Specifies the description of the dedicated microservice.
-               The description can contian a maximum of `256` characters.
+               The description can contain a maximum of `256` characters.
                Changing this will create a new microservice.
         :param pulumi.Input[str] environment: Specifies the environment (stage) type.
                The valid values are **development**, **testing**, **acceptance** and **production**.
@@ -146,7 +146,7 @@ class MicroserviceArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of the dedicated microservice.
-        The description can contian a maximum of `256` characters.
+        The description can contain a maximum of `256` characters.
         Changing this will create a new microservice.
         """
         return pulumi.get(self, "description")
@@ -228,7 +228,7 @@ class _MicroserviceState:
         :param pulumi.Input[str] connect_address: Specifies the connection address of service registry center for the
                specified dedicated CSE engine. Changing this will create a new microservice.
         :param pulumi.Input[str] description: Specifies the description of the dedicated microservice.
-               The description can contian a maximum of `256` characters.
+               The description can contain a maximum of `256` characters.
                Changing this will create a new microservice.
         :param pulumi.Input[str] environment: Specifies the environment (stage) type.
                The valid values are **development**, **testing**, **acceptance** and **production**.
@@ -327,7 +327,7 @@ class _MicroserviceState:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of the dedicated microservice.
-        The description can contian a maximum of `256` characters.
+        The description can contain a maximum of `256` characters.
         Changing this will create a new microservice.
         """
         return pulumi.get(self, "description")
@@ -425,6 +425,40 @@ class Microservice(pulumi.CustomResource):
         > When deleting a microservice, all instances under it will also be deleted together.
 
         ## Example Usage
+        ### Create a microservice in an engine with RBAC authentication disabled
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        engine_conn_addr = config.require_object("engineConnAddr")
+        service_name = config.require_object("serviceName")
+        app_name = config.require_object("appName")
+        test = huaweicloud.cse.Microservice("test",
+            connect_address=engine_conn_addr,
+            version="1.0.0",
+            environment="development",
+            app_name=app_name)
+        ```
+        ### Create a microservice in an engine with RBAC authentication enabled
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        engine_conn_addr = config.require_object("engineConnAddr")
+        service_name = config.require_object("serviceName")
+        app_name = config.require_object("appName")
+        test = huaweicloud.cse.Microservice("test",
+            connect_address=engine_conn_addr,
+            version="1.0.0",
+            environment="development",
+            app_name=app_name,
+            admin_user="root",
+            admin_pass="Huawei!123")
+        ```
 
         ## Import
 
@@ -459,7 +493,7 @@ class Microservice(pulumi.CustomResource):
         :param pulumi.Input[str] connect_address: Specifies the connection address of service registry center for the
                specified dedicated CSE engine. Changing this will create a new microservice.
         :param pulumi.Input[str] description: Specifies the description of the dedicated microservice.
-               The description can contian a maximum of `256` characters.
+               The description can contain a maximum of `256` characters.
                Changing this will create a new microservice.
         :param pulumi.Input[str] environment: Specifies the environment (stage) type.
                The valid values are **development**, **testing**, **acceptance** and **production**.
@@ -485,6 +519,40 @@ class Microservice(pulumi.CustomResource):
         > When deleting a microservice, all instances under it will also be deleted together.
 
         ## Example Usage
+        ### Create a microservice in an engine with RBAC authentication disabled
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        engine_conn_addr = config.require_object("engineConnAddr")
+        service_name = config.require_object("serviceName")
+        app_name = config.require_object("appName")
+        test = huaweicloud.cse.Microservice("test",
+            connect_address=engine_conn_addr,
+            version="1.0.0",
+            environment="development",
+            app_name=app_name)
+        ```
+        ### Create a microservice in an engine with RBAC authentication enabled
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        engine_conn_addr = config.require_object("engineConnAddr")
+        service_name = config.require_object("serviceName")
+        app_name = config.require_object("appName")
+        test = huaweicloud.cse.Microservice("test",
+            connect_address=engine_conn_addr,
+            version="1.0.0",
+            environment="development",
+            app_name=app_name,
+            admin_user="root",
+            admin_pass="Huawei!123")
+        ```
 
         ## Import
 
@@ -593,7 +661,7 @@ class Microservice(pulumi.CustomResource):
         :param pulumi.Input[str] connect_address: Specifies the connection address of service registry center for the
                specified dedicated CSE engine. Changing this will create a new microservice.
         :param pulumi.Input[str] description: Specifies the description of the dedicated microservice.
-               The description can contian a maximum of `256` characters.
+               The description can contain a maximum of `256` characters.
                Changing this will create a new microservice.
         :param pulumi.Input[str] environment: Specifies the environment (stage) type.
                The valid values are **development**, **testing**, **acceptance** and **production**.
@@ -671,7 +739,7 @@ class Microservice(pulumi.CustomResource):
     def description(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the description of the dedicated microservice.
-        The description can contian a maximum of `256` characters.
+        The description can contain a maximum of `256` characters.
         Changing this will create a new microservice.
         """
         return pulumi.get(self, "description")

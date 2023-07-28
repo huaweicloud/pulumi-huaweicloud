@@ -23,16 +23,18 @@ class ResponseArgs:
                  rules: Optional[pulumi.Input[Sequence[pulumi.Input['ResponseRuleArgs']]]] = None):
         """
         The set of arguments for constructing a Response resource.
-        :param pulumi.Input[str] group_id: Specifies the ID of the API group to which the API response belongs to.
-               Changing this will create a new API custom response resource.
-        :param pulumi.Input[str] instance_id: Specifies the ID of the APIG dedicated instance to which the API group
-               where the API custom response belongs. Changing this will create a new API custom response resource.
-        :param pulumi.Input[str] name: Specifies the name of the API custom response. The name consists of 1 to 64 characters,
-               and only letters, digits, hyphens(-), and underscores (_) are allowed.
-        :param pulumi.Input[str] region: Specifies the region in which to create the API custom response resource. If
-               omitted, the provider-level region will be used. Changing this will create a new API custom response resource.
-        :param pulumi.Input[Sequence[pulumi.Input['ResponseRuleArgs']]] rules: Specifies the API custom response rules definition. The object structure is documented
-               below.
+        :param pulumi.Input[str] group_id: Specifies the ID of the API group to which the API custom response
+               belongs.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the API group and the
+               API custom response belong.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the name of the API custom response.  
+               The valid length is limited from `1` to `64`, letters, digits, hyphens (-) and underscores (_) are allowed.
+        :param pulumi.Input[str] region: Specifies the region where the API custom response is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['ResponseRuleArgs']]] rules: Specifies the API custom response rules definition.  
+               The object structure is documented below.
         """
         pulumi.set(__self__, "group_id", group_id)
         pulumi.set(__self__, "instance_id", instance_id)
@@ -47,8 +49,9 @@ class ResponseArgs:
     @pulumi.getter(name="groupId")
     def group_id(self) -> pulumi.Input[str]:
         """
-        Specifies the ID of the API group to which the API response belongs to.
-        Changing this will create a new API custom response resource.
+        Specifies the ID of the API group to which the API custom response
+        belongs.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "group_id")
 
@@ -60,8 +63,9 @@ class ResponseArgs:
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Input[str]:
         """
-        Specifies the ID of the APIG dedicated instance to which the API group
-        where the API custom response belongs. Changing this will create a new API custom response resource.
+        Specifies the ID of the dedicated instance to which the API group and the
+        API custom response belong.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -73,8 +77,8 @@ class ResponseArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the API custom response. The name consists of 1 to 64 characters,
-        and only letters, digits, hyphens(-), and underscores (_) are allowed.
+        Specifies the name of the API custom response.  
+        The valid length is limited from `1` to `64`, letters, digits, hyphens (-) and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -86,8 +90,8 @@ class ResponseArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create the API custom response resource. If
-        omitted, the provider-level region will be used. Changing this will create a new API custom response resource.
+        Specifies the region where the API custom response is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -99,8 +103,8 @@ class ResponseArgs:
     @pulumi.getter
     def rules(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ResponseRuleArgs']]]]:
         """
-        Specifies the API custom response rules definition. The object structure is documented
-        below.
+        Specifies the API custom response rules definition.  
+        The object structure is documented below.
         """
         return pulumi.get(self, "rules")
 
@@ -112,30 +116,32 @@ class ResponseArgs:
 @pulumi.input_type
 class _ResponseState:
     def __init__(__self__, *,
-                 create_time: Optional[pulumi.Input[str]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  group_id: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  rules: Optional[pulumi.Input[Sequence[pulumi.Input['ResponseRuleArgs']]]] = None,
-                 update_time: Optional[pulumi.Input[str]] = None):
+                 updated_at: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Response resources.
-        :param pulumi.Input[str] create_time: Time when the API custom response is created.
-        :param pulumi.Input[str] group_id: Specifies the ID of the API group to which the API response belongs to.
-               Changing this will create a new API custom response resource.
-        :param pulumi.Input[str] instance_id: Specifies the ID of the APIG dedicated instance to which the API group
-               where the API custom response belongs. Changing this will create a new API custom response resource.
-        :param pulumi.Input[str] name: Specifies the name of the API custom response. The name consists of 1 to 64 characters,
-               and only letters, digits, hyphens(-), and underscores (_) are allowed.
-        :param pulumi.Input[str] region: Specifies the region in which to create the API custom response resource. If
-               omitted, the provider-level region will be used. Changing this will create a new API custom response resource.
-        :param pulumi.Input[Sequence[pulumi.Input['ResponseRuleArgs']]] rules: Specifies the API custom response rules definition. The object structure is documented
-               below.
-        :param pulumi.Input[str] update_time: Time when the API custom response was last modified.
+        :param pulumi.Input[str] created_at: The creation time of the API custom response.
+        :param pulumi.Input[str] group_id: Specifies the ID of the API group to which the API custom response
+               belongs.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the API group and the
+               API custom response belong.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the name of the API custom response.  
+               The valid length is limited from `1` to `64`, letters, digits, hyphens (-) and underscores (_) are allowed.
+        :param pulumi.Input[str] region: Specifies the region where the API custom response is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['ResponseRuleArgs']]] rules: Specifies the API custom response rules definition.  
+               The object structure is documented below.
+        :param pulumi.Input[str] updated_at: The latest update time of the API custom response.
         """
-        if create_time is not None:
-            pulumi.set(__self__, "create_time", create_time)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if group_id is not None:
             pulumi.set(__self__, "group_id", group_id)
         if instance_id is not None:
@@ -146,27 +152,28 @@ class _ResponseState:
             pulumi.set(__self__, "region", region)
         if rules is not None:
             pulumi.set(__self__, "rules", rules)
-        if update_time is not None:
-            pulumi.set(__self__, "update_time", update_time)
+        if updated_at is not None:
+            pulumi.set(__self__, "updated_at", updated_at)
 
     @property
-    @pulumi.getter(name="createTime")
-    def create_time(self) -> Optional[pulumi.Input[str]]:
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
         """
-        Time when the API custom response is created.
+        The creation time of the API custom response.
         """
-        return pulumi.get(self, "create_time")
+        return pulumi.get(self, "created_at")
 
-    @create_time.setter
-    def create_time(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "create_time", value)
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
 
     @property
     @pulumi.getter(name="groupId")
     def group_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ID of the API group to which the API response belongs to.
-        Changing this will create a new API custom response resource.
+        Specifies the ID of the API group to which the API custom response
+        belongs.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "group_id")
 
@@ -178,8 +185,9 @@ class _ResponseState:
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ID of the APIG dedicated instance to which the API group
-        where the API custom response belongs. Changing this will create a new API custom response resource.
+        Specifies the ID of the dedicated instance to which the API group and the
+        API custom response belong.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -191,8 +199,8 @@ class _ResponseState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the API custom response. The name consists of 1 to 64 characters,
-        and only letters, digits, hyphens(-), and underscores (_) are allowed.
+        Specifies the name of the API custom response.  
+        The valid length is limited from `1` to `64`, letters, digits, hyphens (-) and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -204,8 +212,8 @@ class _ResponseState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create the API custom response resource. If
-        omitted, the provider-level region will be used. Changing this will create a new API custom response resource.
+        Specifies the region where the API custom response is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -217,8 +225,8 @@ class _ResponseState:
     @pulumi.getter
     def rules(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ResponseRuleArgs']]]]:
         """
-        Specifies the API custom response rules definition. The object structure is documented
-        below.
+        Specifies the API custom response rules definition.  
+        The object structure is documented below.
         """
         return pulumi.get(self, "rules")
 
@@ -227,16 +235,16 @@ class _ResponseState:
         pulumi.set(self, "rules", value)
 
     @property
-    @pulumi.getter(name="updateTime")
-    def update_time(self) -> Optional[pulumi.Input[str]]:
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> Optional[pulumi.Input[str]]:
         """
-        Time when the API custom response was last modified.
+        The latest update time of the API custom response.
         """
-        return pulumi.get(self, "update_time")
+        return pulumi.get(self, "updated_at")
 
-    @update_time.setter
-    def update_time(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "update_time", value)
+    @updated_at.setter
+    def updated_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "updated_at", value)
 
 
 class Response(pulumi.CustomResource):
@@ -275,24 +283,26 @@ class Response(pulumi.CustomResource):
 
         ## Import
 
-        API Responses can be imported using their `name` and IDs of the APIG dedicated instances and API groups to which the API response belongs, separated by a slash, e.g.
+        API Responses can be imported using their `name` and IDs of the APIG dedicated instances and API groups to which the API response belongs, separated by slashes, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/response:Response test <instance id>/<group id>/<name>
+         $ pulumi import huaweicloud:DedicatedApig/response:Response test <instance_id>/<group_id>/<name>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] group_id: Specifies the ID of the API group to which the API response belongs to.
-               Changing this will create a new API custom response resource.
-        :param pulumi.Input[str] instance_id: Specifies the ID of the APIG dedicated instance to which the API group
-               where the API custom response belongs. Changing this will create a new API custom response resource.
-        :param pulumi.Input[str] name: Specifies the name of the API custom response. The name consists of 1 to 64 characters,
-               and only letters, digits, hyphens(-), and underscores (_) are allowed.
-        :param pulumi.Input[str] region: Specifies the region in which to create the API custom response resource. If
-               omitted, the provider-level region will be used. Changing this will create a new API custom response resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ResponseRuleArgs']]]] rules: Specifies the API custom response rules definition. The object structure is documented
-               below.
+        :param pulumi.Input[str] group_id: Specifies the ID of the API group to which the API custom response
+               belongs.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the API group and the
+               API custom response belong.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the name of the API custom response.  
+               The valid length is limited from `1` to `64`, letters, digits, hyphens (-) and underscores (_) are allowed.
+        :param pulumi.Input[str] region: Specifies the region where the API custom response is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ResponseRuleArgs']]]] rules: Specifies the API custom response rules definition.  
+               The object structure is documented below.
         """
         ...
     @overload
@@ -325,10 +335,10 @@ class Response(pulumi.CustomResource):
 
         ## Import
 
-        API Responses can be imported using their `name` and IDs of the APIG dedicated instances and API groups to which the API response belongs, separated by a slash, e.g.
+        API Responses can be imported using their `name` and IDs of the APIG dedicated instances and API groups to which the API response belongs, separated by slashes, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/response:Response test <instance id>/<group id>/<name>
+         $ pulumi import huaweicloud:DedicatedApig/response:Response test <instance_id>/<group_id>/<name>
         ```
 
         :param str resource_name: The name of the resource.
@@ -369,8 +379,8 @@ class Response(pulumi.CustomResource):
             __props__.__dict__["name"] = name
             __props__.__dict__["region"] = region
             __props__.__dict__["rules"] = rules
-            __props__.__dict__["create_time"] = None
-            __props__.__dict__["update_time"] = None
+            __props__.__dict__["created_at"] = None
+            __props__.__dict__["updated_at"] = None
         super(Response, __self__).__init__(
             'huaweicloud:DedicatedApig/response:Response',
             resource_name,
@@ -381,13 +391,13 @@ class Response(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
-            create_time: Optional[pulumi.Input[str]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             group_id: Optional[pulumi.Input[str]] = None,
             instance_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             rules: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ResponseRuleArgs']]]]] = None,
-            update_time: Optional[pulumi.Input[str]] = None) -> 'Response':
+            updated_at: Optional[pulumi.Input[str]] = None) -> 'Response':
         """
         Get an existing Response resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -395,46 +405,49 @@ class Response(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] create_time: Time when the API custom response is created.
-        :param pulumi.Input[str] group_id: Specifies the ID of the API group to which the API response belongs to.
-               Changing this will create a new API custom response resource.
-        :param pulumi.Input[str] instance_id: Specifies the ID of the APIG dedicated instance to which the API group
-               where the API custom response belongs. Changing this will create a new API custom response resource.
-        :param pulumi.Input[str] name: Specifies the name of the API custom response. The name consists of 1 to 64 characters,
-               and only letters, digits, hyphens(-), and underscores (_) are allowed.
-        :param pulumi.Input[str] region: Specifies the region in which to create the API custom response resource. If
-               omitted, the provider-level region will be used. Changing this will create a new API custom response resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ResponseRuleArgs']]]] rules: Specifies the API custom response rules definition. The object structure is documented
-               below.
-        :param pulumi.Input[str] update_time: Time when the API custom response was last modified.
+        :param pulumi.Input[str] created_at: The creation time of the API custom response.
+        :param pulumi.Input[str] group_id: Specifies the ID of the API group to which the API custom response
+               belongs.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the API group and the
+               API custom response belong.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the name of the API custom response.  
+               The valid length is limited from `1` to `64`, letters, digits, hyphens (-) and underscores (_) are allowed.
+        :param pulumi.Input[str] region: Specifies the region where the API custom response is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ResponseRuleArgs']]]] rules: Specifies the API custom response rules definition.  
+               The object structure is documented below.
+        :param pulumi.Input[str] updated_at: The latest update time of the API custom response.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _ResponseState.__new__(_ResponseState)
 
-        __props__.__dict__["create_time"] = create_time
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["group_id"] = group_id
         __props__.__dict__["instance_id"] = instance_id
         __props__.__dict__["name"] = name
         __props__.__dict__["region"] = region
         __props__.__dict__["rules"] = rules
-        __props__.__dict__["update_time"] = update_time
+        __props__.__dict__["updated_at"] = updated_at
         return Response(resource_name, opts=opts, __props__=__props__)
 
     @property
-    @pulumi.getter(name="createTime")
-    def create_time(self) -> pulumi.Output[str]:
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
         """
-        Time when the API custom response is created.
+        The creation time of the API custom response.
         """
-        return pulumi.get(self, "create_time")
+        return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter(name="groupId")
     def group_id(self) -> pulumi.Output[str]:
         """
-        Specifies the ID of the API group to which the API response belongs to.
-        Changing this will create a new API custom response resource.
+        Specifies the ID of the API group to which the API custom response
+        belongs.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "group_id")
 
@@ -442,8 +455,9 @@ class Response(pulumi.CustomResource):
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Output[str]:
         """
-        Specifies the ID of the APIG dedicated instance to which the API group
-        where the API custom response belongs. Changing this will create a new API custom response resource.
+        Specifies the ID of the dedicated instance to which the API group and the
+        API custom response belong.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -451,8 +465,8 @@ class Response(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of the API custom response. The name consists of 1 to 64 characters,
-        and only letters, digits, hyphens(-), and underscores (_) are allowed.
+        Specifies the name of the API custom response.  
+        The valid length is limited from `1` to `64`, letters, digits, hyphens (-) and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -460,8 +474,8 @@ class Response(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        Specifies the region in which to create the API custom response resource. If
-        omitted, the provider-level region will be used. Changing this will create a new API custom response resource.
+        Specifies the region where the API custom response is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -469,16 +483,16 @@ class Response(pulumi.CustomResource):
     @pulumi.getter
     def rules(self) -> pulumi.Output[Sequence['outputs.ResponseRule']]:
         """
-        Specifies the API custom response rules definition. The object structure is documented
-        below.
+        Specifies the API custom response rules definition.  
+        The object structure is documented below.
         """
         return pulumi.get(self, "rules")
 
     @property
-    @pulumi.getter(name="updateTime")
-    def update_time(self) -> pulumi.Output[str]:
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> pulumi.Output[str]:
         """
-        Time when the API custom response was last modified.
+        The latest update time of the API custom response.
         """
-        return pulumi.get(self, "update_time")
+        return pulumi.get(self, "updated_at")
 

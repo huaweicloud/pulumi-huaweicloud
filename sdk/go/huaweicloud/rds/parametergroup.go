@@ -70,7 +70,9 @@ type Parametergroup struct {
 	// contain the following special characters:>!<"&'= the value is left blank by default.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// The parameter group name. It contains a maximum of 64 characters.
-	Name   pulumi.StringOutput `pulumi:"name"`
+	Name pulumi.StringOutput `pulumi:"name"`
+	// The region in which to create the RDS parameter group. If omitted, the
+	// provider-level region will be used. Changing this creates a new parameter group.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Parameter group values key/value pairs defined by users based on the default parameter
 	// groups.
@@ -120,7 +122,9 @@ type parametergroupState struct {
 	// contain the following special characters:>!<"&'= the value is left blank by default.
 	Description *string `pulumi:"description"`
 	// The parameter group name. It contains a maximum of 64 characters.
-	Name   *string `pulumi:"name"`
+	Name *string `pulumi:"name"`
+	// The region in which to create the RDS parameter group. If omitted, the
+	// provider-level region will be used. Changing this creates a new parameter group.
 	Region *string `pulumi:"region"`
 	// Parameter group values key/value pairs defined by users based on the default parameter
 	// groups.
@@ -138,7 +142,9 @@ type ParametergroupState struct {
 	// contain the following special characters:>!<"&'= the value is left blank by default.
 	Description pulumi.StringPtrInput
 	// The parameter group name. It contains a maximum of 64 characters.
-	Name   pulumi.StringPtrInput
+	Name pulumi.StringPtrInput
+	// The region in which to create the RDS parameter group. If omitted, the
+	// provider-level region will be used. Changing this creates a new parameter group.
 	Region pulumi.StringPtrInput
 	// Parameter group values key/value pairs defined by users based on the default parameter
 	// groups.
@@ -157,7 +163,9 @@ type parametergroupArgs struct {
 	// contain the following special characters:>!<"&'= the value is left blank by default.
 	Description *string `pulumi:"description"`
 	// The parameter group name. It contains a maximum of 64 characters.
-	Name   *string `pulumi:"name"`
+	Name *string `pulumi:"name"`
+	// The region in which to create the RDS parameter group. If omitted, the
+	// provider-level region will be used. Changing this creates a new parameter group.
 	Region *string `pulumi:"region"`
 	// Parameter group values key/value pairs defined by users based on the default parameter
 	// groups.
@@ -173,7 +181,9 @@ type ParametergroupArgs struct {
 	// contain the following special characters:>!<"&'= the value is left blank by default.
 	Description pulumi.StringPtrInput
 	// The parameter group name. It contains a maximum of 64 characters.
-	Name   pulumi.StringPtrInput
+	Name pulumi.StringPtrInput
+	// The region in which to create the RDS parameter group. If omitted, the
+	// provider-level region will be used. Changing this creates a new parameter group.
 	Region pulumi.StringPtrInput
 	// Parameter group values key/value pairs defined by users based on the default parameter
 	// groups.
@@ -292,6 +302,8 @@ func (o ParametergroupOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Parametergroup) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
+// The region in which to create the RDS parameter group. If omitted, the
+// provider-level region will be used. Changing this creates a new parameter group.
 func (o ParametergroupOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Parametergroup) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }

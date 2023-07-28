@@ -16,6 +16,7 @@ class CertificateArgs:
     def __init__(__self__, *,
                  certificate: pulumi.Input[str],
                  private_key: pulumi.Input[str],
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
@@ -23,6 +24,8 @@ class CertificateArgs:
         :param pulumi.Input[str] certificate: Specifies the certificate content. Changing this creates a new
                certificate.
         :param pulumi.Input[str] private_key: Specifies the private key. Changing this creates a new certificate.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF certificate.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: Specifies the certificate name. The maximum length is 256 characters. Only digits,
                letters, underscores(`_`), and hyphens(`-`) are allowed.
         :param pulumi.Input[str] region: The region in which to create the WAF certificate resource. If omitted, the
@@ -30,6 +33,8 @@ class CertificateArgs:
         """
         pulumi.set(__self__, "certificate", certificate)
         pulumi.set(__self__, "private_key", private_key)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
@@ -59,6 +64,19 @@ class CertificateArgs:
     @private_key.setter
     def private_key(self, value: pulumi.Input[str]):
         pulumi.set(self, "private_key", value)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID of WAF certificate.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
 
     @property
     @pulumi.getter
@@ -91,6 +109,7 @@ class CertificateArgs:
 class _CertificateState:
     def __init__(__self__, *,
                  certificate: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  expiration: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  private_key: Optional[pulumi.Input[str]] = None,
@@ -99,6 +118,8 @@ class _CertificateState:
         Input properties used for looking up and filtering Certificate resources.
         :param pulumi.Input[str] certificate: Specifies the certificate content. Changing this creates a new
                certificate.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF certificate.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] expiration: Indicates the time when the certificate expires.
         :param pulumi.Input[str] name: Specifies the certificate name. The maximum length is 256 characters. Only digits,
                letters, underscores(`_`), and hyphens(`-`) are allowed.
@@ -108,6 +129,8 @@ class _CertificateState:
         """
         if certificate is not None:
             pulumi.set(__self__, "certificate", certificate)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if expiration is not None:
             pulumi.set(__self__, "expiration", expiration)
         if name is not None:
@@ -129,6 +152,19 @@ class _CertificateState:
     @certificate.setter
     def certificate(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "certificate", value)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID of WAF certificate.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
 
     @property
     @pulumi.getter
@@ -187,6 +223,7 @@ class Certificate(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  certificate: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  private_key: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -203,14 +240,16 @@ class Certificate(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        enterprise_project_id = config.require_object("enterpriseProjectId")
         certificate1 = huaweicloud.waf.Certificate("certificate1",
+            enterprise_project_id=enterprise_project_id,
             certificate=\"\"\"-----BEGIN CERTIFICATE-----
         MIIFmQl5dh2QUAeo39TIKtadgAgh4zHx09kSgayS9Wph9LEqq7MA+2042L3J9aOa
         DAYDVR0TAQH/BAIwADAdBgNVHQ4EFgQUR+SosWwALt6PkP0J9iOIxA6RW8gVsLwq
         ...
         +HhDvD/VeOHytX3RAs2GeTOtxyAV5XpKY5r+PkyUqPJj04t3d0Fopi0gNtLpMF=
         -----END CERTIFICATE-----
-
         \"\"\",
             private_key=\"\"\"-----BEGIN PRIVATE KEY-----
         MIIJwIgYDVQQKExtEaWdpdGFsIFNpZ25hdHVyZSBUcnVzdCBDby4xFzAVBgNVBAM
@@ -219,16 +258,21 @@ class Certificate(pulumi.CustomResource):
         he8Y4IWS6wY7bCkjCWDcRQJMEhg76fsO3txE+FiYruq9RUWhiF1myv4Q6W+CyBFC
         1qoJFlcDyqSMo5iHq3HLjs
         -----END PRIVATE KEY-----
-
         \"\"\")
         ```
 
         ## Import
 
-        Certificates can be imported using the `id`, e.g.
+        There are two ways to import WAF certificate state. * Using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Waf/certificate:Certificate certificate_2 3ebd3201238d41f9bfc3623b61435954
+         $ pulumi import huaweicloud:Waf/certificate:Certificate test <id>
+        ```
+
+         * Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Waf/certificate:Certificate test <id>/<enterprise_project_id>
         ```
 
          Note that the imported state is not identical to your resource definition, due to security reason. The missing attributes include `certificate`, and `private_key`. You can ignore changes as below. resource "huaweicloud_waf_certificate" "certificate_2" {
@@ -249,6 +293,8 @@ class Certificate(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] certificate: Specifies the certificate content. Changing this creates a new
                certificate.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF certificate.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: Specifies the certificate name. The maximum length is 256 characters. Only digits,
                letters, underscores(`_`), and hyphens(`-`) are allowed.
         :param pulumi.Input[str] private_key: Specifies the private key. Changing this creates a new certificate.
@@ -273,14 +319,16 @@ class Certificate(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        enterprise_project_id = config.require_object("enterpriseProjectId")
         certificate1 = huaweicloud.waf.Certificate("certificate1",
+            enterprise_project_id=enterprise_project_id,
             certificate=\"\"\"-----BEGIN CERTIFICATE-----
         MIIFmQl5dh2QUAeo39TIKtadgAgh4zHx09kSgayS9Wph9LEqq7MA+2042L3J9aOa
         DAYDVR0TAQH/BAIwADAdBgNVHQ4EFgQUR+SosWwALt6PkP0J9iOIxA6RW8gVsLwq
         ...
         +HhDvD/VeOHytX3RAs2GeTOtxyAV5XpKY5r+PkyUqPJj04t3d0Fopi0gNtLpMF=
         -----END CERTIFICATE-----
-
         \"\"\",
             private_key=\"\"\"-----BEGIN PRIVATE KEY-----
         MIIJwIgYDVQQKExtEaWdpdGFsIFNpZ25hdHVyZSBUcnVzdCBDby4xFzAVBgNVBAM
@@ -289,16 +337,21 @@ class Certificate(pulumi.CustomResource):
         he8Y4IWS6wY7bCkjCWDcRQJMEhg76fsO3txE+FiYruq9RUWhiF1myv4Q6W+CyBFC
         1qoJFlcDyqSMo5iHq3HLjs
         -----END PRIVATE KEY-----
-
         \"\"\")
         ```
 
         ## Import
 
-        Certificates can be imported using the `id`, e.g.
+        There are two ways to import WAF certificate state. * Using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Waf/certificate:Certificate certificate_2 3ebd3201238d41f9bfc3623b61435954
+         $ pulumi import huaweicloud:Waf/certificate:Certificate test <id>
+        ```
+
+         * Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Waf/certificate:Certificate test <id>/<enterprise_project_id>
         ```
 
          Note that the imported state is not identical to your resource definition, due to security reason. The missing attributes include `certificate`, and `private_key`. You can ignore changes as below. resource "huaweicloud_waf_certificate" "certificate_2" {
@@ -331,6 +384,7 @@ class Certificate(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  certificate: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  private_key: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -346,6 +400,7 @@ class Certificate(pulumi.CustomResource):
             if certificate is None and not opts.urn:
                 raise TypeError("Missing required property 'certificate'")
             __props__.__dict__["certificate"] = certificate
+            __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["name"] = name
             if private_key is None and not opts.urn:
                 raise TypeError("Missing required property 'private_key'")
@@ -363,6 +418,7 @@ class Certificate(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             certificate: Optional[pulumi.Input[str]] = None,
+            enterprise_project_id: Optional[pulumi.Input[str]] = None,
             expiration: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             private_key: Optional[pulumi.Input[str]] = None,
@@ -376,6 +432,8 @@ class Certificate(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] certificate: Specifies the certificate content. Changing this creates a new
                certificate.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF certificate.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] expiration: Indicates the time when the certificate expires.
         :param pulumi.Input[str] name: Specifies the certificate name. The maximum length is 256 characters. Only digits,
                letters, underscores(`_`), and hyphens(`-`) are allowed.
@@ -388,6 +446,7 @@ class Certificate(pulumi.CustomResource):
         __props__ = _CertificateState.__new__(_CertificateState)
 
         __props__.__dict__["certificate"] = certificate
+        __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["expiration"] = expiration
         __props__.__dict__["name"] = name
         __props__.__dict__["private_key"] = private_key
@@ -402,6 +461,15 @@ class Certificate(pulumi.CustomResource):
         certificate.
         """
         return pulumi.get(self, "certificate")
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the enterprise project ID of WAF certificate.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
 
     @property
     @pulumi.getter

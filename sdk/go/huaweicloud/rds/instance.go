@@ -22,27 +22,26 @@ import (
 // import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Rds"
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Vpc"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Rds"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			secgroup, err := Vpc.NewSecgroup(ctx, "secgroup", &Vpc.SecgroupArgs{
-//				Description: pulumi.String("terraform security group acceptance test"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			_, err = Rds.NewInstance(ctx, "instance", &Rds.InstanceArgs{
+//			cfg := config.New(ctx, "")
+//			vpcId := cfg.RequireObject("vpcId")
+//			subnetId := cfg.RequireObject("subnetId")
+//			secgroupId := cfg.RequireObject("secgroupId")
+//			availabilityZone := cfg.RequireObject("availabilityZone")
+//			_, err := Rds.NewInstance(ctx, "instance", &Rds.InstanceArgs{
 //				Flavor:          pulumi.String("rds.pg.n1.large.2"),
-//				VpcId:           pulumi.String("{{ vpc_id }}"),
-//				SubnetId:        pulumi.String("{{ subnet_id }}"),
-//				SecurityGroupId: secgroup.ID(),
+//				VpcId:           pulumi.Any(vpcId),
+//				SubnetId:        pulumi.Any(subnetId),
+//				SecurityGroupId: pulumi.Any(secgroupId),
 //				AvailabilityZones: pulumi.StringArray{
-//					pulumi.String("{{ availability_zone }}"),
+//					pulumi.Any(availabilityZone),
 //				},
 //				Db: &rds.InstanceDbArgs{
 //					Type:     pulumi.String("PostgreSQL"),
@@ -74,29 +73,29 @@ import (
 // import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Rds"
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Vpc"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Rds"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			secgroup, err := Vpc.NewSecgroup(ctx, "secgroup", &Vpc.SecgroupArgs{
-//				Description: pulumi.String("terraform security group acceptance test"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			_, err = Rds.NewInstance(ctx, "instance", &Rds.InstanceArgs{
+//			cfg := config.New(ctx, "")
+//			vpcId := cfg.RequireObject("vpcId")
+//			subnetId := cfg.RequireObject("subnetId")
+//			secgroupId := cfg.RequireObject("secgroupId")
+//			availabilityZone1 := cfg.RequireObject("availabilityZone1")
+//			availabilityZone2 := cfg.RequireObject("availabilityZone2")
+//			_, err := Rds.NewInstance(ctx, "instance", &Rds.InstanceArgs{
 //				Flavor:            pulumi.String("rds.pg.n1.large.2.ha"),
 //				HaReplicationMode: pulumi.String("async"),
-//				VpcId:             pulumi.String("{{ vpc_id }}"),
-//				SubnetId:          pulumi.String("{{ subnet_id }}"),
-//				SecurityGroupId:   secgroup.ID(),
+//				VpcId:             pulumi.Any(vpcId),
+//				SubnetId:          pulumi.Any(subnetId),
+//				SecurityGroupId:   pulumi.Any(secgroupId),
 //				AvailabilityZones: pulumi.StringArray{
-//					pulumi.String("{{ availability_zone_1 }}"),
-//					pulumi.String("{{ availability_zone_2 }}"),
+//					pulumi.Any(_var.Availability_zone_1),
+//					pulumi.Any(_var.Availability_zone_2),
 //				},
 //				Db: &rds.InstanceDbArgs{
 //					Type:     pulumi.String("PostgreSQL"),
@@ -127,37 +126,28 @@ import (
 //
 // import (
 //
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Dew"
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Rds"
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Vpc"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Rds"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			key, err := Dew.NewKey(ctx, "key", &Dew.KeyArgs{
-//				KeyAlias:       pulumi.String("key_1"),
-//				KeyDescription: pulumi.String("first test key"),
-//				IsEnabled:      pulumi.Bool(true),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			secgroup, err := Vpc.NewSecgroup(ctx, "secgroup", &Vpc.SecgroupArgs{
-//				Description: pulumi.String("security group acceptance test"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			_, err = Rds.NewInstance(ctx, "instance", &Rds.InstanceArgs{
+//			cfg := config.New(ctx, "")
+//			vpcId := cfg.RequireObject("vpcId")
+//			subnetId := cfg.RequireObject("subnetId")
+//			secgroupId := cfg.RequireObject("secgroupId")
+//			availabilityZone := cfg.RequireObject("availabilityZone")
+//			kmsId := cfg.RequireObject("kmsId")
+//			_, err := Rds.NewInstance(ctx, "instance", &Rds.InstanceArgs{
 //				Flavor:          pulumi.String("rds.pg.n1.large.2"),
-//				VpcId:           pulumi.String("{{ vpc_id }}"),
-//				SubnetId:        pulumi.String("{{ subnet_id }}"),
-//				SecurityGroupId: secgroup.ID(),
+//				VpcId:           pulumi.Any(vpcId),
+//				SubnetId:        pulumi.Any(subnetId),
+//				SecurityGroupId: pulumi.Any(secgroupId),
 //				AvailabilityZones: pulumi.StringArray{
-//					pulumi.String("{{ availability_zone }}"),
+//					pulumi.Any(availabilityZone),
 //				},
 //				Db: &rds.InstanceDbArgs{
 //					Type:     pulumi.String("PostgreSQL"),
@@ -167,11 +157,72 @@ import (
 //				Volume: &rds.InstanceVolumeArgs{
 //					Type:             pulumi.String("ULTRAHIGH"),
 //					Size:             pulumi.Int(100),
-//					DiskEncryptionId: key.ID(),
+//					DiskEncryptionId: pulumi.Any(kmsId),
 //				},
 //				BackupStrategy: &rds.InstanceBackupStrategyArgs{
 //					StartTime: pulumi.String("08:00-09:00"),
 //					KeepDays:  pulumi.Int(1),
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
+// ### create db instance with customized parameters
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Rds"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Rds"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			vpcId := cfg.RequireObject("vpcId")
+//			subnetId := cfg.RequireObject("subnetId")
+//			secgroupId := cfg.RequireObject("secgroupId")
+//			availabilityZone := cfg.RequireObject("availabilityZone")
+//			_, err := Rds.NewInstance(ctx, "instance", &Rds.InstanceArgs{
+//				Flavor:          pulumi.String("rds.pg.n1.large.2"),
+//				VpcId:           pulumi.Any(vpcId),
+//				SubnetId:        pulumi.Any(subnetId),
+//				SecurityGroupId: pulumi.Any(secgroupId),
+//				AvailabilityZones: pulumi.StringArray{
+//					pulumi.Any(availabilityZone),
+//				},
+//				Db: &rds.InstanceDbArgs{
+//					Type:     pulumi.String("PostgreSQL"),
+//					Version:  pulumi.String("12"),
+//					Password: pulumi.String("Huangwei!120521"),
+//				},
+//				Volume: &rds.InstanceVolumeArgs{
+//					Type: pulumi.String("ULTRAHIGH"),
+//					Size: pulumi.Int(100),
+//				},
+//				BackupStrategy: &rds.InstanceBackupStrategyArgs{
+//					StartTime: pulumi.String("08:00-09:00"),
+//					KeepDays:  pulumi.Int(1),
+//				},
+//				Parameters: rds.InstanceParameterArray{
+//					&rds.InstanceParameterArgs{
+//						Name:  pulumi.String("div_precision_increment"),
+//						Value: pulumi.String("12"),
+//					},
+//					&rds.InstanceParameterArgs{
+//						Name:  pulumi.String("connect_timeout"),
+//						Value: pulumi.String("13"),
+//					},
 //				},
 //			})
 //			if err != nil {
@@ -189,11 +240,11 @@ import (
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Rds/instance:Instance instance_1 7117d38e-4c8f-4624-a505-bd96b97d024c
+//	$ pulumi import huaweicloud:Rds/instance:Instance instance_1 52e4b497d2c94df88a2eb4c661314903in01
 //
 // ```
 //
-//	But due to some attributes missing from the API response, it's required to ignore changes as below. resource "huaweicloud_rds_instance" "instance_1" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`db`, `collation`, `availability_zone`,`lower_case_table_names`. It is generally recommended running `terraform plan` after importing a RDS instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also, you can ignore changes as below. resource "huaweicloud_rds_instance" "instance_1" {
 //
 //	...
 //
@@ -201,7 +252,7 @@ import (
 //
 //	ignore_changes = [
 //
-//	"db", "collation"
+//	"db", "collation", "availability_zone", "lower_case_table_names"
 //
 //	]
 //
@@ -209,9 +260,9 @@ import (
 type Instance struct {
 	pulumi.CustomResourceState
 
+	// Deprecated: Deprecated
 	AutoPay pulumi.StringPtrOutput `pulumi:"autoPay"`
-	// Specifies whether auto renew is enabled. Valid values are "true" and "
-	// false". Changing this creates a new resource.
+	// Specifies whether auto-renew is enabled. Valid values are "true" and "false".
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
 	// Specifies the list of AZ name. Changing this parameter will create a
 	// new resource.
@@ -243,18 +294,26 @@ type Instance struct {
 	// + For PostgreSQL, the value is *async* or *sync*.
 	// + For Microsoft SQL Server, the value is *sync*.
 	HaReplicationMode pulumi.StringOutput `pulumi:"haReplicationMode"`
-	// Specifies the DB instance name. The DB instance name of the same type must be unique for
-	// the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can
-	// contain only letters, digits, hyphens (-), and underscores (_).
+	// Specifies the case-sensitive state of the database table name,
+	// the default value is "1". Changing this parameter will create a new resource.
+	// + 0: Table names are stored as fixed and table names are case-sensitive.
+	// + 1: Table names will be stored in lower case and table names are not case-sensitive.
+	LowerCaseTableNames pulumi.StringPtrOutput `pulumi:"lowerCaseTableNames"`
+	// Specifies the parameter name. Some of them needs the instance to be restarted
+	// to take effect.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Indicates the instance nodes information. Structure is documented below.
 	Nodes InstanceNodeArrayOutput `pulumi:"nodes"`
 	// Specifies the parameter group ID. Changing this parameter will create
 	// a new resource.
 	ParamGroupId pulumi.StringPtrOutput `pulumi:"paramGroupId"`
-	// Specifies the charging period of the RDS DB instance. If `periodUnit` is set
-	// to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
-	// parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+	// Specify an array of one or more parameters to be set to the RDS instance after
+	// launched. You can check on console to see which parameters supported. Structure is documented below.
+	Parameters InstanceParameterArrayOutput `pulumi:"parameters"`
+	// Specifies the backup cycle. Automatic backups will be performed on the specified days of
+	// the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+	// number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+	// Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
 	Period pulumi.IntPtrOutput `pulumi:"period"`
 	// Specifies the charging period unit of the RDS DB instance. Valid values
 	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a
@@ -343,9 +402,9 @@ func GetInstance(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Instance resources.
 type instanceState struct {
+	// Deprecated: Deprecated
 	AutoPay *string `pulumi:"autoPay"`
-	// Specifies whether auto renew is enabled. Valid values are "true" and "
-	// false". Changing this creates a new resource.
+	// Specifies whether auto-renew is enabled. Valid values are "true" and "false".
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the list of AZ name. Changing this parameter will create a
 	// new resource.
@@ -377,18 +436,26 @@ type instanceState struct {
 	// + For PostgreSQL, the value is *async* or *sync*.
 	// + For Microsoft SQL Server, the value is *sync*.
 	HaReplicationMode *string `pulumi:"haReplicationMode"`
-	// Specifies the DB instance name. The DB instance name of the same type must be unique for
-	// the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can
-	// contain only letters, digits, hyphens (-), and underscores (_).
+	// Specifies the case-sensitive state of the database table name,
+	// the default value is "1". Changing this parameter will create a new resource.
+	// + 0: Table names are stored as fixed and table names are case-sensitive.
+	// + 1: Table names will be stored in lower case and table names are not case-sensitive.
+	LowerCaseTableNames *string `pulumi:"lowerCaseTableNames"`
+	// Specifies the parameter name. Some of them needs the instance to be restarted
+	// to take effect.
 	Name *string `pulumi:"name"`
 	// Indicates the instance nodes information. Structure is documented below.
 	Nodes []InstanceNode `pulumi:"nodes"`
 	// Specifies the parameter group ID. Changing this parameter will create
 	// a new resource.
 	ParamGroupId *string `pulumi:"paramGroupId"`
-	// Specifies the charging period of the RDS DB instance. If `periodUnit` is set
-	// to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
-	// parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+	// Specify an array of one or more parameters to be set to the RDS instance after
+	// launched. You can check on console to see which parameters supported. Structure is documented below.
+	Parameters []InstanceParameter `pulumi:"parameters"`
+	// Specifies the backup cycle. Automatic backups will be performed on the specified days of
+	// the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+	// number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+	// Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
 	Period *int `pulumi:"period"`
 	// Specifies the charging period unit of the RDS DB instance. Valid values
 	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a
@@ -427,9 +494,9 @@ type instanceState struct {
 }
 
 type InstanceState struct {
+	// Deprecated: Deprecated
 	AutoPay pulumi.StringPtrInput
-	// Specifies whether auto renew is enabled. Valid values are "true" and "
-	// false". Changing this creates a new resource.
+	// Specifies whether auto-renew is enabled. Valid values are "true" and "false".
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the list of AZ name. Changing this parameter will create a
 	// new resource.
@@ -461,18 +528,26 @@ type InstanceState struct {
 	// + For PostgreSQL, the value is *async* or *sync*.
 	// + For Microsoft SQL Server, the value is *sync*.
 	HaReplicationMode pulumi.StringPtrInput
-	// Specifies the DB instance name. The DB instance name of the same type must be unique for
-	// the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can
-	// contain only letters, digits, hyphens (-), and underscores (_).
+	// Specifies the case-sensitive state of the database table name,
+	// the default value is "1". Changing this parameter will create a new resource.
+	// + 0: Table names are stored as fixed and table names are case-sensitive.
+	// + 1: Table names will be stored in lower case and table names are not case-sensitive.
+	LowerCaseTableNames pulumi.StringPtrInput
+	// Specifies the parameter name. Some of them needs the instance to be restarted
+	// to take effect.
 	Name pulumi.StringPtrInput
 	// Indicates the instance nodes information. Structure is documented below.
 	Nodes InstanceNodeArrayInput
 	// Specifies the parameter group ID. Changing this parameter will create
 	// a new resource.
 	ParamGroupId pulumi.StringPtrInput
-	// Specifies the charging period of the RDS DB instance. If `periodUnit` is set
-	// to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
-	// parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+	// Specify an array of one or more parameters to be set to the RDS instance after
+	// launched. You can check on console to see which parameters supported. Structure is documented below.
+	Parameters InstanceParameterArrayInput
+	// Specifies the backup cycle. Automatic backups will be performed on the specified days of
+	// the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+	// number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+	// Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
 	Period pulumi.IntPtrInput
 	// Specifies the charging period unit of the RDS DB instance. Valid values
 	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a
@@ -515,9 +590,9 @@ func (InstanceState) ElementType() reflect.Type {
 }
 
 type instanceArgs struct {
+	// Deprecated: Deprecated
 	AutoPay *string `pulumi:"autoPay"`
-	// Specifies whether auto renew is enabled. Valid values are "true" and "
-	// false". Changing this creates a new resource.
+	// Specifies whether auto-renew is enabled. Valid values are "true" and "false".
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the list of AZ name. Changing this parameter will create a
 	// new resource.
@@ -547,16 +622,24 @@ type instanceArgs struct {
 	// + For PostgreSQL, the value is *async* or *sync*.
 	// + For Microsoft SQL Server, the value is *sync*.
 	HaReplicationMode *string `pulumi:"haReplicationMode"`
-	// Specifies the DB instance name. The DB instance name of the same type must be unique for
-	// the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can
-	// contain only letters, digits, hyphens (-), and underscores (_).
+	// Specifies the case-sensitive state of the database table name,
+	// the default value is "1". Changing this parameter will create a new resource.
+	// + 0: Table names are stored as fixed and table names are case-sensitive.
+	// + 1: Table names will be stored in lower case and table names are not case-sensitive.
+	LowerCaseTableNames *string `pulumi:"lowerCaseTableNames"`
+	// Specifies the parameter name. Some of them needs the instance to be restarted
+	// to take effect.
 	Name *string `pulumi:"name"`
 	// Specifies the parameter group ID. Changing this parameter will create
 	// a new resource.
 	ParamGroupId *string `pulumi:"paramGroupId"`
-	// Specifies the charging period of the RDS DB instance. If `periodUnit` is set
-	// to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
-	// parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+	// Specify an array of one or more parameters to be set to the RDS instance after
+	// launched. You can check on console to see which parameters supported. Structure is documented below.
+	Parameters []InstanceParameter `pulumi:"parameters"`
+	// Specifies the backup cycle. Automatic backups will be performed on the specified days of
+	// the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+	// number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+	// Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
 	Period *int `pulumi:"period"`
 	// Specifies the charging period unit of the RDS DB instance. Valid values
 	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a
@@ -590,9 +673,9 @@ type instanceArgs struct {
 
 // The set of arguments for constructing a Instance resource.
 type InstanceArgs struct {
+	// Deprecated: Deprecated
 	AutoPay pulumi.StringPtrInput
-	// Specifies whether auto renew is enabled. Valid values are "true" and "
-	// false". Changing this creates a new resource.
+	// Specifies whether auto-renew is enabled. Valid values are "true" and "false".
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the list of AZ name. Changing this parameter will create a
 	// new resource.
@@ -622,16 +705,24 @@ type InstanceArgs struct {
 	// + For PostgreSQL, the value is *async* or *sync*.
 	// + For Microsoft SQL Server, the value is *sync*.
 	HaReplicationMode pulumi.StringPtrInput
-	// Specifies the DB instance name. The DB instance name of the same type must be unique for
-	// the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can
-	// contain only letters, digits, hyphens (-), and underscores (_).
+	// Specifies the case-sensitive state of the database table name,
+	// the default value is "1". Changing this parameter will create a new resource.
+	// + 0: Table names are stored as fixed and table names are case-sensitive.
+	// + 1: Table names will be stored in lower case and table names are not case-sensitive.
+	LowerCaseTableNames pulumi.StringPtrInput
+	// Specifies the parameter name. Some of them needs the instance to be restarted
+	// to take effect.
 	Name pulumi.StringPtrInput
 	// Specifies the parameter group ID. Changing this parameter will create
 	// a new resource.
 	ParamGroupId pulumi.StringPtrInput
-	// Specifies the charging period of the RDS DB instance. If `periodUnit` is set
-	// to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
-	// parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+	// Specify an array of one or more parameters to be set to the RDS instance after
+	// launched. You can check on console to see which parameters supported. Structure is documented below.
+	Parameters InstanceParameterArrayInput
+	// Specifies the backup cycle. Automatic backups will be performed on the specified days of
+	// the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+	// number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+	// Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
 	Period pulumi.IntPtrInput
 	// Specifies the charging period unit of the RDS DB instance. Valid values
 	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a
@@ -750,12 +841,12 @@ func (o InstanceOutput) ToInstanceOutputWithContext(ctx context.Context) Instanc
 	return o
 }
 
+// Deprecated: Deprecated
 func (o InstanceOutput) AutoPay() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.AutoPay }).(pulumi.StringPtrOutput)
 }
 
-// Specifies whether auto renew is enabled. Valid values are "true" and "
-// false". Changing this creates a new resource.
+// Specifies whether auto-renew is enabled. Valid values are "true" and "false".
 func (o InstanceOutput) AutoRenew() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
 }
@@ -820,9 +911,16 @@ func (o InstanceOutput) HaReplicationMode() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.HaReplicationMode }).(pulumi.StringOutput)
 }
 
-// Specifies the DB instance name. The DB instance name of the same type must be unique for
-// the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can
-// contain only letters, digits, hyphens (-), and underscores (_).
+// Specifies the case-sensitive state of the database table name,
+// the default value is "1". Changing this parameter will create a new resource.
+// + 0: Table names are stored as fixed and table names are case-sensitive.
+// + 1: Table names will be stored in lower case and table names are not case-sensitive.
+func (o InstanceOutput) LowerCaseTableNames() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.LowerCaseTableNames }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the parameter name. Some of them needs the instance to be restarted
+// to take effect.
 func (o InstanceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
@@ -838,9 +936,16 @@ func (o InstanceOutput) ParamGroupId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.ParamGroupId }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the charging period of the RDS DB instance. If `periodUnit` is set
-// to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
-// parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+// Specify an array of one or more parameters to be set to the RDS instance after
+// launched. You can check on console to see which parameters supported. Structure is documented below.
+func (o InstanceOutput) Parameters() InstanceParameterArrayOutput {
+	return o.ApplyT(func(v *Instance) InstanceParameterArrayOutput { return v.Parameters }).(InstanceParameterArrayOutput)
+}
+
+// Specifies the backup cycle. Automatic backups will be performed on the specified days of
+// the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
+// number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
+// Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
 func (o InstanceOutput) Period() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.IntPtrOutput { return v.Period }).(pulumi.IntPtrOutput)
 }

@@ -8,62 +8,21 @@ import * as utilities from "../utilities";
  * Attaches a Network Interface to an Instance.
  *
  * ## Example Usage
- * ### Basic Attachment
+ * ### Attach a port (under the specified network) to the ECS instance and generate a random IP address
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const config = new pulumi.Config();
- * const securityGroupId = config.requireObject("securityGroupId");
- * const mynet = huaweicloud.Vpc.getSubnet({
- *     name: "subnet-default",
- * });
- * const myinstance = new huaweicloud.ecs.Instance("myinstance", {
- *     imageId: "ad091b52-742f-469e-8f3c-fd81cadf0743",
- *     flavorId: "s6.small.1",
- *     keyPair: "my_key_pair_name",
- *     securityGroupIds: [securityGroupId],
- *     availabilityZone: "cn-north-4a",
- *     networks: [{
- *         uuid: "55534eaa-533a-419d-9b40-ec427ea7195a",
- *     }],
- * });
- * const attached = new huaweicloud.ecs.InterfaceAttach("attached", {
- *     instanceId: myinstance.id,
- *     networkId: mynet.then(mynet => mynet.id),
+ * const instanceId = config.requireObject("instanceId");
+ * const networkId = config.requireObject("networkId");
+ * const test = new huaweicloud.ecs.InterfaceAttach("test", {
+ *     instanceId: instanceId,
+ *     networkId: networkId,
  * });
  * ```
- * ### Attachment Specifying a Fixed IP
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
- * import * as pulumi from "@huaweicloudos/pulumi";
- *
- * const config = new pulumi.Config();
- * const securityGroupId = config.requireObject("securityGroupId");
- * const mynet = huaweicloud.Vpc.getSubnet({
- *     name: "subnet-default",
- * });
- * const myinstance = new huaweicloud.ecs.Instance("myinstance", {
- *     imageId: "ad091b52-742f-469e-8f3c-fd81cadf0743",
- *     flavorId: "s6.small.1",
- *     keyPair: "my_key_pair_name",
- *     securityGroupIds: [securityGroupId],
- *     availabilityZone: "cn-north-4a",
- *     networks: [{
- *         uuid: "55534eaa-533a-419d-9b40-ec427ea7195a",
- *     }],
- * });
- * const attached = new huaweicloud.ecs.InterfaceAttach("attached", {
- *     instanceId: myinstance.id,
- *     networkId: mynet.then(mynet => mynet.id),
- *     fixedIp: "10.0.10.10",
- * });
- * ```
- * ### Attachment Using an Existing Port
+ * ### Attach a custom port to the ECS instance
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -160,6 +119,11 @@ export class InterfaceAttach extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
+     * Specifies the list of security group IDs bound to the specified port.  
+     * Defaults to the default security group.
+     */
+    public readonly securityGroupIds!: pulumi.Output<string[]>;
+    /**
      * Specifies whether the ECS processes only traffic that is destined specifically
      * for it. This function is enabled by default but should be disabled if the ECS functions as a SNAT server or has a
      * virtual IP address bound to it.
@@ -185,6 +149,7 @@ export class InterfaceAttach extends pulumi.CustomResource {
             resourceInputs["networkId"] = state ? state.networkId : undefined;
             resourceInputs["portId"] = state ? state.portId : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["securityGroupIds"] = state ? state.securityGroupIds : undefined;
             resourceInputs["sourceDestCheck"] = state ? state.sourceDestCheck : undefined;
         } else {
             const args = argsOrState as InterfaceAttachArgs | undefined;
@@ -196,6 +161,7 @@ export class InterfaceAttach extends pulumi.CustomResource {
             resourceInputs["networkId"] = args ? args.networkId : undefined;
             resourceInputs["portId"] = args ? args.portId : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["securityGroupIds"] = args ? args.securityGroupIds : undefined;
             resourceInputs["sourceDestCheck"] = args ? args.sourceDestCheck : undefined;
             resourceInputs["mac"] = undefined /*out*/;
         }
@@ -237,6 +203,11 @@ export interface InterfaceAttachState {
      */
     region?: pulumi.Input<string>;
     /**
+     * Specifies the list of security group IDs bound to the specified port.  
+     * Defaults to the default security group.
+     */
+    securityGroupIds?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
      * Specifies whether the ECS processes only traffic that is destined specifically
      * for it. This function is enabled by default but should be disabled if the ECS functions as a SNAT server or has a
      * virtual IP address bound to it.
@@ -272,6 +243,11 @@ export interface InterfaceAttachArgs {
      * omitted, the provider-level region will be used. Changing this creates a new network interface attache resource.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the list of security group IDs bound to the specified port.  
+     * Defaults to the default security group.
+     */
+    securityGroupIds?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies whether the ECS processes only traffic that is destined specifically
      * for it. This function is enabled by default but should be disabled if the ECS functions as a SNAT server or has a

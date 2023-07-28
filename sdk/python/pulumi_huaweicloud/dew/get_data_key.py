@@ -104,11 +104,9 @@ class AwaitableGetDataKeyResult(GetDataKeyResult):
             region=self.region)
 
 
-def get_data_key(cipher_text: Optional[str] = None,
-                 datakey_length: Optional[str] = None,
+def get_data_key(datakey_length: Optional[str] = None,
                  encryption_context: Optional[str] = None,
                  key_id: Optional[str] = None,
-                 plain_text: Optional[str] = None,
                  region: Optional[str] = None,
                  opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetDataKeyResult:
     """
@@ -129,7 +127,6 @@ def get_data_key(cipher_text: Optional[str] = None,
     ```
 
 
-    :param str cipher_text: The ciphertext of a DEK is expressed in hexadecimal format, and two characters indicate one byte.
     :param str datakey_length: Number of bits in the length of a DEK (data encryption keys). The maximum number
            is 512. Changing this gets the new data encryption key.
     :param str encryption_context: The value of this parameter must be a series of
@@ -137,16 +134,13 @@ def get_data_key(cipher_text: Optional[str] = None,
            information and must be within 8192 characters in length. Example: {"Key1":"Value1","Key2":"Value2"}
     :param str key_id: The globally unique identifier for the key. Changing this gets the new data encryption
            key.
-    :param str plain_text: The plaintext of a DEK is expressed in hexadecimal format, and two characters indicate one byte.
     :param str region: The region in which to obtain the keys. If omitted, the provider-level region will be
            used.
     """
     __args__ = dict()
-    __args__['cipherText'] = cipher_text
     __args__['datakeyLength'] = datakey_length
     __args__['encryptionContext'] = encryption_context
     __args__['keyId'] = key_id
-    __args__['plainText'] = plain_text
     __args__['region'] = region
     opts = pulumi.InvokeOptions.merge(_utilities.get_invoke_opts_defaults(), opts)
     __ret__ = pulumi.runtime.invoke('huaweicloud:Dew/getDataKey:getDataKey', __args__, opts=opts, typ=GetDataKeyResult).value
@@ -162,11 +156,9 @@ def get_data_key(cipher_text: Optional[str] = None,
 
 
 @_utilities.lift_output_func(get_data_key)
-def get_data_key_output(cipher_text: Optional[pulumi.Input[Optional[str]]] = None,
-                        datakey_length: Optional[pulumi.Input[str]] = None,
+def get_data_key_output(datakey_length: Optional[pulumi.Input[str]] = None,
                         encryption_context: Optional[pulumi.Input[Optional[str]]] = None,
                         key_id: Optional[pulumi.Input[str]] = None,
-                        plain_text: Optional[pulumi.Input[Optional[str]]] = None,
                         region: Optional[pulumi.Input[Optional[str]]] = None,
                         opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetDataKeyResult]:
     """
@@ -187,7 +179,6 @@ def get_data_key_output(cipher_text: Optional[pulumi.Input[Optional[str]]] = Non
     ```
 
 
-    :param str cipher_text: The ciphertext of a DEK is expressed in hexadecimal format, and two characters indicate one byte.
     :param str datakey_length: Number of bits in the length of a DEK (data encryption keys). The maximum number
            is 512. Changing this gets the new data encryption key.
     :param str encryption_context: The value of this parameter must be a series of
@@ -195,7 +186,6 @@ def get_data_key_output(cipher_text: Optional[pulumi.Input[Optional[str]]] = Non
            information and must be within 8192 characters in length. Example: {"Key1":"Value1","Key2":"Value2"}
     :param str key_id: The globally unique identifier for the key. Changing this gets the new data encryption
            key.
-    :param str plain_text: The plaintext of a DEK is expressed in hexadecimal format, and two characters indicate one byte.
     :param str region: The region in which to obtain the keys. If omitted, the provider-level region will be
            used.
     """

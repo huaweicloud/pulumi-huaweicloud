@@ -95,15 +95,18 @@ import (
 type RoleAssignment struct {
 	pulumi.CustomResourceState
 
-	// Specifies the domain to assign the role
-	// in.
-	DomainId pulumi.StringPtrOutput `pulumi:"domainId"`
+	// Specifies the domain to assign the role in.
+	// Required if `projectId` is empty. Changing this parameter will create a new resource.
+	DomainId            pulumi.StringPtrOutput `pulumi:"domainId"`
+	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
 	// Specifies the group to assign the role to.
+	// Changing this parameter will create a new resource.
 	GroupId pulumi.StringOutput `pulumi:"groupId"`
-	// Specifies the project to assign the role
-	// in.
+	// Specifies the project to assign the role in.
+	// Required if `domainId` is empty. Changing this parameter will create a new resource.
 	ProjectId pulumi.StringPtrOutput `pulumi:"projectId"`
 	// Specifies the role to assign.
+	// Changing this parameter will create a new resource.
 	RoleId pulumi.StringOutput `pulumi:"roleId"`
 }
 
@@ -143,28 +146,34 @@ func GetRoleAssignment(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering RoleAssignment resources.
 type roleAssignmentState struct {
-	// Specifies the domain to assign the role
-	// in.
-	DomainId *string `pulumi:"domainId"`
+	// Specifies the domain to assign the role in.
+	// Required if `projectId` is empty. Changing this parameter will create a new resource.
+	DomainId            *string `pulumi:"domainId"`
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the group to assign the role to.
+	// Changing this parameter will create a new resource.
 	GroupId *string `pulumi:"groupId"`
-	// Specifies the project to assign the role
-	// in.
+	// Specifies the project to assign the role in.
+	// Required if `domainId` is empty. Changing this parameter will create a new resource.
 	ProjectId *string `pulumi:"projectId"`
 	// Specifies the role to assign.
+	// Changing this parameter will create a new resource.
 	RoleId *string `pulumi:"roleId"`
 }
 
 type RoleAssignmentState struct {
-	// Specifies the domain to assign the role
-	// in.
-	DomainId pulumi.StringPtrInput
+	// Specifies the domain to assign the role in.
+	// Required if `projectId` is empty. Changing this parameter will create a new resource.
+	DomainId            pulumi.StringPtrInput
+	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the group to assign the role to.
+	// Changing this parameter will create a new resource.
 	GroupId pulumi.StringPtrInput
-	// Specifies the project to assign the role
-	// in.
+	// Specifies the project to assign the role in.
+	// Required if `domainId` is empty. Changing this parameter will create a new resource.
 	ProjectId pulumi.StringPtrInput
 	// Specifies the role to assign.
+	// Changing this parameter will create a new resource.
 	RoleId pulumi.StringPtrInput
 }
 
@@ -173,29 +182,35 @@ func (RoleAssignmentState) ElementType() reflect.Type {
 }
 
 type roleAssignmentArgs struct {
-	// Specifies the domain to assign the role
-	// in.
-	DomainId *string `pulumi:"domainId"`
+	// Specifies the domain to assign the role in.
+	// Required if `projectId` is empty. Changing this parameter will create a new resource.
+	DomainId            *string `pulumi:"domainId"`
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the group to assign the role to.
+	// Changing this parameter will create a new resource.
 	GroupId string `pulumi:"groupId"`
-	// Specifies the project to assign the role
-	// in.
+	// Specifies the project to assign the role in.
+	// Required if `domainId` is empty. Changing this parameter will create a new resource.
 	ProjectId *string `pulumi:"projectId"`
 	// Specifies the role to assign.
+	// Changing this parameter will create a new resource.
 	RoleId string `pulumi:"roleId"`
 }
 
 // The set of arguments for constructing a RoleAssignment resource.
 type RoleAssignmentArgs struct {
-	// Specifies the domain to assign the role
-	// in.
-	DomainId pulumi.StringPtrInput
+	// Specifies the domain to assign the role in.
+	// Required if `projectId` is empty. Changing this parameter will create a new resource.
+	DomainId            pulumi.StringPtrInput
+	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the group to assign the role to.
+	// Changing this parameter will create a new resource.
 	GroupId pulumi.StringInput
-	// Specifies the project to assign the role
-	// in.
+	// Specifies the project to assign the role in.
+	// Required if `domainId` is empty. Changing this parameter will create a new resource.
 	ProjectId pulumi.StringPtrInput
 	// Specifies the role to assign.
+	// Changing this parameter will create a new resource.
 	RoleId pulumi.StringInput
 }
 
@@ -286,24 +301,30 @@ func (o RoleAssignmentOutput) ToRoleAssignmentOutputWithContext(ctx context.Cont
 	return o
 }
 
-// Specifies the domain to assign the role
-// in.
+// Specifies the domain to assign the role in.
+// Required if `projectId` is empty. Changing this parameter will create a new resource.
 func (o RoleAssignmentOutput) DomainId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *RoleAssignment) pulumi.StringPtrOutput { return v.DomainId }).(pulumi.StringPtrOutput)
 }
 
+func (o RoleAssignmentOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *RoleAssignment) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the group to assign the role to.
+// Changing this parameter will create a new resource.
 func (o RoleAssignmentOutput) GroupId() pulumi.StringOutput {
 	return o.ApplyT(func(v *RoleAssignment) pulumi.StringOutput { return v.GroupId }).(pulumi.StringOutput)
 }
 
-// Specifies the project to assign the role
-// in.
+// Specifies the project to assign the role in.
+// Required if `domainId` is empty. Changing this parameter will create a new resource.
 func (o RoleAssignmentOutput) ProjectId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *RoleAssignment) pulumi.StringPtrOutput { return v.ProjectId }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the role to assign.
+// Changing this parameter will create a new resource.
 func (o RoleAssignmentOutput) RoleId() pulumi.StringOutput {
 	return o.ApplyT(func(v *RoleAssignment) pulumi.StringOutput { return v.RoleId }).(pulumi.StringOutput)
 }

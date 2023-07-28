@@ -42,6 +42,7 @@ class MysqlInstanceArgs:
                  read_replicas: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 sql_filter_enabled: Optional[pulumi.Input[bool]] = None,
                  table_name_case_sensitivity: Optional[pulumi.Input[bool]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  time_zone: Optional[pulumi.Input[str]] = None,
@@ -58,7 +59,7 @@ class MysqlInstanceArgs:
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
         :param pulumi.Input[bool] audit_log_enabled: Specifies whether audit log is enabled. The default value is `false`.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are "true" and "false". Changing this will do nothing.
+               Valid values are "true" and "false".
         :param pulumi.Input[str] availability_zone_mode: Specifies the availability zone mode: "single" or "multi".
                Defaults to "single". Changing this parameter will create a new resource.
         :param pulumi.Input['MysqlInstanceBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
@@ -91,16 +92,16 @@ class MysqlInstanceArgs:
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
                Changing this will do nothing.
-        :param pulumi.Input[str] proxy_flavor: Specifies the flavor of the proxy.
-        :param pulumi.Input[int] proxy_node_num: Specifies the node count of the proxy.
         :param pulumi.Input[int] read_replicas: Specifies the count of read replicas. Defaults to 1.
         :param pulumi.Input[str] region: The region in which to create the GaussDB mysql instance resource. If omitted,
                the provider-level region will be used. Changing this creates a new instance resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID. Required if the selected subnet
                doesn't enable network ACL. Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] sql_filter_enabled: Specifies whether sql filter is enabled. The default value is `false`.
         :param pulumi.Input[bool] table_name_case_sensitivity: Whether the kernel table name is case sensitive. The value can
                be `true` (case sensitive) and `false` (case insensitive). Defaults to `false`. This parameter only works during
                creation.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the GaussDB Mysql instance.
         :param pulumi.Input[str] time_zone: Specifies the time zone. Defaults to "UTC+08:00". Changing this parameter
                will create a new resource.
         :param pulumi.Input[int] volume_size: Specifies the volume size of the instance. The new storage space must be greater than
@@ -145,7 +146,13 @@ class MysqlInstanceArgs:
         if period_unit is not None:
             pulumi.set(__self__, "period_unit", period_unit)
         if proxy_flavor is not None:
+            warnings.warn("""use huaweicloud_gaussdb_mysql_proxy instead""", DeprecationWarning)
+            pulumi.log.warn("""proxy_flavor is deprecated: use huaweicloud_gaussdb_mysql_proxy instead""")
+        if proxy_flavor is not None:
             pulumi.set(__self__, "proxy_flavor", proxy_flavor)
+        if proxy_node_num is not None:
+            warnings.warn("""use huaweicloud_gaussdb_mysql_proxy instead""", DeprecationWarning)
+            pulumi.log.warn("""proxy_node_num is deprecated: use huaweicloud_gaussdb_mysql_proxy instead""")
         if proxy_node_num is not None:
             pulumi.set(__self__, "proxy_node_num", proxy_node_num)
         if read_replicas is not None:
@@ -154,6 +161,8 @@ class MysqlInstanceArgs:
             pulumi.set(__self__, "region", region)
         if security_group_id is not None:
             pulumi.set(__self__, "security_group_id", security_group_id)
+        if sql_filter_enabled is not None:
+            pulumi.set(__self__, "sql_filter_enabled", sql_filter_enabled)
         if table_name_case_sensitivity is not None:
             pulumi.set(__self__, "table_name_case_sensitivity", table_name_case_sensitivity)
         if tags is not None:
@@ -241,7 +250,7 @@ class MysqlInstanceArgs:
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies whether auto renew is enabled.
-        Valid values are "true" and "false". Changing this will do nothing.
+        Valid values are "true" and "false".
         """
         return pulumi.get(self, "auto_renew")
 
@@ -438,9 +447,6 @@ class MysqlInstanceArgs:
     @property
     @pulumi.getter(name="proxyFlavor")
     def proxy_flavor(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the flavor of the proxy.
-        """
         return pulumi.get(self, "proxy_flavor")
 
     @proxy_flavor.setter
@@ -450,9 +456,6 @@ class MysqlInstanceArgs:
     @property
     @pulumi.getter(name="proxyNodeNum")
     def proxy_node_num(self) -> Optional[pulumi.Input[int]]:
-        """
-        Specifies the node count of the proxy.
-        """
         return pulumi.get(self, "proxy_node_num")
 
     @proxy_node_num.setter
@@ -498,6 +501,18 @@ class MysqlInstanceArgs:
         pulumi.set(self, "security_group_id", value)
 
     @property
+    @pulumi.getter(name="sqlFilterEnabled")
+    def sql_filter_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether sql filter is enabled. The default value is `false`.
+        """
+        return pulumi.get(self, "sql_filter_enabled")
+
+    @sql_filter_enabled.setter
+    def sql_filter_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "sql_filter_enabled", value)
+
+    @property
     @pulumi.getter(name="tableNameCaseSensitivity")
     def table_name_case_sensitivity(self) -> Optional[pulumi.Input[bool]]:
         """
@@ -514,6 +529,9 @@ class MysqlInstanceArgs:
     @property
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the GaussDB Mysql instance.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
@@ -581,6 +599,7 @@ class _MysqlInstanceState:
                  read_replicas: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 sql_filter_enabled: Optional[pulumi.Input[bool]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  table_name_case_sensitivity: Optional[pulumi.Input[bool]] = None,
@@ -592,7 +611,7 @@ class _MysqlInstanceState:
         Input properties used for looking up and filtering MysqlInstance resources.
         :param pulumi.Input[bool] audit_log_enabled: Specifies whether audit log is enabled. The default value is `false`.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are "true" and "false". Changing this will do nothing.
+               Valid values are "true" and "false".
         :param pulumi.Input[str] availability_zone_mode: Specifies the availability zone mode: "single" or "multi".
                Defaults to "single". Changing this parameter will create a new resource.
         :param pulumi.Input['MysqlInstanceBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
@@ -635,21 +654,19 @@ class _MysqlInstanceState:
                Changing this will do nothing.
         :param pulumi.Input[int] port: Indicates the database port.
         :param pulumi.Input[str] private_write_ip: Indicates the private IP address of the DB instance.
-        :param pulumi.Input[str] proxy_address: Indicates the address of the proxy.
-        :param pulumi.Input[str] proxy_flavor: Specifies the flavor of the proxy.
-        :param pulumi.Input[int] proxy_node_num: Specifies the node count of the proxy.
-        :param pulumi.Input[int] proxy_port: Indicates the port of the proxy.
         :param pulumi.Input[int] read_replicas: Specifies the count of read replicas. Defaults to 1.
         :param pulumi.Input[str] region: The region in which to create the GaussDB mysql instance resource. If omitted,
                the provider-level region will be used. Changing this creates a new instance resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID. Required if the selected subnet
                doesn't enable network ACL. Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] sql_filter_enabled: Specifies whether sql filter is enabled. The default value is `false`.
         :param pulumi.Input[str] status: Indicates the node status.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this parameter will create a
                new resource.
         :param pulumi.Input[bool] table_name_case_sensitivity: Whether the kernel table name is case sensitive. The value can
                be `true` (case sensitive) and `false` (case insensitive). Defaults to `false`. This parameter only works during
                creation.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the GaussDB Mysql instance.
         :param pulumi.Input[str] time_zone: Specifies the time zone. Defaults to "UTC+08:00". Changing this parameter
                will create a new resource.
         :param pulumi.Input[int] volume_size: Specifies the volume size of the instance. The new storage space must be greater than
@@ -705,11 +722,23 @@ class _MysqlInstanceState:
         if private_write_ip is not None:
             pulumi.set(__self__, "private_write_ip", private_write_ip)
         if proxy_address is not None:
+            warnings.warn("""use huaweicloud_gaussdb_mysql_proxy instead""", DeprecationWarning)
+            pulumi.log.warn("""proxy_address is deprecated: use huaweicloud_gaussdb_mysql_proxy instead""")
+        if proxy_address is not None:
             pulumi.set(__self__, "proxy_address", proxy_address)
+        if proxy_flavor is not None:
+            warnings.warn("""use huaweicloud_gaussdb_mysql_proxy instead""", DeprecationWarning)
+            pulumi.log.warn("""proxy_flavor is deprecated: use huaweicloud_gaussdb_mysql_proxy instead""")
         if proxy_flavor is not None:
             pulumi.set(__self__, "proxy_flavor", proxy_flavor)
         if proxy_node_num is not None:
+            warnings.warn("""use huaweicloud_gaussdb_mysql_proxy instead""", DeprecationWarning)
+            pulumi.log.warn("""proxy_node_num is deprecated: use huaweicloud_gaussdb_mysql_proxy instead""")
+        if proxy_node_num is not None:
             pulumi.set(__self__, "proxy_node_num", proxy_node_num)
+        if proxy_port is not None:
+            warnings.warn("""use huaweicloud_gaussdb_mysql_proxy instead""", DeprecationWarning)
+            pulumi.log.warn("""proxy_port is deprecated: use huaweicloud_gaussdb_mysql_proxy instead""")
         if proxy_port is not None:
             pulumi.set(__self__, "proxy_port", proxy_port)
         if read_replicas is not None:
@@ -718,6 +747,8 @@ class _MysqlInstanceState:
             pulumi.set(__self__, "region", region)
         if security_group_id is not None:
             pulumi.set(__self__, "security_group_id", security_group_id)
+        if sql_filter_enabled is not None:
+            pulumi.set(__self__, "sql_filter_enabled", sql_filter_enabled)
         if status is not None:
             pulumi.set(__self__, "status", status)
         if subnet_id is not None:
@@ -759,7 +790,7 @@ class _MysqlInstanceState:
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies whether auto renew is enabled.
-        Valid values are "true" and "false". Changing this will do nothing.
+        Valid values are "true" and "false".
         """
         return pulumi.get(self, "auto_renew")
 
@@ -1043,9 +1074,6 @@ class _MysqlInstanceState:
     @property
     @pulumi.getter(name="proxyAddress")
     def proxy_address(self) -> Optional[pulumi.Input[str]]:
-        """
-        Indicates the address of the proxy.
-        """
         return pulumi.get(self, "proxy_address")
 
     @proxy_address.setter
@@ -1055,9 +1083,6 @@ class _MysqlInstanceState:
     @property
     @pulumi.getter(name="proxyFlavor")
     def proxy_flavor(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the flavor of the proxy.
-        """
         return pulumi.get(self, "proxy_flavor")
 
     @proxy_flavor.setter
@@ -1067,9 +1092,6 @@ class _MysqlInstanceState:
     @property
     @pulumi.getter(name="proxyNodeNum")
     def proxy_node_num(self) -> Optional[pulumi.Input[int]]:
-        """
-        Specifies the node count of the proxy.
-        """
         return pulumi.get(self, "proxy_node_num")
 
     @proxy_node_num.setter
@@ -1079,9 +1101,6 @@ class _MysqlInstanceState:
     @property
     @pulumi.getter(name="proxyPort")
     def proxy_port(self) -> Optional[pulumi.Input[int]]:
-        """
-        Indicates the port of the proxy.
-        """
         return pulumi.get(self, "proxy_port")
 
     @proxy_port.setter
@@ -1127,6 +1146,18 @@ class _MysqlInstanceState:
         pulumi.set(self, "security_group_id", value)
 
     @property
+    @pulumi.getter(name="sqlFilterEnabled")
+    def sql_filter_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether sql filter is enabled. The default value is `false`.
+        """
+        return pulumi.get(self, "sql_filter_enabled")
+
+    @sql_filter_enabled.setter
+    def sql_filter_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "sql_filter_enabled", value)
+
+    @property
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
         """
@@ -1168,6 +1199,9 @@ class _MysqlInstanceState:
     @property
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the GaussDB Mysql instance.
+        """
         return pulumi.get(self, "tags")
 
     @tags.setter
@@ -1242,6 +1276,7 @@ class MysqlInstance(pulumi.CustomResource):
                  read_replicas: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 sql_filter_enabled: Optional[pulumi.Input[bool]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  table_name_case_sensitivity: Optional[pulumi.Input[bool]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -1289,14 +1324,14 @@ class MysqlInstance(pulumi.CustomResource):
         GaussDB instance can be imported using the `id`, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:GaussDB/mysqlInstance:MysqlInstance instance_1 ee678f40-ce8e-4d0c-8221-38dead426f06
+         $ pulumi import huaweicloud:GaussDB/mysqlInstance:MysqlInstance instance_1 1a801c1e01e6458d8eed810912e29d0cin07
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[bool] audit_log_enabled: Specifies whether audit log is enabled. The default value is `false`.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are "true" and "false". Changing this will do nothing.
+               Valid values are "true" and "false".
         :param pulumi.Input[str] availability_zone_mode: Specifies the availability zone mode: "single" or "multi".
                Defaults to "single". Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['MysqlInstanceBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
@@ -1334,18 +1369,18 @@ class MysqlInstance(pulumi.CustomResource):
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
                Changing this will do nothing.
-        :param pulumi.Input[str] proxy_flavor: Specifies the flavor of the proxy.
-        :param pulumi.Input[int] proxy_node_num: Specifies the node count of the proxy.
         :param pulumi.Input[int] read_replicas: Specifies the count of read replicas. Defaults to 1.
         :param pulumi.Input[str] region: The region in which to create the GaussDB mysql instance resource. If omitted,
                the provider-level region will be used. Changing this creates a new instance resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID. Required if the selected subnet
                doesn't enable network ACL. Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] sql_filter_enabled: Specifies whether sql filter is enabled. The default value is `false`.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this parameter will create a
                new resource.
         :param pulumi.Input[bool] table_name_case_sensitivity: Whether the kernel table name is case sensitive. The value can
                be `true` (case sensitive) and `false` (case insensitive). Defaults to `false`. This parameter only works during
                creation.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the GaussDB Mysql instance.
         :param pulumi.Input[str] time_zone: Specifies the time zone. Defaults to "UTC+08:00". Changing this parameter
                will create a new resource.
         :param pulumi.Input[int] volume_size: Specifies the volume size of the instance. The new storage space must be greater than
@@ -1398,7 +1433,7 @@ class MysqlInstance(pulumi.CustomResource):
         GaussDB instance can be imported using the `id`, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:GaussDB/mysqlInstance:MysqlInstance instance_1 ee678f40-ce8e-4d0c-8221-38dead426f06
+         $ pulumi import huaweicloud:GaussDB/mysqlInstance:MysqlInstance instance_1 1a801c1e01e6458d8eed810912e29d0cin07
         ```
 
         :param str resource_name: The name of the resource.
@@ -1440,6 +1475,7 @@ class MysqlInstance(pulumi.CustomResource):
                  read_replicas: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 sql_filter_enabled: Optional[pulumi.Input[bool]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  table_name_case_sensitivity: Optional[pulumi.Input[bool]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -1478,11 +1514,18 @@ class MysqlInstance(pulumi.CustomResource):
             __props__.__dict__["password"] = password
             __props__.__dict__["period"] = period
             __props__.__dict__["period_unit"] = period_unit
+            if proxy_flavor is not None and not opts.urn:
+                warnings.warn("""use huaweicloud_gaussdb_mysql_proxy instead""", DeprecationWarning)
+                pulumi.log.warn("""proxy_flavor is deprecated: use huaweicloud_gaussdb_mysql_proxy instead""")
             __props__.__dict__["proxy_flavor"] = proxy_flavor
+            if proxy_node_num is not None and not opts.urn:
+                warnings.warn("""use huaweicloud_gaussdb_mysql_proxy instead""", DeprecationWarning)
+                pulumi.log.warn("""proxy_node_num is deprecated: use huaweicloud_gaussdb_mysql_proxy instead""")
             __props__.__dict__["proxy_node_num"] = proxy_node_num
             __props__.__dict__["read_replicas"] = read_replicas
             __props__.__dict__["region"] = region
             __props__.__dict__["security_group_id"] = security_group_id
+            __props__.__dict__["sql_filter_enabled"] = sql_filter_enabled
             if subnet_id is None and not opts.urn:
                 raise TypeError("Missing required property 'subnet_id'")
             __props__.__dict__["subnet_id"] = subnet_id
@@ -1542,6 +1585,7 @@ class MysqlInstance(pulumi.CustomResource):
             read_replicas: Optional[pulumi.Input[int]] = None,
             region: Optional[pulumi.Input[str]] = None,
             security_group_id: Optional[pulumi.Input[str]] = None,
+            sql_filter_enabled: Optional[pulumi.Input[bool]] = None,
             status: Optional[pulumi.Input[str]] = None,
             subnet_id: Optional[pulumi.Input[str]] = None,
             table_name_case_sensitivity: Optional[pulumi.Input[bool]] = None,
@@ -1558,7 +1602,7 @@ class MysqlInstance(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[bool] audit_log_enabled: Specifies whether audit log is enabled. The default value is `false`.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are "true" and "false". Changing this will do nothing.
+               Valid values are "true" and "false".
         :param pulumi.Input[str] availability_zone_mode: Specifies the availability zone mode: "single" or "multi".
                Defaults to "single". Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['MysqlInstanceBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
@@ -1601,21 +1645,19 @@ class MysqlInstance(pulumi.CustomResource):
                Changing this will do nothing.
         :param pulumi.Input[int] port: Indicates the database port.
         :param pulumi.Input[str] private_write_ip: Indicates the private IP address of the DB instance.
-        :param pulumi.Input[str] proxy_address: Indicates the address of the proxy.
-        :param pulumi.Input[str] proxy_flavor: Specifies the flavor of the proxy.
-        :param pulumi.Input[int] proxy_node_num: Specifies the node count of the proxy.
-        :param pulumi.Input[int] proxy_port: Indicates the port of the proxy.
         :param pulumi.Input[int] read_replicas: Specifies the count of read replicas. Defaults to 1.
         :param pulumi.Input[str] region: The region in which to create the GaussDB mysql instance resource. If omitted,
                the provider-level region will be used. Changing this creates a new instance resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID. Required if the selected subnet
                doesn't enable network ACL. Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] sql_filter_enabled: Specifies whether sql filter is enabled. The default value is `false`.
         :param pulumi.Input[str] status: Indicates the node status.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this parameter will create a
                new resource.
         :param pulumi.Input[bool] table_name_case_sensitivity: Whether the kernel table name is case sensitive. The value can
                be `true` (case sensitive) and `false` (case insensitive). Defaults to `false`. This parameter only works during
                creation.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the GaussDB Mysql instance.
         :param pulumi.Input[str] time_zone: Specifies the time zone. Defaults to "UTC+08:00". Changing this parameter
                will create a new resource.
         :param pulumi.Input[int] volume_size: Specifies the volume size of the instance. The new storage space must be greater than
@@ -1657,6 +1699,7 @@ class MysqlInstance(pulumi.CustomResource):
         __props__.__dict__["read_replicas"] = read_replicas
         __props__.__dict__["region"] = region
         __props__.__dict__["security_group_id"] = security_group_id
+        __props__.__dict__["sql_filter_enabled"] = sql_filter_enabled
         __props__.__dict__["status"] = status
         __props__.__dict__["subnet_id"] = subnet_id
         __props__.__dict__["table_name_case_sensitivity"] = table_name_case_sensitivity
@@ -1684,7 +1727,7 @@ class MysqlInstance(pulumi.CustomResource):
     def auto_renew(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies whether auto renew is enabled.
-        Valid values are "true" and "false". Changing this will do nothing.
+        Valid values are "true" and "false".
         """
         return pulumi.get(self, "auto_renew")
 
@@ -1880,33 +1923,21 @@ class MysqlInstance(pulumi.CustomResource):
     @property
     @pulumi.getter(name="proxyAddress")
     def proxy_address(self) -> pulumi.Output[str]:
-        """
-        Indicates the address of the proxy.
-        """
         return pulumi.get(self, "proxy_address")
 
     @property
     @pulumi.getter(name="proxyFlavor")
     def proxy_flavor(self) -> pulumi.Output[str]:
-        """
-        Specifies the flavor of the proxy.
-        """
         return pulumi.get(self, "proxy_flavor")
 
     @property
     @pulumi.getter(name="proxyNodeNum")
     def proxy_node_num(self) -> pulumi.Output[int]:
-        """
-        Specifies the node count of the proxy.
-        """
         return pulumi.get(self, "proxy_node_num")
 
     @property
     @pulumi.getter(name="proxyPort")
     def proxy_port(self) -> pulumi.Output[int]:
-        """
-        Indicates the port of the proxy.
-        """
         return pulumi.get(self, "proxy_port")
 
     @property
@@ -1934,6 +1965,14 @@ class MysqlInstance(pulumi.CustomResource):
         doesn't enable network ACL. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "security_group_id")
+
+    @property
+    @pulumi.getter(name="sqlFilterEnabled")
+    def sql_filter_enabled(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether sql filter is enabled. The default value is `false`.
+        """
+        return pulumi.get(self, "sql_filter_enabled")
 
     @property
     @pulumi.getter
@@ -1965,6 +2004,9 @@ class MysqlInstance(pulumi.CustomResource):
     @property
     @pulumi.getter
     def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
+        """
+        Specifies the key/value pairs to associate with the GaussDB Mysql instance.
+        """
         return pulumi.get(self, "tags")
 
     @property

@@ -76,7 +76,7 @@ type GetTopicsResult struct {
 	Id string `pulumi:"id"`
 	// The name of the topic.
 	Name   *string `pulumi:"name"`
-	Region *string `pulumi:"region"`
+	Region string  `pulumi:"region"`
 	// The topic URN.
 	TopicUrn *string `pulumi:"topicUrn"`
 	// An array of SMN topics found. Structure is documented below.
@@ -150,8 +150,8 @@ func (o GetTopicsResultOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetTopicsResult) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
 
-func (o GetTopicsResultOutput) Region() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v GetTopicsResult) *string { return v.Region }).(pulumi.StringPtrOutput)
+func (o GetTopicsResultOutput) Region() pulumi.StringOutput {
+	return o.ApplyT(func(v GetTopicsResult) string { return v.Region }).(pulumi.StringOutput)
 }
 
 // The topic URN.

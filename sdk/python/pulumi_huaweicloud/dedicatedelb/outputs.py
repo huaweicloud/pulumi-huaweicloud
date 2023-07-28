@@ -72,16 +72,23 @@ class PoolPersistence(dict):
 
     def __init__(__self__, *,
                  type: str,
-                 cookie_name: Optional[str] = None):
+                 cookie_name: Optional[str] = None,
+                 timeout: Optional[int] = None):
         """
         :param str type: The type of persistence mode. The current specification supports SOURCE_IP,
                HTTP_COOKIE, and APP_COOKIE.
         :param str cookie_name: The name of the cookie if persistence mode is set appropriately. Required
                if `type = APP_COOKIE`.
+        :param int timeout: Specifies the sticky session timeout duration in minutes. This parameter is
+               invalid when type is set to APP_COOKIE. The value range varies depending on the protocol of the backend server group:
+               + When the protocol of the backend server group is TCP or UDP, the value ranges from 1 to 60.
+               + When the protocol of the backend server group is HTTP or HTTPS, the value ranges from 1 to 1440.
         """
         pulumi.set(__self__, "type", type)
         if cookie_name is not None:
             pulumi.set(__self__, "cookie_name", cookie_name)
+        if timeout is not None:
+            pulumi.set(__self__, "timeout", timeout)
 
     @property
     @pulumi.getter
@@ -100,6 +107,17 @@ class PoolPersistence(dict):
         if `type = APP_COOKIE`.
         """
         return pulumi.get(self, "cookie_name")
+
+    @property
+    @pulumi.getter
+    def timeout(self) -> Optional[int]:
+        """
+        Specifies the sticky session timeout duration in minutes. This parameter is
+        invalid when type is set to APP_COOKIE. The value range varies depending on the protocol of the backend server group:
+        + When the protocol of the backend server group is TCP or UDP, the value ranges from 1 to 60.
+        + When the protocol of the backend server group is HTTP or HTTPS, the value ranges from 1 to 1440.
+        """
+        return pulumi.get(self, "timeout")
 
 
 @pulumi.output_type

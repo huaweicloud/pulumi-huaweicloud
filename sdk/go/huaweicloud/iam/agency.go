@@ -29,6 +29,9 @@ import (
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
 //			_, err := Iam.NewAgency(ctx, "agency", &Iam.AgencyArgs{
+//				AllResourcesRoles: pulumi.StringArray{
+//					pulumi.String("Server Administrator"),
+//				},
 //				DelegatedDomainName: pulumi.String("***"),
 //				Description:         pulumi.String("test agency"),
 //				DomainRoles: pulumi.StringArray{
@@ -61,23 +64,37 @@ import (
 //	$ pulumi import huaweicloud:Iam/agency:Agency agency 0b97661f9900f23f4fc2c00971ea4dc0
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to `all_resources_roles` field is missing from the API response. It is generally recommended running `terraform plan` after importing an agency. You can then decide if changes should be applied to the agency, or the resource definition should be updated to align with the agency. Also you can ignore changes as below. hcl resource "huaweicloud_identity_agency" "agency" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [all_resources_roles]
+//
+//	} }
 type Agency struct {
 	pulumi.CustomResourceState
 
+	// Specifies an array of one or more role names which stand for the permissions
+	// to be granted to agency on all resources, including those in enterprise projects, region-specific projects,
+	// and global services under your account.
+	AllResourcesRoles pulumi.StringArrayOutput `pulumi:"allResourcesRoles"`
 	// The time when the agency was created.
 	CreateTime pulumi.StringOutput `pulumi:"createTime"`
-	// Specifies the name of delegated user domain. This parameter
-	// and `delegatedServiceName` are alternative.
-	DelegatedDomainName  pulumi.StringPtrOutput `pulumi:"delegatedDomainName"`
+	// Specifies the name of delegated user domain.
+	DelegatedDomainName pulumi.StringPtrOutput `pulumi:"delegatedDomainName"`
+	// schema: Internal
 	DelegatedServiceName pulumi.StringPtrOutput `pulumi:"delegatedServiceName"`
 	// Specifies the supplementary information about the agency. The value is a string of
 	// 0 to 255 characters, excluding these characters: '**@#$%^&*<>\\**'.
 	Description pulumi.StringOutput `pulumi:"description"`
-	// Specifies an array of one or more role names which stand for the permissionis to be
+	// Specifies an array of one or more role names which stand for the permissions to be
 	// granted to agency on domain.
 	DomainRoles pulumi.StringArrayOutput `pulumi:"domainRoles"`
-	// Specifies the validity period of an agency. The valid value are *ONEDAY* and *FOREVER*
-	// , defaults to *FOREVER*.
+	// Specifies the validity period of an agency. The valid value are *FOREVER*, *ONEDAY*
+	// or the specific days, for example, "20". The default value is *FOREVER*.
 	Duration pulumi.StringPtrOutput `pulumi:"duration"`
 	// The expiration time of agency.
 	ExpireTime pulumi.StringOutput `pulumi:"expireTime"`
@@ -119,20 +136,24 @@ func GetAgency(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Agency resources.
 type agencyState struct {
+	// Specifies an array of one or more role names which stand for the permissions
+	// to be granted to agency on all resources, including those in enterprise projects, region-specific projects,
+	// and global services under your account.
+	AllResourcesRoles []string `pulumi:"allResourcesRoles"`
 	// The time when the agency was created.
 	CreateTime *string `pulumi:"createTime"`
-	// Specifies the name of delegated user domain. This parameter
-	// and `delegatedServiceName` are alternative.
-	DelegatedDomainName  *string `pulumi:"delegatedDomainName"`
+	// Specifies the name of delegated user domain.
+	DelegatedDomainName *string `pulumi:"delegatedDomainName"`
+	// schema: Internal
 	DelegatedServiceName *string `pulumi:"delegatedServiceName"`
 	// Specifies the supplementary information about the agency. The value is a string of
 	// 0 to 255 characters, excluding these characters: '**@#$%^&*<>\\**'.
 	Description *string `pulumi:"description"`
-	// Specifies an array of one or more role names which stand for the permissionis to be
+	// Specifies an array of one or more role names which stand for the permissions to be
 	// granted to agency on domain.
 	DomainRoles []string `pulumi:"domainRoles"`
-	// Specifies the validity period of an agency. The valid value are *ONEDAY* and *FOREVER*
-	// , defaults to *FOREVER*.
+	// Specifies the validity period of an agency. The valid value are *FOREVER*, *ONEDAY*
+	// or the specific days, for example, "20". The default value is *FOREVER*.
 	Duration *string `pulumi:"duration"`
 	// The expiration time of agency.
 	ExpireTime *string `pulumi:"expireTime"`
@@ -145,20 +166,24 @@ type agencyState struct {
 }
 
 type AgencyState struct {
+	// Specifies an array of one or more role names which stand for the permissions
+	// to be granted to agency on all resources, including those in enterprise projects, region-specific projects,
+	// and global services under your account.
+	AllResourcesRoles pulumi.StringArrayInput
 	// The time when the agency was created.
 	CreateTime pulumi.StringPtrInput
-	// Specifies the name of delegated user domain. This parameter
-	// and `delegatedServiceName` are alternative.
-	DelegatedDomainName  pulumi.StringPtrInput
+	// Specifies the name of delegated user domain.
+	DelegatedDomainName pulumi.StringPtrInput
+	// schema: Internal
 	DelegatedServiceName pulumi.StringPtrInput
 	// Specifies the supplementary information about the agency. The value is a string of
 	// 0 to 255 characters, excluding these characters: '**@#$%^&*<>\\**'.
 	Description pulumi.StringPtrInput
-	// Specifies an array of one or more role names which stand for the permissionis to be
+	// Specifies an array of one or more role names which stand for the permissions to be
 	// granted to agency on domain.
 	DomainRoles pulumi.StringArrayInput
-	// Specifies the validity period of an agency. The valid value are *ONEDAY* and *FOREVER*
-	// , defaults to *FOREVER*.
+	// Specifies the validity period of an agency. The valid value are *FOREVER*, *ONEDAY*
+	// or the specific days, for example, "20". The default value is *FOREVER*.
 	Duration pulumi.StringPtrInput
 	// The expiration time of agency.
 	ExpireTime pulumi.StringPtrInput
@@ -175,18 +200,22 @@ func (AgencyState) ElementType() reflect.Type {
 }
 
 type agencyArgs struct {
-	// Specifies the name of delegated user domain. This parameter
-	// and `delegatedServiceName` are alternative.
-	DelegatedDomainName  *string `pulumi:"delegatedDomainName"`
+	// Specifies an array of one or more role names which stand for the permissions
+	// to be granted to agency on all resources, including those in enterprise projects, region-specific projects,
+	// and global services under your account.
+	AllResourcesRoles []string `pulumi:"allResourcesRoles"`
+	// Specifies the name of delegated user domain.
+	DelegatedDomainName *string `pulumi:"delegatedDomainName"`
+	// schema: Internal
 	DelegatedServiceName *string `pulumi:"delegatedServiceName"`
 	// Specifies the supplementary information about the agency. The value is a string of
 	// 0 to 255 characters, excluding these characters: '**@#$%^&*<>\\**'.
 	Description *string `pulumi:"description"`
-	// Specifies an array of one or more role names which stand for the permissionis to be
+	// Specifies an array of one or more role names which stand for the permissions to be
 	// granted to agency on domain.
 	DomainRoles []string `pulumi:"domainRoles"`
-	// Specifies the validity period of an agency. The valid value are *ONEDAY* and *FOREVER*
-	// , defaults to *FOREVER*.
+	// Specifies the validity period of an agency. The valid value are *FOREVER*, *ONEDAY*
+	// or the specific days, for example, "20". The default value is *FOREVER*.
 	Duration *string `pulumi:"duration"`
 	// Specifies the name of agency. The name is a string of 1 to 64 characters.
 	// Changing this will create a new agency.
@@ -198,18 +227,22 @@ type agencyArgs struct {
 
 // The set of arguments for constructing a Agency resource.
 type AgencyArgs struct {
-	// Specifies the name of delegated user domain. This parameter
-	// and `delegatedServiceName` are alternative.
-	DelegatedDomainName  pulumi.StringPtrInput
+	// Specifies an array of one or more role names which stand for the permissions
+	// to be granted to agency on all resources, including those in enterprise projects, region-specific projects,
+	// and global services under your account.
+	AllResourcesRoles pulumi.StringArrayInput
+	// Specifies the name of delegated user domain.
+	DelegatedDomainName pulumi.StringPtrInput
+	// schema: Internal
 	DelegatedServiceName pulumi.StringPtrInput
 	// Specifies the supplementary information about the agency. The value is a string of
 	// 0 to 255 characters, excluding these characters: '**@#$%^&*<>\\**'.
 	Description pulumi.StringPtrInput
-	// Specifies an array of one or more role names which stand for the permissionis to be
+	// Specifies an array of one or more role names which stand for the permissions to be
 	// granted to agency on domain.
 	DomainRoles pulumi.StringArrayInput
-	// Specifies the validity period of an agency. The valid value are *ONEDAY* and *FOREVER*
-	// , defaults to *FOREVER*.
+	// Specifies the validity period of an agency. The valid value are *FOREVER*, *ONEDAY*
+	// or the specific days, for example, "20". The default value is *FOREVER*.
 	Duration pulumi.StringPtrInput
 	// Specifies the name of agency. The name is a string of 1 to 64 characters.
 	// Changing this will create a new agency.
@@ -306,17 +339,24 @@ func (o AgencyOutput) ToAgencyOutputWithContext(ctx context.Context) AgencyOutpu
 	return o
 }
 
+// Specifies an array of one or more role names which stand for the permissions
+// to be granted to agency on all resources, including those in enterprise projects, region-specific projects,
+// and global services under your account.
+func (o AgencyOutput) AllResourcesRoles() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *Agency) pulumi.StringArrayOutput { return v.AllResourcesRoles }).(pulumi.StringArrayOutput)
+}
+
 // The time when the agency was created.
 func (o AgencyOutput) CreateTime() pulumi.StringOutput {
 	return o.ApplyT(func(v *Agency) pulumi.StringOutput { return v.CreateTime }).(pulumi.StringOutput)
 }
 
-// Specifies the name of delegated user domain. This parameter
-// and `delegatedServiceName` are alternative.
+// Specifies the name of delegated user domain.
 func (o AgencyOutput) DelegatedDomainName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Agency) pulumi.StringPtrOutput { return v.DelegatedDomainName }).(pulumi.StringPtrOutput)
 }
 
+// schema: Internal
 func (o AgencyOutput) DelegatedServiceName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Agency) pulumi.StringPtrOutput { return v.DelegatedServiceName }).(pulumi.StringPtrOutput)
 }
@@ -327,14 +367,14 @@ func (o AgencyOutput) Description() pulumi.StringOutput {
 	return o.ApplyT(func(v *Agency) pulumi.StringOutput { return v.Description }).(pulumi.StringOutput)
 }
 
-// Specifies an array of one or more role names which stand for the permissionis to be
+// Specifies an array of one or more role names which stand for the permissions to be
 // granted to agency on domain.
 func (o AgencyOutput) DomainRoles() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Agency) pulumi.StringArrayOutput { return v.DomainRoles }).(pulumi.StringArrayOutput)
 }
 
-// Specifies the validity period of an agency. The valid value are *ONEDAY* and *FOREVER*
-// , defaults to *FOREVER*.
+// Specifies the validity period of an agency. The valid value are *FOREVER*, *ONEDAY*
+// or the specific days, for example, "20". The default value is *FOREVER*.
 func (o AgencyOutput) Duration() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Agency) pulumi.StringPtrOutput { return v.Duration }).(pulumi.StringPtrOutput)
 }

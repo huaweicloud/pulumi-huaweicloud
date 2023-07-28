@@ -545,6 +545,10 @@ class GetEipsEipResult(dict):
                  public_ip: str,
                  status: str):
         """
+        :param str bandwidth_id: The ID of bandwidth.
+        :param str bandwidth_name: The name of bandwidth.
+        :param str bandwidth_share_type: Whether the bandwidth is shared or exclusive.
+        :param int bandwidth_size: The size of bandwidth.
         :param str id: The ID of elastic IP.
         :param int ip_version: The version of elastic IP address.
         :param str port_id: Specifies the ID of the port.
@@ -566,21 +570,33 @@ class GetEipsEipResult(dict):
     @property
     @pulumi.getter(name="bandwidthId")
     def bandwidth_id(self) -> str:
+        """
+        The ID of bandwidth.
+        """
         return pulumi.get(self, "bandwidth_id")
 
     @property
     @pulumi.getter(name="bandwidthName")
     def bandwidth_name(self) -> str:
+        """
+        The name of bandwidth.
+        """
         return pulumi.get(self, "bandwidth_name")
 
     @property
     @pulumi.getter(name="bandwidthShareType")
     def bandwidth_share_type(self) -> str:
+        """
+        Whether the bandwidth is shared or exclusive.
+        """
         return pulumi.get(self, "bandwidth_share_type")
 
     @property
     @pulumi.getter(name="bandwidthSize")
     def bandwidth_size(self) -> int:
+        """
+        The size of bandwidth.
+        """
         return pulumi.get(self, "bandwidth_size")
 
     @property

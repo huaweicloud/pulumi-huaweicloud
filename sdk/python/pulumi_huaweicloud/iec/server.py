@@ -67,8 +67,7 @@ class ServerArgs:
                already be created and associated with the tenant's account. This parameter and `admin_pass` are alternative. Changing
                this parameter creates a new IEC server resource.
         :param pulumi.Input[str] name: Specifies the IEC server name. This parameter can contain a maximum of 64
-               characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-). Changing this parameter
-               creates a new IEC server resource.
+               characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-).
         :param pulumi.Input[str] user_data: Specifies the user data (information after encoding) configured during IEC
                server creation. The value can come from a variety of sources: inline, read in from the *file* function. Changing this
                parameter creates a new IEC server resource.
@@ -289,8 +288,7 @@ class ServerArgs:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the IEC server name. This parameter can contain a maximum of 64
-        characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-). Changing this parameter
-        creates a new IEC server resource.
+        characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-).
         """
         return pulumi.get(self, "name")
 
@@ -371,8 +369,7 @@ class _ServerState:
                already be created and associated with the tenant's account. This parameter and `admin_pass` are alternative. Changing
                this parameter creates a new IEC server resource.
         :param pulumi.Input[str] name: Specifies the IEC server name. This parameter can contain a maximum of 64
-               characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-). Changing this parameter
-               creates a new IEC server resource.
+               characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-).
         :param pulumi.Input[Sequence[pulumi.Input['ServerNicArgs']]] nics: An array of one or more networks to attach to the IEC server. The object structure is documented below.
         :param pulumi.Input[str] origin_server_id: The ID of origin server.
         :param pulumi.Input[str] public_ip: The EIP address that is associted to the IEC server.
@@ -621,8 +618,7 @@ class _ServerState:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the IEC server name. This parameter can contain a maximum of 64
-        characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-). Changing this parameter
-        creates a new IEC server resource.
+        characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-).
         """
         return pulumi.get(self, "name")
 
@@ -907,8 +903,7 @@ class Server(pulumi.CustomResource):
                already be created and associated with the tenant's account. This parameter and `admin_pass` are alternative. Changing
                this parameter creates a new IEC server resource.
         :param pulumi.Input[str] name: Specifies the IEC server name. This parameter can contain a maximum of 64
-               characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-). Changing this parameter
-               creates a new IEC server resource.
+               characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-).
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_groups: Specifies an array of one or more security group IDs to associate with
                the IEC server. Changing this parameter creates a new IEC server resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] subnet_ids: Specifies an array of one or more subnet ID of Network for the IEC server
@@ -1158,8 +1153,7 @@ class Server(pulumi.CustomResource):
                already be created and associated with the tenant's account. This parameter and `admin_pass` are alternative. Changing
                this parameter creates a new IEC server resource.
         :param pulumi.Input[str] name: Specifies the IEC server name. This parameter can contain a maximum of 64
-               characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-). Changing this parameter
-               creates a new IEC server resource.
+               characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-).
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ServerNicArgs']]]] nics: An array of one or more networks to attach to the IEC server. The object structure is documented below.
         :param pulumi.Input[str] origin_server_id: The ID of origin server.
         :param pulumi.Input[str] public_ip: The EIP address that is associted to the IEC server.
@@ -1335,8 +1329,7 @@ class Server(pulumi.CustomResource):
     def name(self) -> pulumi.Output[str]:
         """
         Specifies the IEC server name. This parameter can contain a maximum of 64
-        characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-). Changing this parameter
-        creates a new IEC server resource.
+        characters, which may consist of letters, digits, dot(.), underscores (_), and hyphens (-).
         """
         return pulumi.get(self, "name")
 

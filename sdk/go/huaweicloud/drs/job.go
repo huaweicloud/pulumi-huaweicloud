@@ -94,8 +94,8 @@ type Job struct {
 	// is `cloudDataGuard`. When the disaster recovery type is dual-active disaster recovery, set `multiWrite` to `true`,
 	// otherwise to `false`. The default value is `false`. Changing this parameter will create a new resource.
 	MultiWrite pulumi.BoolPtrOutput `pulumi:"multiWrite"`
-	// Specifies the job name. The name consists of 4 to 50 characters, starting with
-	// a letter. Only letters, digits, underscores (\_) and hyphens (-) are allowed.
+	// Specifies the name of database.
+	// Changing this parameter will create a new resource.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the network type.
 	// Changing this parameter will create a new resource. The options are as follows:
@@ -231,8 +231,8 @@ type jobState struct {
 	// is `cloudDataGuard`. When the disaster recovery type is dual-active disaster recovery, set `multiWrite` to `true`,
 	// otherwise to `false`. The default value is `false`. Changing this parameter will create a new resource.
 	MultiWrite *bool `pulumi:"multiWrite"`
-	// Specifies the job name. The name consists of 4 to 50 characters, starting with
-	// a letter. Only letters, digits, underscores (\_) and hyphens (-) are allowed.
+	// Specifies the name of database.
+	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the network type.
 	// Changing this parameter will create a new resource. The options are as follows:
@@ -324,8 +324,8 @@ type JobState struct {
 	// is `cloudDataGuard`. When the disaster recovery type is dual-active disaster recovery, set `multiWrite` to `true`,
 	// otherwise to `false`. The default value is `false`. Changing this parameter will create a new resource.
 	MultiWrite pulumi.BoolPtrInput
-	// Specifies the job name. The name consists of 4 to 50 characters, starting with
-	// a letter. Only letters, digits, underscores (\_) and hyphens (-) are allowed.
+	// Specifies the name of database.
+	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
 	// Specifies the network type.
 	// Changing this parameter will create a new resource. The options are as follows:
@@ -419,8 +419,8 @@ type jobArgs struct {
 	// is `cloudDataGuard`. When the disaster recovery type is dual-active disaster recovery, set `multiWrite` to `true`,
 	// otherwise to `false`. The default value is `false`. Changing this parameter will create a new resource.
 	MultiWrite *bool `pulumi:"multiWrite"`
-	// Specifies the job name. The name consists of 4 to 50 characters, starting with
-	// a letter. Only letters, digits, underscores (\_) and hyphens (-) are allowed.
+	// Specifies the name of database.
+	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the network type.
 	// Changing this parameter will create a new resource. The options are as follows:
@@ -505,8 +505,8 @@ type JobArgs struct {
 	// is `cloudDataGuard`. When the disaster recovery type is dual-active disaster recovery, set `multiWrite` to `true`,
 	// otherwise to `false`. The default value is `false`. Changing this parameter will create a new resource.
 	MultiWrite pulumi.BoolPtrInput
-	// Specifies the job name. The name consists of 4 to 50 characters, starting with
-	// a letter. Only letters, digits, underscores (\_) and hyphens (-) are allowed.
+	// Specifies the name of database.
+	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
 	// Specifies the network type.
 	// Changing this parameter will create a new resource. The options are as follows:
@@ -717,8 +717,8 @@ func (o JobOutput) MultiWrite() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Job) pulumi.BoolPtrOutput { return v.MultiWrite }).(pulumi.BoolPtrOutput)
 }
 
-// Specifies the job name. The name consists of 4 to 50 characters, starting with
-// a letter. Only letters, digits, underscores (\_) and hyphens (-) are allowed.
+// Specifies the name of database.
+// Changing this parameter will create a new resource.
 func (o JobOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Job) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }

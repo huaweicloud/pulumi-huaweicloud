@@ -80,7 +80,7 @@ export class Device extends pulumi.CustomResource {
     public /*out*/ readonly authType!: pulumi.Output<string>;
     /**
      * Specifies the description of device. The description contains a maximum of 2048
-     * characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters
+     * characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
      * are allowed: `?'#().,&%@!`.
      */
     public readonly description!: pulumi.Output<string | undefined>;
@@ -108,7 +108,7 @@ export class Device extends pulumi.CustomResource {
     public readonly gatewayId!: pulumi.Output<string>;
     /**
      * Specifies the device name, which contains 4 to 256 characters. Only letters,
-     * Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+     * Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -224,7 +224,7 @@ export interface DeviceState {
     authType?: pulumi.Input<string>;
     /**
      * Specifies the description of device. The description contains a maximum of 2048
-     * characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters
+     * characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
      * are allowed: `?'#().,&%@!`.
      */
     description?: pulumi.Input<string>;
@@ -252,7 +252,7 @@ export interface DeviceState {
     gatewayId?: pulumi.Input<string>;
     /**
      * Specifies the device name, which contains 4 to 256 characters. Only letters,
-     * Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+     * Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
      */
     name?: pulumi.Input<string>;
     /**
@@ -303,7 +303,7 @@ export interface DeviceState {
 export interface DeviceArgs {
     /**
      * Specifies the description of device. The description contains a maximum of 2048
-     * characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters
+     * characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
      * are allowed: `?'#().,&%@!`.
      */
     description?: pulumi.Input<string>;
@@ -331,7 +331,7 @@ export interface DeviceArgs {
     gatewayId?: pulumi.Input<string>;
     /**
      * Specifies the device name, which contains 4 to 256 characters. Only letters,
-     * Chinese characters, digits, hyphens (-), underscore (_) and the following specail characters are allowed: `?'#().,&%@!`.
+     * Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
      */
     name?: pulumi.Input<string>;
     /**

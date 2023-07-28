@@ -18,16 +18,19 @@ class GroupArgs:
     def __init__(__self__, *,
                  networks: pulumi.Input[Sequence[pulumi.Input['GroupNetworkArgs']]],
                  scaling_group_name: pulumi.Input[str],
-                 security_groups: pulumi.Input[Sequence[pulumi.Input['GroupSecurityGroupArgs']]],
                  vpc_id: pulumi.Input[str],
+                 agency_name: Optional[pulumi.Input[str]] = None,
+                 availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  available_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  cool_down_time: Optional[pulumi.Input[int]] = None,
                  delete_instances: Optional[pulumi.Input[str]] = None,
                  delete_publicip: Optional[pulumi.Input[bool]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  desire_instance_number: Optional[pulumi.Input[int]] = None,
                  enable: Optional[pulumi.Input[bool]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  force_delete: Optional[pulumi.Input[bool]] = None,
+                 health_periodic_audit_grace_period: Optional[pulumi.Input[int]] = None,
                  health_periodic_audit_method: Optional[pulumi.Input[str]] = None,
                  health_periodic_audit_time: Optional[pulumi.Input[int]] = None,
                  instance_terminate_policy: Optional[pulumi.Input[str]] = None,
@@ -35,58 +38,71 @@ class GroupArgs:
                  lbaas_listeners: Optional[pulumi.Input[Sequence[pulumi.Input['GroupLbaasListenerArgs']]]] = None,
                  max_instance_number: Optional[pulumi.Input[int]] = None,
                  min_instance_number: Optional[pulumi.Input[int]] = None,
+                 multi_az_scaling_policy: Optional[pulumi.Input[str]] = None,
                  notifications: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  scaling_configuration_id: Optional[pulumi.Input[str]] = None,
+                 security_groups: Optional[pulumi.Input[Sequence[pulumi.Input['GroupSecurityGroupArgs']]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Group resource.
-        :param pulumi.Input[Sequence[pulumi.Input['GroupNetworkArgs']]] networks: An array of one or more network IDs. The system supports up to five networks. The
-               networks object structure is documented below.
-        :param pulumi.Input[str] scaling_group_name: The name of the scaling group. The name can contain letters, digits,
-               underscores(_), and hyphens(-),and cannot exceed 64 characters.
-        :param pulumi.Input[Sequence[pulumi.Input['GroupSecurityGroupArgs']]] security_groups: An array of one or more security group IDs to associate with the group. The
-               security_groups object structure is documented below.
-        :param pulumi.Input[str] vpc_id: The VPC ID. Changing this creates a new group.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] available_zones: The availability zones in which to create the instances in the autoscaling group.
-        :param pulumi.Input[int] cool_down_time: The cooling duration (in seconds). The value ranges from 0 to 86400, and is 300 by
-               default.
-        :param pulumi.Input[str] delete_instances: Whether to delete the instances in the AS group when deleting the AS group.
-               The options are `yes` and `no`.
-        :param pulumi.Input[bool] delete_publicip: Whether to delete the elastic IP address bound to the instances of AS group when
-               deleting the instances. The options are `true` and `false`.
-        :param pulumi.Input[int] desire_instance_number: The expected number of instances. The default value is the minimum number
-               of instances. The value ranges from the minimum number of instances to the maximum number of instances.
-        :param pulumi.Input[bool] enable: Whether to enable the AS Group. The options are `true` and `false`. The default value
-               is `true`.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the AS group.
-        :param pulumi.Input[bool] force_delete: Whether to forcibly delete the AS group, remove the ECS instances and release them.
-               The default value is `false`.
-        :param pulumi.Input[str] health_periodic_audit_method: The health check method for instances in the AS group. The health
-               check methods include `ELB_AUDIT` and `NOVA_AUDIT`. If load balancing is configured, the default value of this
-               parameter is `ELB_AUDIT`. Otherwise, the default value is `NOVA_AUDIT`.
-        :param pulumi.Input[int] health_periodic_audit_time: The health check period for instances. The period has four options: 5
-               minutes (default), 15 minutes, 60 minutes, and 180 minutes.
-        :param pulumi.Input[str] instance_terminate_policy: The instance removal policy. The policy has four
-               options: `OLD_CONFIG_OLD_INSTANCE` (default), `OLD_CONFIG_NEW_INSTANCE`,
-               `OLD_INSTANCE`, and `NEW_INSTANCE`.
+        :param pulumi.Input[Sequence[pulumi.Input['GroupNetworkArgs']]] networks: Specifies an array of one or more network IDs. The system supports up to five networks.
+               The object structure is documented below.
+        :param pulumi.Input[str] scaling_group_name: Specifies the name of the scaling group. The name can contain
+               letters, digits, underscores(_), and hyphens(-),and cannot exceed 64 characters.
+        :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this creates a new group.
+        :param pulumi.Input[str] agency_name: Specifies the IAM agency name. If you change the agency,
+               the new agency will be available for ECSs scaled out after the change.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the availability zones in which to create the instances in the
+               autoscaling group.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] available_zones: schema: Deprecated; use availability_zones instead
+        :param pulumi.Input[int] cool_down_time: Specifies the cooling duration (in seconds). The value ranges from 0 to 86400,
+               and is 300 by default.
+        :param pulumi.Input[str] delete_instances: Specifies whether to delete the instances in the AS group when deleting
+               the AS group. The options are `yes` and `no`.
+        :param pulumi.Input[bool] delete_publicip: Specifies whether to delete the elastic IP address bound to the instances of
+               AS group when deleting the instances. The options are `true` and `false`.
+        :param pulumi.Input[str] description: Specifies the description of the AS group.
+               The value can contain 0 to 256 characters.
+        :param pulumi.Input[int] desire_instance_number: Specifies the expected number of instances. The default value is the
+               minimum number of instances. The value ranges from the minimum number of instances to the maximum number of instances.
+        :param pulumi.Input[bool] enable: Specifies whether to enable the AS Group. The options are `true` and `false`.
+               The default value is `true`.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the AS group.
+        :param pulumi.Input[bool] force_delete: Specifies whether to forcibly delete the AS group, remove the ECS instances and
+               release them. The default value is `false`.
+        :param pulumi.Input[int] health_periodic_audit_grace_period: Specifies the health check grace period for instances.
+               The unit is second and the value ranges from 0 to 86400. The default value is 600.
+        :param pulumi.Input[str] health_periodic_audit_method: Specifies the health check method for instances in the AS group.
+               The health check methods include `ELB_AUDIT` and `NOVA_AUDIT`. If load balancing is configured, the default value of
+               this parameter is `ELB_AUDIT`. Otherwise, the default value is `NOVA_AUDIT`.
+        :param pulumi.Input[int] health_periodic_audit_time: Specifies the health check period for instances. The unit is minute
+               and value includes 0, 1, 5 (default), 15, 60, and 180. If the value is set to 0, health check is performed every 10 seconds.
+        :param pulumi.Input[str] instance_terminate_policy: Specifies the instance removal policy. The policy has four
+               options: `OLD_CONFIG_OLD_INSTANCE` (default), `OLD_CONFIG_NEW_INSTANCE`, `OLD_INSTANCE`, and `NEW_INSTANCE`.
         :param pulumi.Input[str] lb_listener_id: The system supports the binding of up to six ELB listeners, the IDs of which are separated using a comma.
-        :param pulumi.Input[Sequence[pulumi.Input['GroupLbaasListenerArgs']]] lbaas_listeners: An array of one or more enhanced load balancer. The system supports the binding
-               of up to six load balancers. The object structure is documented below.
-        :param pulumi.Input[int] max_instance_number: The maximum number of instances. The default value is 0.
-        :param pulumi.Input[int] min_instance_number: The minimum number of instances. The default value is 0.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] notifications: The notification mode. The system only supports `EMAIL`
-               mode which refers to notification by email.
-        :param pulumi.Input[str] region: The region in which to create the AS group. If omitted, the `region` argument
-               of the provider is used. Changing this creates a new AS group.
-        :param pulumi.Input[str] scaling_configuration_id: The configuration ID which defines configurations of instances in the
-               AS group.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the scaling group.
+        :param pulumi.Input[Sequence[pulumi.Input['GroupLbaasListenerArgs']]] lbaas_listeners: Specifies an array of one or more enhanced load balancer. The system supports
+               the binding of up to six load balancers. The object structure is documented below.
+        :param pulumi.Input[int] max_instance_number: Specifies the maximum number of instances. The default value is 0.
+        :param pulumi.Input[int] min_instance_number: Specifies the minimum number of instances. The default value is 0.
+        :param pulumi.Input[str] multi_az_scaling_policy: Specifies the priority policy used to select target AZs when adjusting
+               the number of instances in an AS group. The value can be `EQUILIBRIUM_DISTRIBUTE` and `PICK_FIRST`.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] notifications: schema: Deprecated; The notification mode has been canceled
+        :param pulumi.Input[str] region: Specifies the region in which to create the AS group.
+               If omitted, the provider-level region will be used. Changing this creates a new group.
+        :param pulumi.Input[str] scaling_configuration_id: Specifies the configuration ID which defines configurations
+               of instances in the AS group.
+        :param pulumi.Input[Sequence[pulumi.Input['GroupSecurityGroupArgs']]] security_groups: Specifies an array of one or more security group IDs to associate with the group.
+               The object structure is documented below.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the AS group.
         """
         pulumi.set(__self__, "networks", networks)
         pulumi.set(__self__, "scaling_group_name", scaling_group_name)
-        pulumi.set(__self__, "security_groups", security_groups)
         pulumi.set(__self__, "vpc_id", vpc_id)
+        if agency_name is not None:
+            pulumi.set(__self__, "agency_name", agency_name)
+        if availability_zones is not None:
+            pulumi.set(__self__, "availability_zones", availability_zones)
         if available_zones is not None:
             pulumi.set(__self__, "available_zones", available_zones)
         if cool_down_time is not None:
@@ -95,6 +111,8 @@ class GroupArgs:
             pulumi.set(__self__, "delete_instances", delete_instances)
         if delete_publicip is not None:
             pulumi.set(__self__, "delete_publicip", delete_publicip)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if desire_instance_number is not None:
             pulumi.set(__self__, "desire_instance_number", desire_instance_number)
         if enable is not None:
@@ -103,6 +121,8 @@ class GroupArgs:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if force_delete is not None:
             pulumi.set(__self__, "force_delete", force_delete)
+        if health_periodic_audit_grace_period is not None:
+            pulumi.set(__self__, "health_periodic_audit_grace_period", health_periodic_audit_grace_period)
         if health_periodic_audit_method is not None:
             pulumi.set(__self__, "health_periodic_audit_method", health_periodic_audit_method)
         if health_periodic_audit_time is not None:
@@ -120,12 +140,16 @@ class GroupArgs:
             pulumi.set(__self__, "max_instance_number", max_instance_number)
         if min_instance_number is not None:
             pulumi.set(__self__, "min_instance_number", min_instance_number)
+        if multi_az_scaling_policy is not None:
+            pulumi.set(__self__, "multi_az_scaling_policy", multi_az_scaling_policy)
         if notifications is not None:
             pulumi.set(__self__, "notifications", notifications)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if scaling_configuration_id is not None:
             pulumi.set(__self__, "scaling_configuration_id", scaling_configuration_id)
+        if security_groups is not None:
+            pulumi.set(__self__, "security_groups", security_groups)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
 
@@ -133,8 +157,8 @@ class GroupArgs:
     @pulumi.getter
     def networks(self) -> pulumi.Input[Sequence[pulumi.Input['GroupNetworkArgs']]]:
         """
-        An array of one or more network IDs. The system supports up to five networks. The
-        networks object structure is documented below.
+        Specifies an array of one or more network IDs. The system supports up to five networks.
+        The object structure is documented below.
         """
         return pulumi.get(self, "networks")
 
@@ -146,8 +170,8 @@ class GroupArgs:
     @pulumi.getter(name="scalingGroupName")
     def scaling_group_name(self) -> pulumi.Input[str]:
         """
-        The name of the scaling group. The name can contain letters, digits,
-        underscores(_), and hyphens(-),and cannot exceed 64 characters.
+        Specifies the name of the scaling group. The name can contain
+        letters, digits, underscores(_), and hyphens(-),and cannot exceed 64 characters.
         """
         return pulumi.get(self, "scaling_group_name")
 
@@ -156,23 +180,10 @@ class GroupArgs:
         pulumi.set(self, "scaling_group_name", value)
 
     @property
-    @pulumi.getter(name="securityGroups")
-    def security_groups(self) -> pulumi.Input[Sequence[pulumi.Input['GroupSecurityGroupArgs']]]:
-        """
-        An array of one or more security group IDs to associate with the group. The
-        security_groups object structure is documented below.
-        """
-        return pulumi.get(self, "security_groups")
-
-    @security_groups.setter
-    def security_groups(self, value: pulumi.Input[Sequence[pulumi.Input['GroupSecurityGroupArgs']]]):
-        pulumi.set(self, "security_groups", value)
-
-    @property
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Input[str]:
         """
-        The VPC ID. Changing this creates a new group.
+        Specifies the VPC ID. Changing this creates a new group.
         """
         return pulumi.get(self, "vpc_id")
 
@@ -181,10 +192,36 @@ class GroupArgs:
         pulumi.set(self, "vpc_id", value)
 
     @property
+    @pulumi.getter(name="agencyName")
+    def agency_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the IAM agency name. If you change the agency,
+        the new agency will be available for ECSs scaled out after the change.
+        """
+        return pulumi.get(self, "agency_name")
+
+    @agency_name.setter
+    def agency_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "agency_name", value)
+
+    @property
+    @pulumi.getter(name="availabilityZones")
+    def availability_zones(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the availability zones in which to create the instances in the
+        autoscaling group.
+        """
+        return pulumi.get(self, "availability_zones")
+
+    @availability_zones.setter
+    def availability_zones(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "availability_zones", value)
+
+    @property
     @pulumi.getter(name="availableZones")
     def available_zones(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        The availability zones in which to create the instances in the autoscaling group.
+        schema: Deprecated; use availability_zones instead
         """
         return pulumi.get(self, "available_zones")
 
@@ -196,8 +233,8 @@ class GroupArgs:
     @pulumi.getter(name="coolDownTime")
     def cool_down_time(self) -> Optional[pulumi.Input[int]]:
         """
-        The cooling duration (in seconds). The value ranges from 0 to 86400, and is 300 by
-        default.
+        Specifies the cooling duration (in seconds). The value ranges from 0 to 86400,
+        and is 300 by default.
         """
         return pulumi.get(self, "cool_down_time")
 
@@ -209,8 +246,8 @@ class GroupArgs:
     @pulumi.getter(name="deleteInstances")
     def delete_instances(self) -> Optional[pulumi.Input[str]]:
         """
-        Whether to delete the instances in the AS group when deleting the AS group.
-        The options are `yes` and `no`.
+        Specifies whether to delete the instances in the AS group when deleting
+        the AS group. The options are `yes` and `no`.
         """
         return pulumi.get(self, "delete_instances")
 
@@ -222,8 +259,8 @@ class GroupArgs:
     @pulumi.getter(name="deletePublicip")
     def delete_publicip(self) -> Optional[pulumi.Input[bool]]:
         """
-        Whether to delete the elastic IP address bound to the instances of AS group when
-        deleting the instances. The options are `true` and `false`.
+        Specifies whether to delete the elastic IP address bound to the instances of
+        AS group when deleting the instances. The options are `true` and `false`.
         """
         return pulumi.get(self, "delete_publicip")
 
@@ -232,11 +269,24 @@ class GroupArgs:
         pulumi.set(self, "delete_publicip", value)
 
     @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the AS group.
+        The value can contain 0 to 256 characters.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
     @pulumi.getter(name="desireInstanceNumber")
     def desire_instance_number(self) -> Optional[pulumi.Input[int]]:
         """
-        The expected number of instances. The default value is the minimum number
-        of instances. The value ranges from the minimum number of instances to the maximum number of instances.
+        Specifies the expected number of instances. The default value is the
+        minimum number of instances. The value ranges from the minimum number of instances to the maximum number of instances.
         """
         return pulumi.get(self, "desire_instance_number")
 
@@ -248,8 +298,8 @@ class GroupArgs:
     @pulumi.getter
     def enable(self) -> Optional[pulumi.Input[bool]]:
         """
-        Whether to enable the AS Group. The options are `true` and `false`. The default value
-        is `true`.
+        Specifies whether to enable the AS Group. The options are `true` and `false`.
+        The default value is `true`.
         """
         return pulumi.get(self, "enable")
 
@@ -261,7 +311,7 @@ class GroupArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The enterprise project id of the AS group.
+        Specifies the enterprise project id of the AS group.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -273,8 +323,8 @@ class GroupArgs:
     @pulumi.getter(name="forceDelete")
     def force_delete(self) -> Optional[pulumi.Input[bool]]:
         """
-        Whether to forcibly delete the AS group, remove the ECS instances and release them.
-        The default value is `false`.
+        Specifies whether to forcibly delete the AS group, remove the ECS instances and
+        release them. The default value is `false`.
         """
         return pulumi.get(self, "force_delete")
 
@@ -283,12 +333,25 @@ class GroupArgs:
         pulumi.set(self, "force_delete", value)
 
     @property
+    @pulumi.getter(name="healthPeriodicAuditGracePeriod")
+    def health_periodic_audit_grace_period(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the health check grace period for instances.
+        The unit is second and the value ranges from 0 to 86400. The default value is 600.
+        """
+        return pulumi.get(self, "health_periodic_audit_grace_period")
+
+    @health_periodic_audit_grace_period.setter
+    def health_periodic_audit_grace_period(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "health_periodic_audit_grace_period", value)
+
+    @property
     @pulumi.getter(name="healthPeriodicAuditMethod")
     def health_periodic_audit_method(self) -> Optional[pulumi.Input[str]]:
         """
-        The health check method for instances in the AS group. The health
-        check methods include `ELB_AUDIT` and `NOVA_AUDIT`. If load balancing is configured, the default value of this
-        parameter is `ELB_AUDIT`. Otherwise, the default value is `NOVA_AUDIT`.
+        Specifies the health check method for instances in the AS group.
+        The health check methods include `ELB_AUDIT` and `NOVA_AUDIT`. If load balancing is configured, the default value of
+        this parameter is `ELB_AUDIT`. Otherwise, the default value is `NOVA_AUDIT`.
         """
         return pulumi.get(self, "health_periodic_audit_method")
 
@@ -300,8 +363,8 @@ class GroupArgs:
     @pulumi.getter(name="healthPeriodicAuditTime")
     def health_periodic_audit_time(self) -> Optional[pulumi.Input[int]]:
         """
-        The health check period for instances. The period has four options: 5
-        minutes (default), 15 minutes, 60 minutes, and 180 minutes.
+        Specifies the health check period for instances. The unit is minute
+        and value includes 0, 1, 5 (default), 15, 60, and 180. If the value is set to 0, health check is performed every 10 seconds.
         """
         return pulumi.get(self, "health_periodic_audit_time")
 
@@ -313,9 +376,8 @@ class GroupArgs:
     @pulumi.getter(name="instanceTerminatePolicy")
     def instance_terminate_policy(self) -> Optional[pulumi.Input[str]]:
         """
-        The instance removal policy. The policy has four
-        options: `OLD_CONFIG_OLD_INSTANCE` (default), `OLD_CONFIG_NEW_INSTANCE`,
-        `OLD_INSTANCE`, and `NEW_INSTANCE`.
+        Specifies the instance removal policy. The policy has four
+        options: `OLD_CONFIG_OLD_INSTANCE` (default), `OLD_CONFIG_NEW_INSTANCE`, `OLD_INSTANCE`, and `NEW_INSTANCE`.
         """
         return pulumi.get(self, "instance_terminate_policy")
 
@@ -339,8 +401,8 @@ class GroupArgs:
     @pulumi.getter(name="lbaasListeners")
     def lbaas_listeners(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['GroupLbaasListenerArgs']]]]:
         """
-        An array of one or more enhanced load balancer. The system supports the binding
-        of up to six load balancers. The object structure is documented below.
+        Specifies an array of one or more enhanced load balancer. The system supports
+        the binding of up to six load balancers. The object structure is documented below.
         """
         return pulumi.get(self, "lbaas_listeners")
 
@@ -352,7 +414,7 @@ class GroupArgs:
     @pulumi.getter(name="maxInstanceNumber")
     def max_instance_number(self) -> Optional[pulumi.Input[int]]:
         """
-        The maximum number of instances. The default value is 0.
+        Specifies the maximum number of instances. The default value is 0.
         """
         return pulumi.get(self, "max_instance_number")
 
@@ -364,7 +426,7 @@ class GroupArgs:
     @pulumi.getter(name="minInstanceNumber")
     def min_instance_number(self) -> Optional[pulumi.Input[int]]:
         """
-        The minimum number of instances. The default value is 0.
+        Specifies the minimum number of instances. The default value is 0.
         """
         return pulumi.get(self, "min_instance_number")
 
@@ -373,11 +435,23 @@ class GroupArgs:
         pulumi.set(self, "min_instance_number", value)
 
     @property
+    @pulumi.getter(name="multiAzScalingPolicy")
+    def multi_az_scaling_policy(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the priority policy used to select target AZs when adjusting
+        the number of instances in an AS group. The value can be `EQUILIBRIUM_DISTRIBUTE` and `PICK_FIRST`.
+        """
+        return pulumi.get(self, "multi_az_scaling_policy")
+
+    @multi_az_scaling_policy.setter
+    def multi_az_scaling_policy(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "multi_az_scaling_policy", value)
+
+    @property
     @pulumi.getter
     def notifications(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        The notification mode. The system only supports `EMAIL`
-        mode which refers to notification by email.
+        schema: Deprecated; The notification mode has been canceled
         """
         return pulumi.get(self, "notifications")
 
@@ -389,8 +463,8 @@ class GroupArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the AS group. If omitted, the `region` argument
-        of the provider is used. Changing this creates a new AS group.
+        Specifies the region in which to create the AS group.
+        If omitted, the provider-level region will be used. Changing this creates a new group.
         """
         return pulumi.get(self, "region")
 
@@ -402,8 +476,8 @@ class GroupArgs:
     @pulumi.getter(name="scalingConfigurationId")
     def scaling_configuration_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The configuration ID which defines configurations of instances in the
-        AS group.
+        Specifies the configuration ID which defines configurations
+        of instances in the AS group.
         """
         return pulumi.get(self, "scaling_configuration_id")
 
@@ -412,10 +486,23 @@ class GroupArgs:
         pulumi.set(self, "scaling_configuration_id", value)
 
     @property
+    @pulumi.getter(name="securityGroups")
+    def security_groups(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['GroupSecurityGroupArgs']]]]:
+        """
+        Specifies an array of one or more security group IDs to associate with the group.
+        The object structure is documented below.
+        """
+        return pulumi.get(self, "security_groups")
+
+    @security_groups.setter
+    def security_groups(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['GroupSecurityGroupArgs']]]]):
+        pulumi.set(self, "security_groups", value)
+
+    @property
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
-        The key/value pairs to associate with the scaling group.
+        Specifies the key/value pairs to associate with the AS group.
         """
         return pulumi.get(self, "tags")
 
@@ -427,15 +514,19 @@ class GroupArgs:
 @pulumi.input_type
 class _GroupState:
     def __init__(__self__, *,
+                 agency_name: Optional[pulumi.Input[str]] = None,
+                 availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  available_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  cool_down_time: Optional[pulumi.Input[int]] = None,
                  current_instance_number: Optional[pulumi.Input[int]] = None,
                  delete_instances: Optional[pulumi.Input[str]] = None,
                  delete_publicip: Optional[pulumi.Input[bool]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  desire_instance_number: Optional[pulumi.Input[int]] = None,
                  enable: Optional[pulumi.Input[bool]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  force_delete: Optional[pulumi.Input[bool]] = None,
+                 health_periodic_audit_grace_period: Optional[pulumi.Input[int]] = None,
                  health_periodic_audit_method: Optional[pulumi.Input[str]] = None,
                  health_periodic_audit_time: Optional[pulumi.Input[int]] = None,
                  instance_terminate_policy: Optional[pulumi.Input[str]] = None,
@@ -444,6 +535,7 @@ class _GroupState:
                  lbaas_listeners: Optional[pulumi.Input[Sequence[pulumi.Input['GroupLbaasListenerArgs']]]] = None,
                  max_instance_number: Optional[pulumi.Input[int]] = None,
                  min_instance_number: Optional[pulumi.Input[int]] = None,
+                 multi_az_scaling_policy: Optional[pulumi.Input[str]] = None,
                  networks: Optional[pulumi.Input[Sequence[pulumi.Input['GroupNetworkArgs']]]] = None,
                  notifications: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -455,51 +547,63 @@ class _GroupState:
                  vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Group resources.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] available_zones: The availability zones in which to create the instances in the autoscaling group.
-        :param pulumi.Input[int] cool_down_time: The cooling duration (in seconds). The value ranges from 0 to 86400, and is 300 by
-               default.
-        :param pulumi.Input[int] current_instance_number: Indicates the number of current instances in the AS group.
-        :param pulumi.Input[str] delete_instances: Whether to delete the instances in the AS group when deleting the AS group.
-               The options are `yes` and `no`.
-        :param pulumi.Input[bool] delete_publicip: Whether to delete the elastic IP address bound to the instances of AS group when
-               deleting the instances. The options are `true` and `false`.
-        :param pulumi.Input[int] desire_instance_number: The expected number of instances. The default value is the minimum number
-               of instances. The value ranges from the minimum number of instances to the maximum number of instances.
-        :param pulumi.Input[bool] enable: Whether to enable the AS Group. The options are `true` and `false`. The default value
-               is `true`.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the AS group.
-        :param pulumi.Input[bool] force_delete: Whether to forcibly delete the AS group, remove the ECS instances and release them.
-               The default value is `false`.
-        :param pulumi.Input[str] health_periodic_audit_method: The health check method for instances in the AS group. The health
-               check methods include `ELB_AUDIT` and `NOVA_AUDIT`. If load balancing is configured, the default value of this
-               parameter is `ELB_AUDIT`. Otherwise, the default value is `NOVA_AUDIT`.
-        :param pulumi.Input[int] health_periodic_audit_time: The health check period for instances. The period has four options: 5
-               minutes (default), 15 minutes, 60 minutes, and 180 minutes.
-        :param pulumi.Input[str] instance_terminate_policy: The instance removal policy. The policy has four
-               options: `OLD_CONFIG_OLD_INSTANCE` (default), `OLD_CONFIG_NEW_INSTANCE`,
-               `OLD_INSTANCE`, and `NEW_INSTANCE`.
+        :param pulumi.Input[str] agency_name: Specifies the IAM agency name. If you change the agency,
+               the new agency will be available for ECSs scaled out after the change.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the availability zones in which to create the instances in the
+               autoscaling group.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] available_zones: schema: Deprecated; use availability_zones instead
+        :param pulumi.Input[int] cool_down_time: Specifies the cooling duration (in seconds). The value ranges from 0 to 86400,
+               and is 300 by default.
+        :param pulumi.Input[int] current_instance_number: The number of current instances in the AS group.
+        :param pulumi.Input[str] delete_instances: Specifies whether to delete the instances in the AS group when deleting
+               the AS group. The options are `yes` and `no`.
+        :param pulumi.Input[bool] delete_publicip: Specifies whether to delete the elastic IP address bound to the instances of
+               AS group when deleting the instances. The options are `true` and `false`.
+        :param pulumi.Input[str] description: Specifies the description of the AS group.
+               The value can contain 0 to 256 characters.
+        :param pulumi.Input[int] desire_instance_number: Specifies the expected number of instances. The default value is the
+               minimum number of instances. The value ranges from the minimum number of instances to the maximum number of instances.
+        :param pulumi.Input[bool] enable: Specifies whether to enable the AS Group. The options are `true` and `false`.
+               The default value is `true`.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the AS group.
+        :param pulumi.Input[bool] force_delete: Specifies whether to forcibly delete the AS group, remove the ECS instances and
+               release them. The default value is `false`.
+        :param pulumi.Input[int] health_periodic_audit_grace_period: Specifies the health check grace period for instances.
+               The unit is second and the value ranges from 0 to 86400. The default value is 600.
+        :param pulumi.Input[str] health_periodic_audit_method: Specifies the health check method for instances in the AS group.
+               The health check methods include `ELB_AUDIT` and `NOVA_AUDIT`. If load balancing is configured, the default value of
+               this parameter is `ELB_AUDIT`. Otherwise, the default value is `NOVA_AUDIT`.
+        :param pulumi.Input[int] health_periodic_audit_time: Specifies the health check period for instances. The unit is minute
+               and value includes 0, 1, 5 (default), 15, 60, and 180. If the value is set to 0, health check is performed every 10 seconds.
+        :param pulumi.Input[str] instance_terminate_policy: Specifies the instance removal policy. The policy has four
+               options: `OLD_CONFIG_OLD_INSTANCE` (default), `OLD_CONFIG_NEW_INSTANCE`, `OLD_INSTANCE`, and `NEW_INSTANCE`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] instances: The instances IDs of the AS group.
         :param pulumi.Input[str] lb_listener_id: The system supports the binding of up to six ELB listeners, the IDs of which are separated using a comma.
-        :param pulumi.Input[Sequence[pulumi.Input['GroupLbaasListenerArgs']]] lbaas_listeners: An array of one or more enhanced load balancer. The system supports the binding
-               of up to six load balancers. The object structure is documented below.
-        :param pulumi.Input[int] max_instance_number: The maximum number of instances. The default value is 0.
-        :param pulumi.Input[int] min_instance_number: The minimum number of instances. The default value is 0.
-        :param pulumi.Input[Sequence[pulumi.Input['GroupNetworkArgs']]] networks: An array of one or more network IDs. The system supports up to five networks. The
-               networks object structure is documented below.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] notifications: The notification mode. The system only supports `EMAIL`
-               mode which refers to notification by email.
-        :param pulumi.Input[str] region: The region in which to create the AS group. If omitted, the `region` argument
-               of the provider is used. Changing this creates a new AS group.
-        :param pulumi.Input[str] scaling_configuration_id: The configuration ID which defines configurations of instances in the
-               AS group.
-        :param pulumi.Input[str] scaling_group_name: The name of the scaling group. The name can contain letters, digits,
-               underscores(_), and hyphens(-),and cannot exceed 64 characters.
-        :param pulumi.Input[Sequence[pulumi.Input['GroupSecurityGroupArgs']]] security_groups: An array of one or more security group IDs to associate with the group. The
-               security_groups object structure is documented below.
-        :param pulumi.Input[str] status: Indicates the status of the AS group.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the scaling group.
-        :param pulumi.Input[str] vpc_id: The VPC ID. Changing this creates a new group.
+        :param pulumi.Input[Sequence[pulumi.Input['GroupLbaasListenerArgs']]] lbaas_listeners: Specifies an array of one or more enhanced load balancer. The system supports
+               the binding of up to six load balancers. The object structure is documented below.
+        :param pulumi.Input[int] max_instance_number: Specifies the maximum number of instances. The default value is 0.
+        :param pulumi.Input[int] min_instance_number: Specifies the minimum number of instances. The default value is 0.
+        :param pulumi.Input[str] multi_az_scaling_policy: Specifies the priority policy used to select target AZs when adjusting
+               the number of instances in an AS group. The value can be `EQUILIBRIUM_DISTRIBUTE` and `PICK_FIRST`.
+        :param pulumi.Input[Sequence[pulumi.Input['GroupNetworkArgs']]] networks: Specifies an array of one or more network IDs. The system supports up to five networks.
+               The object structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] notifications: schema: Deprecated; The notification mode has been canceled
+        :param pulumi.Input[str] region: Specifies the region in which to create the AS group.
+               If omitted, the provider-level region will be used. Changing this creates a new group.
+        :param pulumi.Input[str] scaling_configuration_id: Specifies the configuration ID which defines configurations
+               of instances in the AS group.
+        :param pulumi.Input[str] scaling_group_name: Specifies the name of the scaling group. The name can contain
+               letters, digits, underscores(_), and hyphens(-),and cannot exceed 64 characters.
+        :param pulumi.Input[Sequence[pulumi.Input['GroupSecurityGroupArgs']]] security_groups: Specifies an array of one or more security group IDs to associate with the group.
+               The object structure is documented below.
+        :param pulumi.Input[str] status: The status of the AS group.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the AS group.
+        :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this creates a new group.
         """
+        if agency_name is not None:
+            pulumi.set(__self__, "agency_name", agency_name)
+        if availability_zones is not None:
+            pulumi.set(__self__, "availability_zones", availability_zones)
         if available_zones is not None:
             pulumi.set(__self__, "available_zones", available_zones)
         if cool_down_time is not None:
@@ -510,6 +614,8 @@ class _GroupState:
             pulumi.set(__self__, "delete_instances", delete_instances)
         if delete_publicip is not None:
             pulumi.set(__self__, "delete_publicip", delete_publicip)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if desire_instance_number is not None:
             pulumi.set(__self__, "desire_instance_number", desire_instance_number)
         if enable is not None:
@@ -518,6 +624,8 @@ class _GroupState:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if force_delete is not None:
             pulumi.set(__self__, "force_delete", force_delete)
+        if health_periodic_audit_grace_period is not None:
+            pulumi.set(__self__, "health_periodic_audit_grace_period", health_periodic_audit_grace_period)
         if health_periodic_audit_method is not None:
             pulumi.set(__self__, "health_periodic_audit_method", health_periodic_audit_method)
         if health_periodic_audit_time is not None:
@@ -537,6 +645,8 @@ class _GroupState:
             pulumi.set(__self__, "max_instance_number", max_instance_number)
         if min_instance_number is not None:
             pulumi.set(__self__, "min_instance_number", min_instance_number)
+        if multi_az_scaling_policy is not None:
+            pulumi.set(__self__, "multi_az_scaling_policy", multi_az_scaling_policy)
         if networks is not None:
             pulumi.set(__self__, "networks", networks)
         if notifications is not None:
@@ -557,10 +667,36 @@ class _GroupState:
             pulumi.set(__self__, "vpc_id", vpc_id)
 
     @property
+    @pulumi.getter(name="agencyName")
+    def agency_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the IAM agency name. If you change the agency,
+        the new agency will be available for ECSs scaled out after the change.
+        """
+        return pulumi.get(self, "agency_name")
+
+    @agency_name.setter
+    def agency_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "agency_name", value)
+
+    @property
+    @pulumi.getter(name="availabilityZones")
+    def availability_zones(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the availability zones in which to create the instances in the
+        autoscaling group.
+        """
+        return pulumi.get(self, "availability_zones")
+
+    @availability_zones.setter
+    def availability_zones(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "availability_zones", value)
+
+    @property
     @pulumi.getter(name="availableZones")
     def available_zones(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        The availability zones in which to create the instances in the autoscaling group.
+        schema: Deprecated; use availability_zones instead
         """
         return pulumi.get(self, "available_zones")
 
@@ -572,8 +708,8 @@ class _GroupState:
     @pulumi.getter(name="coolDownTime")
     def cool_down_time(self) -> Optional[pulumi.Input[int]]:
         """
-        The cooling duration (in seconds). The value ranges from 0 to 86400, and is 300 by
-        default.
+        Specifies the cooling duration (in seconds). The value ranges from 0 to 86400,
+        and is 300 by default.
         """
         return pulumi.get(self, "cool_down_time")
 
@@ -585,7 +721,7 @@ class _GroupState:
     @pulumi.getter(name="currentInstanceNumber")
     def current_instance_number(self) -> Optional[pulumi.Input[int]]:
         """
-        Indicates the number of current instances in the AS group.
+        The number of current instances in the AS group.
         """
         return pulumi.get(self, "current_instance_number")
 
@@ -597,8 +733,8 @@ class _GroupState:
     @pulumi.getter(name="deleteInstances")
     def delete_instances(self) -> Optional[pulumi.Input[str]]:
         """
-        Whether to delete the instances in the AS group when deleting the AS group.
-        The options are `yes` and `no`.
+        Specifies whether to delete the instances in the AS group when deleting
+        the AS group. The options are `yes` and `no`.
         """
         return pulumi.get(self, "delete_instances")
 
@@ -610,8 +746,8 @@ class _GroupState:
     @pulumi.getter(name="deletePublicip")
     def delete_publicip(self) -> Optional[pulumi.Input[bool]]:
         """
-        Whether to delete the elastic IP address bound to the instances of AS group when
-        deleting the instances. The options are `true` and `false`.
+        Specifies whether to delete the elastic IP address bound to the instances of
+        AS group when deleting the instances. The options are `true` and `false`.
         """
         return pulumi.get(self, "delete_publicip")
 
@@ -620,11 +756,24 @@ class _GroupState:
         pulumi.set(self, "delete_publicip", value)
 
     @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the AS group.
+        The value can contain 0 to 256 characters.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
     @pulumi.getter(name="desireInstanceNumber")
     def desire_instance_number(self) -> Optional[pulumi.Input[int]]:
         """
-        The expected number of instances. The default value is the minimum number
-        of instances. The value ranges from the minimum number of instances to the maximum number of instances.
+        Specifies the expected number of instances. The default value is the
+        minimum number of instances. The value ranges from the minimum number of instances to the maximum number of instances.
         """
         return pulumi.get(self, "desire_instance_number")
 
@@ -636,8 +785,8 @@ class _GroupState:
     @pulumi.getter
     def enable(self) -> Optional[pulumi.Input[bool]]:
         """
-        Whether to enable the AS Group. The options are `true` and `false`. The default value
-        is `true`.
+        Specifies whether to enable the AS Group. The options are `true` and `false`.
+        The default value is `true`.
         """
         return pulumi.get(self, "enable")
 
@@ -649,7 +798,7 @@ class _GroupState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The enterprise project id of the AS group.
+        Specifies the enterprise project id of the AS group.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -661,8 +810,8 @@ class _GroupState:
     @pulumi.getter(name="forceDelete")
     def force_delete(self) -> Optional[pulumi.Input[bool]]:
         """
-        Whether to forcibly delete the AS group, remove the ECS instances and release them.
-        The default value is `false`.
+        Specifies whether to forcibly delete the AS group, remove the ECS instances and
+        release them. The default value is `false`.
         """
         return pulumi.get(self, "force_delete")
 
@@ -671,12 +820,25 @@ class _GroupState:
         pulumi.set(self, "force_delete", value)
 
     @property
+    @pulumi.getter(name="healthPeriodicAuditGracePeriod")
+    def health_periodic_audit_grace_period(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the health check grace period for instances.
+        The unit is second and the value ranges from 0 to 86400. The default value is 600.
+        """
+        return pulumi.get(self, "health_periodic_audit_grace_period")
+
+    @health_periodic_audit_grace_period.setter
+    def health_periodic_audit_grace_period(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "health_periodic_audit_grace_period", value)
+
+    @property
     @pulumi.getter(name="healthPeriodicAuditMethod")
     def health_periodic_audit_method(self) -> Optional[pulumi.Input[str]]:
         """
-        The health check method for instances in the AS group. The health
-        check methods include `ELB_AUDIT` and `NOVA_AUDIT`. If load balancing is configured, the default value of this
-        parameter is `ELB_AUDIT`. Otherwise, the default value is `NOVA_AUDIT`.
+        Specifies the health check method for instances in the AS group.
+        The health check methods include `ELB_AUDIT` and `NOVA_AUDIT`. If load balancing is configured, the default value of
+        this parameter is `ELB_AUDIT`. Otherwise, the default value is `NOVA_AUDIT`.
         """
         return pulumi.get(self, "health_periodic_audit_method")
 
@@ -688,8 +850,8 @@ class _GroupState:
     @pulumi.getter(name="healthPeriodicAuditTime")
     def health_periodic_audit_time(self) -> Optional[pulumi.Input[int]]:
         """
-        The health check period for instances. The period has four options: 5
-        minutes (default), 15 minutes, 60 minutes, and 180 minutes.
+        Specifies the health check period for instances. The unit is minute
+        and value includes 0, 1, 5 (default), 15, 60, and 180. If the value is set to 0, health check is performed every 10 seconds.
         """
         return pulumi.get(self, "health_periodic_audit_time")
 
@@ -701,9 +863,8 @@ class _GroupState:
     @pulumi.getter(name="instanceTerminatePolicy")
     def instance_terminate_policy(self) -> Optional[pulumi.Input[str]]:
         """
-        The instance removal policy. The policy has four
-        options: `OLD_CONFIG_OLD_INSTANCE` (default), `OLD_CONFIG_NEW_INSTANCE`,
-        `OLD_INSTANCE`, and `NEW_INSTANCE`.
+        Specifies the instance removal policy. The policy has four
+        options: `OLD_CONFIG_OLD_INSTANCE` (default), `OLD_CONFIG_NEW_INSTANCE`, `OLD_INSTANCE`, and `NEW_INSTANCE`.
         """
         return pulumi.get(self, "instance_terminate_policy")
 
@@ -739,8 +900,8 @@ class _GroupState:
     @pulumi.getter(name="lbaasListeners")
     def lbaas_listeners(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['GroupLbaasListenerArgs']]]]:
         """
-        An array of one or more enhanced load balancer. The system supports the binding
-        of up to six load balancers. The object structure is documented below.
+        Specifies an array of one or more enhanced load balancer. The system supports
+        the binding of up to six load balancers. The object structure is documented below.
         """
         return pulumi.get(self, "lbaas_listeners")
 
@@ -752,7 +913,7 @@ class _GroupState:
     @pulumi.getter(name="maxInstanceNumber")
     def max_instance_number(self) -> Optional[pulumi.Input[int]]:
         """
-        The maximum number of instances. The default value is 0.
+        Specifies the maximum number of instances. The default value is 0.
         """
         return pulumi.get(self, "max_instance_number")
 
@@ -764,7 +925,7 @@ class _GroupState:
     @pulumi.getter(name="minInstanceNumber")
     def min_instance_number(self) -> Optional[pulumi.Input[int]]:
         """
-        The minimum number of instances. The default value is 0.
+        Specifies the minimum number of instances. The default value is 0.
         """
         return pulumi.get(self, "min_instance_number")
 
@@ -773,11 +934,24 @@ class _GroupState:
         pulumi.set(self, "min_instance_number", value)
 
     @property
+    @pulumi.getter(name="multiAzScalingPolicy")
+    def multi_az_scaling_policy(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the priority policy used to select target AZs when adjusting
+        the number of instances in an AS group. The value can be `EQUILIBRIUM_DISTRIBUTE` and `PICK_FIRST`.
+        """
+        return pulumi.get(self, "multi_az_scaling_policy")
+
+    @multi_az_scaling_policy.setter
+    def multi_az_scaling_policy(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "multi_az_scaling_policy", value)
+
+    @property
     @pulumi.getter
     def networks(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['GroupNetworkArgs']]]]:
         """
-        An array of one or more network IDs. The system supports up to five networks. The
-        networks object structure is documented below.
+        Specifies an array of one or more network IDs. The system supports up to five networks.
+        The object structure is documented below.
         """
         return pulumi.get(self, "networks")
 
@@ -789,8 +963,7 @@ class _GroupState:
     @pulumi.getter
     def notifications(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        The notification mode. The system only supports `EMAIL`
-        mode which refers to notification by email.
+        schema: Deprecated; The notification mode has been canceled
         """
         return pulumi.get(self, "notifications")
 
@@ -802,8 +975,8 @@ class _GroupState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the AS group. If omitted, the `region` argument
-        of the provider is used. Changing this creates a new AS group.
+        Specifies the region in which to create the AS group.
+        If omitted, the provider-level region will be used. Changing this creates a new group.
         """
         return pulumi.get(self, "region")
 
@@ -815,8 +988,8 @@ class _GroupState:
     @pulumi.getter(name="scalingConfigurationId")
     def scaling_configuration_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The configuration ID which defines configurations of instances in the
-        AS group.
+        Specifies the configuration ID which defines configurations
+        of instances in the AS group.
         """
         return pulumi.get(self, "scaling_configuration_id")
 
@@ -828,8 +1001,8 @@ class _GroupState:
     @pulumi.getter(name="scalingGroupName")
     def scaling_group_name(self) -> Optional[pulumi.Input[str]]:
         """
-        The name of the scaling group. The name can contain letters, digits,
-        underscores(_), and hyphens(-),and cannot exceed 64 characters.
+        Specifies the name of the scaling group. The name can contain
+        letters, digits, underscores(_), and hyphens(-),and cannot exceed 64 characters.
         """
         return pulumi.get(self, "scaling_group_name")
 
@@ -841,8 +1014,8 @@ class _GroupState:
     @pulumi.getter(name="securityGroups")
     def security_groups(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['GroupSecurityGroupArgs']]]]:
         """
-        An array of one or more security group IDs to associate with the group. The
-        security_groups object structure is documented below.
+        Specifies an array of one or more security group IDs to associate with the group.
+        The object structure is documented below.
         """
         return pulumi.get(self, "security_groups")
 
@@ -854,7 +1027,7 @@ class _GroupState:
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
         """
-        Indicates the status of the AS group.
+        The status of the AS group.
         """
         return pulumi.get(self, "status")
 
@@ -866,7 +1039,7 @@ class _GroupState:
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
-        The key/value pairs to associate with the scaling group.
+        Specifies the key/value pairs to associate with the AS group.
         """
         return pulumi.get(self, "tags")
 
@@ -878,7 +1051,7 @@ class _GroupState:
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The VPC ID. Changing this creates a new group.
+        Specifies the VPC ID. Changing this creates a new group.
         """
         return pulumi.get(self, "vpc_id")
 
@@ -892,14 +1065,18 @@ class Group(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 agency_name: Optional[pulumi.Input[str]] = None,
+                 availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  available_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  cool_down_time: Optional[pulumi.Input[int]] = None,
                  delete_instances: Optional[pulumi.Input[str]] = None,
                  delete_publicip: Optional[pulumi.Input[bool]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  desire_instance_number: Optional[pulumi.Input[int]] = None,
                  enable: Optional[pulumi.Input[bool]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  force_delete: Optional[pulumi.Input[bool]] = None,
+                 health_periodic_audit_grace_period: Optional[pulumi.Input[int]] = None,
                  health_periodic_audit_method: Optional[pulumi.Input[str]] = None,
                  health_periodic_audit_time: Optional[pulumi.Input[int]] = None,
                  instance_terminate_policy: Optional[pulumi.Input[str]] = None,
@@ -907,6 +1084,7 @@ class Group(pulumi.CustomResource):
                  lbaas_listeners: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupLbaasListenerArgs']]]]] = None,
                  max_instance_number: Optional[pulumi.Input[int]] = None,
                  min_instance_number: Optional[pulumi.Input[int]] = None,
+                 multi_az_scaling_policy: Optional[pulumi.Input[str]] = None,
                  networks: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupNetworkArgs']]]]] = None,
                  notifications: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -917,7 +1095,7 @@ class Group(pulumi.CustomResource):
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages a Autoscaling Group resource within HuaweiCloud.
+        Manages an AS group resource within HuaweiCloud.
 
         ## Example Usage
         ### Basic Autoscaling Group
@@ -926,21 +1104,22 @@ class Group(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        configuration_id = config.require_object("configurationId")
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
         my_as_group = huaweicloud.as_.Group("myAsGroup",
-            delete_instances="yes",
-            delete_publicip=True,
-            desire_instance_number=2,
-            max_instance_number=10,
-            min_instance_number=0,
-            networks=[huaweicloud.as_.GroupNetworkArgs(
-                id="ad091b52-742f-469e-8f3c-fd81cadf0743",
-            )],
-            scaling_configuration_id="37e310f5-db9d-446e-9135-c625f9c2bbfc",
             scaling_group_name="my_as_group",
-            security_groups=[huaweicloud.as_.GroupSecurityGroupArgs(
-                id="45e4c6de-6bf0-4843-8953-2babde3d4810",
-            )],
-            vpc_id="1d8f7e7c-fe04-4cf5-85ac-08b478c290e9")
+            scaling_configuration_id=configuration_id,
+            desire_instance_number=2,
+            min_instance_number=0,
+            max_instance_number=10,
+            vpc_id=vpc_id,
+            delete_publicip=True,
+            delete_instances="yes",
+            networks=[huaweicloud.as_.GroupNetworkArgs(
+                id=subnet_id,
+            )])
         ```
         ### Autoscaling Group with tags
 
@@ -948,25 +1127,26 @@ class Group(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        configuration_id = config.require_object("configurationId")
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
         my_as_group_tags = huaweicloud.as_.Group("myAsGroupTags",
-            delete_instances="yes",
-            delete_publicip=True,
-            desire_instance_number=2,
-            max_instance_number=10,
-            min_instance_number=0,
-            networks=[huaweicloud.as_.GroupNetworkArgs(
-                id="ad091b52-742f-469e-8f3c-fd81cadf0743",
-            )],
-            scaling_configuration_id="37e310f5-db9d-446e-9135-c625f9c2bbfc",
             scaling_group_name="my_as_group_tags",
-            security_groups=[huaweicloud.as_.GroupSecurityGroupArgs(
-                id="45e4c6de-6bf0-4843-8953-2babde3d4810",
+            scaling_configuration_id=configuration_id,
+            desire_instance_number=2,
+            min_instance_number=0,
+            max_instance_number=10,
+            vpc_id=vpc_id,
+            delete_publicip=True,
+            delete_instances="yes",
+            networks=[huaweicloud.as_.GroupNetworkArgs(
+                id=subnet_id,
             )],
             tags={
                 "foo": "bar",
                 "key": "value",
-            },
-            vpc_id="1d8f7e7c-fe04-4cf5-85ac-08b478c290e9")
+            })
         ```
         ### Autoscaling Group Only Remove Members When Scaling Down
 
@@ -974,29 +1154,35 @@ class Group(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        configuration_id = config.require_object("configurationId")
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
         my_as_group_only_remove_members = huaweicloud.as_.Group("myAsGroupOnlyRemoveMembers",
-            delete_instances="no",
-            delete_publicip=True,
-            desire_instance_number=2,
-            max_instance_number=10,
-            min_instance_number=0,
-            networks=[huaweicloud.as_.GroupNetworkArgs(
-                id="ad091b52-742f-469e-8f3c-fd81cadf0743",
-            )],
-            scaling_configuration_id="37e310f5-db9d-446e-9135-c625f9c2bbfc",
             scaling_group_name="my_as_group_only_remove_members",
-            security_groups=[huaweicloud.as_.GroupSecurityGroupArgs(
-                id="45e4c6de-6bf0-4843-8953-2babde3d4810",
-            )],
-            vpc_id="1d8f7e7c-fe04-4cf5-85ac-08b478c290e9")
+            scaling_configuration_id=configuration_id,
+            desire_instance_number=2,
+            min_instance_number=0,
+            max_instance_number=10,
+            vpc_id=vpc_id,
+            delete_publicip=True,
+            delete_instances="no",
+            networks=[huaweicloud.as_.GroupNetworkArgs(
+                id=subnet_id,
+            )])
         ```
-        ### Autoscaling Group With Enhanced Load Balancer Listener
+        ### Autoscaling Group With Elastic Load Balancer Listener
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        loadbalancer1 = huaweicloud.elb.Loadbalancer("loadbalancer1", vip_subnet_id="d9415786-5f1a-428b-b35f-2f1523e146d2")
+        config = pulumi.Config()
+        configuration_id = config.require_object("configurationId")
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        ipv4_subnet_id = config.require_object("ipv4SubnetId")
+        loadbalancer1 = huaweicloud.elb.Loadbalancer("loadbalancer1", vip_subnet_id=ipv4_subnet_id)
         listener1 = huaweicloud.elb.Listener("listener1",
             protocol="HTTP",
             protocol_port=8080,
@@ -1007,16 +1193,13 @@ class Group(pulumi.CustomResource):
             listener_id=listener1.id)
         my_as_group_with_enhanced_lb = huaweicloud.as_.Group("myAsGroupWithEnhancedLb",
             scaling_group_name="my_as_group_with_enhanced_lb",
-            scaling_configuration_id="37e310f5-db9d-446e-9135-c625f9c2bbfc",
+            scaling_configuration_id=configuration_id,
             desire_instance_number=2,
             min_instance_number=0,
             max_instance_number=10,
-            vpc_id="1d8f7e7c-fe04-4cf5-85ac-08b478c290e9",
+            vpc_id=vpc_id,
             networks=[huaweicloud.as_.GroupNetworkArgs(
-                id="ad091b52-742f-469e-8f3c-fd81cadf0743",
-            )],
-            security_groups=[huaweicloud.as_.GroupSecurityGroupArgs(
-                id="45e4c6de-6bf0-4843-8953-2babde3d4810",
+                id=subnet_id,
             )],
             lbaas_listeners=[huaweicloud.as_.GroupLbaasListenerArgs(
                 pool_id=pool1.id,
@@ -1034,47 +1217,55 @@ class Group(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] available_zones: The availability zones in which to create the instances in the autoscaling group.
-        :param pulumi.Input[int] cool_down_time: The cooling duration (in seconds). The value ranges from 0 to 86400, and is 300 by
-               default.
-        :param pulumi.Input[str] delete_instances: Whether to delete the instances in the AS group when deleting the AS group.
-               The options are `yes` and `no`.
-        :param pulumi.Input[bool] delete_publicip: Whether to delete the elastic IP address bound to the instances of AS group when
-               deleting the instances. The options are `true` and `false`.
-        :param pulumi.Input[int] desire_instance_number: The expected number of instances. The default value is the minimum number
-               of instances. The value ranges from the minimum number of instances to the maximum number of instances.
-        :param pulumi.Input[bool] enable: Whether to enable the AS Group. The options are `true` and `false`. The default value
-               is `true`.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the AS group.
-        :param pulumi.Input[bool] force_delete: Whether to forcibly delete the AS group, remove the ECS instances and release them.
-               The default value is `false`.
-        :param pulumi.Input[str] health_periodic_audit_method: The health check method for instances in the AS group. The health
-               check methods include `ELB_AUDIT` and `NOVA_AUDIT`. If load balancing is configured, the default value of this
-               parameter is `ELB_AUDIT`. Otherwise, the default value is `NOVA_AUDIT`.
-        :param pulumi.Input[int] health_periodic_audit_time: The health check period for instances. The period has four options: 5
-               minutes (default), 15 minutes, 60 minutes, and 180 minutes.
-        :param pulumi.Input[str] instance_terminate_policy: The instance removal policy. The policy has four
-               options: `OLD_CONFIG_OLD_INSTANCE` (default), `OLD_CONFIG_NEW_INSTANCE`,
-               `OLD_INSTANCE`, and `NEW_INSTANCE`.
+        :param pulumi.Input[str] agency_name: Specifies the IAM agency name. If you change the agency,
+               the new agency will be available for ECSs scaled out after the change.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the availability zones in which to create the instances in the
+               autoscaling group.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] available_zones: schema: Deprecated; use availability_zones instead
+        :param pulumi.Input[int] cool_down_time: Specifies the cooling duration (in seconds). The value ranges from 0 to 86400,
+               and is 300 by default.
+        :param pulumi.Input[str] delete_instances: Specifies whether to delete the instances in the AS group when deleting
+               the AS group. The options are `yes` and `no`.
+        :param pulumi.Input[bool] delete_publicip: Specifies whether to delete the elastic IP address bound to the instances of
+               AS group when deleting the instances. The options are `true` and `false`.
+        :param pulumi.Input[str] description: Specifies the description of the AS group.
+               The value can contain 0 to 256 characters.
+        :param pulumi.Input[int] desire_instance_number: Specifies the expected number of instances. The default value is the
+               minimum number of instances. The value ranges from the minimum number of instances to the maximum number of instances.
+        :param pulumi.Input[bool] enable: Specifies whether to enable the AS Group. The options are `true` and `false`.
+               The default value is `true`.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the AS group.
+        :param pulumi.Input[bool] force_delete: Specifies whether to forcibly delete the AS group, remove the ECS instances and
+               release them. The default value is `false`.
+        :param pulumi.Input[int] health_periodic_audit_grace_period: Specifies the health check grace period for instances.
+               The unit is second and the value ranges from 0 to 86400. The default value is 600.
+        :param pulumi.Input[str] health_periodic_audit_method: Specifies the health check method for instances in the AS group.
+               The health check methods include `ELB_AUDIT` and `NOVA_AUDIT`. If load balancing is configured, the default value of
+               this parameter is `ELB_AUDIT`. Otherwise, the default value is `NOVA_AUDIT`.
+        :param pulumi.Input[int] health_periodic_audit_time: Specifies the health check period for instances. The unit is minute
+               and value includes 0, 1, 5 (default), 15, 60, and 180. If the value is set to 0, health check is performed every 10 seconds.
+        :param pulumi.Input[str] instance_terminate_policy: Specifies the instance removal policy. The policy has four
+               options: `OLD_CONFIG_OLD_INSTANCE` (default), `OLD_CONFIG_NEW_INSTANCE`, `OLD_INSTANCE`, and `NEW_INSTANCE`.
         :param pulumi.Input[str] lb_listener_id: The system supports the binding of up to six ELB listeners, the IDs of which are separated using a comma.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupLbaasListenerArgs']]]] lbaas_listeners: An array of one or more enhanced load balancer. The system supports the binding
-               of up to six load balancers. The object structure is documented below.
-        :param pulumi.Input[int] max_instance_number: The maximum number of instances. The default value is 0.
-        :param pulumi.Input[int] min_instance_number: The minimum number of instances. The default value is 0.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupNetworkArgs']]]] networks: An array of one or more network IDs. The system supports up to five networks. The
-               networks object structure is documented below.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] notifications: The notification mode. The system only supports `EMAIL`
-               mode which refers to notification by email.
-        :param pulumi.Input[str] region: The region in which to create the AS group. If omitted, the `region` argument
-               of the provider is used. Changing this creates a new AS group.
-        :param pulumi.Input[str] scaling_configuration_id: The configuration ID which defines configurations of instances in the
-               AS group.
-        :param pulumi.Input[str] scaling_group_name: The name of the scaling group. The name can contain letters, digits,
-               underscores(_), and hyphens(-),and cannot exceed 64 characters.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupSecurityGroupArgs']]]] security_groups: An array of one or more security group IDs to associate with the group. The
-               security_groups object structure is documented below.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the scaling group.
-        :param pulumi.Input[str] vpc_id: The VPC ID. Changing this creates a new group.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupLbaasListenerArgs']]]] lbaas_listeners: Specifies an array of one or more enhanced load balancer. The system supports
+               the binding of up to six load balancers. The object structure is documented below.
+        :param pulumi.Input[int] max_instance_number: Specifies the maximum number of instances. The default value is 0.
+        :param pulumi.Input[int] min_instance_number: Specifies the minimum number of instances. The default value is 0.
+        :param pulumi.Input[str] multi_az_scaling_policy: Specifies the priority policy used to select target AZs when adjusting
+               the number of instances in an AS group. The value can be `EQUILIBRIUM_DISTRIBUTE` and `PICK_FIRST`.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupNetworkArgs']]]] networks: Specifies an array of one or more network IDs. The system supports up to five networks.
+               The object structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] notifications: schema: Deprecated; The notification mode has been canceled
+        :param pulumi.Input[str] region: Specifies the region in which to create the AS group.
+               If omitted, the provider-level region will be used. Changing this creates a new group.
+        :param pulumi.Input[str] scaling_configuration_id: Specifies the configuration ID which defines configurations
+               of instances in the AS group.
+        :param pulumi.Input[str] scaling_group_name: Specifies the name of the scaling group. The name can contain
+               letters, digits, underscores(_), and hyphens(-),and cannot exceed 64 characters.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupSecurityGroupArgs']]]] security_groups: Specifies an array of one or more security group IDs to associate with the group.
+               The object structure is documented below.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the AS group.
+        :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this creates a new group.
         """
         ...
     @overload
@@ -1083,7 +1274,7 @@ class Group(pulumi.CustomResource):
                  args: GroupArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a Autoscaling Group resource within HuaweiCloud.
+        Manages an AS group resource within HuaweiCloud.
 
         ## Example Usage
         ### Basic Autoscaling Group
@@ -1092,21 +1283,22 @@ class Group(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        configuration_id = config.require_object("configurationId")
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
         my_as_group = huaweicloud.as_.Group("myAsGroup",
-            delete_instances="yes",
-            delete_publicip=True,
-            desire_instance_number=2,
-            max_instance_number=10,
-            min_instance_number=0,
-            networks=[huaweicloud.as_.GroupNetworkArgs(
-                id="ad091b52-742f-469e-8f3c-fd81cadf0743",
-            )],
-            scaling_configuration_id="37e310f5-db9d-446e-9135-c625f9c2bbfc",
             scaling_group_name="my_as_group",
-            security_groups=[huaweicloud.as_.GroupSecurityGroupArgs(
-                id="45e4c6de-6bf0-4843-8953-2babde3d4810",
-            )],
-            vpc_id="1d8f7e7c-fe04-4cf5-85ac-08b478c290e9")
+            scaling_configuration_id=configuration_id,
+            desire_instance_number=2,
+            min_instance_number=0,
+            max_instance_number=10,
+            vpc_id=vpc_id,
+            delete_publicip=True,
+            delete_instances="yes",
+            networks=[huaweicloud.as_.GroupNetworkArgs(
+                id=subnet_id,
+            )])
         ```
         ### Autoscaling Group with tags
 
@@ -1114,25 +1306,26 @@ class Group(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        configuration_id = config.require_object("configurationId")
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
         my_as_group_tags = huaweicloud.as_.Group("myAsGroupTags",
-            delete_instances="yes",
-            delete_publicip=True,
-            desire_instance_number=2,
-            max_instance_number=10,
-            min_instance_number=0,
-            networks=[huaweicloud.as_.GroupNetworkArgs(
-                id="ad091b52-742f-469e-8f3c-fd81cadf0743",
-            )],
-            scaling_configuration_id="37e310f5-db9d-446e-9135-c625f9c2bbfc",
             scaling_group_name="my_as_group_tags",
-            security_groups=[huaweicloud.as_.GroupSecurityGroupArgs(
-                id="45e4c6de-6bf0-4843-8953-2babde3d4810",
+            scaling_configuration_id=configuration_id,
+            desire_instance_number=2,
+            min_instance_number=0,
+            max_instance_number=10,
+            vpc_id=vpc_id,
+            delete_publicip=True,
+            delete_instances="yes",
+            networks=[huaweicloud.as_.GroupNetworkArgs(
+                id=subnet_id,
             )],
             tags={
                 "foo": "bar",
                 "key": "value",
-            },
-            vpc_id="1d8f7e7c-fe04-4cf5-85ac-08b478c290e9")
+            })
         ```
         ### Autoscaling Group Only Remove Members When Scaling Down
 
@@ -1140,29 +1333,35 @@ class Group(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        configuration_id = config.require_object("configurationId")
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
         my_as_group_only_remove_members = huaweicloud.as_.Group("myAsGroupOnlyRemoveMembers",
-            delete_instances="no",
-            delete_publicip=True,
-            desire_instance_number=2,
-            max_instance_number=10,
-            min_instance_number=0,
-            networks=[huaweicloud.as_.GroupNetworkArgs(
-                id="ad091b52-742f-469e-8f3c-fd81cadf0743",
-            )],
-            scaling_configuration_id="37e310f5-db9d-446e-9135-c625f9c2bbfc",
             scaling_group_name="my_as_group_only_remove_members",
-            security_groups=[huaweicloud.as_.GroupSecurityGroupArgs(
-                id="45e4c6de-6bf0-4843-8953-2babde3d4810",
-            )],
-            vpc_id="1d8f7e7c-fe04-4cf5-85ac-08b478c290e9")
+            scaling_configuration_id=configuration_id,
+            desire_instance_number=2,
+            min_instance_number=0,
+            max_instance_number=10,
+            vpc_id=vpc_id,
+            delete_publicip=True,
+            delete_instances="no",
+            networks=[huaweicloud.as_.GroupNetworkArgs(
+                id=subnet_id,
+            )])
         ```
-        ### Autoscaling Group With Enhanced Load Balancer Listener
+        ### Autoscaling Group With Elastic Load Balancer Listener
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        loadbalancer1 = huaweicloud.elb.Loadbalancer("loadbalancer1", vip_subnet_id="d9415786-5f1a-428b-b35f-2f1523e146d2")
+        config = pulumi.Config()
+        configuration_id = config.require_object("configurationId")
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        ipv4_subnet_id = config.require_object("ipv4SubnetId")
+        loadbalancer1 = huaweicloud.elb.Loadbalancer("loadbalancer1", vip_subnet_id=ipv4_subnet_id)
         listener1 = huaweicloud.elb.Listener("listener1",
             protocol="HTTP",
             protocol_port=8080,
@@ -1173,16 +1372,13 @@ class Group(pulumi.CustomResource):
             listener_id=listener1.id)
         my_as_group_with_enhanced_lb = huaweicloud.as_.Group("myAsGroupWithEnhancedLb",
             scaling_group_name="my_as_group_with_enhanced_lb",
-            scaling_configuration_id="37e310f5-db9d-446e-9135-c625f9c2bbfc",
+            scaling_configuration_id=configuration_id,
             desire_instance_number=2,
             min_instance_number=0,
             max_instance_number=10,
-            vpc_id="1d8f7e7c-fe04-4cf5-85ac-08b478c290e9",
+            vpc_id=vpc_id,
             networks=[huaweicloud.as_.GroupNetworkArgs(
-                id="ad091b52-742f-469e-8f3c-fd81cadf0743",
-            )],
-            security_groups=[huaweicloud.as_.GroupSecurityGroupArgs(
-                id="45e4c6de-6bf0-4843-8953-2babde3d4810",
+                id=subnet_id,
             )],
             lbaas_listeners=[huaweicloud.as_.GroupLbaasListenerArgs(
                 pool_id=pool1.id,
@@ -1213,14 +1409,18 @@ class Group(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 agency_name: Optional[pulumi.Input[str]] = None,
+                 availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  available_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  cool_down_time: Optional[pulumi.Input[int]] = None,
                  delete_instances: Optional[pulumi.Input[str]] = None,
                  delete_publicip: Optional[pulumi.Input[bool]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  desire_instance_number: Optional[pulumi.Input[int]] = None,
                  enable: Optional[pulumi.Input[bool]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  force_delete: Optional[pulumi.Input[bool]] = None,
+                 health_periodic_audit_grace_period: Optional[pulumi.Input[int]] = None,
                  health_periodic_audit_method: Optional[pulumi.Input[str]] = None,
                  health_periodic_audit_time: Optional[pulumi.Input[int]] = None,
                  instance_terminate_policy: Optional[pulumi.Input[str]] = None,
@@ -1228,6 +1428,7 @@ class Group(pulumi.CustomResource):
                  lbaas_listeners: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupLbaasListenerArgs']]]]] = None,
                  max_instance_number: Optional[pulumi.Input[int]] = None,
                  min_instance_number: Optional[pulumi.Input[int]] = None,
+                 multi_az_scaling_policy: Optional[pulumi.Input[str]] = None,
                  networks: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupNetworkArgs']]]]] = None,
                  notifications: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -1245,14 +1446,18 @@ class Group(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = GroupArgs.__new__(GroupArgs)
 
+            __props__.__dict__["agency_name"] = agency_name
+            __props__.__dict__["availability_zones"] = availability_zones
             __props__.__dict__["available_zones"] = available_zones
             __props__.__dict__["cool_down_time"] = cool_down_time
             __props__.__dict__["delete_instances"] = delete_instances
             __props__.__dict__["delete_publicip"] = delete_publicip
+            __props__.__dict__["description"] = description
             __props__.__dict__["desire_instance_number"] = desire_instance_number
             __props__.__dict__["enable"] = enable
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["force_delete"] = force_delete
+            __props__.__dict__["health_periodic_audit_grace_period"] = health_periodic_audit_grace_period
             __props__.__dict__["health_periodic_audit_method"] = health_periodic_audit_method
             __props__.__dict__["health_periodic_audit_time"] = health_periodic_audit_time
             __props__.__dict__["instance_terminate_policy"] = instance_terminate_policy
@@ -1263,6 +1468,7 @@ class Group(pulumi.CustomResource):
             __props__.__dict__["lbaas_listeners"] = lbaas_listeners
             __props__.__dict__["max_instance_number"] = max_instance_number
             __props__.__dict__["min_instance_number"] = min_instance_number
+            __props__.__dict__["multi_az_scaling_policy"] = multi_az_scaling_policy
             if networks is None and not opts.urn:
                 raise TypeError("Missing required property 'networks'")
             __props__.__dict__["networks"] = networks
@@ -1272,8 +1478,6 @@ class Group(pulumi.CustomResource):
             if scaling_group_name is None and not opts.urn:
                 raise TypeError("Missing required property 'scaling_group_name'")
             __props__.__dict__["scaling_group_name"] = scaling_group_name
-            if security_groups is None and not opts.urn:
-                raise TypeError("Missing required property 'security_groups'")
             __props__.__dict__["security_groups"] = security_groups
             __props__.__dict__["tags"] = tags
             if vpc_id is None and not opts.urn:
@@ -1292,15 +1496,19 @@ class Group(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            agency_name: Optional[pulumi.Input[str]] = None,
+            availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             available_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             cool_down_time: Optional[pulumi.Input[int]] = None,
             current_instance_number: Optional[pulumi.Input[int]] = None,
             delete_instances: Optional[pulumi.Input[str]] = None,
             delete_publicip: Optional[pulumi.Input[bool]] = None,
+            description: Optional[pulumi.Input[str]] = None,
             desire_instance_number: Optional[pulumi.Input[int]] = None,
             enable: Optional[pulumi.Input[bool]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             force_delete: Optional[pulumi.Input[bool]] = None,
+            health_periodic_audit_grace_period: Optional[pulumi.Input[int]] = None,
             health_periodic_audit_method: Optional[pulumi.Input[str]] = None,
             health_periodic_audit_time: Optional[pulumi.Input[int]] = None,
             instance_terminate_policy: Optional[pulumi.Input[str]] = None,
@@ -1309,6 +1517,7 @@ class Group(pulumi.CustomResource):
             lbaas_listeners: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupLbaasListenerArgs']]]]] = None,
             max_instance_number: Optional[pulumi.Input[int]] = None,
             min_instance_number: Optional[pulumi.Input[int]] = None,
+            multi_az_scaling_policy: Optional[pulumi.Input[str]] = None,
             networks: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupNetworkArgs']]]]] = None,
             notifications: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             region: Optional[pulumi.Input[str]] = None,
@@ -1325,64 +1534,76 @@ class Group(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] available_zones: The availability zones in which to create the instances in the autoscaling group.
-        :param pulumi.Input[int] cool_down_time: The cooling duration (in seconds). The value ranges from 0 to 86400, and is 300 by
-               default.
-        :param pulumi.Input[int] current_instance_number: Indicates the number of current instances in the AS group.
-        :param pulumi.Input[str] delete_instances: Whether to delete the instances in the AS group when deleting the AS group.
-               The options are `yes` and `no`.
-        :param pulumi.Input[bool] delete_publicip: Whether to delete the elastic IP address bound to the instances of AS group when
-               deleting the instances. The options are `true` and `false`.
-        :param pulumi.Input[int] desire_instance_number: The expected number of instances. The default value is the minimum number
-               of instances. The value ranges from the minimum number of instances to the maximum number of instances.
-        :param pulumi.Input[bool] enable: Whether to enable the AS Group. The options are `true` and `false`. The default value
-               is `true`.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the AS group.
-        :param pulumi.Input[bool] force_delete: Whether to forcibly delete the AS group, remove the ECS instances and release them.
-               The default value is `false`.
-        :param pulumi.Input[str] health_periodic_audit_method: The health check method for instances in the AS group. The health
-               check methods include `ELB_AUDIT` and `NOVA_AUDIT`. If load balancing is configured, the default value of this
-               parameter is `ELB_AUDIT`. Otherwise, the default value is `NOVA_AUDIT`.
-        :param pulumi.Input[int] health_periodic_audit_time: The health check period for instances. The period has four options: 5
-               minutes (default), 15 minutes, 60 minutes, and 180 minutes.
-        :param pulumi.Input[str] instance_terminate_policy: The instance removal policy. The policy has four
-               options: `OLD_CONFIG_OLD_INSTANCE` (default), `OLD_CONFIG_NEW_INSTANCE`,
-               `OLD_INSTANCE`, and `NEW_INSTANCE`.
+        :param pulumi.Input[str] agency_name: Specifies the IAM agency name. If you change the agency,
+               the new agency will be available for ECSs scaled out after the change.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the availability zones in which to create the instances in the
+               autoscaling group.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] available_zones: schema: Deprecated; use availability_zones instead
+        :param pulumi.Input[int] cool_down_time: Specifies the cooling duration (in seconds). The value ranges from 0 to 86400,
+               and is 300 by default.
+        :param pulumi.Input[int] current_instance_number: The number of current instances in the AS group.
+        :param pulumi.Input[str] delete_instances: Specifies whether to delete the instances in the AS group when deleting
+               the AS group. The options are `yes` and `no`.
+        :param pulumi.Input[bool] delete_publicip: Specifies whether to delete the elastic IP address bound to the instances of
+               AS group when deleting the instances. The options are `true` and `false`.
+        :param pulumi.Input[str] description: Specifies the description of the AS group.
+               The value can contain 0 to 256 characters.
+        :param pulumi.Input[int] desire_instance_number: Specifies the expected number of instances. The default value is the
+               minimum number of instances. The value ranges from the minimum number of instances to the maximum number of instances.
+        :param pulumi.Input[bool] enable: Specifies whether to enable the AS Group. The options are `true` and `false`.
+               The default value is `true`.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the AS group.
+        :param pulumi.Input[bool] force_delete: Specifies whether to forcibly delete the AS group, remove the ECS instances and
+               release them. The default value is `false`.
+        :param pulumi.Input[int] health_periodic_audit_grace_period: Specifies the health check grace period for instances.
+               The unit is second and the value ranges from 0 to 86400. The default value is 600.
+        :param pulumi.Input[str] health_periodic_audit_method: Specifies the health check method for instances in the AS group.
+               The health check methods include `ELB_AUDIT` and `NOVA_AUDIT`. If load balancing is configured, the default value of
+               this parameter is `ELB_AUDIT`. Otherwise, the default value is `NOVA_AUDIT`.
+        :param pulumi.Input[int] health_periodic_audit_time: Specifies the health check period for instances. The unit is minute
+               and value includes 0, 1, 5 (default), 15, 60, and 180. If the value is set to 0, health check is performed every 10 seconds.
+        :param pulumi.Input[str] instance_terminate_policy: Specifies the instance removal policy. The policy has four
+               options: `OLD_CONFIG_OLD_INSTANCE` (default), `OLD_CONFIG_NEW_INSTANCE`, `OLD_INSTANCE`, and `NEW_INSTANCE`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] instances: The instances IDs of the AS group.
         :param pulumi.Input[str] lb_listener_id: The system supports the binding of up to six ELB listeners, the IDs of which are separated using a comma.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupLbaasListenerArgs']]]] lbaas_listeners: An array of one or more enhanced load balancer. The system supports the binding
-               of up to six load balancers. The object structure is documented below.
-        :param pulumi.Input[int] max_instance_number: The maximum number of instances. The default value is 0.
-        :param pulumi.Input[int] min_instance_number: The minimum number of instances. The default value is 0.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupNetworkArgs']]]] networks: An array of one or more network IDs. The system supports up to five networks. The
-               networks object structure is documented below.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] notifications: The notification mode. The system only supports `EMAIL`
-               mode which refers to notification by email.
-        :param pulumi.Input[str] region: The region in which to create the AS group. If omitted, the `region` argument
-               of the provider is used. Changing this creates a new AS group.
-        :param pulumi.Input[str] scaling_configuration_id: The configuration ID which defines configurations of instances in the
-               AS group.
-        :param pulumi.Input[str] scaling_group_name: The name of the scaling group. The name can contain letters, digits,
-               underscores(_), and hyphens(-),and cannot exceed 64 characters.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupSecurityGroupArgs']]]] security_groups: An array of one or more security group IDs to associate with the group. The
-               security_groups object structure is documented below.
-        :param pulumi.Input[str] status: Indicates the status of the AS group.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the scaling group.
-        :param pulumi.Input[str] vpc_id: The VPC ID. Changing this creates a new group.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupLbaasListenerArgs']]]] lbaas_listeners: Specifies an array of one or more enhanced load balancer. The system supports
+               the binding of up to six load balancers. The object structure is documented below.
+        :param pulumi.Input[int] max_instance_number: Specifies the maximum number of instances. The default value is 0.
+        :param pulumi.Input[int] min_instance_number: Specifies the minimum number of instances. The default value is 0.
+        :param pulumi.Input[str] multi_az_scaling_policy: Specifies the priority policy used to select target AZs when adjusting
+               the number of instances in an AS group. The value can be `EQUILIBRIUM_DISTRIBUTE` and `PICK_FIRST`.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupNetworkArgs']]]] networks: Specifies an array of one or more network IDs. The system supports up to five networks.
+               The object structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] notifications: schema: Deprecated; The notification mode has been canceled
+        :param pulumi.Input[str] region: Specifies the region in which to create the AS group.
+               If omitted, the provider-level region will be used. Changing this creates a new group.
+        :param pulumi.Input[str] scaling_configuration_id: Specifies the configuration ID which defines configurations
+               of instances in the AS group.
+        :param pulumi.Input[str] scaling_group_name: Specifies the name of the scaling group. The name can contain
+               letters, digits, underscores(_), and hyphens(-),and cannot exceed 64 characters.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['GroupSecurityGroupArgs']]]] security_groups: Specifies an array of one or more security group IDs to associate with the group.
+               The object structure is documented below.
+        :param pulumi.Input[str] status: The status of the AS group.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the AS group.
+        :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this creates a new group.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _GroupState.__new__(_GroupState)
 
+        __props__.__dict__["agency_name"] = agency_name
+        __props__.__dict__["availability_zones"] = availability_zones
         __props__.__dict__["available_zones"] = available_zones
         __props__.__dict__["cool_down_time"] = cool_down_time
         __props__.__dict__["current_instance_number"] = current_instance_number
         __props__.__dict__["delete_instances"] = delete_instances
         __props__.__dict__["delete_publicip"] = delete_publicip
+        __props__.__dict__["description"] = description
         __props__.__dict__["desire_instance_number"] = desire_instance_number
         __props__.__dict__["enable"] = enable
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["force_delete"] = force_delete
+        __props__.__dict__["health_periodic_audit_grace_period"] = health_periodic_audit_grace_period
         __props__.__dict__["health_periodic_audit_method"] = health_periodic_audit_method
         __props__.__dict__["health_periodic_audit_time"] = health_periodic_audit_time
         __props__.__dict__["instance_terminate_policy"] = instance_terminate_policy
@@ -1391,6 +1612,7 @@ class Group(pulumi.CustomResource):
         __props__.__dict__["lbaas_listeners"] = lbaas_listeners
         __props__.__dict__["max_instance_number"] = max_instance_number
         __props__.__dict__["min_instance_number"] = min_instance_number
+        __props__.__dict__["multi_az_scaling_policy"] = multi_az_scaling_policy
         __props__.__dict__["networks"] = networks
         __props__.__dict__["notifications"] = notifications
         __props__.__dict__["region"] = region
@@ -1403,10 +1625,28 @@ class Group(pulumi.CustomResource):
         return Group(resource_name, opts=opts, __props__=__props__)
 
     @property
+    @pulumi.getter(name="agencyName")
+    def agency_name(self) -> pulumi.Output[str]:
+        """
+        Specifies the IAM agency name. If you change the agency,
+        the new agency will be available for ECSs scaled out after the change.
+        """
+        return pulumi.get(self, "agency_name")
+
+    @property
+    @pulumi.getter(name="availabilityZones")
+    def availability_zones(self) -> pulumi.Output[Sequence[str]]:
+        """
+        Specifies the availability zones in which to create the instances in the
+        autoscaling group.
+        """
+        return pulumi.get(self, "availability_zones")
+
+    @property
     @pulumi.getter(name="availableZones")
     def available_zones(self) -> pulumi.Output[Optional[Sequence[str]]]:
         """
-        The availability zones in which to create the instances in the autoscaling group.
+        schema: Deprecated; use availability_zones instead
         """
         return pulumi.get(self, "available_zones")
 
@@ -1414,8 +1654,8 @@ class Group(pulumi.CustomResource):
     @pulumi.getter(name="coolDownTime")
     def cool_down_time(self) -> pulumi.Output[Optional[int]]:
         """
-        The cooling duration (in seconds). The value ranges from 0 to 86400, and is 300 by
-        default.
+        Specifies the cooling duration (in seconds). The value ranges from 0 to 86400,
+        and is 300 by default.
         """
         return pulumi.get(self, "cool_down_time")
 
@@ -1423,7 +1663,7 @@ class Group(pulumi.CustomResource):
     @pulumi.getter(name="currentInstanceNumber")
     def current_instance_number(self) -> pulumi.Output[int]:
         """
-        Indicates the number of current instances in the AS group.
+        The number of current instances in the AS group.
         """
         return pulumi.get(self, "current_instance_number")
 
@@ -1431,8 +1671,8 @@ class Group(pulumi.CustomResource):
     @pulumi.getter(name="deleteInstances")
     def delete_instances(self) -> pulumi.Output[Optional[str]]:
         """
-        Whether to delete the instances in the AS group when deleting the AS group.
-        The options are `yes` and `no`.
+        Specifies whether to delete the instances in the AS group when deleting
+        the AS group. The options are `yes` and `no`.
         """
         return pulumi.get(self, "delete_instances")
 
@@ -1440,17 +1680,26 @@ class Group(pulumi.CustomResource):
     @pulumi.getter(name="deletePublicip")
     def delete_publicip(self) -> pulumi.Output[Optional[bool]]:
         """
-        Whether to delete the elastic IP address bound to the instances of AS group when
-        deleting the instances. The options are `true` and `false`.
+        Specifies whether to delete the elastic IP address bound to the instances of
+        AS group when deleting the instances. The options are `true` and `false`.
         """
         return pulumi.get(self, "delete_publicip")
+
+    @property
+    @pulumi.getter
+    def description(self) -> pulumi.Output[str]:
+        """
+        Specifies the description of the AS group.
+        The value can contain 0 to 256 characters.
+        """
+        return pulumi.get(self, "description")
 
     @property
     @pulumi.getter(name="desireInstanceNumber")
     def desire_instance_number(self) -> pulumi.Output[int]:
         """
-        The expected number of instances. The default value is the minimum number
-        of instances. The value ranges from the minimum number of instances to the maximum number of instances.
+        Specifies the expected number of instances. The default value is the
+        minimum number of instances. The value ranges from the minimum number of instances to the maximum number of instances.
         """
         return pulumi.get(self, "desire_instance_number")
 
@@ -1458,8 +1707,8 @@ class Group(pulumi.CustomResource):
     @pulumi.getter
     def enable(self) -> pulumi.Output[Optional[bool]]:
         """
-        Whether to enable the AS Group. The options are `true` and `false`. The default value
-        is `true`.
+        Specifies whether to enable the AS Group. The options are `true` and `false`.
+        The default value is `true`.
         """
         return pulumi.get(self, "enable")
 
@@ -1467,7 +1716,7 @@ class Group(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        The enterprise project id of the AS group.
+        Specifies the enterprise project id of the AS group.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -1475,18 +1724,27 @@ class Group(pulumi.CustomResource):
     @pulumi.getter(name="forceDelete")
     def force_delete(self) -> pulumi.Output[Optional[bool]]:
         """
-        Whether to forcibly delete the AS group, remove the ECS instances and release them.
-        The default value is `false`.
+        Specifies whether to forcibly delete the AS group, remove the ECS instances and
+        release them. The default value is `false`.
         """
         return pulumi.get(self, "force_delete")
+
+    @property
+    @pulumi.getter(name="healthPeriodicAuditGracePeriod")
+    def health_periodic_audit_grace_period(self) -> pulumi.Output[int]:
+        """
+        Specifies the health check grace period for instances.
+        The unit is second and the value ranges from 0 to 86400. The default value is 600.
+        """
+        return pulumi.get(self, "health_periodic_audit_grace_period")
 
     @property
     @pulumi.getter(name="healthPeriodicAuditMethod")
     def health_periodic_audit_method(self) -> pulumi.Output[Optional[str]]:
         """
-        The health check method for instances in the AS group. The health
-        check methods include `ELB_AUDIT` and `NOVA_AUDIT`. If load balancing is configured, the default value of this
-        parameter is `ELB_AUDIT`. Otherwise, the default value is `NOVA_AUDIT`.
+        Specifies the health check method for instances in the AS group.
+        The health check methods include `ELB_AUDIT` and `NOVA_AUDIT`. If load balancing is configured, the default value of
+        this parameter is `ELB_AUDIT`. Otherwise, the default value is `NOVA_AUDIT`.
         """
         return pulumi.get(self, "health_periodic_audit_method")
 
@@ -1494,8 +1752,8 @@ class Group(pulumi.CustomResource):
     @pulumi.getter(name="healthPeriodicAuditTime")
     def health_periodic_audit_time(self) -> pulumi.Output[Optional[int]]:
         """
-        The health check period for instances. The period has four options: 5
-        minutes (default), 15 minutes, 60 minutes, and 180 minutes.
+        Specifies the health check period for instances. The unit is minute
+        and value includes 0, 1, 5 (default), 15, 60, and 180. If the value is set to 0, health check is performed every 10 seconds.
         """
         return pulumi.get(self, "health_periodic_audit_time")
 
@@ -1503,9 +1761,8 @@ class Group(pulumi.CustomResource):
     @pulumi.getter(name="instanceTerminatePolicy")
     def instance_terminate_policy(self) -> pulumi.Output[Optional[str]]:
         """
-        The instance removal policy. The policy has four
-        options: `OLD_CONFIG_OLD_INSTANCE` (default), `OLD_CONFIG_NEW_INSTANCE`,
-        `OLD_INSTANCE`, and `NEW_INSTANCE`.
+        Specifies the instance removal policy. The policy has four
+        options: `OLD_CONFIG_OLD_INSTANCE` (default), `OLD_CONFIG_NEW_INSTANCE`, `OLD_INSTANCE`, and `NEW_INSTANCE`.
         """
         return pulumi.get(self, "instance_terminate_policy")
 
@@ -1529,8 +1786,8 @@ class Group(pulumi.CustomResource):
     @pulumi.getter(name="lbaasListeners")
     def lbaas_listeners(self) -> pulumi.Output[Sequence['outputs.GroupLbaasListener']]:
         """
-        An array of one or more enhanced load balancer. The system supports the binding
-        of up to six load balancers. The object structure is documented below.
+        Specifies an array of one or more enhanced load balancer. The system supports
+        the binding of up to six load balancers. The object structure is documented below.
         """
         return pulumi.get(self, "lbaas_listeners")
 
@@ -1538,7 +1795,7 @@ class Group(pulumi.CustomResource):
     @pulumi.getter(name="maxInstanceNumber")
     def max_instance_number(self) -> pulumi.Output[Optional[int]]:
         """
-        The maximum number of instances. The default value is 0.
+        Specifies the maximum number of instances. The default value is 0.
         """
         return pulumi.get(self, "max_instance_number")
 
@@ -1546,16 +1803,25 @@ class Group(pulumi.CustomResource):
     @pulumi.getter(name="minInstanceNumber")
     def min_instance_number(self) -> pulumi.Output[Optional[int]]:
         """
-        The minimum number of instances. The default value is 0.
+        Specifies the minimum number of instances. The default value is 0.
         """
         return pulumi.get(self, "min_instance_number")
+
+    @property
+    @pulumi.getter(name="multiAzScalingPolicy")
+    def multi_az_scaling_policy(self) -> pulumi.Output[str]:
+        """
+        Specifies the priority policy used to select target AZs when adjusting
+        the number of instances in an AS group. The value can be `EQUILIBRIUM_DISTRIBUTE` and `PICK_FIRST`.
+        """
+        return pulumi.get(self, "multi_az_scaling_policy")
 
     @property
     @pulumi.getter
     def networks(self) -> pulumi.Output[Sequence['outputs.GroupNetwork']]:
         """
-        An array of one or more network IDs. The system supports up to five networks. The
-        networks object structure is documented below.
+        Specifies an array of one or more network IDs. The system supports up to five networks.
+        The object structure is documented below.
         """
         return pulumi.get(self, "networks")
 
@@ -1563,8 +1829,7 @@ class Group(pulumi.CustomResource):
     @pulumi.getter
     def notifications(self) -> pulumi.Output[Optional[Sequence[str]]]:
         """
-        The notification mode. The system only supports `EMAIL`
-        mode which refers to notification by email.
+        schema: Deprecated; The notification mode has been canceled
         """
         return pulumi.get(self, "notifications")
 
@@ -1572,8 +1837,8 @@ class Group(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        The region in which to create the AS group. If omitted, the `region` argument
-        of the provider is used. Changing this creates a new AS group.
+        Specifies the region in which to create the AS group.
+        If omitted, the provider-level region will be used. Changing this creates a new group.
         """
         return pulumi.get(self, "region")
 
@@ -1581,8 +1846,8 @@ class Group(pulumi.CustomResource):
     @pulumi.getter(name="scalingConfigurationId")
     def scaling_configuration_id(self) -> pulumi.Output[str]:
         """
-        The configuration ID which defines configurations of instances in the
-        AS group.
+        Specifies the configuration ID which defines configurations
+        of instances in the AS group.
         """
         return pulumi.get(self, "scaling_configuration_id")
 
@@ -1590,8 +1855,8 @@ class Group(pulumi.CustomResource):
     @pulumi.getter(name="scalingGroupName")
     def scaling_group_name(self) -> pulumi.Output[str]:
         """
-        The name of the scaling group. The name can contain letters, digits,
-        underscores(_), and hyphens(-),and cannot exceed 64 characters.
+        Specifies the name of the scaling group. The name can contain
+        letters, digits, underscores(_), and hyphens(-),and cannot exceed 64 characters.
         """
         return pulumi.get(self, "scaling_group_name")
 
@@ -1599,8 +1864,8 @@ class Group(pulumi.CustomResource):
     @pulumi.getter(name="securityGroups")
     def security_groups(self) -> pulumi.Output[Sequence['outputs.GroupSecurityGroup']]:
         """
-        An array of one or more security group IDs to associate with the group. The
-        security_groups object structure is documented below.
+        Specifies an array of one or more security group IDs to associate with the group.
+        The object structure is documented below.
         """
         return pulumi.get(self, "security_groups")
 
@@ -1608,7 +1873,7 @@ class Group(pulumi.CustomResource):
     @pulumi.getter
     def status(self) -> pulumi.Output[str]:
         """
-        Indicates the status of the AS group.
+        The status of the AS group.
         """
         return pulumi.get(self, "status")
 
@@ -1616,7 +1881,7 @@ class Group(pulumi.CustomResource):
     @pulumi.getter
     def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
         """
-        The key/value pairs to associate with the scaling group.
+        Specifies the key/value pairs to associate with the AS group.
         """
         return pulumi.get(self, "tags")
 
@@ -1624,7 +1889,7 @@ class Group(pulumi.CustomResource):
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Output[str]:
         """
-        The VPC ID. Changing this creates a new group.
+        Specifies the VPC ID. Changing this creates a new group.
         """
         return pulumi.get(self, "vpc_id")
 

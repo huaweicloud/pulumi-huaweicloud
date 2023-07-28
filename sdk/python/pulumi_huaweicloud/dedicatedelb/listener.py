@@ -18,6 +18,7 @@ class ListenerArgs:
                  protocol: pulumi.Input[str],
                  protocol_port: pulumi.Input[int],
                  access_policy: Optional[pulumi.Input[str]] = None,
+                 advanced_forwarding_enabled: Optional[pulumi.Input[bool]] = None,
                  ca_certificate: Optional[pulumi.Input[str]] = None,
                  default_pool_id: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
@@ -43,6 +44,8 @@ class ListenerArgs:
                new listener.
         :param pulumi.Input[str] access_policy: Specifies the access policy for the listener. Valid options are *white* and
                *black*.
+        :param pulumi.Input[bool] advanced_forwarding_enabled: Specifies whether to enable advanced forwarding.
+               If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
         :param pulumi.Input[str] ca_certificate: Specifies the ID of the CA certificate used by the listener. This parameter is
                valid when protocol is set to *HTTPS*.
         :param pulumi.Input[str] default_pool_id: The ID of the default pool with which the listener is associated. Changing this
@@ -76,6 +79,8 @@ class ListenerArgs:
         pulumi.set(__self__, "protocol_port", protocol_port)
         if access_policy is not None:
             pulumi.set(__self__, "access_policy", access_policy)
+        if advanced_forwarding_enabled is not None:
+            pulumi.set(__self__, "advanced_forwarding_enabled", advanced_forwarding_enabled)
         if ca_certificate is not None:
             pulumi.set(__self__, "ca_certificate", ca_certificate)
         if default_pool_id is not None:
@@ -158,6 +163,19 @@ class ListenerArgs:
     @access_policy.setter
     def access_policy(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "access_policy", value)
+
+    @property
+    @pulumi.getter(name="advancedForwardingEnabled")
+    def advanced_forwarding_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable advanced forwarding.
+        If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
+        """
+        return pulumi.get(self, "advanced_forwarding_enabled")
+
+    @advanced_forwarding_enabled.setter
+    def advanced_forwarding_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "advanced_forwarding_enabled", value)
 
     @property
     @pulumi.getter(name="caCertificate")
@@ -356,6 +374,7 @@ class ListenerArgs:
 class _ListenerState:
     def __init__(__self__, *,
                  access_policy: Optional[pulumi.Input[str]] = None,
+                 advanced_forwarding_enabled: Optional[pulumi.Input[bool]] = None,
                  ca_certificate: Optional[pulumi.Input[str]] = None,
                  default_pool_id: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
@@ -378,6 +397,8 @@ class _ListenerState:
         Input properties used for looking up and filtering Listener resources.
         :param pulumi.Input[str] access_policy: Specifies the access policy for the listener. Valid options are *white* and
                *black*.
+        :param pulumi.Input[bool] advanced_forwarding_enabled: Specifies whether to enable advanced forwarding.
+               If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
         :param pulumi.Input[str] ca_certificate: Specifies the ID of the CA certificate used by the listener. This parameter is
                valid when protocol is set to *HTTPS*.
         :param pulumi.Input[str] default_pool_id: The ID of the default pool with which the listener is associated. Changing this
@@ -414,6 +435,8 @@ class _ListenerState:
         """
         if access_policy is not None:
             pulumi.set(__self__, "access_policy", access_policy)
+        if advanced_forwarding_enabled is not None:
+            pulumi.set(__self__, "advanced_forwarding_enabled", advanced_forwarding_enabled)
         if ca_certificate is not None:
             pulumi.set(__self__, "ca_certificate", ca_certificate)
         if default_pool_id is not None:
@@ -463,6 +486,19 @@ class _ListenerState:
     @access_policy.setter
     def access_policy(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "access_policy", value)
+
+    @property
+    @pulumi.getter(name="advancedForwardingEnabled")
+    def advanced_forwarding_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable advanced forwarding.
+        If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
+        """
+        return pulumi.get(self, "advanced_forwarding_enabled")
+
+    @advanced_forwarding_enabled.setter
+    def advanced_forwarding_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "advanced_forwarding_enabled", value)
 
     @property
     @pulumi.getter(name="caCertificate")
@@ -702,6 +738,7 @@ class Listener(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  access_policy: Optional[pulumi.Input[str]] = None,
+                 advanced_forwarding_enabled: Optional[pulumi.Input[bool]] = None,
                  ca_certificate: Optional[pulumi.Input[str]] = None,
                  default_pool_id: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
@@ -736,6 +773,8 @@ class Listener(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] access_policy: Specifies the access policy for the listener. Valid options are *white* and
                *black*.
+        :param pulumi.Input[bool] advanced_forwarding_enabled: Specifies whether to enable advanced forwarding.
+               If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
         :param pulumi.Input[str] ca_certificate: Specifies the ID of the CA certificate used by the listener. This parameter is
                valid when protocol is set to *HTTPS*.
         :param pulumi.Input[str] default_pool_id: The ID of the default pool with which the listener is associated. Changing this
@@ -803,6 +842,7 @@ class Listener(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  access_policy: Optional[pulumi.Input[str]] = None,
+                 advanced_forwarding_enabled: Optional[pulumi.Input[bool]] = None,
                  ca_certificate: Optional[pulumi.Input[str]] = None,
                  default_pool_id: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
@@ -831,6 +871,7 @@ class Listener(pulumi.CustomResource):
             __props__ = ListenerArgs.__new__(ListenerArgs)
 
             __props__.__dict__["access_policy"] = access_policy
+            __props__.__dict__["advanced_forwarding_enabled"] = advanced_forwarding_enabled
             __props__.__dict__["ca_certificate"] = ca_certificate
             __props__.__dict__["default_pool_id"] = default_pool_id
             __props__.__dict__["description"] = description
@@ -866,6 +907,7 @@ class Listener(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             access_policy: Optional[pulumi.Input[str]] = None,
+            advanced_forwarding_enabled: Optional[pulumi.Input[bool]] = None,
             ca_certificate: Optional[pulumi.Input[str]] = None,
             default_pool_id: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
@@ -893,6 +935,8 @@ class Listener(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] access_policy: Specifies the access policy for the listener. Valid options are *white* and
                *black*.
+        :param pulumi.Input[bool] advanced_forwarding_enabled: Specifies whether to enable advanced forwarding.
+               If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
         :param pulumi.Input[str] ca_certificate: Specifies the ID of the CA certificate used by the listener. This parameter is
                valid when protocol is set to *HTTPS*.
         :param pulumi.Input[str] default_pool_id: The ID of the default pool with which the listener is associated. Changing this
@@ -932,6 +976,7 @@ class Listener(pulumi.CustomResource):
         __props__ = _ListenerState.__new__(_ListenerState)
 
         __props__.__dict__["access_policy"] = access_policy
+        __props__.__dict__["advanced_forwarding_enabled"] = advanced_forwarding_enabled
         __props__.__dict__["ca_certificate"] = ca_certificate
         __props__.__dict__["default_pool_id"] = default_pool_id
         __props__.__dict__["description"] = description
@@ -960,6 +1005,15 @@ class Listener(pulumi.CustomResource):
         *black*.
         """
         return pulumi.get(self, "access_policy")
+
+    @property
+    @pulumi.getter(name="advancedForwardingEnabled")
+    def advanced_forwarding_enabled(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to enable advanced forwarding.
+        If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
+        """
+        return pulumi.get(self, "advanced_forwarding_enabled")
 
     @property
     @pulumi.getter(name="caCertificate")

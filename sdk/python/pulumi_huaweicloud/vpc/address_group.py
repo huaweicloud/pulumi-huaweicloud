@@ -16,23 +16,43 @@ class AddressGroupArgs:
     def __init__(__self__, *,
                  addresses: pulumi.Input[Sequence[pulumi.Input[str]]],
                  description: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 force_destroy: Optional[pulumi.Input[bool]] = None,
+                 ip_version: Optional[pulumi.Input[int]] = None,
+                 max_capacity: Optional[pulumi.Input[int]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a AddressGroup resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] addresses: Specifies an array of one or more IPv4 addresses. The address can be a single IP
-               address (such as 192.168.10.10), IP address range (such as 192.168.1.1-192.168.1.50) or IP address CIDR (such as 192.168.0.0/16).
-               The maximum length is 20.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] addresses: Specifies an array of one or more IP addresses. The address can be a single IP
+               address, IP address range or IP address CIDR. The maximum length is 20.
         :param pulumi.Input[str] description: Specifies the supplementary information about the IP address group.
                The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
+               Changing this creates a new address group.
+        :param pulumi.Input[bool] force_destroy: Specifies whether to forcibly destroy the address group if it is associated with
+               a security group rule, the address group and the associated security group rule will be deleted together.
+               The default value is **false**.
+        :param pulumi.Input[int] ip_version: Specifies the IP version, either `4` (default) or `6`.
+               Changing this creates a new address group.
+        :param pulumi.Input[int] max_capacity: Specifies the maximum number of addresses that an address group can contain.
+               Value range: **1**-**20**, the default value is **20**.
         :param pulumi.Input[str] name: Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
                letters, digits, underscores (_), hyphens (-) and periods (.).
-        :param pulumi.Input[str] region: Specifies tThe region in which to create the IP address group. If omitted, the
+        :param pulumi.Input[str] region: Specifies the region in which to create the IP address group. If omitted, the
                provider-level region will be used. Changing this creates a new address group.
         """
         pulumi.set(__self__, "addresses", addresses)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if force_destroy is not None:
+            pulumi.set(__self__, "force_destroy", force_destroy)
+        if ip_version is not None:
+            pulumi.set(__self__, "ip_version", ip_version)
+        if max_capacity is not None:
+            pulumi.set(__self__, "max_capacity", max_capacity)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
@@ -42,9 +62,8 @@ class AddressGroupArgs:
     @pulumi.getter
     def addresses(self) -> pulumi.Input[Sequence[pulumi.Input[str]]]:
         """
-        Specifies an array of one or more IPv4 addresses. The address can be a single IP
-        address (such as 192.168.10.10), IP address range (such as 192.168.1.1-192.168.1.50) or IP address CIDR (such as 192.168.0.0/16).
-        The maximum length is 20.
+        Specifies an array of one or more IP addresses. The address can be a single IP
+        address, IP address range or IP address CIDR. The maximum length is 20.
         """
         return pulumi.get(self, "addresses")
 
@@ -66,6 +85,59 @@ class AddressGroupArgs:
         pulumi.set(self, "description", value)
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID.
+        Changing this creates a new address group.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
+    @pulumi.getter(name="forceDestroy")
+    def force_destroy(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to forcibly destroy the address group if it is associated with
+        a security group rule, the address group and the associated security group rule will be deleted together.
+        The default value is **false**.
+        """
+        return pulumi.get(self, "force_destroy")
+
+    @force_destroy.setter
+    def force_destroy(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "force_destroy", value)
+
+    @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the IP version, either `4` (default) or `6`.
+        Changing this creates a new address group.
+        """
+        return pulumi.get(self, "ip_version")
+
+    @ip_version.setter
+    def ip_version(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "ip_version", value)
+
+    @property
+    @pulumi.getter(name="maxCapacity")
+    def max_capacity(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the maximum number of addresses that an address group can contain.
+        Value range: **1**-**20**, the default value is **20**.
+        """
+        return pulumi.get(self, "max_capacity")
+
+    @max_capacity.setter
+    def max_capacity(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "max_capacity", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
@@ -82,7 +154,7 @@ class AddressGroupArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies tThe region in which to create the IP address group. If omitted, the
+        Specifies the region in which to create the IP address group. If omitted, the
         provider-level region will be used. Changing this creates a new address group.
         """
         return pulumi.get(self, "region")
@@ -97,28 +169,44 @@ class _AddressGroupState:
     def __init__(__self__, *,
                  addresses: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 force_destroy: Optional[pulumi.Input[bool]] = None,
                  ip_version: Optional[pulumi.Input[int]] = None,
+                 max_capacity: Optional[pulumi.Input[int]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering AddressGroup resources.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] addresses: Specifies an array of one or more IPv4 addresses. The address can be a single IP
-               address (such as 192.168.10.10), IP address range (such as 192.168.1.1-192.168.1.50) or IP address CIDR (such as 192.168.0.0/16).
-               The maximum length is 20.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] addresses: Specifies an array of one or more IP addresses. The address can be a single IP
+               address, IP address range or IP address CIDR. The maximum length is 20.
         :param pulumi.Input[str] description: Specifies the supplementary information about the IP address group.
                The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
-        :param pulumi.Input[int] ip_version: The IP version of the address group. The value is 4.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
+               Changing this creates a new address group.
+        :param pulumi.Input[bool] force_destroy: Specifies whether to forcibly destroy the address group if it is associated with
+               a security group rule, the address group and the associated security group rule will be deleted together.
+               The default value is **false**.
+        :param pulumi.Input[int] ip_version: Specifies the IP version, either `4` (default) or `6`.
+               Changing this creates a new address group.
+        :param pulumi.Input[int] max_capacity: Specifies the maximum number of addresses that an address group can contain.
+               Value range: **1**-**20**, the default value is **20**.
         :param pulumi.Input[str] name: Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
                letters, digits, underscores (_), hyphens (-) and periods (.).
-        :param pulumi.Input[str] region: Specifies tThe region in which to create the IP address group. If omitted, the
+        :param pulumi.Input[str] region: Specifies the region in which to create the IP address group. If omitted, the
                provider-level region will be used. Changing this creates a new address group.
         """
         if addresses is not None:
             pulumi.set(__self__, "addresses", addresses)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if force_destroy is not None:
+            pulumi.set(__self__, "force_destroy", force_destroy)
         if ip_version is not None:
             pulumi.set(__self__, "ip_version", ip_version)
+        if max_capacity is not None:
+            pulumi.set(__self__, "max_capacity", max_capacity)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
@@ -128,9 +216,8 @@ class _AddressGroupState:
     @pulumi.getter
     def addresses(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        Specifies an array of one or more IPv4 addresses. The address can be a single IP
-        address (such as 192.168.10.10), IP address range (such as 192.168.1.1-192.168.1.50) or IP address CIDR (such as 192.168.0.0/16).
-        The maximum length is 20.
+        Specifies an array of one or more IP addresses. The address can be a single IP
+        address, IP address range or IP address CIDR. The maximum length is 20.
         """
         return pulumi.get(self, "addresses")
 
@@ -152,16 +239,57 @@ class _AddressGroupState:
         pulumi.set(self, "description", value)
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID.
+        Changing this creates a new address group.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
+    @pulumi.getter(name="forceDestroy")
+    def force_destroy(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to forcibly destroy the address group if it is associated with
+        a security group rule, the address group and the associated security group rule will be deleted together.
+        The default value is **false**.
+        """
+        return pulumi.get(self, "force_destroy")
+
+    @force_destroy.setter
+    def force_destroy(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "force_destroy", value)
+
+    @property
     @pulumi.getter(name="ipVersion")
     def ip_version(self) -> Optional[pulumi.Input[int]]:
         """
-        The IP version of the address group. The value is 4.
+        Specifies the IP version, either `4` (default) or `6`.
+        Changing this creates a new address group.
         """
         return pulumi.get(self, "ip_version")
 
     @ip_version.setter
     def ip_version(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "ip_version", value)
+
+    @property
+    @pulumi.getter(name="maxCapacity")
+    def max_capacity(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the maximum number of addresses that an address group can contain.
+        Value range: **1**-**20**, the default value is **20**.
+        """
+        return pulumi.get(self, "max_capacity")
+
+    @max_capacity.setter
+    def max_capacity(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "max_capacity", value)
 
     @property
     @pulumi.getter
@@ -180,7 +308,7 @@ class _AddressGroupState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies tThe region in which to create the IP address group. If omitted, the
+        Specifies the region in which to create the IP address group. If omitted, the
         provider-level region will be used. Changing this creates a new address group.
         """
         return pulumi.get(self, "region")
@@ -197,6 +325,10 @@ class AddressGroup(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  addresses: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 force_destroy: Optional[pulumi.Input[bool]] = None,
+                 ip_version: Optional[pulumi.Input[int]] = None,
+                 max_capacity: Optional[pulumi.Input[int]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  __props__=None):
@@ -204,35 +336,68 @@ class AddressGroup(pulumi.CustomResource):
         Manages a VPC IP address group resource within HuaweiCloud.
 
         ## Example Usage
+        ### IPv4 Address Group
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        test = huaweicloud.vpc.AddressGroup("test", addresses=[
+        ipv4 = huaweicloud.vpc.AddressGroup("ipv4", addresses=[
             "192.168.10.10",
             "192.168.1.1-192.168.1.50",
         ])
         ```
+        ### IPv6 Address Group
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        ipv6 = huaweicloud.vpc.AddressGroup("ipv6",
+            addresses=["2001:db8:a583:6e::/64"],
+            ip_version=6)
+        ```
 
         ## Import
 
-        IP address groups can be imported using the `id`, e.g.
+        IP address groups can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vpc/addressGroup:AddressGroup test bc96f6b0-ca2c-42ee-b719-0f26bc9c8661
         ```
 
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`force_destroy`. It is generally recommended running `terraform plan` after importing the image. You can then decide if changes should be applied to the image, or the resource definition should be updated to align with the image. Also you can ignore changes as below. hcl resource "huaweicloud_vpc_address_group" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         force_destroy,
+
+         ]
+
+         } }
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] addresses: Specifies an array of one or more IPv4 addresses. The address can be a single IP
-               address (such as 192.168.10.10), IP address range (such as 192.168.1.1-192.168.1.50) or IP address CIDR (such as 192.168.0.0/16).
-               The maximum length is 20.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] addresses: Specifies an array of one or more IP addresses. The address can be a single IP
+               address, IP address range or IP address CIDR. The maximum length is 20.
         :param pulumi.Input[str] description: Specifies the supplementary information about the IP address group.
                The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
+               Changing this creates a new address group.
+        :param pulumi.Input[bool] force_destroy: Specifies whether to forcibly destroy the address group if it is associated with
+               a security group rule, the address group and the associated security group rule will be deleted together.
+               The default value is **false**.
+        :param pulumi.Input[int] ip_version: Specifies the IP version, either `4` (default) or `6`.
+               Changing this creates a new address group.
+        :param pulumi.Input[int] max_capacity: Specifies the maximum number of addresses that an address group can contain.
+               Value range: **1**-**20**, the default value is **20**.
         :param pulumi.Input[str] name: Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
                letters, digits, underscores (_), hyphens (-) and periods (.).
-        :param pulumi.Input[str] region: Specifies tThe region in which to create the IP address group. If omitted, the
+        :param pulumi.Input[str] region: Specifies the region in which to create the IP address group. If omitted, the
                provider-level region will be used. Changing this creates a new address group.
         """
         ...
@@ -245,24 +410,49 @@ class AddressGroup(pulumi.CustomResource):
         Manages a VPC IP address group resource within HuaweiCloud.
 
         ## Example Usage
+        ### IPv4 Address Group
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        test = huaweicloud.vpc.AddressGroup("test", addresses=[
+        ipv4 = huaweicloud.vpc.AddressGroup("ipv4", addresses=[
             "192.168.10.10",
             "192.168.1.1-192.168.1.50",
         ])
         ```
+        ### IPv6 Address Group
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        ipv6 = huaweicloud.vpc.AddressGroup("ipv6",
+            addresses=["2001:db8:a583:6e::/64"],
+            ip_version=6)
+        ```
 
         ## Import
 
-        IP address groups can be imported using the `id`, e.g.
+        IP address groups can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vpc/addressGroup:AddressGroup test bc96f6b0-ca2c-42ee-b719-0f26bc9c8661
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`force_destroy`. It is generally recommended running `terraform plan` after importing the image. You can then decide if changes should be applied to the image, or the resource definition should be updated to align with the image. Also you can ignore changes as below. hcl resource "huaweicloud_vpc_address_group" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         force_destroy,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param AddressGroupArgs args: The arguments to use to populate this resource's properties.
@@ -281,6 +471,10 @@ class AddressGroup(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  addresses: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 force_destroy: Optional[pulumi.Input[bool]] = None,
+                 ip_version: Optional[pulumi.Input[int]] = None,
+                 max_capacity: Optional[pulumi.Input[int]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  __props__=None):
@@ -296,9 +490,12 @@ class AddressGroup(pulumi.CustomResource):
                 raise TypeError("Missing required property 'addresses'")
             __props__.__dict__["addresses"] = addresses
             __props__.__dict__["description"] = description
+            __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+            __props__.__dict__["force_destroy"] = force_destroy
+            __props__.__dict__["ip_version"] = ip_version
+            __props__.__dict__["max_capacity"] = max_capacity
             __props__.__dict__["name"] = name
             __props__.__dict__["region"] = region
-            __props__.__dict__["ip_version"] = None
         super(AddressGroup, __self__).__init__(
             'huaweicloud:Vpc/addressGroup:AddressGroup',
             resource_name,
@@ -311,7 +508,10 @@ class AddressGroup(pulumi.CustomResource):
             opts: Optional[pulumi.ResourceOptions] = None,
             addresses: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             description: Optional[pulumi.Input[str]] = None,
+            enterprise_project_id: Optional[pulumi.Input[str]] = None,
+            force_destroy: Optional[pulumi.Input[bool]] = None,
             ip_version: Optional[pulumi.Input[int]] = None,
+            max_capacity: Optional[pulumi.Input[int]] = None,
             name: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None) -> 'AddressGroup':
         """
@@ -321,15 +521,22 @@ class AddressGroup(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] addresses: Specifies an array of one or more IPv4 addresses. The address can be a single IP
-               address (such as 192.168.10.10), IP address range (such as 192.168.1.1-192.168.1.50) or IP address CIDR (such as 192.168.0.0/16).
-               The maximum length is 20.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] addresses: Specifies an array of one or more IP addresses. The address can be a single IP
+               address, IP address range or IP address CIDR. The maximum length is 20.
         :param pulumi.Input[str] description: Specifies the supplementary information about the IP address group.
                The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
-        :param pulumi.Input[int] ip_version: The IP version of the address group. The value is 4.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
+               Changing this creates a new address group.
+        :param pulumi.Input[bool] force_destroy: Specifies whether to forcibly destroy the address group if it is associated with
+               a security group rule, the address group and the associated security group rule will be deleted together.
+               The default value is **false**.
+        :param pulumi.Input[int] ip_version: Specifies the IP version, either `4` (default) or `6`.
+               Changing this creates a new address group.
+        :param pulumi.Input[int] max_capacity: Specifies the maximum number of addresses that an address group can contain.
+               Value range: **1**-**20**, the default value is **20**.
         :param pulumi.Input[str] name: Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
                letters, digits, underscores (_), hyphens (-) and periods (.).
-        :param pulumi.Input[str] region: Specifies tThe region in which to create the IP address group. If omitted, the
+        :param pulumi.Input[str] region: Specifies the region in which to create the IP address group. If omitted, the
                provider-level region will be used. Changing this creates a new address group.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -338,7 +545,10 @@ class AddressGroup(pulumi.CustomResource):
 
         __props__.__dict__["addresses"] = addresses
         __props__.__dict__["description"] = description
+        __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+        __props__.__dict__["force_destroy"] = force_destroy
         __props__.__dict__["ip_version"] = ip_version
+        __props__.__dict__["max_capacity"] = max_capacity
         __props__.__dict__["name"] = name
         __props__.__dict__["region"] = region
         return AddressGroup(resource_name, opts=opts, __props__=__props__)
@@ -347,9 +557,8 @@ class AddressGroup(pulumi.CustomResource):
     @pulumi.getter
     def addresses(self) -> pulumi.Output[Sequence[str]]:
         """
-        Specifies an array of one or more IPv4 addresses. The address can be a single IP
-        address (such as 192.168.10.10), IP address range (such as 192.168.1.1-192.168.1.50) or IP address CIDR (such as 192.168.0.0/16).
-        The maximum length is 20.
+        Specifies an array of one or more IP addresses. The address can be a single IP
+        address, IP address range or IP address CIDR. The maximum length is 20.
         """
         return pulumi.get(self, "addresses")
 
@@ -363,12 +572,41 @@ class AddressGroup(pulumi.CustomResource):
         return pulumi.get(self, "description")
 
     @property
-    @pulumi.getter(name="ipVersion")
-    def ip_version(self) -> pulumi.Output[int]:
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        The IP version of the address group. The value is 4.
+        Specifies the enterprise project ID.
+        Changing this creates a new address group.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @property
+    @pulumi.getter(name="forceDestroy")
+    def force_destroy(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether to forcibly destroy the address group if it is associated with
+        a security group rule, the address group and the associated security group rule will be deleted together.
+        The default value is **false**.
+        """
+        return pulumi.get(self, "force_destroy")
+
+    @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> pulumi.Output[Optional[int]]:
+        """
+        Specifies the IP version, either `4` (default) or `6`.
+        Changing this creates a new address group.
         """
         return pulumi.get(self, "ip_version")
+
+    @property
+    @pulumi.getter(name="maxCapacity")
+    def max_capacity(self) -> pulumi.Output[int]:
+        """
+        Specifies the maximum number of addresses that an address group can contain.
+        Value range: **1**-**20**, the default value is **20**.
+        """
+        return pulumi.get(self, "max_capacity")
 
     @property
     @pulumi.getter
@@ -383,7 +621,7 @@ class AddressGroup(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        Specifies tThe region in which to create the IP address group. If omitted, the
+        Specifies the region in which to create the IP address group. If omitted, the
         provider-level region will be used. Changing this creates a new address group.
         """
         return pulumi.get(self, "region")

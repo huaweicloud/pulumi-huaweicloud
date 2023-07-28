@@ -72,7 +72,8 @@ type NetworkAclRule struct {
 	IpVersion pulumi.IntPtrOutput `pulumi:"ipVersion"`
 	// Specifies a unique id for the iec network ACL.
 	NetworkAclId pulumi.StringOutput `pulumi:"networkAclId"`
-	PolicyId     pulumi.StringOutput `pulumi:"policyId"`
+	// The ID of the firewall policy for the iec network ACL.
+	PolicyId pulumi.StringOutput `pulumi:"policyId"`
 	// Specifies the protocol supported by the iec network ACL rule. Valid values are: *tcp*
 	// , *udp*, *icmp* and *any*.
 	Protocol pulumi.StringPtrOutput `pulumi:"protocol"`
@@ -141,7 +142,8 @@ type networkAclRuleState struct {
 	IpVersion *int `pulumi:"ipVersion"`
 	// Specifies a unique id for the iec network ACL.
 	NetworkAclId *string `pulumi:"networkAclId"`
-	PolicyId     *string `pulumi:"policyId"`
+	// The ID of the firewall policy for the iec network ACL.
+	PolicyId *string `pulumi:"policyId"`
 	// Specifies the protocol supported by the iec network ACL rule. Valid values are: *tcp*
 	// , *udp*, *icmp* and *any*.
 	Protocol *string `pulumi:"protocol"`
@@ -175,7 +177,8 @@ type NetworkAclRuleState struct {
 	IpVersion pulumi.IntPtrInput
 	// Specifies a unique id for the iec network ACL.
 	NetworkAclId pulumi.StringPtrInput
-	PolicyId     pulumi.StringPtrInput
+	// The ID of the firewall policy for the iec network ACL.
+	PolicyId pulumi.StringPtrInput
 	// Specifies the protocol supported by the iec network ACL rule. Valid values are: *tcp*
 	// , *udp*, *icmp* and *any*.
 	Protocol pulumi.StringPtrInput
@@ -390,6 +393,7 @@ func (o NetworkAclRuleOutput) NetworkAclId() pulumi.StringOutput {
 	return o.ApplyT(func(v *NetworkAclRule) pulumi.StringOutput { return v.NetworkAclId }).(pulumi.StringOutput)
 }
 
+// The ID of the firewall policy for the iec network ACL.
 func (o NetworkAclRuleOutput) PolicyId() pulumi.StringOutput {
 	return o.ApplyT(func(v *NetworkAclRule) pulumi.StringOutput { return v.PolicyId }).(pulumi.StringOutput)
 }

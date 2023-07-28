@@ -44,12 +44,12 @@ export class Subnet extends pulumi.CustomResource {
     }
 
     /**
-     * - Specifies the availability zone (AZ) to which the subnet belongs.
+     * Specifies the availability zone (AZ) to which the subnet belongs.
      * The value must be an existing AZ in the system. Changing this creates a new Subnet.
      */
     public readonly availabilityZone!: pulumi.Output<string>;
     /**
-     * - Specifies the network segment on which the subnet resides. The value must be in
+     * Specifies the network segment on which the subnet resides. The value must be in
      * CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
      * new Subnet.
      */
@@ -60,17 +60,23 @@ export class Subnet extends pulumi.CustomResource {
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * - Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
+     * Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
      */
     public readonly dhcpEnable!: pulumi.Output<boolean | undefined>;
     /**
-     * - Specifies the DNS server address list of a subnet. This field is required if you need to
+     * Specifies the DHCP lease expiration time. The value can be -1, which indicates
+     * unlimited lease time, or Number+h. the number ranges from 1 to 30,000. For example, the value can be 5h. The default
+     * value is 24h.
+     */
+    public readonly dhcpLeaseTime!: pulumi.Output<string>;
+    /**
+     * Specifies the DNS server address list of a subnet. This field is required if you need to
      * use more than two DNS servers. This parameter value is the superset of both DNS server address 1 and DNS server
      * address 2.
      */
     public readonly dnsLists!: pulumi.Output<string[]>;
     /**
-     * - Specifies the gateway of the subnet. The value must be a valid IP address
+     * Specifies the gateway of the subnet. The value must be a valid IP address
      * in the subnet segment. Changing this creates a new Subnet.
      */
     public readonly gatewayIp!: pulumi.Output<string>;
@@ -83,7 +89,7 @@ export class Subnet extends pulumi.CustomResource {
      */
     public /*out*/ readonly ipv6Cidr!: pulumi.Output<string>;
     /**
-     * - Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
+     * Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
      */
     public readonly ipv6Enable!: pulumi.Output<boolean | undefined>;
     /**
@@ -95,12 +101,18 @@ export class Subnet extends pulumi.CustomResource {
      */
     public /*out*/ readonly ipv6SubnetId!: pulumi.Output<string>;
     /**
-     * - Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
+     * Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
      * letters, digits, underscores (_), and hyphens (-).
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * - Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
+     * Specifies the NTP server address. Currently only IPv4 addresses are supported.
+     * A maximum of four IP addresses can be configured, and each address must be unique. Multiple IP addresses must be
+     * separated using commas(,). Removing this parameter indicates that no NTP server is configured.
+     */
+    public readonly ntpServerAddress!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
      * IP address.
      */
     public readonly primaryDns!: pulumi.Output<string>;
@@ -110,7 +122,7 @@ export class Subnet extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * - Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
+     * Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
      * IP address.
      */
     public readonly secondaryDns!: pulumi.Output<string>;
@@ -123,7 +135,7 @@ export class Subnet extends pulumi.CustomResource {
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
-     * - Specifies the ID of the VPC to which the subnet belongs. Changing this creates
+     * Specifies the ID of the VPC to which the subnet belongs. Changing this creates
      * a new Subnet.
      */
     public readonly vpcId!: pulumi.Output<string>;
@@ -145,6 +157,7 @@ export class Subnet extends pulumi.CustomResource {
             resourceInputs["cidr"] = state ? state.cidr : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["dhcpEnable"] = state ? state.dhcpEnable : undefined;
+            resourceInputs["dhcpLeaseTime"] = state ? state.dhcpLeaseTime : undefined;
             resourceInputs["dnsLists"] = state ? state.dnsLists : undefined;
             resourceInputs["gatewayIp"] = state ? state.gatewayIp : undefined;
             resourceInputs["ipv4SubnetId"] = state ? state.ipv4SubnetId : undefined;
@@ -153,6 +166,7 @@ export class Subnet extends pulumi.CustomResource {
             resourceInputs["ipv6Gateway"] = state ? state.ipv6Gateway : undefined;
             resourceInputs["ipv6SubnetId"] = state ? state.ipv6SubnetId : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
+            resourceInputs["ntpServerAddress"] = state ? state.ntpServerAddress : undefined;
             resourceInputs["primaryDns"] = state ? state.primaryDns : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["secondaryDns"] = state ? state.secondaryDns : undefined;
@@ -174,10 +188,12 @@ export class Subnet extends pulumi.CustomResource {
             resourceInputs["cidr"] = args ? args.cidr : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["dhcpEnable"] = args ? args.dhcpEnable : undefined;
+            resourceInputs["dhcpLeaseTime"] = args ? args.dhcpLeaseTime : undefined;
             resourceInputs["dnsLists"] = args ? args.dnsLists : undefined;
             resourceInputs["gatewayIp"] = args ? args.gatewayIp : undefined;
             resourceInputs["ipv6Enable"] = args ? args.ipv6Enable : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
+            resourceInputs["ntpServerAddress"] = args ? args.ntpServerAddress : undefined;
             resourceInputs["primaryDns"] = args ? args.primaryDns : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["secondaryDns"] = args ? args.secondaryDns : undefined;
@@ -199,12 +215,12 @@ export class Subnet extends pulumi.CustomResource {
  */
 export interface SubnetState {
     /**
-     * - Specifies the availability zone (AZ) to which the subnet belongs.
+     * Specifies the availability zone (AZ) to which the subnet belongs.
      * The value must be an existing AZ in the system. Changing this creates a new Subnet.
      */
     availabilityZone?: pulumi.Input<string>;
     /**
-     * - Specifies the network segment on which the subnet resides. The value must be in
+     * Specifies the network segment on which the subnet resides. The value must be in
      * CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
      * new Subnet.
      */
@@ -215,17 +231,23 @@ export interface SubnetState {
      */
     description?: pulumi.Input<string>;
     /**
-     * - Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
+     * Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
      */
     dhcpEnable?: pulumi.Input<boolean>;
     /**
-     * - Specifies the DNS server address list of a subnet. This field is required if you need to
+     * Specifies the DHCP lease expiration time. The value can be -1, which indicates
+     * unlimited lease time, or Number+h. the number ranges from 1 to 30,000. For example, the value can be 5h. The default
+     * value is 24h.
+     */
+    dhcpLeaseTime?: pulumi.Input<string>;
+    /**
+     * Specifies the DNS server address list of a subnet. This field is required if you need to
      * use more than two DNS servers. This parameter value is the superset of both DNS server address 1 and DNS server
      * address 2.
      */
     dnsLists?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * - Specifies the gateway of the subnet. The value must be a valid IP address
+     * Specifies the gateway of the subnet. The value must be a valid IP address
      * in the subnet segment. Changing this creates a new Subnet.
      */
     gatewayIp?: pulumi.Input<string>;
@@ -238,7 +260,7 @@ export interface SubnetState {
      */
     ipv6Cidr?: pulumi.Input<string>;
     /**
-     * - Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
+     * Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
      */
     ipv6Enable?: pulumi.Input<boolean>;
     /**
@@ -250,12 +272,18 @@ export interface SubnetState {
      */
     ipv6SubnetId?: pulumi.Input<string>;
     /**
-     * - Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
+     * Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
      * letters, digits, underscores (_), and hyphens (-).
      */
     name?: pulumi.Input<string>;
     /**
-     * - Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
+     * Specifies the NTP server address. Currently only IPv4 addresses are supported.
+     * A maximum of four IP addresses can be configured, and each address must be unique. Multiple IP addresses must be
+     * separated using commas(,). Removing this parameter indicates that no NTP server is configured.
+     */
+    ntpServerAddress?: pulumi.Input<string>;
+    /**
+     * Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
      * IP address.
      */
     primaryDns?: pulumi.Input<string>;
@@ -265,7 +293,7 @@ export interface SubnetState {
      */
     region?: pulumi.Input<string>;
     /**
-     * - Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
+     * Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
      * IP address.
      */
     secondaryDns?: pulumi.Input<string>;
@@ -278,7 +306,7 @@ export interface SubnetState {
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * - Specifies the ID of the VPC to which the subnet belongs. Changing this creates
+     * Specifies the ID of the VPC to which the subnet belongs. Changing this creates
      * a new Subnet.
      */
     vpcId?: pulumi.Input<string>;
@@ -289,12 +317,12 @@ export interface SubnetState {
  */
 export interface SubnetArgs {
     /**
-     * - Specifies the availability zone (AZ) to which the subnet belongs.
+     * Specifies the availability zone (AZ) to which the subnet belongs.
      * The value must be an existing AZ in the system. Changing this creates a new Subnet.
      */
     availabilityZone?: pulumi.Input<string>;
     /**
-     * - Specifies the network segment on which the subnet resides. The value must be in
+     * Specifies the network segment on which the subnet resides. The value must be in
      * CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
      * new Subnet.
      */
@@ -305,31 +333,43 @@ export interface SubnetArgs {
      */
     description?: pulumi.Input<string>;
     /**
-     * - Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
+     * Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
      */
     dhcpEnable?: pulumi.Input<boolean>;
     /**
-     * - Specifies the DNS server address list of a subnet. This field is required if you need to
+     * Specifies the DHCP lease expiration time. The value can be -1, which indicates
+     * unlimited lease time, or Number+h. the number ranges from 1 to 30,000. For example, the value can be 5h. The default
+     * value is 24h.
+     */
+    dhcpLeaseTime?: pulumi.Input<string>;
+    /**
+     * Specifies the DNS server address list of a subnet. This field is required if you need to
      * use more than two DNS servers. This parameter value is the superset of both DNS server address 1 and DNS server
      * address 2.
      */
     dnsLists?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * - Specifies the gateway of the subnet. The value must be a valid IP address
+     * Specifies the gateway of the subnet. The value must be a valid IP address
      * in the subnet segment. Changing this creates a new Subnet.
      */
     gatewayIp: pulumi.Input<string>;
     /**
-     * - Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
+     * Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
      */
     ipv6Enable?: pulumi.Input<boolean>;
     /**
-     * - Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
+     * Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
      * letters, digits, underscores (_), and hyphens (-).
      */
     name?: pulumi.Input<string>;
     /**
-     * - Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
+     * Specifies the NTP server address. Currently only IPv4 addresses are supported.
+     * A maximum of four IP addresses can be configured, and each address must be unique. Multiple IP addresses must be
+     * separated using commas(,). Removing this parameter indicates that no NTP server is configured.
+     */
+    ntpServerAddress?: pulumi.Input<string>;
+    /**
+     * Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
      * IP address.
      */
     primaryDns?: pulumi.Input<string>;
@@ -339,7 +379,7 @@ export interface SubnetArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * - Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
+     * Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
      * IP address.
      */
     secondaryDns?: pulumi.Input<string>;
@@ -348,7 +388,7 @@ export interface SubnetArgs {
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * - Specifies the ID of the VPC to which the subnet belongs. Changing this creates
+     * Specifies the ID of the VPC to which the subnet belongs. Changing this creates
      * a new Subnet.
      */
     vpcId: pulumi.Input<string>;

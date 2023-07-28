@@ -237,6 +237,17 @@ Object.defineProperty(exports, "region", {
 });
 
 /**
+ * Whether the service endpoints are regional
+ */
+export declare const regional: boolean | undefined;
+Object.defineProperty(exports, "regional", {
+    get() {
+        return __config.getObject<boolean>("regional");
+    },
+    enumerable: true,
+});
+
+/**
  * The secret key of the HuaweiCloud to use.
  */
 export declare const secretKey: string | undefined;

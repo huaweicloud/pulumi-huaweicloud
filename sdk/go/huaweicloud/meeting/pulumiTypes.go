@@ -658,8 +658,10 @@ func (o ConferenceCycleParamsPtrOutput) StartDate() pulumi.StringPtrOutput {
 }
 
 type ConferenceJoinPassword struct {
+	// The password of the common participant.
 	Guest *string `pulumi:"guest"`
-	Host  *string `pulumi:"host"`
+	// The password of the meeting host.
+	Host *string `pulumi:"host"`
 }
 
 // ConferenceJoinPasswordInput is an input type that accepts ConferenceJoinPasswordArgs and ConferenceJoinPasswordOutput values.
@@ -674,8 +676,10 @@ type ConferenceJoinPasswordInput interface {
 }
 
 type ConferenceJoinPasswordArgs struct {
+	// The password of the common participant.
 	Guest pulumi.StringPtrInput `pulumi:"guest"`
-	Host  pulumi.StringPtrInput `pulumi:"host"`
+	// The password of the meeting host.
+	Host pulumi.StringPtrInput `pulumi:"host"`
 }
 
 func (ConferenceJoinPasswordArgs) ElementType() reflect.Type {
@@ -729,10 +733,12 @@ func (o ConferenceJoinPasswordOutput) ToConferenceJoinPasswordOutputWithContext(
 	return o
 }
 
+// The password of the common participant.
 func (o ConferenceJoinPasswordOutput) Guest() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ConferenceJoinPassword) *string { return v.Guest }).(pulumi.StringPtrOutput)
 }
 
+// The password of the meeting host.
 func (o ConferenceJoinPasswordOutput) Host() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ConferenceJoinPassword) *string { return v.Host }).(pulumi.StringPtrOutput)
 }
@@ -1183,7 +1189,9 @@ type ConferenceSubconferenceSubconfiguration struct {
 	// + **0**: All users.
 	// + **2**: Users within the enterprise.
 	// + **3**: The invited user.
-	CallinRestriction    *int                                                        `pulumi:"callinRestriction"`
+	CallinRestriction *int `pulumi:"callinRestriction"`
+	// The webinar Audience Display Strategy.
+	// The object structure is documented below.
 	ShowAudiencePolicies []ConferenceSubconferenceSubconfigurationShowAudiencePolicy `pulumi:"showAudiencePolicies"`
 	// Specifies whether to open the waiting room (only valid for RTC enterprises).
 	WaitingRoomEnabled *bool `pulumi:"waitingRoomEnabled"`
@@ -1213,7 +1221,9 @@ type ConferenceSubconferenceSubconfigurationArgs struct {
 	// + **0**: All users.
 	// + **2**: Users within the enterprise.
 	// + **3**: The invited user.
-	CallinRestriction    pulumi.IntPtrInput                                                  `pulumi:"callinRestriction"`
+	CallinRestriction pulumi.IntPtrInput `pulumi:"callinRestriction"`
+	// The webinar Audience Display Strategy.
+	// The object structure is documented below.
 	ShowAudiencePolicies ConferenceSubconferenceSubconfigurationShowAudiencePolicyArrayInput `pulumi:"showAudiencePolicies"`
 	// Specifies whether to open the waiting room (only valid for RTC enterprises).
 	WaitingRoomEnabled pulumi.BoolPtrInput `pulumi:"waitingRoomEnabled"`
@@ -1292,6 +1302,8 @@ func (o ConferenceSubconferenceSubconfigurationOutput) CallinRestriction() pulum
 	return o.ApplyT(func(v ConferenceSubconferenceSubconfiguration) *int { return v.CallinRestriction }).(pulumi.IntPtrOutput)
 }
 
+// The webinar Audience Display Strategy.
+// The object structure is documented below.
 func (o ConferenceSubconferenceSubconfigurationOutput) ShowAudiencePolicies() ConferenceSubconferenceSubconfigurationShowAudiencePolicyArrayOutput {
 	return o.ApplyT(func(v ConferenceSubconferenceSubconfiguration) []ConferenceSubconferenceSubconfigurationShowAudiencePolicy {
 		return v.ShowAudiencePolicies

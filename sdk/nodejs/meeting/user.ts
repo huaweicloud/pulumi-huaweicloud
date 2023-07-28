@@ -303,6 +303,7 @@ export class User extends pulumi.CustomResource {
     /**
      * Specifies the user account. The value can contain **1** to **64** characters.
      * If omitted, the service will automatically generate a value.
+     * Changing this parameter will create a new resource.
      */
     public readonly account!: pulumi.Output<string>;
     /**
@@ -327,7 +328,7 @@ export class User extends pulumi.CustomResource {
     public readonly appKey!: pulumi.Output<string | undefined>;
     /**
      * Specifies the corporation ID.
-     * Required if the application is used in multiple enterprises. Only availabe if `appId` is set.
+     * Required if the application is used in multiple enterprises. Only available if `appId` is set.
      * Changing this parameter will create a new resource.
      */
     public readonly corpId!: pulumi.Output<string>;
@@ -426,7 +427,7 @@ export class User extends pulumi.CustomResource {
     public /*out*/ readonly type!: pulumi.Output<number>;
     /**
      * Specifies the user ID of the administrator.
-     * Only availabe if `appId` is set. If omitted, the user ID of default administrator will be used.
+     * Only available if `appId` is set. If omitted, the user ID of default administrator will be used.
      * Changing this parameter will create a new resource.
      */
     public readonly userId!: pulumi.Output<string>;
@@ -516,6 +517,7 @@ export interface UserState {
     /**
      * Specifies the user account. The value can contain **1** to **64** characters.
      * If omitted, the service will automatically generate a value.
+     * Changing this parameter will create a new resource.
      */
     account?: pulumi.Input<string>;
     /**
@@ -540,7 +542,7 @@ export interface UserState {
     appKey?: pulumi.Input<string>;
     /**
      * Specifies the corporation ID.
-     * Required if the application is used in multiple enterprises. Only availabe if `appId` is set.
+     * Required if the application is used in multiple enterprises. Only available if `appId` is set.
      * Changing this parameter will create a new resource.
      */
     corpId?: pulumi.Input<string>;
@@ -639,7 +641,7 @@ export interface UserState {
     type?: pulumi.Input<number>;
     /**
      * Specifies the user ID of the administrator.
-     * Only availabe if `appId` is set. If omitted, the user ID of default administrator will be used.
+     * Only available if `appId` is set. If omitted, the user ID of default administrator will be used.
      * Changing this parameter will create a new resource.
      */
     userId?: pulumi.Input<string>;
@@ -652,6 +654,7 @@ export interface UserArgs {
     /**
      * Specifies the user account. The value can contain **1** to **64** characters.
      * If omitted, the service will automatically generate a value.
+     * Changing this parameter will create a new resource.
      */
     account?: pulumi.Input<string>;
     /**
@@ -676,7 +679,7 @@ export interface UserArgs {
     appKey?: pulumi.Input<string>;
     /**
      * Specifies the corporation ID.
-     * Required if the application is used in multiple enterprises. Only availabe if `appId` is set.
+     * Required if the application is used in multiple enterprises. Only available if `appId` is set.
      * Changing this parameter will create a new resource.
      */
     corpId?: pulumi.Input<string>;
@@ -758,7 +761,7 @@ export interface UserArgs {
     title?: pulumi.Input<string>;
     /**
      * Specifies the user ID of the administrator.
-     * Only availabe if `appId` is set. If omitted, the user ID of default administrator will be used.
+     * Only available if `appId` is set. If omitted, the user ID of default administrator will be used.
      * Changing this parameter will create a new resource.
      */
     userId?: pulumi.Input<string>;

@@ -143,6 +143,7 @@ export class Stream extends pulumi.CustomResource {
     public /*out*/ readonly streamId!: pulumi.Output<string>;
     /**
      * Name of the DIS stream to be created.
+     * Changing this parameter will create a new resource.
      */
     public readonly streamName!: pulumi.Output<string>;
     /**
@@ -301,6 +302,7 @@ export interface StreamState {
     streamId?: pulumi.Input<string>;
     /**
      * Name of the DIS stream to be created.
+     * Changing this parameter will create a new resource.
      */
     streamName?: pulumi.Input<string>;
     /**
@@ -375,6 +377,7 @@ export interface StreamArgs {
     retentionPeriod?: pulumi.Input<number>;
     /**
      * Name of the DIS stream to be created.
+     * Changing this parameter will create a new resource.
      */
     streamName: pulumi.Input<string>;
     /**

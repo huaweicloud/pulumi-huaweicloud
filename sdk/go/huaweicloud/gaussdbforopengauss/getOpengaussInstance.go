@@ -91,7 +91,11 @@ type LookupOpengaussInstanceResult struct {
 	Port int `pulumi:"port"`
 	// Indicates the list of private IP address of the nodes.
 	PrivateIps []string `pulumi:"privateIps"`
-	Region     string   `pulumi:"region"`
+	// Indicates the public IP address of the DB instance.
+	PublicIps []string `pulumi:"publicIps"`
+	Region    string   `pulumi:"region"`
+	// Indicates the replica num.
+	ReplicaNum int `pulumi:"replicaNum"`
 	// Indicates the security group ID.
 	SecurityGroupId string `pulumi:"securityGroupId"`
 	// Indicates the sharding num.
@@ -225,8 +229,18 @@ func (o LookupOpengaussInstanceResultOutput) PrivateIps() pulumi.StringArrayOutp
 	return o.ApplyT(func(v LookupOpengaussInstanceResult) []string { return v.PrivateIps }).(pulumi.StringArrayOutput)
 }
 
+// Indicates the public IP address of the DB instance.
+func (o LookupOpengaussInstanceResultOutput) PublicIps() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v LookupOpengaussInstanceResult) []string { return v.PublicIps }).(pulumi.StringArrayOutput)
+}
+
 func (o LookupOpengaussInstanceResultOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupOpengaussInstanceResult) string { return v.Region }).(pulumi.StringOutput)
+}
+
+// Indicates the replica num.
+func (o LookupOpengaussInstanceResultOutput) ReplicaNum() pulumi.IntOutput {
+	return o.ApplyT(func(v LookupOpengaussInstanceResult) int { return v.ReplicaNum }).(pulumi.IntOutput)
 }
 
 // Indicates the security group ID.

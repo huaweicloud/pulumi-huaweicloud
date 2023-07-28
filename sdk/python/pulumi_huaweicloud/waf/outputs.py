@@ -55,7 +55,7 @@ class DedicatedDomainServer(dict):
                  vpc_id: str):
         """
         :param str address: IP address or domain name of the web server that the client accesses. For
-               example, 192.168.1.1 or www.example.com. Changing this creates a new service.
+               example, `192.168.1.1` or `www.example.com`. Changing this creates a new service.
         :param str client_protocol: Protocol type of the client. The options include `HTTP` and `HTTPS`.
                Changing this creates a new service.
         :param int port: Port number used by the web server. The value ranges from 0 to 65535. Changing this
@@ -78,7 +78,7 @@ class DedicatedDomainServer(dict):
     def address(self) -> str:
         """
         IP address or domain name of the web server that the client accesses. For
-        example, 192.168.1.1 or www.example.com. Changing this creates a new service.
+        example, `192.168.1.1` or `www.example.com`. Changing this creates a new service.
         """
         return pulumi.get(self, "address")
 
@@ -155,7 +155,7 @@ class DomainServer(dict):
                  server_protocol: str):
         """
         :param str address: IP address or domain name of the web server that the client accesses. For example,
-               192.168.1.1 or www.a.com.
+               `192.168.1.1` or `www.a.com`.
         :param str client_protocol: Protocol type of the client. The options include `HTTP` and `HTTPS`.
         :param int port: Port number used by the web server. The value ranges from 0 to 65535, for example, 8080.
         :param str server_protocol: Protocol used by WAF to forward client requests to the server. The options
@@ -171,7 +171,7 @@ class DomainServer(dict):
     def address(self) -> str:
         """
         IP address or domain name of the web server that the client accesses. For example,
-        192.168.1.1 or www.a.com.
+        `192.168.1.1` or `www.a.com`.
         """
         return pulumi.get(self, "address")
 
@@ -419,7 +419,7 @@ class GetDedicatedInstancesInstanceResult(dict):
                  access_status: int,
                  available_zone: str,
                  cpu_architecture: str,
-                 cpu_flavor: str,
+                 ecs_flavor: str,
                  group_id: str,
                  id: str,
                  name: str,
@@ -434,6 +434,7 @@ class GetDedicatedInstancesInstanceResult(dict):
         :param int access_status: The access status of the instance. `0`: inaccessible, `1`: accessible.
         :param str available_zone: The available zone names for the WAF dedicated instances.
         :param str cpu_architecture: The ECS cpu architecture of WAF dedicated instance.
+        :param str ecs_flavor: The flavor of the ECS used by the WAF instance.
         :param str group_id: The instance group ID used by the WAF dedicated instance in ELB mode.
         :param str id: The id of WAF dedicated instance.
         :param str name: The name of WAF dedicated instance.
@@ -448,7 +449,7 @@ class GetDedicatedInstancesInstanceResult(dict):
         pulumi.set(__self__, "access_status", access_status)
         pulumi.set(__self__, "available_zone", available_zone)
         pulumi.set(__self__, "cpu_architecture", cpu_architecture)
-        pulumi.set(__self__, "cpu_flavor", cpu_flavor)
+        pulumi.set(__self__, "ecs_flavor", ecs_flavor)
         pulumi.set(__self__, "group_id", group_id)
         pulumi.set(__self__, "id", id)
         pulumi.set(__self__, "name", name)
@@ -485,9 +486,12 @@ class GetDedicatedInstancesInstanceResult(dict):
         return pulumi.get(self, "cpu_architecture")
 
     @property
-    @pulumi.getter(name="cpuFlavor")
-    def cpu_flavor(self) -> str:
-        return pulumi.get(self, "cpu_flavor")
+    @pulumi.getter(name="ecsFlavor")
+    def ecs_flavor(self) -> str:
+        """
+        The flavor of the ECS used by the WAF instance.
+        """
+        return pulumi.get(self, "ecs_flavor")
 
     @property
     @pulumi.getter(name="groupId")

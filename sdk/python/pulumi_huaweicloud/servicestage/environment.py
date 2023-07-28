@@ -30,7 +30,7 @@ class EnvironmentArgs:
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID to which the environment belongs.
                Changing this will create a new resource.
         :param pulumi.Input[str] description: Specifies the environment description.
-               The description can contian a maximum of 128 characters.
+               The description can contain a maximum of 128 characters.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise projcet ID to which the application
                belongs. Changing this will create a new resource.
         :param pulumi.Input[str] name: Specifies the environment name.
@@ -85,7 +85,7 @@ class EnvironmentArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the environment description.
-        The description can contian a maximum of 128 characters.
+        The description can contain a maximum of 128 characters.
         """
         return pulumi.get(self, "description")
 
@@ -162,7 +162,7 @@ class _EnvironmentState:
         :param pulumi.Input[Sequence[pulumi.Input['EnvironmentBasicResourceArgs']]] basic_resources: Specifies the basic resources.
                The object structure is documented below.
         :param pulumi.Input[str] description: Specifies the environment description.
-               The description can contian a maximum of 128 characters.
+               The description can contain a maximum of 128 characters.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise projcet ID to which the application
                belongs. Changing this will create a new resource.
         :param pulumi.Input[str] name: Specifies the environment name.
@@ -208,7 +208,7 @@ class _EnvironmentState:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the environment description.
-        The description can contian a maximum of 128 characters.
+        The description can contain a maximum of 128 characters.
         """
         return pulumi.get(self, "description")
 
@@ -338,7 +338,7 @@ class Environment(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['EnvironmentBasicResourceArgs']]]] basic_resources: Specifies the basic resources.
                The object structure is documented below.
         :param pulumi.Input[str] description: Specifies the environment description.
-               The description can contian a maximum of 128 characters.
+               The description can contain a maximum of 128 characters.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise projcet ID to which the application
                belongs. Changing this will create a new resource.
         :param pulumi.Input[str] name: Specifies the environment name.
@@ -463,7 +463,7 @@ class Environment(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['EnvironmentBasicResourceArgs']]]] basic_resources: Specifies the basic resources.
                The object structure is documented below.
         :param pulumi.Input[str] description: Specifies the environment description.
-               The description can contian a maximum of 128 characters.
+               The description can contain a maximum of 128 characters.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise projcet ID to which the application
                belongs. Changing this will create a new resource.
         :param pulumi.Input[str] name: Specifies the environment name.
@@ -503,7 +503,7 @@ class Environment(pulumi.CustomResource):
     def description(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the environment description.
-        The description can contian a maximum of 128 characters.
+        The description can contain a maximum of 128 characters.
         """
         return pulumi.get(self, "description")
 

@@ -375,7 +375,8 @@ type GetSourceServersServer struct {
 	OsVersion string `pulumi:"osVersion"`
 	// The UTC time when the source server is registered.
 	RegisteredTime string `pulumi:"registeredTime"`
-	State          string `pulumi:"state"`
+	// Specifies the status of the source server.
+	State string `pulumi:"state"`
 	// The vcpus count of the source server.
 	Vcpus int `pulumi:"vcpus"`
 }
@@ -412,7 +413,8 @@ type GetSourceServersServerArgs struct {
 	OsVersion pulumi.StringInput `pulumi:"osVersion"`
 	// The UTC time when the source server is registered.
 	RegisteredTime pulumi.StringInput `pulumi:"registeredTime"`
-	State          pulumi.StringInput `pulumi:"state"`
+	// Specifies the status of the source server.
+	State pulumi.StringInput `pulumi:"state"`
 	// The vcpus count of the source server.
 	Vcpus pulumi.IntInput `pulumi:"vcpus"`
 }
@@ -518,6 +520,7 @@ func (o GetSourceServersServerOutput) RegisteredTime() pulumi.StringOutput {
 	return o.ApplyT(func(v GetSourceServersServer) string { return v.RegisteredTime }).(pulumi.StringOutput)
 }
 
+// Specifies the status of the source server.
 func (o GetSourceServersServerOutput) State() pulumi.StringOutput {
 	return o.ApplyT(func(v GetSourceServersServer) string { return v.State }).(pulumi.StringOutput)
 }

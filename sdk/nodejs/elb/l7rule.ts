@@ -75,9 +75,6 @@ export class L7rule extends pulumi.CustomResource {
         return obj['__pulumiType'] === L7rule.__pulumiType;
     }
 
-    /**
-     * The administrative state of the L7 Rule. The value can only be true (UP).
-     */
     public readonly adminStateUp!: pulumi.Output<boolean | undefined>;
     /**
      * The comparison type for the L7 rule - can either be STARTS_WITH, EQUAL_TO or REGEX
@@ -170,9 +167,6 @@ export class L7rule extends pulumi.CustomResource {
  * Input properties used for looking up and filtering L7rule resources.
  */
 export interface L7ruleState {
-    /**
-     * The administrative state of the L7 Rule. The value can only be true (UP).
-     */
     adminStateUp?: pulumi.Input<boolean>;
     /**
      * The comparison type for the L7 rule - can either be STARTS_WITH, EQUAL_TO or REGEX
@@ -215,9 +209,6 @@ export interface L7ruleState {
  * The set of arguments for constructing a L7rule resource.
  */
 export interface L7ruleArgs {
-    /**
-     * The administrative state of the L7 Rule. The value can only be true (UP).
-     */
     adminStateUp?: pulumi.Input<boolean>;
     /**
      * The comparison type for the L7 rule - can either be STARTS_WITH, EQUAL_TO or REGEX

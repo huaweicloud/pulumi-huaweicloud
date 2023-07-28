@@ -55,7 +55,7 @@ type NodeAttach struct {
 	// Specifies the ID of the cluster. Changing this parameter will create a new
 	// resource.
 	ClusterId pulumi.StringOutput `pulumi:"clusterId"`
-	// The data disks related configuration.
+	// The configurations of the data disk.
 	DataVolumes NodeAttachDataVolumeArrayOutput `pulumi:"dataVolumes"`
 	// Specifies the available disk space of a single docker container on the
 	// node in device mapper mode. Changing this parameter will create a new resource.
@@ -63,8 +63,9 @@ type NodeAttach struct {
 	// The Ecs group ID.
 	EcsGroupId pulumi.StringOutput `pulumi:"ecsGroupId"`
 	// The flavor ID of the CCE node.
-	FlavorId pulumi.StringOutput    `pulumi:"flavorId"`
-	ImageId  pulumi.StringPtrOutput `pulumi:"imageId"`
+	FlavorId pulumi.StringOutput `pulumi:"flavorId"`
+	// schema: Internal
+	ImageId pulumi.StringPtrOutput `pulumi:"imageId"`
 	// Specifies the key pair name when logging in to select the key pair mode.
 	// This parameter and `password` are alternative. Changing this parameter will reset the node.
 	KeyPair pulumi.StringPtrOutput `pulumi:"keyPair"`
@@ -78,9 +79,11 @@ type NodeAttach struct {
 	// Changing this parameter will create a new resource.
 	MaxPods pulumi.IntPtrOutput `pulumi:"maxPods"`
 	// Specifies the Node Name.
-	Name          pulumi.StringOutput    `pulumi:"name"`
+	Name pulumi.StringOutput `pulumi:"name"`
+	// schema: Internal
 	NicMultiQueue pulumi.StringPtrOutput `pulumi:"nicMultiQueue"`
-	NicThreshold  pulumi.StringPtrOutput `pulumi:"nicThreshold"`
+	// schema: Internal
+	NicThreshold pulumi.StringPtrOutput `pulumi:"nicThreshold"`
 	// Specifies the operating System of the node. Changing this parameter will reset the node.
 	// + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
 	Os pulumi.StringOutput `pulumi:"os"`
@@ -101,7 +104,7 @@ type NodeAttach struct {
 	// The region in which to create the CCE node attach resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new CCE node attach resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// The system disk related configuration.
+	// The configuration of the system disk.
 	RootVolumes NodeAttachRootVolumeArrayOutput `pulumi:"rootVolumes"`
 	// The runtime of the CCE node.
 	Runtime pulumi.StringOutput `pulumi:"runtime"`
@@ -165,7 +168,7 @@ type nodeAttachState struct {
 	// Specifies the ID of the cluster. Changing this parameter will create a new
 	// resource.
 	ClusterId *string `pulumi:"clusterId"`
-	// The data disks related configuration.
+	// The configurations of the data disk.
 	DataVolumes []NodeAttachDataVolume `pulumi:"dataVolumes"`
 	// Specifies the available disk space of a single docker container on the
 	// node in device mapper mode. Changing this parameter will create a new resource.
@@ -174,7 +177,8 @@ type nodeAttachState struct {
 	EcsGroupId *string `pulumi:"ecsGroupId"`
 	// The flavor ID of the CCE node.
 	FlavorId *string `pulumi:"flavorId"`
-	ImageId  *string `pulumi:"imageId"`
+	// schema: Internal
+	ImageId *string `pulumi:"imageId"`
 	// Specifies the key pair name when logging in to select the key pair mode.
 	// This parameter and `password` are alternative. Changing this parameter will reset the node.
 	KeyPair *string `pulumi:"keyPair"`
@@ -188,9 +192,11 @@ type nodeAttachState struct {
 	// Changing this parameter will create a new resource.
 	MaxPods *int `pulumi:"maxPods"`
 	// Specifies the Node Name.
-	Name          *string `pulumi:"name"`
+	Name *string `pulumi:"name"`
+	// schema: Internal
 	NicMultiQueue *string `pulumi:"nicMultiQueue"`
-	NicThreshold  *string `pulumi:"nicThreshold"`
+	// schema: Internal
+	NicThreshold *string `pulumi:"nicThreshold"`
 	// Specifies the operating System of the node. Changing this parameter will reset the node.
 	// + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
 	Os *string `pulumi:"os"`
@@ -211,7 +217,7 @@ type nodeAttachState struct {
 	// The region in which to create the CCE node attach resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new CCE node attach resource.
 	Region *string `pulumi:"region"`
-	// The system disk related configuration.
+	// The configuration of the system disk.
 	RootVolumes []NodeAttachRootVolume `pulumi:"rootVolumes"`
 	// The runtime of the CCE node.
 	Runtime *string `pulumi:"runtime"`
@@ -237,7 +243,7 @@ type NodeAttachState struct {
 	// Specifies the ID of the cluster. Changing this parameter will create a new
 	// resource.
 	ClusterId pulumi.StringPtrInput
-	// The data disks related configuration.
+	// The configurations of the data disk.
 	DataVolumes NodeAttachDataVolumeArrayInput
 	// Specifies the available disk space of a single docker container on the
 	// node in device mapper mode. Changing this parameter will create a new resource.
@@ -246,7 +252,8 @@ type NodeAttachState struct {
 	EcsGroupId pulumi.StringPtrInput
 	// The flavor ID of the CCE node.
 	FlavorId pulumi.StringPtrInput
-	ImageId  pulumi.StringPtrInput
+	// schema: Internal
+	ImageId pulumi.StringPtrInput
 	// Specifies the key pair name when logging in to select the key pair mode.
 	// This parameter and `password` are alternative. Changing this parameter will reset the node.
 	KeyPair pulumi.StringPtrInput
@@ -260,9 +267,11 @@ type NodeAttachState struct {
 	// Changing this parameter will create a new resource.
 	MaxPods pulumi.IntPtrInput
 	// Specifies the Node Name.
-	Name          pulumi.StringPtrInput
+	Name pulumi.StringPtrInput
+	// schema: Internal
 	NicMultiQueue pulumi.StringPtrInput
-	NicThreshold  pulumi.StringPtrInput
+	// schema: Internal
+	NicThreshold pulumi.StringPtrInput
 	// Specifies the operating System of the node. Changing this parameter will reset the node.
 	// + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
 	Os pulumi.StringPtrInput
@@ -283,7 +292,7 @@ type NodeAttachState struct {
 	// The region in which to create the CCE node attach resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new CCE node attach resource.
 	Region pulumi.StringPtrInput
-	// The system disk related configuration.
+	// The configuration of the system disk.
 	RootVolumes NodeAttachRootVolumeArrayInput
 	// The runtime of the CCE node.
 	Runtime pulumi.StringPtrInput
@@ -311,8 +320,9 @@ type nodeAttachArgs struct {
 	ClusterId string `pulumi:"clusterId"`
 	// Specifies the available disk space of a single docker container on the
 	// node in device mapper mode. Changing this parameter will create a new resource.
-	DockerBaseSize *int    `pulumi:"dockerBaseSize"`
-	ImageId        *string `pulumi:"imageId"`
+	DockerBaseSize *int `pulumi:"dockerBaseSize"`
+	// schema: Internal
+	ImageId *string `pulumi:"imageId"`
 	// Specifies the key pair name when logging in to select the key pair mode.
 	// This parameter and `password` are alternative. Changing this parameter will reset the node.
 	KeyPair *string `pulumi:"keyPair"`
@@ -326,9 +336,11 @@ type nodeAttachArgs struct {
 	// Changing this parameter will create a new resource.
 	MaxPods *int `pulumi:"maxPods"`
 	// Specifies the Node Name.
-	Name          *string `pulumi:"name"`
+	Name *string `pulumi:"name"`
+	// schema: Internal
 	NicMultiQueue *string `pulumi:"nicMultiQueue"`
-	NicThreshold  *string `pulumi:"nicThreshold"`
+	// schema: Internal
+	NicThreshold *string `pulumi:"nicThreshold"`
 	// Specifies the operating System of the node. Changing this parameter will reset the node.
 	// + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
 	Os string `pulumi:"os"`
@@ -363,7 +375,8 @@ type NodeAttachArgs struct {
 	// Specifies the available disk space of a single docker container on the
 	// node in device mapper mode. Changing this parameter will create a new resource.
 	DockerBaseSize pulumi.IntPtrInput
-	ImageId        pulumi.StringPtrInput
+	// schema: Internal
+	ImageId pulumi.StringPtrInput
 	// Specifies the key pair name when logging in to select the key pair mode.
 	// This parameter and `password` are alternative. Changing this parameter will reset the node.
 	KeyPair pulumi.StringPtrInput
@@ -377,9 +390,11 @@ type NodeAttachArgs struct {
 	// Changing this parameter will create a new resource.
 	MaxPods pulumi.IntPtrInput
 	// Specifies the Node Name.
-	Name          pulumi.StringPtrInput
+	Name pulumi.StringPtrInput
+	// schema: Internal
 	NicMultiQueue pulumi.StringPtrInput
-	NicThreshold  pulumi.StringPtrInput
+	// schema: Internal
+	NicThreshold pulumi.StringPtrInput
 	// Specifies the operating System of the node. Changing this parameter will reset the node.
 	// + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
 	Os pulumi.StringInput
@@ -509,7 +524,7 @@ func (o NodeAttachOutput) ClusterId() pulumi.StringOutput {
 	return o.ApplyT(func(v *NodeAttach) pulumi.StringOutput { return v.ClusterId }).(pulumi.StringOutput)
 }
 
-// The data disks related configuration.
+// The configurations of the data disk.
 func (o NodeAttachOutput) DataVolumes() NodeAttachDataVolumeArrayOutput {
 	return o.ApplyT(func(v *NodeAttach) NodeAttachDataVolumeArrayOutput { return v.DataVolumes }).(NodeAttachDataVolumeArrayOutput)
 }
@@ -530,6 +545,7 @@ func (o NodeAttachOutput) FlavorId() pulumi.StringOutput {
 	return o.ApplyT(func(v *NodeAttach) pulumi.StringOutput { return v.FlavorId }).(pulumi.StringOutput)
 }
 
+// schema: Internal
 func (o NodeAttachOutput) ImageId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *NodeAttach) pulumi.StringPtrOutput { return v.ImageId }).(pulumi.StringPtrOutput)
 }
@@ -563,10 +579,12 @@ func (o NodeAttachOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *NodeAttach) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
+// schema: Internal
 func (o NodeAttachOutput) NicMultiQueue() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *NodeAttach) pulumi.StringPtrOutput { return v.NicMultiQueue }).(pulumi.StringPtrOutput)
 }
 
+// schema: Internal
 func (o NodeAttachOutput) NicThreshold() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *NodeAttach) pulumi.StringPtrOutput { return v.NicThreshold }).(pulumi.StringPtrOutput)
 }
@@ -612,7 +630,7 @@ func (o NodeAttachOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *NodeAttach) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// The system disk related configuration.
+// The configuration of the system disk.
 func (o NodeAttachOutput) RootVolumes() NodeAttachRootVolumeArrayOutput {
 	return o.ApplyT(func(v *NodeAttach) NodeAttachRootVolumeArrayOutput { return v.RootVolumes }).(NodeAttachRootVolumeArrayOutput)
 }

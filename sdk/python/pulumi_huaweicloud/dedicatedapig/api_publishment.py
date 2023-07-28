@@ -24,15 +24,17 @@ class ApiPublishmentArgs:
                  version_id: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a ApiPublishment resource.
-        :param pulumi.Input[str] api_id: Specifies the API ID to be published or already published.
-               Changing this will create a new publishment resource.
-        :param pulumi.Input[str] env_id: Specifies the environment ID to which the current version of the API will be
-               published or has been published. Changing this will create a new publishment resource.
+        :param pulumi.Input[str] api_id: Specifies the ID of the API to be published or already published.  
+               Changing this will create a new resource.
+        :param pulumi.Input[str] env_id: Specifies the ID of the environmentto which the current version of the API
+               will be published or has been published.
+               Changing this will create a new resource.
         :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API belongs
                to. Changing this will create a new publishment resource.
         :param pulumi.Input[str] description: Specifies the description of the current publishment.
-        :param pulumi.Input[str] region: Specifies the region in which to publish APIs.
-               If omitted, the provider-level region will be used. Changing this will create a new publishment resource.
+        :param pulumi.Input[str] region: Specifies the region in which to publish APIs.  
+               If omitted, the provider-level region will be used.
+               Changing this will create a new resource.
         :param pulumi.Input[str] version_id: Specifies the version ID of the current publishment.
         """
         pulumi.set(__self__, "api_id", api_id)
@@ -49,8 +51,8 @@ class ApiPublishmentArgs:
     @pulumi.getter(name="apiId")
     def api_id(self) -> pulumi.Input[str]:
         """
-        Specifies the API ID to be published or already published.
-        Changing this will create a new publishment resource.
+        Specifies the ID of the API to be published or already published.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "api_id")
 
@@ -62,8 +64,9 @@ class ApiPublishmentArgs:
     @pulumi.getter(name="envId")
     def env_id(self) -> pulumi.Input[str]:
         """
-        Specifies the environment ID to which the current version of the API will be
-        published or has been published. Changing this will create a new publishment resource.
+        Specifies the ID of the environmentto which the current version of the API
+        will be published or has been published.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "env_id")
 
@@ -100,8 +103,9 @@ class ApiPublishmentArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to publish APIs.
-        If omitted, the provider-level region will be used. Changing this will create a new publishment resource.
+        Specifies the region in which to publish APIs.  
+        If omitted, the provider-level region will be used.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -132,24 +136,27 @@ class _ApiPublishmentState:
                  histories: Optional[pulumi.Input[Sequence[pulumi.Input['ApiPublishmentHistoryArgs']]]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
                  publish_id: Optional[pulumi.Input[str]] = None,
-                 publish_time: Optional[pulumi.Input[str]] = None,
+                 published_at: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  version_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering ApiPublishment resources.
-        :param pulumi.Input[str] api_id: Specifies the API ID to be published or already published.
-               Changing this will create a new publishment resource.
+        :param pulumi.Input[str] api_id: Specifies the ID of the API to be published or already published.  
+               Changing this will create a new resource.
         :param pulumi.Input[str] description: Specifies the description of the current publishment.
-        :param pulumi.Input[str] env_id: Specifies the environment ID to which the current version of the API will be
-               published or has been published. Changing this will create a new publishment resource.
-        :param pulumi.Input[str] env_name: Environment name to which the current version of the API is published.
-        :param pulumi.Input[Sequence[pulumi.Input['ApiPublishmentHistoryArgs']]] histories: All publish informations of the API. The structure is documented below.
+        :param pulumi.Input[str] env_id: Specifies the ID of the environmentto which the current version of the API
+               will be published or has been published.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] env_name: The name of the environment to which the current version of the API is published.
+        :param pulumi.Input[Sequence[pulumi.Input['ApiPublishmentHistoryArgs']]] histories: All publish informations of the API.  
+               The object structure is documented below.
         :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API belongs
                to. Changing this will create a new publishment resource.
         :param pulumi.Input[str] publish_id: The publish ID of the API in current environment.
-        :param pulumi.Input[str] publish_time: Time when the current version was published.
-        :param pulumi.Input[str] region: Specifies the region in which to publish APIs.
-               If omitted, the provider-level region will be used. Changing this will create a new publishment resource.
+        :param pulumi.Input[str] published_at: Time when the current version was published.
+        :param pulumi.Input[str] region: Specifies the region in which to publish APIs.  
+               If omitted, the provider-level region will be used.
+               Changing this will create a new resource.
         :param pulumi.Input[str] version_id: Specifies the version ID of the current publishment.
         """
         if api_id is not None:
@@ -166,8 +173,8 @@ class _ApiPublishmentState:
             pulumi.set(__self__, "instance_id", instance_id)
         if publish_id is not None:
             pulumi.set(__self__, "publish_id", publish_id)
-        if publish_time is not None:
-            pulumi.set(__self__, "publish_time", publish_time)
+        if published_at is not None:
+            pulumi.set(__self__, "published_at", published_at)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if version_id is not None:
@@ -177,8 +184,8 @@ class _ApiPublishmentState:
     @pulumi.getter(name="apiId")
     def api_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the API ID to be published or already published.
-        Changing this will create a new publishment resource.
+        Specifies the ID of the API to be published or already published.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "api_id")
 
@@ -202,8 +209,9 @@ class _ApiPublishmentState:
     @pulumi.getter(name="envId")
     def env_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the environment ID to which the current version of the API will be
-        published or has been published. Changing this will create a new publishment resource.
+        Specifies the ID of the environmentto which the current version of the API
+        will be published or has been published.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "env_id")
 
@@ -215,7 +223,7 @@ class _ApiPublishmentState:
     @pulumi.getter(name="envName")
     def env_name(self) -> Optional[pulumi.Input[str]]:
         """
-        Environment name to which the current version of the API is published.
+        The name of the environment to which the current version of the API is published.
         """
         return pulumi.get(self, "env_name")
 
@@ -227,7 +235,8 @@ class _ApiPublishmentState:
     @pulumi.getter
     def histories(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ApiPublishmentHistoryArgs']]]]:
         """
-        All publish informations of the API. The structure is documented below.
+        All publish informations of the API.  
+        The object structure is documented below.
         """
         return pulumi.get(self, "histories")
 
@@ -261,23 +270,24 @@ class _ApiPublishmentState:
         pulumi.set(self, "publish_id", value)
 
     @property
-    @pulumi.getter(name="publishTime")
-    def publish_time(self) -> Optional[pulumi.Input[str]]:
+    @pulumi.getter(name="publishedAt")
+    def published_at(self) -> Optional[pulumi.Input[str]]:
         """
         Time when the current version was published.
         """
-        return pulumi.get(self, "publish_time")
+        return pulumi.get(self, "published_at")
 
-    @publish_time.setter
-    def publish_time(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "publish_time", value)
+    @published_at.setter
+    def published_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "published_at", value)
 
     @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to publish APIs.
-        If omitted, the provider-level region will be used. Changing this will create a new publishment resource.
+        Specifies the region in which to publish APIs.  
+        If omitted, the provider-level region will be used.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -347,25 +357,25 @@ class ApiPublishment(pulumi.CustomResource):
 
         ## Import
 
-        APIs can be imported using their `instance_id`, `env_id` and `api_id`, separated by slashes, e.g.
+        The publishments can be imported using their related `instance_id`, `env_id` and `api_id`, separated by slashes, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/apiPublishment:ApiPublishment test
+         $ pulumi import huaweicloud:DedicatedApig/apiPublishment:ApiPublishment test <instance_id>/<env_id>/<api_id>
         ```
-
-         9b0a0a2f97aa43afbf7d852e3ba6a6f9/c5b32727186c4fe6b60408a8a297be09/9a3b3484c08545f9b9b0dcb2de0f5b8a
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] api_id: Specifies the API ID to be published or already published.
-               Changing this will create a new publishment resource.
+        :param pulumi.Input[str] api_id: Specifies the ID of the API to be published or already published.  
+               Changing this will create a new resource.
         :param pulumi.Input[str] description: Specifies the description of the current publishment.
-        :param pulumi.Input[str] env_id: Specifies the environment ID to which the current version of the API will be
-               published or has been published. Changing this will create a new publishment resource.
+        :param pulumi.Input[str] env_id: Specifies the ID of the environmentto which the current version of the API
+               will be published or has been published.
+               Changing this will create a new resource.
         :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API belongs
                to. Changing this will create a new publishment resource.
-        :param pulumi.Input[str] region: Specifies the region in which to publish APIs.
-               If omitted, the provider-level region will be used. Changing this will create a new publishment resource.
+        :param pulumi.Input[str] region: Specifies the region in which to publish APIs.  
+               If omitted, the provider-level region will be used.
+               Changing this will create a new resource.
         :param pulumi.Input[str] version_id: Specifies the version ID of the current publishment.
         """
         ...
@@ -411,13 +421,11 @@ class ApiPublishment(pulumi.CustomResource):
 
         ## Import
 
-        APIs can be imported using their `instance_id`, `env_id` and `api_id`, separated by slashes, e.g.
+        The publishments can be imported using their related `instance_id`, `env_id` and `api_id`, separated by slashes, e.g.
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/apiPublishment:ApiPublishment test
+         $ pulumi import huaweicloud:DedicatedApig/apiPublishment:ApiPublishment test <instance_id>/<env_id>/<api_id>
         ```
-
-         9b0a0a2f97aa43afbf7d852e3ba6a6f9/c5b32727186c4fe6b60408a8a297be09/9a3b3484c08545f9b9b0dcb2de0f5b8a
 
         :param str resource_name: The name of the resource.
         :param ApiPublishmentArgs args: The arguments to use to populate this resource's properties.
@@ -464,7 +472,7 @@ class ApiPublishment(pulumi.CustomResource):
             __props__.__dict__["env_name"] = None
             __props__.__dict__["histories"] = None
             __props__.__dict__["publish_id"] = None
-            __props__.__dict__["publish_time"] = None
+            __props__.__dict__["published_at"] = None
         super(ApiPublishment, __self__).__init__(
             'huaweicloud:DedicatedApig/apiPublishment:ApiPublishment',
             resource_name,
@@ -482,7 +490,7 @@ class ApiPublishment(pulumi.CustomResource):
             histories: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiPublishmentHistoryArgs']]]]] = None,
             instance_id: Optional[pulumi.Input[str]] = None,
             publish_id: Optional[pulumi.Input[str]] = None,
-            publish_time: Optional[pulumi.Input[str]] = None,
+            published_at: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             version_id: Optional[pulumi.Input[str]] = None) -> 'ApiPublishment':
         """
@@ -492,19 +500,22 @@ class ApiPublishment(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] api_id: Specifies the API ID to be published or already published.
-               Changing this will create a new publishment resource.
+        :param pulumi.Input[str] api_id: Specifies the ID of the API to be published or already published.  
+               Changing this will create a new resource.
         :param pulumi.Input[str] description: Specifies the description of the current publishment.
-        :param pulumi.Input[str] env_id: Specifies the environment ID to which the current version of the API will be
-               published or has been published. Changing this will create a new publishment resource.
-        :param pulumi.Input[str] env_name: Environment name to which the current version of the API is published.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiPublishmentHistoryArgs']]]] histories: All publish informations of the API. The structure is documented below.
+        :param pulumi.Input[str] env_id: Specifies the ID of the environmentto which the current version of the API
+               will be published or has been published.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] env_name: The name of the environment to which the current version of the API is published.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiPublishmentHistoryArgs']]]] histories: All publish informations of the API.  
+               The object structure is documented below.
         :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API belongs
                to. Changing this will create a new publishment resource.
         :param pulumi.Input[str] publish_id: The publish ID of the API in current environment.
-        :param pulumi.Input[str] publish_time: Time when the current version was published.
-        :param pulumi.Input[str] region: Specifies the region in which to publish APIs.
-               If omitted, the provider-level region will be used. Changing this will create a new publishment resource.
+        :param pulumi.Input[str] published_at: Time when the current version was published.
+        :param pulumi.Input[str] region: Specifies the region in which to publish APIs.  
+               If omitted, the provider-level region will be used.
+               Changing this will create a new resource.
         :param pulumi.Input[str] version_id: Specifies the version ID of the current publishment.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -518,7 +529,7 @@ class ApiPublishment(pulumi.CustomResource):
         __props__.__dict__["histories"] = histories
         __props__.__dict__["instance_id"] = instance_id
         __props__.__dict__["publish_id"] = publish_id
-        __props__.__dict__["publish_time"] = publish_time
+        __props__.__dict__["published_at"] = published_at
         __props__.__dict__["region"] = region
         __props__.__dict__["version_id"] = version_id
         return ApiPublishment(resource_name, opts=opts, __props__=__props__)
@@ -527,8 +538,8 @@ class ApiPublishment(pulumi.CustomResource):
     @pulumi.getter(name="apiId")
     def api_id(self) -> pulumi.Output[str]:
         """
-        Specifies the API ID to be published or already published.
-        Changing this will create a new publishment resource.
+        Specifies the ID of the API to be published or already published.  
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "api_id")
 
@@ -544,8 +555,9 @@ class ApiPublishment(pulumi.CustomResource):
     @pulumi.getter(name="envId")
     def env_id(self) -> pulumi.Output[str]:
         """
-        Specifies the environment ID to which the current version of the API will be
-        published or has been published. Changing this will create a new publishment resource.
+        Specifies the ID of the environmentto which the current version of the API
+        will be published or has been published.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "env_id")
 
@@ -553,7 +565,7 @@ class ApiPublishment(pulumi.CustomResource):
     @pulumi.getter(name="envName")
     def env_name(self) -> pulumi.Output[str]:
         """
-        Environment name to which the current version of the API is published.
+        The name of the environment to which the current version of the API is published.
         """
         return pulumi.get(self, "env_name")
 
@@ -561,7 +573,8 @@ class ApiPublishment(pulumi.CustomResource):
     @pulumi.getter
     def histories(self) -> pulumi.Output[Sequence['outputs.ApiPublishmentHistory']]:
         """
-        All publish informations of the API. The structure is documented below.
+        All publish informations of the API.  
+        The object structure is documented below.
         """
         return pulumi.get(self, "histories")
 
@@ -583,19 +596,20 @@ class ApiPublishment(pulumi.CustomResource):
         return pulumi.get(self, "publish_id")
 
     @property
-    @pulumi.getter(name="publishTime")
-    def publish_time(self) -> pulumi.Output[str]:
+    @pulumi.getter(name="publishedAt")
+    def published_at(self) -> pulumi.Output[str]:
         """
         Time when the current version was published.
         """
-        return pulumi.get(self, "publish_time")
+        return pulumi.get(self, "published_at")
 
     @property
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        Specifies the region in which to publish APIs.
-        If omitted, the provider-level region will be used. Changing this will create a new publishment resource.
+        Specifies the region in which to publish APIs.  
+        If omitted, the provider-level region will be used.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 

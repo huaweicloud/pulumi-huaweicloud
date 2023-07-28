@@ -21,7 +21,10 @@ class GetPeeringConnectionResult:
     """
     A collection of values returned by getPeeringConnection.
     """
-    def __init__(__self__, id=None, name=None, peer_tenant_id=None, peer_vpc_id=None, region=None, status=None, vpc_id=None):
+    def __init__(__self__, description=None, id=None, name=None, peer_tenant_id=None, peer_vpc_id=None, region=None, status=None, vpc_id=None):
+        if description and not isinstance(description, str):
+            raise TypeError("Expected argument 'description' to be a str")
+        pulumi.set(__self__, "description", description)
         if id and not isinstance(id, str):
             raise TypeError("Expected argument 'id' to be a str")
         pulumi.set(__self__, "id", id)
@@ -43,6 +46,14 @@ class GetPeeringConnectionResult:
         if vpc_id and not isinstance(vpc_id, str):
             raise TypeError("Expected argument 'vpc_id' to be a str")
         pulumi.set(__self__, "vpc_id", vpc_id)
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        The description of the VPC Peering Connection.
+        """
+        return pulumi.get(self, "description")
 
     @property
     @pulumi.getter
@@ -86,6 +97,7 @@ class AwaitableGetPeeringConnectionResult(GetPeeringConnectionResult):
         if False:
             yield self
         return GetPeeringConnectionResult(
+            description=self.description,
             id=self.id,
             name=self.name,
             peer_tenant_id=self.peer_tenant_id,
@@ -146,6 +158,7 @@ def get_peering_connection(id: Optional[str] = None,
     __ret__ = pulumi.runtime.invoke('huaweicloud:Vpc/getPeeringConnection:getPeeringConnection', __args__, opts=opts, typ=GetPeeringConnectionResult).value
 
     return AwaitableGetPeeringConnectionResult(
+        description=__ret__.description,
         id=__ret__.id,
         name=__ret__.name,
         peer_tenant_id=__ret__.peer_tenant_id,

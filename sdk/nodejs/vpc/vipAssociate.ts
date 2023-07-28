@@ -5,25 +5,22 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Manages a Vip associate resource within HuaweiCloud.
+ * Using this resource, one or more NICs (to which the ECS instance belongs) can be bound to the VIP.
+ *
+ * > A VIP can only have one resource.
  *
  * ## Example Usage
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const mynet = huaweicloud.Vpc.getSubnet({
- *     name: "subnet-default",
- * });
- * const myvip = new huaweicloud.vpc.Vip("myvip", {networkId: mynet.then(mynet => mynet.id)});
+ * const config = new pulumi.Config();
+ * const vipId = config.requireObject("vipId");
+ * const nicPortIds = config.requireObject("nicPortIds");
  * const vipAssociated = new huaweicloud.vpc.VipAssociate("vipAssociated", {
- *     vipId: myvip.id,
- *     portIds: [
- *         _var.port_1,
- *         _var.port_2,
- *     ],
+ *     vipId: vipId,
+ *     portIds: nicPortIds,
  * });
  * ```
  *

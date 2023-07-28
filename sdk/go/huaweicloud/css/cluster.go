@@ -110,6 +110,50 @@ import (
 //	}
 //
 // ```
+// ### create a cluster with ess-data node and cold node use local disk
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Css"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Css"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			availabilityZone := cfg.RequireObject("availabilityZone")
+//			vpcId := cfg.RequireObject("vpcId")
+//			subnetId := cfg.RequireObject("subnetId")
+//			secgroupId := cfg.RequireObject("secgroupId")
+//			_, err := Css.NewCluster(ctx, "cluster", &Css.ClusterArgs{
+//				EngineVersion: pulumi.String("7.10.2"),
+//				EssNodeConfig: &css.ClusterEssNodeConfigArgs{
+//					Flavor:         pulumi.String("ess.spec-ds.xlarge.8"),
+//					InstanceNumber: pulumi.Int(1),
+//				},
+//				ColdNodeConfig: &css.ClusterColdNodeConfigArgs{
+//					Flavor:         pulumi.String("ess.spec-ds.2xlarge.8"),
+//					InstanceNumber: pulumi.Int(2),
+//				},
+//				AvailabilityZone: pulumi.Any(availabilityZone),
+//				VpcId:            pulumi.Any(vpcId),
+//				SubnetId:         pulumi.Any(subnetId),
+//				SecurityGroupId:  pulumi.Any(secgroupId),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
 //
 // ## Import
 //
@@ -125,7 +169,6 @@ type Cluster struct {
 
 	// Specifies whether auto renew is enabled.
 	// Valid values are `true` and `false`, defaults to `false`.
-	// Changing this parameter will create a new resource.
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
 	// Specifies the availability zone name.
 	// Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
@@ -166,6 +209,10 @@ type Cluster struct {
 	EssNodeConfig ClusterEssNodeConfigOutput `pulumi:"essNodeConfig"`
 	// Deprecated: please use ess_node_config.instance_number instead
 	ExpectNodeNum pulumi.IntOutput `pulumi:"expectNodeNum"`
+	// Specifies whether to enable HTTPS. Defaults to `false`.
+	// When `httpsEnabled` is set to `true`, the `securityMode` needs to be set to `true`.
+	// Changing this parameter will create a new resource.
+	HttpsEnabled pulumi.BoolOutput `pulumi:"httpsEnabled"`
 	// Specifies Kibana public network access information.
 	// This parameter is valid only when securityMode is set to true.
 	// The kibanaPublicAccess structure is documented below.
@@ -210,10 +257,7 @@ type Cluster struct {
 	// authentication. Available values include *true* and *false*. securityMode is disabled by default.
 	// Changing this parameter will create a new resource.
 	SecurityMode pulumi.BoolPtrOutput `pulumi:"securityMode"`
-	// The cluster status
-	// + `100`: The operation, such as instance creation, is in progress.
-	// + `200`: The cluster is available.
-	// + `303`: The cluster is unavailable.
+	// Instance status.
 	Status pulumi.StringOutput `pulumi:"status"`
 	// Specifies the Subnet ID. Changing this parameter will create a new resource.
 	SubnetId pulumi.StringOutput `pulumi:"subnetId"`
@@ -265,7 +309,6 @@ func GetCluster(ctx *pulumi.Context,
 type clusterState struct {
 	// Specifies whether auto renew is enabled.
 	// Valid values are `true` and `false`, defaults to `false`.
-	// Changing this parameter will create a new resource.
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the availability zone name.
 	// Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
@@ -306,6 +349,10 @@ type clusterState struct {
 	EssNodeConfig *ClusterEssNodeConfig `pulumi:"essNodeConfig"`
 	// Deprecated: please use ess_node_config.instance_number instead
 	ExpectNodeNum *int `pulumi:"expectNodeNum"`
+	// Specifies whether to enable HTTPS. Defaults to `false`.
+	// When `httpsEnabled` is set to `true`, the `securityMode` needs to be set to `true`.
+	// Changing this parameter will create a new resource.
+	HttpsEnabled *bool `pulumi:"httpsEnabled"`
 	// Specifies Kibana public network access information.
 	// This parameter is valid only when securityMode is set to true.
 	// The kibanaPublicAccess structure is documented below.
@@ -350,10 +397,7 @@ type clusterState struct {
 	// authentication. Available values include *true* and *false*. securityMode is disabled by default.
 	// Changing this parameter will create a new resource.
 	SecurityMode *bool `pulumi:"securityMode"`
-	// The cluster status
-	// + `100`: The operation, such as instance creation, is in progress.
-	// + `200`: The cluster is available.
-	// + `303`: The cluster is unavailable.
+	// Instance status.
 	Status *string `pulumi:"status"`
 	// Specifies the Subnet ID. Changing this parameter will create a new resource.
 	SubnetId *string `pulumi:"subnetId"`
@@ -373,7 +417,6 @@ type clusterState struct {
 type ClusterState struct {
 	// Specifies whether auto renew is enabled.
 	// Valid values are `true` and `false`, defaults to `false`.
-	// Changing this parameter will create a new resource.
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the availability zone name.
 	// Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
@@ -414,6 +457,10 @@ type ClusterState struct {
 	EssNodeConfig ClusterEssNodeConfigPtrInput
 	// Deprecated: please use ess_node_config.instance_number instead
 	ExpectNodeNum pulumi.IntPtrInput
+	// Specifies whether to enable HTTPS. Defaults to `false`.
+	// When `httpsEnabled` is set to `true`, the `securityMode` needs to be set to `true`.
+	// Changing this parameter will create a new resource.
+	HttpsEnabled pulumi.BoolPtrInput
 	// Specifies Kibana public network access information.
 	// This parameter is valid only when securityMode is set to true.
 	// The kibanaPublicAccess structure is documented below.
@@ -458,10 +505,7 @@ type ClusterState struct {
 	// authentication. Available values include *true* and *false*. securityMode is disabled by default.
 	// Changing this parameter will create a new resource.
 	SecurityMode pulumi.BoolPtrInput
-	// The cluster status
-	// + `100`: The operation, such as instance creation, is in progress.
-	// + `200`: The cluster is available.
-	// + `303`: The cluster is unavailable.
+	// Instance status.
 	Status pulumi.StringPtrInput
 	// Specifies the Subnet ID. Changing this parameter will create a new resource.
 	SubnetId pulumi.StringPtrInput
@@ -485,7 +529,6 @@ func (ClusterState) ElementType() reflect.Type {
 type clusterArgs struct {
 	// Specifies whether auto renew is enabled.
 	// Valid values are `true` and `false`, defaults to `false`.
-	// Changing this parameter will create a new resource.
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the availability zone name.
 	// Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
@@ -521,6 +564,10 @@ type clusterArgs struct {
 	EssNodeConfig *ClusterEssNodeConfig `pulumi:"essNodeConfig"`
 	// Deprecated: please use ess_node_config.instance_number instead
 	ExpectNodeNum *int `pulumi:"expectNodeNum"`
+	// Specifies whether to enable HTTPS. Defaults to `false`.
+	// When `httpsEnabled` is set to `true`, the `securityMode` needs to be set to `true`.
+	// Changing this parameter will create a new resource.
+	HttpsEnabled *bool `pulumi:"httpsEnabled"`
 	// Specifies Kibana public network access information.
 	// This parameter is valid only when securityMode is set to true.
 	// The kibanaPublicAccess structure is documented below.
@@ -578,7 +625,6 @@ type clusterArgs struct {
 type ClusterArgs struct {
 	// Specifies whether auto renew is enabled.
 	// Valid values are `true` and `false`, defaults to `false`.
-	// Changing this parameter will create a new resource.
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the availability zone name.
 	// Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
@@ -614,6 +660,10 @@ type ClusterArgs struct {
 	EssNodeConfig ClusterEssNodeConfigPtrInput
 	// Deprecated: please use ess_node_config.instance_number instead
 	ExpectNodeNum pulumi.IntPtrInput
+	// Specifies whether to enable HTTPS. Defaults to `false`.
+	// When `httpsEnabled` is set to `true`, the `securityMode` needs to be set to `true`.
+	// Changing this parameter will create a new resource.
+	HttpsEnabled pulumi.BoolPtrInput
 	// Specifies Kibana public network access information.
 	// This parameter is valid only when securityMode is set to true.
 	// The kibanaPublicAccess structure is documented below.
@@ -756,7 +806,6 @@ func (o ClusterOutput) ToClusterOutputWithContext(ctx context.Context) ClusterOu
 
 // Specifies whether auto renew is enabled.
 // Valid values are `true` and `false`, defaults to `false`.
-// Changing this parameter will create a new resource.
 func (o ClusterOutput) AutoRenew() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
 }
@@ -834,6 +883,13 @@ func (o ClusterOutput) EssNodeConfig() ClusterEssNodeConfigOutput {
 // Deprecated: please use ess_node_config.instance_number instead
 func (o ClusterOutput) ExpectNodeNum() pulumi.IntOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.IntOutput { return v.ExpectNodeNum }).(pulumi.IntOutput)
+}
+
+// Specifies whether to enable HTTPS. Defaults to `false`.
+// When `httpsEnabled` is set to `true`, the `securityMode` needs to be set to `true`.
+// Changing this parameter will create a new resource.
+func (o ClusterOutput) HttpsEnabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Cluster) pulumi.BoolOutput { return v.HttpsEnabled }).(pulumi.BoolOutput)
 }
 
 // Specifies Kibana public network access information.
@@ -916,10 +972,7 @@ func (o ClusterOutput) SecurityMode() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.BoolPtrOutput { return v.SecurityMode }).(pulumi.BoolPtrOutput)
 }
 
-// The cluster status
-// + `100`: The operation, such as instance creation, is in progress.
-// + `200`: The cluster is available.
-// + `303`: The cluster is unavailable.
+// Instance status.
 func (o ClusterOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
 }

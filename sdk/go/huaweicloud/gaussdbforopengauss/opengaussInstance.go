@@ -21,7 +21,7 @@ import (
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:GaussDBforOpenGauss/opengaussInstance:OpengaussInstance test ee678f40-ce8e-4d0c-8221-38dead426f06
+//	$ pulumi import huaweicloud:GaussDBforOpenGauss/opengaussInstance:OpengaussInstance test 1f2c4f48adea4ae684c8edd8818fa349in14
 //
 // ```
 type OpengaussInstance struct {
@@ -46,7 +46,6 @@ type OpengaussInstance struct {
 	ConfigurationId pulumi.StringPtrOutput `pulumi:"configurationId"`
 	// Specifies the coordinator number. Values: 1~9. The default value is 3.
 	// The value must not be greater than twice value of `shardingNum`.
-	// This parameter is valid only when the HA mode is set to **enterprise**.
 	CoordinatorNum pulumi.IntPtrOutput `pulumi:"coordinatorNum"`
 	// Specifies the datastore information.
 	// The object structure is documented below.
@@ -104,7 +103,6 @@ type OpengaussInstance struct {
 	Region pulumi.StringOutput `pulumi:"region"`
 	// The replica number. The valid values are **2** and **3**, defaults to **3**.
 	// Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
-	// This parameter is valid only when the HA mode is set to **centralization_standard**.
 	// Changing this parameter will create a new resource.
 	ReplicaNum pulumi.IntPtrOutput `pulumi:"replicaNum"`
 	// Specifies the security group ID to which the instance belongs.
@@ -113,7 +111,7 @@ type OpengaussInstance struct {
 	// (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
 	SecurityGroupId pulumi.StringPtrOutput `pulumi:"securityGroupId"`
 	// Specifies the sharding number. The valid value is range form `1` to `9`.
-	// The default value is 3. This parameter is valid only when the HA mode is set to **enterprise**.
+	// The default value is 3.
 	ShardingNum pulumi.IntPtrOutput `pulumi:"shardingNum"`
 	// Indicates the node status.
 	Status pulumi.StringOutput `pulumi:"status"`
@@ -206,7 +204,6 @@ type opengaussInstanceState struct {
 	ConfigurationId *string `pulumi:"configurationId"`
 	// Specifies the coordinator number. Values: 1~9. The default value is 3.
 	// The value must not be greater than twice value of `shardingNum`.
-	// This parameter is valid only when the HA mode is set to **enterprise**.
 	CoordinatorNum *int `pulumi:"coordinatorNum"`
 	// Specifies the datastore information.
 	// The object structure is documented below.
@@ -264,7 +261,6 @@ type opengaussInstanceState struct {
 	Region *string `pulumi:"region"`
 	// The replica number. The valid values are **2** and **3**, defaults to **3**.
 	// Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
-	// This parameter is valid only when the HA mode is set to **centralization_standard**.
 	// Changing this parameter will create a new resource.
 	ReplicaNum *int `pulumi:"replicaNum"`
 	// Specifies the security group ID to which the instance belongs.
@@ -273,7 +269,7 @@ type opengaussInstanceState struct {
 	// (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
 	SecurityGroupId *string `pulumi:"securityGroupId"`
 	// Specifies the sharding number. The valid value is range form `1` to `9`.
-	// The default value is 3. This parameter is valid only when the HA mode is set to **enterprise**.
+	// The default value is 3.
 	ShardingNum *int `pulumi:"shardingNum"`
 	// Indicates the node status.
 	Status *string `pulumi:"status"`
@@ -316,7 +312,6 @@ type OpengaussInstanceState struct {
 	ConfigurationId pulumi.StringPtrInput
 	// Specifies the coordinator number. Values: 1~9. The default value is 3.
 	// The value must not be greater than twice value of `shardingNum`.
-	// This parameter is valid only when the HA mode is set to **enterprise**.
 	CoordinatorNum pulumi.IntPtrInput
 	// Specifies the datastore information.
 	// The object structure is documented below.
@@ -374,7 +369,6 @@ type OpengaussInstanceState struct {
 	Region pulumi.StringPtrInput
 	// The replica number. The valid values are **2** and **3**, defaults to **3**.
 	// Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
-	// This parameter is valid only when the HA mode is set to **centralization_standard**.
 	// Changing this parameter will create a new resource.
 	ReplicaNum pulumi.IntPtrInput
 	// Specifies the security group ID to which the instance belongs.
@@ -383,7 +377,7 @@ type OpengaussInstanceState struct {
 	// (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
 	SecurityGroupId pulumi.StringPtrInput
 	// Specifies the sharding number. The valid value is range form `1` to `9`.
-	// The default value is 3. This parameter is valid only when the HA mode is set to **enterprise**.
+	// The default value is 3.
 	ShardingNum pulumi.IntPtrInput
 	// Indicates the node status.
 	Status pulumi.StringPtrInput
@@ -430,7 +424,6 @@ type opengaussInstanceArgs struct {
 	ConfigurationId *string `pulumi:"configurationId"`
 	// Specifies the coordinator number. Values: 1~9. The default value is 3.
 	// The value must not be greater than twice value of `shardingNum`.
-	// This parameter is valid only when the HA mode is set to **enterprise**.
 	CoordinatorNum *int `pulumi:"coordinatorNum"`
 	// Specifies the datastore information.
 	// The object structure is documented below.
@@ -476,7 +469,6 @@ type opengaussInstanceArgs struct {
 	Region *string `pulumi:"region"`
 	// The replica number. The valid values are **2** and **3**, defaults to **3**.
 	// Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
-	// This parameter is valid only when the HA mode is set to **centralization_standard**.
 	// Changing this parameter will create a new resource.
 	ReplicaNum *int `pulumi:"replicaNum"`
 	// Specifies the security group ID to which the instance belongs.
@@ -485,7 +477,7 @@ type opengaussInstanceArgs struct {
 	// (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
 	SecurityGroupId *string `pulumi:"securityGroupId"`
 	// Specifies the sharding number. The valid value is range form `1` to `9`.
-	// The default value is 3. This parameter is valid only when the HA mode is set to **enterprise**.
+	// The default value is 3.
 	ShardingNum *int `pulumi:"shardingNum"`
 	// Specifies the network ID of VPC subnet to which the instance belongs.
 	// Changing this parameter will create a new resource.
@@ -522,7 +514,6 @@ type OpengaussInstanceArgs struct {
 	ConfigurationId pulumi.StringPtrInput
 	// Specifies the coordinator number. Values: 1~9. The default value is 3.
 	// The value must not be greater than twice value of `shardingNum`.
-	// This parameter is valid only when the HA mode is set to **enterprise**.
 	CoordinatorNum pulumi.IntPtrInput
 	// Specifies the datastore information.
 	// The object structure is documented below.
@@ -568,7 +559,6 @@ type OpengaussInstanceArgs struct {
 	Region pulumi.StringPtrInput
 	// The replica number. The valid values are **2** and **3**, defaults to **3**.
 	// Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
-	// This parameter is valid only when the HA mode is set to **centralization_standard**.
 	// Changing this parameter will create a new resource.
 	ReplicaNum pulumi.IntPtrInput
 	// Specifies the security group ID to which the instance belongs.
@@ -577,7 +567,7 @@ type OpengaussInstanceArgs struct {
 	// (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
 	SecurityGroupId pulumi.StringPtrInput
 	// Specifies the sharding number. The valid value is range form `1` to `9`.
-	// The default value is 3. This parameter is valid only when the HA mode is set to **enterprise**.
+	// The default value is 3.
 	ShardingNum pulumi.IntPtrInput
 	// Specifies the network ID of VPC subnet to which the instance belongs.
 	// Changing this parameter will create a new resource.
@@ -714,7 +704,6 @@ func (o OpengaussInstanceOutput) ConfigurationId() pulumi.StringPtrOutput {
 
 // Specifies the coordinator number. Values: 1~9. The default value is 3.
 // The value must not be greater than twice value of `shardingNum`.
-// This parameter is valid only when the HA mode is set to **enterprise**.
 func (o OpengaussInstanceOutput) CoordinatorNum() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *OpengaussInstance) pulumi.IntPtrOutput { return v.CoordinatorNum }).(pulumi.IntPtrOutput)
 }
@@ -826,7 +815,6 @@ func (o OpengaussInstanceOutput) Region() pulumi.StringOutput {
 
 // The replica number. The valid values are **2** and **3**, defaults to **3**.
 // Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
-// This parameter is valid only when the HA mode is set to **centralization_standard**.
 // Changing this parameter will create a new resource.
 func (o OpengaussInstanceOutput) ReplicaNum() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *OpengaussInstance) pulumi.IntPtrOutput { return v.ReplicaNum }).(pulumi.IntPtrOutput)
@@ -841,7 +829,7 @@ func (o OpengaussInstanceOutput) SecurityGroupId() pulumi.StringPtrOutput {
 }
 
 // Specifies the sharding number. The valid value is range form `1` to `9`.
-// The default value is 3. This parameter is valid only when the HA mode is set to **enterprise**.
+// The default value is 3.
 func (o OpengaussInstanceOutput) ShardingNum() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *OpengaussInstance) pulumi.IntPtrOutput { return v.ShardingNum }).(pulumi.IntPtrOutput)
 }

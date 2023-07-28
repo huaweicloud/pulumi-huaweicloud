@@ -50,6 +50,7 @@ func LookupSecgroup(ctx *pulumi.Context, args *LookupSecgroupArgs, opts ...pulum
 
 // A collection of arguments for invoking getSecgroup.
 type LookupSecgroupArgs struct {
+	// Specifies the enterprise project ID of the security group.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the name of the security group.
 	Name *string `pulumi:"name"`
@@ -94,6 +95,7 @@ func LookupSecgroupOutput(ctx *pulumi.Context, args LookupSecgroupOutputArgs, op
 
 // A collection of arguments for invoking getSecgroup.
 type LookupSecgroupOutputArgs struct {
+	// Specifies the enterprise project ID of the security group.
 	EnterpriseProjectId pulumi.StringPtrInput `pulumi:"enterpriseProjectId"`
 	// Specifies the name of the security group.
 	Name pulumi.StringPtrInput `pulumi:"name"`

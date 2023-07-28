@@ -20,8 +20,9 @@ class NotebookMountStorageInitArgs:
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a NotebookMountStorage resource.
-        :param pulumi.Input[str] local_mount_directory: Specifies the local mount directory. Only the sub directory of `/data/`
-               can be mounted. The format is : `/data/dir1/`. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] local_mount_directory: Specifies the local mount directory.
+               Only the subdirectory of `/data/` can be mounted. The format is : `/data/dir1/`.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] notebook_id: Specifies ID of notebook which the storage be mounted to.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] storage_path: Specifies the path of Parallel File System (PFS) or its folders in OBS.
@@ -39,8 +40,9 @@ class NotebookMountStorageInitArgs:
     @pulumi.getter(name="localMountDirectory")
     def local_mount_directory(self) -> pulumi.Input[str]:
         """
-        Specifies the local mount directory. Only the sub directory of `/data/`
-        can be mounted. The format is : `/data/dir1/`. Changing this parameter will create a new resource.
+        Specifies the local mount directory.
+        Only the subdirectory of `/data/` can be mounted. The format is : `/data/dir1/`.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "local_mount_directory")
 
@@ -100,8 +102,9 @@ class _NotebookMountStorageState:
                  type: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering NotebookMountStorage resources.
-        :param pulumi.Input[str] local_mount_directory: Specifies the local mount directory. Only the sub directory of `/data/`
-               can be mounted. The format is : `/data/dir1/`. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] local_mount_directory: Specifies the local mount directory.
+               Only the subdirectory of `/data/` can be mounted. The format is : `/data/dir1/`.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] mount_id: The mount ID.
         :param pulumi.Input[str] notebook_id: Specifies ID of notebook which the storage be mounted to.
                Changing this parameter will create a new resource.
@@ -132,8 +135,9 @@ class _NotebookMountStorageState:
     @pulumi.getter(name="localMountDirectory")
     def local_mount_directory(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the local mount directory. Only the sub directory of `/data/`
-        can be mounted. The format is : `/data/dir1/`. Changing this parameter will create a new resource.
+        Specifies the local mount directory.
+        Only the subdirectory of `/data/` can be mounted. The format is : `/data/dir1/`.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "local_mount_directory")
 
@@ -258,8 +262,9 @@ class NotebookMountStorage(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] local_mount_directory: Specifies the local mount directory. Only the sub directory of `/data/`
-               can be mounted. The format is : `/data/dir1/`. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] local_mount_directory: Specifies the local mount directory.
+               Only the subdirectory of `/data/` can be mounted. The format is : `/data/dir1/`.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] notebook_id: Specifies ID of notebook which the storage be mounted to.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: The region in which to create the resource. If omitted, the
@@ -366,8 +371,9 @@ class NotebookMountStorage(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] local_mount_directory: Specifies the local mount directory. Only the sub directory of `/data/`
-               can be mounted. The format is : `/data/dir1/`. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] local_mount_directory: Specifies the local mount directory.
+               Only the subdirectory of `/data/` can be mounted. The format is : `/data/dir1/`.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] mount_id: The mount ID.
         :param pulumi.Input[str] notebook_id: Specifies ID of notebook which the storage be mounted to.
                Changing this parameter will create a new resource.
@@ -396,8 +402,9 @@ class NotebookMountStorage(pulumi.CustomResource):
     @pulumi.getter(name="localMountDirectory")
     def local_mount_directory(self) -> pulumi.Output[str]:
         """
-        Specifies the local mount directory. Only the sub directory of `/data/`
-        can be mounted. The format is : `/data/dir1/`. Changing this parameter will create a new resource.
+        Specifies the local mount directory.
+        Only the subdirectory of `/data/` can be mounted. The format is : `/data/dir1/`.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "local_mount_directory")
 

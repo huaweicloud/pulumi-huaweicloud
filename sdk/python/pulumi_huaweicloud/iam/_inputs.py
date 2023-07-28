@@ -27,7 +27,7 @@ class AclIpCidrArgs:
         """
         :param pulumi.Input[str] cidr: Specifies the IPv4 CIDR block, for example, **192.168.0.0/24**.
         :param pulumi.Input[str] description: Specifies a description about an IP address range. This parameter can contain a
-               maximum of 255 characters and the following charactors are not allowed:**@#%^&*<>\\\\**.
+               maximum of 255 characters and the following characters are not allowed:**@#%^&*<>\\\\**.
         """
         pulumi.set(__self__, "cidr", cidr)
         if description is not None:
@@ -50,7 +50,7 @@ class AclIpCidrArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies a description about an IP address range. This parameter can contain a
-        maximum of 255 characters and the following charactors are not allowed:**@#%^&*<>\\\\**.
+        maximum of 255 characters and the following characters are not allowed:**@#%^&*<>\\\\**.
         """
         return pulumi.get(self, "description")
 
@@ -67,7 +67,7 @@ class AclIpRangeArgs:
         """
         :param pulumi.Input[str] range: Specifies the Ip address range, for example, **0.0.0.0-255.255.255.0**.
         :param pulumi.Input[str] description: Specifies a description about an IP address range. This parameter can contain a
-               maximum of 255 characters and the following charactors are not allowed:**@#%^&*<>\\\\**.
+               maximum of 255 characters and the following characters are not allowed:**@#%^&*<>\\\\**.
         """
         pulumi.set(__self__, "range", range)
         if description is not None:
@@ -90,7 +90,7 @@ class AclIpRangeArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies a description about an IP address range. This parameter can contain a
-        maximum of 255 characters and the following charactors are not allowed:**@#%^&*<>\\\\**.
+        maximum of 255 characters and the following characters are not allowed:**@#%^&*<>\\\\**.
         """
         return pulumi.get(self, "description")
 

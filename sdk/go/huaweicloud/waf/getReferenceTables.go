@@ -22,13 +22,17 @@ import (
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Waf"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Waf"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			enterpriseProjectId := cfg.RequireObject("enterpriseProjectId")
 //			_, err := Waf.GetReferenceTables(ctx, &waf.GetReferenceTablesArgs{
-//				Name: pulumi.StringRef("reference_table_name"),
+//				Name:                pulumi.StringRef("reference_table_name"),
+//				EnterpriseProjectId: pulumi.StringRef(enterpriseProjectId),
 //			}, nil)
 //			if err != nil {
 //				return err
@@ -50,6 +54,8 @@ func GetReferenceTables(ctx *pulumi.Context, args *GetReferenceTablesArgs, opts 
 
 // A collection of arguments for invoking getReferenceTables.
 type GetReferenceTablesArgs struct {
+	// Specifies the enterprise project ID of WAF reference tables.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// The name of the reference table. The value is case sensitive and matches exactly.
 	Name *string `pulumi:"name"`
 	// The region in which to create the WAF reference table resource.
@@ -59,6 +65,7 @@ type GetReferenceTablesArgs struct {
 
 // A collection of values returned by getReferenceTables.
 type GetReferenceTablesResult struct {
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// The provider-assigned unique ID for this managed resource.
 	Id string `pulumi:"id"`
 	// The name of the reference table. The maximum length is 64 characters.
@@ -83,6 +90,8 @@ func GetReferenceTablesOutput(ctx *pulumi.Context, args GetReferenceTablesOutput
 
 // A collection of arguments for invoking getReferenceTables.
 type GetReferenceTablesOutputArgs struct {
+	// Specifies the enterprise project ID of WAF reference tables.
+	EnterpriseProjectId pulumi.StringPtrInput `pulumi:"enterpriseProjectId"`
 	// The name of the reference table. The value is case sensitive and matches exactly.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// The region in which to create the WAF reference table resource.
@@ -107,6 +116,10 @@ func (o GetReferenceTablesResultOutput) ToGetReferenceTablesResultOutput() GetRe
 
 func (o GetReferenceTablesResultOutput) ToGetReferenceTablesResultOutputWithContext(ctx context.Context) GetReferenceTablesResultOutput {
 	return o
+}
+
+func (o GetReferenceTablesResultOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v GetReferenceTablesResult) *string { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
 
 // The provider-assigned unique ID for this managed resource.

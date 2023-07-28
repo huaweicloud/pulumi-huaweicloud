@@ -75,7 +75,7 @@ export class Ptrrecord extends pulumi.CustomResource {
      */
     public /*out*/ readonly address!: pulumi.Output<string>;
     /**
-     * Description of the PTR record.
+     * Specifies the description of the PTR record.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
@@ -84,17 +84,18 @@ export class Ptrrecord extends pulumi.CustomResource {
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
-     * The ID of the FloatingIP/EIP.
+     * Specifies the ID of the FloatingIP/EIP.
+     * Changing this creates a new PTR record.
      */
     public readonly floatingipId!: pulumi.Output<string>;
     /**
-     * Domain name of the PTR record. A domain name is case insensitive. Uppercase letters will
-     * also be converted into lowercase letters.
+     * Specifies the domain name of the PTR record. A domain name is case-insensitive.
+     * Uppercase letters will also be converted into lowercase letters.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * The region in which to create the PTR record. If omitted, the `region`
-     * argument of the provider will be used. Changing this creates a new PTR record.
+     * Specifies the region in which to create the PTR record. If omitted,
+     * the `region` argument of the provider will be used. Changing this creates a new PTR record.
      */
     public readonly region!: pulumi.Output<string>;
     /**
@@ -102,8 +103,8 @@ export class Ptrrecord extends pulumi.CustomResource {
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
-     * The time to live (TTL) of the record set (in seconds). The value range is 300–2147483647. The
-     * default value is 300.
+     * Specifies the time to live (TTL) of the record set (in seconds).
+     * The value range is 300–2147483647. The default value is 300.
      */
     public readonly ttl!: pulumi.Output<number | undefined>;
 
@@ -156,7 +157,7 @@ export interface PtrrecordState {
      */
     address?: pulumi.Input<string>;
     /**
-     * Description of the PTR record.
+     * Specifies the description of the PTR record.
      */
     description?: pulumi.Input<string>;
     /**
@@ -165,17 +166,18 @@ export interface PtrrecordState {
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * The ID of the FloatingIP/EIP.
+     * Specifies the ID of the FloatingIP/EIP.
+     * Changing this creates a new PTR record.
      */
     floatingipId?: pulumi.Input<string>;
     /**
-     * Domain name of the PTR record. A domain name is case insensitive. Uppercase letters will
-     * also be converted into lowercase letters.
+     * Specifies the domain name of the PTR record. A domain name is case-insensitive.
+     * Uppercase letters will also be converted into lowercase letters.
      */
     name?: pulumi.Input<string>;
     /**
-     * The region in which to create the PTR record. If omitted, the `region`
-     * argument of the provider will be used. Changing this creates a new PTR record.
+     * Specifies the region in which to create the PTR record. If omitted,
+     * the `region` argument of the provider will be used. Changing this creates a new PTR record.
      */
     region?: pulumi.Input<string>;
     /**
@@ -183,8 +185,8 @@ export interface PtrrecordState {
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * The time to live (TTL) of the record set (in seconds). The value range is 300–2147483647. The
-     * default value is 300.
+     * Specifies the time to live (TTL) of the record set (in seconds).
+     * The value range is 300–2147483647. The default value is 300.
      */
     ttl?: pulumi.Input<number>;
 }
@@ -194,7 +196,7 @@ export interface PtrrecordState {
  */
 export interface PtrrecordArgs {
     /**
-     * Description of the PTR record.
+     * Specifies the description of the PTR record.
      */
     description?: pulumi.Input<string>;
     /**
@@ -203,17 +205,18 @@ export interface PtrrecordArgs {
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * The ID of the FloatingIP/EIP.
+     * Specifies the ID of the FloatingIP/EIP.
+     * Changing this creates a new PTR record.
      */
     floatingipId: pulumi.Input<string>;
     /**
-     * Domain name of the PTR record. A domain name is case insensitive. Uppercase letters will
-     * also be converted into lowercase letters.
+     * Specifies the domain name of the PTR record. A domain name is case-insensitive.
+     * Uppercase letters will also be converted into lowercase letters.
      */
     name?: pulumi.Input<string>;
     /**
-     * The region in which to create the PTR record. If omitted, the `region`
-     * argument of the provider will be used. Changing this creates a new PTR record.
+     * Specifies the region in which to create the PTR record. If omitted,
+     * the `region` argument of the provider will be used. Changing this creates a new PTR record.
      */
     region?: pulumi.Input<string>;
     /**
@@ -221,8 +224,8 @@ export interface PtrrecordArgs {
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * The time to live (TTL) of the record set (in seconds). The value range is 300–2147483647. The
-     * default value is 300.
+     * Specifies the time to live (TTL) of the record set (in seconds).
+     * The value range is 300–2147483647. The default value is 300.
      */
     ttl?: pulumi.Input<number>;
 }

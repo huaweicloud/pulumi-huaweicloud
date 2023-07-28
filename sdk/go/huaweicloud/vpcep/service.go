@@ -33,9 +33,10 @@ import (
 //			vpcId := cfg.RequireObject("vpcId")
 //			vmPort := cfg.RequireObject("vmPort")
 //			_, err := Vpcep.NewService(ctx, "demo", &Vpcep.ServiceArgs{
-//				ServerType: pulumi.String("VM"),
-//				VpcId:      pulumi.Any(vpcId),
-//				PortId:     pulumi.Any(vmPort),
+//				ServerType:  pulumi.String("VM"),
+//				VpcId:       pulumi.Any(vpcId),
+//				PortId:      pulumi.Any(vmPort),
+//				Description: pulumi.String("test description"),
 //				PortMappings: vpcep.ServicePortMappingArray{
 //					&vpcep.ServicePortMappingArgs{
 //						ServicePort:  pulumi.Int(8080),
@@ -54,53 +55,54 @@ import (
 //
 // ## Import
 //
-// VPC endpoint services can be imported using the `id`, e.g.
+// VPC endpoint services can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Vpcep/service:Service test_service 950cd3ba-9d0e-4451-97c1-3e97dd515d46
+//	$ pulumi import huaweicloud:Vpcep/service:Service test_service <id>
 //
 // ```
 type Service struct {
 	pulumi.CustomResourceState
 
-	// - Specifies whether connection approval is required. The default value is false.
+	// Specifies whether connection approval is required. The default value is false.
 	Approval pulumi.BoolOutput `pulumi:"approval"`
 	// An array of VPC endpoints connect to the VPC endpoint service. Structure is documented below.
 	Connections ServiceConnectionArrayOutput `pulumi:"connections"`
-	// - Specifies the name of the VPC endpoint service. The value contains a maximum of 16
-	//   characters, including letters, digits, underscores (_), and hyphens (-).
+	// Specifies the description of the VPC endpoint service.
+	Description pulumi.StringOutput `pulumi:"description"`
+	// Specifies the name of the VPC endpoint service. The value contains a maximum of 16
+	// characters, including letters, digits, underscores (_), and hyphens (-).
 	Name pulumi.StringOutput `pulumi:"name"`
-	// - Specifies the list of accounts to access the VPC endpoint service. The record is in
-	//   the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+	// Specifies the list of accounts to access the VPC endpoint service. The record is in
+	// the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
 	Permissions pulumi.StringArrayOutput `pulumi:"permissions"`
-	// - Specifies the ID for identifying the backend resource of the VPC endpoint
-	//   service.
+	// Specifies the ID for identifying the backend resource of the VPC endpoint service.
 	// + If the `serverType` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
-	// + If the `serverType` is **VIP**, the value is the NIC ID of the physical server where virtual resources are
-	//   created.
 	// + If the `serverType` is **LB**, the value is the ID of the port bound to the private IP address of the load
 	//   balancer.
 	PortId pulumi.StringOutput `pulumi:"portId"`
-	// - Specified the port mappings opened to the VPC endpoint service. Structure is
-	//   documented below.
+	// Specifies the port mappings opened to the VPC endpoint service. Structure is
+	// documented below.
 	PortMappings ServicePortMappingArrayOutput `pulumi:"portMappings"`
 	// The region in which to create the VPC endpoint service. If omitted, the
 	// provider-level region will be used. Changing this creates a new VPC endpoint service resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// - Specifies the backend resource type. The value can be **VM**, **VIP**
-	//   or **LB**.
+	// Specifies the backend resource type. The valid values are as follows:
+	// + **VM**: Indicates the cloud server, which can be used as a server.
+	// + **LB**: Indicates the shared load balancer, which is applicable to services with high access traffic and services
+	//   that require high reliability and disaster recovery.
 	ServerType pulumi.StringOutput `pulumi:"serverType"`
-	// The full name of the VPC endpoint service in the format: *region.name.id*.
+	// The full name of the VPC endpoint service in the format: *region.name.id* or *region.id*.
 	ServiceName pulumi.StringOutput `pulumi:"serviceName"`
-	// The type of the VPC endpoint service. Only **interface** can be configured.
+	// The type of the VPC endpoint service.
 	ServiceType pulumi.StringPtrOutput `pulumi:"serviceType"`
 	// The connection status of the VPC endpoint.
 	Status pulumi.StringOutput `pulumi:"status"`
 	// The key/value pairs to associate with the VPC endpoint service.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
-	// - Specifies the ID of the VPC to which the backend resource of the VPC endpoint
-	//   service belongs. Changing this creates a new VPC endpoint service.
+	// Specifies the ID of the VPC to which the backend resource of the VPC endpoint
+	// service belongs. Changing this creates a new VPC endpoint service.
 	VpcId pulumi.StringOutput `pulumi:"vpcId"`
 }
 
@@ -146,84 +148,86 @@ func GetService(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Service resources.
 type serviceState struct {
-	// - Specifies whether connection approval is required. The default value is false.
+	// Specifies whether connection approval is required. The default value is false.
 	Approval *bool `pulumi:"approval"`
 	// An array of VPC endpoints connect to the VPC endpoint service. Structure is documented below.
 	Connections []ServiceConnection `pulumi:"connections"`
-	// - Specifies the name of the VPC endpoint service. The value contains a maximum of 16
-	//   characters, including letters, digits, underscores (_), and hyphens (-).
+	// Specifies the description of the VPC endpoint service.
+	Description *string `pulumi:"description"`
+	// Specifies the name of the VPC endpoint service. The value contains a maximum of 16
+	// characters, including letters, digits, underscores (_), and hyphens (-).
 	Name *string `pulumi:"name"`
-	// - Specifies the list of accounts to access the VPC endpoint service. The record is in
-	//   the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+	// Specifies the list of accounts to access the VPC endpoint service. The record is in
+	// the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
 	Permissions []string `pulumi:"permissions"`
-	// - Specifies the ID for identifying the backend resource of the VPC endpoint
-	//   service.
+	// Specifies the ID for identifying the backend resource of the VPC endpoint service.
 	// + If the `serverType` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
-	// + If the `serverType` is **VIP**, the value is the NIC ID of the physical server where virtual resources are
-	//   created.
 	// + If the `serverType` is **LB**, the value is the ID of the port bound to the private IP address of the load
 	//   balancer.
 	PortId *string `pulumi:"portId"`
-	// - Specified the port mappings opened to the VPC endpoint service. Structure is
-	//   documented below.
+	// Specifies the port mappings opened to the VPC endpoint service. Structure is
+	// documented below.
 	PortMappings []ServicePortMapping `pulumi:"portMappings"`
 	// The region in which to create the VPC endpoint service. If omitted, the
 	// provider-level region will be used. Changing this creates a new VPC endpoint service resource.
 	Region *string `pulumi:"region"`
-	// - Specifies the backend resource type. The value can be **VM**, **VIP**
-	//   or **LB**.
+	// Specifies the backend resource type. The valid values are as follows:
+	// + **VM**: Indicates the cloud server, which can be used as a server.
+	// + **LB**: Indicates the shared load balancer, which is applicable to services with high access traffic and services
+	//   that require high reliability and disaster recovery.
 	ServerType *string `pulumi:"serverType"`
-	// The full name of the VPC endpoint service in the format: *region.name.id*.
+	// The full name of the VPC endpoint service in the format: *region.name.id* or *region.id*.
 	ServiceName *string `pulumi:"serviceName"`
-	// The type of the VPC endpoint service. Only **interface** can be configured.
+	// The type of the VPC endpoint service.
 	ServiceType *string `pulumi:"serviceType"`
 	// The connection status of the VPC endpoint.
 	Status *string `pulumi:"status"`
 	// The key/value pairs to associate with the VPC endpoint service.
 	Tags map[string]string `pulumi:"tags"`
-	// - Specifies the ID of the VPC to which the backend resource of the VPC endpoint
-	//   service belongs. Changing this creates a new VPC endpoint service.
+	// Specifies the ID of the VPC to which the backend resource of the VPC endpoint
+	// service belongs. Changing this creates a new VPC endpoint service.
 	VpcId *string `pulumi:"vpcId"`
 }
 
 type ServiceState struct {
-	// - Specifies whether connection approval is required. The default value is false.
+	// Specifies whether connection approval is required. The default value is false.
 	Approval pulumi.BoolPtrInput
 	// An array of VPC endpoints connect to the VPC endpoint service. Structure is documented below.
 	Connections ServiceConnectionArrayInput
-	// - Specifies the name of the VPC endpoint service. The value contains a maximum of 16
-	//   characters, including letters, digits, underscores (_), and hyphens (-).
+	// Specifies the description of the VPC endpoint service.
+	Description pulumi.StringPtrInput
+	// Specifies the name of the VPC endpoint service. The value contains a maximum of 16
+	// characters, including letters, digits, underscores (_), and hyphens (-).
 	Name pulumi.StringPtrInput
-	// - Specifies the list of accounts to access the VPC endpoint service. The record is in
-	//   the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+	// Specifies the list of accounts to access the VPC endpoint service. The record is in
+	// the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
 	Permissions pulumi.StringArrayInput
-	// - Specifies the ID for identifying the backend resource of the VPC endpoint
-	//   service.
+	// Specifies the ID for identifying the backend resource of the VPC endpoint service.
 	// + If the `serverType` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
-	// + If the `serverType` is **VIP**, the value is the NIC ID of the physical server where virtual resources are
-	//   created.
 	// + If the `serverType` is **LB**, the value is the ID of the port bound to the private IP address of the load
 	//   balancer.
 	PortId pulumi.StringPtrInput
-	// - Specified the port mappings opened to the VPC endpoint service. Structure is
-	//   documented below.
+	// Specifies the port mappings opened to the VPC endpoint service. Structure is
+	// documented below.
 	PortMappings ServicePortMappingArrayInput
 	// The region in which to create the VPC endpoint service. If omitted, the
 	// provider-level region will be used. Changing this creates a new VPC endpoint service resource.
 	Region pulumi.StringPtrInput
-	// - Specifies the backend resource type. The value can be **VM**, **VIP**
-	//   or **LB**.
+	// Specifies the backend resource type. The valid values are as follows:
+	// + **VM**: Indicates the cloud server, which can be used as a server.
+	// + **LB**: Indicates the shared load balancer, which is applicable to services with high access traffic and services
+	//   that require high reliability and disaster recovery.
 	ServerType pulumi.StringPtrInput
-	// The full name of the VPC endpoint service in the format: *region.name.id*.
+	// The full name of the VPC endpoint service in the format: *region.name.id* or *region.id*.
 	ServiceName pulumi.StringPtrInput
-	// The type of the VPC endpoint service. Only **interface** can be configured.
+	// The type of the VPC endpoint service.
 	ServiceType pulumi.StringPtrInput
 	// The connection status of the VPC endpoint.
 	Status pulumi.StringPtrInput
 	// The key/value pairs to associate with the VPC endpoint service.
 	Tags pulumi.StringMapInput
-	// - Specifies the ID of the VPC to which the backend resource of the VPC endpoint
-	//   service belongs. Changing this creates a new VPC endpoint service.
+	// Specifies the ID of the VPC to which the backend resource of the VPC endpoint
+	// service belongs. Changing this creates a new VPC endpoint service.
 	VpcId pulumi.StringPtrInput
 }
 
@@ -232,73 +236,75 @@ func (ServiceState) ElementType() reflect.Type {
 }
 
 type serviceArgs struct {
-	// - Specifies whether connection approval is required. The default value is false.
+	// Specifies whether connection approval is required. The default value is false.
 	Approval *bool `pulumi:"approval"`
-	// - Specifies the name of the VPC endpoint service. The value contains a maximum of 16
-	//   characters, including letters, digits, underscores (_), and hyphens (-).
+	// Specifies the description of the VPC endpoint service.
+	Description *string `pulumi:"description"`
+	// Specifies the name of the VPC endpoint service. The value contains a maximum of 16
+	// characters, including letters, digits, underscores (_), and hyphens (-).
 	Name *string `pulumi:"name"`
-	// - Specifies the list of accounts to access the VPC endpoint service. The record is in
-	//   the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+	// Specifies the list of accounts to access the VPC endpoint service. The record is in
+	// the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
 	Permissions []string `pulumi:"permissions"`
-	// - Specifies the ID for identifying the backend resource of the VPC endpoint
-	//   service.
+	// Specifies the ID for identifying the backend resource of the VPC endpoint service.
 	// + If the `serverType` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
-	// + If the `serverType` is **VIP**, the value is the NIC ID of the physical server where virtual resources are
-	//   created.
 	// + If the `serverType` is **LB**, the value is the ID of the port bound to the private IP address of the load
 	//   balancer.
 	PortId string `pulumi:"portId"`
-	// - Specified the port mappings opened to the VPC endpoint service. Structure is
-	//   documented below.
+	// Specifies the port mappings opened to the VPC endpoint service. Structure is
+	// documented below.
 	PortMappings []ServicePortMapping `pulumi:"portMappings"`
 	// The region in which to create the VPC endpoint service. If omitted, the
 	// provider-level region will be used. Changing this creates a new VPC endpoint service resource.
 	Region *string `pulumi:"region"`
-	// - Specifies the backend resource type. The value can be **VM**, **VIP**
-	//   or **LB**.
+	// Specifies the backend resource type. The valid values are as follows:
+	// + **VM**: Indicates the cloud server, which can be used as a server.
+	// + **LB**: Indicates the shared load balancer, which is applicable to services with high access traffic and services
+	//   that require high reliability and disaster recovery.
 	ServerType string `pulumi:"serverType"`
-	// The type of the VPC endpoint service. Only **interface** can be configured.
+	// The type of the VPC endpoint service.
 	ServiceType *string `pulumi:"serviceType"`
 	// The key/value pairs to associate with the VPC endpoint service.
 	Tags map[string]string `pulumi:"tags"`
-	// - Specifies the ID of the VPC to which the backend resource of the VPC endpoint
-	//   service belongs. Changing this creates a new VPC endpoint service.
+	// Specifies the ID of the VPC to which the backend resource of the VPC endpoint
+	// service belongs. Changing this creates a new VPC endpoint service.
 	VpcId string `pulumi:"vpcId"`
 }
 
 // The set of arguments for constructing a Service resource.
 type ServiceArgs struct {
-	// - Specifies whether connection approval is required. The default value is false.
+	// Specifies whether connection approval is required. The default value is false.
 	Approval pulumi.BoolPtrInput
-	// - Specifies the name of the VPC endpoint service. The value contains a maximum of 16
-	//   characters, including letters, digits, underscores (_), and hyphens (-).
+	// Specifies the description of the VPC endpoint service.
+	Description pulumi.StringPtrInput
+	// Specifies the name of the VPC endpoint service. The value contains a maximum of 16
+	// characters, including letters, digits, underscores (_), and hyphens (-).
 	Name pulumi.StringPtrInput
-	// - Specifies the list of accounts to access the VPC endpoint service. The record is in
-	//   the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+	// Specifies the list of accounts to access the VPC endpoint service. The record is in
+	// the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
 	Permissions pulumi.StringArrayInput
-	// - Specifies the ID for identifying the backend resource of the VPC endpoint
-	//   service.
+	// Specifies the ID for identifying the backend resource of the VPC endpoint service.
 	// + If the `serverType` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
-	// + If the `serverType` is **VIP**, the value is the NIC ID of the physical server where virtual resources are
-	//   created.
 	// + If the `serverType` is **LB**, the value is the ID of the port bound to the private IP address of the load
 	//   balancer.
 	PortId pulumi.StringInput
-	// - Specified the port mappings opened to the VPC endpoint service. Structure is
-	//   documented below.
+	// Specifies the port mappings opened to the VPC endpoint service. Structure is
+	// documented below.
 	PortMappings ServicePortMappingArrayInput
 	// The region in which to create the VPC endpoint service. If omitted, the
 	// provider-level region will be used. Changing this creates a new VPC endpoint service resource.
 	Region pulumi.StringPtrInput
-	// - Specifies the backend resource type. The value can be **VM**, **VIP**
-	//   or **LB**.
+	// Specifies the backend resource type. The valid values are as follows:
+	// + **VM**: Indicates the cloud server, which can be used as a server.
+	// + **LB**: Indicates the shared load balancer, which is applicable to services with high access traffic and services
+	//   that require high reliability and disaster recovery.
 	ServerType pulumi.StringInput
-	// The type of the VPC endpoint service. Only **interface** can be configured.
+	// The type of the VPC endpoint service.
 	ServiceType pulumi.StringPtrInput
 	// The key/value pairs to associate with the VPC endpoint service.
 	Tags pulumi.StringMapInput
-	// - Specifies the ID of the VPC to which the backend resource of the VPC endpoint
-	//   service belongs. Changing this creates a new VPC endpoint service.
+	// Specifies the ID of the VPC to which the backend resource of the VPC endpoint
+	// service belongs. Changing this creates a new VPC endpoint service.
 	VpcId pulumi.StringInput
 }
 
@@ -389,7 +395,7 @@ func (o ServiceOutput) ToServiceOutputWithContext(ctx context.Context) ServiceOu
 	return o
 }
 
-// - Specifies whether connection approval is required. The default value is false.
+// Specifies whether connection approval is required. The default value is false.
 func (o ServiceOutput) Approval() pulumi.BoolOutput {
 	return o.ApplyT(func(v *Service) pulumi.BoolOutput { return v.Approval }).(pulumi.BoolOutput)
 }
@@ -399,31 +405,33 @@ func (o ServiceOutput) Connections() ServiceConnectionArrayOutput {
 	return o.ApplyT(func(v *Service) ServiceConnectionArrayOutput { return v.Connections }).(ServiceConnectionArrayOutput)
 }
 
-//   - Specifies the name of the VPC endpoint service. The value contains a maximum of 16
-//     characters, including letters, digits, underscores (_), and hyphens (-).
+// Specifies the description of the VPC endpoint service.
+func (o ServiceOutput) Description() pulumi.StringOutput {
+	return o.ApplyT(func(v *Service) pulumi.StringOutput { return v.Description }).(pulumi.StringOutput)
+}
+
+// Specifies the name of the VPC endpoint service. The value contains a maximum of 16
+// characters, including letters, digits, underscores (_), and hyphens (-).
 func (o ServiceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Service) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-//   - Specifies the list of accounts to access the VPC endpoint service. The record is in
-//     the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+// Specifies the list of accounts to access the VPC endpoint service. The record is in
+// the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
 func (o ServiceOutput) Permissions() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Service) pulumi.StringArrayOutput { return v.Permissions }).(pulumi.StringArrayOutput)
 }
 
-//   - Specifies the ID for identifying the backend resource of the VPC endpoint
-//     service.
+// Specifies the ID for identifying the backend resource of the VPC endpoint service.
 //   - If the `serverType` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
-//   - If the `serverType` is **VIP**, the value is the NIC ID of the physical server where virtual resources are
-//     created.
 //   - If the `serverType` is **LB**, the value is the ID of the port bound to the private IP address of the load
 //     balancer.
 func (o ServiceOutput) PortId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Service) pulumi.StringOutput { return v.PortId }).(pulumi.StringOutput)
 }
 
-//   - Specified the port mappings opened to the VPC endpoint service. Structure is
-//     documented below.
+// Specifies the port mappings opened to the VPC endpoint service. Structure is
+// documented below.
 func (o ServiceOutput) PortMappings() ServicePortMappingArrayOutput {
 	return o.ApplyT(func(v *Service) ServicePortMappingArrayOutput { return v.PortMappings }).(ServicePortMappingArrayOutput)
 }
@@ -434,18 +442,20 @@ func (o ServiceOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Service) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-//   - Specifies the backend resource type. The value can be **VM**, **VIP**
-//     or **LB**.
+// Specifies the backend resource type. The valid values are as follows:
+//   - **VM**: Indicates the cloud server, which can be used as a server.
+//   - **LB**: Indicates the shared load balancer, which is applicable to services with high access traffic and services
+//     that require high reliability and disaster recovery.
 func (o ServiceOutput) ServerType() pulumi.StringOutput {
 	return o.ApplyT(func(v *Service) pulumi.StringOutput { return v.ServerType }).(pulumi.StringOutput)
 }
 
-// The full name of the VPC endpoint service in the format: *region.name.id*.
+// The full name of the VPC endpoint service in the format: *region.name.id* or *region.id*.
 func (o ServiceOutput) ServiceName() pulumi.StringOutput {
 	return o.ApplyT(func(v *Service) pulumi.StringOutput { return v.ServiceName }).(pulumi.StringOutput)
 }
 
-// The type of the VPC endpoint service. Only **interface** can be configured.
+// The type of the VPC endpoint service.
 func (o ServiceOutput) ServiceType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Service) pulumi.StringPtrOutput { return v.ServiceType }).(pulumi.StringPtrOutput)
 }
@@ -460,8 +470,8 @@ func (o ServiceOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Service) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }
 
-//   - Specifies the ID of the VPC to which the backend resource of the VPC endpoint
-//     service belongs. Changing this creates a new VPC endpoint service.
+// Specifies the ID of the VPC to which the backend resource of the VPC endpoint
+// service belongs. Changing this creates a new VPC endpoint service.
 func (o ServiceOutput) VpcId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Service) pulumi.StringOutput { return v.VpcId }).(pulumi.StringOutput)
 }

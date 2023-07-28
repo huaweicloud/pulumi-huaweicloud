@@ -59,6 +59,9 @@ export class Servergroup extends pulumi.CustomResource {
         return obj['__pulumiType'] === Servergroup.__pulumiType;
     }
 
+    /**
+     * schema: Internal
+     */
     public /*out*/ readonly faultDomains!: pulumi.Output<string[]>;
     /**
      * Specifies an array of one or more instance ID to attach server group.
@@ -116,6 +119,9 @@ export class Servergroup extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Servergroup resources.
  */
 export interface ServergroupState {
+    /**
+     * schema: Internal
+     */
     faultDomains?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies an array of one or more instance ID to attach server group.

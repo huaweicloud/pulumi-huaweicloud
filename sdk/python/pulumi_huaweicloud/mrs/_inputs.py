@@ -12,6 +12,8 @@ from .. import _utilities
 __all__ = [
     'ClusterAnalysisCoreNodesArgs',
     'ClusterAnalysisTaskNodesArgs',
+    'ClusterComponentConfigArgs',
+    'ClusterComponentConfigConfigArgs',
     'ClusterCustomNodeArgs',
     'ClusterMasterNodesArgs',
     'ClusterStreamingCoreNodesArgs',
@@ -33,11 +35,11 @@ class ClusterAnalysisCoreNodesArgs:
         """
         :param pulumi.Input[int] data_volume_count: Specifies the data disk number of the nodes. The number configuration
                of each node are as follows:
-               + master_nodes: 1.
-               + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-               + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-               + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-               + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+               + **master_nodes**: 1.
+               + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+               + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+               + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+               + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
         :param pulumi.Input[str] flavor: Specifies the instance specifications for each nodes in node group.
                Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[int] node_number: Specifies the number of nodes for the node group.
@@ -46,16 +48,16 @@ class ClusterAnalysisCoreNodesArgs:
         :param pulumi.Input[str] root_volume_type: Specifies the system disk flavor of the nodes. Changing this will
                create a new MapReduce cluster resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] assigned_roles: Specifies the roles deployed in a node group.This argument is mandatory
-               when the cluster type is CUSTOM. Each character string represents a role expression.
+               when the cluster type is **CUSTOM**. Each character string represents a role expression.
         :param pulumi.Input[int] data_volume_size: Specifies the data disk size of the nodes,in GB. The value range is 10
                to 32768. Required if `data_volume_count` is greater than zero. Changing this will create a new MapReduce
                cluster resource.
         :param pulumi.Input[str] data_volume_type: Specifies the data disk flavor of the nodes.
                Required if `data_volume_count` is greater than zero. Changing this will create a new MapReduce cluster resource.
                The following disk types are supported:
-               + `SATA`: common I/O disk
-               + `SAS`: high I/O disk
-               + `SSD`: ultra-high I/O disk
+               + **SATA**: common I/O disk.
+               + **SAS**: high I/O disk.
+               + **SSD**: ultra-high I/O disk.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] host_ips: The host list of this nodes group in the cluster.
         """
         pulumi.set(__self__, "data_volume_count", data_volume_count)
@@ -78,11 +80,11 @@ class ClusterAnalysisCoreNodesArgs:
         """
         Specifies the data disk number of the nodes. The number configuration
         of each node are as follows:
-        + master_nodes: 1.
-        + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-        + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-        + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-        + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+        + **master_nodes**: 1.
+        + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+        + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+        + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+        + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
         """
         return pulumi.get(self, "data_volume_count")
 
@@ -146,7 +148,7 @@ class ClusterAnalysisCoreNodesArgs:
     def assigned_roles(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         Specifies the roles deployed in a node group.This argument is mandatory
-        when the cluster type is CUSTOM. Each character string represents a role expression.
+        when the cluster type is **CUSTOM**. Each character string represents a role expression.
         """
         return pulumi.get(self, "assigned_roles")
 
@@ -175,9 +177,9 @@ class ClusterAnalysisCoreNodesArgs:
         Specifies the data disk flavor of the nodes.
         Required if `data_volume_count` is greater than zero. Changing this will create a new MapReduce cluster resource.
         The following disk types are supported:
-        + `SATA`: common I/O disk
-        + `SAS`: high I/O disk
-        + `SSD`: ultra-high I/O disk
+        + **SATA**: common I/O disk.
+        + **SAS**: high I/O disk.
+        + **SSD**: ultra-high I/O disk.
         """
         return pulumi.get(self, "data_volume_type")
 
@@ -213,11 +215,11 @@ class ClusterAnalysisTaskNodesArgs:
         """
         :param pulumi.Input[int] data_volume_count: Specifies the data disk number of the nodes. The number configuration
                of each node are as follows:
-               + master_nodes: 1.
-               + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-               + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-               + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-               + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+               + **master_nodes**: 1.
+               + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+               + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+               + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+               + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
         :param pulumi.Input[str] flavor: Specifies the instance specifications for each nodes in node group.
                Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[int] node_number: Specifies the number of nodes for the node group.
@@ -226,16 +228,16 @@ class ClusterAnalysisTaskNodesArgs:
         :param pulumi.Input[str] root_volume_type: Specifies the system disk flavor of the nodes. Changing this will
                create a new MapReduce cluster resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] assigned_roles: Specifies the roles deployed in a node group.This argument is mandatory
-               when the cluster type is CUSTOM. Each character string represents a role expression.
+               when the cluster type is **CUSTOM**. Each character string represents a role expression.
         :param pulumi.Input[int] data_volume_size: Specifies the data disk size of the nodes,in GB. The value range is 10
                to 32768. Required if `data_volume_count` is greater than zero. Changing this will create a new MapReduce
                cluster resource.
         :param pulumi.Input[str] data_volume_type: Specifies the data disk flavor of the nodes.
                Required if `data_volume_count` is greater than zero. Changing this will create a new MapReduce cluster resource.
                The following disk types are supported:
-               + `SATA`: common I/O disk
-               + `SAS`: high I/O disk
-               + `SSD`: ultra-high I/O disk
+               + **SATA**: common I/O disk.
+               + **SAS**: high I/O disk.
+               + **SSD**: ultra-high I/O disk.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] host_ips: The host list of this nodes group in the cluster.
         """
         pulumi.set(__self__, "data_volume_count", data_volume_count)
@@ -258,11 +260,11 @@ class ClusterAnalysisTaskNodesArgs:
         """
         Specifies the data disk number of the nodes. The number configuration
         of each node are as follows:
-        + master_nodes: 1.
-        + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-        + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-        + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-        + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+        + **master_nodes**: 1.
+        + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+        + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+        + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+        + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
         """
         return pulumi.get(self, "data_volume_count")
 
@@ -326,7 +328,7 @@ class ClusterAnalysisTaskNodesArgs:
     def assigned_roles(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         Specifies the roles deployed in a node group.This argument is mandatory
-        when the cluster type is CUSTOM. Each character string represents a role expression.
+        when the cluster type is **CUSTOM**. Each character string represents a role expression.
         """
         return pulumi.get(self, "assigned_roles")
 
@@ -355,9 +357,9 @@ class ClusterAnalysisTaskNodesArgs:
         Specifies the data disk flavor of the nodes.
         Required if `data_volume_count` is greater than zero. Changing this will create a new MapReduce cluster resource.
         The following disk types are supported:
-        + `SATA`: common I/O disk
-        + `SAS`: high I/O disk
-        + `SSD`: ultra-high I/O disk
+        + **SATA**: common I/O disk.
+        + **SAS**: high I/O disk.
+        + **SSD**: ultra-high I/O disk.
         """
         return pulumi.get(self, "data_volume_type")
 
@@ -379,6 +381,105 @@ class ClusterAnalysisTaskNodesArgs:
 
 
 @pulumi.input_type
+class ClusterComponentConfigArgs:
+    def __init__(__self__, *,
+                 configs: pulumi.Input[Sequence[pulumi.Input['ClusterComponentConfigConfigArgs']]],
+                 name: pulumi.Input[str]):
+        """
+        :param pulumi.Input[Sequence[pulumi.Input['ClusterComponentConfigConfigArgs']]] configs: Specifies the configuration of component installed.
+               The object structure is documented below.
+        :param pulumi.Input[str] name: Specifies the component name of the cluster which has installed.
+               Changing this will create a new MapReduce cluster resource.
+        """
+        pulumi.set(__self__, "configs", configs)
+        pulumi.set(__self__, "name", name)
+
+    @property
+    @pulumi.getter
+    def configs(self) -> pulumi.Input[Sequence[pulumi.Input['ClusterComponentConfigConfigArgs']]]:
+        """
+        Specifies the configuration of component installed.
+        The object structure is documented below.
+        """
+        return pulumi.get(self, "configs")
+
+    @configs.setter
+    def configs(self, value: pulumi.Input[Sequence[pulumi.Input['ClusterComponentConfigConfigArgs']]]):
+        pulumi.set(self, "configs", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        """
+        Specifies the component name of the cluster which has installed.
+        Changing this will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
+
+@pulumi.input_type
+class ClusterComponentConfigConfigArgs:
+    def __init__(__self__, *,
+                 config_file_name: pulumi.Input[str],
+                 key: pulumi.Input[str],
+                 value: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] config_file_name: Specifies the configuration file name of component installed.
+               Changing this will create a new MapReduce cluster resource.
+        :param pulumi.Input[str] key: Specifies the configuration item key of component installed.
+               Changing this will create a new MapReduce cluster resource.
+        :param pulumi.Input[str] value: Specifies the configuration item value of component installed.
+               Changing this will create a new MapReduce cluster resource.
+        """
+        pulumi.set(__self__, "config_file_name", config_file_name)
+        pulumi.set(__self__, "key", key)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter(name="configFileName")
+    def config_file_name(self) -> pulumi.Input[str]:
+        """
+        Specifies the configuration file name of component installed.
+        Changing this will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "config_file_name")
+
+    @config_file_name.setter
+    def config_file_name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "config_file_name", value)
+
+    @property
+    @pulumi.getter
+    def key(self) -> pulumi.Input[str]:
+        """
+        Specifies the configuration item key of component installed.
+        Changing this will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "key")
+
+    @key.setter
+    def key(self, value: pulumi.Input[str]):
+        pulumi.set(self, "key", value)
+
+    @property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[str]:
+        """
+        Specifies the configuration item value of component installed.
+        Changing this will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value", value)
+
+
+@pulumi.input_type
 class ClusterCustomNodeArgs:
     def __init__(__self__, *,
                  data_volume_count: pulumi.Input[int],
@@ -394,11 +495,11 @@ class ClusterCustomNodeArgs:
         """
         :param pulumi.Input[int] data_volume_count: Specifies the data disk number of the nodes. The number configuration
                of each node are as follows:
-               + master_nodes: 1.
-               + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-               + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-               + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-               + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+               + **master_nodes**: 1.
+               + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+               + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+               + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+               + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
         :param pulumi.Input[str] flavor: Specifies the instance specifications for each nodes in node group.
                Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[str] group_name: Specifies the name of nodes for the node group.
@@ -408,16 +509,16 @@ class ClusterCustomNodeArgs:
         :param pulumi.Input[str] root_volume_type: Specifies the system disk flavor of the nodes. Changing this will
                create a new MapReduce cluster resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] assigned_roles: Specifies the roles deployed in a node group.This argument is mandatory
-               when the cluster type is CUSTOM. Each character string represents a role expression.
+               when the cluster type is **CUSTOM**. Each character string represents a role expression.
         :param pulumi.Input[int] data_volume_size: Specifies the data disk size of the nodes,in GB. The value range is 10
                to 32768. Required if `data_volume_count` is greater than zero. Changing this will create a new MapReduce
                cluster resource.
         :param pulumi.Input[str] data_volume_type: Specifies the data disk flavor of the nodes.
                Required if `data_volume_count` is greater than zero. Changing this will create a new MapReduce cluster resource.
                The following disk types are supported:
-               + `SATA`: common I/O disk
-               + `SAS`: high I/O disk
-               + `SSD`: ultra-high I/O disk
+               + **SATA**: common I/O disk.
+               + **SAS**: high I/O disk.
+               + **SSD**: ultra-high I/O disk.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] host_ips: The host list of this nodes group in the cluster.
         """
         pulumi.set(__self__, "data_volume_count", data_volume_count)
@@ -441,11 +542,11 @@ class ClusterCustomNodeArgs:
         """
         Specifies the data disk number of the nodes. The number configuration
         of each node are as follows:
-        + master_nodes: 1.
-        + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-        + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-        + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-        + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+        + **master_nodes**: 1.
+        + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+        + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+        + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+        + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
         """
         return pulumi.get(self, "data_volume_count")
 
@@ -521,7 +622,7 @@ class ClusterCustomNodeArgs:
     def assigned_roles(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         Specifies the roles deployed in a node group.This argument is mandatory
-        when the cluster type is CUSTOM. Each character string represents a role expression.
+        when the cluster type is **CUSTOM**. Each character string represents a role expression.
         """
         return pulumi.get(self, "assigned_roles")
 
@@ -550,9 +651,9 @@ class ClusterCustomNodeArgs:
         Specifies the data disk flavor of the nodes.
         Required if `data_volume_count` is greater than zero. Changing this will create a new MapReduce cluster resource.
         The following disk types are supported:
-        + `SATA`: common I/O disk
-        + `SAS`: high I/O disk
-        + `SSD`: ultra-high I/O disk
+        + **SATA**: common I/O disk.
+        + **SAS**: high I/O disk.
+        + **SSD**: ultra-high I/O disk.
         """
         return pulumi.get(self, "data_volume_type")
 
@@ -588,11 +689,11 @@ class ClusterMasterNodesArgs:
         """
         :param pulumi.Input[int] data_volume_count: Specifies the data disk number of the nodes. The number configuration
                of each node are as follows:
-               + master_nodes: 1.
-               + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-               + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-               + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-               + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+               + **master_nodes**: 1.
+               + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+               + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+               + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+               + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
         :param pulumi.Input[str] flavor: Specifies the instance specifications for each nodes in node group.
                Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[int] node_number: Specifies the number of nodes for the node group.
@@ -601,16 +702,16 @@ class ClusterMasterNodesArgs:
         :param pulumi.Input[str] root_volume_type: Specifies the system disk flavor of the nodes. Changing this will
                create a new MapReduce cluster resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] assigned_roles: Specifies the roles deployed in a node group.This argument is mandatory
-               when the cluster type is CUSTOM. Each character string represents a role expression.
+               when the cluster type is **CUSTOM**. Each character string represents a role expression.
         :param pulumi.Input[int] data_volume_size: Specifies the data disk size of the nodes,in GB. The value range is 10
                to 32768. Required if `data_volume_count` is greater than zero. Changing this will create a new MapReduce
                cluster resource.
         :param pulumi.Input[str] data_volume_type: Specifies the data disk flavor of the nodes.
                Required if `data_volume_count` is greater than zero. Changing this will create a new MapReduce cluster resource.
                The following disk types are supported:
-               + `SATA`: common I/O disk
-               + `SAS`: high I/O disk
-               + `SSD`: ultra-high I/O disk
+               + **SATA**: common I/O disk.
+               + **SAS**: high I/O disk.
+               + **SSD**: ultra-high I/O disk.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] host_ips: The host list of this nodes group in the cluster.
         """
         pulumi.set(__self__, "data_volume_count", data_volume_count)
@@ -633,11 +734,11 @@ class ClusterMasterNodesArgs:
         """
         Specifies the data disk number of the nodes. The number configuration
         of each node are as follows:
-        + master_nodes: 1.
-        + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-        + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-        + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-        + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+        + **master_nodes**: 1.
+        + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+        + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+        + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+        + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
         """
         return pulumi.get(self, "data_volume_count")
 
@@ -701,7 +802,7 @@ class ClusterMasterNodesArgs:
     def assigned_roles(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         Specifies the roles deployed in a node group.This argument is mandatory
-        when the cluster type is CUSTOM. Each character string represents a role expression.
+        when the cluster type is **CUSTOM**. Each character string represents a role expression.
         """
         return pulumi.get(self, "assigned_roles")
 
@@ -730,9 +831,9 @@ class ClusterMasterNodesArgs:
         Specifies the data disk flavor of the nodes.
         Required if `data_volume_count` is greater than zero. Changing this will create a new MapReduce cluster resource.
         The following disk types are supported:
-        + `SATA`: common I/O disk
-        + `SAS`: high I/O disk
-        + `SSD`: ultra-high I/O disk
+        + **SATA**: common I/O disk.
+        + **SAS**: high I/O disk.
+        + **SSD**: ultra-high I/O disk.
         """
         return pulumi.get(self, "data_volume_type")
 
@@ -768,11 +869,11 @@ class ClusterStreamingCoreNodesArgs:
         """
         :param pulumi.Input[int] data_volume_count: Specifies the data disk number of the nodes. The number configuration
                of each node are as follows:
-               + master_nodes: 1.
-               + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-               + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-               + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-               + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+               + **master_nodes**: 1.
+               + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+               + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+               + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+               + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
         :param pulumi.Input[str] flavor: Specifies the instance specifications for each nodes in node group.
                Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[int] node_number: Specifies the number of nodes for the node group.
@@ -781,16 +882,16 @@ class ClusterStreamingCoreNodesArgs:
         :param pulumi.Input[str] root_volume_type: Specifies the system disk flavor of the nodes. Changing this will
                create a new MapReduce cluster resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] assigned_roles: Specifies the roles deployed in a node group.This argument is mandatory
-               when the cluster type is CUSTOM. Each character string represents a role expression.
+               when the cluster type is **CUSTOM**. Each character string represents a role expression.
         :param pulumi.Input[int] data_volume_size: Specifies the data disk size of the nodes,in GB. The value range is 10
                to 32768. Required if `data_volume_count` is greater than zero. Changing this will create a new MapReduce
                cluster resource.
         :param pulumi.Input[str] data_volume_type: Specifies the data disk flavor of the nodes.
                Required if `data_volume_count` is greater than zero. Changing this will create a new MapReduce cluster resource.
                The following disk types are supported:
-               + `SATA`: common I/O disk
-               + `SAS`: high I/O disk
-               + `SSD`: ultra-high I/O disk
+               + **SATA**: common I/O disk.
+               + **SAS**: high I/O disk.
+               + **SSD**: ultra-high I/O disk.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] host_ips: The host list of this nodes group in the cluster.
         """
         pulumi.set(__self__, "data_volume_count", data_volume_count)
@@ -813,11 +914,11 @@ class ClusterStreamingCoreNodesArgs:
         """
         Specifies the data disk number of the nodes. The number configuration
         of each node are as follows:
-        + master_nodes: 1.
-        + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-        + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-        + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-        + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+        + **master_nodes**: 1.
+        + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+        + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+        + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+        + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
         """
         return pulumi.get(self, "data_volume_count")
 
@@ -881,7 +982,7 @@ class ClusterStreamingCoreNodesArgs:
     def assigned_roles(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         Specifies the roles deployed in a node group.This argument is mandatory
-        when the cluster type is CUSTOM. Each character string represents a role expression.
+        when the cluster type is **CUSTOM**. Each character string represents a role expression.
         """
         return pulumi.get(self, "assigned_roles")
 
@@ -910,9 +1011,9 @@ class ClusterStreamingCoreNodesArgs:
         Specifies the data disk flavor of the nodes.
         Required if `data_volume_count` is greater than zero. Changing this will create a new MapReduce cluster resource.
         The following disk types are supported:
-        + `SATA`: common I/O disk
-        + `SAS`: high I/O disk
-        + `SSD`: ultra-high I/O disk
+        + **SATA**: common I/O disk.
+        + **SAS**: high I/O disk.
+        + **SSD**: ultra-high I/O disk.
         """
         return pulumi.get(self, "data_volume_type")
 
@@ -948,11 +1049,11 @@ class ClusterStreamingTaskNodesArgs:
         """
         :param pulumi.Input[int] data_volume_count: Specifies the data disk number of the nodes. The number configuration
                of each node are as follows:
-               + master_nodes: 1.
-               + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-               + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-               + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-               + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+               + **master_nodes**: 1.
+               + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+               + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+               + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+               + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
         :param pulumi.Input[str] flavor: Specifies the instance specifications for each nodes in node group.
                Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[int] node_number: Specifies the number of nodes for the node group.
@@ -961,16 +1062,16 @@ class ClusterStreamingTaskNodesArgs:
         :param pulumi.Input[str] root_volume_type: Specifies the system disk flavor of the nodes. Changing this will
                create a new MapReduce cluster resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] assigned_roles: Specifies the roles deployed in a node group.This argument is mandatory
-               when the cluster type is CUSTOM. Each character string represents a role expression.
+               when the cluster type is **CUSTOM**. Each character string represents a role expression.
         :param pulumi.Input[int] data_volume_size: Specifies the data disk size of the nodes,in GB. The value range is 10
                to 32768. Required if `data_volume_count` is greater than zero. Changing this will create a new MapReduce
                cluster resource.
         :param pulumi.Input[str] data_volume_type: Specifies the data disk flavor of the nodes.
                Required if `data_volume_count` is greater than zero. Changing this will create a new MapReduce cluster resource.
                The following disk types are supported:
-               + `SATA`: common I/O disk
-               + `SAS`: high I/O disk
-               + `SSD`: ultra-high I/O disk
+               + **SATA**: common I/O disk.
+               + **SAS**: high I/O disk.
+               + **SSD**: ultra-high I/O disk.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] host_ips: The host list of this nodes group in the cluster.
         """
         pulumi.set(__self__, "data_volume_count", data_volume_count)
@@ -993,11 +1094,11 @@ class ClusterStreamingTaskNodesArgs:
         """
         Specifies the data disk number of the nodes. The number configuration
         of each node are as follows:
-        + master_nodes: 1.
-        + analysis_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-        + streaming_core_nodes: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
-        + analysis_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
-        + streaming_task_nodes: minimum is zero and the maximum is subject to the configuration of the corresponding flavor.
+        + **master_nodes**: 1.
+        + **analysis_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+        + **streaming_core_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+        + **analysis_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
+        + **streaming_task_nodes**: minimum is one and the maximum is subject to the configuration of the corresponding flavor.
         """
         return pulumi.get(self, "data_volume_count")
 
@@ -1061,7 +1162,7 @@ class ClusterStreamingTaskNodesArgs:
     def assigned_roles(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         Specifies the roles deployed in a node group.This argument is mandatory
-        when the cluster type is CUSTOM. Each character string represents a role expression.
+        when the cluster type is **CUSTOM**. Each character string represents a role expression.
         """
         return pulumi.get(self, "assigned_roles")
 
@@ -1090,9 +1191,9 @@ class ClusterStreamingTaskNodesArgs:
         Specifies the data disk flavor of the nodes.
         Required if `data_volume_count` is greater than zero. Changing this will create a new MapReduce cluster resource.
         The following disk types are supported:
-        + `SATA`: common I/O disk
-        + `SAS`: high I/O disk
-        + `SSD`: ultra-high I/O disk
+        + **SATA**: common I/O disk.
+        + **SAS**: high I/O disk.
+        + **SSD**: ultra-high I/O disk.
         """
         return pulumi.get(self, "data_volume_type")
 

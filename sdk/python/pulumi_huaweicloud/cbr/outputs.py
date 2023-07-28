@@ -13,6 +13,7 @@ from . import outputs
 __all__ = [
     'PolicyBackupCycle',
     'PolicyLongTermRetention',
+    'VaultPolicy',
     'VaultResource',
     'GetVaultsVaultResult',
     'GetVaultsVaultResourceResult',
@@ -89,19 +90,42 @@ class PolicyBackupCycle(dict):
 
 @pulumi.output_type
 class PolicyLongTermRetention(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "fullBackupInterval":
+            suggest = "full_backup_interval"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in PolicyLongTermRetention. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        PolicyLongTermRetention.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        PolicyLongTermRetention.__key_warning(key)
+        return super().get(key, default)
+
     def __init__(__self__, *,
                  daily: Optional[int] = None,
+                 full_backup_interval: Optional[int] = None,
                  monthly: Optional[int] = None,
                  weekly: Optional[int] = None,
                  yearly: Optional[int] = None):
         """
         :param int daily: - Specifies the latest backup of each day is saved in the long term.
+        :param int full_backup_interval: Specifies how often (after how many incremental backups) a full backup is
+               performed. The valid value ranges from `-1` to `100`.
+               If `-1` is specified, full backup will not be performed.
         :param int monthly: - Specifies the latest backup of each month is saved in the long term.
         :param int weekly: - Specifies the latest backup of each week is saved in the long term.
         :param int yearly: - Specifies the latest backup of each year is saved in the long term.
         """
         if daily is not None:
             pulumi.set(__self__, "daily", daily)
+        if full_backup_interval is not None:
+            pulumi.set(__self__, "full_backup_interval", full_backup_interval)
         if monthly is not None:
             pulumi.set(__self__, "monthly", monthly)
         if weekly is not None:
@@ -116,6 +140,16 @@ class PolicyLongTermRetention(dict):
         - Specifies the latest backup of each day is saved in the long term.
         """
         return pulumi.get(self, "daily")
+
+    @property
+    @pulumi.getter(name="fullBackupInterval")
+    def full_backup_interval(self) -> Optional[int]:
+        """
+        Specifies how often (after how many incremental backups) a full backup is
+        performed. The valid value ranges from `-1` to `100`.
+        If `-1` is specified, full backup will not be performed.
+        """
+        return pulumi.get(self, "full_backup_interval")
 
     @property
     @pulumi.getter
@@ -140,6 +174,55 @@ class PolicyLongTermRetention(dict):
         - Specifies the latest backup of each year is saved in the long term.
         """
         return pulumi.get(self, "yearly")
+
+
+@pulumi.output_type
+class VaultPolicy(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "destinationVaultId":
+            suggest = "destination_vault_id"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in VaultPolicy. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        VaultPolicy.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        VaultPolicy.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 id: str,
+                 destination_vault_id: Optional[str] = None):
+        """
+        :param str id: Specifies the policy ID.
+        :param str destination_vault_id: Specifies the ID of destination vault to which the replication policy
+               will associated.
+        """
+        pulumi.set(__self__, "id", id)
+        if destination_vault_id is not None:
+            pulumi.set(__self__, "destination_vault_id", destination_vault_id)
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        Specifies the policy ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="destinationVaultId")
+    def destination_vault_id(self) -> Optional[str]:
+        """
+        Specifies the ID of destination vault to which the replication policy
+        will associated.
+        """
+        return pulumi.get(self, "destination_vault_id")
 
 
 @pulumi.output_type
@@ -228,27 +311,27 @@ class GetVaultsVaultResult(dict):
         """
         :param float allocated: The allocated capacity of the vault, in GB.
         :param bool auto_expand_enabled: Specifies whether to enable automatic expansion of the backup protection
-               type vault. Default to **false**.
-        :param str consistent_level: Specifies the backup specifications.
+               type vault. Defaults to **false**.
+        :param str consistent_level: Specifies the consistent level (specification) of the vault.
                The valid values are as follows:
                + **[crash_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
                + **[app_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
-        :param str enterprise_project_id: Specifies a unique ID in UUID format of enterprise project.
+        :param str enterprise_project_id: Specifies the ID of the enterprise project to which the vault belongs.
         :param str id: The vault ID in UUID format.
-        :param str name: Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
+        :param str name: Specifies the vault name. This parameter can contain a maximum of 64
                characters, which may consist of letters, digits, underscores(_) and hyphens (-).
-        :param str policy_id: Specifies a policy to associate with the CBR vault.
+        :param str policy_id: Specifies the ID of the policy associated with the vault.
                The `policy_id` cannot be used with the vault of replicate protection type.
-        :param str protection_type: Specifies the protection type of the CBR vault.
+        :param str protection_type: Specifies the protection type of the vault.
                The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
-        :param Sequence['GetVaultsVaultResourceArgs'] resources: An array of one or more resources to attach to the CBR vault.
+        :param Sequence['GetVaultsVaultResourceArgs'] resources: The array of one or more resources to attach to the vault.
                The object structure is documented below.
         :param int size: Specifies the vault sapacity, in GB. The valid value range is `1` to `10,485,760`.
         :param str spec_code: The specification code.
-        :param str status: Specifies the CBR vault status, including **available**, **lock**, **frozen** and **error**.
+        :param str status: Specifies the vault status, including **available**, **lock**, **frozen** and **error**.
         :param str storage: The name of the bucket for the vault.
-        :param Mapping[str, str] tags: The key/value pairs to associate with the CBR vault.
-        :param str type: Specifies the object type of the CBR vault. The vaild values are as follows:
+        :param Mapping[str, str] tags: The key/value pairs to associate with the vault.
+        :param str type: Specifies the object type of the vault. The vaild values are as follows:
                + **server** (Cloud Servers)
                + **disk** (EVS Disks)
                + **turbo** (SFS Turbo file systems)
@@ -284,7 +367,7 @@ class GetVaultsVaultResult(dict):
     def auto_expand_enabled(self) -> bool:
         """
         Specifies whether to enable automatic expansion of the backup protection
-        type vault. Default to **false**.
+        type vault. Defaults to **false**.
         """
         return pulumi.get(self, "auto_expand_enabled")
 
@@ -292,7 +375,7 @@ class GetVaultsVaultResult(dict):
     @pulumi.getter(name="consistentLevel")
     def consistent_level(self) -> str:
         """
-        Specifies the backup specifications.
+        Specifies the consistent level (specification) of the vault.
         The valid values are as follows:
         + **[crash_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
         + **[app_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
@@ -303,7 +386,7 @@ class GetVaultsVaultResult(dict):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> str:
         """
-        Specifies a unique ID in UUID format of enterprise project.
+        Specifies the ID of the enterprise project to which the vault belongs.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -319,7 +402,7 @@ class GetVaultsVaultResult(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
+        Specifies the vault name. This parameter can contain a maximum of 64
         characters, which may consist of letters, digits, underscores(_) and hyphens (-).
         """
         return pulumi.get(self, "name")
@@ -328,7 +411,7 @@ class GetVaultsVaultResult(dict):
     @pulumi.getter(name="policyId")
     def policy_id(self) -> str:
         """
-        Specifies a policy to associate with the CBR vault.
+        Specifies the ID of the policy associated with the vault.
         The `policy_id` cannot be used with the vault of replicate protection type.
         """
         return pulumi.get(self, "policy_id")
@@ -337,7 +420,7 @@ class GetVaultsVaultResult(dict):
     @pulumi.getter(name="protectionType")
     def protection_type(self) -> str:
         """
-        Specifies the protection type of the CBR vault.
+        Specifies the protection type of the vault.
         The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
         """
         return pulumi.get(self, "protection_type")
@@ -346,7 +429,7 @@ class GetVaultsVaultResult(dict):
     @pulumi.getter
     def resources(self) -> Sequence['outputs.GetVaultsVaultResourceResult']:
         """
-        An array of one or more resources to attach to the CBR vault.
+        The array of one or more resources to attach to the vault.
         The object structure is documented below.
         """
         return pulumi.get(self, "resources")
@@ -371,7 +454,7 @@ class GetVaultsVaultResult(dict):
     @pulumi.getter
     def status(self) -> str:
         """
-        Specifies the CBR vault status, including **available**, **lock**, **frozen** and **error**.
+        Specifies the vault status, including **available**, **lock**, **frozen** and **error**.
         """
         return pulumi.get(self, "status")
 
@@ -387,7 +470,7 @@ class GetVaultsVaultResult(dict):
     @pulumi.getter
     def tags(self) -> Mapping[str, str]:
         """
-        The key/value pairs to associate with the CBR vault.
+        The key/value pairs to associate with the vault.
         """
         return pulumi.get(self, "tags")
 
@@ -395,7 +478,7 @@ class GetVaultsVaultResult(dict):
     @pulumi.getter
     def type(self) -> str:
         """
-        Specifies the object type of the CBR vault. The vaild values are as follows:
+        Specifies the object type of the vault. The vaild values are as follows:
         + **server** (Cloud Servers)
         + **disk** (EVS Disks)
         + **turbo** (SFS Turbo file systems)
@@ -418,8 +501,8 @@ class GetVaultsVaultResourceResult(dict):
                  includes: Sequence[str],
                  server_id: str):
         """
-        :param Sequence[str] excludes: An array of disk IDs which will be excluded in the backup.
-        :param Sequence[str] includes: An array of disk or SFS file system IDs which will be included in the backup.
+        :param Sequence[str] excludes: The array of disk IDs which will be excluded in the backup.
+        :param Sequence[str] includes: The array of disk or SFS file system IDs which will be included in the backup.
         :param str server_id: The ID of the ECS instance to be backed up.
         """
         pulumi.set(__self__, "excludes", excludes)
@@ -430,7 +513,7 @@ class GetVaultsVaultResourceResult(dict):
     @pulumi.getter
     def excludes(self) -> Sequence[str]:
         """
-        An array of disk IDs which will be excluded in the backup.
+        The array of disk IDs which will be excluded in the backup.
         """
         return pulumi.get(self, "excludes")
 
@@ -438,7 +521,7 @@ class GetVaultsVaultResourceResult(dict):
     @pulumi.getter
     def includes(self) -> Sequence[str]:
         """
-        An array of disk or SFS file system IDs which will be included in the backup.
+        The array of disk or SFS file system IDs which will be included in the backup.
         """
         return pulumi.get(self, "includes")
 

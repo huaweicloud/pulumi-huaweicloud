@@ -25,20 +25,21 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Waf"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			policy1, err := Waf.NewPolicy(ctx, "policy1", nil)
-//			if err != nil {
-//				return err
-//			}
-//			_, err = Waf.NewRuleDataMasking(ctx, "rule1", &Waf.RuleDataMaskingArgs{
-//				PolicyId: policy1.ID(),
-//				Path:     pulumi.String("/login"),
-//				Field:    pulumi.String("params"),
-//				Subfield: pulumi.String("password"),
+//			cfg := config.New(ctx, "")
+//			enterpriseProjectId := cfg.RequireObject("enterpriseProjectId")
+//			policyId := cfg.RequireObject("policyId")
+//			_, err := Waf.NewRuleDataMasking(ctx, "rule1", &Waf.RuleDataMaskingArgs{
+//				PolicyId:            pulumi.Any(policyId),
+//				EnterpriseProjectId: pulumi.Any(enterpriseProjectId),
+//				Path:                pulumi.String("/login"),
+//				Field:               pulumi.String("params"),
+//				Subfield:            pulumi.String("password"),
 //			})
 //			if err != nil {
 //				return err
@@ -51,16 +52,27 @@ import (
 //
 // ## Import
 //
-// Data Masking Rules can be imported using the policy ID and rule ID separated by a slash, e.g.
+// There are two ways to import WAF rule data masking state. * Using `policy_id` and `rule_id`, separated by a slash, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Waf/ruleDataMasking:RuleDataMasking rule_1 d78b439fd5e54ea08886e5f63ee7b3f5/ac01a092d50e4e6ba3cd622c1128ba2c
+//	$ pulumi import huaweicloud:Waf/ruleDataMasking:RuleDataMasking test <policy_id>/<rule_id>
+//
+// ```
+//
+//   - Using `policy_id`, `rule_id` and `enterprise_project_id`, separated by slashes, e.g. bash
+//
+// ```sh
+//
+//	$ pulumi import huaweicloud:Waf/ruleDataMasking:RuleDataMasking test <policy_id>/<rule_id>/<enterprise_project_id>
 //
 // ```
 type RuleDataMasking struct {
 	pulumi.CustomResourceState
 
+	// Specifies the enterprise project ID of WAF data masking rule.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
 	// The position where the masked field stored. Valid values are:
 	// + `params`: The field in the parameter.
 	// + `header`: The field in the header.
@@ -120,6 +132,9 @@ func GetRuleDataMasking(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering RuleDataMasking resources.
 type ruleDataMaskingState struct {
+	// Specifies the enterprise project ID of WAF data masking rule.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// The position where the masked field stored. Valid values are:
 	// + `params`: The field in the parameter.
 	// + `header`: The field in the header.
@@ -138,6 +153,9 @@ type ruleDataMaskingState struct {
 }
 
 type RuleDataMaskingState struct {
+	// Specifies the enterprise project ID of WAF data masking rule.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// The position where the masked field stored. Valid values are:
 	// + `params`: The field in the parameter.
 	// + `header`: The field in the header.
@@ -160,6 +178,9 @@ func (RuleDataMaskingState) ElementType() reflect.Type {
 }
 
 type ruleDataMaskingArgs struct {
+	// Specifies the enterprise project ID of WAF data masking rule.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// The position where the masked field stored. Valid values are:
 	// + `params`: The field in the parameter.
 	// + `header`: The field in the header.
@@ -179,6 +200,9 @@ type ruleDataMaskingArgs struct {
 
 // The set of arguments for constructing a RuleDataMasking resource.
 type RuleDataMaskingArgs struct {
+	// Specifies the enterprise project ID of WAF data masking rule.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// The position where the masked field stored. Valid values are:
 	// + `params`: The field in the parameter.
 	// + `header`: The field in the header.
@@ -281,6 +305,12 @@ func (o RuleDataMaskingOutput) ToRuleDataMaskingOutput() RuleDataMaskingOutput {
 
 func (o RuleDataMaskingOutput) ToRuleDataMaskingOutputWithContext(ctx context.Context) RuleDataMaskingOutput {
 	return o
+}
+
+// Specifies the enterprise project ID of WAF data masking rule.
+// Changing this parameter will create a new resource.
+func (o RuleDataMaskingOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *RuleDataMasking) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
 
 // The position where the masked field stored. Valid values are:

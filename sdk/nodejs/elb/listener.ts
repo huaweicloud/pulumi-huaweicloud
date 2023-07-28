@@ -59,10 +59,6 @@ export class Listener extends pulumi.CustomResource {
         return obj['__pulumiType'] === Listener.__pulumiType;
     }
 
-    /**
-     * The administrative state of the listener. A valid value is true (UP) or false (
-     * DOWN).
-     */
     public readonly adminStateUp!: pulumi.Output<boolean | undefined>;
     /**
      * The maximum number of connections allowed for the listener. The value ranges from
@@ -189,10 +185,6 @@ export class Listener extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Listener resources.
  */
 export interface ListenerState {
-    /**
-     * The administrative state of the listener. A valid value is true (UP) or false (
-     * DOWN).
-     */
     adminStateUp?: pulumi.Input<boolean>;
     /**
      * The maximum number of connections allowed for the listener. The value ranges from
@@ -262,10 +254,6 @@ export interface ListenerState {
  * The set of arguments for constructing a Listener resource.
  */
 export interface ListenerArgs {
-    /**
-     * The administrative state of the listener. A valid value is true (UP) or false (
-     * DOWN).
-     */
     adminStateUp?: pulumi.Input<boolean>;
     /**
      * The maximum number of connections allowed for the listener. The value ranges from

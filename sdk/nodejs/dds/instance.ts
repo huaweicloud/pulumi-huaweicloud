@@ -54,7 +54,7 @@ import * as utilities from "../utilities";
  *     vpcId: "{{ vpc_id }}",
  * });
  * ```
- * ### Creating A Replica Set
+ * ### Creating A Replica Set Community Edition
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -81,6 +81,33 @@ import * as utilities from "../utilities";
  *     vpcId: "{{ vpc_id }}",
  * });
  * ```
+ * ### Creating A Single Community Edition
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as huaweicloud from "@pulumi/huaweicloud";
+ *
+ * const instance = new huaweicloud.Dds.Instance("instance", {
+ *     availabilityZone: "{{ availability_zone }}",
+ *     datastore: {
+ *         storageEngine: "wiredTiger",
+ *         type: "DDS-Community",
+ *         version: "3.4",
+ *     },
+ *     flavors: [{
+ *         num: 1,
+ *         size: 30,
+ *         specCode: "dds.mongodb.s6.large.2.single",
+ *         storage: "ULTRAHIGH",
+ *         type: "single",
+ *     }],
+ *     mode: "Single",
+ *     password: "Test@123",
+ *     securityGroupId: "{{ security_group_id }}",
+ *     subnetId: "{{ subnet_network_id }}}",
+ *     vpcId: "{{ vpc_id }}",
+ * });
+ * ```
  *
  * ## Import
  *
@@ -90,7 +117,7 @@ import * as utilities from "../utilities";
  *  $ pulumi import huaweicloud:Dds/instance:Instance instance 9c6d6ff2cba3434293fd479571517e16in02
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `availability_zone`, `flavor`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dds_instance" "instance" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `availability_zone`, `flavor`, configuration. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dds_instance" "instance" {
  *
  *  ...
  *
@@ -98,7 +125,7 @@ import * as utilities from "../utilities";
  *
  *  ignore_changes = [
  *
- *  password, availability_zone, flavor,
+ *  password, availability_zone, flavor, configuration,
  *
  *  ]
  *
@@ -132,9 +159,12 @@ export class Instance extends pulumi.CustomResource {
         return obj['__pulumiType'] === Instance.__pulumiType;
     }
 
+    /**
+     * @deprecated Deprecated
+     */
     public readonly autoPay!: pulumi.Output<string | undefined>;
     /**
-     * Specifies whether auto renew is enabled.
+     * Specifies whether auto-renew is enabled.
      * Valid values are `true` and `false`, defaults to `false`.
      * Changing this creates a new instance.
      */
@@ -155,6 +185,11 @@ export class Instance extends pulumi.CustomResource {
      * + `postPaid`: indicates the pay-per-use billing mode.
      */
     public readonly chargingMode!: pulumi.Output<string>;
+    /**
+     * Specifies the configuration information.
+     * The structure is described below. Changing this creates a new instance.
+     */
+    public readonly configurations!: pulumi.Output<outputs.Dds.InstanceConfiguration[] | undefined>;
     /**
      * Specifies database information. The structure is described below. Changing
      * this creates a new instance.
@@ -180,8 +215,8 @@ export class Instance extends pulumi.CustomResource {
      */
     public readonly flavors!: pulumi.Output<outputs.Dds.InstanceFlavor[]>;
     /**
-     * Specifies the mode of the database instance. Changing this creates a new
-     * instance.
+     * Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
+     * **Single** are supported. Changing this creates a new instance.
      */
     public readonly mode!: pulumi.Output<string>;
     /**
@@ -212,8 +247,8 @@ export class Instance extends pulumi.CustomResource {
      */
     public readonly periodUnit!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the database access port. The valid values are range from `2,100` to `9,500` and
-     * `27,017`, `27,018`, `27,019`. Defaults to `8,635`.
+     * Specifies the database access port. The valid values are range from `2100` to `9500` and
+     * `27017`, `27018`, `27019`. Defaults to `8635`.
      */
     public readonly port!: pulumi.Output<number>;
     /**
@@ -264,6 +299,7 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["availabilityZone"] = state ? state.availabilityZone : undefined;
             resourceInputs["backupStrategy"] = state ? state.backupStrategy : undefined;
             resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
+            resourceInputs["configurations"] = state ? state.configurations : undefined;
             resourceInputs["datastore"] = state ? state.datastore : undefined;
             resourceInputs["dbUsername"] = state ? state.dbUsername : undefined;
             resourceInputs["diskEncryptionId"] = state ? state.diskEncryptionId : undefined;
@@ -314,6 +350,7 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["availabilityZone"] = args ? args.availabilityZone : undefined;
             resourceInputs["backupStrategy"] = args ? args.backupStrategy : undefined;
             resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
+            resourceInputs["configurations"] = args ? args.configurations : undefined;
             resourceInputs["datastore"] = args ? args.datastore : undefined;
             resourceInputs["diskEncryptionId"] = args ? args.diskEncryptionId : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
@@ -343,9 +380,12 @@ export class Instance extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Instance resources.
  */
 export interface InstanceState {
+    /**
+     * @deprecated Deprecated
+     */
     autoPay?: pulumi.Input<string>;
     /**
-     * Specifies whether auto renew is enabled.
+     * Specifies whether auto-renew is enabled.
      * Valid values are `true` and `false`, defaults to `false`.
      * Changing this creates a new instance.
      */
@@ -366,6 +406,11 @@ export interface InstanceState {
      * + `postPaid`: indicates the pay-per-use billing mode.
      */
     chargingMode?: pulumi.Input<string>;
+    /**
+     * Specifies the configuration information.
+     * The structure is described below. Changing this creates a new instance.
+     */
+    configurations?: pulumi.Input<pulumi.Input<inputs.Dds.InstanceConfiguration>[]>;
     /**
      * Specifies database information. The structure is described below. Changing
      * this creates a new instance.
@@ -391,8 +436,8 @@ export interface InstanceState {
      */
     flavors?: pulumi.Input<pulumi.Input<inputs.Dds.InstanceFlavor>[]>;
     /**
-     * Specifies the mode of the database instance. Changing this creates a new
-     * instance.
+     * Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
+     * **Single** are supported. Changing this creates a new instance.
      */
     mode?: pulumi.Input<string>;
     /**
@@ -423,8 +468,8 @@ export interface InstanceState {
      */
     periodUnit?: pulumi.Input<string>;
     /**
-     * Specifies the database access port. The valid values are range from `2,100` to `9,500` and
-     * `27,017`, `27,018`, `27,019`. Defaults to `8,635`.
+     * Specifies the database access port. The valid values are range from `2100` to `9500` and
+     * `27017`, `27018`, `27019`. Defaults to `8635`.
      */
     port?: pulumi.Input<number>;
     /**
@@ -462,9 +507,12 @@ export interface InstanceState {
  * The set of arguments for constructing a Instance resource.
  */
 export interface InstanceArgs {
+    /**
+     * @deprecated Deprecated
+     */
     autoPay?: pulumi.Input<string>;
     /**
-     * Specifies whether auto renew is enabled.
+     * Specifies whether auto-renew is enabled.
      * Valid values are `true` and `false`, defaults to `false`.
      * Changing this creates a new instance.
      */
@@ -486,6 +534,11 @@ export interface InstanceArgs {
      */
     chargingMode?: pulumi.Input<string>;
     /**
+     * Specifies the configuration information.
+     * The structure is described below. Changing this creates a new instance.
+     */
+    configurations?: pulumi.Input<pulumi.Input<inputs.Dds.InstanceConfiguration>[]>;
+    /**
      * Specifies database information. The structure is described below. Changing
      * this creates a new instance.
      */
@@ -506,8 +559,8 @@ export interface InstanceArgs {
      */
     flavors: pulumi.Input<pulumi.Input<inputs.Dds.InstanceFlavor>[]>;
     /**
-     * Specifies the mode of the database instance. Changing this creates a new
-     * instance.
+     * Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
+     * **Single** are supported. Changing this creates a new instance.
      */
     mode: pulumi.Input<string>;
     /**
@@ -534,8 +587,8 @@ export interface InstanceArgs {
      */
     periodUnit?: pulumi.Input<string>;
     /**
-     * Specifies the database access port. The valid values are range from `2,100` to `9,500` and
-     * `27,017`, `27,018`, `27,019`. Defaults to `8,635`.
+     * Specifies the database access port. The valid values are range from `2100` to `9500` and
+     * `27017`, `27018`, `27019`. Defaults to `8635`.
      */
     port?: pulumi.Input<number>;
     /**

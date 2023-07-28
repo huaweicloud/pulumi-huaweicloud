@@ -16,6 +16,7 @@ import * as utilities from "../utilities";
  * import * as huaweicloud from "@pulumi/huaweicloud";
  *
  * const agency = new huaweicloud.Iam.Agency("agency", {
+ *     allResourcesRoles: ["Server Administrator"],
  *     delegatedDomainName: "***",
  *     description: "test agency",
  *     domainRoles: ["Anti-DDoS Administrator"],
@@ -33,6 +34,16 @@ import * as utilities from "../utilities";
  * ```sh
  *  $ pulumi import huaweicloud:Iam/agency:Agency agency 0b97661f9900f23f4fc2c00971ea4dc0
  * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to `all_resources_roles` field is missing from the API response. It is generally recommended running `terraform plan` after importing an agency. You can then decide if changes should be applied to the agency, or the resource definition should be updated to align with the agency. Also you can ignore changes as below. hcl resource "huaweicloud_identity_agency" "agency" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [all_resources_roles]
+ *
+ *  } }
  */
 export class Agency extends pulumi.CustomResource {
     /**
@@ -63,14 +74,22 @@ export class Agency extends pulumi.CustomResource {
     }
 
     /**
+     * Specifies an array of one or more role names which stand for the permissions
+     * to be granted to agency on all resources, including those in enterprise projects, region-specific projects,
+     * and global services under your account.
+     */
+    public readonly allResourcesRoles!: pulumi.Output<string[] | undefined>;
+    /**
      * The time when the agency was created.
      */
     public /*out*/ readonly createTime!: pulumi.Output<string>;
     /**
-     * Specifies the name of delegated user domain. This parameter
-     * and `delegatedServiceName` are alternative.
+     * Specifies the name of delegated user domain.
      */
     public readonly delegatedDomainName!: pulumi.Output<string | undefined>;
+    /**
+     * schema: Internal
+     */
     public readonly delegatedServiceName!: pulumi.Output<string | undefined>;
     /**
      * Specifies the supplementary information about the agency. The value is a string of
@@ -78,13 +97,13 @@ export class Agency extends pulumi.CustomResource {
      */
     public readonly description!: pulumi.Output<string>;
     /**
-     * Specifies an array of one or more role names which stand for the permissionis to be
+     * Specifies an array of one or more role names which stand for the permissions to be
      * granted to agency on domain.
      */
     public readonly domainRoles!: pulumi.Output<string[] | undefined>;
     /**
-     * Specifies the validity period of an agency. The valid value are *ONEDAY* and *FOREVER*
-     * , defaults to *FOREVER*.
+     * Specifies the validity period of an agency. The valid value are *FOREVER*, *ONEDAY*
+     * or the specific days, for example, "20". The default value is *FOREVER*.
      */
     public readonly duration!: pulumi.Output<string | undefined>;
     /**
@@ -115,6 +134,7 @@ export class Agency extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as AgencyState | undefined;
+            resourceInputs["allResourcesRoles"] = state ? state.allResourcesRoles : undefined;
             resourceInputs["createTime"] = state ? state.createTime : undefined;
             resourceInputs["delegatedDomainName"] = state ? state.delegatedDomainName : undefined;
             resourceInputs["delegatedServiceName"] = state ? state.delegatedServiceName : undefined;
@@ -126,6 +146,7 @@ export class Agency extends pulumi.CustomResource {
             resourceInputs["projectRoles"] = state ? state.projectRoles : undefined;
         } else {
             const args = argsOrState as AgencyArgs | undefined;
+            resourceInputs["allResourcesRoles"] = args ? args.allResourcesRoles : undefined;
             resourceInputs["delegatedDomainName"] = args ? args.delegatedDomainName : undefined;
             resourceInputs["delegatedServiceName"] = args ? args.delegatedServiceName : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
@@ -146,14 +167,22 @@ export class Agency extends pulumi.CustomResource {
  */
 export interface AgencyState {
     /**
+     * Specifies an array of one or more role names which stand for the permissions
+     * to be granted to agency on all resources, including those in enterprise projects, region-specific projects,
+     * and global services under your account.
+     */
+    allResourcesRoles?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
      * The time when the agency was created.
      */
     createTime?: pulumi.Input<string>;
     /**
-     * Specifies the name of delegated user domain. This parameter
-     * and `delegatedServiceName` are alternative.
+     * Specifies the name of delegated user domain.
      */
     delegatedDomainName?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
     delegatedServiceName?: pulumi.Input<string>;
     /**
      * Specifies the supplementary information about the agency. The value is a string of
@@ -161,13 +190,13 @@ export interface AgencyState {
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies an array of one or more role names which stand for the permissionis to be
+     * Specifies an array of one or more role names which stand for the permissions to be
      * granted to agency on domain.
      */
     domainRoles?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * Specifies the validity period of an agency. The valid value are *ONEDAY* and *FOREVER*
-     * , defaults to *FOREVER*.
+     * Specifies the validity period of an agency. The valid value are *FOREVER*, *ONEDAY*
+     * or the specific days, for example, "20". The default value is *FOREVER*.
      */
     duration?: pulumi.Input<string>;
     /**
@@ -191,10 +220,18 @@ export interface AgencyState {
  */
 export interface AgencyArgs {
     /**
-     * Specifies the name of delegated user domain. This parameter
-     * and `delegatedServiceName` are alternative.
+     * Specifies an array of one or more role names which stand for the permissions
+     * to be granted to agency on all resources, including those in enterprise projects, region-specific projects,
+     * and global services under your account.
+     */
+    allResourcesRoles?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * Specifies the name of delegated user domain.
      */
     delegatedDomainName?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
     delegatedServiceName?: pulumi.Input<string>;
     /**
      * Specifies the supplementary information about the agency. The value is a string of
@@ -202,13 +239,13 @@ export interface AgencyArgs {
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies an array of one or more role names which stand for the permissionis to be
+     * Specifies an array of one or more role names which stand for the permissions to be
      * granted to agency on domain.
      */
     domainRoles?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * Specifies the validity period of an agency. The valid value are *ONEDAY* and *FOREVER*
-     * , defaults to *FOREVER*.
+     * Specifies the validity period of an agency. The valid value are *FOREVER*, *ONEDAY*
+     * or the specific days, for example, "20". The default value is *FOREVER*.
      */
     duration?: pulumi.Input<string>;
     /**

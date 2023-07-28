@@ -41,7 +41,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * APIG Dedicated Instances can be imported by their `id`, e.g.
+ * Dedicated instances can be imported by their `id`, e.g.
  *
  * ```sh
  *  $ pulumi import huaweicloud:DedicatedApig/instance:Instance test de379eed30aa4d31a84f426ea3c7ef4e
@@ -76,51 +76,83 @@ export class Instance extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies an array of available zone names for the APIG dedicated
-     * instance. Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?APIG) for list elements.
-     * Changing this will create a new APIG dedicated instance resource.
+     * Specifies the name list of availability zones for the dedicated
+     * instance.
+     * Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?APIG) for list elements.
+     * Changing this will create a new resource.
      */
-    public readonly availableZones!: pulumi.Output<string[]>;
+    public readonly availabilityZones!: pulumi.Output<string[]>;
     /**
-     * Specifies the egress bandwidth size of the APIG dedicated instance. The range of
-     * valid value is from 1 to 2000.
+     * schema: Deprecated; The name list of availability zones for the dedicated instance.
+     */
+    public readonly availableZones!: pulumi.Output<string[] | undefined>;
+    /**
+     * Specifies the egress bandwidth size of the dedicated instance.  
+     * The valid value ranges from `0` to `2,000`.
      */
     public readonly bandwidthSize!: pulumi.Output<number | undefined>;
     /**
-     * Time when the APIG instance is created, in RFC-3339 format.
+     * schema: Deprecated; Time when the dedicated instance is created.
+     *
+     * @deprecated Use 'created_at' instead
      */
     public /*out*/ readonly createTime!: pulumi.Output<string>;
     /**
-     * Specifies the description about the APIG dedicated instance. The description
-     * contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+     * Time when the dedicated instance is created, in RFC-3339 format.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
+     * Specifies the description of the dedicated instance.  
+     * The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the edition of the APIG dedicated instance. The supported editions
-     * are as follows: BASIC, PROFESSIONAL, ENTERPRISE, PLATINUM. Changing this will create a new APIG dedicated instance
-     * resource.
+     * Specifies the edition of the dedicated instance.  
+     * The valid values are as follows:
+     * + **BASIC**: Basic Edition instance.
+     * + **PROFESSIONAL**: Professional Edition instance.
+     * + **ENTERPRISE**: Enterprise Edition instance.
+     * + **PLATINUM**: Platinum Edition instance.
+     * + **BASIC_IPV6**: IPv6 instance of the Basic Edition.
+     * + **PROFESSIONAL_IPV6**: IPv6 instance of the Professional Edition.
+     * + **ENTERPRISE_IPV6**: IPv6 instance of the Enterprise Edition.
+     * + **PLATINUM_IPV6**: IPv6 instance of the Platinum Edition.
      */
     public readonly edition!: pulumi.Output<string>;
     /**
-     * The egress (nat) public ip address.
+     * The egress (NAT) public IP address.
      */
     public /*out*/ readonly egressAddress!: pulumi.Output<string>;
     /**
-     * Specifies the eip ID associated with the APIG dedicated instance.
+     * Specifies the EIP ID associated with the dedicated instance.
      */
-    public readonly eipId!: pulumi.Output<string | undefined>;
+    public readonly eipId!: pulumi.Output<string>;
     /**
-     * Specifies an enterprise project ID. This parameter is required
-     * for enterprise users. Changing this will create a new APIG dedicated instance resource.
+     * Specifies the enterprise project ID to which the dedicated
+     * instance belongs.
+     * This parameter is required for enterprise users. Changing this will create a new resource.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
-     * The ingress eip address.
+     * The ingress EIP address.
      */
     public /*out*/ readonly ingressAddress!: pulumi.Output<string>;
     /**
-     * Specifies a start time of the maintenance time window in the format 'xx:00:00'.
-     * The value of xx can be 02, 06, 10, 14, 18 or 22.
+     * Specifies whether public access with an IPv6 address is supported.  
+     * Changing this will create a new resource.
+     */
+    public readonly ipv6Enable!: pulumi.Output<boolean>;
+    /**
+     * Specifies the provider type of load balancer used by the
+     * dedicated instance.
+     * The valid values are as follows:
+     * + **lvs**: Linux virtual server.
+     * + **elb**: Elastic load balance.
+     */
+    public readonly loadbalancerProvider!: pulumi.Output<string>;
+    /**
+     * Specifies the start time of the maintenance time window.  
+     * The format is **xx:00:00**, the value of **xx** can be `02`, `06`, `10`, `14`, `18` or `22`.
      */
     public readonly maintainBegin!: pulumi.Output<string>;
     /**
@@ -128,27 +160,29 @@ export class Instance extends pulumi.CustomResource {
      */
     public /*out*/ readonly maintainEnd!: pulumi.Output<string>;
     /**
-     * Specifies the name of the API dedicated instance. The API group name consists of 3 to 64
-     * characters, starting with a letter. Only letters, digits, and underscores (_) are allowed.
+     * Specifies the name of the dedicated instance.  
+     * The name can contain `3` to `64` characters, only letters, digits, hyphens (-) and underscores (_) are allowed, and
+     * must start with a letter.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Specifies the region in which to create the APIG dedicated instance resource.
-     * If omitted, the provider-level region will be used. Changing this will create a new APIG dedicated instance resource.
+     * Specifies the region in which to create the dedicated instance resource.  
+     * If omitted, the provider-level region will be used.
+     * Changing this will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Specifies an ID of the security group to which the APIG dedicated instance
+     * Specifies the ID of the security group to which the dedicated instance
      * belongs to.
      */
     public readonly securityGroupId!: pulumi.Output<string>;
     /**
-     * Status of the APIG dedicated instance.
+     * Status of the dedicated instance.
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
-     * Specifies an ID of the VPC subnet used to create the APIG dedicated
-     * instance. Changing this will create a new APIG dedicated instance resource.
+     * Specifies the ID of the VPC subnet used to create the dedicated instance.  
+     * Changing this will create a new resource.
      */
     public readonly subnetId!: pulumi.Output<string>;
     /**
@@ -156,12 +190,12 @@ export class Instance extends pulumi.CustomResource {
      */
     public /*out*/ readonly supportedFeatures!: pulumi.Output<string[]>;
     /**
-     * Specifies an ID of the VPC used to create the APIG dedicated instance.
-     * Changing this will create a new APIG dedicated instance resource.
+     * Specifies the ID of the VPC used to create the dedicated instance.  
+     * Changing this will create a new resource.
      */
     public readonly vpcId!: pulumi.Output<string>;
     /**
-     * The ingress private ip address of vpc.
+     * The ingress private IP address of the VPC.
      */
     public /*out*/ readonly vpcIngressAddress!: pulumi.Output<string>;
 
@@ -178,15 +212,19 @@ export class Instance extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as InstanceState | undefined;
+            resourceInputs["availabilityZones"] = state ? state.availabilityZones : undefined;
             resourceInputs["availableZones"] = state ? state.availableZones : undefined;
             resourceInputs["bandwidthSize"] = state ? state.bandwidthSize : undefined;
             resourceInputs["createTime"] = state ? state.createTime : undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["edition"] = state ? state.edition : undefined;
             resourceInputs["egressAddress"] = state ? state.egressAddress : undefined;
             resourceInputs["eipId"] = state ? state.eipId : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["ingressAddress"] = state ? state.ingressAddress : undefined;
+            resourceInputs["ipv6Enable"] = state ? state.ipv6Enable : undefined;
+            resourceInputs["loadbalancerProvider"] = state ? state.loadbalancerProvider : undefined;
             resourceInputs["maintainBegin"] = state ? state.maintainBegin : undefined;
             resourceInputs["maintainEnd"] = state ? state.maintainEnd : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
@@ -199,9 +237,6 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["vpcIngressAddress"] = state ? state.vpcIngressAddress : undefined;
         } else {
             const args = argsOrState as InstanceArgs | undefined;
-            if ((!args || args.availableZones === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'availableZones'");
-            }
             if ((!args || args.edition === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'edition'");
             }
@@ -214,12 +249,15 @@ export class Instance extends pulumi.CustomResource {
             if ((!args || args.vpcId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'vpcId'");
             }
+            resourceInputs["availabilityZones"] = args ? args.availabilityZones : undefined;
             resourceInputs["availableZones"] = args ? args.availableZones : undefined;
             resourceInputs["bandwidthSize"] = args ? args.bandwidthSize : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["edition"] = args ? args.edition : undefined;
             resourceInputs["eipId"] = args ? args.eipId : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
+            resourceInputs["ipv6Enable"] = args ? args.ipv6Enable : undefined;
+            resourceInputs["loadbalancerProvider"] = args ? args.loadbalancerProvider : undefined;
             resourceInputs["maintainBegin"] = args ? args.maintainBegin : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
@@ -227,6 +265,7 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["subnetId"] = args ? args.subnetId : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
             resourceInputs["createTime"] = undefined /*out*/;
+            resourceInputs["createdAt"] = undefined /*out*/;
             resourceInputs["egressAddress"] = undefined /*out*/;
             resourceInputs["ingressAddress"] = undefined /*out*/;
             resourceInputs["maintainEnd"] = undefined /*out*/;
@@ -244,51 +283,83 @@ export class Instance extends pulumi.CustomResource {
  */
 export interface InstanceState {
     /**
-     * Specifies an array of available zone names for the APIG dedicated
-     * instance. Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?APIG) for list elements.
-     * Changing this will create a new APIG dedicated instance resource.
+     * Specifies the name list of availability zones for the dedicated
+     * instance.
+     * Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?APIG) for list elements.
+     * Changing this will create a new resource.
+     */
+    availabilityZones?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * schema: Deprecated; The name list of availability zones for the dedicated instance.
      */
     availableZones?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * Specifies the egress bandwidth size of the APIG dedicated instance. The range of
-     * valid value is from 1 to 2000.
+     * Specifies the egress bandwidth size of the dedicated instance.  
+     * The valid value ranges from `0` to `2,000`.
      */
     bandwidthSize?: pulumi.Input<number>;
     /**
-     * Time when the APIG instance is created, in RFC-3339 format.
+     * schema: Deprecated; Time when the dedicated instance is created.
+     *
+     * @deprecated Use 'created_at' instead
      */
     createTime?: pulumi.Input<string>;
     /**
-     * Specifies the description about the APIG dedicated instance. The description
-     * contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+     * Time when the dedicated instance is created, in RFC-3339 format.
+     */
+    createdAt?: pulumi.Input<string>;
+    /**
+     * Specifies the description of the dedicated instance.  
+     * The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the edition of the APIG dedicated instance. The supported editions
-     * are as follows: BASIC, PROFESSIONAL, ENTERPRISE, PLATINUM. Changing this will create a new APIG dedicated instance
-     * resource.
+     * Specifies the edition of the dedicated instance.  
+     * The valid values are as follows:
+     * + **BASIC**: Basic Edition instance.
+     * + **PROFESSIONAL**: Professional Edition instance.
+     * + **ENTERPRISE**: Enterprise Edition instance.
+     * + **PLATINUM**: Platinum Edition instance.
+     * + **BASIC_IPV6**: IPv6 instance of the Basic Edition.
+     * + **PROFESSIONAL_IPV6**: IPv6 instance of the Professional Edition.
+     * + **ENTERPRISE_IPV6**: IPv6 instance of the Enterprise Edition.
+     * + **PLATINUM_IPV6**: IPv6 instance of the Platinum Edition.
      */
     edition?: pulumi.Input<string>;
     /**
-     * The egress (nat) public ip address.
+     * The egress (NAT) public IP address.
      */
     egressAddress?: pulumi.Input<string>;
     /**
-     * Specifies the eip ID associated with the APIG dedicated instance.
+     * Specifies the EIP ID associated with the dedicated instance.
      */
     eipId?: pulumi.Input<string>;
     /**
-     * Specifies an enterprise project ID. This parameter is required
-     * for enterprise users. Changing this will create a new APIG dedicated instance resource.
+     * Specifies the enterprise project ID to which the dedicated
+     * instance belongs.
+     * This parameter is required for enterprise users. Changing this will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * The ingress eip address.
+     * The ingress EIP address.
      */
     ingressAddress?: pulumi.Input<string>;
     /**
-     * Specifies a start time of the maintenance time window in the format 'xx:00:00'.
-     * The value of xx can be 02, 06, 10, 14, 18 or 22.
+     * Specifies whether public access with an IPv6 address is supported.  
+     * Changing this will create a new resource.
+     */
+    ipv6Enable?: pulumi.Input<boolean>;
+    /**
+     * Specifies the provider type of load balancer used by the
+     * dedicated instance.
+     * The valid values are as follows:
+     * + **lvs**: Linux virtual server.
+     * + **elb**: Elastic load balance.
+     */
+    loadbalancerProvider?: pulumi.Input<string>;
+    /**
+     * Specifies the start time of the maintenance time window.  
+     * The format is **xx:00:00**, the value of **xx** can be `02`, `06`, `10`, `14`, `18` or `22`.
      */
     maintainBegin?: pulumi.Input<string>;
     /**
@@ -296,27 +367,29 @@ export interface InstanceState {
      */
     maintainEnd?: pulumi.Input<string>;
     /**
-     * Specifies the name of the API dedicated instance. The API group name consists of 3 to 64
-     * characters, starting with a letter. Only letters, digits, and underscores (_) are allowed.
+     * Specifies the name of the dedicated instance.  
+     * The name can contain `3` to `64` characters, only letters, digits, hyphens (-) and underscores (_) are allowed, and
+     * must start with a letter.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to create the APIG dedicated instance resource.
-     * If omitted, the provider-level region will be used. Changing this will create a new APIG dedicated instance resource.
+     * Specifies the region in which to create the dedicated instance resource.  
+     * If omitted, the provider-level region will be used.
+     * Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies an ID of the security group to which the APIG dedicated instance
+     * Specifies the ID of the security group to which the dedicated instance
      * belongs to.
      */
     securityGroupId?: pulumi.Input<string>;
     /**
-     * Status of the APIG dedicated instance.
+     * Status of the dedicated instance.
      */
     status?: pulumi.Input<string>;
     /**
-     * Specifies an ID of the VPC subnet used to create the APIG dedicated
-     * instance. Changing this will create a new APIG dedicated instance resource.
+     * Specifies the ID of the VPC subnet used to create the dedicated instance.  
+     * Changing this will create a new resource.
      */
     subnetId?: pulumi.Input<string>;
     /**
@@ -324,12 +397,12 @@ export interface InstanceState {
      */
     supportedFeatures?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * Specifies an ID of the VPC used to create the APIG dedicated instance.
-     * Changing this will create a new APIG dedicated instance resource.
+     * Specifies the ID of the VPC used to create the dedicated instance.  
+     * Changing this will create a new resource.
      */
     vpcId?: pulumi.Input<string>;
     /**
-     * The ingress private ip address of vpc.
+     * The ingress private IP address of the VPC.
      */
     vpcIngressAddress?: pulumi.Input<string>;
 }
@@ -339,64 +412,92 @@ export interface InstanceState {
  */
 export interface InstanceArgs {
     /**
-     * Specifies an array of available zone names for the APIG dedicated
-     * instance. Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?APIG) for list elements.
-     * Changing this will create a new APIG dedicated instance resource.
+     * Specifies the name list of availability zones for the dedicated
+     * instance.
+     * Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?APIG) for list elements.
+     * Changing this will create a new resource.
      */
-    availableZones: pulumi.Input<pulumi.Input<string>[]>;
+    availabilityZones?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * Specifies the egress bandwidth size of the APIG dedicated instance. The range of
-     * valid value is from 1 to 2000.
+     * schema: Deprecated; The name list of availability zones for the dedicated instance.
+     */
+    availableZones?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * Specifies the egress bandwidth size of the dedicated instance.  
+     * The valid value ranges from `0` to `2,000`.
      */
     bandwidthSize?: pulumi.Input<number>;
     /**
-     * Specifies the description about the APIG dedicated instance. The description
-     * contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+     * Specifies the description of the dedicated instance.  
+     * The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the edition of the APIG dedicated instance. The supported editions
-     * are as follows: BASIC, PROFESSIONAL, ENTERPRISE, PLATINUM. Changing this will create a new APIG dedicated instance
-     * resource.
+     * Specifies the edition of the dedicated instance.  
+     * The valid values are as follows:
+     * + **BASIC**: Basic Edition instance.
+     * + **PROFESSIONAL**: Professional Edition instance.
+     * + **ENTERPRISE**: Enterprise Edition instance.
+     * + **PLATINUM**: Platinum Edition instance.
+     * + **BASIC_IPV6**: IPv6 instance of the Basic Edition.
+     * + **PROFESSIONAL_IPV6**: IPv6 instance of the Professional Edition.
+     * + **ENTERPRISE_IPV6**: IPv6 instance of the Enterprise Edition.
+     * + **PLATINUM_IPV6**: IPv6 instance of the Platinum Edition.
      */
     edition: pulumi.Input<string>;
     /**
-     * Specifies the eip ID associated with the APIG dedicated instance.
+     * Specifies the EIP ID associated with the dedicated instance.
      */
     eipId?: pulumi.Input<string>;
     /**
-     * Specifies an enterprise project ID. This parameter is required
-     * for enterprise users. Changing this will create a new APIG dedicated instance resource.
+     * Specifies the enterprise project ID to which the dedicated
+     * instance belongs.
+     * This parameter is required for enterprise users. Changing this will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Specifies a start time of the maintenance time window in the format 'xx:00:00'.
-     * The value of xx can be 02, 06, 10, 14, 18 or 22.
+     * Specifies whether public access with an IPv6 address is supported.  
+     * Changing this will create a new resource.
+     */
+    ipv6Enable?: pulumi.Input<boolean>;
+    /**
+     * Specifies the provider type of load balancer used by the
+     * dedicated instance.
+     * The valid values are as follows:
+     * + **lvs**: Linux virtual server.
+     * + **elb**: Elastic load balance.
+     */
+    loadbalancerProvider?: pulumi.Input<string>;
+    /**
+     * Specifies the start time of the maintenance time window.  
+     * The format is **xx:00:00**, the value of **xx** can be `02`, `06`, `10`, `14`, `18` or `22`.
      */
     maintainBegin?: pulumi.Input<string>;
     /**
-     * Specifies the name of the API dedicated instance. The API group name consists of 3 to 64
-     * characters, starting with a letter. Only letters, digits, and underscores (_) are allowed.
+     * Specifies the name of the dedicated instance.  
+     * The name can contain `3` to `64` characters, only letters, digits, hyphens (-) and underscores (_) are allowed, and
+     * must start with a letter.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to create the APIG dedicated instance resource.
-     * If omitted, the provider-level region will be used. Changing this will create a new APIG dedicated instance resource.
+     * Specifies the region in which to create the dedicated instance resource.  
+     * If omitted, the provider-level region will be used.
+     * Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies an ID of the security group to which the APIG dedicated instance
+     * Specifies the ID of the security group to which the dedicated instance
      * belongs to.
      */
     securityGroupId: pulumi.Input<string>;
     /**
-     * Specifies an ID of the VPC subnet used to create the APIG dedicated
-     * instance. Changing this will create a new APIG dedicated instance resource.
+     * Specifies the ID of the VPC subnet used to create the dedicated instance.  
+     * Changing this will create a new resource.
      */
     subnetId: pulumi.Input<string>;
     /**
-     * Specifies an ID of the VPC used to create the APIG dedicated instance.
-     * Changing this will create a new APIG dedicated instance resource.
+     * Specifies the ID of the VPC used to create the dedicated instance.  
+     * Changing this will create a new resource.
      */
     vpcId: pulumi.Input<string>;
 }

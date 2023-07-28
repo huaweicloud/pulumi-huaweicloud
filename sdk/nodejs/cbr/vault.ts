@@ -9,6 +9,30 @@ import * as utilities from "../utilities";
  * Manages a CBR Vault resource within Huaweicloud.
  *
  * ## Example Usage
+ * ### Create a server type vault
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const vaultName = config.requireObject("vaultName");
+ * const ecsInstanceId = config.requireObject("ecsInstanceId");
+ * const attachedVolumeIds = config.requireObject("attachedVolumeIds");
+ * const test = new huaweicloud.cbr.Vault("test", {
+ *     type: "server",
+ *     protectionType: "backup",
+ *     consistentLevel: "crash_consistent",
+ *     size: 100,
+ *     resources: [{
+ *         serverId: ecsInstanceId,
+ *         excludes: attachedVolumeIds,
+ *     }],
+ *     tags: {
+ *         foo: "bar",
+ *     },
+ * });
+ * ```
  * ### Create a disk type vault
  *
  * ```typescript
@@ -17,14 +41,14 @@ import * as utilities from "../utilities";
  *
  * const config = new pulumi.Config();
  * const vaultName = config.requireObject("vaultName");
- * const evsVolumeId = config.requireObject("evsVolumeId");
+ * const evsVolumeIds = config.requireObject("evsVolumeIds");
  * const test = new huaweicloud.cbr.Vault("test", {
  *     type: "disk",
  *     protectionType: "backup",
  *     size: 50,
  *     autoExpand: true,
  *     resources: [{
- *         includes: [evsVolumeId],
+ *         includes: evsVolumeIds,
  *     }],
  *     tags: {
  *         foo: "bar",
@@ -39,13 +63,13 @@ import * as utilities from "../utilities";
  *
  * const config = new pulumi.Config();
  * const vaultName = config.requireObject("vaultName");
- * const sfsTurboId = config.requireObject("sfsTurboId");
+ * const sfsTurboIds = config.requireObject("sfsTurboIds");
  * const test = new huaweicloud.cbr.Vault("test", {
  *     type: "turbo",
  *     protectionType: "backup",
  *     size: 1000,
  *     resources: [{
- *         includes: [sfsTurboId],
+ *         includes: sfsTurboIds,
  *     }],
  *     tags: {
  *         foo: "bar",
@@ -130,12 +154,20 @@ export class Vault extends pulumi.CustomResource {
      * Defaults to **false**.
      */
     public readonly autoExpand!: pulumi.Output<boolean>;
+    /**
+     * @deprecated Deprecated
+     */
     public readonly autoPay!: pulumi.Output<string | undefined>;
     /**
      * Specifies whether auto renew is enabled.
-     * Valid values are **true** and **false**. Defaults to **false**. Changing this will create a new vault.
+     * Valid values are **true** and **false**. Defaults to **false**.
      */
     public readonly autoRenew!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the backup name prefix.
+     * Changing this will create a new vault.
+     */
+    public readonly backupNamePrefix!: pulumi.Output<string>;
     /**
      * Specifies the tags to filter resources for automatic association with **auto_bind**.
      */
@@ -148,15 +180,15 @@ export class Vault extends pulumi.CustomResource {
      */
     public readonly chargingMode!: pulumi.Output<string>;
     /**
-     * Specifies the backup specifications.
+     * Specifies the consistent level (specification) of the vault.
      * The valid values are as follows:
      * + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
      * + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
      */
     public readonly consistentLevel!: pulumi.Output<string | undefined>;
     /**
-     * Specifies a unique ID in UUID format of enterprise project.
-     * Changing this will create a new vault.
+     * Specifies the ID of the enterprise project to which the vault
+     * belongs. Changing this will create a new vault.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
@@ -179,8 +211,12 @@ export class Vault extends pulumi.CustomResource {
      */
     public readonly periodUnit!: pulumi.Output<string | undefined>;
     /**
-     * Specifies a policy to associate with the CBR vault.
-     * `policyId` cannot be used with the vault of replicate protection type.
+     * Specifies the policy details to associate with the CBR vault.
+     * The object structure is documented below.
+     */
+    public readonly policies!: pulumi.Output<outputs.Cbr.VaultPolicy[]>;
+    /**
+     * schema:Deprecated; Using parameter 'policy' instead.
      */
     public readonly policyId!: pulumi.Output<string | undefined>;
     /**
@@ -250,6 +286,7 @@ export class Vault extends pulumi.CustomResource {
             resourceInputs["autoExpand"] = state ? state.autoExpand : undefined;
             resourceInputs["autoPay"] = state ? state.autoPay : undefined;
             resourceInputs["autoRenew"] = state ? state.autoRenew : undefined;
+            resourceInputs["backupNamePrefix"] = state ? state.backupNamePrefix : undefined;
             resourceInputs["bindRules"] = state ? state.bindRules : undefined;
             resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
             resourceInputs["consistentLevel"] = state ? state.consistentLevel : undefined;
@@ -257,6 +294,7 @@ export class Vault extends pulumi.CustomResource {
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["period"] = state ? state.period : undefined;
             resourceInputs["periodUnit"] = state ? state.periodUnit : undefined;
+            resourceInputs["policies"] = state ? state.policies : undefined;
             resourceInputs["policyId"] = state ? state.policyId : undefined;
             resourceInputs["protectionType"] = state ? state.protectionType : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
@@ -283,6 +321,7 @@ export class Vault extends pulumi.CustomResource {
             resourceInputs["autoExpand"] = args ? args.autoExpand : undefined;
             resourceInputs["autoPay"] = args ? args.autoPay : undefined;
             resourceInputs["autoRenew"] = args ? args.autoRenew : undefined;
+            resourceInputs["backupNamePrefix"] = args ? args.backupNamePrefix : undefined;
             resourceInputs["bindRules"] = args ? args.bindRules : undefined;
             resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
             resourceInputs["consistentLevel"] = args ? args.consistentLevel : undefined;
@@ -290,6 +329,7 @@ export class Vault extends pulumi.CustomResource {
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["period"] = args ? args.period : undefined;
             resourceInputs["periodUnit"] = args ? args.periodUnit : undefined;
+            resourceInputs["policies"] = args ? args.policies : undefined;
             resourceInputs["policyId"] = args ? args.policyId : undefined;
             resourceInputs["protectionType"] = args ? args.protectionType : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
@@ -325,12 +365,20 @@ export interface VaultState {
      * Defaults to **false**.
      */
     autoExpand?: pulumi.Input<boolean>;
+    /**
+     * @deprecated Deprecated
+     */
     autoPay?: pulumi.Input<string>;
     /**
      * Specifies whether auto renew is enabled.
-     * Valid values are **true** and **false**. Defaults to **false**. Changing this will create a new vault.
+     * Valid values are **true** and **false**. Defaults to **false**.
      */
     autoRenew?: pulumi.Input<string>;
+    /**
+     * Specifies the backup name prefix.
+     * Changing this will create a new vault.
+     */
+    backupNamePrefix?: pulumi.Input<string>;
     /**
      * Specifies the tags to filter resources for automatic association with **auto_bind**.
      */
@@ -343,15 +391,15 @@ export interface VaultState {
      */
     chargingMode?: pulumi.Input<string>;
     /**
-     * Specifies the backup specifications.
+     * Specifies the consistent level (specification) of the vault.
      * The valid values are as follows:
      * + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
      * + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
      */
     consistentLevel?: pulumi.Input<string>;
     /**
-     * Specifies a unique ID in UUID format of enterprise project.
-     * Changing this will create a new vault.
+     * Specifies the ID of the enterprise project to which the vault
+     * belongs. Changing this will create a new vault.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -374,8 +422,12 @@ export interface VaultState {
      */
     periodUnit?: pulumi.Input<string>;
     /**
-     * Specifies a policy to associate with the CBR vault.
-     * `policyId` cannot be used with the vault of replicate protection type.
+     * Specifies the policy details to associate with the CBR vault.
+     * The object structure is documented below.
+     */
+    policies?: pulumi.Input<pulumi.Input<inputs.Cbr.VaultPolicy>[]>;
+    /**
+     * schema:Deprecated; Using parameter 'policy' instead.
      */
     policyId?: pulumi.Input<string>;
     /**
@@ -441,12 +493,20 @@ export interface VaultArgs {
      * Defaults to **false**.
      */
     autoExpand?: pulumi.Input<boolean>;
+    /**
+     * @deprecated Deprecated
+     */
     autoPay?: pulumi.Input<string>;
     /**
      * Specifies whether auto renew is enabled.
-     * Valid values are **true** and **false**. Defaults to **false**. Changing this will create a new vault.
+     * Valid values are **true** and **false**. Defaults to **false**.
      */
     autoRenew?: pulumi.Input<string>;
+    /**
+     * Specifies the backup name prefix.
+     * Changing this will create a new vault.
+     */
+    backupNamePrefix?: pulumi.Input<string>;
     /**
      * Specifies the tags to filter resources for automatic association with **auto_bind**.
      */
@@ -459,15 +519,15 @@ export interface VaultArgs {
      */
     chargingMode?: pulumi.Input<string>;
     /**
-     * Specifies the backup specifications.
+     * Specifies the consistent level (specification) of the vault.
      * The valid values are as follows:
      * + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
      * + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
      */
     consistentLevel?: pulumi.Input<string>;
     /**
-     * Specifies a unique ID in UUID format of enterprise project.
-     * Changing this will create a new vault.
+     * Specifies the ID of the enterprise project to which the vault
+     * belongs. Changing this will create a new vault.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -490,8 +550,12 @@ export interface VaultArgs {
      */
     periodUnit?: pulumi.Input<string>;
     /**
-     * Specifies a policy to associate with the CBR vault.
-     * `policyId` cannot be used with the vault of replicate protection type.
+     * Specifies the policy details to associate with the CBR vault.
+     * The object structure is documented below.
+     */
+    policies?: pulumi.Input<pulumi.Input<inputs.Cbr.VaultPolicy>[]>;
+    /**
+     * schema:Deprecated; Using parameter 'policy' instead.
      */
     policyId?: pulumi.Input<string>;
     /**

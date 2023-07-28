@@ -28,6 +28,9 @@ type Listener struct {
 	// Specifies the access policy for the listener. Valid options are *white* and
 	// *black*.
 	AccessPolicy pulumi.StringPtrOutput `pulumi:"accessPolicy"`
+	// Specifies whether to enable advanced forwarding.
+	// If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
+	AdvancedForwardingEnabled pulumi.BoolOutput `pulumi:"advancedForwardingEnabled"`
 	// Specifies the ID of the CA certificate used by the listener. This parameter is
 	// valid when protocol is set to *HTTPS*.
 	CaCertificate pulumi.StringPtrOutput `pulumi:"caCertificate"`
@@ -123,6 +126,9 @@ type listenerState struct {
 	// Specifies the access policy for the listener. Valid options are *white* and
 	// *black*.
 	AccessPolicy *string `pulumi:"accessPolicy"`
+	// Specifies whether to enable advanced forwarding.
+	// If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
+	AdvancedForwardingEnabled *bool `pulumi:"advancedForwardingEnabled"`
 	// Specifies the ID of the CA certificate used by the listener. This parameter is
 	// valid when protocol is set to *HTTPS*.
 	CaCertificate *string `pulumi:"caCertificate"`
@@ -180,6 +186,9 @@ type ListenerState struct {
 	// Specifies the access policy for the listener. Valid options are *white* and
 	// *black*.
 	AccessPolicy pulumi.StringPtrInput
+	// Specifies whether to enable advanced forwarding.
+	// If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
+	AdvancedForwardingEnabled pulumi.BoolPtrInput
 	// Specifies the ID of the CA certificate used by the listener. This parameter is
 	// valid when protocol is set to *HTTPS*.
 	CaCertificate pulumi.StringPtrInput
@@ -241,6 +250,9 @@ type listenerArgs struct {
 	// Specifies the access policy for the listener. Valid options are *white* and
 	// *black*.
 	AccessPolicy *string `pulumi:"accessPolicy"`
+	// Specifies whether to enable advanced forwarding.
+	// If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
+	AdvancedForwardingEnabled *bool `pulumi:"advancedForwardingEnabled"`
 	// Specifies the ID of the CA certificate used by the listener. This parameter is
 	// valid when protocol is set to *HTTPS*.
 	CaCertificate *string `pulumi:"caCertificate"`
@@ -299,6 +311,9 @@ type ListenerArgs struct {
 	// Specifies the access policy for the listener. Valid options are *white* and
 	// *black*.
 	AccessPolicy pulumi.StringPtrInput
+	// Specifies whether to enable advanced forwarding.
+	// If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
+	AdvancedForwardingEnabled pulumi.BoolPtrInput
 	// Specifies the ID of the CA certificate used by the listener. This parameter is
 	// valid when protocol is set to *HTTPS*.
 	CaCertificate pulumi.StringPtrInput
@@ -443,6 +458,12 @@ func (o ListenerOutput) ToListenerOutputWithContext(ctx context.Context) Listene
 // *black*.
 func (o ListenerOutput) AccessPolicy() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Listener) pulumi.StringPtrOutput { return v.AccessPolicy }).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether to enable advanced forwarding.
+// If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
+func (o ListenerOutput) AdvancedForwardingEnabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Listener) pulumi.BoolOutput { return v.AdvancedForwardingEnabled }).(pulumi.BoolOutput)
 }
 
 // Specifies the ID of the CA certificate used by the listener. This parameter is

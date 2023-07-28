@@ -187,9 +187,11 @@ func (o MysqlInstanceBackupStrategyPtrOutput) StartTime() pulumi.StringPtrOutput
 }
 
 type MysqlInstanceDatastore struct {
-	// Specifies the database engine. Only "gauss-mysql" is supported now.
+	// Specifies the database engine. Only "gaussdb-mysql" is supported now.
+	// Changing this parameter will create a new resource.
 	Engine string `pulumi:"engine"`
 	// Specifies the database version. Only "8.0" is supported now.
+	// Changing this parameter will create a new resource.
 	Version string `pulumi:"version"`
 }
 
@@ -205,9 +207,11 @@ type MysqlInstanceDatastoreInput interface {
 }
 
 type MysqlInstanceDatastoreArgs struct {
-	// Specifies the database engine. Only "gauss-mysql" is supported now.
+	// Specifies the database engine. Only "gaussdb-mysql" is supported now.
+	// Changing this parameter will create a new resource.
 	Engine pulumi.StringInput `pulumi:"engine"`
 	// Specifies the database version. Only "8.0" is supported now.
+	// Changing this parameter will create a new resource.
 	Version pulumi.StringInput `pulumi:"version"`
 }
 
@@ -288,12 +292,14 @@ func (o MysqlInstanceDatastoreOutput) ToMysqlInstanceDatastorePtrOutputWithConte
 	}).(MysqlInstanceDatastorePtrOutput)
 }
 
-// Specifies the database engine. Only "gauss-mysql" is supported now.
+// Specifies the database engine. Only "gaussdb-mysql" is supported now.
+// Changing this parameter will create a new resource.
 func (o MysqlInstanceDatastoreOutput) Engine() pulumi.StringOutput {
 	return o.ApplyT(func(v MysqlInstanceDatastore) string { return v.Engine }).(pulumi.StringOutput)
 }
 
 // Specifies the database version. Only "8.0" is supported now.
+// Changing this parameter will create a new resource.
 func (o MysqlInstanceDatastoreOutput) Version() pulumi.StringOutput {
 	return o.ApplyT(func(v MysqlInstanceDatastore) string { return v.Version }).(pulumi.StringOutput)
 }
@@ -322,7 +328,8 @@ func (o MysqlInstanceDatastorePtrOutput) Elem() MysqlInstanceDatastoreOutput {
 	}).(MysqlInstanceDatastoreOutput)
 }
 
-// Specifies the database engine. Only "gauss-mysql" is supported now.
+// Specifies the database engine. Only "gaussdb-mysql" is supported now.
+// Changing this parameter will create a new resource.
 func (o MysqlInstanceDatastorePtrOutput) Engine() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *MysqlInstanceDatastore) *string {
 		if v == nil {
@@ -333,6 +340,7 @@ func (o MysqlInstanceDatastorePtrOutput) Engine() pulumi.StringPtrOutput {
 }
 
 // Specifies the database version. Only "8.0" is supported now.
+// Changing this parameter will create a new resource.
 func (o MysqlInstanceDatastorePtrOutput) Version() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *MysqlInstanceDatastore) *string {
 		if v == nil {

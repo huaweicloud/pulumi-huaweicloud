@@ -14,26 +14,20 @@ type AddonValues struct {
 	// Specifies the key/value pairs vary depending on the add-on.
 	// Only supports non-nested structure and only supports string type elements.
 	// This is an alternative to `basicJson`, but it is not recommended.
-	// Changing this parameter will create a new resource.
 	Basic map[string]string `pulumi:"basic"`
 	// Specifies the json string vary depending on the add-on.
-	// Changing this parameter will create a new resource.
 	BasicJson *string `pulumi:"basicJson"`
 	// Specifies the key/value pairs vary depending on the add-on.
 	// Only supports non-nested structure and only supports string type elements.
 	// This is an alternative to `customJson`, but it is not recommended.
-	// Changing this parameter will create a new resource.
 	Custom map[string]string `pulumi:"custom"`
 	// Specifies the json string vary depending on the add-on.
-	// Changing this parameter will create a new resource.
 	CustomJson *string `pulumi:"customJson"`
 	// Specifies the key/value pairs vary depending on the add-on.
 	// Only supports non-nested structure and only supports string type elements.
 	// This is an alternative to `flavorJson`, but it is not recommended.
-	// Changing this parameter will create a new resource.
 	Flavor map[string]string `pulumi:"flavor"`
 	// Specifies the json string vary depending on the add-on.
-	// Changing this parameter will create a new resource.
 	FlavorJson *string `pulumi:"flavorJson"`
 }
 
@@ -52,26 +46,20 @@ type AddonValuesArgs struct {
 	// Specifies the key/value pairs vary depending on the add-on.
 	// Only supports non-nested structure and only supports string type elements.
 	// This is an alternative to `basicJson`, but it is not recommended.
-	// Changing this parameter will create a new resource.
 	Basic pulumi.StringMapInput `pulumi:"basic"`
 	// Specifies the json string vary depending on the add-on.
-	// Changing this parameter will create a new resource.
 	BasicJson pulumi.StringPtrInput `pulumi:"basicJson"`
 	// Specifies the key/value pairs vary depending on the add-on.
 	// Only supports non-nested structure and only supports string type elements.
 	// This is an alternative to `customJson`, but it is not recommended.
-	// Changing this parameter will create a new resource.
 	Custom pulumi.StringMapInput `pulumi:"custom"`
 	// Specifies the json string vary depending on the add-on.
-	// Changing this parameter will create a new resource.
 	CustomJson pulumi.StringPtrInput `pulumi:"customJson"`
 	// Specifies the key/value pairs vary depending on the add-on.
 	// Only supports non-nested structure and only supports string type elements.
 	// This is an alternative to `flavorJson`, but it is not recommended.
-	// Changing this parameter will create a new resource.
 	Flavor pulumi.StringMapInput `pulumi:"flavor"`
 	// Specifies the json string vary depending on the add-on.
-	// Changing this parameter will create a new resource.
 	FlavorJson pulumi.StringPtrInput `pulumi:"flavorJson"`
 }
 
@@ -155,13 +143,11 @@ func (o AddonValuesOutput) ToAddonValuesPtrOutputWithContext(ctx context.Context
 // Specifies the key/value pairs vary depending on the add-on.
 // Only supports non-nested structure and only supports string type elements.
 // This is an alternative to `basicJson`, but it is not recommended.
-// Changing this parameter will create a new resource.
 func (o AddonValuesOutput) Basic() pulumi.StringMapOutput {
 	return o.ApplyT(func(v AddonValues) map[string]string { return v.Basic }).(pulumi.StringMapOutput)
 }
 
 // Specifies the json string vary depending on the add-on.
-// Changing this parameter will create a new resource.
 func (o AddonValuesOutput) BasicJson() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v AddonValues) *string { return v.BasicJson }).(pulumi.StringPtrOutput)
 }
@@ -169,13 +155,11 @@ func (o AddonValuesOutput) BasicJson() pulumi.StringPtrOutput {
 // Specifies the key/value pairs vary depending on the add-on.
 // Only supports non-nested structure and only supports string type elements.
 // This is an alternative to `customJson`, but it is not recommended.
-// Changing this parameter will create a new resource.
 func (o AddonValuesOutput) Custom() pulumi.StringMapOutput {
 	return o.ApplyT(func(v AddonValues) map[string]string { return v.Custom }).(pulumi.StringMapOutput)
 }
 
 // Specifies the json string vary depending on the add-on.
-// Changing this parameter will create a new resource.
 func (o AddonValuesOutput) CustomJson() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v AddonValues) *string { return v.CustomJson }).(pulumi.StringPtrOutput)
 }
@@ -183,13 +167,11 @@ func (o AddonValuesOutput) CustomJson() pulumi.StringPtrOutput {
 // Specifies the key/value pairs vary depending on the add-on.
 // Only supports non-nested structure and only supports string type elements.
 // This is an alternative to `flavorJson`, but it is not recommended.
-// Changing this parameter will create a new resource.
 func (o AddonValuesOutput) Flavor() pulumi.StringMapOutput {
 	return o.ApplyT(func(v AddonValues) map[string]string { return v.Flavor }).(pulumi.StringMapOutput)
 }
 
 // Specifies the json string vary depending on the add-on.
-// Changing this parameter will create a new resource.
 func (o AddonValuesOutput) FlavorJson() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v AddonValues) *string { return v.FlavorJson }).(pulumi.StringPtrOutput)
 }
@@ -221,7 +203,6 @@ func (o AddonValuesPtrOutput) Elem() AddonValuesOutput {
 // Specifies the key/value pairs vary depending on the add-on.
 // Only supports non-nested structure and only supports string type elements.
 // This is an alternative to `basicJson`, but it is not recommended.
-// Changing this parameter will create a new resource.
 func (o AddonValuesPtrOutput) Basic() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *AddonValues) map[string]string {
 		if v == nil {
@@ -232,7 +213,6 @@ func (o AddonValuesPtrOutput) Basic() pulumi.StringMapOutput {
 }
 
 // Specifies the json string vary depending on the add-on.
-// Changing this parameter will create a new resource.
 func (o AddonValuesPtrOutput) BasicJson() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *AddonValues) *string {
 		if v == nil {
@@ -245,7 +225,6 @@ func (o AddonValuesPtrOutput) BasicJson() pulumi.StringPtrOutput {
 // Specifies the key/value pairs vary depending on the add-on.
 // Only supports non-nested structure and only supports string type elements.
 // This is an alternative to `customJson`, but it is not recommended.
-// Changing this parameter will create a new resource.
 func (o AddonValuesPtrOutput) Custom() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *AddonValues) map[string]string {
 		if v == nil {
@@ -256,7 +235,6 @@ func (o AddonValuesPtrOutput) Custom() pulumi.StringMapOutput {
 }
 
 // Specifies the json string vary depending on the add-on.
-// Changing this parameter will create a new resource.
 func (o AddonValuesPtrOutput) CustomJson() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *AddonValues) *string {
 		if v == nil {
@@ -269,7 +247,6 @@ func (o AddonValuesPtrOutput) CustomJson() pulumi.StringPtrOutput {
 // Specifies the key/value pairs vary depending on the add-on.
 // Only supports non-nested structure and only supports string type elements.
 // This is an alternative to `flavorJson`, but it is not recommended.
-// Changing this parameter will create a new resource.
 func (o AddonValuesPtrOutput) Flavor() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *AddonValues) map[string]string {
 		if v == nil {
@@ -280,7 +257,6 @@ func (o AddonValuesPtrOutput) Flavor() pulumi.StringMapOutput {
 }
 
 // Specifies the json string vary depending on the add-on.
-// Changing this parameter will create a new resource.
 func (o AddonValuesPtrOutput) FlavorJson() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *AddonValues) *string {
 		if v == nil {
@@ -627,12 +603,17 @@ func (o ClusterMasterArrayOutput) Index(i pulumi.IntInput) ClusterMasterOutput {
 }
 
 type NodeAttachDataVolume struct {
-	ExtendParam   *string           `pulumi:"extendParam"`
+	// Deprecated: use extend_params instead
+	ExtendParam *string `pulumi:"extendParam"`
+	// The disk expansion parameters.
 	ExtendParams  map[string]string `pulumi:"extendParams"`
 	HwPassthrough *bool             `pulumi:"hwPassthrough"`
-	KmsKeyId      *string           `pulumi:"kmsKeyId"`
-	Size          *int              `pulumi:"size"`
-	Volumetype    *string           `pulumi:"volumetype"`
+	// The ID of a KMS key. This is used to encrypt the volume.
+	KmsKeyId *string `pulumi:"kmsKeyId"`
+	// The disk size in GB.
+	Size *int `pulumi:"size"`
+	// The disk type.
+	Volumetype *string `pulumi:"volumetype"`
 }
 
 // NodeAttachDataVolumeInput is an input type that accepts NodeAttachDataVolumeArgs and NodeAttachDataVolumeOutput values.
@@ -647,12 +628,17 @@ type NodeAttachDataVolumeInput interface {
 }
 
 type NodeAttachDataVolumeArgs struct {
-	ExtendParam   pulumi.StringPtrInput `pulumi:"extendParam"`
+	// Deprecated: use extend_params instead
+	ExtendParam pulumi.StringPtrInput `pulumi:"extendParam"`
+	// The disk expansion parameters.
 	ExtendParams  pulumi.StringMapInput `pulumi:"extendParams"`
 	HwPassthrough pulumi.BoolPtrInput   `pulumi:"hwPassthrough"`
-	KmsKeyId      pulumi.StringPtrInput `pulumi:"kmsKeyId"`
-	Size          pulumi.IntPtrInput    `pulumi:"size"`
-	Volumetype    pulumi.StringPtrInput `pulumi:"volumetype"`
+	// The ID of a KMS key. This is used to encrypt the volume.
+	KmsKeyId pulumi.StringPtrInput `pulumi:"kmsKeyId"`
+	// The disk size in GB.
+	Size pulumi.IntPtrInput `pulumi:"size"`
+	// The disk type.
+	Volumetype pulumi.StringPtrInput `pulumi:"volumetype"`
 }
 
 func (NodeAttachDataVolumeArgs) ElementType() reflect.Type {
@@ -706,10 +692,12 @@ func (o NodeAttachDataVolumeOutput) ToNodeAttachDataVolumeOutputWithContext(ctx 
 	return o
 }
 
+// Deprecated: use extend_params instead
 func (o NodeAttachDataVolumeOutput) ExtendParam() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NodeAttachDataVolume) *string { return v.ExtendParam }).(pulumi.StringPtrOutput)
 }
 
+// The disk expansion parameters.
 func (o NodeAttachDataVolumeOutput) ExtendParams() pulumi.StringMapOutput {
 	return o.ApplyT(func(v NodeAttachDataVolume) map[string]string { return v.ExtendParams }).(pulumi.StringMapOutput)
 }
@@ -718,14 +706,17 @@ func (o NodeAttachDataVolumeOutput) HwPassthrough() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v NodeAttachDataVolume) *bool { return v.HwPassthrough }).(pulumi.BoolPtrOutput)
 }
 
+// The ID of a KMS key. This is used to encrypt the volume.
 func (o NodeAttachDataVolumeOutput) KmsKeyId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NodeAttachDataVolume) *string { return v.KmsKeyId }).(pulumi.StringPtrOutput)
 }
 
+// The disk size in GB.
 func (o NodeAttachDataVolumeOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v NodeAttachDataVolume) *int { return v.Size }).(pulumi.IntPtrOutput)
 }
 
+// The disk type.
 func (o NodeAttachDataVolumeOutput) Volumetype() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NodeAttachDataVolume) *string { return v.Volumetype }).(pulumi.StringPtrOutput)
 }
@@ -751,11 +742,17 @@ func (o NodeAttachDataVolumeArrayOutput) Index(i pulumi.IntInput) NodeAttachData
 }
 
 type NodeAttachRootVolume struct {
-	ExtendParam   *string           `pulumi:"extendParam"`
+	// Deprecated: use extend_params instead
+	ExtendParam *string `pulumi:"extendParam"`
+	// The disk expansion parameters.
 	ExtendParams  map[string]string `pulumi:"extendParams"`
 	HwPassthrough *bool             `pulumi:"hwPassthrough"`
-	Size          *int              `pulumi:"size"`
-	Volumetype    *string           `pulumi:"volumetype"`
+	// The ID of a KMS key. This is used to encrypt the volume.
+	KmsKeyId *string `pulumi:"kmsKeyId"`
+	// The disk size in GB.
+	Size *int `pulumi:"size"`
+	// The disk type.
+	Volumetype *string `pulumi:"volumetype"`
 }
 
 // NodeAttachRootVolumeInput is an input type that accepts NodeAttachRootVolumeArgs and NodeAttachRootVolumeOutput values.
@@ -770,11 +767,17 @@ type NodeAttachRootVolumeInput interface {
 }
 
 type NodeAttachRootVolumeArgs struct {
-	ExtendParam   pulumi.StringPtrInput `pulumi:"extendParam"`
+	// Deprecated: use extend_params instead
+	ExtendParam pulumi.StringPtrInput `pulumi:"extendParam"`
+	// The disk expansion parameters.
 	ExtendParams  pulumi.StringMapInput `pulumi:"extendParams"`
 	HwPassthrough pulumi.BoolPtrInput   `pulumi:"hwPassthrough"`
-	Size          pulumi.IntPtrInput    `pulumi:"size"`
-	Volumetype    pulumi.StringPtrInput `pulumi:"volumetype"`
+	// The ID of a KMS key. This is used to encrypt the volume.
+	KmsKeyId pulumi.StringPtrInput `pulumi:"kmsKeyId"`
+	// The disk size in GB.
+	Size pulumi.IntPtrInput `pulumi:"size"`
+	// The disk type.
+	Volumetype pulumi.StringPtrInput `pulumi:"volumetype"`
 }
 
 func (NodeAttachRootVolumeArgs) ElementType() reflect.Type {
@@ -828,10 +831,12 @@ func (o NodeAttachRootVolumeOutput) ToNodeAttachRootVolumeOutputWithContext(ctx 
 	return o
 }
 
+// Deprecated: use extend_params instead
 func (o NodeAttachRootVolumeOutput) ExtendParam() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NodeAttachRootVolume) *string { return v.ExtendParam }).(pulumi.StringPtrOutput)
 }
 
+// The disk expansion parameters.
 func (o NodeAttachRootVolumeOutput) ExtendParams() pulumi.StringMapOutput {
 	return o.ApplyT(func(v NodeAttachRootVolume) map[string]string { return v.ExtendParams }).(pulumi.StringMapOutput)
 }
@@ -840,10 +845,17 @@ func (o NodeAttachRootVolumeOutput) HwPassthrough() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v NodeAttachRootVolume) *bool { return v.HwPassthrough }).(pulumi.BoolPtrOutput)
 }
 
+// The ID of a KMS key. This is used to encrypt the volume.
+func (o NodeAttachRootVolumeOutput) KmsKeyId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeAttachRootVolume) *string { return v.KmsKeyId }).(pulumi.StringPtrOutput)
+}
+
+// The disk size in GB.
 func (o NodeAttachRootVolumeOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v NodeAttachRootVolume) *int { return v.Size }).(pulumi.IntPtrOutput)
 }
 
+// The disk type.
 func (o NodeAttachRootVolumeOutput) Volumetype() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NodeAttachRootVolume) *string { return v.Volumetype }).(pulumi.StringPtrOutput)
 }
@@ -1194,7 +1206,9 @@ type NodePoolDataVolume struct {
 	// Specifies the KMS key ID. This is used to encrypt the volume.
 	// Changing this parameter will create a new resource.
 	KmsKeyId *string `pulumi:"kmsKeyId"`
-	// Specifies the disk size in GB. Changing this parameter will create a new resource.
+	// Specifies the size of a virtual space. Only an integer percentage is supported.
+	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+	// Changing this parameter will create a new resource.
 	Size int `pulumi:"size"`
 	// Specifies the disk type. Changing this parameter will create a new resource.
 	Volumetype string `pulumi:"volumetype"`
@@ -1229,7 +1243,9 @@ type NodePoolDataVolumeArgs struct {
 	// Specifies the KMS key ID. This is used to encrypt the volume.
 	// Changing this parameter will create a new resource.
 	KmsKeyId pulumi.StringPtrInput `pulumi:"kmsKeyId"`
-	// Specifies the disk size in GB. Changing this parameter will create a new resource.
+	// Specifies the size of a virtual space. Only an integer percentage is supported.
+	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+	// Changing this parameter will create a new resource.
 	Size pulumi.IntInput `pulumi:"size"`
 	// Specifies the disk type. Changing this parameter will create a new resource.
 	Volumetype pulumi.StringInput `pulumi:"volumetype"`
@@ -1315,7 +1331,9 @@ func (o NodePoolDataVolumeOutput) KmsKeyId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NodePoolDataVolume) *string { return v.KmsKeyId }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the disk size in GB. Changing this parameter will create a new resource.
+// Specifies the size of a virtual space. Only an integer percentage is supported.
+// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+// Changing this parameter will create a new resource.
 func (o NodePoolDataVolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v NodePoolDataVolume) int { return v.Size }).(pulumi.IntOutput)
 }
@@ -1360,7 +1378,12 @@ type NodePoolRootVolume struct {
 	// Changing this parameter will create a new resource.
 	ExtendParams  map[string]string `pulumi:"extendParams"`
 	HwPassthrough *bool             `pulumi:"hwPassthrough"`
-	// Specifies the disk size in GB. Changing this parameter will create a new resource.
+	// Specifies the KMS key ID. This is used to encrypt the volume.
+	// Changing this parameter will create a new resource.
+	KmsKeyId *string `pulumi:"kmsKeyId"`
+	// Specifies the size of a virtual space. Only an integer percentage is supported.
+	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+	// Changing this parameter will create a new resource.
 	Size int `pulumi:"size"`
 	// Specifies the disk type. Changing this parameter will create a new resource.
 	Volumetype string `pulumi:"volumetype"`
@@ -1392,7 +1415,12 @@ type NodePoolRootVolumeArgs struct {
 	// Changing this parameter will create a new resource.
 	ExtendParams  pulumi.StringMapInput `pulumi:"extendParams"`
 	HwPassthrough pulumi.BoolPtrInput   `pulumi:"hwPassthrough"`
-	// Specifies the disk size in GB. Changing this parameter will create a new resource.
+	// Specifies the KMS key ID. This is used to encrypt the volume.
+	// Changing this parameter will create a new resource.
+	KmsKeyId pulumi.StringPtrInput `pulumi:"kmsKeyId"`
+	// Specifies the size of a virtual space. Only an integer percentage is supported.
+	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+	// Changing this parameter will create a new resource.
 	Size pulumi.IntInput `pulumi:"size"`
 	// Specifies the disk type. Changing this parameter will create a new resource.
 	Volumetype pulumi.StringInput `pulumi:"volumetype"`
@@ -1498,7 +1526,15 @@ func (o NodePoolRootVolumeOutput) HwPassthrough() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v NodePoolRootVolume) *bool { return v.HwPassthrough }).(pulumi.BoolPtrOutput)
 }
 
-// Specifies the disk size in GB. Changing this parameter will create a new resource.
+// Specifies the KMS key ID. This is used to encrypt the volume.
+// Changing this parameter will create a new resource.
+func (o NodePoolRootVolumeOutput) KmsKeyId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolRootVolume) *string { return v.KmsKeyId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the size of a virtual space. Only an integer percentage is supported.
+// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+// Changing this parameter will create a new resource.
 func (o NodePoolRootVolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v NodePoolRootVolume) int { return v.Size }).(pulumi.IntOutput)
 }
@@ -1570,7 +1606,20 @@ func (o NodePoolRootVolumePtrOutput) HwPassthrough() pulumi.BoolPtrOutput {
 	}).(pulumi.BoolPtrOutput)
 }
 
-// Specifies the disk size in GB. Changing this parameter will create a new resource.
+// Specifies the KMS key ID. This is used to encrypt the volume.
+// Changing this parameter will create a new resource.
+func (o NodePoolRootVolumePtrOutput) KmsKeyId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePoolRootVolume) *string {
+		if v == nil {
+			return nil
+		}
+		return v.KmsKeyId
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the size of a virtual space. Only an integer percentage is supported.
+// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+// Changing this parameter will create a new resource.
 func (o NodePoolRootVolumePtrOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *NodePoolRootVolume) *int {
 		if v == nil {
@@ -1588,6 +1637,652 @@ func (o NodePoolRootVolumePtrOutput) Volumetype() pulumi.StringPtrOutput {
 		}
 		return &v.Volumetype
 	}).(pulumi.StringPtrOutput)
+}
+
+type NodePoolStorage struct {
+	// Specifies the storage group consists of multiple storage devices.
+	// This is used to divide storage space. Structure is documented below.
+	// Changing this parameter will create a new resource.
+	Groups []NodePoolStorageGroup `pulumi:"groups"`
+	// Specifies the disk selection.
+	// Matched disks are managed according to match labels and storage type. Structure is documented below.
+	// Changing this parameter will create a new resource.
+	Selectors []NodePoolStorageSelector `pulumi:"selectors"`
+}
+
+// NodePoolStorageInput is an input type that accepts NodePoolStorageArgs and NodePoolStorageOutput values.
+// You can construct a concrete instance of `NodePoolStorageInput` via:
+//
+//	NodePoolStorageArgs{...}
+type NodePoolStorageInput interface {
+	pulumi.Input
+
+	ToNodePoolStorageOutput() NodePoolStorageOutput
+	ToNodePoolStorageOutputWithContext(context.Context) NodePoolStorageOutput
+}
+
+type NodePoolStorageArgs struct {
+	// Specifies the storage group consists of multiple storage devices.
+	// This is used to divide storage space. Structure is documented below.
+	// Changing this parameter will create a new resource.
+	Groups NodePoolStorageGroupArrayInput `pulumi:"groups"`
+	// Specifies the disk selection.
+	// Matched disks are managed according to match labels and storage type. Structure is documented below.
+	// Changing this parameter will create a new resource.
+	Selectors NodePoolStorageSelectorArrayInput `pulumi:"selectors"`
+}
+
+func (NodePoolStorageArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolStorage)(nil)).Elem()
+}
+
+func (i NodePoolStorageArgs) ToNodePoolStorageOutput() NodePoolStorageOutput {
+	return i.ToNodePoolStorageOutputWithContext(context.Background())
+}
+
+func (i NodePoolStorageArgs) ToNodePoolStorageOutputWithContext(ctx context.Context) NodePoolStorageOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolStorageOutput)
+}
+
+func (i NodePoolStorageArgs) ToNodePoolStoragePtrOutput() NodePoolStoragePtrOutput {
+	return i.ToNodePoolStoragePtrOutputWithContext(context.Background())
+}
+
+func (i NodePoolStorageArgs) ToNodePoolStoragePtrOutputWithContext(ctx context.Context) NodePoolStoragePtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolStorageOutput).ToNodePoolStoragePtrOutputWithContext(ctx)
+}
+
+// NodePoolStoragePtrInput is an input type that accepts NodePoolStorageArgs, NodePoolStoragePtr and NodePoolStoragePtrOutput values.
+// You can construct a concrete instance of `NodePoolStoragePtrInput` via:
+//
+//	        NodePoolStorageArgs{...}
+//
+//	or:
+//
+//	        nil
+type NodePoolStoragePtrInput interface {
+	pulumi.Input
+
+	ToNodePoolStoragePtrOutput() NodePoolStoragePtrOutput
+	ToNodePoolStoragePtrOutputWithContext(context.Context) NodePoolStoragePtrOutput
+}
+
+type nodePoolStoragePtrType NodePoolStorageArgs
+
+func NodePoolStoragePtr(v *NodePoolStorageArgs) NodePoolStoragePtrInput {
+	return (*nodePoolStoragePtrType)(v)
+}
+
+func (*nodePoolStoragePtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodePoolStorage)(nil)).Elem()
+}
+
+func (i *nodePoolStoragePtrType) ToNodePoolStoragePtrOutput() NodePoolStoragePtrOutput {
+	return i.ToNodePoolStoragePtrOutputWithContext(context.Background())
+}
+
+func (i *nodePoolStoragePtrType) ToNodePoolStoragePtrOutputWithContext(ctx context.Context) NodePoolStoragePtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolStoragePtrOutput)
+}
+
+type NodePoolStorageOutput struct{ *pulumi.OutputState }
+
+func (NodePoolStorageOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolStorage)(nil)).Elem()
+}
+
+func (o NodePoolStorageOutput) ToNodePoolStorageOutput() NodePoolStorageOutput {
+	return o
+}
+
+func (o NodePoolStorageOutput) ToNodePoolStorageOutputWithContext(ctx context.Context) NodePoolStorageOutput {
+	return o
+}
+
+func (o NodePoolStorageOutput) ToNodePoolStoragePtrOutput() NodePoolStoragePtrOutput {
+	return o.ToNodePoolStoragePtrOutputWithContext(context.Background())
+}
+
+func (o NodePoolStorageOutput) ToNodePoolStoragePtrOutputWithContext(ctx context.Context) NodePoolStoragePtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v NodePoolStorage) *NodePoolStorage {
+		return &v
+	}).(NodePoolStoragePtrOutput)
+}
+
+// Specifies the storage group consists of multiple storage devices.
+// This is used to divide storage space. Structure is documented below.
+// Changing this parameter will create a new resource.
+func (o NodePoolStorageOutput) Groups() NodePoolStorageGroupArrayOutput {
+	return o.ApplyT(func(v NodePoolStorage) []NodePoolStorageGroup { return v.Groups }).(NodePoolStorageGroupArrayOutput)
+}
+
+// Specifies the disk selection.
+// Matched disks are managed according to match labels and storage type. Structure is documented below.
+// Changing this parameter will create a new resource.
+func (o NodePoolStorageOutput) Selectors() NodePoolStorageSelectorArrayOutput {
+	return o.ApplyT(func(v NodePoolStorage) []NodePoolStorageSelector { return v.Selectors }).(NodePoolStorageSelectorArrayOutput)
+}
+
+type NodePoolStoragePtrOutput struct{ *pulumi.OutputState }
+
+func (NodePoolStoragePtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodePoolStorage)(nil)).Elem()
+}
+
+func (o NodePoolStoragePtrOutput) ToNodePoolStoragePtrOutput() NodePoolStoragePtrOutput {
+	return o
+}
+
+func (o NodePoolStoragePtrOutput) ToNodePoolStoragePtrOutputWithContext(ctx context.Context) NodePoolStoragePtrOutput {
+	return o
+}
+
+func (o NodePoolStoragePtrOutput) Elem() NodePoolStorageOutput {
+	return o.ApplyT(func(v *NodePoolStorage) NodePoolStorage {
+		if v != nil {
+			return *v
+		}
+		var ret NodePoolStorage
+		return ret
+	}).(NodePoolStorageOutput)
+}
+
+// Specifies the storage group consists of multiple storage devices.
+// This is used to divide storage space. Structure is documented below.
+// Changing this parameter will create a new resource.
+func (o NodePoolStoragePtrOutput) Groups() NodePoolStorageGroupArrayOutput {
+	return o.ApplyT(func(v *NodePoolStorage) []NodePoolStorageGroup {
+		if v == nil {
+			return nil
+		}
+		return v.Groups
+	}).(NodePoolStorageGroupArrayOutput)
+}
+
+// Specifies the disk selection.
+// Matched disks are managed according to match labels and storage type. Structure is documented below.
+// Changing this parameter will create a new resource.
+func (o NodePoolStoragePtrOutput) Selectors() NodePoolStorageSelectorArrayOutput {
+	return o.ApplyT(func(v *NodePoolStorage) []NodePoolStorageSelector {
+		if v == nil {
+			return nil
+		}
+		return v.Selectors
+	}).(NodePoolStorageSelectorArrayOutput)
+}
+
+type NodePoolStorageGroup struct {
+	// Specifies the whether the storage space is for **kubernetes** and
+	// **runtime** components. Only one group can be set to true. The default value is **false**.
+	// Changing this parameter will create a new resource.
+	CceManaged *bool `pulumi:"cceManaged"`
+	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+	// and **user** are supported. Changing this parameter will create a new resource.
+	Name string `pulumi:"name"`
+	// Specifies the list of names of seletors to match.
+	// This parameter corresponds to name in `selectors`. A group can match multiple selectors,
+	// but a selector can match only one group. Changing this parameter will create a new resource.
+	SelectorNames []string `pulumi:"selectorNames"`
+	// Specifies the detailed management of space configuration in a group.
+	// Changing this parameter will create a new resource.
+	VirtualSpaces []NodePoolStorageGroupVirtualSpace `pulumi:"virtualSpaces"`
+}
+
+// NodePoolStorageGroupInput is an input type that accepts NodePoolStorageGroupArgs and NodePoolStorageGroupOutput values.
+// You can construct a concrete instance of `NodePoolStorageGroupInput` via:
+//
+//	NodePoolStorageGroupArgs{...}
+type NodePoolStorageGroupInput interface {
+	pulumi.Input
+
+	ToNodePoolStorageGroupOutput() NodePoolStorageGroupOutput
+	ToNodePoolStorageGroupOutputWithContext(context.Context) NodePoolStorageGroupOutput
+}
+
+type NodePoolStorageGroupArgs struct {
+	// Specifies the whether the storage space is for **kubernetes** and
+	// **runtime** components. Only one group can be set to true. The default value is **false**.
+	// Changing this parameter will create a new resource.
+	CceManaged pulumi.BoolPtrInput `pulumi:"cceManaged"`
+	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+	// and **user** are supported. Changing this parameter will create a new resource.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the list of names of seletors to match.
+	// This parameter corresponds to name in `selectors`. A group can match multiple selectors,
+	// but a selector can match only one group. Changing this parameter will create a new resource.
+	SelectorNames pulumi.StringArrayInput `pulumi:"selectorNames"`
+	// Specifies the detailed management of space configuration in a group.
+	// Changing this parameter will create a new resource.
+	VirtualSpaces NodePoolStorageGroupVirtualSpaceArrayInput `pulumi:"virtualSpaces"`
+}
+
+func (NodePoolStorageGroupArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolStorageGroup)(nil)).Elem()
+}
+
+func (i NodePoolStorageGroupArgs) ToNodePoolStorageGroupOutput() NodePoolStorageGroupOutput {
+	return i.ToNodePoolStorageGroupOutputWithContext(context.Background())
+}
+
+func (i NodePoolStorageGroupArgs) ToNodePoolStorageGroupOutputWithContext(ctx context.Context) NodePoolStorageGroupOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolStorageGroupOutput)
+}
+
+// NodePoolStorageGroupArrayInput is an input type that accepts NodePoolStorageGroupArray and NodePoolStorageGroupArrayOutput values.
+// You can construct a concrete instance of `NodePoolStorageGroupArrayInput` via:
+//
+//	NodePoolStorageGroupArray{ NodePoolStorageGroupArgs{...} }
+type NodePoolStorageGroupArrayInput interface {
+	pulumi.Input
+
+	ToNodePoolStorageGroupArrayOutput() NodePoolStorageGroupArrayOutput
+	ToNodePoolStorageGroupArrayOutputWithContext(context.Context) NodePoolStorageGroupArrayOutput
+}
+
+type NodePoolStorageGroupArray []NodePoolStorageGroupInput
+
+func (NodePoolStorageGroupArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]NodePoolStorageGroup)(nil)).Elem()
+}
+
+func (i NodePoolStorageGroupArray) ToNodePoolStorageGroupArrayOutput() NodePoolStorageGroupArrayOutput {
+	return i.ToNodePoolStorageGroupArrayOutputWithContext(context.Background())
+}
+
+func (i NodePoolStorageGroupArray) ToNodePoolStorageGroupArrayOutputWithContext(ctx context.Context) NodePoolStorageGroupArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolStorageGroupArrayOutput)
+}
+
+type NodePoolStorageGroupOutput struct{ *pulumi.OutputState }
+
+func (NodePoolStorageGroupOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolStorageGroup)(nil)).Elem()
+}
+
+func (o NodePoolStorageGroupOutput) ToNodePoolStorageGroupOutput() NodePoolStorageGroupOutput {
+	return o
+}
+
+func (o NodePoolStorageGroupOutput) ToNodePoolStorageGroupOutputWithContext(ctx context.Context) NodePoolStorageGroupOutput {
+	return o
+}
+
+// Specifies the whether the storage space is for **kubernetes** and
+// **runtime** components. Only one group can be set to true. The default value is **false**.
+// Changing this parameter will create a new resource.
+func (o NodePoolStorageGroupOutput) CceManaged() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v NodePoolStorageGroup) *bool { return v.CceManaged }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+// and **user** are supported. Changing this parameter will create a new resource.
+func (o NodePoolStorageGroupOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v NodePoolStorageGroup) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the list of names of seletors to match.
+// This parameter corresponds to name in `selectors`. A group can match multiple selectors,
+// but a selector can match only one group. Changing this parameter will create a new resource.
+func (o NodePoolStorageGroupOutput) SelectorNames() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v NodePoolStorageGroup) []string { return v.SelectorNames }).(pulumi.StringArrayOutput)
+}
+
+// Specifies the detailed management of space configuration in a group.
+// Changing this parameter will create a new resource.
+func (o NodePoolStorageGroupOutput) VirtualSpaces() NodePoolStorageGroupVirtualSpaceArrayOutput {
+	return o.ApplyT(func(v NodePoolStorageGroup) []NodePoolStorageGroupVirtualSpace { return v.VirtualSpaces }).(NodePoolStorageGroupVirtualSpaceArrayOutput)
+}
+
+type NodePoolStorageGroupArrayOutput struct{ *pulumi.OutputState }
+
+func (NodePoolStorageGroupArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]NodePoolStorageGroup)(nil)).Elem()
+}
+
+func (o NodePoolStorageGroupArrayOutput) ToNodePoolStorageGroupArrayOutput() NodePoolStorageGroupArrayOutput {
+	return o
+}
+
+func (o NodePoolStorageGroupArrayOutput) ToNodePoolStorageGroupArrayOutputWithContext(ctx context.Context) NodePoolStorageGroupArrayOutput {
+	return o
+}
+
+func (o NodePoolStorageGroupArrayOutput) Index(i pulumi.IntInput) NodePoolStorageGroupOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) NodePoolStorageGroup {
+		return vs[0].([]NodePoolStorageGroup)[vs[1].(int)]
+	}).(NodePoolStorageGroupOutput)
+}
+
+type NodePoolStorageGroupVirtualSpace struct {
+	// Specifies the LVM write mode, values can be **linear** and **striped**.
+	// This parameter takes effect only in **kubernetes** and **user** configuration. Changing this parameter will create
+	// a new resource.
+	LvmLvType *string `pulumi:"lvmLvType"`
+	// Specifies the absolute path to which the disk is attached.
+	// This parameter takes effect only in **user** configuration. Changing this parameter will create a new resource.
+	LvmPath *string `pulumi:"lvmPath"`
+	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+	// and **user** are supported. Changing this parameter will create a new resource.
+	Name string `pulumi:"name"`
+	// Specifies the LVM write mode, values can be **linear** and **striped**.
+	// This parameter takes effect only in **runtime** configuration. Changing this parameter will create a new resource.
+	RuntimeLvType *string `pulumi:"runtimeLvType"`
+	// Specifies the size of a virtual space. Only an integer percentage is supported.
+	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+	// Changing this parameter will create a new resource.
+	Size string `pulumi:"size"`
+}
+
+// NodePoolStorageGroupVirtualSpaceInput is an input type that accepts NodePoolStorageGroupVirtualSpaceArgs and NodePoolStorageGroupVirtualSpaceOutput values.
+// You can construct a concrete instance of `NodePoolStorageGroupVirtualSpaceInput` via:
+//
+//	NodePoolStorageGroupVirtualSpaceArgs{...}
+type NodePoolStorageGroupVirtualSpaceInput interface {
+	pulumi.Input
+
+	ToNodePoolStorageGroupVirtualSpaceOutput() NodePoolStorageGroupVirtualSpaceOutput
+	ToNodePoolStorageGroupVirtualSpaceOutputWithContext(context.Context) NodePoolStorageGroupVirtualSpaceOutput
+}
+
+type NodePoolStorageGroupVirtualSpaceArgs struct {
+	// Specifies the LVM write mode, values can be **linear** and **striped**.
+	// This parameter takes effect only in **kubernetes** and **user** configuration. Changing this parameter will create
+	// a new resource.
+	LvmLvType pulumi.StringPtrInput `pulumi:"lvmLvType"`
+	// Specifies the absolute path to which the disk is attached.
+	// This parameter takes effect only in **user** configuration. Changing this parameter will create a new resource.
+	LvmPath pulumi.StringPtrInput `pulumi:"lvmPath"`
+	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+	// and **user** are supported. Changing this parameter will create a new resource.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the LVM write mode, values can be **linear** and **striped**.
+	// This parameter takes effect only in **runtime** configuration. Changing this parameter will create a new resource.
+	RuntimeLvType pulumi.StringPtrInput `pulumi:"runtimeLvType"`
+	// Specifies the size of a virtual space. Only an integer percentage is supported.
+	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+	// Changing this parameter will create a new resource.
+	Size pulumi.StringInput `pulumi:"size"`
+}
+
+func (NodePoolStorageGroupVirtualSpaceArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolStorageGroupVirtualSpace)(nil)).Elem()
+}
+
+func (i NodePoolStorageGroupVirtualSpaceArgs) ToNodePoolStorageGroupVirtualSpaceOutput() NodePoolStorageGroupVirtualSpaceOutput {
+	return i.ToNodePoolStorageGroupVirtualSpaceOutputWithContext(context.Background())
+}
+
+func (i NodePoolStorageGroupVirtualSpaceArgs) ToNodePoolStorageGroupVirtualSpaceOutputWithContext(ctx context.Context) NodePoolStorageGroupVirtualSpaceOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolStorageGroupVirtualSpaceOutput)
+}
+
+// NodePoolStorageGroupVirtualSpaceArrayInput is an input type that accepts NodePoolStorageGroupVirtualSpaceArray and NodePoolStorageGroupVirtualSpaceArrayOutput values.
+// You can construct a concrete instance of `NodePoolStorageGroupVirtualSpaceArrayInput` via:
+//
+//	NodePoolStorageGroupVirtualSpaceArray{ NodePoolStorageGroupVirtualSpaceArgs{...} }
+type NodePoolStorageGroupVirtualSpaceArrayInput interface {
+	pulumi.Input
+
+	ToNodePoolStorageGroupVirtualSpaceArrayOutput() NodePoolStorageGroupVirtualSpaceArrayOutput
+	ToNodePoolStorageGroupVirtualSpaceArrayOutputWithContext(context.Context) NodePoolStorageGroupVirtualSpaceArrayOutput
+}
+
+type NodePoolStorageGroupVirtualSpaceArray []NodePoolStorageGroupVirtualSpaceInput
+
+func (NodePoolStorageGroupVirtualSpaceArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]NodePoolStorageGroupVirtualSpace)(nil)).Elem()
+}
+
+func (i NodePoolStorageGroupVirtualSpaceArray) ToNodePoolStorageGroupVirtualSpaceArrayOutput() NodePoolStorageGroupVirtualSpaceArrayOutput {
+	return i.ToNodePoolStorageGroupVirtualSpaceArrayOutputWithContext(context.Background())
+}
+
+func (i NodePoolStorageGroupVirtualSpaceArray) ToNodePoolStorageGroupVirtualSpaceArrayOutputWithContext(ctx context.Context) NodePoolStorageGroupVirtualSpaceArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolStorageGroupVirtualSpaceArrayOutput)
+}
+
+type NodePoolStorageGroupVirtualSpaceOutput struct{ *pulumi.OutputState }
+
+func (NodePoolStorageGroupVirtualSpaceOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolStorageGroupVirtualSpace)(nil)).Elem()
+}
+
+func (o NodePoolStorageGroupVirtualSpaceOutput) ToNodePoolStorageGroupVirtualSpaceOutput() NodePoolStorageGroupVirtualSpaceOutput {
+	return o
+}
+
+func (o NodePoolStorageGroupVirtualSpaceOutput) ToNodePoolStorageGroupVirtualSpaceOutputWithContext(ctx context.Context) NodePoolStorageGroupVirtualSpaceOutput {
+	return o
+}
+
+// Specifies the LVM write mode, values can be **linear** and **striped**.
+// This parameter takes effect only in **kubernetes** and **user** configuration. Changing this parameter will create
+// a new resource.
+func (o NodePoolStorageGroupVirtualSpaceOutput) LvmLvType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolStorageGroupVirtualSpace) *string { return v.LvmLvType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the absolute path to which the disk is attached.
+// This parameter takes effect only in **user** configuration. Changing this parameter will create a new resource.
+func (o NodePoolStorageGroupVirtualSpaceOutput) LvmPath() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolStorageGroupVirtualSpace) *string { return v.LvmPath }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+// and **user** are supported. Changing this parameter will create a new resource.
+func (o NodePoolStorageGroupVirtualSpaceOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v NodePoolStorageGroupVirtualSpace) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the LVM write mode, values can be **linear** and **striped**.
+// This parameter takes effect only in **runtime** configuration. Changing this parameter will create a new resource.
+func (o NodePoolStorageGroupVirtualSpaceOutput) RuntimeLvType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolStorageGroupVirtualSpace) *string { return v.RuntimeLvType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the size of a virtual space. Only an integer percentage is supported.
+// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+// Changing this parameter will create a new resource.
+func (o NodePoolStorageGroupVirtualSpaceOutput) Size() pulumi.StringOutput {
+	return o.ApplyT(func(v NodePoolStorageGroupVirtualSpace) string { return v.Size }).(pulumi.StringOutput)
+}
+
+type NodePoolStorageGroupVirtualSpaceArrayOutput struct{ *pulumi.OutputState }
+
+func (NodePoolStorageGroupVirtualSpaceArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]NodePoolStorageGroupVirtualSpace)(nil)).Elem()
+}
+
+func (o NodePoolStorageGroupVirtualSpaceArrayOutput) ToNodePoolStorageGroupVirtualSpaceArrayOutput() NodePoolStorageGroupVirtualSpaceArrayOutput {
+	return o
+}
+
+func (o NodePoolStorageGroupVirtualSpaceArrayOutput) ToNodePoolStorageGroupVirtualSpaceArrayOutputWithContext(ctx context.Context) NodePoolStorageGroupVirtualSpaceArrayOutput {
+	return o
+}
+
+func (o NodePoolStorageGroupVirtualSpaceArrayOutput) Index(i pulumi.IntInput) NodePoolStorageGroupVirtualSpaceOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) NodePoolStorageGroupVirtualSpace {
+		return vs[0].([]NodePoolStorageGroupVirtualSpace)[vs[1].(int)]
+	}).(NodePoolStorageGroupVirtualSpaceOutput)
+}
+
+type NodePoolStorageSelector struct {
+	// Specifies the number of disks to be selected. If omitted,
+	// all disks of this type are selected. Changing this parameter will create a new resource.
+	MatchLabelCount *string `pulumi:"matchLabelCount"`
+	// Specifies the cstomer master key ID of an encrypted
+	// disk. Changing this parameter will create a new resource.
+	MatchLabelMetadataCmkid *string `pulumi:"matchLabelMetadataCmkid"`
+	// Specifies the disk encryption identifier.
+	// Values can be: **0** indicates that the disk is not encrypted and **1** indicates that the disk is encrypted.
+	// If omitted, whether the disk is encrypted is not limited. Changing this parameter will create a new resource.
+	MatchLabelMetadataEncrypted *string `pulumi:"matchLabelMetadataEncrypted"`
+	// Specifies the matched disk size. If omitted,
+	// the disk size is not limited. Example: 100. Changing this parameter will create a new resource.
+	MatchLabelSize *string `pulumi:"matchLabelSize"`
+	// Specifies the EVS disk type. Currently,
+	// **SSD**, **GPSSD**, and **SAS** are supported. If omitted, the disk type is not limited.
+	// Changing this parameter will create a new resource.
+	MatchLabelVolumeType *string `pulumi:"matchLabelVolumeType"`
+	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+	// and **user** are supported. Changing this parameter will create a new resource.
+	Name string `pulumi:"name"`
+	// Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
+	// The default value is **evs**. Changing this parameter will create a new resource.
+	Type *string `pulumi:"type"`
+}
+
+// NodePoolStorageSelectorInput is an input type that accepts NodePoolStorageSelectorArgs and NodePoolStorageSelectorOutput values.
+// You can construct a concrete instance of `NodePoolStorageSelectorInput` via:
+//
+//	NodePoolStorageSelectorArgs{...}
+type NodePoolStorageSelectorInput interface {
+	pulumi.Input
+
+	ToNodePoolStorageSelectorOutput() NodePoolStorageSelectorOutput
+	ToNodePoolStorageSelectorOutputWithContext(context.Context) NodePoolStorageSelectorOutput
+}
+
+type NodePoolStorageSelectorArgs struct {
+	// Specifies the number of disks to be selected. If omitted,
+	// all disks of this type are selected. Changing this parameter will create a new resource.
+	MatchLabelCount pulumi.StringPtrInput `pulumi:"matchLabelCount"`
+	// Specifies the cstomer master key ID of an encrypted
+	// disk. Changing this parameter will create a new resource.
+	MatchLabelMetadataCmkid pulumi.StringPtrInput `pulumi:"matchLabelMetadataCmkid"`
+	// Specifies the disk encryption identifier.
+	// Values can be: **0** indicates that the disk is not encrypted and **1** indicates that the disk is encrypted.
+	// If omitted, whether the disk is encrypted is not limited. Changing this parameter will create a new resource.
+	MatchLabelMetadataEncrypted pulumi.StringPtrInput `pulumi:"matchLabelMetadataEncrypted"`
+	// Specifies the matched disk size. If omitted,
+	// the disk size is not limited. Example: 100. Changing this parameter will create a new resource.
+	MatchLabelSize pulumi.StringPtrInput `pulumi:"matchLabelSize"`
+	// Specifies the EVS disk type. Currently,
+	// **SSD**, **GPSSD**, and **SAS** are supported. If omitted, the disk type is not limited.
+	// Changing this parameter will create a new resource.
+	MatchLabelVolumeType pulumi.StringPtrInput `pulumi:"matchLabelVolumeType"`
+	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+	// and **user** are supported. Changing this parameter will create a new resource.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
+	// The default value is **evs**. Changing this parameter will create a new resource.
+	Type pulumi.StringPtrInput `pulumi:"type"`
+}
+
+func (NodePoolStorageSelectorArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolStorageSelector)(nil)).Elem()
+}
+
+func (i NodePoolStorageSelectorArgs) ToNodePoolStorageSelectorOutput() NodePoolStorageSelectorOutput {
+	return i.ToNodePoolStorageSelectorOutputWithContext(context.Background())
+}
+
+func (i NodePoolStorageSelectorArgs) ToNodePoolStorageSelectorOutputWithContext(ctx context.Context) NodePoolStorageSelectorOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolStorageSelectorOutput)
+}
+
+// NodePoolStorageSelectorArrayInput is an input type that accepts NodePoolStorageSelectorArray and NodePoolStorageSelectorArrayOutput values.
+// You can construct a concrete instance of `NodePoolStorageSelectorArrayInput` via:
+//
+//	NodePoolStorageSelectorArray{ NodePoolStorageSelectorArgs{...} }
+type NodePoolStorageSelectorArrayInput interface {
+	pulumi.Input
+
+	ToNodePoolStorageSelectorArrayOutput() NodePoolStorageSelectorArrayOutput
+	ToNodePoolStorageSelectorArrayOutputWithContext(context.Context) NodePoolStorageSelectorArrayOutput
+}
+
+type NodePoolStorageSelectorArray []NodePoolStorageSelectorInput
+
+func (NodePoolStorageSelectorArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]NodePoolStorageSelector)(nil)).Elem()
+}
+
+func (i NodePoolStorageSelectorArray) ToNodePoolStorageSelectorArrayOutput() NodePoolStorageSelectorArrayOutput {
+	return i.ToNodePoolStorageSelectorArrayOutputWithContext(context.Background())
+}
+
+func (i NodePoolStorageSelectorArray) ToNodePoolStorageSelectorArrayOutputWithContext(ctx context.Context) NodePoolStorageSelectorArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolStorageSelectorArrayOutput)
+}
+
+type NodePoolStorageSelectorOutput struct{ *pulumi.OutputState }
+
+func (NodePoolStorageSelectorOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolStorageSelector)(nil)).Elem()
+}
+
+func (o NodePoolStorageSelectorOutput) ToNodePoolStorageSelectorOutput() NodePoolStorageSelectorOutput {
+	return o
+}
+
+func (o NodePoolStorageSelectorOutput) ToNodePoolStorageSelectorOutputWithContext(ctx context.Context) NodePoolStorageSelectorOutput {
+	return o
+}
+
+// Specifies the number of disks to be selected. If omitted,
+// all disks of this type are selected. Changing this parameter will create a new resource.
+func (o NodePoolStorageSelectorOutput) MatchLabelCount() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolStorageSelector) *string { return v.MatchLabelCount }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the cstomer master key ID of an encrypted
+// disk. Changing this parameter will create a new resource.
+func (o NodePoolStorageSelectorOutput) MatchLabelMetadataCmkid() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolStorageSelector) *string { return v.MatchLabelMetadataCmkid }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the disk encryption identifier.
+// Values can be: **0** indicates that the disk is not encrypted and **1** indicates that the disk is encrypted.
+// If omitted, whether the disk is encrypted is not limited. Changing this parameter will create a new resource.
+func (o NodePoolStorageSelectorOutput) MatchLabelMetadataEncrypted() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolStorageSelector) *string { return v.MatchLabelMetadataEncrypted }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the matched disk size. If omitted,
+// the disk size is not limited. Example: 100. Changing this parameter will create a new resource.
+func (o NodePoolStorageSelectorOutput) MatchLabelSize() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolStorageSelector) *string { return v.MatchLabelSize }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the EVS disk type. Currently,
+// **SSD**, **GPSSD**, and **SAS** are supported. If omitted, the disk type is not limited.
+// Changing this parameter will create a new resource.
+func (o NodePoolStorageSelectorOutput) MatchLabelVolumeType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolStorageSelector) *string { return v.MatchLabelVolumeType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+// and **user** are supported. Changing this parameter will create a new resource.
+func (o NodePoolStorageSelectorOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v NodePoolStorageSelector) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
+// The default value is **evs**. Changing this parameter will create a new resource.
+func (o NodePoolStorageSelectorOutput) Type() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolStorageSelector) *string { return v.Type }).(pulumi.StringPtrOutput)
+}
+
+type NodePoolStorageSelectorArrayOutput struct{ *pulumi.OutputState }
+
+func (NodePoolStorageSelectorArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]NodePoolStorageSelector)(nil)).Elem()
+}
+
+func (o NodePoolStorageSelectorArrayOutput) ToNodePoolStorageSelectorArrayOutput() NodePoolStorageSelectorArrayOutput {
+	return o
+}
+
+func (o NodePoolStorageSelectorArrayOutput) ToNodePoolStorageSelectorArrayOutputWithContext(ctx context.Context) NodePoolStorageSelectorArrayOutput {
+	return o
+}
+
+func (o NodePoolStorageSelectorArrayOutput) Index(i pulumi.IntInput) NodePoolStorageSelectorOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) NodePoolStorageSelector {
+		return vs[0].([]NodePoolStorageSelector)[vs[1].(int)]
+	}).(NodePoolStorageSelectorOutput)
 }
 
 type NodePoolTaint struct {
@@ -1729,6 +2424,9 @@ type NodeRootVolume struct {
 	// Changing this parameter will create a new resource.
 	ExtendParams  map[string]string `pulumi:"extendParams"`
 	HwPassthrough *bool             `pulumi:"hwPassthrough"`
+	// Specifies the ID of a KMS key. This is used to encrypt the volume.
+	// Changing this parameter will create a new resource.
+	KmsKeyId *string `pulumi:"kmsKeyId"`
 	// Specifies the size of a virtual space. Only an integer percentage is supported.
 	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
 	// Changing this parameter will create a new resource.
@@ -1764,6 +2462,9 @@ type NodeRootVolumeArgs struct {
 	// Changing this parameter will create a new resource.
 	ExtendParams  pulumi.StringMapInput `pulumi:"extendParams"`
 	HwPassthrough pulumi.BoolPtrInput   `pulumi:"hwPassthrough"`
+	// Specifies the ID of a KMS key. This is used to encrypt the volume.
+	// Changing this parameter will create a new resource.
+	KmsKeyId pulumi.StringPtrInput `pulumi:"kmsKeyId"`
 	// Specifies the size of a virtual space. Only an integer percentage is supported.
 	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
 	// Changing this parameter will create a new resource.
@@ -1873,6 +2574,12 @@ func (o NodeRootVolumeOutput) HwPassthrough() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v NodeRootVolume) *bool { return v.HwPassthrough }).(pulumi.BoolPtrOutput)
 }
 
+// Specifies the ID of a KMS key. This is used to encrypt the volume.
+// Changing this parameter will create a new resource.
+func (o NodeRootVolumeOutput) KmsKeyId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeRootVolume) *string { return v.KmsKeyId }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the size of a virtual space. Only an integer percentage is supported.
 // Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
 // Changing this parameter will create a new resource.
@@ -1946,6 +2653,17 @@ func (o NodeRootVolumePtrOutput) HwPassthrough() pulumi.BoolPtrOutput {
 		}
 		return v.HwPassthrough
 	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the ID of a KMS key. This is used to encrypt the volume.
+// Changing this parameter will create a new resource.
+func (o NodeRootVolumePtrOutput) KmsKeyId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodeRootVolume) *string {
+		if v == nil {
+			return nil
+		}
+		return v.KmsKeyId
+	}).(pulumi.StringPtrOutput)
 }
 
 // Specifies the size of a virtual space. Only an integer percentage is supported.
@@ -2443,7 +3161,7 @@ type NodeStorageSelector struct {
 	// Specifies the number of disks to be selected. If omitted,
 	// all disks of this type are selected. Changing this parameter will create a new resource.
 	MatchLabelCount *string `pulumi:"matchLabelCount"`
-	// Specifies the cstomer master key ID of an encrypted
+	// Specifies the customer master key ID of an encrypted
 	// disk. Changing this parameter will create a new resource.
 	MatchLabelMetadataCmkid *string `pulumi:"matchLabelMetadataCmkid"`
 	// Specifies the disk encryption identifier.
@@ -2480,7 +3198,7 @@ type NodeStorageSelectorArgs struct {
 	// Specifies the number of disks to be selected. If omitted,
 	// all disks of this type are selected. Changing this parameter will create a new resource.
 	MatchLabelCount pulumi.StringPtrInput `pulumi:"matchLabelCount"`
-	// Specifies the cstomer master key ID of an encrypted
+	// Specifies the customer master key ID of an encrypted
 	// disk. Changing this parameter will create a new resource.
 	MatchLabelMetadataCmkid pulumi.StringPtrInput `pulumi:"matchLabelMetadataCmkid"`
 	// Specifies the disk encryption identifier.
@@ -2559,7 +3277,7 @@ func (o NodeStorageSelectorOutput) MatchLabelCount() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NodeStorageSelector) *string { return v.MatchLabelCount }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the cstomer master key ID of an encrypted
+// Specifies the customer master key ID of an encrypted
 // disk. Changing this parameter will create a new resource.
 func (o NodeStorageSelectorOutput) MatchLabelMetadataCmkid() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NodeStorageSelector) *string { return v.MatchLabelMetadataCmkid }).(pulumi.StringPtrOutput)
@@ -2748,7 +3466,9 @@ func (o NodeTaintArrayOutput) Index(i pulumi.IntInput) NodeTaintOutput {
 }
 
 type GetAddonTemplateSupportVersion struct {
-	BareMetals      []string `pulumi:"bareMetals"`
+	// The cluster (Bare Metal) version that the add-on template supported.
+	BareMetals []string `pulumi:"bareMetals"`
+	// The cluster (Virtual Machine) version that the add-on template supported.
 	VirtualMachines []string `pulumi:"virtualMachines"`
 }
 
@@ -2764,7 +3484,9 @@ type GetAddonTemplateSupportVersionInput interface {
 }
 
 type GetAddonTemplateSupportVersionArgs struct {
-	BareMetals      pulumi.StringArrayInput `pulumi:"bareMetals"`
+	// The cluster (Bare Metal) version that the add-on template supported.
+	BareMetals pulumi.StringArrayInput `pulumi:"bareMetals"`
+	// The cluster (Virtual Machine) version that the add-on template supported.
 	VirtualMachines pulumi.StringArrayInput `pulumi:"virtualMachines"`
 }
 
@@ -2819,10 +3541,12 @@ func (o GetAddonTemplateSupportVersionOutput) ToGetAddonTemplateSupportVersionOu
 	return o
 }
 
+// The cluster (Bare Metal) version that the add-on template supported.
 func (o GetAddonTemplateSupportVersionOutput) BareMetals() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v GetAddonTemplateSupportVersion) []string { return v.BareMetals }).(pulumi.StringArrayOutput)
 }
 
+// The cluster (Virtual Machine) version that the add-on template supported.
 func (o GetAddonTemplateSupportVersionOutput) VirtualMachines() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v GetAddonTemplateSupportVersion) []string { return v.VirtualMachines }).(pulumi.StringArrayOutput)
 }
@@ -3309,7 +4033,7 @@ type GetClustersCluster struct {
 	Endpoints []GetClustersClusterEndpoint `pulumi:"endpoints"`
 	// The ENI network segment.
 	EniSubnetCidr string `pulumi:"eniSubnetCidr"`
-	// The ENI subnet ID.
+	// The **IPv4 subnet ID** of the subnet where the ENI resides.
 	EniSubnetId string `pulumi:"eniSubnetId"`
 	// Specifies the enterprise project ID of the cluster.
 	EnterpriseProjectId string `pulumi:"enterpriseProjectId"`
@@ -3319,7 +4043,7 @@ type GetClustersCluster struct {
 	Id string `pulumi:"id"`
 	// The raw Kubernetes config to be used by kubectl and other compatible tools.
 	KubeConfigRaw string `pulumi:"kubeConfigRaw"`
-	// The advanced configuration of master nodes.
+	// The advanced configuration of master nodes. Structure is documented below.
 	Masters []GetClustersClusterMaster `pulumi:"masters"`
 	// Specifies the name of the cluster.
 	Name string `pulumi:"name"`
@@ -3369,7 +4093,7 @@ type GetClustersClusterArgs struct {
 	Endpoints GetClustersClusterEndpointArrayInput `pulumi:"endpoints"`
 	// The ENI network segment.
 	EniSubnetCidr pulumi.StringInput `pulumi:"eniSubnetCidr"`
-	// The ENI subnet ID.
+	// The **IPv4 subnet ID** of the subnet where the ENI resides.
 	EniSubnetId pulumi.StringInput `pulumi:"eniSubnetId"`
 	// Specifies the enterprise project ID of the cluster.
 	EnterpriseProjectId pulumi.StringInput `pulumi:"enterpriseProjectId"`
@@ -3379,7 +4103,7 @@ type GetClustersClusterArgs struct {
 	Id pulumi.StringInput `pulumi:"id"`
 	// The raw Kubernetes config to be used by kubectl and other compatible tools.
 	KubeConfigRaw pulumi.StringInput `pulumi:"kubeConfigRaw"`
-	// The advanced configuration of master nodes.
+	// The advanced configuration of master nodes. Structure is documented below.
 	Masters GetClustersClusterMasterArrayInput `pulumi:"masters"`
 	// Specifies the name of the cluster.
 	Name pulumi.StringInput `pulumi:"name"`
@@ -3501,7 +4225,7 @@ func (o GetClustersClusterOutput) EniSubnetCidr() pulumi.StringOutput {
 	return o.ApplyT(func(v GetClustersCluster) string { return v.EniSubnetCidr }).(pulumi.StringOutput)
 }
 
-// The ENI subnet ID.
+// The **IPv4 subnet ID** of the subnet where the ENI resides.
 func (o GetClustersClusterOutput) EniSubnetId() pulumi.StringOutput {
 	return o.ApplyT(func(v GetClustersCluster) string { return v.EniSubnetId }).(pulumi.StringOutput)
 }
@@ -3526,7 +4250,7 @@ func (o GetClustersClusterOutput) KubeConfigRaw() pulumi.StringOutput {
 	return o.ApplyT(func(v GetClustersCluster) string { return v.KubeConfigRaw }).(pulumi.StringOutput)
 }
 
-// The advanced configuration of master nodes.
+// The advanced configuration of master nodes. Structure is documented below.
 func (o GetClustersClusterOutput) Masters() GetClustersClusterMasterArrayOutput {
 	return o.ApplyT(func(v GetClustersCluster) []GetClustersClusterMaster { return v.Masters }).(GetClustersClusterMasterArrayOutput)
 }
@@ -3924,6 +4648,7 @@ func (o GetClustersClusterEndpointArrayOutput) Index(i pulumi.IntInput) GetClust
 }
 
 type GetClustersClusterMaster struct {
+	// The availability zone (AZ) of the master node.
 	AvailabilityZone string `pulumi:"availabilityZone"`
 }
 
@@ -3939,6 +4664,7 @@ type GetClustersClusterMasterInput interface {
 }
 
 type GetClustersClusterMasterArgs struct {
+	// The availability zone (AZ) of the master node.
 	AvailabilityZone pulumi.StringInput `pulumi:"availabilityZone"`
 }
 
@@ -3993,6 +4719,7 @@ func (o GetClustersClusterMasterOutput) ToGetClustersClusterMasterOutputWithCont
 	return o
 }
 
+// The availability zone (AZ) of the master node.
 func (o GetClustersClusterMasterOutput) AvailabilityZone() pulumi.StringOutput {
 	return o.ApplyT(func(v GetClustersClusterMaster) string { return v.AvailabilityZone }).(pulumi.StringOutput)
 }
@@ -4960,6 +5687,14 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolDataVolumeArrayInput)(nil)).Elem(), NodePoolDataVolumeArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolRootVolumeInput)(nil)).Elem(), NodePoolRootVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolRootVolumePtrInput)(nil)).Elem(), NodePoolRootVolumeArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolStorageInput)(nil)).Elem(), NodePoolStorageArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolStoragePtrInput)(nil)).Elem(), NodePoolStorageArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolStorageGroupInput)(nil)).Elem(), NodePoolStorageGroupArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolStorageGroupArrayInput)(nil)).Elem(), NodePoolStorageGroupArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolStorageGroupVirtualSpaceInput)(nil)).Elem(), NodePoolStorageGroupVirtualSpaceArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolStorageGroupVirtualSpaceArrayInput)(nil)).Elem(), NodePoolStorageGroupVirtualSpaceArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolStorageSelectorInput)(nil)).Elem(), NodePoolStorageSelectorArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolStorageSelectorArrayInput)(nil)).Elem(), NodePoolStorageSelectorArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolTaintInput)(nil)).Elem(), NodePoolTaintArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolTaintArrayInput)(nil)).Elem(), NodePoolTaintArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NodeRootVolumeInput)(nil)).Elem(), NodeRootVolumeArgs{})
@@ -5028,6 +5763,14 @@ func init() {
 	pulumi.RegisterOutputType(NodePoolDataVolumeArrayOutput{})
 	pulumi.RegisterOutputType(NodePoolRootVolumeOutput{})
 	pulumi.RegisterOutputType(NodePoolRootVolumePtrOutput{})
+	pulumi.RegisterOutputType(NodePoolStorageOutput{})
+	pulumi.RegisterOutputType(NodePoolStoragePtrOutput{})
+	pulumi.RegisterOutputType(NodePoolStorageGroupOutput{})
+	pulumi.RegisterOutputType(NodePoolStorageGroupArrayOutput{})
+	pulumi.RegisterOutputType(NodePoolStorageGroupVirtualSpaceOutput{})
+	pulumi.RegisterOutputType(NodePoolStorageGroupVirtualSpaceArrayOutput{})
+	pulumi.RegisterOutputType(NodePoolStorageSelectorOutput{})
+	pulumi.RegisterOutputType(NodePoolStorageSelectorArrayOutput{})
 	pulumi.RegisterOutputType(NodePoolTaintOutput{})
 	pulumi.RegisterOutputType(NodePoolTaintArrayOutput{})
 	pulumi.RegisterOutputType(NodeRootVolumeOutput{})

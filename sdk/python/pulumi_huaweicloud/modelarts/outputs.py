@@ -693,12 +693,12 @@ class GetDatasetsDatasetResult(dict):
                  data_sources: Sequence['outputs.GetDatasetsDatasetDataSourceResult'],
                  description: str,
                  id: str,
+                 labels: Sequence['outputs.GetDatasetsDatasetLabelResult'],
                  name: str,
                  output_path: str,
                  schemas: Sequence['outputs.GetDatasetsDatasetSchemaResult'],
                  status: int,
-                 type: int,
-                 labels: Optional[Sequence['outputs.GetDatasetsDatasetLabelResult']] = None):
+                 type: int):
         """
         :param str created_at: The dataset creation time.
         :param str data_format: The dataset format. Valid values include: `Default`, `CarbonData`: Carbon format(Supported only for
@@ -707,6 +707,7 @@ class GetDatasetsDatasetResult(dict):
                this directory and subdirectories to the dataset. Structure is documented below.
         :param str description: The description of the dataset.
         :param str id: The ID of the dataset.
+        :param Sequence['GetDatasetsDatasetLabelArgs'] labels: The labels information. Structure is documented below.
         :param str name: Specifies the name of datasets.
         :param str output_path: The OBS path for storing output files such as labeled files.
         :param Sequence['GetDatasetsDatasetSchemaArgs'] schemas: The schema information of source data when `type` is `400`(Table Type). Structure is documented below.
@@ -729,20 +730,18 @@ class GetDatasetsDatasetResult(dict):
                + **400**: Table type, supported formats: Carbon type.
                + **600**: Video, supported formats: `.mp4`
                + **900**: Free format.
-        :param Sequence['GetDatasetsDatasetLabelArgs'] labels: The labels information. Structure is documented below.
         """
         pulumi.set(__self__, "created_at", created_at)
         pulumi.set(__self__, "data_format", data_format)
         pulumi.set(__self__, "data_sources", data_sources)
         pulumi.set(__self__, "description", description)
         pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "labels", labels)
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "output_path", output_path)
         pulumi.set(__self__, "schemas", schemas)
         pulumi.set(__self__, "status", status)
         pulumi.set(__self__, "type", type)
-        if labels is not None:
-            pulumi.set(__self__, "labels", labels)
 
     @property
     @pulumi.getter(name="createdAt")
@@ -785,6 +784,14 @@ class GetDatasetsDatasetResult(dict):
         The ID of the dataset.
         """
         return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def labels(self) -> Sequence['outputs.GetDatasetsDatasetLabelResult']:
+        """
+        The labels information. Structure is documented below.
+        """
+        return pulumi.get(self, "labels")
 
     @property
     @pulumi.getter
@@ -842,14 +849,6 @@ class GetDatasetsDatasetResult(dict):
         + **900**: Free format.
         """
         return pulumi.get(self, "type")
-
-    @property
-    @pulumi.getter
-    def labels(self) -> Optional[Sequence['outputs.GetDatasetsDatasetLabelResult']]:
-        """
-        The labels information. Structure is documented below.
-        """
-        return pulumi.get(self, "labels")
 
 
 @pulumi.output_type

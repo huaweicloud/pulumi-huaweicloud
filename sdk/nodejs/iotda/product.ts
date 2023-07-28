@@ -124,31 +124,31 @@ export class Product extends pulumi.CustomResource {
     public readonly dataType!: pulumi.Output<string>;
     /**
      * Specifies the description of the parameter. The description contains a maximum of
-     * 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+     * 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
      * characters are allowed: `?'#().,&%@!`.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
      * Specifies the device type. The device type contains a maximum of 32 characters.
-     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters
+     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
      * are allowed: `?'#().,&%@!`. Example: StreetLight, GasMeter, or WaterMeter.
      */
     public readonly deviceType!: pulumi.Output<string>;
     /**
      * Specifies the industry which the device belongs to. The industry contains a maximum of
      * 64 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
-     * the following specail characters are allowed: `?'#().,&%@!`.
+     * the following special characters are allowed: `?'#().,&%@!`.
      */
     public readonly industry!: pulumi.Output<string>;
     /**
      * Specifies the manufacturer name. The name contains a maximum of 32 characters.
-     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
      * characters are allowed: `?'#().,&%@!`.
      */
     public readonly manufacturerName!: pulumi.Output<string>;
     /**
      * Specifies the name of the parameter. The name contains a maximum of 64 characters.
-     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
      * allowed: `?'#().,&%@!`.
      */
     public readonly name!: pulumi.Output<string>;
@@ -159,7 +159,7 @@ export class Product extends pulumi.CustomResource {
      */
     public readonly productId!: pulumi.Output<string>;
     /**
-     * Specifies the protocal.
+     * Specifies the protocol.
      * The valid values are **MQTT**, **CoAP**, **HTTP**, **HTTPS**, **Modbus**, **ONVIF**, **OPC-UA**, **OPC-DA**, **Other**.
      */
     public readonly protocol!: pulumi.Output<string>;
@@ -245,31 +245,31 @@ export interface ProductState {
     dataType?: pulumi.Input<string>;
     /**
      * Specifies the description of the parameter. The description contains a maximum of
-     * 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+     * 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
      * characters are allowed: `?'#().,&%@!`.
      */
     description?: pulumi.Input<string>;
     /**
      * Specifies the device type. The device type contains a maximum of 32 characters.
-     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters
+     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
      * are allowed: `?'#().,&%@!`. Example: StreetLight, GasMeter, or WaterMeter.
      */
     deviceType?: pulumi.Input<string>;
     /**
      * Specifies the industry which the device belongs to. The industry contains a maximum of
      * 64 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
-     * the following specail characters are allowed: `?'#().,&%@!`.
+     * the following special characters are allowed: `?'#().,&%@!`.
      */
     industry?: pulumi.Input<string>;
     /**
      * Specifies the manufacturer name. The name contains a maximum of 32 characters.
-     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
      * characters are allowed: `?'#().,&%@!`.
      */
     manufacturerName?: pulumi.Input<string>;
     /**
      * Specifies the name of the parameter. The name contains a maximum of 64 characters.
-     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
      * allowed: `?'#().,&%@!`.
      */
     name?: pulumi.Input<string>;
@@ -280,7 +280,7 @@ export interface ProductState {
      */
     productId?: pulumi.Input<string>;
     /**
-     * Specifies the protocal.
+     * Specifies the protocol.
      * The valid values are **MQTT**, **CoAP**, **HTTP**, **HTTPS**, **Modbus**, **ONVIF**, **OPC-UA**, **OPC-DA**, **Other**.
      */
     protocol?: pulumi.Input<string>;
@@ -312,31 +312,31 @@ export interface ProductArgs {
     dataType: pulumi.Input<string>;
     /**
      * Specifies the description of the parameter. The description contains a maximum of
-     * 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+     * 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
      * characters are allowed: `?'#().,&%@!`.
      */
     description?: pulumi.Input<string>;
     /**
      * Specifies the device type. The device type contains a maximum of 32 characters.
-     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters
+     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
      * are allowed: `?'#().,&%@!`. Example: StreetLight, GasMeter, or WaterMeter.
      */
     deviceType: pulumi.Input<string>;
     /**
      * Specifies the industry which the device belongs to. The industry contains a maximum of
      * 64 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
-     * the following specail characters are allowed: `?'#().,&%@!`.
+     * the following special characters are allowed: `?'#().,&%@!`.
      */
     industry?: pulumi.Input<string>;
     /**
      * Specifies the manufacturer name. The name contains a maximum of 32 characters.
-     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail
+     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
      * characters are allowed: `?'#().,&%@!`.
      */
     manufacturerName?: pulumi.Input<string>;
     /**
      * Specifies the name of the parameter. The name contains a maximum of 64 characters.
-     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+     * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
      * allowed: `?'#().,&%@!`.
      */
     name?: pulumi.Input<string>;
@@ -347,7 +347,7 @@ export interface ProductArgs {
      */
     productId?: pulumi.Input<string>;
     /**
-     * Specifies the protocal.
+     * Specifies the protocol.
      * The valid values are **MQTT**, **CoAP**, **HTTP**, **HTTPS**, **Modbus**, **ONVIF**, **OPC-UA**, **OPC-DA**, **Other**.
      */
     protocol: pulumi.Input<string>;

@@ -56,8 +56,6 @@ import (
 type Listener struct {
 	pulumi.CustomResourceState
 
-	// The administrative state of the listener. A valid value is true (UP) or false (
-	// DOWN).
 	AdminStateUp pulumi.BoolPtrOutput `pulumi:"adminStateUp"`
 	// The maximum number of connections allowed for the listener. The value ranges from
 	// -1 to 2,147,483,647. This parameter is reserved and has been not used. Only the administrator can specify the maximum
@@ -136,8 +134,6 @@ func GetListener(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Listener resources.
 type listenerState struct {
-	// The administrative state of the listener. A valid value is true (UP) or false (
-	// DOWN).
 	AdminStateUp *bool `pulumi:"adminStateUp"`
 	// The maximum number of connections allowed for the listener. The value ranges from
 	// -1 to 2,147,483,647. This parameter is reserved and has been not used. Only the administrator can specify the maximum
@@ -178,8 +174,6 @@ type listenerState struct {
 }
 
 type ListenerState struct {
-	// The administrative state of the listener. A valid value is true (UP) or false (
-	// DOWN).
 	AdminStateUp pulumi.BoolPtrInput
 	// The maximum number of connections allowed for the listener. The value ranges from
 	// -1 to 2,147,483,647. This parameter is reserved and has been not used. Only the administrator can specify the maximum
@@ -224,8 +218,6 @@ func (ListenerState) ElementType() reflect.Type {
 }
 
 type listenerArgs struct {
-	// The administrative state of the listener. A valid value is true (UP) or false (
-	// DOWN).
 	AdminStateUp *bool `pulumi:"adminStateUp"`
 	// The maximum number of connections allowed for the listener. The value ranges from
 	// -1 to 2,147,483,647. This parameter is reserved and has been not used. Only the administrator can specify the maximum
@@ -267,8 +259,6 @@ type listenerArgs struct {
 
 // The set of arguments for constructing a Listener resource.
 type ListenerArgs struct {
-	// The administrative state of the listener. A valid value is true (UP) or false (
-	// DOWN).
 	AdminStateUp pulumi.BoolPtrInput
 	// The maximum number of connections allowed for the listener. The value ranges from
 	// -1 to 2,147,483,647. This parameter is reserved and has been not used. Only the administrator can specify the maximum
@@ -395,8 +385,6 @@ func (o ListenerOutput) ToListenerOutputWithContext(ctx context.Context) Listene
 	return o
 }
 
-// The administrative state of the listener. A valid value is true (UP) or false (
-// DOWN).
 func (o ListenerOutput) AdminStateUp() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Listener) pulumi.BoolPtrOutput { return v.AdminStateUp }).(pulumi.BoolPtrOutput)
 }

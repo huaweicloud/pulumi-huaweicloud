@@ -102,7 +102,7 @@ type DataforwardingRule struct {
 	// Can not enable without `targets`.
 	Enabled pulumi.BoolPtrOutput `pulumi:"enabled"`
 	// Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
-	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the region to which the KAFKA belongs.
@@ -173,7 +173,7 @@ type dataforwardingRuleState struct {
 	// Can not enable without `targets`.
 	Enabled *bool `pulumi:"enabled"`
 	// Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
-	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name *string `pulumi:"name"`
 	// Specifies the region to which the KAFKA belongs.
@@ -212,7 +212,7 @@ type DataforwardingRuleState struct {
 	// Can not enable without `targets`.
 	Enabled pulumi.BoolPtrInput
 	// Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
-	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name pulumi.StringPtrInput
 	// Specifies the region to which the KAFKA belongs.
@@ -255,7 +255,7 @@ type dataforwardingRuleArgs struct {
 	// Can not enable without `targets`.
 	Enabled *bool `pulumi:"enabled"`
 	// Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
-	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name *string `pulumi:"name"`
 	// Specifies the region to which the KAFKA belongs.
@@ -295,7 +295,7 @@ type DataforwardingRuleArgs struct {
 	// Can not enable without `targets`.
 	Enabled pulumi.BoolPtrInput
 	// Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
-	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name pulumi.StringPtrInput
 	// Specifies the region to which the KAFKA belongs.
@@ -426,7 +426,7 @@ func (o DataforwardingRuleOutput) Enabled() pulumi.BoolPtrOutput {
 }
 
 // Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
-// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following specail characters are
+// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 // allowed: `?'#().,&%@!`.
 func (o DataforwardingRuleOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *DataforwardingRule) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)

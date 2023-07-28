@@ -47,6 +47,10 @@ export interface GetFileSystemArgs {
      * The name of the shared file system.
      */
     name?: string;
+    /**
+     * Specifies the region in which to obtain the shared file system.
+     * If omitted, the provider-level region will be used.
+     */
     region?: string;
     /**
      * The status of the shared file system.
@@ -74,6 +78,9 @@ export interface GetFileSystemResult {
      * The availability zone name.
      */
     readonly availabilityZone: string;
+    /**
+     * The description of the shared file system.
+     */
     readonly description: string;
     /**
      * The path for accessing the shared file system.
@@ -115,6 +122,9 @@ export interface GetFileSystemResult {
      * The size (GB) of the shared file system.
      */
     readonly size: number;
+    /**
+     * The state of the shared file system.
+     */
     readonly state: string;
     readonly status: string;
 }
@@ -135,6 +145,10 @@ export interface GetFileSystemOutputArgs {
      * The name of the shared file system.
      */
     name?: pulumi.Input<string>;
+    /**
+     * Specifies the region in which to obtain the shared file system.
+     * If omitted, the provider-level region will be used.
+     */
     region?: pulumi.Input<string>;
     /**
      * The status of the shared file system.

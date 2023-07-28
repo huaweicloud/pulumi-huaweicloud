@@ -70,7 +70,7 @@ type Application struct {
 	// The list of component IDs associated under the application.
 	ComponentIds pulumi.StringArrayOutput `pulumi:"componentIds"`
 	// Specifies the application description.
-	// The description can contian a maximum of `128` characters.
+	// The description can contain a maximum of `128` characters.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the enterprise projcet ID to which the application
 	// belongs. Changing this will create a new resource.
@@ -119,7 +119,7 @@ type applicationState struct {
 	// The list of component IDs associated under the application.
 	ComponentIds []string `pulumi:"componentIds"`
 	// Specifies the application description.
-	// The description can contian a maximum of `128` characters.
+	// The description can contain a maximum of `128` characters.
 	Description *string `pulumi:"description"`
 	// Specifies the enterprise projcet ID to which the application
 	// belongs. Changing this will create a new resource.
@@ -139,7 +139,7 @@ type ApplicationState struct {
 	// The list of component IDs associated under the application.
 	ComponentIds pulumi.StringArrayInput
 	// Specifies the application description.
-	// The description can contian a maximum of `128` characters.
+	// The description can contain a maximum of `128` characters.
 	Description pulumi.StringPtrInput
 	// Specifies the enterprise projcet ID to which the application
 	// belongs. Changing this will create a new resource.
@@ -161,7 +161,7 @@ func (ApplicationState) ElementType() reflect.Type {
 
 type applicationArgs struct {
 	// Specifies the application description.
-	// The description can contian a maximum of `128` characters.
+	// The description can contain a maximum of `128` characters.
 	Description *string `pulumi:"description"`
 	// Specifies the enterprise projcet ID to which the application
 	// belongs. Changing this will create a new resource.
@@ -180,7 +180,7 @@ type applicationArgs struct {
 // The set of arguments for constructing a Application resource.
 type ApplicationArgs struct {
 	// Specifies the application description.
-	// The description can contian a maximum of `128` characters.
+	// The description can contain a maximum of `128` characters.
 	Description pulumi.StringPtrInput
 	// Specifies the enterprise projcet ID to which the application
 	// belongs. Changing this will create a new resource.
@@ -289,7 +289,7 @@ func (o ApplicationOutput) ComponentIds() pulumi.StringArrayOutput {
 }
 
 // Specifies the application description.
-// The description can contian a maximum of `128` characters.
+// The description can contain a maximum of `128` characters.
 func (o ApplicationOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Application) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }

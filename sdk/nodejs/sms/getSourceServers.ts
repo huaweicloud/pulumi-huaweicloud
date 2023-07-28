@@ -52,6 +52,9 @@ export interface GetSourceServersArgs {
      * Specifies the name of the source server.
      */
     name?: string;
+    /**
+     * Specifies the status of the source server.
+     */
     state?: string;
 }
 
@@ -75,6 +78,9 @@ export interface GetSourceServersResult {
      * An array of SMS source servers found. Structure is documented below.
      */
     readonly servers: outputs.Sms.GetSourceServersServer[];
+    /**
+     * The status of the source server.
+     */
     readonly state?: string;
 }
 
@@ -98,5 +104,8 @@ export interface GetSourceServersOutputArgs {
      * Specifies the name of the source server.
      */
     name?: pulumi.Input<string>;
+    /**
+     * Specifies the status of the source server.
+     */
     state?: pulumi.Input<string>;
 }

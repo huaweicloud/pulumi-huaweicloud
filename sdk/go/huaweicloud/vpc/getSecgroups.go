@@ -59,6 +59,8 @@ type GetSecgroupsArgs struct {
 	Description *string `pulumi:"description"`
 	// Specifies the enterprise project ID of the security group.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies the id of the desired security group.
+	Id *string `pulumi:"id"`
 	// Specifies the name of the security group.
 	Name *string `pulumi:"name"`
 	// Specifies the region in which to obtain the security group list.
@@ -71,11 +73,11 @@ type GetSecgroupsResult struct {
 	Description *string `pulumi:"description"`
 	// The enterprise project ID of the security group.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// The provider-assigned unique ID for this managed resource.
+	// The security group ID.
 	Id string `pulumi:"id"`
 	// The name of the security group.
 	Name   *string `pulumi:"name"`
-	Region *string `pulumi:"region"`
+	Region string  `pulumi:"region"`
 	// The list of security groups. The object is documented below.
 	SecurityGroups []GetSecgroupsSecurityGroup `pulumi:"securityGroups"`
 }
@@ -100,6 +102,8 @@ type GetSecgroupsOutputArgs struct {
 	Description pulumi.StringPtrInput `pulumi:"description"`
 	// Specifies the enterprise project ID of the security group.
 	EnterpriseProjectId pulumi.StringPtrInput `pulumi:"enterpriseProjectId"`
+	// Specifies the id of the desired security group.
+	Id pulumi.StringPtrInput `pulumi:"id"`
 	// Specifies the name of the security group.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Specifies the region in which to obtain the security group list.
@@ -135,7 +139,7 @@ func (o GetSecgroupsResultOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetSecgroupsResult) *string { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
 
-// The provider-assigned unique ID for this managed resource.
+// The security group ID.
 func (o GetSecgroupsResultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetSecgroupsResult) string { return v.Id }).(pulumi.StringOutput)
 }
@@ -145,8 +149,8 @@ func (o GetSecgroupsResultOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetSecgroupsResult) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
 
-func (o GetSecgroupsResultOutput) Region() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v GetSecgroupsResult) *string { return v.Region }).(pulumi.StringPtrOutput)
+func (o GetSecgroupsResultOutput) Region() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSecgroupsResult) string { return v.Region }).(pulumi.StringOutput)
 }
 
 // The list of security groups. The object is documented below.

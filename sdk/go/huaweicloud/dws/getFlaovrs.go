@@ -10,7 +10,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Use this data source to get available flavors of HuaweiCloud dws cluster node.
+// Use this data source to get available flavors of DWS cluster node.
 //
 // ## Example Usage
 //
@@ -50,29 +50,43 @@ func GetFlaovrs(ctx *pulumi.Context, args *GetFlaovrsArgs, opts ...pulumi.Invoke
 
 // A collection of arguments for invoking getFlaovrs.
 type GetFlaovrsArgs struct {
-	// Specifies the availability zone name.
+	// The availability zone name.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
-	// Specifies the ram of the dws node flavor in GB.
+	// The type of datastore.\
+	// The options are as follows:
+	// - **dws**: OLAP, elastic scaling, unlimited scaling of compute and storage capacity.
+	// - **hybrid**: a single data warehouse used for transaction and analytics workloads,
+	//   in single-node or cluster mode.
+	// - **stream**: built-in time series operators; up to 40:1 compression ratio; applicable to IoT services.
+	DatastoreType *string `pulumi:"datastoreType"`
+	// The ram of the dws node flavor in GB.
 	Memory *int `pulumi:"memory"`
-	// Specifies the region in which to obtain the dws cluster client. If omitted, the
-	// provider-level region will be used.
+	// Specifies the region in which to query the data source.
+	// If omitted, the provider-level region will be used.
 	Region *string `pulumi:"region"`
-	// Specifies the vcpus of the dws node flavor.
+	// The vcpus of the dws node flavor.
 	Vcpus *int `pulumi:"vcpus"`
 }
 
 // A collection of values returned by getFlaovrs.
 type GetFlaovrsResult struct {
-	// Indicates the availability zone where the node resides.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
-	// Indicates the flavors information. Structure is documented below.
+	// The type of datastore.\
+	// The options are as follows:
+	// - **dws**: OLAP, elastic scaling, unlimited scaling of compute and storage capacity.
+	// - **hybrid**: a single data warehouse used for transaction and analytics workloads,
+	//   in single-node or cluster mode.
+	// - **stream**: built-in time series operators; up to 40:1 compression ratio; applicable to IoT services.
+	DatastoreType *string `pulumi:"datastoreType"`
+	// The list of flavor detail.
+	// The Flavors structure is documented below.
 	Flavors []GetFlaovrsFlavor `pulumi:"flavors"`
 	// The provider-assigned unique ID for this managed resource.
 	Id string `pulumi:"id"`
-	// Indicates the ram of the dws node flavor in GB.
+	// The ram of the dws node flavor in GB.
 	Memory *int   `pulumi:"memory"`
 	Region string `pulumi:"region"`
-	// Indicates the vcpus of the dws node flavor.
+	// The vcpus of the dws node flavor.
 	Vcpus *int `pulumi:"vcpus"`
 }
 
@@ -91,14 +105,21 @@ func GetFlaovrsOutput(ctx *pulumi.Context, args GetFlaovrsOutputArgs, opts ...pu
 
 // A collection of arguments for invoking getFlaovrs.
 type GetFlaovrsOutputArgs struct {
-	// Specifies the availability zone name.
+	// The availability zone name.
 	AvailabilityZone pulumi.StringPtrInput `pulumi:"availabilityZone"`
-	// Specifies the ram of the dws node flavor in GB.
+	// The type of datastore.\
+	// The options are as follows:
+	// - **dws**: OLAP, elastic scaling, unlimited scaling of compute and storage capacity.
+	// - **hybrid**: a single data warehouse used for transaction and analytics workloads,
+	//   in single-node or cluster mode.
+	// - **stream**: built-in time series operators; up to 40:1 compression ratio; applicable to IoT services.
+	DatastoreType pulumi.StringPtrInput `pulumi:"datastoreType"`
+	// The ram of the dws node flavor in GB.
 	Memory pulumi.IntPtrInput `pulumi:"memory"`
-	// Specifies the region in which to obtain the dws cluster client. If omitted, the
-	// provider-level region will be used.
+	// Specifies the region in which to query the data source.
+	// If omitted, the provider-level region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
-	// Specifies the vcpus of the dws node flavor.
+	// The vcpus of the dws node flavor.
 	Vcpus pulumi.IntPtrInput `pulumi:"vcpus"`
 }
 
@@ -121,12 +142,22 @@ func (o GetFlaovrsResultOutput) ToGetFlaovrsResultOutputWithContext(ctx context.
 	return o
 }
 
-// Indicates the availability zone where the node resides.
 func (o GetFlaovrsResultOutput) AvailabilityZone() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetFlaovrsResult) *string { return v.AvailabilityZone }).(pulumi.StringPtrOutput)
 }
 
-// Indicates the flavors information. Structure is documented below.
+// The type of datastore.\
+// The options are as follows:
+//   - **dws**: OLAP, elastic scaling, unlimited scaling of compute and storage capacity.
+//   - **hybrid**: a single data warehouse used for transaction and analytics workloads,
+//     in single-node or cluster mode.
+//   - **stream**: built-in time series operators; up to 40:1 compression ratio; applicable to IoT services.
+func (o GetFlaovrsResultOutput) DatastoreType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v GetFlaovrsResult) *string { return v.DatastoreType }).(pulumi.StringPtrOutput)
+}
+
+// The list of flavor detail.
+// The Flavors structure is documented below.
 func (o GetFlaovrsResultOutput) Flavors() GetFlaovrsFlavorArrayOutput {
 	return o.ApplyT(func(v GetFlaovrsResult) []GetFlaovrsFlavor { return v.Flavors }).(GetFlaovrsFlavorArrayOutput)
 }
@@ -136,7 +167,7 @@ func (o GetFlaovrsResultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlaovrsResult) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// Indicates the ram of the dws node flavor in GB.
+// The ram of the dws node flavor in GB.
 func (o GetFlaovrsResultOutput) Memory() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v GetFlaovrsResult) *int { return v.Memory }).(pulumi.IntPtrOutput)
 }
@@ -145,7 +176,7 @@ func (o GetFlaovrsResultOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlaovrsResult) string { return v.Region }).(pulumi.StringOutput)
 }
 
-// Indicates the vcpus of the dws node flavor.
+// The vcpus of the dws node flavor.
 func (o GetFlaovrsResultOutput) Vcpus() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v GetFlaovrsResult) *int { return v.Vcpus }).(pulumi.IntPtrOutput)
 }

@@ -34,10 +34,10 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * API groups of the APIG can be imported using their `id` and the ID of the APIG instance to which the group belongs, separated by a slash, e.g.
+ * API groups can be imported using their `id` and the ID of the related dedicated instance, separated by a slash, e.g.
  *
  * ```sh
- *  $ pulumi import huaweicloud:DedicatedApig/group:Group test <instance id>/<id>
+ *  $ pulumi import huaweicloud:DedicatedApig/group:Group test <instance_id>/<id>
  * ```
  */
 export class Group extends pulumi.CustomResource {
@@ -69,42 +69,49 @@ export class Group extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies the description about the API group. The description contain a maximum of
-     * 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or Unicode
-     * format.
+     * Specifies the group description.  
+     * The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+     * Chinese characters must be in **UTF-8** or **Unicode** format.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies an array of one or more APIG environments of the associated APIG group. The
-     * object structure is documented below.
+     * Specifies an array of one or more environments of the associated group.  
+     * The object structure is documented below.
      */
     public readonly environments!: pulumi.Output<outputs.DedicatedApig.GroupEnvironment[] | undefined>;
     /**
-     * Specifies an ID of the APIG dedicated instance to which the API group
-     * belongs to. Changing this will create a new API group resource.
+     * Specifies the ID of the dedicated instance to which the group belongs.  
+     * Changing this will create a new resource.
      */
     public readonly instanceId!: pulumi.Output<string>;
     /**
-     * Specifies the variable name, which can contains of 3 to 32 characters, starting with a
-     * letter. Only letters, digits, hyphens (-), and underscores (_) are allowed. In the definition of an API, `name` (
-     * case-sensitive) indicates a variable, such as #Name#. It is replaced by the actual value when the API is published in
-     * an environment. The variable names are not allowed to be repeated for an API group.
+     * Specifies the variable name.  
+     * The valid length is limited from `3` to `32` characters.
+     * Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
+     * In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
+     * It is replaced by the actual value when the API is published in an environment.
+     * The variable names are not allowed to be repeated for an API group.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Specifies the region in which to create the API group resource. If omitted,
-     * the provider-level region will be used. Changing this will create a new API group resource.
+     * Specifies the region where the APIG (API) group is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Registration time, in RFC-3339 format.
+     * The registration time, in RFC-3339 format.
      */
-    public /*out*/ readonly registraionTime!: pulumi.Output<string>;
+    public /*out*/ readonly registrationTime!: pulumi.Output<string>;
     /**
-     * Time when the API group was last modified, in RFC-3339 format.
-     * * `environment/variable/variable_id` - ID of the environment variable.
+     * schema: Deprecated; The latest update time of the group.
+     *
+     * @deprecated Use 'updated_at' instead
      */
     public /*out*/ readonly updateTime!: pulumi.Output<string>;
+    /**
+     * The time when the API group was last modified, in RFC-3339 format.
+     */
+    public /*out*/ readonly updatedAt!: pulumi.Output<string>;
 
     /**
      * Create a Group resource with the given unique name, arguments, and options.
@@ -124,8 +131,9 @@ export class Group extends pulumi.CustomResource {
             resourceInputs["instanceId"] = state ? state.instanceId : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
-            resourceInputs["registraionTime"] = state ? state.registraionTime : undefined;
+            resourceInputs["registrationTime"] = state ? state.registrationTime : undefined;
             resourceInputs["updateTime"] = state ? state.updateTime : undefined;
+            resourceInputs["updatedAt"] = state ? state.updatedAt : undefined;
         } else {
             const args = argsOrState as GroupArgs | undefined;
             if ((!args || args.instanceId === undefined) && !opts.urn) {
@@ -136,8 +144,9 @@ export class Group extends pulumi.CustomResource {
             resourceInputs["instanceId"] = args ? args.instanceId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
-            resourceInputs["registraionTime"] = undefined /*out*/;
+            resourceInputs["registrationTime"] = undefined /*out*/;
             resourceInputs["updateTime"] = undefined /*out*/;
+            resourceInputs["updatedAt"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Group.__pulumiType, name, resourceInputs, opts);
@@ -149,42 +158,49 @@ export class Group extends pulumi.CustomResource {
  */
 export interface GroupState {
     /**
-     * Specifies the description about the API group. The description contain a maximum of
-     * 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or Unicode
-     * format.
+     * Specifies the group description.  
+     * The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+     * Chinese characters must be in **UTF-8** or **Unicode** format.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies an array of one or more APIG environments of the associated APIG group. The
-     * object structure is documented below.
+     * Specifies an array of one or more environments of the associated group.  
+     * The object structure is documented below.
      */
     environments?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.GroupEnvironment>[]>;
     /**
-     * Specifies an ID of the APIG dedicated instance to which the API group
-     * belongs to. Changing this will create a new API group resource.
+     * Specifies the ID of the dedicated instance to which the group belongs.  
+     * Changing this will create a new resource.
      */
     instanceId?: pulumi.Input<string>;
     /**
-     * Specifies the variable name, which can contains of 3 to 32 characters, starting with a
-     * letter. Only letters, digits, hyphens (-), and underscores (_) are allowed. In the definition of an API, `name` (
-     * case-sensitive) indicates a variable, such as #Name#. It is replaced by the actual value when the API is published in
-     * an environment. The variable names are not allowed to be repeated for an API group.
+     * Specifies the variable name.  
+     * The valid length is limited from `3` to `32` characters.
+     * Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
+     * In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
+     * It is replaced by the actual value when the API is published in an environment.
+     * The variable names are not allowed to be repeated for an API group.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to create the API group resource. If omitted,
-     * the provider-level region will be used. Changing this will create a new API group resource.
+     * Specifies the region where the APIG (API) group is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Registration time, in RFC-3339 format.
+     * The registration time, in RFC-3339 format.
      */
-    registraionTime?: pulumi.Input<string>;
+    registrationTime?: pulumi.Input<string>;
     /**
-     * Time when the API group was last modified, in RFC-3339 format.
-     * * `environment/variable/variable_id` - ID of the environment variable.
+     * schema: Deprecated; The latest update time of the group.
+     *
+     * @deprecated Use 'updated_at' instead
      */
     updateTime?: pulumi.Input<string>;
+    /**
+     * The time when the API group was last modified, in RFC-3339 format.
+     */
+    updatedAt?: pulumi.Input<string>;
 }
 
 /**
@@ -192,31 +208,33 @@ export interface GroupState {
  */
 export interface GroupArgs {
     /**
-     * Specifies the description about the API group. The description contain a maximum of
-     * 255 characters and the angle brackets (< and >) are not allowed. Chinese characters must be in UTF-8 or Unicode
-     * format.
+     * Specifies the group description.  
+     * The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+     * Chinese characters must be in **UTF-8** or **Unicode** format.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies an array of one or more APIG environments of the associated APIG group. The
-     * object structure is documented below.
+     * Specifies an array of one or more environments of the associated group.  
+     * The object structure is documented below.
      */
     environments?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.GroupEnvironment>[]>;
     /**
-     * Specifies an ID of the APIG dedicated instance to which the API group
-     * belongs to. Changing this will create a new API group resource.
+     * Specifies the ID of the dedicated instance to which the group belongs.  
+     * Changing this will create a new resource.
      */
     instanceId: pulumi.Input<string>;
     /**
-     * Specifies the variable name, which can contains of 3 to 32 characters, starting with a
-     * letter. Only letters, digits, hyphens (-), and underscores (_) are allowed. In the definition of an API, `name` (
-     * case-sensitive) indicates a variable, such as #Name#. It is replaced by the actual value when the API is published in
-     * an environment. The variable names are not allowed to be repeated for an API group.
+     * Specifies the variable name.  
+     * The valid length is limited from `3` to `32` characters.
+     * Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
+     * In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
+     * It is replaced by the actual value when the API is published in an environment.
+     * The variable names are not allowed to be repeated for an API group.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to create the API group resource. If omitted,
-     * the provider-level region will be used. Changing this will create a new API group resource.
+     * Specifies the region where the APIG (API) group is located.  
+     * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
 }

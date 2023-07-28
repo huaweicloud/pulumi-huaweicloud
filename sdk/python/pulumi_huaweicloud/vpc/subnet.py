@@ -20,38 +20,46 @@ class SubnetArgs:
                  availability_zone: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  dhcp_enable: Optional[pulumi.Input[bool]] = None,
+                 dhcp_lease_time: Optional[pulumi.Input[str]] = None,
                  dns_lists: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  ipv6_enable: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 ntp_server_address: Optional[pulumi.Input[str]] = None,
                  primary_dns: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  secondary_dns: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Subnet resource.
-        :param pulumi.Input[str] cidr: - Specifies the network segment on which the subnet resides. The value must be in
+        :param pulumi.Input[str] cidr: Specifies the network segment on which the subnet resides. The value must be in
                CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
                new Subnet.
-        :param pulumi.Input[str] gateway_ip: - Specifies the gateway of the subnet. The value must be a valid IP address
+        :param pulumi.Input[str] gateway_ip: Specifies the gateway of the subnet. The value must be a valid IP address
                in the subnet segment. Changing this creates a new Subnet.
-        :param pulumi.Input[str] vpc_id: - Specifies the ID of the VPC to which the subnet belongs. Changing this creates
+        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the subnet belongs. Changing this creates
                a new Subnet.
-        :param pulumi.Input[str] availability_zone: - Specifies the availability zone (AZ) to which the subnet belongs.
+        :param pulumi.Input[str] availability_zone: Specifies the availability zone (AZ) to which the subnet belongs.
                The value must be an existing AZ in the system. Changing this creates a new Subnet.
         :param pulumi.Input[str] description: Specifies supplementary information about the subnet. The value is a string of
                no more than 255 characters and cannot contain angle brackets (< or >).
-        :param pulumi.Input[bool] dhcp_enable: - Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] dns_lists: - Specifies the DNS server address list of a subnet. This field is required if you need to
+        :param pulumi.Input[bool] dhcp_enable: Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
+        :param pulumi.Input[str] dhcp_lease_time: Specifies the DHCP lease expiration time. The value can be -1, which indicates
+               unlimited lease time, or Number+h. the number ranges from 1 to 30,000. For example, the value can be 5h. The default
+               value is 24h.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] dns_lists: Specifies the DNS server address list of a subnet. This field is required if you need to
                use more than two DNS servers. This parameter value is the superset of both DNS server address 1 and DNS server
                address 2.
-        :param pulumi.Input[bool] ipv6_enable: - Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
-        :param pulumi.Input[str] name: - Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
+        :param pulumi.Input[bool] ipv6_enable: Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
+        :param pulumi.Input[str] name: Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
                letters, digits, underscores (_), and hyphens (-).
-        :param pulumi.Input[str] primary_dns: - Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
+        :param pulumi.Input[str] ntp_server_address: Specifies the NTP server address. Currently only IPv4 addresses are supported.
+               A maximum of four IP addresses can be configured, and each address must be unique. Multiple IP addresses must be
+               separated using commas(,). Removing this parameter indicates that no NTP server is configured.
+        :param pulumi.Input[str] primary_dns: Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
                IP address.
         :param pulumi.Input[str] region: Specifies tThe region in which to create the vpc subnet. If omitted, the
                provider-level region will be used. Changing this creates a new Subnet.
-        :param pulumi.Input[str] secondary_dns: - Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
+        :param pulumi.Input[str] secondary_dns: Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
                IP address.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the subnet.
         """
@@ -64,12 +72,16 @@ class SubnetArgs:
             pulumi.set(__self__, "description", description)
         if dhcp_enable is not None:
             pulumi.set(__self__, "dhcp_enable", dhcp_enable)
+        if dhcp_lease_time is not None:
+            pulumi.set(__self__, "dhcp_lease_time", dhcp_lease_time)
         if dns_lists is not None:
             pulumi.set(__self__, "dns_lists", dns_lists)
         if ipv6_enable is not None:
             pulumi.set(__self__, "ipv6_enable", ipv6_enable)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if ntp_server_address is not None:
+            pulumi.set(__self__, "ntp_server_address", ntp_server_address)
         if primary_dns is not None:
             pulumi.set(__self__, "primary_dns", primary_dns)
         if region is not None:
@@ -83,7 +95,7 @@ class SubnetArgs:
     @pulumi.getter
     def cidr(self) -> pulumi.Input[str]:
         """
-        - Specifies the network segment on which the subnet resides. The value must be in
+        Specifies the network segment on which the subnet resides. The value must be in
         CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
         new Subnet.
         """
@@ -97,7 +109,7 @@ class SubnetArgs:
     @pulumi.getter(name="gatewayIp")
     def gateway_ip(self) -> pulumi.Input[str]:
         """
-        - Specifies the gateway of the subnet. The value must be a valid IP address
+        Specifies the gateway of the subnet. The value must be a valid IP address
         in the subnet segment. Changing this creates a new Subnet.
         """
         return pulumi.get(self, "gateway_ip")
@@ -110,7 +122,7 @@ class SubnetArgs:
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Input[str]:
         """
-        - Specifies the ID of the VPC to which the subnet belongs. Changing this creates
+        Specifies the ID of the VPC to which the subnet belongs. Changing this creates
         a new Subnet.
         """
         return pulumi.get(self, "vpc_id")
@@ -123,7 +135,7 @@ class SubnetArgs:
     @pulumi.getter(name="availabilityZone")
     def availability_zone(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the availability zone (AZ) to which the subnet belongs.
+        Specifies the availability zone (AZ) to which the subnet belongs.
         The value must be an existing AZ in the system. Changing this creates a new Subnet.
         """
         return pulumi.get(self, "availability_zone")
@@ -149,7 +161,7 @@ class SubnetArgs:
     @pulumi.getter(name="dhcpEnable")
     def dhcp_enable(self) -> Optional[pulumi.Input[bool]]:
         """
-        - Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
+        Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
         """
         return pulumi.get(self, "dhcp_enable")
 
@@ -158,10 +170,24 @@ class SubnetArgs:
         pulumi.set(self, "dhcp_enable", value)
 
     @property
+    @pulumi.getter(name="dhcpLeaseTime")
+    def dhcp_lease_time(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the DHCP lease expiration time. The value can be -1, which indicates
+        unlimited lease time, or Number+h. the number ranges from 1 to 30,000. For example, the value can be 5h. The default
+        value is 24h.
+        """
+        return pulumi.get(self, "dhcp_lease_time")
+
+    @dhcp_lease_time.setter
+    def dhcp_lease_time(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "dhcp_lease_time", value)
+
+    @property
     @pulumi.getter(name="dnsLists")
     def dns_lists(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        - Specifies the DNS server address list of a subnet. This field is required if you need to
+        Specifies the DNS server address list of a subnet. This field is required if you need to
         use more than two DNS servers. This parameter value is the superset of both DNS server address 1 and DNS server
         address 2.
         """
@@ -175,7 +201,7 @@ class SubnetArgs:
     @pulumi.getter(name="ipv6Enable")
     def ipv6_enable(self) -> Optional[pulumi.Input[bool]]:
         """
-        - Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
+        Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
         """
         return pulumi.get(self, "ipv6_enable")
 
@@ -187,7 +213,7 @@ class SubnetArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
+        Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
         letters, digits, underscores (_), and hyphens (-).
         """
         return pulumi.get(self, "name")
@@ -197,10 +223,24 @@ class SubnetArgs:
         pulumi.set(self, "name", value)
 
     @property
+    @pulumi.getter(name="ntpServerAddress")
+    def ntp_server_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the NTP server address. Currently only IPv4 addresses are supported.
+        A maximum of four IP addresses can be configured, and each address must be unique. Multiple IP addresses must be
+        separated using commas(,). Removing this parameter indicates that no NTP server is configured.
+        """
+        return pulumi.get(self, "ntp_server_address")
+
+    @ntp_server_address.setter
+    def ntp_server_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ntp_server_address", value)
+
+    @property
     @pulumi.getter(name="primaryDns")
     def primary_dns(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
+        Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
         IP address.
         """
         return pulumi.get(self, "primary_dns")
@@ -226,7 +266,7 @@ class SubnetArgs:
     @pulumi.getter(name="secondaryDns")
     def secondary_dns(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
+        Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
         IP address.
         """
         return pulumi.get(self, "secondary_dns")
@@ -255,6 +295,7 @@ class _SubnetState:
                  cidr: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  dhcp_enable: Optional[pulumi.Input[bool]] = None,
+                 dhcp_lease_time: Optional[pulumi.Input[str]] = None,
                  dns_lists: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  gateway_ip: Optional[pulumi.Input[str]] = None,
                  ipv4_subnet_id: Optional[pulumi.Input[str]] = None,
@@ -263,6 +304,7 @@ class _SubnetState:
                  ipv6_gateway: Optional[pulumi.Input[str]] = None,
                  ipv6_subnet_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 ntp_server_address: Optional[pulumi.Input[str]] = None,
                  primary_dns: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  secondary_dns: Optional[pulumi.Input[str]] = None,
@@ -271,35 +313,41 @@ class _SubnetState:
                  vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Subnet resources.
-        :param pulumi.Input[str] availability_zone: - Specifies the availability zone (AZ) to which the subnet belongs.
+        :param pulumi.Input[str] availability_zone: Specifies the availability zone (AZ) to which the subnet belongs.
                The value must be an existing AZ in the system. Changing this creates a new Subnet.
-        :param pulumi.Input[str] cidr: - Specifies the network segment on which the subnet resides. The value must be in
+        :param pulumi.Input[str] cidr: Specifies the network segment on which the subnet resides. The value must be in
                CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
                new Subnet.
         :param pulumi.Input[str] description: Specifies supplementary information about the subnet. The value is a string of
                no more than 255 characters and cannot contain angle brackets (< or >).
-        :param pulumi.Input[bool] dhcp_enable: - Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] dns_lists: - Specifies the DNS server address list of a subnet. This field is required if you need to
+        :param pulumi.Input[bool] dhcp_enable: Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
+        :param pulumi.Input[str] dhcp_lease_time: Specifies the DHCP lease expiration time. The value can be -1, which indicates
+               unlimited lease time, or Number+h. the number ranges from 1 to 30,000. For example, the value can be 5h. The default
+               value is 24h.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] dns_lists: Specifies the DNS server address list of a subnet. This field is required if you need to
                use more than two DNS servers. This parameter value is the superset of both DNS server address 1 and DNS server
                address 2.
-        :param pulumi.Input[str] gateway_ip: - Specifies the gateway of the subnet. The value must be a valid IP address
+        :param pulumi.Input[str] gateway_ip: Specifies the gateway of the subnet. The value must be a valid IP address
                in the subnet segment. Changing this creates a new Subnet.
         :param pulumi.Input[str] ipv4_subnet_id: The ID of the IPv4 subnet (Native OpenStack API).
         :param pulumi.Input[str] ipv6_cidr: The IPv6 subnet CIDR block.
-        :param pulumi.Input[bool] ipv6_enable: - Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
+        :param pulumi.Input[bool] ipv6_enable: Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
         :param pulumi.Input[str] ipv6_gateway: The IPv6 subnet gateway.
         :param pulumi.Input[str] ipv6_subnet_id: The ID of the IPv6 subnet (Native OpenStack API).
-        :param pulumi.Input[str] name: - Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
+        :param pulumi.Input[str] name: Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
                letters, digits, underscores (_), and hyphens (-).
-        :param pulumi.Input[str] primary_dns: - Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
+        :param pulumi.Input[str] ntp_server_address: Specifies the NTP server address. Currently only IPv4 addresses are supported.
+               A maximum of four IP addresses can be configured, and each address must be unique. Multiple IP addresses must be
+               separated using commas(,). Removing this parameter indicates that no NTP server is configured.
+        :param pulumi.Input[str] primary_dns: Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
                IP address.
         :param pulumi.Input[str] region: Specifies tThe region in which to create the vpc subnet. If omitted, the
                provider-level region will be used. Changing this creates a new Subnet.
-        :param pulumi.Input[str] secondary_dns: - Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
+        :param pulumi.Input[str] secondary_dns: Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
                IP address.
         :param pulumi.Input[str] subnet_id: schema: Deprecated
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the subnet.
-        :param pulumi.Input[str] vpc_id: - Specifies the ID of the VPC to which the subnet belongs. Changing this creates
+        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the subnet belongs. Changing this creates
                a new Subnet.
         """
         if availability_zone is not None:
@@ -310,6 +358,8 @@ class _SubnetState:
             pulumi.set(__self__, "description", description)
         if dhcp_enable is not None:
             pulumi.set(__self__, "dhcp_enable", dhcp_enable)
+        if dhcp_lease_time is not None:
+            pulumi.set(__self__, "dhcp_lease_time", dhcp_lease_time)
         if dns_lists is not None:
             pulumi.set(__self__, "dns_lists", dns_lists)
         if gateway_ip is not None:
@@ -326,6 +376,8 @@ class _SubnetState:
             pulumi.set(__self__, "ipv6_subnet_id", ipv6_subnet_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if ntp_server_address is not None:
+            pulumi.set(__self__, "ntp_server_address", ntp_server_address)
         if primary_dns is not None:
             pulumi.set(__self__, "primary_dns", primary_dns)
         if region is not None:
@@ -343,7 +395,7 @@ class _SubnetState:
     @pulumi.getter(name="availabilityZone")
     def availability_zone(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the availability zone (AZ) to which the subnet belongs.
+        Specifies the availability zone (AZ) to which the subnet belongs.
         The value must be an existing AZ in the system. Changing this creates a new Subnet.
         """
         return pulumi.get(self, "availability_zone")
@@ -356,7 +408,7 @@ class _SubnetState:
     @pulumi.getter
     def cidr(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the network segment on which the subnet resides. The value must be in
+        Specifies the network segment on which the subnet resides. The value must be in
         CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
         new Subnet.
         """
@@ -383,7 +435,7 @@ class _SubnetState:
     @pulumi.getter(name="dhcpEnable")
     def dhcp_enable(self) -> Optional[pulumi.Input[bool]]:
         """
-        - Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
+        Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
         """
         return pulumi.get(self, "dhcp_enable")
 
@@ -392,10 +444,24 @@ class _SubnetState:
         pulumi.set(self, "dhcp_enable", value)
 
     @property
+    @pulumi.getter(name="dhcpLeaseTime")
+    def dhcp_lease_time(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the DHCP lease expiration time. The value can be -1, which indicates
+        unlimited lease time, or Number+h. the number ranges from 1 to 30,000. For example, the value can be 5h. The default
+        value is 24h.
+        """
+        return pulumi.get(self, "dhcp_lease_time")
+
+    @dhcp_lease_time.setter
+    def dhcp_lease_time(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "dhcp_lease_time", value)
+
+    @property
     @pulumi.getter(name="dnsLists")
     def dns_lists(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        - Specifies the DNS server address list of a subnet. This field is required if you need to
+        Specifies the DNS server address list of a subnet. This field is required if you need to
         use more than two DNS servers. This parameter value is the superset of both DNS server address 1 and DNS server
         address 2.
         """
@@ -409,7 +475,7 @@ class _SubnetState:
     @pulumi.getter(name="gatewayIp")
     def gateway_ip(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the gateway of the subnet. The value must be a valid IP address
+        Specifies the gateway of the subnet. The value must be a valid IP address
         in the subnet segment. Changing this creates a new Subnet.
         """
         return pulumi.get(self, "gateway_ip")
@@ -446,7 +512,7 @@ class _SubnetState:
     @pulumi.getter(name="ipv6Enable")
     def ipv6_enable(self) -> Optional[pulumi.Input[bool]]:
         """
-        - Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
+        Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
         """
         return pulumi.get(self, "ipv6_enable")
 
@@ -482,7 +548,7 @@ class _SubnetState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
+        Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
         letters, digits, underscores (_), and hyphens (-).
         """
         return pulumi.get(self, "name")
@@ -492,10 +558,24 @@ class _SubnetState:
         pulumi.set(self, "name", value)
 
     @property
+    @pulumi.getter(name="ntpServerAddress")
+    def ntp_server_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the NTP server address. Currently only IPv4 addresses are supported.
+        A maximum of four IP addresses can be configured, and each address must be unique. Multiple IP addresses must be
+        separated using commas(,). Removing this parameter indicates that no NTP server is configured.
+        """
+        return pulumi.get(self, "ntp_server_address")
+
+    @ntp_server_address.setter
+    def ntp_server_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ntp_server_address", value)
+
+    @property
     @pulumi.getter(name="primaryDns")
     def primary_dns(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
+        Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
         IP address.
         """
         return pulumi.get(self, "primary_dns")
@@ -521,7 +601,7 @@ class _SubnetState:
     @pulumi.getter(name="secondaryDns")
     def secondary_dns(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
+        Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
         IP address.
         """
         return pulumi.get(self, "secondary_dns")
@@ -558,7 +638,7 @@ class _SubnetState:
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the ID of the VPC to which the subnet belongs. Changing this creates
+        Specifies the ID of the VPC to which the subnet belongs. Changing this creates
         a new Subnet.
         """
         return pulumi.get(self, "vpc_id")
@@ -577,10 +657,12 @@ class Subnet(pulumi.CustomResource):
                  cidr: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  dhcp_enable: Optional[pulumi.Input[bool]] = None,
+                 dhcp_lease_time: Optional[pulumi.Input[str]] = None,
                  dns_lists: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  gateway_ip: Optional[pulumi.Input[str]] = None,
                  ipv6_enable: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 ntp_server_address: Optional[pulumi.Input[str]] = None,
                  primary_dns: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  secondary_dns: Optional[pulumi.Input[str]] = None,
@@ -600,30 +682,36 @@ class Subnet(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] availability_zone: - Specifies the availability zone (AZ) to which the subnet belongs.
+        :param pulumi.Input[str] availability_zone: Specifies the availability zone (AZ) to which the subnet belongs.
                The value must be an existing AZ in the system. Changing this creates a new Subnet.
-        :param pulumi.Input[str] cidr: - Specifies the network segment on which the subnet resides. The value must be in
+        :param pulumi.Input[str] cidr: Specifies the network segment on which the subnet resides. The value must be in
                CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
                new Subnet.
         :param pulumi.Input[str] description: Specifies supplementary information about the subnet. The value is a string of
                no more than 255 characters and cannot contain angle brackets (< or >).
-        :param pulumi.Input[bool] dhcp_enable: - Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] dns_lists: - Specifies the DNS server address list of a subnet. This field is required if you need to
+        :param pulumi.Input[bool] dhcp_enable: Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
+        :param pulumi.Input[str] dhcp_lease_time: Specifies the DHCP lease expiration time. The value can be -1, which indicates
+               unlimited lease time, or Number+h. the number ranges from 1 to 30,000. For example, the value can be 5h. The default
+               value is 24h.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] dns_lists: Specifies the DNS server address list of a subnet. This field is required if you need to
                use more than two DNS servers. This parameter value is the superset of both DNS server address 1 and DNS server
                address 2.
-        :param pulumi.Input[str] gateway_ip: - Specifies the gateway of the subnet. The value must be a valid IP address
+        :param pulumi.Input[str] gateway_ip: Specifies the gateway of the subnet. The value must be a valid IP address
                in the subnet segment. Changing this creates a new Subnet.
-        :param pulumi.Input[bool] ipv6_enable: - Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
-        :param pulumi.Input[str] name: - Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
+        :param pulumi.Input[bool] ipv6_enable: Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
+        :param pulumi.Input[str] name: Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
                letters, digits, underscores (_), and hyphens (-).
-        :param pulumi.Input[str] primary_dns: - Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
+        :param pulumi.Input[str] ntp_server_address: Specifies the NTP server address. Currently only IPv4 addresses are supported.
+               A maximum of four IP addresses can be configured, and each address must be unique. Multiple IP addresses must be
+               separated using commas(,). Removing this parameter indicates that no NTP server is configured.
+        :param pulumi.Input[str] primary_dns: Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
                IP address.
         :param pulumi.Input[str] region: Specifies tThe region in which to create the vpc subnet. If omitted, the
                provider-level region will be used. Changing this creates a new Subnet.
-        :param pulumi.Input[str] secondary_dns: - Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
+        :param pulumi.Input[str] secondary_dns: Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
                IP address.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the subnet.
-        :param pulumi.Input[str] vpc_id: - Specifies the ID of the VPC to which the subnet belongs. Changing this creates
+        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the subnet belongs. Changing this creates
                a new Subnet.
         """
         ...
@@ -662,10 +750,12 @@ class Subnet(pulumi.CustomResource):
                  cidr: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  dhcp_enable: Optional[pulumi.Input[bool]] = None,
+                 dhcp_lease_time: Optional[pulumi.Input[str]] = None,
                  dns_lists: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  gateway_ip: Optional[pulumi.Input[str]] = None,
                  ipv6_enable: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 ntp_server_address: Optional[pulumi.Input[str]] = None,
                  primary_dns: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  secondary_dns: Optional[pulumi.Input[str]] = None,
@@ -686,12 +776,14 @@ class Subnet(pulumi.CustomResource):
             __props__.__dict__["cidr"] = cidr
             __props__.__dict__["description"] = description
             __props__.__dict__["dhcp_enable"] = dhcp_enable
+            __props__.__dict__["dhcp_lease_time"] = dhcp_lease_time
             __props__.__dict__["dns_lists"] = dns_lists
             if gateway_ip is None and not opts.urn:
                 raise TypeError("Missing required property 'gateway_ip'")
             __props__.__dict__["gateway_ip"] = gateway_ip
             __props__.__dict__["ipv6_enable"] = ipv6_enable
             __props__.__dict__["name"] = name
+            __props__.__dict__["ntp_server_address"] = ntp_server_address
             __props__.__dict__["primary_dns"] = primary_dns
             __props__.__dict__["region"] = region
             __props__.__dict__["secondary_dns"] = secondary_dns
@@ -718,6 +810,7 @@ class Subnet(pulumi.CustomResource):
             cidr: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
             dhcp_enable: Optional[pulumi.Input[bool]] = None,
+            dhcp_lease_time: Optional[pulumi.Input[str]] = None,
             dns_lists: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             gateway_ip: Optional[pulumi.Input[str]] = None,
             ipv4_subnet_id: Optional[pulumi.Input[str]] = None,
@@ -726,6 +819,7 @@ class Subnet(pulumi.CustomResource):
             ipv6_gateway: Optional[pulumi.Input[str]] = None,
             ipv6_subnet_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
+            ntp_server_address: Optional[pulumi.Input[str]] = None,
             primary_dns: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             secondary_dns: Optional[pulumi.Input[str]] = None,
@@ -739,35 +833,41 @@ class Subnet(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] availability_zone: - Specifies the availability zone (AZ) to which the subnet belongs.
+        :param pulumi.Input[str] availability_zone: Specifies the availability zone (AZ) to which the subnet belongs.
                The value must be an existing AZ in the system. Changing this creates a new Subnet.
-        :param pulumi.Input[str] cidr: - Specifies the network segment on which the subnet resides. The value must be in
+        :param pulumi.Input[str] cidr: Specifies the network segment on which the subnet resides. The value must be in
                CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
                new Subnet.
         :param pulumi.Input[str] description: Specifies supplementary information about the subnet. The value is a string of
                no more than 255 characters and cannot contain angle brackets (< or >).
-        :param pulumi.Input[bool] dhcp_enable: - Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] dns_lists: - Specifies the DNS server address list of a subnet. This field is required if you need to
+        :param pulumi.Input[bool] dhcp_enable: Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
+        :param pulumi.Input[str] dhcp_lease_time: Specifies the DHCP lease expiration time. The value can be -1, which indicates
+               unlimited lease time, or Number+h. the number ranges from 1 to 30,000. For example, the value can be 5h. The default
+               value is 24h.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] dns_lists: Specifies the DNS server address list of a subnet. This field is required if you need to
                use more than two DNS servers. This parameter value is the superset of both DNS server address 1 and DNS server
                address 2.
-        :param pulumi.Input[str] gateway_ip: - Specifies the gateway of the subnet. The value must be a valid IP address
+        :param pulumi.Input[str] gateway_ip: Specifies the gateway of the subnet. The value must be a valid IP address
                in the subnet segment. Changing this creates a new Subnet.
         :param pulumi.Input[str] ipv4_subnet_id: The ID of the IPv4 subnet (Native OpenStack API).
         :param pulumi.Input[str] ipv6_cidr: The IPv6 subnet CIDR block.
-        :param pulumi.Input[bool] ipv6_enable: - Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
+        :param pulumi.Input[bool] ipv6_enable: Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
         :param pulumi.Input[str] ipv6_gateway: The IPv6 subnet gateway.
         :param pulumi.Input[str] ipv6_subnet_id: The ID of the IPv6 subnet (Native OpenStack API).
-        :param pulumi.Input[str] name: - Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
+        :param pulumi.Input[str] name: Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
                letters, digits, underscores (_), and hyphens (-).
-        :param pulumi.Input[str] primary_dns: - Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
+        :param pulumi.Input[str] ntp_server_address: Specifies the NTP server address. Currently only IPv4 addresses are supported.
+               A maximum of four IP addresses can be configured, and each address must be unique. Multiple IP addresses must be
+               separated using commas(,). Removing this parameter indicates that no NTP server is configured.
+        :param pulumi.Input[str] primary_dns: Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
                IP address.
         :param pulumi.Input[str] region: Specifies tThe region in which to create the vpc subnet. If omitted, the
                provider-level region will be used. Changing this creates a new Subnet.
-        :param pulumi.Input[str] secondary_dns: - Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
+        :param pulumi.Input[str] secondary_dns: Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
                IP address.
         :param pulumi.Input[str] subnet_id: schema: Deprecated
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the subnet.
-        :param pulumi.Input[str] vpc_id: - Specifies the ID of the VPC to which the subnet belongs. Changing this creates
+        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the subnet belongs. Changing this creates
                a new Subnet.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -778,6 +878,7 @@ class Subnet(pulumi.CustomResource):
         __props__.__dict__["cidr"] = cidr
         __props__.__dict__["description"] = description
         __props__.__dict__["dhcp_enable"] = dhcp_enable
+        __props__.__dict__["dhcp_lease_time"] = dhcp_lease_time
         __props__.__dict__["dns_lists"] = dns_lists
         __props__.__dict__["gateway_ip"] = gateway_ip
         __props__.__dict__["ipv4_subnet_id"] = ipv4_subnet_id
@@ -786,6 +887,7 @@ class Subnet(pulumi.CustomResource):
         __props__.__dict__["ipv6_gateway"] = ipv6_gateway
         __props__.__dict__["ipv6_subnet_id"] = ipv6_subnet_id
         __props__.__dict__["name"] = name
+        __props__.__dict__["ntp_server_address"] = ntp_server_address
         __props__.__dict__["primary_dns"] = primary_dns
         __props__.__dict__["region"] = region
         __props__.__dict__["secondary_dns"] = secondary_dns
@@ -798,7 +900,7 @@ class Subnet(pulumi.CustomResource):
     @pulumi.getter(name="availabilityZone")
     def availability_zone(self) -> pulumi.Output[str]:
         """
-        - Specifies the availability zone (AZ) to which the subnet belongs.
+        Specifies the availability zone (AZ) to which the subnet belongs.
         The value must be an existing AZ in the system. Changing this creates a new Subnet.
         """
         return pulumi.get(self, "availability_zone")
@@ -807,7 +909,7 @@ class Subnet(pulumi.CustomResource):
     @pulumi.getter
     def cidr(self) -> pulumi.Output[str]:
         """
-        - Specifies the network segment on which the subnet resides. The value must be in
+        Specifies the network segment on which the subnet resides. The value must be in
         CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
         new Subnet.
         """
@@ -826,15 +928,25 @@ class Subnet(pulumi.CustomResource):
     @pulumi.getter(name="dhcpEnable")
     def dhcp_enable(self) -> pulumi.Output[Optional[bool]]:
         """
-        - Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
+        Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
         """
         return pulumi.get(self, "dhcp_enable")
+
+    @property
+    @pulumi.getter(name="dhcpLeaseTime")
+    def dhcp_lease_time(self) -> pulumi.Output[str]:
+        """
+        Specifies the DHCP lease expiration time. The value can be -1, which indicates
+        unlimited lease time, or Number+h. the number ranges from 1 to 30,000. For example, the value can be 5h. The default
+        value is 24h.
+        """
+        return pulumi.get(self, "dhcp_lease_time")
 
     @property
     @pulumi.getter(name="dnsLists")
     def dns_lists(self) -> pulumi.Output[Sequence[str]]:
         """
-        - Specifies the DNS server address list of a subnet. This field is required if you need to
+        Specifies the DNS server address list of a subnet. This field is required if you need to
         use more than two DNS servers. This parameter value is the superset of both DNS server address 1 and DNS server
         address 2.
         """
@@ -844,7 +956,7 @@ class Subnet(pulumi.CustomResource):
     @pulumi.getter(name="gatewayIp")
     def gateway_ip(self) -> pulumi.Output[str]:
         """
-        - Specifies the gateway of the subnet. The value must be a valid IP address
+        Specifies the gateway of the subnet. The value must be a valid IP address
         in the subnet segment. Changing this creates a new Subnet.
         """
         return pulumi.get(self, "gateway_ip")
@@ -869,7 +981,7 @@ class Subnet(pulumi.CustomResource):
     @pulumi.getter(name="ipv6Enable")
     def ipv6_enable(self) -> pulumi.Output[Optional[bool]]:
         """
-        - Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
+        Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
         """
         return pulumi.get(self, "ipv6_enable")
 
@@ -893,16 +1005,26 @@ class Subnet(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        - Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
+        Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
         letters, digits, underscores (_), and hyphens (-).
         """
         return pulumi.get(self, "name")
 
     @property
+    @pulumi.getter(name="ntpServerAddress")
+    def ntp_server_address(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the NTP server address. Currently only IPv4 addresses are supported.
+        A maximum of four IP addresses can be configured, and each address must be unique. Multiple IP addresses must be
+        separated using commas(,). Removing this parameter indicates that no NTP server is configured.
+        """
+        return pulumi.get(self, "ntp_server_address")
+
+    @property
     @pulumi.getter(name="primaryDns")
     def primary_dns(self) -> pulumi.Output[str]:
         """
-        - Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
+        Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
         IP address.
         """
         return pulumi.get(self, "primary_dns")
@@ -920,7 +1042,7 @@ class Subnet(pulumi.CustomResource):
     @pulumi.getter(name="secondaryDns")
     def secondary_dns(self) -> pulumi.Output[str]:
         """
-        - Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
+        Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
         IP address.
         """
         return pulumi.get(self, "secondary_dns")
@@ -945,7 +1067,7 @@ class Subnet(pulumi.CustomResource):
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Output[str]:
         """
-        - Specifies the ID of the VPC to which the subnet belongs. Changing this creates
+        Specifies the ID of the VPC to which the subnet belongs. Changing this creates
         a new Subnet.
         """
         return pulumi.get(self, "vpc_id")

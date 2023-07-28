@@ -16,24 +16,28 @@ class PeeringConnectionArgs:
     def __init__(__self__, *,
                  peer_vpc_id: pulumi.Input[str],
                  vpc_id: pulumi.Input[str],
+                 description: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  peer_tenant_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a PeeringConnection resource.
-        :param pulumi.Input[str] peer_vpc_id: - Specifies the VPC ID of the accepter tenant. Changing this creates a new
+        :param pulumi.Input[str] peer_vpc_id: Specifies the VPC ID of the accepter tenant. Changing this creates a new
                VPC peering connection.
-        :param pulumi.Input[str] vpc_id: - Specifies the ID of a VPC involved in a VPC peering connection. Changing this
+        :param pulumi.Input[str] vpc_id: Specifies the ID of a VPC involved in a VPC peering connection. Changing this
                creates a new VPC peering connection.
-        :param pulumi.Input[str] name: - Specifies the name of the VPC peering connection. The value can contain 1 to 64
+        :param pulumi.Input[str] description: Specifies the description of the VPC peering connection.
+        :param pulumi.Input[str] name: Specifies the name of the VPC peering connection. The value can contain 1 to 64
                characters.
-        :param pulumi.Input[str] peer_tenant_id: - Specified the Tenant Id of the accepter tenant. Changing this creates
+        :param pulumi.Input[str] peer_tenant_id: Specifies the tenant ID of the accepter tenant. Changing this creates
                a new VPC peering connection.
         :param pulumi.Input[str] region: The region in which to create the VPC peering connection. If omitted, the
                provider-level region will be used. Changing this creates a new VPC peering connection resource.
         """
         pulumi.set(__self__, "peer_vpc_id", peer_vpc_id)
         pulumi.set(__self__, "vpc_id", vpc_id)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if peer_tenant_id is not None:
@@ -45,7 +49,7 @@ class PeeringConnectionArgs:
     @pulumi.getter(name="peerVpcId")
     def peer_vpc_id(self) -> pulumi.Input[str]:
         """
-        - Specifies the VPC ID of the accepter tenant. Changing this creates a new
+        Specifies the VPC ID of the accepter tenant. Changing this creates a new
         VPC peering connection.
         """
         return pulumi.get(self, "peer_vpc_id")
@@ -58,7 +62,7 @@ class PeeringConnectionArgs:
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Input[str]:
         """
-        - Specifies the ID of a VPC involved in a VPC peering connection. Changing this
+        Specifies the ID of a VPC involved in a VPC peering connection. Changing this
         creates a new VPC peering connection.
         """
         return pulumi.get(self, "vpc_id")
@@ -69,9 +73,21 @@ class PeeringConnectionArgs:
 
     @property
     @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the VPC peering connection.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the name of the VPC peering connection. The value can contain 1 to 64
+        Specifies the name of the VPC peering connection. The value can contain 1 to 64
         characters.
         """
         return pulumi.get(self, "name")
@@ -84,7 +100,7 @@ class PeeringConnectionArgs:
     @pulumi.getter(name="peerTenantId")
     def peer_tenant_id(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specified the Tenant Id of the accepter tenant. Changing this creates
+        Specifies the tenant ID of the accepter tenant. Changing this creates
         a new VPC peering connection.
         """
         return pulumi.get(self, "peer_tenant_id")
@@ -110,6 +126,7 @@ class PeeringConnectionArgs:
 @pulumi.input_type
 class _PeeringConnectionState:
     def __init__(__self__, *,
+                 description: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  peer_tenant_id: Optional[pulumi.Input[str]] = None,
                  peer_vpc_id: Optional[pulumi.Input[str]] = None,
@@ -118,19 +135,22 @@ class _PeeringConnectionState:
                  vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering PeeringConnection resources.
-        :param pulumi.Input[str] name: - Specifies the name of the VPC peering connection. The value can contain 1 to 64
+        :param pulumi.Input[str] description: Specifies the description of the VPC peering connection.
+        :param pulumi.Input[str] name: Specifies the name of the VPC peering connection. The value can contain 1 to 64
                characters.
-        :param pulumi.Input[str] peer_tenant_id: - Specified the Tenant Id of the accepter tenant. Changing this creates
+        :param pulumi.Input[str] peer_tenant_id: Specifies the tenant ID of the accepter tenant. Changing this creates
                a new VPC peering connection.
-        :param pulumi.Input[str] peer_vpc_id: - Specifies the VPC ID of the accepter tenant. Changing this creates a new
+        :param pulumi.Input[str] peer_vpc_id: Specifies the VPC ID of the accepter tenant. Changing this creates a new
                VPC peering connection.
         :param pulumi.Input[str] region: The region in which to create the VPC peering connection. If omitted, the
                provider-level region will be used. Changing this creates a new VPC peering connection resource.
         :param pulumi.Input[str] status: The VPC peering connection status. The value can be PENDING_ACCEPTANCE, REJECTED, EXPIRED, DELETED, or
                ACTIVE.
-        :param pulumi.Input[str] vpc_id: - Specifies the ID of a VPC involved in a VPC peering connection. Changing this
+        :param pulumi.Input[str] vpc_id: Specifies the ID of a VPC involved in a VPC peering connection. Changing this
                creates a new VPC peering connection.
         """
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if peer_tenant_id is not None:
@@ -146,9 +166,21 @@ class _PeeringConnectionState:
 
     @property
     @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the VPC peering connection.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the name of the VPC peering connection. The value can contain 1 to 64
+        Specifies the name of the VPC peering connection. The value can contain 1 to 64
         characters.
         """
         return pulumi.get(self, "name")
@@ -161,7 +193,7 @@ class _PeeringConnectionState:
     @pulumi.getter(name="peerTenantId")
     def peer_tenant_id(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specified the Tenant Id of the accepter tenant. Changing this creates
+        Specifies the tenant ID of the accepter tenant. Changing this creates
         a new VPC peering connection.
         """
         return pulumi.get(self, "peer_tenant_id")
@@ -174,7 +206,7 @@ class _PeeringConnectionState:
     @pulumi.getter(name="peerVpcId")
     def peer_vpc_id(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the VPC ID of the accepter tenant. Changing this creates a new
+        Specifies the VPC ID of the accepter tenant. Changing this creates a new
         VPC peering connection.
         """
         return pulumi.get(self, "peer_vpc_id")
@@ -213,7 +245,7 @@ class _PeeringConnectionState:
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the ID of a VPC involved in a VPC peering connection. Changing this
+        Specifies the ID of a VPC involved in a VPC peering connection. Changing this
         creates a new VPC peering connection.
         """
         return pulumi.get(self, "vpc_id")
@@ -228,6 +260,7 @@ class PeeringConnection(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  peer_tenant_id: Optional[pulumi.Input[str]] = None,
                  peer_vpc_id: Optional[pulumi.Input[str]] = None,
@@ -237,15 +270,13 @@ class PeeringConnection(pulumi.CustomResource):
         """
         Provides a resource to manage a VPC Peering Connection resource.
 
-        > **NOTE:** For cross-tenant (requester's tenant differs from the accepter's tenant) VPC Peering Connections, use
-        the `Vpc.PeeringConnection` resource to manage the requester's side of the connection and use
-        the `Vpc.PeeringConnectionAccepter` resource to manage the accepter's side of the connection.
+        > **NOTE:** For cross-tenant (requester's tenant differs from the accepter's tenant) VPC Peering Connections,
+          use the `Vpc.PeeringConnection` resource to manage the requester's side of the connection and
+          use the `Vpc.PeeringConnectionAccepter` resource to manage the accepter's side of the connection.
+          <br/>If you create a VPC peering connection with another VPC of your own, the connection is created without the need
+          for you to accept the connection.
 
         ## Example Usage
-        ## Notes
-
-        If you create a VPC peering connection with another VPC of your own, the connection is created without the need for you
-        to accept the connection.
 
         ## Import
 
@@ -257,15 +288,16 @@ class PeeringConnection(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] name: - Specifies the name of the VPC peering connection. The value can contain 1 to 64
+        :param pulumi.Input[str] description: Specifies the description of the VPC peering connection.
+        :param pulumi.Input[str] name: Specifies the name of the VPC peering connection. The value can contain 1 to 64
                characters.
-        :param pulumi.Input[str] peer_tenant_id: - Specified the Tenant Id of the accepter tenant. Changing this creates
+        :param pulumi.Input[str] peer_tenant_id: Specifies the tenant ID of the accepter tenant. Changing this creates
                a new VPC peering connection.
-        :param pulumi.Input[str] peer_vpc_id: - Specifies the VPC ID of the accepter tenant. Changing this creates a new
+        :param pulumi.Input[str] peer_vpc_id: Specifies the VPC ID of the accepter tenant. Changing this creates a new
                VPC peering connection.
         :param pulumi.Input[str] region: The region in which to create the VPC peering connection. If omitted, the
                provider-level region will be used. Changing this creates a new VPC peering connection resource.
-        :param pulumi.Input[str] vpc_id: - Specifies the ID of a VPC involved in a VPC peering connection. Changing this
+        :param pulumi.Input[str] vpc_id: Specifies the ID of a VPC involved in a VPC peering connection. Changing this
                creates a new VPC peering connection.
         """
         ...
@@ -277,15 +309,13 @@ class PeeringConnection(pulumi.CustomResource):
         """
         Provides a resource to manage a VPC Peering Connection resource.
 
-        > **NOTE:** For cross-tenant (requester's tenant differs from the accepter's tenant) VPC Peering Connections, use
-        the `Vpc.PeeringConnection` resource to manage the requester's side of the connection and use
-        the `Vpc.PeeringConnectionAccepter` resource to manage the accepter's side of the connection.
+        > **NOTE:** For cross-tenant (requester's tenant differs from the accepter's tenant) VPC Peering Connections,
+          use the `Vpc.PeeringConnection` resource to manage the requester's side of the connection and
+          use the `Vpc.PeeringConnectionAccepter` resource to manage the accepter's side of the connection.
+          <br/>If you create a VPC peering connection with another VPC of your own, the connection is created without the need
+          for you to accept the connection.
 
         ## Example Usage
-        ## Notes
-
-        If you create a VPC peering connection with another VPC of your own, the connection is created without the need for you
-        to accept the connection.
 
         ## Import
 
@@ -310,6 +340,7 @@ class PeeringConnection(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  peer_tenant_id: Optional[pulumi.Input[str]] = None,
                  peer_vpc_id: Optional[pulumi.Input[str]] = None,
@@ -324,6 +355,7 @@ class PeeringConnection(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = PeeringConnectionArgs.__new__(PeeringConnectionArgs)
 
+            __props__.__dict__["description"] = description
             __props__.__dict__["name"] = name
             __props__.__dict__["peer_tenant_id"] = peer_tenant_id
             if peer_vpc_id is None and not opts.urn:
@@ -344,6 +376,7 @@ class PeeringConnection(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            description: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             peer_tenant_id: Optional[pulumi.Input[str]] = None,
             peer_vpc_id: Optional[pulumi.Input[str]] = None,
@@ -357,23 +390,25 @@ class PeeringConnection(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] name: - Specifies the name of the VPC peering connection. The value can contain 1 to 64
+        :param pulumi.Input[str] description: Specifies the description of the VPC peering connection.
+        :param pulumi.Input[str] name: Specifies the name of the VPC peering connection. The value can contain 1 to 64
                characters.
-        :param pulumi.Input[str] peer_tenant_id: - Specified the Tenant Id of the accepter tenant. Changing this creates
+        :param pulumi.Input[str] peer_tenant_id: Specifies the tenant ID of the accepter tenant. Changing this creates
                a new VPC peering connection.
-        :param pulumi.Input[str] peer_vpc_id: - Specifies the VPC ID of the accepter tenant. Changing this creates a new
+        :param pulumi.Input[str] peer_vpc_id: Specifies the VPC ID of the accepter tenant. Changing this creates a new
                VPC peering connection.
         :param pulumi.Input[str] region: The region in which to create the VPC peering connection. If omitted, the
                provider-level region will be used. Changing this creates a new VPC peering connection resource.
         :param pulumi.Input[str] status: The VPC peering connection status. The value can be PENDING_ACCEPTANCE, REJECTED, EXPIRED, DELETED, or
                ACTIVE.
-        :param pulumi.Input[str] vpc_id: - Specifies the ID of a VPC involved in a VPC peering connection. Changing this
+        :param pulumi.Input[str] vpc_id: Specifies the ID of a VPC involved in a VPC peering connection. Changing this
                creates a new VPC peering connection.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _PeeringConnectionState.__new__(_PeeringConnectionState)
 
+        __props__.__dict__["description"] = description
         __props__.__dict__["name"] = name
         __props__.__dict__["peer_tenant_id"] = peer_tenant_id
         __props__.__dict__["peer_vpc_id"] = peer_vpc_id
@@ -384,9 +419,17 @@ class PeeringConnection(pulumi.CustomResource):
 
     @property
     @pulumi.getter
+    def description(self) -> pulumi.Output[str]:
+        """
+        Specifies the description of the VPC peering connection.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        - Specifies the name of the VPC peering connection. The value can contain 1 to 64
+        Specifies the name of the VPC peering connection. The value can contain 1 to 64
         characters.
         """
         return pulumi.get(self, "name")
@@ -395,7 +438,7 @@ class PeeringConnection(pulumi.CustomResource):
     @pulumi.getter(name="peerTenantId")
     def peer_tenant_id(self) -> pulumi.Output[str]:
         """
-        - Specified the Tenant Id of the accepter tenant. Changing this creates
+        Specifies the tenant ID of the accepter tenant. Changing this creates
         a new VPC peering connection.
         """
         return pulumi.get(self, "peer_tenant_id")
@@ -404,7 +447,7 @@ class PeeringConnection(pulumi.CustomResource):
     @pulumi.getter(name="peerVpcId")
     def peer_vpc_id(self) -> pulumi.Output[str]:
         """
-        - Specifies the VPC ID of the accepter tenant. Changing this creates a new
+        Specifies the VPC ID of the accepter tenant. Changing this creates a new
         VPC peering connection.
         """
         return pulumi.get(self, "peer_vpc_id")
@@ -431,7 +474,7 @@ class PeeringConnection(pulumi.CustomResource):
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Output[str]:
         """
-        - Specifies the ID of a VPC involved in a VPC peering connection. Changing this
+        Specifies the ID of a VPC involved in a VPC peering connection. Changing this
         creates a new VPC peering connection.
         """
         return pulumi.get(self, "vpc_id")

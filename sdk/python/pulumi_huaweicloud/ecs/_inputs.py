@@ -11,12 +11,10 @@ from .. import _utilities
 
 __all__ = [
     'InstanceBandwidthArgs',
-    'InstanceBlockDeviceArgs',
     'InstanceDataDiskArgs',
     'InstanceNetworkArgs',
     'InstanceSchedulerHintArgs',
     'InstanceVolumeAttachedArgs',
-    'GetInstanceSchedulerHintArgs',
 ]
 
 @pulumi.input_type
@@ -102,115 +100,26 @@ class InstanceBandwidthArgs:
 
 
 @pulumi.input_type
-class InstanceBlockDeviceArgs:
-    def __init__(__self__, *,
-                 source_type: pulumi.Input[str],
-                 boot_index: Optional[pulumi.Input[int]] = None,
-                 delete_on_termination: Optional[pulumi.Input[bool]] = None,
-                 destination_type: Optional[pulumi.Input[str]] = None,
-                 guest_format: Optional[pulumi.Input[str]] = None,
-                 uuid: Optional[pulumi.Input[str]] = None,
-                 volume_size: Optional[pulumi.Input[int]] = None):
-        """
-        :param pulumi.Input[str] uuid: Specifies the network UUID to attach to the instance.
-               Changing this creates a new instance.
-        """
-        pulumi.set(__self__, "source_type", source_type)
-        if boot_index is not None:
-            pulumi.set(__self__, "boot_index", boot_index)
-        if delete_on_termination is not None:
-            pulumi.set(__self__, "delete_on_termination", delete_on_termination)
-        if destination_type is not None:
-            pulumi.set(__self__, "destination_type", destination_type)
-        if guest_format is not None:
-            pulumi.set(__self__, "guest_format", guest_format)
-        if uuid is not None:
-            pulumi.set(__self__, "uuid", uuid)
-        if volume_size is not None:
-            pulumi.set(__self__, "volume_size", volume_size)
-
-    @property
-    @pulumi.getter(name="sourceType")
-    def source_type(self) -> pulumi.Input[str]:
-        return pulumi.get(self, "source_type")
-
-    @source_type.setter
-    def source_type(self, value: pulumi.Input[str]):
-        pulumi.set(self, "source_type", value)
-
-    @property
-    @pulumi.getter(name="bootIndex")
-    def boot_index(self) -> Optional[pulumi.Input[int]]:
-        return pulumi.get(self, "boot_index")
-
-    @boot_index.setter
-    def boot_index(self, value: Optional[pulumi.Input[int]]):
-        pulumi.set(self, "boot_index", value)
-
-    @property
-    @pulumi.getter(name="deleteOnTermination")
-    def delete_on_termination(self) -> Optional[pulumi.Input[bool]]:
-        return pulumi.get(self, "delete_on_termination")
-
-    @delete_on_termination.setter
-    def delete_on_termination(self, value: Optional[pulumi.Input[bool]]):
-        pulumi.set(self, "delete_on_termination", value)
-
-    @property
-    @pulumi.getter(name="destinationType")
-    def destination_type(self) -> Optional[pulumi.Input[str]]:
-        return pulumi.get(self, "destination_type")
-
-    @destination_type.setter
-    def destination_type(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "destination_type", value)
-
-    @property
-    @pulumi.getter(name="guestFormat")
-    def guest_format(self) -> Optional[pulumi.Input[str]]:
-        return pulumi.get(self, "guest_format")
-
-    @guest_format.setter
-    def guest_format(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "guest_format", value)
-
-    @property
-    @pulumi.getter
-    def uuid(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the network UUID to attach to the instance.
-        Changing this creates a new instance.
-        """
-        return pulumi.get(self, "uuid")
-
-    @uuid.setter
-    def uuid(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "uuid", value)
-
-    @property
-    @pulumi.getter(name="volumeSize")
-    def volume_size(self) -> Optional[pulumi.Input[int]]:
-        return pulumi.get(self, "volume_size")
-
-    @volume_size.setter
-    def volume_size(self, value: Optional[pulumi.Input[int]]):
-        pulumi.set(self, "volume_size", value)
-
-
-@pulumi.input_type
 class InstanceDataDiskArgs:
     def __init__(__self__, *,
                  size: pulumi.Input[int],
                  type: pulumi.Input[str],
+                 kms_key_id: Optional[pulumi.Input[str]] = None,
                  snapshot_id: Optional[pulumi.Input[str]] = None):
         """
         :param pulumi.Input[int] size: Specifies the bandwidth size. The value ranges from 1 to 300 Mbit/s.
                This parameter is mandatory when `share_type` is set to **PER**. Changing this creates a new instance.
         :param pulumi.Input[str] type: Specifies the ECS data disk type, which must be one of available disk types,
                contains of *SSD*, *GPSSD* and *SAS*. Changing this creates a new instance.
+        :param pulumi.Input[str] kms_key_id: Specifies the ID of a KMS key. This is used to encrypt the disk.
+               Changing this creates a new instance.
+        :param pulumi.Input[str] snapshot_id: Specifies the EVS snapshot ID or ID of the original data disk contained in
+               the full-ECS image. Changing this creates a new instance.
         """
         pulumi.set(__self__, "size", size)
         pulumi.set(__self__, "type", type)
+        if kms_key_id is not None:
+            pulumi.set(__self__, "kms_key_id", kms_key_id)
         if snapshot_id is not None:
             pulumi.set(__self__, "snapshot_id", snapshot_id)
 
@@ -241,8 +150,25 @@ class InstanceDataDiskArgs:
         pulumi.set(self, "type", value)
 
     @property
+    @pulumi.getter(name="kmsKeyId")
+    def kms_key_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of a KMS key. This is used to encrypt the disk.
+        Changing this creates a new instance.
+        """
+        return pulumi.get(self, "kms_key_id")
+
+    @kms_key_id.setter
+    def kms_key_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "kms_key_id", value)
+
+    @property
     @pulumi.getter(name="snapshotId")
     def snapshot_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the EVS snapshot ID or ID of the original data disk contained in
+        the full-ECS image. Changing this creates a new instance.
+        """
         return pulumi.get(self, "snapshot_id")
 
     @snapshot_id.setter
@@ -266,8 +192,11 @@ class InstanceNetworkArgs:
                Accepts true or false. Defaults to false.
         :param pulumi.Input[str] fixed_ip_v4: Specifies a fixed IPv4 address to be used on this network.
                Changing this creates a new instance.
+        :param pulumi.Input[str] fixed_ip_v6: The Fixed IPv6 address of the instance on that network.
         :param pulumi.Input[bool] ipv6_enable: Specifies whether the IPv6 function is enabled for the nic.
                Defaults to false. Changing this creates a new instance.
+        :param pulumi.Input[str] mac: The MAC address of the NIC on that network.
+        :param pulumi.Input[str] port: The port ID corresponding to the IP address on that network.
         :param pulumi.Input[bool] source_dest_check: Specifies whether the ECS processes only traffic that is destined specifically
                for it. This function is enabled by default but should be disabled if the ECS functions as a SNAT server or has a
                virtual IP address bound to it.
@@ -320,6 +249,9 @@ class InstanceNetworkArgs:
     @property
     @pulumi.getter(name="fixedIpV6")
     def fixed_ip_v6(self) -> Optional[pulumi.Input[str]]:
+        """
+        The Fixed IPv6 address of the instance on that network.
+        """
         return pulumi.get(self, "fixed_ip_v6")
 
     @fixed_ip_v6.setter
@@ -342,6 +274,9 @@ class InstanceNetworkArgs:
     @property
     @pulumi.getter
     def mac(self) -> Optional[pulumi.Input[str]]:
+        """
+        The MAC address of the NIC on that network.
+        """
         return pulumi.get(self, "mac")
 
     @mac.setter
@@ -351,6 +286,9 @@ class InstanceNetworkArgs:
     @property
     @pulumi.getter
     def port(self) -> Optional[pulumi.Input[str]]:
+        """
+        The port ID corresponding to the IP address on that network.
+        """
         return pulumi.get(self, "port")
 
     @port.setter
@@ -464,18 +402,26 @@ class InstanceSchedulerHintArgs:
 class InstanceVolumeAttachedArgs:
     def __init__(__self__, *,
                  boot_index: Optional[pulumi.Input[int]] = None,
+                 kms_key_id: Optional[pulumi.Input[str]] = None,
                  pci_address: Optional[pulumi.Input[str]] = None,
                  size: Optional[pulumi.Input[int]] = None,
                  type: Optional[pulumi.Input[str]] = None,
                  volume_id: Optional[pulumi.Input[str]] = None):
         """
+        :param pulumi.Input[int] boot_index: The volume boot index on that attachment.
+        :param pulumi.Input[str] kms_key_id: Specifies the ID of a KMS key. This is used to encrypt the disk.
+               Changing this creates a new instance.
+        :param pulumi.Input[str] pci_address: The volume pci address on that attachment.
         :param pulumi.Input[int] size: Specifies the bandwidth size. The value ranges from 1 to 300 Mbit/s.
                This parameter is mandatory when `share_type` is set to **PER**. Changing this creates a new instance.
         :param pulumi.Input[str] type: Specifies the ECS data disk type, which must be one of available disk types,
                contains of *SSD*, *GPSSD* and *SAS*. Changing this creates a new instance.
+        :param pulumi.Input[str] volume_id: The volume ID on that attachment.
         """
         if boot_index is not None:
             pulumi.set(__self__, "boot_index", boot_index)
+        if kms_key_id is not None:
+            pulumi.set(__self__, "kms_key_id", kms_key_id)
         if pci_address is not None:
             pulumi.set(__self__, "pci_address", pci_address)
         if size is not None:
@@ -488,6 +434,9 @@ class InstanceVolumeAttachedArgs:
     @property
     @pulumi.getter(name="bootIndex")
     def boot_index(self) -> Optional[pulumi.Input[int]]:
+        """
+        The volume boot index on that attachment.
+        """
         return pulumi.get(self, "boot_index")
 
     @boot_index.setter
@@ -495,8 +444,24 @@ class InstanceVolumeAttachedArgs:
         pulumi.set(self, "boot_index", value)
 
     @property
+    @pulumi.getter(name="kmsKeyId")
+    def kms_key_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of a KMS key. This is used to encrypt the disk.
+        Changing this creates a new instance.
+        """
+        return pulumi.get(self, "kms_key_id")
+
+    @kms_key_id.setter
+    def kms_key_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "kms_key_id", value)
+
+    @property
     @pulumi.getter(name="pciAddress")
     def pci_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        The volume pci address on that attachment.
+        """
         return pulumi.get(self, "pci_address")
 
     @pci_address.setter
@@ -532,32 +497,13 @@ class InstanceVolumeAttachedArgs:
     @property
     @pulumi.getter(name="volumeId")
     def volume_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The volume ID on that attachment.
+        """
         return pulumi.get(self, "volume_id")
 
     @volume_id.setter
     def volume_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "volume_id", value)
-
-
-@pulumi.input_type
-class GetInstanceSchedulerHintArgs:
-    def __init__(__self__, *,
-                 group: str):
-        """
-        :param str group: The UUID of a Server Group where the instance will be placed into.
-        """
-        pulumi.set(__self__, "group", group)
-
-    @property
-    @pulumi.getter
-    def group(self) -> str:
-        """
-        The UUID of a Server Group where the instance will be placed into.
-        """
-        return pulumi.get(self, "group")
-
-    @group.setter
-    def group(self, value: str):
-        pulumi.set(self, "group", value)
 
 

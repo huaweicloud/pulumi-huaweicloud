@@ -68,6 +68,7 @@ import * as utilities from "../utilities";
  * const imageUrl = config.requireObject("imageUrl");
  * const bySwrImage = new huaweicloud.functiongraph.Function("bySwrImage", {
  *     agency: agencyName,
+ *     handler: "-",
  *     app: "default",
  *     runtime: "Custom Image",
  *     memorySize: 128,
@@ -85,6 +86,20 @@ import * as utilities from "../utilities";
  * ```sh
  *  $ pulumi import huaweicloud:FunctionGraph/function:Function my-func 7117d38e-4c8f-4624-a505-bd96b97d024c
  * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attributes are`app`, `func_code`, `agency`, `tags"`. It is generally recommended running `terraform plan` after importing a function. You can then decide if changes should be applied to the function, or the resource definition should be updated to align with the function. Also you can ignore changes as below. hcl resource "huaweicloud_fgs_function" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [
+ *
+ *  app, func_code, agency, tags,
+ *
+ *  ]
+ *
+ *  } }
  */
 export class Function extends pulumi.CustomResource {
     /**
@@ -148,7 +163,6 @@ export class Function extends pulumi.CustomResource {
     /**
      * Specifies the custom image configuration for creating function.
      * The object structure is documented below.
-     * Changing this will create a new resource.
      */
     public readonly customImage!: pulumi.Output<outputs.FunctionGraph.FunctionCustomImage>;
     /**
@@ -199,6 +213,12 @@ export class Function extends pulumi.CustomResource {
      */
     public readonly initializerTimeout!: pulumi.Output<number>;
     /**
+     * Specifies the maximum number of instances of the function.  
+     * The valid value ranges from `-1` to `1000`, defaults to `400`.
+     * + The minimum value is `-1` and means the number of instances is unlimited.
+     */
+    public readonly maxInstanceNum!: pulumi.Output<string>;
+    /**
      * Specifies the memory size(MB) allocated to the function.
      */
     public readonly memorySize!: pulumi.Output<number>;
@@ -231,10 +251,14 @@ export class Function extends pulumi.CustomResource {
     public readonly region!: pulumi.Output<string>;
     /**
      * Specifies the environment for executing the function.
-     * If the function is created using a SWR image, set this parameter to `Custom Image`.
+     * If the function is created using an SWR image, set this parameter to `Custom Image`.
      * Changing this will create a new resource.
      */
     public readonly runtime!: pulumi.Output<string>;
+    /**
+     * Specifies the key/value pairs to associate with the function.
+     */
+    public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
      * Specifies the timeout interval of the function, ranges from 3s to 900s.
      */
@@ -287,6 +311,7 @@ export class Function extends pulumi.CustomResource {
             resourceInputs["handler"] = state ? state.handler : undefined;
             resourceInputs["initializerHandler"] = state ? state.initializerHandler : undefined;
             resourceInputs["initializerTimeout"] = state ? state.initializerTimeout : undefined;
+            resourceInputs["maxInstanceNum"] = state ? state.maxInstanceNum : undefined;
             resourceInputs["memorySize"] = state ? state.memorySize : undefined;
             resourceInputs["mountUserGroupId"] = state ? state.mountUserGroupId : undefined;
             resourceInputs["mountUserId"] = state ? state.mountUserId : undefined;
@@ -295,6 +320,7 @@ export class Function extends pulumi.CustomResource {
             resourceInputs["package"] = state ? state.package : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["runtime"] = state ? state.runtime : undefined;
+            resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["timeout"] = state ? state.timeout : undefined;
             resourceInputs["urn"] = state ? state.urn : undefined;
             resourceInputs["userData"] = state ? state.userData : undefined;
@@ -329,6 +355,7 @@ export class Function extends pulumi.CustomResource {
             resourceInputs["handler"] = args ? args.handler : undefined;
             resourceInputs["initializerHandler"] = args ? args.initializerHandler : undefined;
             resourceInputs["initializerTimeout"] = args ? args.initializerTimeout : undefined;
+            resourceInputs["maxInstanceNum"] = args ? args.maxInstanceNum : undefined;
             resourceInputs["memorySize"] = args ? args.memorySize : undefined;
             resourceInputs["mountUserGroupId"] = args ? args.mountUserGroupId : undefined;
             resourceInputs["mountUserId"] = args ? args.mountUserId : undefined;
@@ -337,6 +364,7 @@ export class Function extends pulumi.CustomResource {
             resourceInputs["package"] = args ? args.package : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["runtime"] = args ? args.runtime : undefined;
+            resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["timeout"] = args ? args.timeout : undefined;
             resourceInputs["userData"] = args ? args.userData : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
@@ -387,7 +415,6 @@ export interface FunctionState {
     /**
      * Specifies the custom image configuration for creating function.
      * The object structure is documented below.
-     * Changing this will create a new resource.
      */
     customImage?: pulumi.Input<inputs.FunctionGraph.FunctionCustomImage>;
     /**
@@ -438,6 +465,12 @@ export interface FunctionState {
      */
     initializerTimeout?: pulumi.Input<number>;
     /**
+     * Specifies the maximum number of instances of the function.  
+     * The valid value ranges from `-1` to `1000`, defaults to `400`.
+     * + The minimum value is `-1` and means the number of instances is unlimited.
+     */
+    maxInstanceNum?: pulumi.Input<string>;
+    /**
      * Specifies the memory size(MB) allocated to the function.
      */
     memorySize?: pulumi.Input<number>;
@@ -470,10 +503,14 @@ export interface FunctionState {
     region?: pulumi.Input<string>;
     /**
      * Specifies the environment for executing the function.
-     * If the function is created using a SWR image, set this parameter to `Custom Image`.
+     * If the function is created using an SWR image, set this parameter to `Custom Image`.
      * Changing this will create a new resource.
      */
     runtime?: pulumi.Input<string>;
+    /**
+     * Specifies the key/value pairs to associate with the function.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Specifies the timeout interval of the function, ranges from 3s to 900s.
      */
@@ -535,7 +572,6 @@ export interface FunctionArgs {
     /**
      * Specifies the custom image configuration for creating function.
      * The object structure is documented below.
-     * Changing this will create a new resource.
      */
     customImage?: pulumi.Input<inputs.FunctionGraph.FunctionCustomImage>;
     /**
@@ -586,6 +622,12 @@ export interface FunctionArgs {
      */
     initializerTimeout?: pulumi.Input<number>;
     /**
+     * Specifies the maximum number of instances of the function.  
+     * The valid value ranges from `-1` to `1000`, defaults to `400`.
+     * + The minimum value is `-1` and means the number of instances is unlimited.
+     */
+    maxInstanceNum?: pulumi.Input<string>;
+    /**
      * Specifies the memory size(MB) allocated to the function.
      */
     memorySize: pulumi.Input<number>;
@@ -618,10 +660,14 @@ export interface FunctionArgs {
     region?: pulumi.Input<string>;
     /**
      * Specifies the environment for executing the function.
-     * If the function is created using a SWR image, set this parameter to `Custom Image`.
+     * If the function is created using an SWR image, set this parameter to `Custom Image`.
      * Changing this will create a new resource.
      */
     runtime: pulumi.Input<string>;
+    /**
+     * Specifies the key/value pairs to associate with the function.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Specifies the timeout interval of the function, ranges from 3s to 900s.
      */

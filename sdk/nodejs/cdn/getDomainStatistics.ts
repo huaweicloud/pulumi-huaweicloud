@@ -61,8 +61,9 @@ export interface GetDomainStatisticsArgs {
      */
     country?: string;
     /**
-     * Specifies the domain name list. Domain names are separated by commas (,),
-     * for example, www.test1.com,www.test2.com. The value all indicates that all domain names under your account are queried.
+     * Specifies the domain name list.
+     * Domain names are separated by commas (,), for example, `www.test1.com,www.test2.com`.
+     * The value all indicates that all domain names under your account are queried.
      */
     domainName: string;
     /**
@@ -167,8 +168,9 @@ export interface GetDomainStatisticsOutputArgs {
      */
     country?: pulumi.Input<string>;
     /**
-     * Specifies the domain name list. Domain names are separated by commas (,),
-     * for example, www.test1.com,www.test2.com. The value all indicates that all domain names under your account are queried.
+     * Specifies the domain name list.
+     * Domain names are separated by commas (,), for example, `www.test1.com,www.test2.com`.
+     * The value all indicates that all domain names under your account are queried.
      */
     domainName: pulumi.Input<string>;
     /**

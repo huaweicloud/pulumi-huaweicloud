@@ -101,18 +101,19 @@ class EipBandwidthArgs:
                  name: Optional[pulumi.Input[str]] = None,
                  size: Optional[pulumi.Input[int]] = None):
         """
-        :param pulumi.Input[str] share_type: Whether the bandwidth is dedicated or shared. Changing this creates a new
-               resource. Possible values are as follows:
+        :param pulumi.Input[str] share_type: Specifies whether the bandwidth is dedicated or shared.  
+               Changing this will create a new resource. Possible values are as follows:
                + **PER**: Dedicated bandwidth
                + **WHOLE**: Shared bandwidth
         :param pulumi.Input[str] charge_mode: Specifies whether the bandwidth is billed by traffic or by bandwidth
-               size. The value can be *traffic* or *bandwidth*. Changing this creates a new resource.
-        :param pulumi.Input[str] id: The shared bandwidth id. This parameter is mandatory when
-               `share_type` is set to **WHOLE**. Changing this creates a new resource.
-        :param pulumi.Input[str] name: The bandwidth name, which is a string of 1 to 64 characters that contain letters, digits,
-               underscores (_), and hyphens (-). This parameter is mandatory when `share_type` is set to **PER**.
-        :param pulumi.Input[int] size: The bandwidth size. The value ranges from 1 to 300 Mbit/s. This parameter is mandatory
-               when `share_type` is set to **PER**.
+               size. The value can be **traffic** or **bandwidth**. Changing this will create a new resource.
+        :param pulumi.Input[str] id: The shared bandwidth ID.  
+               This parameter is mandatory when `share_type` is set to **WHOLE**. Changing this will create a new resource.
+        :param pulumi.Input[str] name: Specifies the bandwidth name.  
+               The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
+               This parameter is mandatory when `share_type` is set to **PER**.
+        :param pulumi.Input[int] size: The bandwidth size.  
+               The value ranges from `1` to `300` Mbit/s. This parameter is mandatory when `share_type` is set to **PER**.
         """
         pulumi.set(__self__, "share_type", share_type)
         if charge_mode is not None:
@@ -128,8 +129,8 @@ class EipBandwidthArgs:
     @pulumi.getter(name="shareType")
     def share_type(self) -> pulumi.Input[str]:
         """
-        Whether the bandwidth is dedicated or shared. Changing this creates a new
-        resource. Possible values are as follows:
+        Specifies whether the bandwidth is dedicated or shared.  
+        Changing this will create a new resource. Possible values are as follows:
         + **PER**: Dedicated bandwidth
         + **WHOLE**: Shared bandwidth
         """
@@ -144,7 +145,7 @@ class EipBandwidthArgs:
     def charge_mode(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies whether the bandwidth is billed by traffic or by bandwidth
-        size. The value can be *traffic* or *bandwidth*. Changing this creates a new resource.
+        size. The value can be **traffic** or **bandwidth**. Changing this will create a new resource.
         """
         return pulumi.get(self, "charge_mode")
 
@@ -156,8 +157,8 @@ class EipBandwidthArgs:
     @pulumi.getter
     def id(self) -> Optional[pulumi.Input[str]]:
         """
-        The shared bandwidth id. This parameter is mandatory when
-        `share_type` is set to **WHOLE**. Changing this creates a new resource.
+        The shared bandwidth ID.  
+        This parameter is mandatory when `share_type` is set to **WHOLE**. Changing this will create a new resource.
         """
         return pulumi.get(self, "id")
 
@@ -169,8 +170,9 @@ class EipBandwidthArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        The bandwidth name, which is a string of 1 to 64 characters that contain letters, digits,
-        underscores (_), and hyphens (-). This parameter is mandatory when `share_type` is set to **PER**.
+        Specifies the bandwidth name.  
+        The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
+        This parameter is mandatory when `share_type` is set to **PER**.
         """
         return pulumi.get(self, "name")
 
@@ -182,8 +184,8 @@ class EipBandwidthArgs:
     @pulumi.getter
     def size(self) -> Optional[pulumi.Input[int]]:
         """
-        The bandwidth size. The value ranges from 1 to 300 Mbit/s. This parameter is mandatory
-        when `share_type` is set to **PER**.
+        The bandwidth size.  
+        The value ranges from `1` to `300` Mbit/s. This parameter is mandatory when `share_type` is set to **PER**.
         """
         return pulumi.get(self, "size")
 
@@ -200,13 +202,13 @@ class EipPublicipArgs:
                  port_id: Optional[pulumi.Input[str]] = None,
                  type: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[str] ip_address: Specifies the EIP to be assigned. The value must be a valid **IPv4**
-               address in the available IP address range. The system automatically assigns an EIP if you do not specify it.
-               Changing this creates a new resource.
-        :param pulumi.Input[int] ip_version: Specifies the IP version, either 4 (default) or 6.
+        :param pulumi.Input[str] ip_address: Specifies the EIP address to be assigned.  
+               The value must be a valid **IPv4** address in the available IP address range.
+               The system automatically assigns an EIP if you do not specify it. Changing this will create a new resource.
+        :param pulumi.Input[int] ip_version: Specifies the IP version, either `4` (default) or `6`.
         :param pulumi.Input[str] port_id: The port ID which the EIP associated with.
-        :param pulumi.Input[str] type: Specifies the EIP type. Possible values are *5_bgp* (dynamic BGP)
-               and *5_sbgp* (static BGP), the default value is *5_bgp*. Changing this creates a new resource.
+        :param pulumi.Input[str] type: Specifies the EIP type. Possible values are **5_bgp** (dynamic BGP)
+               and **5_sbgp** (static BGP), the default value is **5_bgp**. Changing this will create a new resource.
         """
         if ip_address is not None:
             pulumi.set(__self__, "ip_address", ip_address)
@@ -221,9 +223,9 @@ class EipPublicipArgs:
     @pulumi.getter(name="ipAddress")
     def ip_address(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the EIP to be assigned. The value must be a valid **IPv4**
-        address in the available IP address range. The system automatically assigns an EIP if you do not specify it.
-        Changing this creates a new resource.
+        Specifies the EIP address to be assigned.  
+        The value must be a valid **IPv4** address in the available IP address range.
+        The system automatically assigns an EIP if you do not specify it. Changing this will create a new resource.
         """
         return pulumi.get(self, "ip_address")
 
@@ -235,7 +237,7 @@ class EipPublicipArgs:
     @pulumi.getter(name="ipVersion")
     def ip_version(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the IP version, either 4 (default) or 6.
+        Specifies the IP version, either `4` (default) or `6`.
         """
         return pulumi.get(self, "ip_version")
 
@@ -259,8 +261,8 @@ class EipPublicipArgs:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the EIP type. Possible values are *5_bgp* (dynamic BGP)
-        and *5_sbgp* (static BGP), the default value is *5_bgp*. Changing this creates a new resource.
+        Specifies the EIP type. Possible values are **5_bgp** (dynamic BGP)
+        and **5_sbgp** (static BGP), the default value is **5_bgp**. Changing this will create a new resource.
         """
         return pulumi.get(self, "type")
 
@@ -372,10 +374,10 @@ class RouteTableRouteArgs:
                  type: pulumi.Input[str],
                  description: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[str] destination: - Specifies the destination address in the CIDR notation format,
+        :param pulumi.Input[str] destination: Specifies the destination address in the CIDR notation format,
                for example, 192.168.200.0/24. The destination of each route must be unique and cannot overlap
                with any subnet in the VPC.
-        :param pulumi.Input[str] nexthop: - Specifies the next hop.
+        :param pulumi.Input[str] nexthop: Specifies the next hop.
                + If the route type is **ecs**, the value is an ECS instance ID in the VPC.
                + If the route type is **eni**, the value is the extension NIC of an ECS in the VPC.
                + If the route type is **vip**, the value is a virtual IP address.
@@ -384,9 +386,9 @@ class RouteTableRouteArgs:
                + If the route type is **vpn**, the value is a VPN gateway ID.
                + If the route type is **dc**, the value is a Direct Connect gateway ID.
                + If the route type is **cc**, the value is a Cloud Connection ID.
-        :param pulumi.Input[str] type: - Specifies the route type. Currently, the value can be:
+        :param pulumi.Input[str] type: Specifies the route type. Currently, the value can be:
                **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
-        :param pulumi.Input[str] description: - Specifies the supplementary information about the route.
+        :param pulumi.Input[str] description: Specifies the supplementary information about the route.
                The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
         """
         pulumi.set(__self__, "destination", destination)
@@ -399,7 +401,7 @@ class RouteTableRouteArgs:
     @pulumi.getter
     def destination(self) -> pulumi.Input[str]:
         """
-        - Specifies the destination address in the CIDR notation format,
+        Specifies the destination address in the CIDR notation format,
         for example, 192.168.200.0/24. The destination of each route must be unique and cannot overlap
         with any subnet in the VPC.
         """
@@ -413,7 +415,7 @@ class RouteTableRouteArgs:
     @pulumi.getter
     def nexthop(self) -> pulumi.Input[str]:
         """
-        - Specifies the next hop.
+        Specifies the next hop.
         + If the route type is **ecs**, the value is an ECS instance ID in the VPC.
         + If the route type is **eni**, the value is the extension NIC of an ECS in the VPC.
         + If the route type is **vip**, the value is a virtual IP address.
@@ -433,7 +435,7 @@ class RouteTableRouteArgs:
     @pulumi.getter
     def type(self) -> pulumi.Input[str]:
         """
-        - Specifies the route type. Currently, the value can be:
+        Specifies the route type. Currently, the value can be:
         **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
         """
         return pulumi.get(self, "type")
@@ -446,7 +448,7 @@ class RouteTableRouteArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        - Specifies the supplementary information about the route.
+        Specifies the supplementary information about the route.
         The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
         """
         return pulumi.get(self, "description")

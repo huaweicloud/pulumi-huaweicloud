@@ -115,7 +115,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`encryption`, `source`, `acl` and `sse_kms_key_id`. It is generally recommended running `terraform plan` after importing an object. You can then decide if changes should be applied to the object, or the resource definition should be updated to align with the object. Also you can ignore changes as below. resource "huaweicloud_obs_bucket_object" "object" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`encryption`, `source`, `acl` and `kms_key_id`. It is generally recommended running `terraform plan` after importing an object. You can then decide if changes should be applied to the object, or the resource definition should be updated to align with the object. Also you can ignore changes as below. resource "huaweicloud_obs_bucket_object" "object" {
 //
 //	...
 //
@@ -123,7 +123,7 @@ import (
 //
 //	ignore_changes = [
 //
-//	encryption, source, acl, sse_kms_key_id,
+//	encryption, source, acl, kms_key_id,
 //
 //	]
 //
@@ -146,7 +146,8 @@ type BucketObject struct {
 	// The only meaningful value is `md5(file("pathToFile"))`.
 	Etag pulumi.StringOutput `pulumi:"etag"`
 	// The name of the object once it is in the bucket.
-	Key      pulumi.StringOutput    `pulumi:"key"`
+	Key pulumi.StringOutput `pulumi:"key"`
+	// The ID of the kms key. If omitted, the default master key will be used.
 	KmsKeyId pulumi.StringPtrOutput `pulumi:"kmsKeyId"`
 	// The region in which to create the OBS bucket object resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new OBS bucket object resource.
@@ -212,7 +213,8 @@ type bucketObjectState struct {
 	// The only meaningful value is `md5(file("pathToFile"))`.
 	Etag *string `pulumi:"etag"`
 	// The name of the object once it is in the bucket.
-	Key      *string `pulumi:"key"`
+	Key *string `pulumi:"key"`
+	// The ID of the kms key. If omitted, the default master key will be used.
 	KmsKeyId *string `pulumi:"kmsKeyId"`
 	// The region in which to create the OBS bucket object resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new OBS bucket object resource.
@@ -243,7 +245,8 @@ type BucketObjectState struct {
 	// The only meaningful value is `md5(file("pathToFile"))`.
 	Etag pulumi.StringPtrInput
 	// The name of the object once it is in the bucket.
-	Key      pulumi.StringPtrInput
+	Key pulumi.StringPtrInput
+	// The ID of the kms key. If omitted, the default master key will be used.
 	KmsKeyId pulumi.StringPtrInput
 	// The region in which to create the OBS bucket object resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new OBS bucket object resource.
@@ -278,7 +281,8 @@ type bucketObjectArgs struct {
 	// The only meaningful value is `md5(file("pathToFile"))`.
 	Etag *string `pulumi:"etag"`
 	// The name of the object once it is in the bucket.
-	Key      string  `pulumi:"key"`
+	Key string `pulumi:"key"`
+	// The ID of the kms key. If omitted, the default master key will be used.
 	KmsKeyId *string `pulumi:"kmsKeyId"`
 	// The region in which to create the OBS bucket object resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new OBS bucket object resource.
@@ -306,7 +310,8 @@ type BucketObjectArgs struct {
 	// The only meaningful value is `md5(file("pathToFile"))`.
 	Etag pulumi.StringPtrInput
 	// The name of the object once it is in the bucket.
-	Key      pulumi.StringInput
+	Key pulumi.StringInput
+	// The ID of the kms key. If omitted, the default master key will be used.
 	KmsKeyId pulumi.StringPtrInput
 	// The region in which to create the OBS bucket object resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new OBS bucket object resource.
@@ -441,6 +446,7 @@ func (o BucketObjectOutput) Key() pulumi.StringOutput {
 	return o.ApplyT(func(v *BucketObject) pulumi.StringOutput { return v.Key }).(pulumi.StringOutput)
 }
 
+// The ID of the kms key. If omitted, the default master key will be used.
 func (o BucketObjectOutput) KmsKeyId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *BucketObject) pulumi.StringPtrOutput { return v.KmsKeyId }).(pulumi.StringPtrOutput)
 }

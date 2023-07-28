@@ -132,8 +132,8 @@ def get_port(fixed_ip: Optional[str] = None,
     import pulumi_huaweicloud as huaweicloud
 
     config = pulumi.Config()
-    subent_id = config.require_object("subentId")
-    port1 = huaweicloud.Iec.get_port(subnet_id=subent_id,
+    subnet_id = config.require_object("subnetId")
+    port1 = huaweicloud.Iec.get_port(subnet_id=subnet_id,
         fixed_ip="192.168.1.123")
     ```
 
@@ -182,8 +182,8 @@ def get_port_output(fixed_ip: Optional[pulumi.Input[Optional[str]]] = None,
     import pulumi_huaweicloud as huaweicloud
 
     config = pulumi.Config()
-    subent_id = config.require_object("subentId")
-    port1 = huaweicloud.Iec.get_port(subnet_id=subent_id,
+    subnet_id = config.require_object("subnetId")
+    port1 = huaweicloud.Iec.get_port(subnet_id=subnet_id,
         fixed_ip="192.168.1.123")
     ```
 

@@ -76,7 +76,7 @@ export class User extends pulumi.CustomResource {
     public readonly description!: pulumi.Output<string | undefined>;
     /**
      * Specifies whether the user is disabled.
-     * Defualts to **false**.
+     * Defaults to **false**.
      */
     public readonly disabled!: pulumi.Output<boolean | undefined>;
     /**
@@ -85,7 +85,7 @@ export class User extends pulumi.CustomResource {
     public readonly email!: pulumi.Output<string>;
     /**
      * Specifies whether to allow password modification.
-     * Defualts to **true**.
+     * Defaults to **true**.
      */
     public readonly enableChangePassword!: pulumi.Output<boolean | undefined>;
     /**
@@ -101,12 +101,12 @@ export class User extends pulumi.CustomResource {
     public readonly name!: pulumi.Output<string>;
     /**
      * Specifies whether the next login requires a password reset.
-     * Defualts to **true**.
+     * Defaults to **true**.
      */
     public readonly nextLoginChangePassword!: pulumi.Output<boolean | undefined>;
     /**
      * Specifies whether the password will never expires.
-     * Defualts to **false**.
+     * Defaults to **false**.
      */
     public readonly passwordNeverExpires!: pulumi.Output<boolean | undefined>;
     /**
@@ -182,7 +182,7 @@ export interface UserState {
     description?: pulumi.Input<string>;
     /**
      * Specifies whether the user is disabled.
-     * Defualts to **false**.
+     * Defaults to **false**.
      */
     disabled?: pulumi.Input<boolean>;
     /**
@@ -191,7 +191,7 @@ export interface UserState {
     email?: pulumi.Input<string>;
     /**
      * Specifies whether to allow password modification.
-     * Defualts to **true**.
+     * Defaults to **true**.
      */
     enableChangePassword?: pulumi.Input<boolean>;
     /**
@@ -207,12 +207,12 @@ export interface UserState {
     name?: pulumi.Input<string>;
     /**
      * Specifies whether the next login requires a password reset.
-     * Defualts to **true**.
+     * Defaults to **true**.
      */
     nextLoginChangePassword?: pulumi.Input<boolean>;
     /**
      * Specifies whether the password will never expires.
-     * Defualts to **false**.
+     * Defaults to **false**.
      */
     passwordNeverExpires?: pulumi.Input<boolean>;
     /**
@@ -243,7 +243,7 @@ export interface UserArgs {
     description?: pulumi.Input<string>;
     /**
      * Specifies whether the user is disabled.
-     * Defualts to **false**.
+     * Defaults to **false**.
      */
     disabled?: pulumi.Input<boolean>;
     /**
@@ -252,7 +252,7 @@ export interface UserArgs {
     email: pulumi.Input<string>;
     /**
      * Specifies whether to allow password modification.
-     * Defualts to **true**.
+     * Defaults to **true**.
      */
     enableChangePassword?: pulumi.Input<boolean>;
     /**
@@ -264,12 +264,12 @@ export interface UserArgs {
     name?: pulumi.Input<string>;
     /**
      * Specifies whether the next login requires a password reset.
-     * Defualts to **true**.
+     * Defaults to **true**.
      */
     nextLoginChangePassword?: pulumi.Input<boolean>;
     /**
      * Specifies whether the password will never expires.
-     * Defualts to **false**.
+     * Defaults to **false**.
      */
     passwordNeverExpires?: pulumi.Input<boolean>;
     /**

@@ -44,24 +44,108 @@ import (
 //	}
 //
 // ```
+// ### Creating a whole image from an existing ECS
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Ims"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			vaultId := cfg.RequireObject("vaultId")
+//			instanceId := cfg.RequireObject("instanceId")
+//			_, err := Ims.NewImage(ctx, "test", &Ims.ImageArgs{
+//				InstanceId: pulumi.Any(instanceId),
+//				VaultId:    pulumi.Any(vaultId),
+//				Tags: pulumi.StringMap{
+//					"foo": pulumi.String("bar2"),
+//					"key": pulumi.String("value"),
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
+// ### Creating a whole image from CBR backup
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Ims"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			backupId := cfg.RequireObject("backupId")
+//			_, err := Ims.NewImage(ctx, "test", &Ims.ImageArgs{
+//				BackupId: pulumi.Any(backupId),
+//				Tags: pulumi.StringMap{
+//					"foo": pulumi.String("bar1"),
+//					"key": pulumi.String("value"),
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
 //
 // ## Import
 //
-// Images can be imported using the `id`, e.g.
+// Images can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Ims/image:Image my_image 7886e623-f1b3-473e-b882-67ba1c35887f
+//	$ pulumi import huaweicloud:Ims/image:Image my_image <id>
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`vault_id`. It is generally recommended running `terraform plan` after importing the image. You can then decide if changes should be applied to the image, or the resource definition should be updated to align with the image. Also you can ignore changes as below. resource "huaweicloud_images_image" "test" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [
+//
+//	vault_id,
+//
+//	]
+//
+//	} }
 type Image struct {
 	pulumi.CustomResourceState
 
+	// The ID of the CBR backup that needs to be converted into an image. This
+	// parameter is mandatory when you create a private whole image from a CBR backup.
+	BackupId pulumi.StringOutput `pulumi:"backupId"`
 	// The checksum of the data associated with the image.
 	Checksum pulumi.StringOutput `pulumi:"checksum"`
 	// The master key used for encrypting an image.
 	CmkId pulumi.StringPtrOutput `pulumi:"cmkId"`
-	// The image resource. The pattern can be 'instance,*instance_id*' or 'file,*image_url*'.
+	// The image resource. The pattern can be 'instance,*instance_id*', 'file,*image_url*'
+	// or 'server_backup,*backup_id*'.
 	DataOrigin pulumi.StringOutput `pulumi:"dataOrigin"`
 	// A description of the image.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
@@ -77,20 +161,21 @@ type Image struct {
 	// name:Image file name*.
 	ImageUrl pulumi.StringPtrOutput `pulumi:"imageUrl"`
 	// The ID of the ECS that needs to be converted into an image. This
-	// parameter is mandatory when you create a privete image from an ECS.
-	InstanceId pulumi.StringPtrOutput `pulumi:"instanceId"`
+	// parameter is mandatory when you create a private image or a private whole image from an ECS.
+	// If the value of `vaultId` is not empty, then a whole image will be created.
+	InstanceId pulumi.StringOutput `pulumi:"instanceId"`
 	// If automatic configuration is required, set the value to true. Otherwise, set
 	// the value to false.
 	IsConfig pulumi.BoolPtrOutput `pulumi:"isConfig"`
 	// The maximum memory of the image in the unit of MB.
-	MaxRam pulumi.IntPtrOutput `pulumi:"maxRam"`
+	MaxRam pulumi.IntOutput `pulumi:"maxRam"`
 	// The minimum size of the system disk in the unit of GB. This parameter is
 	// mandatory when you create a private image from an external file uploaded to an OBS bucket. The value ranges from 1 GB
 	// to 1024 GB.
 	MinDisk pulumi.IntPtrOutput `pulumi:"minDisk"`
 	// The minimum memory of the image in the unit of MB. The default value is 0,
 	// indicating that the memory is not restricted.
-	MinRam pulumi.IntPtrOutput `pulumi:"minRam"`
+	MinRam pulumi.IntOutput `pulumi:"minRam"`
 	// The name of the image.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// The OS version. This parameter is valid when you create a private image
@@ -102,6 +187,9 @@ type Image struct {
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// The image type. Must be one of `ECS`, `FusionCompute`, `BMS`, or `Ironic`.
 	Type pulumi.StringPtrOutput `pulumi:"type"`
+	// The ID of the vault to which an ECS is to be added or has been added.
+	// This parameter is mandatory when you create a private whole image from an ECS.
+	VaultId pulumi.StringPtrOutput `pulumi:"vaultId"`
 	// Whether the image is visible to other tenants.
 	Visibility pulumi.StringOutput `pulumi:"visibility"`
 }
@@ -136,11 +224,15 @@ func GetImage(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Image resources.
 type imageState struct {
+	// The ID of the CBR backup that needs to be converted into an image. This
+	// parameter is mandatory when you create a private whole image from a CBR backup.
+	BackupId *string `pulumi:"backupId"`
 	// The checksum of the data associated with the image.
 	Checksum *string `pulumi:"checksum"`
 	// The master key used for encrypting an image.
 	CmkId *string `pulumi:"cmkId"`
-	// The image resource. The pattern can be 'instance,*instance_id*' or 'file,*image_url*'.
+	// The image resource. The pattern can be 'instance,*instance_id*', 'file,*image_url*'
+	// or 'server_backup,*backup_id*'.
 	DataOrigin *string `pulumi:"dataOrigin"`
 	// A description of the image.
 	Description *string `pulumi:"description"`
@@ -156,7 +248,8 @@ type imageState struct {
 	// name:Image file name*.
 	ImageUrl *string `pulumi:"imageUrl"`
 	// The ID of the ECS that needs to be converted into an image. This
-	// parameter is mandatory when you create a privete image from an ECS.
+	// parameter is mandatory when you create a private image or a private whole image from an ECS.
+	// If the value of `vaultId` is not empty, then a whole image will be created.
 	InstanceId *string `pulumi:"instanceId"`
 	// If automatic configuration is required, set the value to true. Otherwise, set
 	// the value to false.
@@ -181,16 +274,23 @@ type imageState struct {
 	Tags map[string]string `pulumi:"tags"`
 	// The image type. Must be one of `ECS`, `FusionCompute`, `BMS`, or `Ironic`.
 	Type *string `pulumi:"type"`
+	// The ID of the vault to which an ECS is to be added or has been added.
+	// This parameter is mandatory when you create a private whole image from an ECS.
+	VaultId *string `pulumi:"vaultId"`
 	// Whether the image is visible to other tenants.
 	Visibility *string `pulumi:"visibility"`
 }
 
 type ImageState struct {
+	// The ID of the CBR backup that needs to be converted into an image. This
+	// parameter is mandatory when you create a private whole image from a CBR backup.
+	BackupId pulumi.StringPtrInput
 	// The checksum of the data associated with the image.
 	Checksum pulumi.StringPtrInput
 	// The master key used for encrypting an image.
 	CmkId pulumi.StringPtrInput
-	// The image resource. The pattern can be 'instance,*instance_id*' or 'file,*image_url*'.
+	// The image resource. The pattern can be 'instance,*instance_id*', 'file,*image_url*'
+	// or 'server_backup,*backup_id*'.
 	DataOrigin pulumi.StringPtrInput
 	// A description of the image.
 	Description pulumi.StringPtrInput
@@ -206,7 +306,8 @@ type ImageState struct {
 	// name:Image file name*.
 	ImageUrl pulumi.StringPtrInput
 	// The ID of the ECS that needs to be converted into an image. This
-	// parameter is mandatory when you create a privete image from an ECS.
+	// parameter is mandatory when you create a private image or a private whole image from an ECS.
+	// If the value of `vaultId` is not empty, then a whole image will be created.
 	InstanceId pulumi.StringPtrInput
 	// If automatic configuration is required, set the value to true. Otherwise, set
 	// the value to false.
@@ -231,6 +332,9 @@ type ImageState struct {
 	Tags pulumi.StringMapInput
 	// The image type. Must be one of `ECS`, `FusionCompute`, `BMS`, or `Ironic`.
 	Type pulumi.StringPtrInput
+	// The ID of the vault to which an ECS is to be added or has been added.
+	// This parameter is mandatory when you create a private whole image from an ECS.
+	VaultId pulumi.StringPtrInput
 	// Whether the image is visible to other tenants.
 	Visibility pulumi.StringPtrInput
 }
@@ -240,6 +344,9 @@ func (ImageState) ElementType() reflect.Type {
 }
 
 type imageArgs struct {
+	// The ID of the CBR backup that needs to be converted into an image. This
+	// parameter is mandatory when you create a private whole image from a CBR backup.
+	BackupId *string `pulumi:"backupId"`
 	// The master key used for encrypting an image.
 	CmkId *string `pulumi:"cmkId"`
 	// A description of the image.
@@ -252,7 +359,8 @@ type imageArgs struct {
 	// name:Image file name*.
 	ImageUrl *string `pulumi:"imageUrl"`
 	// The ID of the ECS that needs to be converted into an image. This
-	// parameter is mandatory when you create a privete image from an ECS.
+	// parameter is mandatory when you create a private image or a private whole image from an ECS.
+	// If the value of `vaultId` is not empty, then a whole image will be created.
 	InstanceId *string `pulumi:"instanceId"`
 	// If automatic configuration is required, set the value to true. Otherwise, set
 	// the value to false.
@@ -275,10 +383,16 @@ type imageArgs struct {
 	Tags map[string]string `pulumi:"tags"`
 	// The image type. Must be one of `ECS`, `FusionCompute`, `BMS`, or `Ironic`.
 	Type *string `pulumi:"type"`
+	// The ID of the vault to which an ECS is to be added or has been added.
+	// This parameter is mandatory when you create a private whole image from an ECS.
+	VaultId *string `pulumi:"vaultId"`
 }
 
 // The set of arguments for constructing a Image resource.
 type ImageArgs struct {
+	// The ID of the CBR backup that needs to be converted into an image. This
+	// parameter is mandatory when you create a private whole image from a CBR backup.
+	BackupId pulumi.StringPtrInput
 	// The master key used for encrypting an image.
 	CmkId pulumi.StringPtrInput
 	// A description of the image.
@@ -291,7 +405,8 @@ type ImageArgs struct {
 	// name:Image file name*.
 	ImageUrl pulumi.StringPtrInput
 	// The ID of the ECS that needs to be converted into an image. This
-	// parameter is mandatory when you create a privete image from an ECS.
+	// parameter is mandatory when you create a private image or a private whole image from an ECS.
+	// If the value of `vaultId` is not empty, then a whole image will be created.
 	InstanceId pulumi.StringPtrInput
 	// If automatic configuration is required, set the value to true. Otherwise, set
 	// the value to false.
@@ -314,6 +429,9 @@ type ImageArgs struct {
 	Tags pulumi.StringMapInput
 	// The image type. Must be one of `ECS`, `FusionCompute`, `BMS`, or `Ironic`.
 	Type pulumi.StringPtrInput
+	// The ID of the vault to which an ECS is to be added or has been added.
+	// This parameter is mandatory when you create a private whole image from an ECS.
+	VaultId pulumi.StringPtrInput
 }
 
 func (ImageArgs) ElementType() reflect.Type {
@@ -403,6 +521,12 @@ func (o ImageOutput) ToImageOutputWithContext(ctx context.Context) ImageOutput {
 	return o
 }
 
+// The ID of the CBR backup that needs to be converted into an image. This
+// parameter is mandatory when you create a private whole image from a CBR backup.
+func (o ImageOutput) BackupId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Image) pulumi.StringOutput { return v.BackupId }).(pulumi.StringOutput)
+}
+
 // The checksum of the data associated with the image.
 func (o ImageOutput) Checksum() pulumi.StringOutput {
 	return o.ApplyT(func(v *Image) pulumi.StringOutput { return v.Checksum }).(pulumi.StringOutput)
@@ -413,7 +537,8 @@ func (o ImageOutput) CmkId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Image) pulumi.StringPtrOutput { return v.CmkId }).(pulumi.StringPtrOutput)
 }
 
-// The image resource. The pattern can be 'instance,*instance_id*' or 'file,*image_url*'.
+// The image resource. The pattern can be 'instance,*instance_id*', 'file,*image_url*'
+// or 'server_backup,*backup_id*'.
 func (o ImageOutput) DataOrigin() pulumi.StringOutput {
 	return o.ApplyT(func(v *Image) pulumi.StringOutput { return v.DataOrigin }).(pulumi.StringOutput)
 }
@@ -447,9 +572,10 @@ func (o ImageOutput) ImageUrl() pulumi.StringPtrOutput {
 }
 
 // The ID of the ECS that needs to be converted into an image. This
-// parameter is mandatory when you create a privete image from an ECS.
-func (o ImageOutput) InstanceId() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *Image) pulumi.StringPtrOutput { return v.InstanceId }).(pulumi.StringPtrOutput)
+// parameter is mandatory when you create a private image or a private whole image from an ECS.
+// If the value of `vaultId` is not empty, then a whole image will be created.
+func (o ImageOutput) InstanceId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Image) pulumi.StringOutput { return v.InstanceId }).(pulumi.StringOutput)
 }
 
 // If automatic configuration is required, set the value to true. Otherwise, set
@@ -459,8 +585,8 @@ func (o ImageOutput) IsConfig() pulumi.BoolPtrOutput {
 }
 
 // The maximum memory of the image in the unit of MB.
-func (o ImageOutput) MaxRam() pulumi.IntPtrOutput {
-	return o.ApplyT(func(v *Image) pulumi.IntPtrOutput { return v.MaxRam }).(pulumi.IntPtrOutput)
+func (o ImageOutput) MaxRam() pulumi.IntOutput {
+	return o.ApplyT(func(v *Image) pulumi.IntOutput { return v.MaxRam }).(pulumi.IntOutput)
 }
 
 // The minimum size of the system disk in the unit of GB. This parameter is
@@ -472,8 +598,8 @@ func (o ImageOutput) MinDisk() pulumi.IntPtrOutput {
 
 // The minimum memory of the image in the unit of MB. The default value is 0,
 // indicating that the memory is not restricted.
-func (o ImageOutput) MinRam() pulumi.IntPtrOutput {
-	return o.ApplyT(func(v *Image) pulumi.IntPtrOutput { return v.MinRam }).(pulumi.IntPtrOutput)
+func (o ImageOutput) MinRam() pulumi.IntOutput {
+	return o.ApplyT(func(v *Image) pulumi.IntOutput { return v.MinRam }).(pulumi.IntOutput)
 }
 
 // The name of the image.
@@ -500,6 +626,12 @@ func (o ImageOutput) Tags() pulumi.StringMapOutput {
 // The image type. Must be one of `ECS`, `FusionCompute`, `BMS`, or `Ironic`.
 func (o ImageOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Image) pulumi.StringPtrOutput { return v.Type }).(pulumi.StringPtrOutput)
+}
+
+// The ID of the vault to which an ECS is to be added or has been added.
+// This parameter is mandatory when you create a private whole image from an ECS.
+func (o ImageOutput) VaultId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Image) pulumi.StringPtrOutput { return v.VaultId }).(pulumi.StringPtrOutput)
 }
 
 // Whether the image is visible to other tenants.

@@ -25,17 +25,21 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Waf"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			enterpriseProjectId := cfg.RequireObject("enterpriseProjectId")
 //			_, err := Waf.NewReferenceTable(ctx, "refTable", &Waf.ReferenceTableArgs{
+//				Type:                pulumi.String("url"),
+//				EnterpriseProjectId: pulumi.Any(enterpriseProjectId),
 //				Conditions: pulumi.StringArray{
 //					pulumi.String("/admin"),
 //					pulumi.String("/manage"),
 //				},
-//				Type: pulumi.String("url"),
 //			})
 //			if err != nil {
 //				return err
@@ -48,11 +52,19 @@ import (
 //
 // ## Import
 //
-// The reference table can be imported using the `id`, e.g.
+// There are two ways to import WAF reference table state. * Using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Waf/referenceTable:ReferenceTable ref_table 96e46e5e702b4e2aa5609ad287de4788
+//	$ pulumi import huaweicloud:Waf/referenceTable:ReferenceTable test <id>
+//
+// ```
+//
+//   - Using `id` and `enterprise_project_id`, separated by a slash, e.g. bash
+//
+// ```sh
+//
+//	$ pulumi import huaweicloud:Waf/referenceTable:ReferenceTable test <id>/<enterprise_project_id>
 //
 // ```
 type ReferenceTable struct {
@@ -65,6 +77,9 @@ type ReferenceTable struct {
 	CreationTime pulumi.StringOutput `pulumi:"creationTime"`
 	// The description of the reference table. The maximum length is 128 characters.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
+	// Specifies the enterprise project ID of WAF reference table.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
 	// The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
 	// maximum length is 64 characters.
 	Name pulumi.StringOutput `pulumi:"name"`
@@ -116,6 +131,9 @@ type referenceTableState struct {
 	CreationTime *string `pulumi:"creationTime"`
 	// The description of the reference table. The maximum length is 128 characters.
 	Description *string `pulumi:"description"`
+	// Specifies the enterprise project ID of WAF reference table.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
 	// maximum length is 64 characters.
 	Name *string `pulumi:"name"`
@@ -135,6 +153,9 @@ type ReferenceTableState struct {
 	CreationTime pulumi.StringPtrInput
 	// The description of the reference table. The maximum length is 128 characters.
 	Description pulumi.StringPtrInput
+	// Specifies the enterprise project ID of WAF reference table.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
 	// maximum length is 64 characters.
 	Name pulumi.StringPtrInput
@@ -156,6 +177,9 @@ type referenceTableArgs struct {
 	Conditions []string `pulumi:"conditions"`
 	// The description of the reference table. The maximum length is 128 characters.
 	Description *string `pulumi:"description"`
+	// Specifies the enterprise project ID of WAF reference table.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
 	// maximum length is 64 characters.
 	Name *string `pulumi:"name"`
@@ -174,6 +198,9 @@ type ReferenceTableArgs struct {
 	Conditions pulumi.StringArrayInput
 	// The description of the reference table. The maximum length is 128 characters.
 	Description pulumi.StringPtrInput
+	// Specifies the enterprise project ID of WAF reference table.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
 	// maximum length is 64 characters.
 	Name pulumi.StringPtrInput
@@ -286,6 +313,12 @@ func (o ReferenceTableOutput) CreationTime() pulumi.StringOutput {
 // The description of the reference table. The maximum length is 128 characters.
 func (o ReferenceTableOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ReferenceTable) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the enterprise project ID of WAF reference table.
+// Changing this parameter will create a new resource.
+func (o ReferenceTableOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ReferenceTable) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
 
 // The name of the reference table. Only letters, digits, and underscores(_) are allowed. The

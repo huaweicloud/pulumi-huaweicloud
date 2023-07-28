@@ -57,9 +57,15 @@ export interface GetNetwork_aclResult {
      */
     readonly description: string;
     readonly id: string;
+    /**
+     * A list of the IDs of ingress rules associated with the IEC network ACL.
+     */
     readonly inboundRules: string[];
     readonly name: string;
     readonly networks: outputs.Iec.GetNetwork_aclNetwork[];
+    /**
+     * A list of the IDs of egress rules associated with the IEC network ACL.
+     */
     readonly outboundRules: string[];
     /**
      * The status of the IEC network ACL.

@@ -24,7 +24,7 @@ class ApplicationArgs:
         """
         The set of arguments for constructing a Application resource.
         :param pulumi.Input[str] description: Specifies the application description.
-               The description can contian a maximum of `128` characters.
+               The description can contain a maximum of `128` characters.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise projcet ID to which the application
                belongs. Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input['ApplicationEnvironmentArgs']]] environments: Specifies the configurations of the environment variables.
@@ -50,7 +50,7 @@ class ApplicationArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the application description.
-        The description can contian a maximum of `128` characters.
+        The description can contain a maximum of `128` characters.
         """
         return pulumi.get(self, "description")
 
@@ -124,7 +124,7 @@ class _ApplicationState:
         Input properties used for looking up and filtering Application resources.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] component_ids: The list of component IDs associated under the application.
         :param pulumi.Input[str] description: Specifies the application description.
-               The description can contian a maximum of `128` characters.
+               The description can contain a maximum of `128` characters.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise projcet ID to which the application
                belongs. Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input['ApplicationEnvironmentArgs']]] environments: Specifies the configurations of the environment variables.
@@ -164,7 +164,7 @@ class _ApplicationState:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the application description.
-        The description can contian a maximum of `128` characters.
+        The description can contain a maximum of `128` characters.
         """
         return pulumi.get(self, "description")
 
@@ -270,7 +270,7 @@ class Application(pulumi.CustomResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: Specifies the application description.
-               The description can contian a maximum of `128` characters.
+               The description can contain a maximum of `128` characters.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise projcet ID to which the application
                belongs. Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApplicationEnvironmentArgs']]]] environments: Specifies the configurations of the environment variables.
@@ -377,7 +377,7 @@ class Application(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] component_ids: The list of component IDs associated under the application.
         :param pulumi.Input[str] description: Specifies the application description.
-               The description can contian a maximum of `128` characters.
+               The description can contain a maximum of `128` characters.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise projcet ID to which the application
                belongs. Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApplicationEnvironmentArgs']]]] environments: Specifies the configurations of the environment variables.
@@ -412,7 +412,7 @@ class Application(pulumi.CustomResource):
     def description(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the application description.
-        The description can contian a maximum of `128` characters.
+        The description can contain a maximum of `128` characters.
         """
         return pulumi.get(self, "description")
 

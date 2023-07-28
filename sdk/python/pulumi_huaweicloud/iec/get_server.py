@@ -89,9 +89,6 @@ class GetServerResult:
     @property
     @pulumi.getter(name="edgecloudId")
     def edgecloud_id(self) -> str:
-        """
-        The ID of the edgecloud service.
-        """
         return pulumi.get(self, "edgecloud_id")
 
     @property
@@ -129,6 +126,9 @@ class GetServerResult:
     @property
     @pulumi.getter(name="imageId")
     def image_id(self) -> str:
+        """
+        The image ID of the IEC server.
+        """
         return pulumi.get(self, "image_id")
 
     @property
@@ -142,6 +142,9 @@ class GetServerResult:
     @property
     @pulumi.getter(name="keyPair")
     def key_pair(self) -> str:
+        """
+        The name of a key pair to put on the IEC server.
+        """
         return pulumi.get(self, "key_pair")
 
     @property
@@ -189,6 +192,9 @@ class GetServerResult:
     @property
     @pulumi.getter(name="userData")
     def user_data(self) -> str:
+        """
+        The user data (information after encoding) configured during IEC server creation.
+        """
         return pulumi.get(self, "user_data")
 
     @property
@@ -254,7 +260,7 @@ def get_server(edgecloud_id: Optional[str] = None,
     ```
 
 
-    :param str edgecloud_id: The ID of the edgecloud service.
+    :param str edgecloud_id: Specifies the ID of the edgecloud service.
     :param str name: Specifies the IEC server name, which can be queried with a regular expression.
     :param str status: Specifies the status of IEC server.
     """
@@ -306,7 +312,7 @@ def get_server_output(edgecloud_id: Optional[pulumi.Input[Optional[str]]] = None
     ```
 
 
-    :param str edgecloud_id: The ID of the edgecloud service.
+    :param str edgecloud_id: Specifies the ID of the edgecloud service.
     :param str name: Specifies the IEC server name, which can be queried with a regular expression.
     :param str status: Specifies the status of IEC server.
     """

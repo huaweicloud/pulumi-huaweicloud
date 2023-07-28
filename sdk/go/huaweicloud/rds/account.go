@@ -11,64 +11,13 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages RDS Mysql account resource within HuaweiCloud.
-//
-// ## Example Usage
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Rds"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			cfg := config.New(ctx, "")
-//			instanceId := cfg.RequireObject("instanceId")
-//			_, err := Rds.NewAccount(ctx, "test", &Rds.AccountArgs{
-//				InstanceId: pulumi.Any(instanceId),
-//				Password:   pulumi.String("Test@12345678"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
-//
-// ## Import
-//
-// RDS account can be imported using the `instance id` and `account name`, e.g.
-//
-// ```sh
-//
-//	$ pulumi import huaweicloud:Rds/account:Account user_1 instance_id/account_name
-//
-// ```
 type Account struct {
 	pulumi.CustomResourceState
 
-	// Specifies the rds instance id. Changing this will create a new resource.
 	InstanceId pulumi.StringOutput `pulumi:"instanceId"`
-	// Specifies the username of the db account. Only lowercase letters, digits,
-	// hyphens (-), and userscores (_) are allowed. Changing this will create a new resource.
-	// + If the database version is MySQL 5.6, the username consists of 1 to 16 characters.
-	// + If the database version is MySQL 5.7 or 8.0, the username consists of 1 to 32 characters.
-	Name pulumi.StringOutput `pulumi:"name"`
-	// Specifies the password of the db account. The parameter must be 8 to 32 characters
-	// long and contain only letters(case-sensitive), digits, and special characters(~!@#$%^*-_=+?,()&). The value must be
-	// different from name or name spelled backwards.
-	Password pulumi.StringOutput `pulumi:"password"`
-	// The region in which to create the rds account resource. If omitted, the
-	// provider-level region will be used. Changing this creates a new resource.
-	Region pulumi.StringOutput `pulumi:"region"`
+	Name       pulumi.StringOutput `pulumi:"name"`
+	Password   pulumi.StringOutput `pulumi:"password"`
+	Region     pulumi.StringOutput `pulumi:"region"`
 }
 
 // NewAccount registers a new resource with the given unique name, arguments, and options.
@@ -107,37 +56,17 @@ func GetAccount(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Account resources.
 type accountState struct {
-	// Specifies the rds instance id. Changing this will create a new resource.
 	InstanceId *string `pulumi:"instanceId"`
-	// Specifies the username of the db account. Only lowercase letters, digits,
-	// hyphens (-), and userscores (_) are allowed. Changing this will create a new resource.
-	// + If the database version is MySQL 5.6, the username consists of 1 to 16 characters.
-	// + If the database version is MySQL 5.7 or 8.0, the username consists of 1 to 32 characters.
-	Name *string `pulumi:"name"`
-	// Specifies the password of the db account. The parameter must be 8 to 32 characters
-	// long and contain only letters(case-sensitive), digits, and special characters(~!@#$%^*-_=+?,()&). The value must be
-	// different from name or name spelled backwards.
-	Password *string `pulumi:"password"`
-	// The region in which to create the rds account resource. If omitted, the
-	// provider-level region will be used. Changing this creates a new resource.
-	Region *string `pulumi:"region"`
+	Name       *string `pulumi:"name"`
+	Password   *string `pulumi:"password"`
+	Region     *string `pulumi:"region"`
 }
 
 type AccountState struct {
-	// Specifies the rds instance id. Changing this will create a new resource.
 	InstanceId pulumi.StringPtrInput
-	// Specifies the username of the db account. Only lowercase letters, digits,
-	// hyphens (-), and userscores (_) are allowed. Changing this will create a new resource.
-	// + If the database version is MySQL 5.6, the username consists of 1 to 16 characters.
-	// + If the database version is MySQL 5.7 or 8.0, the username consists of 1 to 32 characters.
-	Name pulumi.StringPtrInput
-	// Specifies the password of the db account. The parameter must be 8 to 32 characters
-	// long and contain only letters(case-sensitive), digits, and special characters(~!@#$%^*-_=+?,()&). The value must be
-	// different from name or name spelled backwards.
-	Password pulumi.StringPtrInput
-	// The region in which to create the rds account resource. If omitted, the
-	// provider-level region will be used. Changing this creates a new resource.
-	Region pulumi.StringPtrInput
+	Name       pulumi.StringPtrInput
+	Password   pulumi.StringPtrInput
+	Region     pulumi.StringPtrInput
 }
 
 func (AccountState) ElementType() reflect.Type {
@@ -145,38 +74,18 @@ func (AccountState) ElementType() reflect.Type {
 }
 
 type accountArgs struct {
-	// Specifies the rds instance id. Changing this will create a new resource.
-	InstanceId string `pulumi:"instanceId"`
-	// Specifies the username of the db account. Only lowercase letters, digits,
-	// hyphens (-), and userscores (_) are allowed. Changing this will create a new resource.
-	// + If the database version is MySQL 5.6, the username consists of 1 to 16 characters.
-	// + If the database version is MySQL 5.7 or 8.0, the username consists of 1 to 32 characters.
-	Name *string `pulumi:"name"`
-	// Specifies the password of the db account. The parameter must be 8 to 32 characters
-	// long and contain only letters(case-sensitive), digits, and special characters(~!@#$%^*-_=+?,()&). The value must be
-	// different from name or name spelled backwards.
-	Password string `pulumi:"password"`
-	// The region in which to create the rds account resource. If omitted, the
-	// provider-level region will be used. Changing this creates a new resource.
-	Region *string `pulumi:"region"`
+	InstanceId string  `pulumi:"instanceId"`
+	Name       *string `pulumi:"name"`
+	Password   string  `pulumi:"password"`
+	Region     *string `pulumi:"region"`
 }
 
 // The set of arguments for constructing a Account resource.
 type AccountArgs struct {
-	// Specifies the rds instance id. Changing this will create a new resource.
 	InstanceId pulumi.StringInput
-	// Specifies the username of the db account. Only lowercase letters, digits,
-	// hyphens (-), and userscores (_) are allowed. Changing this will create a new resource.
-	// + If the database version is MySQL 5.6, the username consists of 1 to 16 characters.
-	// + If the database version is MySQL 5.7 or 8.0, the username consists of 1 to 32 characters.
-	Name pulumi.StringPtrInput
-	// Specifies the password of the db account. The parameter must be 8 to 32 characters
-	// long and contain only letters(case-sensitive), digits, and special characters(~!@#$%^*-_=+?,()&). The value must be
-	// different from name or name spelled backwards.
-	Password pulumi.StringInput
-	// The region in which to create the rds account resource. If omitted, the
-	// provider-level region will be used. Changing this creates a new resource.
-	Region pulumi.StringPtrInput
+	Name       pulumi.StringPtrInput
+	Password   pulumi.StringInput
+	Region     pulumi.StringPtrInput
 }
 
 func (AccountArgs) ElementType() reflect.Type {
@@ -266,28 +175,18 @@ func (o AccountOutput) ToAccountOutputWithContext(ctx context.Context) AccountOu
 	return o
 }
 
-// Specifies the rds instance id. Changing this will create a new resource.
 func (o AccountOutput) InstanceId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Account) pulumi.StringOutput { return v.InstanceId }).(pulumi.StringOutput)
 }
 
-// Specifies the username of the db account. Only lowercase letters, digits,
-// hyphens (-), and userscores (_) are allowed. Changing this will create a new resource.
-// + If the database version is MySQL 5.6, the username consists of 1 to 16 characters.
-// + If the database version is MySQL 5.7 or 8.0, the username consists of 1 to 32 characters.
 func (o AccountOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Account) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the password of the db account. The parameter must be 8 to 32 characters
-// long and contain only letters(case-sensitive), digits, and special characters(~!@#$%^*-_=+?,()&). The value must be
-// different from name or name spelled backwards.
 func (o AccountOutput) Password() pulumi.StringOutput {
 	return o.ApplyT(func(v *Account) pulumi.StringOutput { return v.Password }).(pulumi.StringOutput)
 }
 
-// The region in which to create the rds account resource. If omitted, the
-// provider-level region will be used. Changing this creates a new resource.
 func (o AccountOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Account) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }

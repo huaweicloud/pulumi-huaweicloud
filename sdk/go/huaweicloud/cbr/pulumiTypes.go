@@ -208,6 +208,10 @@ func (o PolicyBackupCyclePtrOutput) Interval() pulumi.IntPtrOutput {
 type PolicyLongTermRetention struct {
 	// - Specifies the latest backup of each day is saved in the long term.
 	Daily *int `pulumi:"daily"`
+	// Specifies how often (after how many incremental backups) a full backup is
+	// performed. The valid value ranges from `-1` to `100`.
+	// If `-1` is specified, full backup will not be performed.
+	FullBackupInterval *int `pulumi:"fullBackupInterval"`
 	// - Specifies the latest backup of each month is saved in the long term.
 	Monthly *int `pulumi:"monthly"`
 	// - Specifies the latest backup of each week is saved in the long term.
@@ -230,6 +234,10 @@ type PolicyLongTermRetentionInput interface {
 type PolicyLongTermRetentionArgs struct {
 	// - Specifies the latest backup of each day is saved in the long term.
 	Daily pulumi.IntPtrInput `pulumi:"daily"`
+	// Specifies how often (after how many incremental backups) a full backup is
+	// performed. The valid value ranges from `-1` to `100`.
+	// If `-1` is specified, full backup will not be performed.
+	FullBackupInterval pulumi.IntPtrInput `pulumi:"fullBackupInterval"`
 	// - Specifies the latest backup of each month is saved in the long term.
 	Monthly pulumi.IntPtrInput `pulumi:"monthly"`
 	// - Specifies the latest backup of each week is saved in the long term.
@@ -320,6 +328,13 @@ func (o PolicyLongTermRetentionOutput) Daily() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v PolicyLongTermRetention) *int { return v.Daily }).(pulumi.IntPtrOutput)
 }
 
+// Specifies how often (after how many incremental backups) a full backup is
+// performed. The valid value ranges from `-1` to `100`.
+// If `-1` is specified, full backup will not be performed.
+func (o PolicyLongTermRetentionOutput) FullBackupInterval() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v PolicyLongTermRetention) *int { return v.FullBackupInterval }).(pulumi.IntPtrOutput)
+}
+
 // - Specifies the latest backup of each month is saved in the long term.
 func (o PolicyLongTermRetentionOutput) Monthly() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v PolicyLongTermRetention) *int { return v.Monthly }).(pulumi.IntPtrOutput)
@@ -369,6 +384,18 @@ func (o PolicyLongTermRetentionPtrOutput) Daily() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
+// Specifies how often (after how many incremental backups) a full backup is
+// performed. The valid value ranges from `-1` to `100`.
+// If `-1` is specified, full backup will not be performed.
+func (o PolicyLongTermRetentionPtrOutput) FullBackupInterval() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *PolicyLongTermRetention) *int {
+		if v == nil {
+			return nil
+		}
+		return v.FullBackupInterval
+	}).(pulumi.IntPtrOutput)
+}
+
 // - Specifies the latest backup of each month is saved in the long term.
 func (o PolicyLongTermRetentionPtrOutput) Monthly() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *PolicyLongTermRetention) *int {
@@ -397,6 +424,115 @@ func (o PolicyLongTermRetentionPtrOutput) Yearly() pulumi.IntPtrOutput {
 		}
 		return v.Yearly
 	}).(pulumi.IntPtrOutput)
+}
+
+type VaultPolicy struct {
+	// Specifies the ID of destination vault to which the replication policy
+	// will associated.
+	DestinationVaultId *string `pulumi:"destinationVaultId"`
+	// Specifies the policy ID.
+	Id string `pulumi:"id"`
+}
+
+// VaultPolicyInput is an input type that accepts VaultPolicyArgs and VaultPolicyOutput values.
+// You can construct a concrete instance of `VaultPolicyInput` via:
+//
+//	VaultPolicyArgs{...}
+type VaultPolicyInput interface {
+	pulumi.Input
+
+	ToVaultPolicyOutput() VaultPolicyOutput
+	ToVaultPolicyOutputWithContext(context.Context) VaultPolicyOutput
+}
+
+type VaultPolicyArgs struct {
+	// Specifies the ID of destination vault to which the replication policy
+	// will associated.
+	DestinationVaultId pulumi.StringPtrInput `pulumi:"destinationVaultId"`
+	// Specifies the policy ID.
+	Id pulumi.StringInput `pulumi:"id"`
+}
+
+func (VaultPolicyArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*VaultPolicy)(nil)).Elem()
+}
+
+func (i VaultPolicyArgs) ToVaultPolicyOutput() VaultPolicyOutput {
+	return i.ToVaultPolicyOutputWithContext(context.Background())
+}
+
+func (i VaultPolicyArgs) ToVaultPolicyOutputWithContext(ctx context.Context) VaultPolicyOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(VaultPolicyOutput)
+}
+
+// VaultPolicyArrayInput is an input type that accepts VaultPolicyArray and VaultPolicyArrayOutput values.
+// You can construct a concrete instance of `VaultPolicyArrayInput` via:
+//
+//	VaultPolicyArray{ VaultPolicyArgs{...} }
+type VaultPolicyArrayInput interface {
+	pulumi.Input
+
+	ToVaultPolicyArrayOutput() VaultPolicyArrayOutput
+	ToVaultPolicyArrayOutputWithContext(context.Context) VaultPolicyArrayOutput
+}
+
+type VaultPolicyArray []VaultPolicyInput
+
+func (VaultPolicyArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]VaultPolicy)(nil)).Elem()
+}
+
+func (i VaultPolicyArray) ToVaultPolicyArrayOutput() VaultPolicyArrayOutput {
+	return i.ToVaultPolicyArrayOutputWithContext(context.Background())
+}
+
+func (i VaultPolicyArray) ToVaultPolicyArrayOutputWithContext(ctx context.Context) VaultPolicyArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(VaultPolicyArrayOutput)
+}
+
+type VaultPolicyOutput struct{ *pulumi.OutputState }
+
+func (VaultPolicyOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*VaultPolicy)(nil)).Elem()
+}
+
+func (o VaultPolicyOutput) ToVaultPolicyOutput() VaultPolicyOutput {
+	return o
+}
+
+func (o VaultPolicyOutput) ToVaultPolicyOutputWithContext(ctx context.Context) VaultPolicyOutput {
+	return o
+}
+
+// Specifies the ID of destination vault to which the replication policy
+// will associated.
+func (o VaultPolicyOutput) DestinationVaultId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v VaultPolicy) *string { return v.DestinationVaultId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the policy ID.
+func (o VaultPolicyOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v VaultPolicy) string { return v.Id }).(pulumi.StringOutput)
+}
+
+type VaultPolicyArrayOutput struct{ *pulumi.OutputState }
+
+func (VaultPolicyArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]VaultPolicy)(nil)).Elem()
+}
+
+func (o VaultPolicyArrayOutput) ToVaultPolicyArrayOutput() VaultPolicyArrayOutput {
+	return o
+}
+
+func (o VaultPolicyArrayOutput) ToVaultPolicyArrayOutputWithContext(ctx context.Context) VaultPolicyArrayOutput {
+	return o
+}
+
+func (o VaultPolicyArrayOutput) Index(i pulumi.IntInput) VaultPolicyOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) VaultPolicy {
+		return vs[0].([]VaultPolicy)[vs[1].(int)]
+	}).(VaultPolicyOutput)
 }
 
 type VaultResource struct {
@@ -524,40 +660,40 @@ type GetVaultsVault struct {
 	// The allocated capacity of the vault, in GB.
 	Allocated float64 `pulumi:"allocated"`
 	// Specifies whether to enable automatic expansion of the backup protection
-	// type vault. Default to **false**.
+	// type vault. Defaults to **false**.
 	AutoExpandEnabled bool `pulumi:"autoExpandEnabled"`
-	// Specifies the backup specifications.
+	// Specifies the consistent level (specification) of the vault.
 	// The valid values are as follows:
 	// + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	// + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	ConsistentLevel string `pulumi:"consistentLevel"`
-	// Specifies a unique ID in UUID format of enterprise project.
+	// Specifies the ID of the enterprise project to which the vault belongs.
 	EnterpriseProjectId string `pulumi:"enterpriseProjectId"`
 	// The vault ID in UUID format.
 	Id string `pulumi:"id"`
-	// Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
+	// Specifies the vault name. This parameter can contain a maximum of 64
 	// characters, which may consist of letters, digits, underscores(_) and hyphens (-).
 	Name string `pulumi:"name"`
-	// Specifies a policy to associate with the CBR vault.
+	// Specifies the ID of the policy associated with the vault.
 	// The `policyId` cannot be used with the vault of replicate protection type.
 	PolicyId string `pulumi:"policyId"`
-	// Specifies the protection type of the CBR vault.
+	// Specifies the protection type of the vault.
 	// The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
 	ProtectionType string `pulumi:"protectionType"`
-	// An array of one or more resources to attach to the CBR vault.
+	// The array of one or more resources to attach to the vault.
 	// The object structure is documented below.
 	Resources []GetVaultsVaultResource `pulumi:"resources"`
 	// Specifies the vault sapacity, in GB. The valid value range is `1` to `10,485,760`.
 	Size int `pulumi:"size"`
 	// The specification code.
 	SpecCode string `pulumi:"specCode"`
-	// Specifies the CBR vault status, including **available**, **lock**, **frozen** and **error**.
+	// Specifies the vault status, including **available**, **lock**, **frozen** and **error**.
 	Status string `pulumi:"status"`
 	// The name of the bucket for the vault.
 	Storage string `pulumi:"storage"`
-	// The key/value pairs to associate with the CBR vault.
+	// The key/value pairs to associate with the vault.
 	Tags map[string]string `pulumi:"tags"`
-	// Specifies the object type of the CBR vault. The vaild values are as follows:
+	// Specifies the object type of the vault. The vaild values are as follows:
 	// + **server** (Cloud Servers)
 	// + **disk** (EVS Disks)
 	// + **turbo** (SFS Turbo file systems)
@@ -581,40 +717,40 @@ type GetVaultsVaultArgs struct {
 	// The allocated capacity of the vault, in GB.
 	Allocated pulumi.Float64Input `pulumi:"allocated"`
 	// Specifies whether to enable automatic expansion of the backup protection
-	// type vault. Default to **false**.
+	// type vault. Defaults to **false**.
 	AutoExpandEnabled pulumi.BoolInput `pulumi:"autoExpandEnabled"`
-	// Specifies the backup specifications.
+	// Specifies the consistent level (specification) of the vault.
 	// The valid values are as follows:
 	// + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	// + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	ConsistentLevel pulumi.StringInput `pulumi:"consistentLevel"`
-	// Specifies a unique ID in UUID format of enterprise project.
+	// Specifies the ID of the enterprise project to which the vault belongs.
 	EnterpriseProjectId pulumi.StringInput `pulumi:"enterpriseProjectId"`
 	// The vault ID in UUID format.
 	Id pulumi.StringInput `pulumi:"id"`
-	// Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
+	// Specifies the vault name. This parameter can contain a maximum of 64
 	// characters, which may consist of letters, digits, underscores(_) and hyphens (-).
 	Name pulumi.StringInput `pulumi:"name"`
-	// Specifies a policy to associate with the CBR vault.
+	// Specifies the ID of the policy associated with the vault.
 	// The `policyId` cannot be used with the vault of replicate protection type.
 	PolicyId pulumi.StringInput `pulumi:"policyId"`
-	// Specifies the protection type of the CBR vault.
+	// Specifies the protection type of the vault.
 	// The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
 	ProtectionType pulumi.StringInput `pulumi:"protectionType"`
-	// An array of one or more resources to attach to the CBR vault.
+	// The array of one or more resources to attach to the vault.
 	// The object structure is documented below.
 	Resources GetVaultsVaultResourceArrayInput `pulumi:"resources"`
 	// Specifies the vault sapacity, in GB. The valid value range is `1` to `10,485,760`.
 	Size pulumi.IntInput `pulumi:"size"`
 	// The specification code.
 	SpecCode pulumi.StringInput `pulumi:"specCode"`
-	// Specifies the CBR vault status, including **available**, **lock**, **frozen** and **error**.
+	// Specifies the vault status, including **available**, **lock**, **frozen** and **error**.
 	Status pulumi.StringInput `pulumi:"status"`
 	// The name of the bucket for the vault.
 	Storage pulumi.StringInput `pulumi:"storage"`
-	// The key/value pairs to associate with the CBR vault.
+	// The key/value pairs to associate with the vault.
 	Tags pulumi.StringMapInput `pulumi:"tags"`
-	// Specifies the object type of the CBR vault. The vaild values are as follows:
+	// Specifies the object type of the vault. The vaild values are as follows:
 	// + **server** (Cloud Servers)
 	// + **disk** (EVS Disks)
 	// + **turbo** (SFS Turbo file systems)
@@ -680,12 +816,12 @@ func (o GetVaultsVaultOutput) Allocated() pulumi.Float64Output {
 }
 
 // Specifies whether to enable automatic expansion of the backup protection
-// type vault. Default to **false**.
+// type vault. Defaults to **false**.
 func (o GetVaultsVaultOutput) AutoExpandEnabled() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetVaultsVault) bool { return v.AutoExpandEnabled }).(pulumi.BoolOutput)
 }
 
-// Specifies the backup specifications.
+// Specifies the consistent level (specification) of the vault.
 // The valid values are as follows:
 // + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 // + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
@@ -693,7 +829,7 @@ func (o GetVaultsVaultOutput) ConsistentLevel() pulumi.StringOutput {
 	return o.ApplyT(func(v GetVaultsVault) string { return v.ConsistentLevel }).(pulumi.StringOutput)
 }
 
-// Specifies a unique ID in UUID format of enterprise project.
+// Specifies the ID of the enterprise project to which the vault belongs.
 func (o GetVaultsVaultOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v GetVaultsVault) string { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
@@ -703,25 +839,25 @@ func (o GetVaultsVaultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetVaultsVault) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
+// Specifies the vault name. This parameter can contain a maximum of 64
 // characters, which may consist of letters, digits, underscores(_) and hyphens (-).
 func (o GetVaultsVaultOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v GetVaultsVault) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies a policy to associate with the CBR vault.
+// Specifies the ID of the policy associated with the vault.
 // The `policyId` cannot be used with the vault of replicate protection type.
 func (o GetVaultsVaultOutput) PolicyId() pulumi.StringOutput {
 	return o.ApplyT(func(v GetVaultsVault) string { return v.PolicyId }).(pulumi.StringOutput)
 }
 
-// Specifies the protection type of the CBR vault.
+// Specifies the protection type of the vault.
 // The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
 func (o GetVaultsVaultOutput) ProtectionType() pulumi.StringOutput {
 	return o.ApplyT(func(v GetVaultsVault) string { return v.ProtectionType }).(pulumi.StringOutput)
 }
 
-// An array of one or more resources to attach to the CBR vault.
+// The array of one or more resources to attach to the vault.
 // The object structure is documented below.
 func (o GetVaultsVaultOutput) Resources() GetVaultsVaultResourceArrayOutput {
 	return o.ApplyT(func(v GetVaultsVault) []GetVaultsVaultResource { return v.Resources }).(GetVaultsVaultResourceArrayOutput)
@@ -737,7 +873,7 @@ func (o GetVaultsVaultOutput) SpecCode() pulumi.StringOutput {
 	return o.ApplyT(func(v GetVaultsVault) string { return v.SpecCode }).(pulumi.StringOutput)
 }
 
-// Specifies the CBR vault status, including **available**, **lock**, **frozen** and **error**.
+// Specifies the vault status, including **available**, **lock**, **frozen** and **error**.
 func (o GetVaultsVaultOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v GetVaultsVault) string { return v.Status }).(pulumi.StringOutput)
 }
@@ -747,12 +883,12 @@ func (o GetVaultsVaultOutput) Storage() pulumi.StringOutput {
 	return o.ApplyT(func(v GetVaultsVault) string { return v.Storage }).(pulumi.StringOutput)
 }
 
-// The key/value pairs to associate with the CBR vault.
+// The key/value pairs to associate with the vault.
 func (o GetVaultsVaultOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v GetVaultsVault) map[string]string { return v.Tags }).(pulumi.StringMapOutput)
 }
 
-// Specifies the object type of the CBR vault. The vaild values are as follows:
+// Specifies the object type of the vault. The vaild values are as follows:
 // + **server** (Cloud Servers)
 // + **disk** (EVS Disks)
 // + **turbo** (SFS Turbo file systems)
@@ -786,9 +922,9 @@ func (o GetVaultsVaultArrayOutput) Index(i pulumi.IntInput) GetVaultsVaultOutput
 }
 
 type GetVaultsVaultResource struct {
-	// An array of disk IDs which will be excluded in the backup.
+	// The array of disk IDs which will be excluded in the backup.
 	Excludes []string `pulumi:"excludes"`
-	// An array of disk or SFS file system IDs which will be included in the backup.
+	// The array of disk or SFS file system IDs which will be included in the backup.
 	Includes []string `pulumi:"includes"`
 	// The ID of the ECS instance to be backed up.
 	ServerId string `pulumi:"serverId"`
@@ -806,9 +942,9 @@ type GetVaultsVaultResourceInput interface {
 }
 
 type GetVaultsVaultResourceArgs struct {
-	// An array of disk IDs which will be excluded in the backup.
+	// The array of disk IDs which will be excluded in the backup.
 	Excludes pulumi.StringArrayInput `pulumi:"excludes"`
-	// An array of disk or SFS file system IDs which will be included in the backup.
+	// The array of disk or SFS file system IDs which will be included in the backup.
 	Includes pulumi.StringArrayInput `pulumi:"includes"`
 	// The ID of the ECS instance to be backed up.
 	ServerId pulumi.StringInput `pulumi:"serverId"`
@@ -865,12 +1001,12 @@ func (o GetVaultsVaultResourceOutput) ToGetVaultsVaultResourceOutputWithContext(
 	return o
 }
 
-// An array of disk IDs which will be excluded in the backup.
+// The array of disk IDs which will be excluded in the backup.
 func (o GetVaultsVaultResourceOutput) Excludes() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v GetVaultsVaultResource) []string { return v.Excludes }).(pulumi.StringArrayOutput)
 }
 
-// An array of disk or SFS file system IDs which will be included in the backup.
+// The array of disk or SFS file system IDs which will be included in the backup.
 func (o GetVaultsVaultResourceOutput) Includes() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v GetVaultsVaultResource) []string { return v.Includes }).(pulumi.StringArrayOutput)
 }
@@ -905,6 +1041,8 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*PolicyBackupCyclePtrInput)(nil)).Elem(), PolicyBackupCycleArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*PolicyLongTermRetentionInput)(nil)).Elem(), PolicyLongTermRetentionArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*PolicyLongTermRetentionPtrInput)(nil)).Elem(), PolicyLongTermRetentionArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*VaultPolicyInput)(nil)).Elem(), VaultPolicyArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*VaultPolicyArrayInput)(nil)).Elem(), VaultPolicyArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*VaultResourceInput)(nil)).Elem(), VaultResourceArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*VaultResourceArrayInput)(nil)).Elem(), VaultResourceArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetVaultsVaultInput)(nil)).Elem(), GetVaultsVaultArgs{})
@@ -915,6 +1053,8 @@ func init() {
 	pulumi.RegisterOutputType(PolicyBackupCyclePtrOutput{})
 	pulumi.RegisterOutputType(PolicyLongTermRetentionOutput{})
 	pulumi.RegisterOutputType(PolicyLongTermRetentionPtrOutput{})
+	pulumi.RegisterOutputType(VaultPolicyOutput{})
+	pulumi.RegisterOutputType(VaultPolicyArrayOutput{})
 	pulumi.RegisterOutputType(VaultResourceOutput{})
 	pulumi.RegisterOutputType(VaultResourceArrayOutput{})
 	pulumi.RegisterOutputType(GetVaultsVaultOutput{})

@@ -14,18 +14,126 @@ import (
 // Manages CDM job resource within HuaweiCloud.
 //
 // ## Example Usage
+// ### Create a cdm job
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cdm"
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Obs"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Cdm"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			name := cfg.RequireObject("name")
+//			obsLinkName := cfg.RequireObject("obsLinkName")
+//			obsInputBucket := cfg.RequireObject("obsInputBucket")
+//			obsOutputBucket := cfg.RequireObject("obsOutputBucket")
+//			obsLinkNameInput := cfg.RequireObject("obsLinkNameInput")
+//			_, err := Obs.NewBucket(ctx, "input", &Obs.BucketArgs{
+//				Bucket:       pulumi.String("job-input"),
+//				Acl:          pulumi.String("private"),
+//				ForceDestroy: pulumi.Bool(true),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			_, err = Obs.NewBucket(ctx, "output", &Obs.BucketArgs{
+//				Bucket:       pulumi.String("job-output"),
+//				Acl:          pulumi.String("private"),
+//				ForceDestroy: pulumi.Bool(true),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			_, err = Cdm.NewJob(ctx, "test", &Cdm.JobArgs{
+//				JobType:         pulumi.String("NORMAL_JOB"),
+//				ClusterId:       pulumi.Any(huaweicloud_cdm_cluster.Test.Id),
+//				SourceConnector: pulumi.String("obs-connector"),
+//				SourceLinkName:  pulumi.Any(obsLinkName),
+//				SourceJobConfig: pulumi.StringMap{
+//					"bucketName":               pulumi.Any(obsInputBucket),
+//					"inputDirectory":           pulumi.String("/"),
+//					"listTextFile":             pulumi.String("false"),
+//					"inputFormat":              pulumi.String("BINARY_FILE"),
+//					"fromCompression":          pulumi.String("NONE"),
+//					"fromFileOpType":           pulumi.String("DO_NOTHING"),
+//					"useMarkerFile":            pulumi.String("false"),
+//					"useTimeFilter":            pulumi.String("false"),
+//					"fileSeparator":            pulumi.String("|"),
+//					"filterType":               pulumi.String("NONE"),
+//					"useWildCard":              pulumi.String("false"),
+//					"decryption":               pulumi.String("NONE"),
+//					"nonexistentPathDisregard": pulumi.String("false"),
+//				},
+//				DestinationConnector: pulumi.String("obs-connector"),
+//				DestinationLinkName:  pulumi.Any(obsLinkName),
+//				DestinationJobConfig: pulumi.StringMap{
+//					"bucketName":          pulumi.Any(obsOutputBucket),
+//					"outputDirectory":     pulumi.String("/"),
+//					"outputFormat":        pulumi.String("BINARY_FILE"),
+//					"validateMD5":         pulumi.String("true"),
+//					"recordMD5Result":     pulumi.String("false"),
+//					"duplicateFileOpType": pulumi.String("REPLACE"),
+//					"useCustomDirectory":  pulumi.String("false"),
+//					"encryption":          pulumi.String("NONE"),
+//					"copyContentType":     pulumi.String("false"),
+//					"shouldClearTable":    pulumi.String("false"),
+//				},
+//				Config: &cdm.JobConfigArgs{
+//					RetryType:                  pulumi.String("NONE"),
+//					SchedulerEnabled:           pulumi.Bool(false),
+//					ThrottlingExtractorsNumber: pulumi.Int(4),
+//					ThrottlingRecordDirtyData:  pulumi.Bool(false),
+//					ThrottlingMaxErrorRecords:  pulumi.Int(10),
+//					ThrottlingLoaderNumber:     pulumi.Int(1),
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
 //
 // ## Import
 //
 // Jobs can be imported by `id`. It is composed of the ID of CDM cluster which this job run in and the name of job,
 //
-// separated by a slash. For example,
+// separated by a slash. For example, bash
 //
 // ```sh
 //
 //	$ pulumi import huaweicloud:Cdm/job:Job test b11b407c-e604-4e8d-8bc4-92398320b847/jobName
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`source_job_config` and `destination_job_config`.
+//
+// It is generally recommended running `terraform plan` after importing a cluster.
+//
+// You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_cdm_cluster" "test" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [
+//
+//	source_job_config, destination_job_config,
+//
+//	]
+//
+//	} }
 type Job struct {
 	pulumi.CustomResourceState
 

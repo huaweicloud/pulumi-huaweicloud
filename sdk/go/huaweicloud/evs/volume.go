@@ -106,12 +106,12 @@ type Volume struct {
 	pulumi.CustomResourceState
 
 	// If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-	// the Device as the Instance sees it.
+	// the Device as the Instance sees it. The object structure is documented below.
 	Attachments VolumeAttachmentArrayOutput `pulumi:"attachments"`
-	AutoPay     pulumi.StringPtrOutput      `pulumi:"autoPay"`
+	// Deprecated: Deprecated
+	AutoPay pulumi.StringPtrOutput `pulumi:"autoPay"`
 	// Specifies whether auto renew is enabled.
 	// Valid values are **true** and **false**.
-	// Changing this creates a new disk.
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
 	// Specifies the availability zone for the disk. Changing this creates
 	// a new disk.
@@ -128,6 +128,10 @@ type Volume struct {
 	// + **postPaid**: the pay-per-use billing mode.
 	//   Changing this creates a new disk.
 	ChargingMode pulumi.StringOutput `pulumi:"chargingMode"`
+	// Specifies the ID of the DSS storage pool accommodating the disk.
+	DedicatedStorageId pulumi.StringPtrOutput `pulumi:"dedicatedStorageId"`
+	// The name of the DSS storage pool accommodating the disk.
+	DedicatedStorageName pulumi.StringOutput `pulumi:"dedicatedStorageName"`
 	// Specifies the disk description. The value can contain a maximum of 255 bytes.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the device type of disk to create. Valid options are VBD and
@@ -217,12 +221,12 @@ func GetVolume(ctx *pulumi.Context,
 // Input properties used for looking up and filtering Volume resources.
 type volumeState struct {
 	// If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-	// the Device as the Instance sees it.
+	// the Device as the Instance sees it. The object structure is documented below.
 	Attachments []VolumeAttachment `pulumi:"attachments"`
-	AutoPay     *string            `pulumi:"autoPay"`
+	// Deprecated: Deprecated
+	AutoPay *string `pulumi:"autoPay"`
 	// Specifies whether auto renew is enabled.
 	// Valid values are **true** and **false**.
-	// Changing this creates a new disk.
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the availability zone for the disk. Changing this creates
 	// a new disk.
@@ -239,6 +243,10 @@ type volumeState struct {
 	// + **postPaid**: the pay-per-use billing mode.
 	//   Changing this creates a new disk.
 	ChargingMode *string `pulumi:"chargingMode"`
+	// Specifies the ID of the DSS storage pool accommodating the disk.
+	DedicatedStorageId *string `pulumi:"dedicatedStorageId"`
+	// The name of the DSS storage pool accommodating the disk.
+	DedicatedStorageName *string `pulumi:"dedicatedStorageName"`
 	// Specifies the disk description. The value can contain a maximum of 255 bytes.
 	Description *string `pulumi:"description"`
 	// Specifies the device type of disk to create. Valid options are VBD and
@@ -293,12 +301,12 @@ type volumeState struct {
 
 type VolumeState struct {
 	// If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-	// the Device as the Instance sees it.
+	// the Device as the Instance sees it. The object structure is documented below.
 	Attachments VolumeAttachmentArrayInput
-	AutoPay     pulumi.StringPtrInput
+	// Deprecated: Deprecated
+	AutoPay pulumi.StringPtrInput
 	// Specifies whether auto renew is enabled.
 	// Valid values are **true** and **false**.
-	// Changing this creates a new disk.
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the availability zone for the disk. Changing this creates
 	// a new disk.
@@ -315,6 +323,10 @@ type VolumeState struct {
 	// + **postPaid**: the pay-per-use billing mode.
 	//   Changing this creates a new disk.
 	ChargingMode pulumi.StringPtrInput
+	// Specifies the ID of the DSS storage pool accommodating the disk.
+	DedicatedStorageId pulumi.StringPtrInput
+	// The name of the DSS storage pool accommodating the disk.
+	DedicatedStorageName pulumi.StringPtrInput
 	// Specifies the disk description. The value can contain a maximum of 255 bytes.
 	Description pulumi.StringPtrInput
 	// Specifies the device type of disk to create. Valid options are VBD and
@@ -372,10 +384,10 @@ func (VolumeState) ElementType() reflect.Type {
 }
 
 type volumeArgs struct {
+	// Deprecated: Deprecated
 	AutoPay *string `pulumi:"autoPay"`
 	// Specifies whether auto renew is enabled.
 	// Valid values are **true** and **false**.
-	// Changing this creates a new disk.
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the availability zone for the disk. Changing this creates
 	// a new disk.
@@ -392,6 +404,8 @@ type volumeArgs struct {
 	// + **postPaid**: the pay-per-use billing mode.
 	//   Changing this creates a new disk.
 	ChargingMode *string `pulumi:"chargingMode"`
+	// Specifies the ID of the DSS storage pool accommodating the disk.
+	DedicatedStorageId *string `pulumi:"dedicatedStorageId"`
 	// Specifies the disk description. The value can contain a maximum of 255 bytes.
 	Description *string `pulumi:"description"`
 	// Specifies the device type of disk to create. Valid options are VBD and
@@ -444,10 +458,10 @@ type volumeArgs struct {
 
 // The set of arguments for constructing a Volume resource.
 type VolumeArgs struct {
+	// Deprecated: Deprecated
 	AutoPay pulumi.StringPtrInput
 	// Specifies whether auto renew is enabled.
 	// Valid values are **true** and **false**.
-	// Changing this creates a new disk.
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the availability zone for the disk. Changing this creates
 	// a new disk.
@@ -464,6 +478,8 @@ type VolumeArgs struct {
 	// + **postPaid**: the pay-per-use billing mode.
 	//   Changing this creates a new disk.
 	ChargingMode pulumi.StringPtrInput
+	// Specifies the ID of the DSS storage pool accommodating the disk.
+	DedicatedStorageId pulumi.StringPtrInput
 	// Specifies the disk description. The value can contain a maximum of 255 bytes.
 	Description pulumi.StringPtrInput
 	// Specifies the device type of disk to create. Valid options are VBD and
@@ -602,18 +618,18 @@ func (o VolumeOutput) ToVolumeOutputWithContext(ctx context.Context) VolumeOutpu
 }
 
 // If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-// the Device as the Instance sees it.
+// the Device as the Instance sees it. The object structure is documented below.
 func (o VolumeOutput) Attachments() VolumeAttachmentArrayOutput {
 	return o.ApplyT(func(v *Volume) VolumeAttachmentArrayOutput { return v.Attachments }).(VolumeAttachmentArrayOutput)
 }
 
+// Deprecated: Deprecated
 func (o VolumeOutput) AutoPay() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringPtrOutput { return v.AutoPay }).(pulumi.StringPtrOutput)
 }
 
 // Specifies whether auto renew is enabled.
 // Valid values are **true** and **false**.
-// Changing this creates a new disk.
 func (o VolumeOutput) AutoRenew() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
 }
@@ -643,6 +659,16 @@ func (o VolumeOutput) Cascade() pulumi.BoolPtrOutput {
 //     Changing this creates a new disk.
 func (o VolumeOutput) ChargingMode() pulumi.StringOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringOutput { return v.ChargingMode }).(pulumi.StringOutput)
+}
+
+// Specifies the ID of the DSS storage pool accommodating the disk.
+func (o VolumeOutput) DedicatedStorageId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Volume) pulumi.StringPtrOutput { return v.DedicatedStorageId }).(pulumi.StringPtrOutput)
+}
+
+// The name of the DSS storage pool accommodating the disk.
+func (o VolumeOutput) DedicatedStorageName() pulumi.StringOutput {
+	return o.ApplyT(func(v *Volume) pulumi.StringOutput { return v.DedicatedStorageName }).(pulumi.StringOutput)
 }
 
 // Specifies the disk description. The value can contain a maximum of 255 bytes.

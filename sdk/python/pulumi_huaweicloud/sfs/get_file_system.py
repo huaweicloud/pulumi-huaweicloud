@@ -115,6 +115,9 @@ class GetFileSystemResult:
     @property
     @pulumi.getter
     def description(self) -> str:
+        """
+        The description of the shared file system.
+        """
         return pulumi.get(self, "description")
 
     @property
@@ -208,6 +211,9 @@ class GetFileSystemResult:
     @property
     @pulumi.getter
     def state(self) -> str:
+        """
+        The state of the shared file system.
+        """
         return pulumi.get(self, "state")
 
     @property
@@ -265,6 +271,8 @@ def get_file_system(id: Optional[str] = None,
 
     :param str id: The UUID of the shared file system.
     :param str name: The name of the shared file system.
+    :param str region: Specifies the region in which to obtain the shared file system.
+           If omitted, the provider-level region will be used.
     :param str status: The status of the shared file system.
     """
     __args__ = dict()
@@ -320,6 +328,8 @@ def get_file_system_output(id: Optional[pulumi.Input[Optional[str]]] = None,
 
     :param str id: The UUID of the shared file system.
     :param str name: The name of the shared file system.
+    :param str region: Specifies the region in which to obtain the shared file system.
+           If omitted, the provider-level region will be used.
     :param str status: The status of the shared file system.
     """
     ...

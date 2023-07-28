@@ -22,7 +22,7 @@ class GetInstancesResult:
     """
     A collection of values returned by getInstances.
     """
-    def __init__(__self__, availability_zone=None, enterprise_project_id=None, flavor_id=None, flavor_name=None, id=None, image_id=None, instances=None, key_pair=None, name=None, region=None, status=None):
+    def __init__(__self__, availability_zone=None, enterprise_project_id=None, flavor_id=None, flavor_name=None, id=None, image_id=None, instance_id=None, instances=None, key_pair=None, name=None, region=None, status=None):
         if availability_zone and not isinstance(availability_zone, str):
             raise TypeError("Expected argument 'availability_zone' to be a str")
         pulumi.set(__self__, "availability_zone", availability_zone)
@@ -41,6 +41,9 @@ class GetInstancesResult:
         if image_id and not isinstance(image_id, str):
             raise TypeError("Expected argument 'image_id' to be a str")
         pulumi.set(__self__, "image_id", image_id)
+        if instance_id and not isinstance(instance_id, str):
+            raise TypeError("Expected argument 'instance_id' to be a str")
+        pulumi.set(__self__, "instance_id", instance_id)
         if instances and not isinstance(instances, list):
             raise TypeError("Expected argument 'instances' to be a list")
         pulumi.set(__self__, "instances", instances)
@@ -106,6 +109,11 @@ class GetInstancesResult:
         return pulumi.get(self, "image_id")
 
     @property
+    @pulumi.getter(name="instanceId")
+    def instance_id(self) -> Optional[str]:
+        return pulumi.get(self, "instance_id")
+
+    @property
     @pulumi.getter
     def instances(self) -> Sequence['outputs.GetInstancesInstanceResult']:
         """
@@ -155,6 +163,7 @@ class AwaitableGetInstancesResult(GetInstancesResult):
             flavor_name=self.flavor_name,
             id=self.id,
             image_id=self.image_id,
+            instance_id=self.instance_id,
             instances=self.instances,
             key_pair=self.key_pair,
             name=self.name,
@@ -167,6 +176,7 @@ def get_instances(availability_zone: Optional[str] = None,
                   flavor_id: Optional[str] = None,
                   flavor_name: Optional[str] = None,
                   image_id: Optional[str] = None,
+                  instance_id: Optional[str] = None,
                   key_pair: Optional[str] = None,
                   name: Optional[str] = None,
                   region: Optional[str] = None,
@@ -193,6 +203,7 @@ def get_instances(availability_zone: Optional[str] = None,
     :param str flavor_id: Specifies the flavor ID.
     :param str flavor_name: Specifies the flavor name of the instance.
     :param str image_id: Specifies the image ID of the instance.
+    :param str instance_id: Specifies the ECS ID.
     :param str key_pair: Specifies the key pair that is used to authenticate the instance.
     :param str name: Specifies the instance name, which can be queried with a regular expression.
            The instance name supports fuzzy matching query too.
@@ -209,6 +220,7 @@ def get_instances(availability_zone: Optional[str] = None,
     __args__['flavorId'] = flavor_id
     __args__['flavorName'] = flavor_name
     __args__['imageId'] = image_id
+    __args__['instanceId'] = instance_id
     __args__['keyPair'] = key_pair
     __args__['name'] = name
     __args__['region'] = region
@@ -223,6 +235,7 @@ def get_instances(availability_zone: Optional[str] = None,
         flavor_name=__ret__.flavor_name,
         id=__ret__.id,
         image_id=__ret__.image_id,
+        instance_id=__ret__.instance_id,
         instances=__ret__.instances,
         key_pair=__ret__.key_pair,
         name=__ret__.name,
@@ -236,6 +249,7 @@ def get_instances_output(availability_zone: Optional[pulumi.Input[Optional[str]]
                          flavor_id: Optional[pulumi.Input[Optional[str]]] = None,
                          flavor_name: Optional[pulumi.Input[Optional[str]]] = None,
                          image_id: Optional[pulumi.Input[Optional[str]]] = None,
+                         instance_id: Optional[pulumi.Input[Optional[str]]] = None,
                          key_pair: Optional[pulumi.Input[Optional[str]]] = None,
                          name: Optional[pulumi.Input[Optional[str]]] = None,
                          region: Optional[pulumi.Input[Optional[str]]] = None,
@@ -262,6 +276,7 @@ def get_instances_output(availability_zone: Optional[pulumi.Input[Optional[str]]
     :param str flavor_id: Specifies the flavor ID.
     :param str flavor_name: Specifies the flavor name of the instance.
     :param str image_id: Specifies the image ID of the instance.
+    :param str instance_id: Specifies the ECS ID.
     :param str key_pair: Specifies the key pair that is used to authenticate the instance.
     :param str name: Specifies the instance name, which can be queried with a regular expression.
            The instance name supports fuzzy matching query too.

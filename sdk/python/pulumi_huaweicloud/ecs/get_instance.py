@@ -9,7 +9,6 @@ import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
 from . import outputs
-from ._inputs import *
 
 __all__ = [
     'GetInstanceResult',
@@ -23,7 +22,7 @@ class GetInstanceResult:
     """
     A collection of values returned by getInstance.
     """
-    def __init__(__self__, availability_zone=None, enterprise_project_id=None, fixed_ip_v4=None, flavor_id=None, flavor_name=None, id=None, image_id=None, image_name=None, key_pair=None, name=None, networks=None, public_ip=None, region=None, scheduler_hints=None, security_group_ids=None, security_groups=None, status=None, system_disk_id=None, tags=None, user_data=None, volume_attacheds=None):
+    def __init__(__self__, availability_zone=None, enterprise_project_id=None, fixed_ip_v4=None, flavor_id=None, flavor_name=None, id=None, image_id=None, image_name=None, instance_id=None, key_pair=None, name=None, networks=None, public_ip=None, region=None, scheduler_hints=None, security_group_ids=None, security_groups=None, status=None, system_disk_id=None, tags=None, user_data=None, volume_attacheds=None):
         if availability_zone and not isinstance(availability_zone, str):
             raise TypeError("Expected argument 'availability_zone' to be a str")
         pulumi.set(__self__, "availability_zone", availability_zone)
@@ -48,6 +47,9 @@ class GetInstanceResult:
         if image_name and not isinstance(image_name, str):
             raise TypeError("Expected argument 'image_name' to be a str")
         pulumi.set(__self__, "image_name", image_name)
+        if instance_id and not isinstance(instance_id, str):
+            raise TypeError("Expected argument 'instance_id' to be a str")
+        pulumi.set(__self__, "instance_id", instance_id)
         if key_pair and not isinstance(key_pair, str):
             raise TypeError("Expected argument 'key_pair' to be a str")
         pulumi.set(__self__, "key_pair", key_pair)
@@ -147,6 +149,11 @@ class GetInstanceResult:
         return pulumi.get(self, "image_name")
 
     @property
+    @pulumi.getter(name="instanceId")
+    def instance_id(self) -> Optional[str]:
+        return pulumi.get(self, "instance_id")
+
+    @property
     @pulumi.getter(name="keyPair")
     def key_pair(self) -> str:
         """
@@ -163,8 +170,8 @@ class GetInstanceResult:
     @pulumi.getter
     def networks(self) -> Sequence['outputs.GetInstanceNetworkResult']:
         """
-        An array of one or more networks to attach to the instance. The network object structure is documented
-        below.
+        An array of one or more networks to attach to the instance.
+        The network object structure is documented below.
         """
         return pulumi.get(self, "networks")
 
@@ -185,8 +192,8 @@ class GetInstanceResult:
     @pulumi.getter(name="schedulerHints")
     def scheduler_hints(self) -> Sequence['outputs.GetInstanceSchedulerHintResult']:
         """
-        The scheduler with hints on how the instance should be launched. The available hints are described
-        below.
+        The scheduler with hints on how the instance should be launched.
+        The scheduler hints structure is documented below.
         """
         return pulumi.get(self, "scheduler_hints")
 
@@ -201,6 +208,9 @@ class GetInstanceResult:
     @property
     @pulumi.getter(name="securityGroups")
     def security_groups(self) -> Sequence[str]:
+        """
+        An array of one or more security groups to associate with the instance.
+        """
         return pulumi.get(self, "security_groups")
 
     @property
@@ -239,8 +249,8 @@ class GetInstanceResult:
     @pulumi.getter(name="volumeAttacheds")
     def volume_attacheds(self) -> Sequence['outputs.GetInstanceVolumeAttachedResult']:
         """
-        An array of one or more disks to attach to the instance. The volume_attached object structure is
-        documented below.
+        An array of one or more disks to attach to the instance.
+        The volume attached object structure is documented below.
         """
         return pulumi.get(self, "volume_attacheds")
 
@@ -259,6 +269,7 @@ class AwaitableGetInstanceResult(GetInstanceResult):
             id=self.id,
             image_id=self.image_id,
             image_name=self.image_name,
+            instance_id=self.instance_id,
             key_pair=self.key_pair,
             name=self.name,
             networks=self.networks,
@@ -277,9 +288,9 @@ class AwaitableGetInstanceResult(GetInstanceResult):
 def get_instance(enterprise_project_id: Optional[str] = None,
                  fixed_ip_v4: Optional[str] = None,
                  flavor_id: Optional[str] = None,
+                 instance_id: Optional[str] = None,
                  name: Optional[str] = None,
                  region: Optional[str] = None,
-                 scheduler_hints: Optional[Sequence[pulumi.InputType['GetInstanceSchedulerHintArgs']]] = None,
                  opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetInstanceResult:
     """
     Use this data source to get the details of a specified compute instance.
@@ -299,19 +310,18 @@ def get_instance(enterprise_project_id: Optional[str] = None,
     :param str enterprise_project_id: Specifies the enterprise project id.
     :param str fixed_ip_v4: Specifies the IPv4 addresses of the ECS.
     :param str flavor_id: Specifies the flavor ID.
+    :param str instance_id: Specifies the ECS ID.
     :param str name: Specifies the ECS name, which can be queried with a regular expression.
-    :param str region: The region in which to obtain the instance. If omitted, the provider-level region will
-           be used.
-    :param Sequence[pulumi.InputType['GetInstanceSchedulerHintArgs']] scheduler_hints: The scheduler with hints on how the instance should be launched. The available hints are described
-           below.
+    :param str region: The region in which to obtain the instance.
+           If omitted, the provider-level region will be used.
     """
     __args__ = dict()
     __args__['enterpriseProjectId'] = enterprise_project_id
     __args__['fixedIpV4'] = fixed_ip_v4
     __args__['flavorId'] = flavor_id
+    __args__['instanceId'] = instance_id
     __args__['name'] = name
     __args__['region'] = region
-    __args__['schedulerHints'] = scheduler_hints
     opts = pulumi.InvokeOptions.merge(_utilities.get_invoke_opts_defaults(), opts)
     __ret__ = pulumi.runtime.invoke('huaweicloud:Ecs/getInstance:getInstance', __args__, opts=opts, typ=GetInstanceResult).value
 
@@ -324,6 +334,7 @@ def get_instance(enterprise_project_id: Optional[str] = None,
         id=__ret__.id,
         image_id=__ret__.image_id,
         image_name=__ret__.image_name,
+        instance_id=__ret__.instance_id,
         key_pair=__ret__.key_pair,
         name=__ret__.name,
         networks=__ret__.networks,
@@ -343,9 +354,9 @@ def get_instance(enterprise_project_id: Optional[str] = None,
 def get_instance_output(enterprise_project_id: Optional[pulumi.Input[Optional[str]]] = None,
                         fixed_ip_v4: Optional[pulumi.Input[Optional[str]]] = None,
                         flavor_id: Optional[pulumi.Input[Optional[str]]] = None,
+                        instance_id: Optional[pulumi.Input[Optional[str]]] = None,
                         name: Optional[pulumi.Input[Optional[str]]] = None,
                         region: Optional[pulumi.Input[Optional[str]]] = None,
-                        scheduler_hints: Optional[pulumi.Input[Optional[Sequence[pulumi.InputType['GetInstanceSchedulerHintArgs']]]]] = None,
                         opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetInstanceResult]:
     """
     Use this data source to get the details of a specified compute instance.
@@ -365,10 +376,9 @@ def get_instance_output(enterprise_project_id: Optional[pulumi.Input[Optional[st
     :param str enterprise_project_id: Specifies the enterprise project id.
     :param str fixed_ip_v4: Specifies the IPv4 addresses of the ECS.
     :param str flavor_id: Specifies the flavor ID.
+    :param str instance_id: Specifies the ECS ID.
     :param str name: Specifies the ECS name, which can be queried with a regular expression.
-    :param str region: The region in which to obtain the instance. If omitted, the provider-level region will
-           be used.
-    :param Sequence[pulumi.InputType['GetInstanceSchedulerHintArgs']] scheduler_hints: The scheduler with hints on how the instance should be launched. The available hints are described
-           below.
+    :param str region: The region in which to obtain the instance.
+           If omitted, the provider-level region will be used.
     """
     ...

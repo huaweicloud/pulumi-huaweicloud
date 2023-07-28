@@ -92,17 +92,18 @@ import (
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:GaussDBforNoSQL/cassandraInstance:CassandraInstance instance_1 2e045d8b-b226-4aa2-91b9-7e76357655c06
+//	$ pulumi import huaweicloud:GaussDBforNoSQL/cassandraInstance:CassandraInstance instance_1 749112383d5342e9acb6c7825801b452in06
 //
 // ```
 type CassandraInstance struct {
 	pulumi.CustomResourceState
 
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false". Changing this will do nothing.
+	// Valid values are "true" and "false".
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
-	// Specifies the AZ name. Changing this parameter will create a new
-	// resource.
+	// Specifies the AZ name. For a three-AZ deployment instance,
+	// use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+	// Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringOutput `pulumi:"availabilityZone"`
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy CassandraInstanceBackupStrategyOutput `pulumi:"backupStrategy"`
@@ -131,6 +132,10 @@ type CassandraInstance struct {
 	// If specified, try to import the instance instead of creating if the name already
 	// existed.
 	ForceImport pulumi.BoolPtrOutput `pulumi:"forceImport"`
+	// Indicates the LB IP address of the db.
+	LbIpAddress pulumi.StringOutput `pulumi:"lbIpAddress"`
+	// Indicates the LB port of the db.
+	LbPort pulumi.StringOutput `pulumi:"lbPort"`
 	// Indicates the instance type.
 	Mode pulumi.StringOutput `pulumi:"mode"`
 	// Specifies the instance name, which can be the same as an existing instance name. The value
@@ -232,10 +237,11 @@ func GetCassandraInstance(ctx *pulumi.Context,
 // Input properties used for looking up and filtering CassandraInstance resources.
 type cassandraInstanceState struct {
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false". Changing this will do nothing.
+	// Valid values are "true" and "false".
 	AutoRenew *string `pulumi:"autoRenew"`
-	// Specifies the AZ name. Changing this parameter will create a new
-	// resource.
+	// Specifies the AZ name. For a three-AZ deployment instance,
+	// use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+	// Changing this parameter will create a new resource.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy *CassandraInstanceBackupStrategy `pulumi:"backupStrategy"`
@@ -264,6 +270,10 @@ type cassandraInstanceState struct {
 	// If specified, try to import the instance instead of creating if the name already
 	// existed.
 	ForceImport *bool `pulumi:"forceImport"`
+	// Indicates the LB IP address of the db.
+	LbIpAddress *string `pulumi:"lbIpAddress"`
+	// Indicates the LB port of the db.
+	LbPort *string `pulumi:"lbPort"`
 	// Indicates the instance type.
 	Mode *string `pulumi:"mode"`
 	// Specifies the instance name, which can be the same as an existing instance name. The value
@@ -318,10 +328,11 @@ type cassandraInstanceState struct {
 
 type CassandraInstanceState struct {
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false". Changing this will do nothing.
+	// Valid values are "true" and "false".
 	AutoRenew pulumi.StringPtrInput
-	// Specifies the AZ name. Changing this parameter will create a new
-	// resource.
+	// Specifies the AZ name. For a three-AZ deployment instance,
+	// use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+	// Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringPtrInput
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy CassandraInstanceBackupStrategyPtrInput
@@ -350,6 +361,10 @@ type CassandraInstanceState struct {
 	// If specified, try to import the instance instead of creating if the name already
 	// existed.
 	ForceImport pulumi.BoolPtrInput
+	// Indicates the LB IP address of the db.
+	LbIpAddress pulumi.StringPtrInput
+	// Indicates the LB port of the db.
+	LbPort pulumi.StringPtrInput
 	// Indicates the instance type.
 	Mode pulumi.StringPtrInput
 	// Specifies the instance name, which can be the same as an existing instance name. The value
@@ -408,10 +423,11 @@ func (CassandraInstanceState) ElementType() reflect.Type {
 
 type cassandraInstanceArgs struct {
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false". Changing this will do nothing.
+	// Valid values are "true" and "false".
 	AutoRenew *string `pulumi:"autoRenew"`
-	// Specifies the AZ name. Changing this parameter will create a new
-	// resource.
+	// Specifies the AZ name. For a three-AZ deployment instance,
+	// use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+	// Changing this parameter will create a new resource.
 	AvailabilityZone string `pulumi:"availabilityZone"`
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy *CassandraInstanceBackupStrategy `pulumi:"backupStrategy"`
@@ -483,10 +499,11 @@ type cassandraInstanceArgs struct {
 // The set of arguments for constructing a CassandraInstance resource.
 type CassandraInstanceArgs struct {
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false". Changing this will do nothing.
+	// Valid values are "true" and "false".
 	AutoRenew pulumi.StringPtrInput
-	// Specifies the AZ name. Changing this parameter will create a new
-	// resource.
+	// Specifies the AZ name. For a three-AZ deployment instance,
+	// use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+	// Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringInput
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy CassandraInstanceBackupStrategyPtrInput
@@ -643,13 +660,14 @@ func (o CassandraInstanceOutput) ToCassandraInstanceOutputWithContext(ctx contex
 }
 
 // Specifies whether auto renew is enabled.
-// Valid values are "true" and "false". Changing this will do nothing.
+// Valid values are "true" and "false".
 func (o CassandraInstanceOutput) AutoRenew() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *CassandraInstance) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the AZ name. Changing this parameter will create a new
-// resource.
+// Specifies the AZ name. For a three-AZ deployment instance,
+// use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
+// Changing this parameter will create a new resource.
 func (o CassandraInstanceOutput) AvailabilityZone() pulumi.StringOutput {
 	return o.ApplyT(func(v *CassandraInstance) pulumi.StringOutput { return v.AvailabilityZone }).(pulumi.StringOutput)
 }
@@ -709,6 +727,16 @@ func (o CassandraInstanceOutput) Flavor() pulumi.StringOutput {
 // existed.
 func (o CassandraInstanceOutput) ForceImport() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *CassandraInstance) pulumi.BoolPtrOutput { return v.ForceImport }).(pulumi.BoolPtrOutput)
+}
+
+// Indicates the LB IP address of the db.
+func (o CassandraInstanceOutput) LbIpAddress() pulumi.StringOutput {
+	return o.ApplyT(func(v *CassandraInstance) pulumi.StringOutput { return v.LbIpAddress }).(pulumi.StringOutput)
+}
+
+// Indicates the LB port of the db.
+func (o CassandraInstanceOutput) LbPort() pulumi.StringOutput {
+	return o.ApplyT(func(v *CassandraInstance) pulumi.StringOutput { return v.LbPort }).(pulumi.StringOutput)
 }
 
 // Indicates the instance type.

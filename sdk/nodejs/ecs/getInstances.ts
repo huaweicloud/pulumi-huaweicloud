@@ -34,6 +34,7 @@ export function getInstances(args?: GetInstancesArgs, opts?: pulumi.InvokeOption
         "flavorId": args.flavorId,
         "flavorName": args.flavorName,
         "imageId": args.imageId,
+        "instanceId": args.instanceId,
         "keyPair": args.keyPair,
         "name": args.name,
         "region": args.region,
@@ -66,6 +67,10 @@ export interface GetInstancesArgs {
      * Specifies the image ID of the instance.
      */
     imageId?: string;
+    /**
+     * Specifies the ECS ID.
+     */
+    instanceId?: string;
     /**
      * Specifies the key pair that is used to authenticate the instance.
      */
@@ -117,6 +122,7 @@ export interface GetInstancesResult {
      * The image ID of the instance.
      */
     readonly imageId?: string;
+    readonly instanceId?: string;
     /**
      * List of ECS instance details. The object structure of each ECS instance is documented below.
      */
@@ -165,6 +171,10 @@ export interface GetInstancesOutputArgs {
      * Specifies the image ID of the instance.
      */
     imageId?: pulumi.Input<string>;
+    /**
+     * Specifies the ECS ID.
+     */
+    instanceId?: pulumi.Input<string>;
     /**
      * Specifies the key pair that is used to authenticate the instance.
      */

@@ -93,10 +93,11 @@ import (
 //				return err
 //			}
 //			_, err = Vpcep.NewEndpoint(ctx, "demoEndpoint", &Vpcep.EndpointArgs{
-//				ServiceId: demoService.ID(),
-//				VpcId:     pulumi.Any(vpcId),
-//				NetworkId: pulumi.Any(networkId),
-//				EnableDns: pulumi.Bool(true),
+//				ServiceId:   demoService.ID(),
+//				VpcId:       pulumi.Any(vpcId),
+//				NetworkId:   pulumi.Any(networkId),
+//				EnableDns:   pulumi.Bool(true),
+//				Description: pulumi.String("test description"),
 //			})
 //			if err != nil {
 //				return err
@@ -109,27 +110,29 @@ import (
 //
 // ## Import
 //
-// VPC endpoint can be imported using the `id`, e.g.
+// VPC endpoint can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Vpcep/endpoint:Endpoint test 828907cc-40c9-42fe-8206-ecc1bdd30060
+//	$ pulumi import huaweicloud:Vpcep/endpoint:Endpoint test <id>
 //
 // ```
 type Endpoint struct {
 	pulumi.CustomResourceState
 
-	// - Specifies whether to create a private domain name. The default value is
-	//   true. Changing this creates a new VPC endpoint.
+	// Specifies the description of the VPC endpoint.
+	Description pulumi.StringOutput `pulumi:"description"`
+	// Specifies whether to create a private domain name. The default value is
+	// true. Changing this creates a new VPC endpoint.
 	EnableDns pulumi.BoolPtrOutput `pulumi:"enableDns"`
-	// - Specifies whether to enable access control. The default value is
-	//   false. Changing this creates a new VPC endpoint.
+	// Specifies whether to enable access control. The default value is
+	// false.
 	EnableWhitelist pulumi.BoolPtrOutput `pulumi:"enableWhitelist"`
-	// - Specifies the IP address for accessing the associated VPC endpoint
-	//   service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
+	// Specifies the IP address for accessing the associated VPC endpoint
+	// service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
 	IpAddress pulumi.StringOutput `pulumi:"ipAddress"`
-	// - Specifies the network ID of the subnet in the VPC specified by `vpcId`.
-	//   Changing this creates a new VPC endpoint.
+	// Specifies the network ID of the subnet in the VPC specified by `vpcId`.
+	// Changing this creates a new VPC endpoint.
 	NetworkId pulumi.StringOutput `pulumi:"networkId"`
 	// The packet ID of the VPC endpoint.
 	PacketId pulumi.IntOutput `pulumi:"packetId"`
@@ -139,8 +142,8 @@ type Endpoint struct {
 	// The region in which to create the VPC endpoint. If omitted, the provider-level
 	// region will be used. Changing this creates a new VPC endpoint.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// - Specifies the ID of the VPC endpoint service. Changing this creates a new
-	//   VPC endpoint.
+	// Specifies the ID of the VPC endpoint service.
+	// The VPC endpoint service could be private or public. Changing this creates a new VPC endpoint.
 	ServiceId pulumi.StringOutput `pulumi:"serviceId"`
 	// The name of the VPC endpoint service.
 	ServiceName pulumi.StringOutput `pulumi:"serviceName"`
@@ -150,11 +153,11 @@ type Endpoint struct {
 	Status pulumi.StringOutput `pulumi:"status"`
 	// The key/value pairs to associate with the VPC endpoint.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
-	// - Specifies the ID of the VPC where the VPC endpoint is to be created. Changing
-	//   this creates a new VPC endpoint.
+	// Specifies the ID of the VPC where the VPC endpoint is to be created. Changing
+	// this creates a new VPC endpoint.
 	VpcId pulumi.StringOutput `pulumi:"vpcId"`
-	// - Specifies the list of IP address or CIDR block which can be accessed to the
-	//   VPC endpoint. Changing this creates a new VPC endpoint.
+	// Specifies the list of IP address or CIDR block which can be accessed to the
+	// VPC endpoint. This field is valid when `enableWhitelist` is set to **true**. The max length of whitelist is 20.
 	Whitelists pulumi.StringArrayOutput `pulumi:"whitelists"`
 }
 
@@ -197,17 +200,19 @@ func GetEndpoint(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Endpoint resources.
 type endpointState struct {
-	// - Specifies whether to create a private domain name. The default value is
-	//   true. Changing this creates a new VPC endpoint.
+	// Specifies the description of the VPC endpoint.
+	Description *string `pulumi:"description"`
+	// Specifies whether to create a private domain name. The default value is
+	// true. Changing this creates a new VPC endpoint.
 	EnableDns *bool `pulumi:"enableDns"`
-	// - Specifies whether to enable access control. The default value is
-	//   false. Changing this creates a new VPC endpoint.
+	// Specifies whether to enable access control. The default value is
+	// false.
 	EnableWhitelist *bool `pulumi:"enableWhitelist"`
-	// - Specifies the IP address for accessing the associated VPC endpoint
-	//   service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
+	// Specifies the IP address for accessing the associated VPC endpoint
+	// service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
 	IpAddress *string `pulumi:"ipAddress"`
-	// - Specifies the network ID of the subnet in the VPC specified by `vpcId`.
-	//   Changing this creates a new VPC endpoint.
+	// Specifies the network ID of the subnet in the VPC specified by `vpcId`.
+	// Changing this creates a new VPC endpoint.
 	NetworkId *string `pulumi:"networkId"`
 	// The packet ID of the VPC endpoint.
 	PacketId *int `pulumi:"packetId"`
@@ -217,8 +222,8 @@ type endpointState struct {
 	// The region in which to create the VPC endpoint. If omitted, the provider-level
 	// region will be used. Changing this creates a new VPC endpoint.
 	Region *string `pulumi:"region"`
-	// - Specifies the ID of the VPC endpoint service. Changing this creates a new
-	//   VPC endpoint.
+	// Specifies the ID of the VPC endpoint service.
+	// The VPC endpoint service could be private or public. Changing this creates a new VPC endpoint.
 	ServiceId *string `pulumi:"serviceId"`
 	// The name of the VPC endpoint service.
 	ServiceName *string `pulumi:"serviceName"`
@@ -228,26 +233,28 @@ type endpointState struct {
 	Status *string `pulumi:"status"`
 	// The key/value pairs to associate with the VPC endpoint.
 	Tags map[string]string `pulumi:"tags"`
-	// - Specifies the ID of the VPC where the VPC endpoint is to be created. Changing
-	//   this creates a new VPC endpoint.
+	// Specifies the ID of the VPC where the VPC endpoint is to be created. Changing
+	// this creates a new VPC endpoint.
 	VpcId *string `pulumi:"vpcId"`
-	// - Specifies the list of IP address or CIDR block which can be accessed to the
-	//   VPC endpoint. Changing this creates a new VPC endpoint.
+	// Specifies the list of IP address or CIDR block which can be accessed to the
+	// VPC endpoint. This field is valid when `enableWhitelist` is set to **true**. The max length of whitelist is 20.
 	Whitelists []string `pulumi:"whitelists"`
 }
 
 type EndpointState struct {
-	// - Specifies whether to create a private domain name. The default value is
-	//   true. Changing this creates a new VPC endpoint.
+	// Specifies the description of the VPC endpoint.
+	Description pulumi.StringPtrInput
+	// Specifies whether to create a private domain name. The default value is
+	// true. Changing this creates a new VPC endpoint.
 	EnableDns pulumi.BoolPtrInput
-	// - Specifies whether to enable access control. The default value is
-	//   false. Changing this creates a new VPC endpoint.
+	// Specifies whether to enable access control. The default value is
+	// false.
 	EnableWhitelist pulumi.BoolPtrInput
-	// - Specifies the IP address for accessing the associated VPC endpoint
-	//   service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
+	// Specifies the IP address for accessing the associated VPC endpoint
+	// service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
 	IpAddress pulumi.StringPtrInput
-	// - Specifies the network ID of the subnet in the VPC specified by `vpcId`.
-	//   Changing this creates a new VPC endpoint.
+	// Specifies the network ID of the subnet in the VPC specified by `vpcId`.
+	// Changing this creates a new VPC endpoint.
 	NetworkId pulumi.StringPtrInput
 	// The packet ID of the VPC endpoint.
 	PacketId pulumi.IntPtrInput
@@ -257,8 +264,8 @@ type EndpointState struct {
 	// The region in which to create the VPC endpoint. If omitted, the provider-level
 	// region will be used. Changing this creates a new VPC endpoint.
 	Region pulumi.StringPtrInput
-	// - Specifies the ID of the VPC endpoint service. Changing this creates a new
-	//   VPC endpoint.
+	// Specifies the ID of the VPC endpoint service.
+	// The VPC endpoint service could be private or public. Changing this creates a new VPC endpoint.
 	ServiceId pulumi.StringPtrInput
 	// The name of the VPC endpoint service.
 	ServiceName pulumi.StringPtrInput
@@ -268,11 +275,11 @@ type EndpointState struct {
 	Status pulumi.StringPtrInput
 	// The key/value pairs to associate with the VPC endpoint.
 	Tags pulumi.StringMapInput
-	// - Specifies the ID of the VPC where the VPC endpoint is to be created. Changing
-	//   this creates a new VPC endpoint.
+	// Specifies the ID of the VPC where the VPC endpoint is to be created. Changing
+	// this creates a new VPC endpoint.
 	VpcId pulumi.StringPtrInput
-	// - Specifies the list of IP address or CIDR block which can be accessed to the
-	//   VPC endpoint. Changing this creates a new VPC endpoint.
+	// Specifies the list of IP address or CIDR block which can be accessed to the
+	// VPC endpoint. This field is valid when `enableWhitelist` is set to **true**. The max length of whitelist is 20.
 	Whitelists pulumi.StringArrayInput
 }
 
@@ -281,61 +288,65 @@ func (EndpointState) ElementType() reflect.Type {
 }
 
 type endpointArgs struct {
-	// - Specifies whether to create a private domain name. The default value is
-	//   true. Changing this creates a new VPC endpoint.
+	// Specifies the description of the VPC endpoint.
+	Description *string `pulumi:"description"`
+	// Specifies whether to create a private domain name. The default value is
+	// true. Changing this creates a new VPC endpoint.
 	EnableDns *bool `pulumi:"enableDns"`
-	// - Specifies whether to enable access control. The default value is
-	//   false. Changing this creates a new VPC endpoint.
+	// Specifies whether to enable access control. The default value is
+	// false.
 	EnableWhitelist *bool `pulumi:"enableWhitelist"`
-	// - Specifies the IP address for accessing the associated VPC endpoint
-	//   service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
+	// Specifies the IP address for accessing the associated VPC endpoint
+	// service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
 	IpAddress *string `pulumi:"ipAddress"`
-	// - Specifies the network ID of the subnet in the VPC specified by `vpcId`.
-	//   Changing this creates a new VPC endpoint.
+	// Specifies the network ID of the subnet in the VPC specified by `vpcId`.
+	// Changing this creates a new VPC endpoint.
 	NetworkId string `pulumi:"networkId"`
 	// The region in which to create the VPC endpoint. If omitted, the provider-level
 	// region will be used. Changing this creates a new VPC endpoint.
 	Region *string `pulumi:"region"`
-	// - Specifies the ID of the VPC endpoint service. Changing this creates a new
-	//   VPC endpoint.
+	// Specifies the ID of the VPC endpoint service.
+	// The VPC endpoint service could be private or public. Changing this creates a new VPC endpoint.
 	ServiceId string `pulumi:"serviceId"`
 	// The key/value pairs to associate with the VPC endpoint.
 	Tags map[string]string `pulumi:"tags"`
-	// - Specifies the ID of the VPC where the VPC endpoint is to be created. Changing
-	//   this creates a new VPC endpoint.
+	// Specifies the ID of the VPC where the VPC endpoint is to be created. Changing
+	// this creates a new VPC endpoint.
 	VpcId string `pulumi:"vpcId"`
-	// - Specifies the list of IP address or CIDR block which can be accessed to the
-	//   VPC endpoint. Changing this creates a new VPC endpoint.
+	// Specifies the list of IP address or CIDR block which can be accessed to the
+	// VPC endpoint. This field is valid when `enableWhitelist` is set to **true**. The max length of whitelist is 20.
 	Whitelists []string `pulumi:"whitelists"`
 }
 
 // The set of arguments for constructing a Endpoint resource.
 type EndpointArgs struct {
-	// - Specifies whether to create a private domain name. The default value is
-	//   true. Changing this creates a new VPC endpoint.
+	// Specifies the description of the VPC endpoint.
+	Description pulumi.StringPtrInput
+	// Specifies whether to create a private domain name. The default value is
+	// true. Changing this creates a new VPC endpoint.
 	EnableDns pulumi.BoolPtrInput
-	// - Specifies whether to enable access control. The default value is
-	//   false. Changing this creates a new VPC endpoint.
+	// Specifies whether to enable access control. The default value is
+	// false.
 	EnableWhitelist pulumi.BoolPtrInput
-	// - Specifies the IP address for accessing the associated VPC endpoint
-	//   service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
+	// Specifies the IP address for accessing the associated VPC endpoint
+	// service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
 	IpAddress pulumi.StringPtrInput
-	// - Specifies the network ID of the subnet in the VPC specified by `vpcId`.
-	//   Changing this creates a new VPC endpoint.
+	// Specifies the network ID of the subnet in the VPC specified by `vpcId`.
+	// Changing this creates a new VPC endpoint.
 	NetworkId pulumi.StringInput
 	// The region in which to create the VPC endpoint. If omitted, the provider-level
 	// region will be used. Changing this creates a new VPC endpoint.
 	Region pulumi.StringPtrInput
-	// - Specifies the ID of the VPC endpoint service. Changing this creates a new
-	//   VPC endpoint.
+	// Specifies the ID of the VPC endpoint service.
+	// The VPC endpoint service could be private or public. Changing this creates a new VPC endpoint.
 	ServiceId pulumi.StringInput
 	// The key/value pairs to associate with the VPC endpoint.
 	Tags pulumi.StringMapInput
-	// - Specifies the ID of the VPC where the VPC endpoint is to be created. Changing
-	//   this creates a new VPC endpoint.
+	// Specifies the ID of the VPC where the VPC endpoint is to be created. Changing
+	// this creates a new VPC endpoint.
 	VpcId pulumi.StringInput
-	// - Specifies the list of IP address or CIDR block which can be accessed to the
-	//   VPC endpoint. Changing this creates a new VPC endpoint.
+	// Specifies the list of IP address or CIDR block which can be accessed to the
+	// VPC endpoint. This field is valid when `enableWhitelist` is set to **true**. The max length of whitelist is 20.
 	Whitelists pulumi.StringArrayInput
 }
 
@@ -426,26 +437,31 @@ func (o EndpointOutput) ToEndpointOutputWithContext(ctx context.Context) Endpoin
 	return o
 }
 
-//   - Specifies whether to create a private domain name. The default value is
-//     true. Changing this creates a new VPC endpoint.
+// Specifies the description of the VPC endpoint.
+func (o EndpointOutput) Description() pulumi.StringOutput {
+	return o.ApplyT(func(v *Endpoint) pulumi.StringOutput { return v.Description }).(pulumi.StringOutput)
+}
+
+// Specifies whether to create a private domain name. The default value is
+// true. Changing this creates a new VPC endpoint.
 func (o EndpointOutput) EnableDns() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Endpoint) pulumi.BoolPtrOutput { return v.EnableDns }).(pulumi.BoolPtrOutput)
 }
 
-//   - Specifies whether to enable access control. The default value is
-//     false. Changing this creates a new VPC endpoint.
+// Specifies whether to enable access control. The default value is
+// false.
 func (o EndpointOutput) EnableWhitelist() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Endpoint) pulumi.BoolPtrOutput { return v.EnableWhitelist }).(pulumi.BoolPtrOutput)
 }
 
-//   - Specifies the IP address for accessing the associated VPC endpoint
-//     service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
+// Specifies the IP address for accessing the associated VPC endpoint
+// service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
 func (o EndpointOutput) IpAddress() pulumi.StringOutput {
 	return o.ApplyT(func(v *Endpoint) pulumi.StringOutput { return v.IpAddress }).(pulumi.StringOutput)
 }
 
-//   - Specifies the network ID of the subnet in the VPC specified by `vpcId`.
-//     Changing this creates a new VPC endpoint.
+// Specifies the network ID of the subnet in the VPC specified by `vpcId`.
+// Changing this creates a new VPC endpoint.
 func (o EndpointOutput) NetworkId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Endpoint) pulumi.StringOutput { return v.NetworkId }).(pulumi.StringOutput)
 }
@@ -467,8 +483,8 @@ func (o EndpointOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Endpoint) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-//   - Specifies the ID of the VPC endpoint service. Changing this creates a new
-//     VPC endpoint.
+// Specifies the ID of the VPC endpoint service.
+// The VPC endpoint service could be private or public. Changing this creates a new VPC endpoint.
 func (o EndpointOutput) ServiceId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Endpoint) pulumi.StringOutput { return v.ServiceId }).(pulumi.StringOutput)
 }
@@ -493,14 +509,14 @@ func (o EndpointOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Endpoint) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }
 
-//   - Specifies the ID of the VPC where the VPC endpoint is to be created. Changing
-//     this creates a new VPC endpoint.
+// Specifies the ID of the VPC where the VPC endpoint is to be created. Changing
+// this creates a new VPC endpoint.
 func (o EndpointOutput) VpcId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Endpoint) pulumi.StringOutput { return v.VpcId }).(pulumi.StringOutput)
 }
 
-//   - Specifies the list of IP address or CIDR block which can be accessed to the
-//     VPC endpoint. Changing this creates a new VPC endpoint.
+// Specifies the list of IP address or CIDR block which can be accessed to the
+// VPC endpoint. This field is valid when `enableWhitelist` is set to **true**. The max length of whitelist is 20.
 func (o EndpointOutput) Whitelists() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Endpoint) pulumi.StringArrayOutput { return v.Whitelists }).(pulumi.StringArrayOutput)
 }

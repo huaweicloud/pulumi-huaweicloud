@@ -21,7 +21,10 @@ class GetCertificateResult:
     """
     A collection of values returned by getCertificate.
     """
-    def __init__(__self__, expiration=None, expire_status=None, id=None, name=None, region=None):
+    def __init__(__self__, enterprise_project_id=None, expiration=None, expire_status=None, id=None, name=None, region=None):
+        if enterprise_project_id and not isinstance(enterprise_project_id, str):
+            raise TypeError("Expected argument 'enterprise_project_id' to be a str")
+        pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if expiration and not isinstance(expiration, str):
             raise TypeError("Expected argument 'expiration' to be a str")
         pulumi.set(__self__, "expiration", expiration)
@@ -37,6 +40,11 @@ class GetCertificateResult:
         if region and not isinstance(region, str):
             raise TypeError("Expected argument 'region' to be a str")
         pulumi.set(__self__, "region", region)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[str]:
+        return pulumi.get(self, "enterprise_project_id")
 
     @property
     @pulumi.getter
@@ -76,6 +84,7 @@ class AwaitableGetCertificateResult(GetCertificateResult):
         if False:
             yield self
         return GetCertificateResult(
+            enterprise_project_id=self.enterprise_project_id,
             expiration=self.expiration,
             expire_status=self.expire_status,
             id=self.id,
@@ -83,7 +92,8 @@ class AwaitableGetCertificateResult(GetCertificateResult):
             region=self.region)
 
 
-def get_certificate(expire_status: Optional[int] = None,
+def get_certificate(enterprise_project_id: Optional[str] = None,
+                    expire_status: Optional[int] = None,
                     name: Optional[str] = None,
                     region: Optional[str] = None,
                     opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetCertificateResult:
@@ -96,22 +106,14 @@ def get_certificate(expire_status: Optional[int] = None,
     import pulumi
     import pulumi_huaweicloud as huaweicloud
 
-    certificate1 = huaweicloud.Waf.get_certificate(name="certificate name")
-    domain1 = huaweicloud.waf.Domain("domain1",
-        domain="www.domainname.com",
-        certificate_id=certificate1.id,
-        certificate_name=certificate1.name,
-        keep_policy=False,
-        proxy=False,
-        servers=[huaweicloud.waf.DomainServerArgs(
-            client_protocol="HTTPS",
-            server_protocol="HTTP",
-            address="192.168.10.1",
-            port=8080,
-        )])
+    config = pulumi.Config()
+    enterprise_project_id = config.require_object("enterpriseProjectId")
+    certificate1 = huaweicloud.Waf.get_certificate(name="certificate name",
+        enterprise_project_id=enterprise_project_id)
     ```
 
 
+    :param str enterprise_project_id: The enterprise project ID of WAF certificate.
     :param int expire_status: The expire status of certificate. Defaults is `0`. The value can be:
            + `0`: not expire
            + `1`: has expired
@@ -121,6 +123,7 @@ def get_certificate(expire_status: Optional[int] = None,
            used.
     """
     __args__ = dict()
+    __args__['enterpriseProjectId'] = enterprise_project_id
     __args__['expireStatus'] = expire_status
     __args__['name'] = name
     __args__['region'] = region
@@ -128,6 +131,7 @@ def get_certificate(expire_status: Optional[int] = None,
     __ret__ = pulumi.runtime.invoke('huaweicloud:Waf/getCertificate:getCertificate', __args__, opts=opts, typ=GetCertificateResult).value
 
     return AwaitableGetCertificateResult(
+        enterprise_project_id=__ret__.enterprise_project_id,
         expiration=__ret__.expiration,
         expire_status=__ret__.expire_status,
         id=__ret__.id,
@@ -136,7 +140,8 @@ def get_certificate(expire_status: Optional[int] = None,
 
 
 @_utilities.lift_output_func(get_certificate)
-def get_certificate_output(expire_status: Optional[pulumi.Input[Optional[int]]] = None,
+def get_certificate_output(enterprise_project_id: Optional[pulumi.Input[Optional[str]]] = None,
+                           expire_status: Optional[pulumi.Input[Optional[int]]] = None,
                            name: Optional[pulumi.Input[str]] = None,
                            region: Optional[pulumi.Input[Optional[str]]] = None,
                            opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetCertificateResult]:
@@ -149,22 +154,14 @@ def get_certificate_output(expire_status: Optional[pulumi.Input[Optional[int]]] 
     import pulumi
     import pulumi_huaweicloud as huaweicloud
 
-    certificate1 = huaweicloud.Waf.get_certificate(name="certificate name")
-    domain1 = huaweicloud.waf.Domain("domain1",
-        domain="www.domainname.com",
-        certificate_id=certificate1.id,
-        certificate_name=certificate1.name,
-        keep_policy=False,
-        proxy=False,
-        servers=[huaweicloud.waf.DomainServerArgs(
-            client_protocol="HTTPS",
-            server_protocol="HTTP",
-            address="192.168.10.1",
-            port=8080,
-        )])
+    config = pulumi.Config()
+    enterprise_project_id = config.require_object("enterpriseProjectId")
+    certificate1 = huaweicloud.Waf.get_certificate(name="certificate name",
+        enterprise_project_id=enterprise_project_id)
     ```
 
 
+    :param str enterprise_project_id: The enterprise project ID of WAF certificate.
     :param int expire_status: The expire status of certificate. Defaults is `0`. The value can be:
            + `0`: not expire
            + `1`: has expired

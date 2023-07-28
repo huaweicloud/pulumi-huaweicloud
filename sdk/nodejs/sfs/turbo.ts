@@ -25,6 +25,10 @@ import * as utilities from "../utilities";
  *     subnetId: subnetId,
  *     securityGroupId: secgroupId,
  *     availabilityZone: testAz,
+ *     tags: {
+ *         foo: "bar",
+ *         key: "value",
+ *     },
  * });
  * ```
  *
@@ -35,6 +39,20 @@ import * as utilities from "../utilities";
  * ```sh
  *  $ pulumi import huaweicloud:Sfs/turbo:Turbo huaweicloud_sfs_turbo 1e3d5306-24c9-4316-9185-70e9787d71ab
  * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to payment attributes missing from the API response. The missing attributes include`charging_mode`, `period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing an instance. You can ignore changes as below. hcl resource "huaweicloud_sfs_turbo" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [
+ *
+ *  charging_mode, period_unit, period, auto_renew,
+ *
+ *  ]
+ *
+ *  } }
  */
 export class Turbo extends pulumi.CustomResource {
     /**
@@ -65,6 +83,11 @@ export class Turbo extends pulumi.CustomResource {
     }
 
     /**
+     * Specifies whether auto renew is enabled.  
+     * The valid values are **true** and **false**.
+     */
+    public readonly autoRenew!: pulumi.Output<string | undefined>;
+    /**
      * Specifies the availability zone where the file system is located.
      * Changing this will create a new resource.
      */
@@ -74,10 +97,25 @@ export class Turbo extends pulumi.CustomResource {
      */
     public /*out*/ readonly availableCapacity!: pulumi.Output<string>;
     /**
+     * Specifies the charging mode of the SFS Turbo.
+     * Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+     * Changing this parameter will create a new cluster resource.
+     */
+    public readonly chargingMode!: pulumi.Output<string>;
+    /**
      * Specifies the ID of a KMS key to encrypt the file system. Changing this
      * will create a new resource.
      */
     public readonly cryptKeyId!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the VM flavor used for creating a dedicated file system.
+     */
+    public readonly dedicatedFlavor!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the ID of the dedicated distributed storage used
+     * when creating a dedicated file system.
+     */
+    public readonly dedicatedStorageId!: pulumi.Output<string | undefined>;
     /**
      * Specifies whether the file system is enhanced or not. Changing this will
      * create a new resource.
@@ -97,6 +135,20 @@ export class Turbo extends pulumi.CustomResource {
      * characters and must start with a letter. Changing this will create a new resource.
      */
     public readonly name!: pulumi.Output<string>;
+    /**
+     * Specifies the charging period of the SFS Turbo.
+     * If `periodUnit` is set to **month**, the value ranges from `1` to `11`.
+     * If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+     * This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this parameter will create a new cluster resource.
+     */
+    public readonly period!: pulumi.Output<number | undefined>;
+    /**
+     * Specifies the charging period unit of the SFS Turbo.
+     * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this parameter will create a new cluster resource.
+     */
+    public readonly periodUnit!: pulumi.Output<string | undefined>;
     /**
      * The region in which to create the SFS Turbo resource. If omitted, the
      * provider-level region will be used. Changing this creates a new SFS Turbo resource.
@@ -132,6 +184,10 @@ export class Turbo extends pulumi.CustomResource {
      */
     public readonly subnetId!: pulumi.Output<string>;
     /**
+     * Specifies the key/value pairs to associate with the SFS Turbo.
+     */
+    public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
+    /**
      * The version ID of the SFS Turbo file system.
      */
     public /*out*/ readonly version!: pulumi.Output<string>;
@@ -153,13 +209,19 @@ export class Turbo extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as TurboState | undefined;
+            resourceInputs["autoRenew"] = state ? state.autoRenew : undefined;
             resourceInputs["availabilityZone"] = state ? state.availabilityZone : undefined;
             resourceInputs["availableCapacity"] = state ? state.availableCapacity : undefined;
+            resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
             resourceInputs["cryptKeyId"] = state ? state.cryptKeyId : undefined;
+            resourceInputs["dedicatedFlavor"] = state ? state.dedicatedFlavor : undefined;
+            resourceInputs["dedicatedStorageId"] = state ? state.dedicatedStorageId : undefined;
             resourceInputs["enhanced"] = state ? state.enhanced : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["exportLocation"] = state ? state.exportLocation : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
+            resourceInputs["period"] = state ? state.period : undefined;
+            resourceInputs["periodUnit"] = state ? state.periodUnit : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["securityGroupId"] = state ? state.securityGroupId : undefined;
             resourceInputs["shareProto"] = state ? state.shareProto : undefined;
@@ -167,6 +229,7 @@ export class Turbo extends pulumi.CustomResource {
             resourceInputs["size"] = state ? state.size : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["subnetId"] = state ? state.subnetId : undefined;
+            resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["version"] = state ? state.version : undefined;
             resourceInputs["vpcId"] = state ? state.vpcId : undefined;
         } else {
@@ -186,17 +249,24 @@ export class Turbo extends pulumi.CustomResource {
             if ((!args || args.vpcId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'vpcId'");
             }
+            resourceInputs["autoRenew"] = args ? args.autoRenew : undefined;
             resourceInputs["availabilityZone"] = args ? args.availabilityZone : undefined;
+            resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
             resourceInputs["cryptKeyId"] = args ? args.cryptKeyId : undefined;
+            resourceInputs["dedicatedFlavor"] = args ? args.dedicatedFlavor : undefined;
+            resourceInputs["dedicatedStorageId"] = args ? args.dedicatedStorageId : undefined;
             resourceInputs["enhanced"] = args ? args.enhanced : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
+            resourceInputs["period"] = args ? args.period : undefined;
+            resourceInputs["periodUnit"] = args ? args.periodUnit : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["securityGroupId"] = args ? args.securityGroupId : undefined;
             resourceInputs["shareProto"] = args ? args.shareProto : undefined;
             resourceInputs["shareType"] = args ? args.shareType : undefined;
             resourceInputs["size"] = args ? args.size : undefined;
             resourceInputs["subnetId"] = args ? args.subnetId : undefined;
+            resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
             resourceInputs["availableCapacity"] = undefined /*out*/;
             resourceInputs["exportLocation"] = undefined /*out*/;
@@ -213,6 +283,11 @@ export class Turbo extends pulumi.CustomResource {
  */
 export interface TurboState {
     /**
+     * Specifies whether auto renew is enabled.  
+     * The valid values are **true** and **false**.
+     */
+    autoRenew?: pulumi.Input<string>;
+    /**
      * Specifies the availability zone where the file system is located.
      * Changing this will create a new resource.
      */
@@ -222,10 +297,25 @@ export interface TurboState {
      */
     availableCapacity?: pulumi.Input<string>;
     /**
+     * Specifies the charging mode of the SFS Turbo.
+     * Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+     * Changing this parameter will create a new cluster resource.
+     */
+    chargingMode?: pulumi.Input<string>;
+    /**
      * Specifies the ID of a KMS key to encrypt the file system. Changing this
      * will create a new resource.
      */
     cryptKeyId?: pulumi.Input<string>;
+    /**
+     * Specifies the VM flavor used for creating a dedicated file system.
+     */
+    dedicatedFlavor?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the dedicated distributed storage used
+     * when creating a dedicated file system.
+     */
+    dedicatedStorageId?: pulumi.Input<string>;
     /**
      * Specifies whether the file system is enhanced or not. Changing this will
      * create a new resource.
@@ -245,6 +335,20 @@ export interface TurboState {
      * characters and must start with a letter. Changing this will create a new resource.
      */
     name?: pulumi.Input<string>;
+    /**
+     * Specifies the charging period of the SFS Turbo.
+     * If `periodUnit` is set to **month**, the value ranges from `1` to `11`.
+     * If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+     * This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this parameter will create a new cluster resource.
+     */
+    period?: pulumi.Input<number>;
+    /**
+     * Specifies the charging period unit of the SFS Turbo.
+     * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this parameter will create a new cluster resource.
+     */
+    periodUnit?: pulumi.Input<string>;
     /**
      * The region in which to create the SFS Turbo resource. If omitted, the
      * provider-level region will be used. Changing this creates a new SFS Turbo resource.
@@ -280,6 +384,10 @@ export interface TurboState {
      */
     subnetId?: pulumi.Input<string>;
     /**
+     * Specifies the key/value pairs to associate with the SFS Turbo.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
      * The version ID of the SFS Turbo file system.
      */
     version?: pulumi.Input<string>;
@@ -294,15 +402,35 @@ export interface TurboState {
  */
 export interface TurboArgs {
     /**
+     * Specifies whether auto renew is enabled.  
+     * The valid values are **true** and **false**.
+     */
+    autoRenew?: pulumi.Input<string>;
+    /**
      * Specifies the availability zone where the file system is located.
      * Changing this will create a new resource.
      */
     availabilityZone: pulumi.Input<string>;
     /**
+     * Specifies the charging mode of the SFS Turbo.
+     * Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+     * Changing this parameter will create a new cluster resource.
+     */
+    chargingMode?: pulumi.Input<string>;
+    /**
      * Specifies the ID of a KMS key to encrypt the file system. Changing this
      * will create a new resource.
      */
     cryptKeyId?: pulumi.Input<string>;
+    /**
+     * Specifies the VM flavor used for creating a dedicated file system.
+     */
+    dedicatedFlavor?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the dedicated distributed storage used
+     * when creating a dedicated file system.
+     */
+    dedicatedStorageId?: pulumi.Input<string>;
     /**
      * Specifies whether the file system is enhanced or not. Changing this will
      * create a new resource.
@@ -318,6 +446,20 @@ export interface TurboArgs {
      * characters and must start with a letter. Changing this will create a new resource.
      */
     name?: pulumi.Input<string>;
+    /**
+     * Specifies the charging period of the SFS Turbo.
+     * If `periodUnit` is set to **month**, the value ranges from `1` to `11`.
+     * If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+     * This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this parameter will create a new cluster resource.
+     */
+    period?: pulumi.Input<number>;
+    /**
+     * Specifies the charging period unit of the SFS Turbo.
+     * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this parameter will create a new cluster resource.
+     */
+    periodUnit?: pulumi.Input<string>;
     /**
      * The region in which to create the SFS Turbo resource. If omitted, the
      * provider-level region will be used. Changing this creates a new SFS Turbo resource.
@@ -348,6 +490,10 @@ export interface TurboArgs {
      * resource.
      */
     subnetId: pulumi.Input<string>;
+    /**
+     * Specifies the key/value pairs to associate with the SFS Turbo.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Specifies the VPC ID. Changing this will create a new resource.
      */

@@ -11,7 +11,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages a AS Policy resource within HuaweiCloud.
+// Manages an AS policy resource within HuaweiCloud.
 //
 // ## Example Usage
 // ### AS Recurrence Policy
@@ -24,25 +24,27 @@ import (
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/As"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/As"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			asGroupId := cfg.RequireObject("asGroupId")
 //			_, err := As.NewPolicy(ctx, "myAspolicy", &As.PolicyArgs{
-//				CoolDownTime:   pulumi.Int(900),
-//				ScalingGroupId: pulumi.String("4579f2f5-cbe8-425a-8f32-53dcb9d9053a"),
-//				ScalingPolicyAction: &as.PolicyScalingPolicyActionArgs{
-//					InstanceNumber: pulumi.Int(1),
-//					Operation:      pulumi.String("ADD"),
-//				},
 //				ScalingPolicyName: pulumi.String("my_aspolicy"),
 //				ScalingPolicyType: pulumi.String("RECURRENCE"),
+//				ScalingGroupId:    pulumi.Any(asGroupId),
+//				ScalingPolicyAction: &as.PolicyScalingPolicyActionArgs{
+//					Operation:      pulumi.String("ADD"),
+//					InstanceNumber: pulumi.Int(1),
+//				},
 //				ScheduledPolicy: &as.PolicyScheduledPolicyArgs{
-//					EndTime:        pulumi.String("2020-12-30T12:00Z"),
 //					LaunchTime:     pulumi.String("07:00"),
 //					RecurrenceType: pulumi.String("Daily"),
-//					StartTime:      pulumi.String("2020-11-30T12:00Z"),
+//					StartTime:      pulumi.String("2022-11-30T12:00Z"),
+//					EndTime:        pulumi.String("2022-12-30T12:00Z"),
 //				},
 //			})
 //			if err != nil {
@@ -63,22 +65,24 @@ import (
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/As"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/As"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			asGroupId := cfg.RequireObject("asGroupId")
 //			_, err := As.NewPolicy(ctx, "myAspolicy1", &As.PolicyArgs{
-//				CoolDownTime:   pulumi.Int(900),
-//				ScalingGroupId: pulumi.String("4579f2f5-cbe8-425a-8f32-53dcb9d9053a"),
-//				ScalingPolicyAction: &as.PolicyScalingPolicyActionArgs{
-//					InstanceNumber: pulumi.Int(1),
-//					Operation:      pulumi.String("REMOVE"),
-//				},
 //				ScalingPolicyName: pulumi.String("my_aspolicy_1"),
 //				ScalingPolicyType: pulumi.String("SCHEDULED"),
+//				ScalingGroupId:    pulumi.Any(asGroupId),
+//				ScalingPolicyAction: &as.PolicyScalingPolicyActionArgs{
+//					Operation:      pulumi.String("REMOVE"),
+//					InstanceNumber: pulumi.Int(1),
+//				},
 //				ScheduledPolicy: &as.PolicyScheduledPolicyArgs{
-//					LaunchTime: pulumi.String("2020-12-22T12:00Z"),
+//					LaunchTime: pulumi.String("2022-12-22T12:00Z"),
 //				},
 //			})
 //			if err != nil {
@@ -89,8 +93,6 @@ import (
 //	}
 //
 // ```
-//
-// Please note that the `launchTime` of the `SCHEDULED` policy cannot be earlier than the current time.
 // ### AS Alarm Policy
 //
 // ```go
@@ -103,11 +105,14 @@ import (
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/As"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Cse"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			asGroupId := cfg.RequireObject("asGroupId")
 //			alarmRule, err := Cse.NewAlarmrule(ctx, "alarmRule", &Cse.AlarmruleArgs{
 //				AlarmName: pulumi.String("as_alarm_rule"),
 //				Metric: &cse.AlarmruleMetricArgs{
@@ -116,17 +121,19 @@ import (
 //					Dimensions: cse.AlarmruleMetricDimensionArray{
 //						&cse.AlarmruleMetricDimensionArgs{
 //							Name:  pulumi.String("AutoScalingGroup"),
-//							Value: pulumi.String("4579f2f5-cbe8-425a-8f32-53dcb9d9053a"),
+//							Value: pulumi.Any(asGroupId),
 //						},
 //					},
 //				},
-//				Condition: &cse.AlarmruleConditionArgs{
-//					Period:             pulumi.Int(300),
-//					Filter:             pulumi.String("average"),
-//					ComparisonOperator: pulumi.String(">="),
-//					Value:              pulumi.Int(60),
-//					Unit:               pulumi.String("%"),
-//					Count:              pulumi.Int(1),
+//				Conditions: cse.AlarmruleConditionArray{
+//					&cse.AlarmruleConditionArgs{
+//						Period:             pulumi.Int(300),
+//						Filter:             pulumi.String("average"),
+//						ComparisonOperator: pulumi.String(">="),
+//						Value:              pulumi.Float64(60),
+//						Unit:               pulumi.String("%"),
+//						Count:              pulumi.Int(1),
+//					},
 //				},
 //				AlarmActions: cse.AlarmruleAlarmActionArray{
 //					&cse.AlarmruleAlarmActionArgs{
@@ -141,7 +148,7 @@ import (
 //			_, err = As.NewPolicy(ctx, "myAspolicy2", &As.PolicyArgs{
 //				ScalingPolicyName: pulumi.String("my_aspolicy_2"),
 //				ScalingPolicyType: pulumi.String("ALARM"),
-//				ScalingGroupId:    pulumi.String("4579f2f5-cbe8-425a-8f32-53dcb9d9053a"),
+//				ScalingGroupId:    pulumi.Any(asGroupId),
 //				AlarmId:           alarmRule.ID(),
 //				CoolDownTime:      pulumi.Int(900),
 //				ScalingPolicyAction: &as.PolicyScalingPolicyActionArgs{
@@ -157,31 +164,45 @@ import (
 //	}
 //
 // ```
+//
+// ## Import
+//
+// AS policies can be imported by their `id`, e.g.
+//
+// ```sh
+//
+//	$ pulumi import huaweicloud:As/policy:Policy test 9fcb65fe-fd79-4407-8fa0-07602044e1c3
+//
+// ```
 type Policy struct {
 	pulumi.CustomResourceState
 
-	// The alarm rule ID. This argument is mandatory when `scalingPolicyType`
-	// is set to `ALARM`. You can create an alarm rule with `Cse.Alarmrule`.
 	AlarmId pulumi.StringPtrOutput `pulumi:"alarmId"`
-	// The cooling duration (in seconds), and is 900 by default.
-	CoolDownTime pulumi.IntPtrOutput `pulumi:"coolDownTime"`
-	// The region in which to create the AS policy. If omitted, the `region` argument
-	// of the provider is used. Changing this creates a new AS policy.
+	// Specifies the cooling duration (in seconds).
+	// The value ranges from 0 to 86400 and is 300 by default.
+	CoolDownTime pulumi.IntOutput `pulumi:"coolDownTime"`
+	// Specifies the region in which to create the AS policy. If omitted, the
+	// provider-level region will be used. Changing this creates a new AS policy.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// The AS group ID. Changing this creates a new AS policy.
+	// Specifies the AS group ID. Changing this creates a new AS policy.
 	ScalingGroupId pulumi.StringOutput `pulumi:"scalingGroupId"`
-	// The action of the AS policy. The scalingPolicyAction structure is
-	// documented below.
+	// Specifies the action of the AS policy.
+	// The object structure is documented below.
 	ScalingPolicyAction PolicyScalingPolicyActionOutput `pulumi:"scalingPolicyAction"`
-	// The name of the AS policy. The name can contain letters, digits,
+	// Specifies the name of the AS policy. The name contains only letters, digits,
 	// underscores(_), and hyphens(-), and cannot exceed 64 characters.
 	ScalingPolicyName pulumi.StringOutput `pulumi:"scalingPolicyName"`
-	// The AS policy type. The values can be `ALARM`, `SCHEDULED`,
-	// and `RECURRENCE`.
+	// Specifies the AS policy type. The value can be `ALARM`, `SCHEDULED` or `RECURRENCE`.
+	// + **ALARM**: indicates that the scaling action is triggered by an alarm.
+	// + **SCHEDULED**: indicates that the scaling action is triggered as scheduled.
+	// + **RECURRENCE**: indicates that the scaling action is triggered periodically.
 	ScalingPolicyType pulumi.StringOutput `pulumi:"scalingPolicyType"`
-	// The periodic or scheduled AS policy. This argument is mandatory
-	// when `scalingPolicyType` is set to `SCHEDULED` or `RECURRENCE`. The scheduledPolicy structure is documented below.
+	// Specifies the periodic or scheduled AS policy.
+	// This parameter is mandatory when `scalingPolicyType` is set to `SCHEDULED` or `RECURRENCE`.
+	// The object structure is documented below.
 	ScheduledPolicy PolicyScheduledPolicyOutput `pulumi:"scheduledPolicy"`
+	// The AS policy status. The value can be *INSERVICE*, *PAUSED* or *EXECUTING*.
+	Status pulumi.StringOutput `pulumi:"status"`
 }
 
 // NewPolicy registers a new resource with the given unique name, arguments, and options.
@@ -223,53 +244,61 @@ func GetPolicy(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Policy resources.
 type policyState struct {
-	// The alarm rule ID. This argument is mandatory when `scalingPolicyType`
-	// is set to `ALARM`. You can create an alarm rule with `Cse.Alarmrule`.
 	AlarmId *string `pulumi:"alarmId"`
-	// The cooling duration (in seconds), and is 900 by default.
+	// Specifies the cooling duration (in seconds).
+	// The value ranges from 0 to 86400 and is 300 by default.
 	CoolDownTime *int `pulumi:"coolDownTime"`
-	// The region in which to create the AS policy. If omitted, the `region` argument
-	// of the provider is used. Changing this creates a new AS policy.
+	// Specifies the region in which to create the AS policy. If omitted, the
+	// provider-level region will be used. Changing this creates a new AS policy.
 	Region *string `pulumi:"region"`
-	// The AS group ID. Changing this creates a new AS policy.
+	// Specifies the AS group ID. Changing this creates a new AS policy.
 	ScalingGroupId *string `pulumi:"scalingGroupId"`
-	// The action of the AS policy. The scalingPolicyAction structure is
-	// documented below.
+	// Specifies the action of the AS policy.
+	// The object structure is documented below.
 	ScalingPolicyAction *PolicyScalingPolicyAction `pulumi:"scalingPolicyAction"`
-	// The name of the AS policy. The name can contain letters, digits,
+	// Specifies the name of the AS policy. The name contains only letters, digits,
 	// underscores(_), and hyphens(-), and cannot exceed 64 characters.
 	ScalingPolicyName *string `pulumi:"scalingPolicyName"`
-	// The AS policy type. The values can be `ALARM`, `SCHEDULED`,
-	// and `RECURRENCE`.
+	// Specifies the AS policy type. The value can be `ALARM`, `SCHEDULED` or `RECURRENCE`.
+	// + **ALARM**: indicates that the scaling action is triggered by an alarm.
+	// + **SCHEDULED**: indicates that the scaling action is triggered as scheduled.
+	// + **RECURRENCE**: indicates that the scaling action is triggered periodically.
 	ScalingPolicyType *string `pulumi:"scalingPolicyType"`
-	// The periodic or scheduled AS policy. This argument is mandatory
-	// when `scalingPolicyType` is set to `SCHEDULED` or `RECURRENCE`. The scheduledPolicy structure is documented below.
+	// Specifies the periodic or scheduled AS policy.
+	// This parameter is mandatory when `scalingPolicyType` is set to `SCHEDULED` or `RECURRENCE`.
+	// The object structure is documented below.
 	ScheduledPolicy *PolicyScheduledPolicy `pulumi:"scheduledPolicy"`
+	// The AS policy status. The value can be *INSERVICE*, *PAUSED* or *EXECUTING*.
+	Status *string `pulumi:"status"`
 }
 
 type PolicyState struct {
-	// The alarm rule ID. This argument is mandatory when `scalingPolicyType`
-	// is set to `ALARM`. You can create an alarm rule with `Cse.Alarmrule`.
 	AlarmId pulumi.StringPtrInput
-	// The cooling duration (in seconds), and is 900 by default.
+	// Specifies the cooling duration (in seconds).
+	// The value ranges from 0 to 86400 and is 300 by default.
 	CoolDownTime pulumi.IntPtrInput
-	// The region in which to create the AS policy. If omitted, the `region` argument
-	// of the provider is used. Changing this creates a new AS policy.
+	// Specifies the region in which to create the AS policy. If omitted, the
+	// provider-level region will be used. Changing this creates a new AS policy.
 	Region pulumi.StringPtrInput
-	// The AS group ID. Changing this creates a new AS policy.
+	// Specifies the AS group ID. Changing this creates a new AS policy.
 	ScalingGroupId pulumi.StringPtrInput
-	// The action of the AS policy. The scalingPolicyAction structure is
-	// documented below.
+	// Specifies the action of the AS policy.
+	// The object structure is documented below.
 	ScalingPolicyAction PolicyScalingPolicyActionPtrInput
-	// The name of the AS policy. The name can contain letters, digits,
+	// Specifies the name of the AS policy. The name contains only letters, digits,
 	// underscores(_), and hyphens(-), and cannot exceed 64 characters.
 	ScalingPolicyName pulumi.StringPtrInput
-	// The AS policy type. The values can be `ALARM`, `SCHEDULED`,
-	// and `RECURRENCE`.
+	// Specifies the AS policy type. The value can be `ALARM`, `SCHEDULED` or `RECURRENCE`.
+	// + **ALARM**: indicates that the scaling action is triggered by an alarm.
+	// + **SCHEDULED**: indicates that the scaling action is triggered as scheduled.
+	// + **RECURRENCE**: indicates that the scaling action is triggered periodically.
 	ScalingPolicyType pulumi.StringPtrInput
-	// The periodic or scheduled AS policy. This argument is mandatory
-	// when `scalingPolicyType` is set to `SCHEDULED` or `RECURRENCE`. The scheduledPolicy structure is documented below.
+	// Specifies the periodic or scheduled AS policy.
+	// This parameter is mandatory when `scalingPolicyType` is set to `SCHEDULED` or `RECURRENCE`.
+	// The object structure is documented below.
 	ScheduledPolicy PolicyScheduledPolicyPtrInput
+	// The AS policy status. The value can be *INSERVICE*, *PAUSED* or *EXECUTING*.
+	Status pulumi.StringPtrInput
 }
 
 func (PolicyState) ElementType() reflect.Type {
@@ -277,53 +306,57 @@ func (PolicyState) ElementType() reflect.Type {
 }
 
 type policyArgs struct {
-	// The alarm rule ID. This argument is mandatory when `scalingPolicyType`
-	// is set to `ALARM`. You can create an alarm rule with `Cse.Alarmrule`.
 	AlarmId *string `pulumi:"alarmId"`
-	// The cooling duration (in seconds), and is 900 by default.
+	// Specifies the cooling duration (in seconds).
+	// The value ranges from 0 to 86400 and is 300 by default.
 	CoolDownTime *int `pulumi:"coolDownTime"`
-	// The region in which to create the AS policy. If omitted, the `region` argument
-	// of the provider is used. Changing this creates a new AS policy.
+	// Specifies the region in which to create the AS policy. If omitted, the
+	// provider-level region will be used. Changing this creates a new AS policy.
 	Region *string `pulumi:"region"`
-	// The AS group ID. Changing this creates a new AS policy.
+	// Specifies the AS group ID. Changing this creates a new AS policy.
 	ScalingGroupId string `pulumi:"scalingGroupId"`
-	// The action of the AS policy. The scalingPolicyAction structure is
-	// documented below.
+	// Specifies the action of the AS policy.
+	// The object structure is documented below.
 	ScalingPolicyAction *PolicyScalingPolicyAction `pulumi:"scalingPolicyAction"`
-	// The name of the AS policy. The name can contain letters, digits,
+	// Specifies the name of the AS policy. The name contains only letters, digits,
 	// underscores(_), and hyphens(-), and cannot exceed 64 characters.
 	ScalingPolicyName string `pulumi:"scalingPolicyName"`
-	// The AS policy type. The values can be `ALARM`, `SCHEDULED`,
-	// and `RECURRENCE`.
+	// Specifies the AS policy type. The value can be `ALARM`, `SCHEDULED` or `RECURRENCE`.
+	// + **ALARM**: indicates that the scaling action is triggered by an alarm.
+	// + **SCHEDULED**: indicates that the scaling action is triggered as scheduled.
+	// + **RECURRENCE**: indicates that the scaling action is triggered periodically.
 	ScalingPolicyType string `pulumi:"scalingPolicyType"`
-	// The periodic or scheduled AS policy. This argument is mandatory
-	// when `scalingPolicyType` is set to `SCHEDULED` or `RECURRENCE`. The scheduledPolicy structure is documented below.
+	// Specifies the periodic or scheduled AS policy.
+	// This parameter is mandatory when `scalingPolicyType` is set to `SCHEDULED` or `RECURRENCE`.
+	// The object structure is documented below.
 	ScheduledPolicy *PolicyScheduledPolicy `pulumi:"scheduledPolicy"`
 }
 
 // The set of arguments for constructing a Policy resource.
 type PolicyArgs struct {
-	// The alarm rule ID. This argument is mandatory when `scalingPolicyType`
-	// is set to `ALARM`. You can create an alarm rule with `Cse.Alarmrule`.
 	AlarmId pulumi.StringPtrInput
-	// The cooling duration (in seconds), and is 900 by default.
+	// Specifies the cooling duration (in seconds).
+	// The value ranges from 0 to 86400 and is 300 by default.
 	CoolDownTime pulumi.IntPtrInput
-	// The region in which to create the AS policy. If omitted, the `region` argument
-	// of the provider is used. Changing this creates a new AS policy.
+	// Specifies the region in which to create the AS policy. If omitted, the
+	// provider-level region will be used. Changing this creates a new AS policy.
 	Region pulumi.StringPtrInput
-	// The AS group ID. Changing this creates a new AS policy.
+	// Specifies the AS group ID. Changing this creates a new AS policy.
 	ScalingGroupId pulumi.StringInput
-	// The action of the AS policy. The scalingPolicyAction structure is
-	// documented below.
+	// Specifies the action of the AS policy.
+	// The object structure is documented below.
 	ScalingPolicyAction PolicyScalingPolicyActionPtrInput
-	// The name of the AS policy. The name can contain letters, digits,
+	// Specifies the name of the AS policy. The name contains only letters, digits,
 	// underscores(_), and hyphens(-), and cannot exceed 64 characters.
 	ScalingPolicyName pulumi.StringInput
-	// The AS policy type. The values can be `ALARM`, `SCHEDULED`,
-	// and `RECURRENCE`.
+	// Specifies the AS policy type. The value can be `ALARM`, `SCHEDULED` or `RECURRENCE`.
+	// + **ALARM**: indicates that the scaling action is triggered by an alarm.
+	// + **SCHEDULED**: indicates that the scaling action is triggered as scheduled.
+	// + **RECURRENCE**: indicates that the scaling action is triggered periodically.
 	ScalingPolicyType pulumi.StringInput
-	// The periodic or scheduled AS policy. This argument is mandatory
-	// when `scalingPolicyType` is set to `SCHEDULED` or `RECURRENCE`. The scheduledPolicy structure is documented below.
+	// Specifies the periodic or scheduled AS policy.
+	// This parameter is mandatory when `scalingPolicyType` is set to `SCHEDULED` or `RECURRENCE`.
+	// The object structure is documented below.
 	ScheduledPolicy PolicyScheduledPolicyPtrInput
 }
 
@@ -414,50 +447,57 @@ func (o PolicyOutput) ToPolicyOutputWithContext(ctx context.Context) PolicyOutpu
 	return o
 }
 
-// The alarm rule ID. This argument is mandatory when `scalingPolicyType`
-// is set to `ALARM`. You can create an alarm rule with `Cse.Alarmrule`.
 func (o PolicyOutput) AlarmId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Policy) pulumi.StringPtrOutput { return v.AlarmId }).(pulumi.StringPtrOutput)
 }
 
-// The cooling duration (in seconds), and is 900 by default.
-func (o PolicyOutput) CoolDownTime() pulumi.IntPtrOutput {
-	return o.ApplyT(func(v *Policy) pulumi.IntPtrOutput { return v.CoolDownTime }).(pulumi.IntPtrOutput)
+// Specifies the cooling duration (in seconds).
+// The value ranges from 0 to 86400 and is 300 by default.
+func (o PolicyOutput) CoolDownTime() pulumi.IntOutput {
+	return o.ApplyT(func(v *Policy) pulumi.IntOutput { return v.CoolDownTime }).(pulumi.IntOutput)
 }
 
-// The region in which to create the AS policy. If omitted, the `region` argument
-// of the provider is used. Changing this creates a new AS policy.
+// Specifies the region in which to create the AS policy. If omitted, the
+// provider-level region will be used. Changing this creates a new AS policy.
 func (o PolicyOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Policy) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// The AS group ID. Changing this creates a new AS policy.
+// Specifies the AS group ID. Changing this creates a new AS policy.
 func (o PolicyOutput) ScalingGroupId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Policy) pulumi.StringOutput { return v.ScalingGroupId }).(pulumi.StringOutput)
 }
 
-// The action of the AS policy. The scalingPolicyAction structure is
-// documented below.
+// Specifies the action of the AS policy.
+// The object structure is documented below.
 func (o PolicyOutput) ScalingPolicyAction() PolicyScalingPolicyActionOutput {
 	return o.ApplyT(func(v *Policy) PolicyScalingPolicyActionOutput { return v.ScalingPolicyAction }).(PolicyScalingPolicyActionOutput)
 }
 
-// The name of the AS policy. The name can contain letters, digits,
+// Specifies the name of the AS policy. The name contains only letters, digits,
 // underscores(_), and hyphens(-), and cannot exceed 64 characters.
 func (o PolicyOutput) ScalingPolicyName() pulumi.StringOutput {
 	return o.ApplyT(func(v *Policy) pulumi.StringOutput { return v.ScalingPolicyName }).(pulumi.StringOutput)
 }
 
-// The AS policy type. The values can be `ALARM`, `SCHEDULED`,
-// and `RECURRENCE`.
+// Specifies the AS policy type. The value can be `ALARM`, `SCHEDULED` or `RECURRENCE`.
+// + **ALARM**: indicates that the scaling action is triggered by an alarm.
+// + **SCHEDULED**: indicates that the scaling action is triggered as scheduled.
+// + **RECURRENCE**: indicates that the scaling action is triggered periodically.
 func (o PolicyOutput) ScalingPolicyType() pulumi.StringOutput {
 	return o.ApplyT(func(v *Policy) pulumi.StringOutput { return v.ScalingPolicyType }).(pulumi.StringOutput)
 }
 
-// The periodic or scheduled AS policy. This argument is mandatory
-// when `scalingPolicyType` is set to `SCHEDULED` or `RECURRENCE`. The scheduledPolicy structure is documented below.
+// Specifies the periodic or scheduled AS policy.
+// This parameter is mandatory when `scalingPolicyType` is set to `SCHEDULED` or `RECURRENCE`.
+// The object structure is documented below.
 func (o PolicyOutput) ScheduledPolicy() PolicyScheduledPolicyOutput {
 	return o.ApplyT(func(v *Policy) PolicyScheduledPolicyOutput { return v.ScheduledPolicy }).(PolicyScheduledPolicyOutput)
+}
+
+// The AS policy status. The value can be *INSERVICE*, *PAUSED* or *EXECUTING*.
+func (o PolicyOutput) Status() pulumi.StringOutput {
+	return o.ApplyT(func(v *Policy) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
 }
 
 type PolicyArrayOutput struct{ *pulumi.OutputState }

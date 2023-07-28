@@ -318,6 +318,7 @@ type User struct {
 
 	// Specifies the user account. The value can contain **1** to **64** characters.
 	// If omitted, the service will automatically generate a value.
+	// Changing this parameter will create a new resource.
 	Account pulumi.StringOutput `pulumi:"account"`
 	// Specifies the (HUAWEI Cloud meeting) user account name to which the
 	// administrator belongs. Changing this parameter will create a new resource.
@@ -332,7 +333,7 @@ type User struct {
 	// Required if `appId` is set. Changing this parameter will create a new resource.
 	AppKey pulumi.StringPtrOutput `pulumi:"appKey"`
 	// Specifies the corporation ID.
-	// Required if the application is used in multiple enterprises. Only availabe if `appId` is set.
+	// Required if the application is used in multiple enterprises. Only available if `appId` is set.
 	// Changing this parameter will create a new resource.
 	CorpId pulumi.StringOutput `pulumi:"corpId"`
 	// Specifies the country to which the phone number belongs to.
@@ -389,7 +390,7 @@ type User struct {
 	// + **2**: Enterprise member account.
 	Type pulumi.IntOutput `pulumi:"type"`
 	// Specifies the user ID of the administrator.
-	// Only availabe if `appId` is set. If omitted, the user ID of default administrator will be used.
+	// Only available if `appId` is set. If omitted, the user ID of default administrator will be used.
 	// Changing this parameter will create a new resource.
 	UserId pulumi.StringOutput `pulumi:"userId"`
 }
@@ -429,6 +430,7 @@ func GetUser(ctx *pulumi.Context,
 type userState struct {
 	// Specifies the user account. The value can contain **1** to **64** characters.
 	// If omitted, the service will automatically generate a value.
+	// Changing this parameter will create a new resource.
 	Account *string `pulumi:"account"`
 	// Specifies the (HUAWEI Cloud meeting) user account name to which the
 	// administrator belongs. Changing this parameter will create a new resource.
@@ -443,7 +445,7 @@ type userState struct {
 	// Required if `appId` is set. Changing this parameter will create a new resource.
 	AppKey *string `pulumi:"appKey"`
 	// Specifies the corporation ID.
-	// Required if the application is used in multiple enterprises. Only availabe if `appId` is set.
+	// Required if the application is used in multiple enterprises. Only available if `appId` is set.
 	// Changing this parameter will create a new resource.
 	CorpId *string `pulumi:"corpId"`
 	// Specifies the country to which the phone number belongs to.
@@ -500,7 +502,7 @@ type userState struct {
 	// + **2**: Enterprise member account.
 	Type *int `pulumi:"type"`
 	// Specifies the user ID of the administrator.
-	// Only availabe if `appId` is set. If omitted, the user ID of default administrator will be used.
+	// Only available if `appId` is set. If omitted, the user ID of default administrator will be used.
 	// Changing this parameter will create a new resource.
 	UserId *string `pulumi:"userId"`
 }
@@ -508,6 +510,7 @@ type userState struct {
 type UserState struct {
 	// Specifies the user account. The value can contain **1** to **64** characters.
 	// If omitted, the service will automatically generate a value.
+	// Changing this parameter will create a new resource.
 	Account pulumi.StringPtrInput
 	// Specifies the (HUAWEI Cloud meeting) user account name to which the
 	// administrator belongs. Changing this parameter will create a new resource.
@@ -522,7 +525,7 @@ type UserState struct {
 	// Required if `appId` is set. Changing this parameter will create a new resource.
 	AppKey pulumi.StringPtrInput
 	// Specifies the corporation ID.
-	// Required if the application is used in multiple enterprises. Only availabe if `appId` is set.
+	// Required if the application is used in multiple enterprises. Only available if `appId` is set.
 	// Changing this parameter will create a new resource.
 	CorpId pulumi.StringPtrInput
 	// Specifies the country to which the phone number belongs to.
@@ -579,7 +582,7 @@ type UserState struct {
 	// + **2**: Enterprise member account.
 	Type pulumi.IntPtrInput
 	// Specifies the user ID of the administrator.
-	// Only availabe if `appId` is set. If omitted, the user ID of default administrator will be used.
+	// Only available if `appId` is set. If omitted, the user ID of default administrator will be used.
 	// Changing this parameter will create a new resource.
 	UserId pulumi.StringPtrInput
 }
@@ -591,6 +594,7 @@ func (UserState) ElementType() reflect.Type {
 type userArgs struct {
 	// Specifies the user account. The value can contain **1** to **64** characters.
 	// If omitted, the service will automatically generate a value.
+	// Changing this parameter will create a new resource.
 	Account *string `pulumi:"account"`
 	// Specifies the (HUAWEI Cloud meeting) user account name to which the
 	// administrator belongs. Changing this parameter will create a new resource.
@@ -605,7 +609,7 @@ type userArgs struct {
 	// Required if `appId` is set. Changing this parameter will create a new resource.
 	AppKey *string `pulumi:"appKey"`
 	// Specifies the corporation ID.
-	// Required if the application is used in multiple enterprises. Only availabe if `appId` is set.
+	// Required if the application is used in multiple enterprises. Only available if `appId` is set.
 	// Changing this parameter will create a new resource.
 	CorpId *string `pulumi:"corpId"`
 	// Specifies the country to which the phone number belongs to.
@@ -653,7 +657,7 @@ type userArgs struct {
 	// Specifies the title name. The value can contain **0** to **32** characters.
 	Title *string `pulumi:"title"`
 	// Specifies the user ID of the administrator.
-	// Only availabe if `appId` is set. If omitted, the user ID of default administrator will be used.
+	// Only available if `appId` is set. If omitted, the user ID of default administrator will be used.
 	// Changing this parameter will create a new resource.
 	UserId *string `pulumi:"userId"`
 }
@@ -662,6 +666,7 @@ type userArgs struct {
 type UserArgs struct {
 	// Specifies the user account. The value can contain **1** to **64** characters.
 	// If omitted, the service will automatically generate a value.
+	// Changing this parameter will create a new resource.
 	Account pulumi.StringPtrInput
 	// Specifies the (HUAWEI Cloud meeting) user account name to which the
 	// administrator belongs. Changing this parameter will create a new resource.
@@ -676,7 +681,7 @@ type UserArgs struct {
 	// Required if `appId` is set. Changing this parameter will create a new resource.
 	AppKey pulumi.StringPtrInput
 	// Specifies the corporation ID.
-	// Required if the application is used in multiple enterprises. Only availabe if `appId` is set.
+	// Required if the application is used in multiple enterprises. Only available if `appId` is set.
 	// Changing this parameter will create a new resource.
 	CorpId pulumi.StringPtrInput
 	// Specifies the country to which the phone number belongs to.
@@ -724,7 +729,7 @@ type UserArgs struct {
 	// Specifies the title name. The value can contain **0** to **32** characters.
 	Title pulumi.StringPtrInput
 	// Specifies the user ID of the administrator.
-	// Only availabe if `appId` is set. If omitted, the user ID of default administrator will be used.
+	// Only available if `appId` is set. If omitted, the user ID of default administrator will be used.
 	// Changing this parameter will create a new resource.
 	UserId pulumi.StringPtrInput
 }
@@ -818,6 +823,7 @@ func (o UserOutput) ToUserOutputWithContext(ctx context.Context) UserOutput {
 
 // Specifies the user account. The value can contain **1** to **64** characters.
 // If omitted, the service will automatically generate a value.
+// Changing this parameter will create a new resource.
 func (o UserOutput) Account() pulumi.StringOutput {
 	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.Account }).(pulumi.StringOutput)
 }
@@ -847,7 +853,7 @@ func (o UserOutput) AppKey() pulumi.StringPtrOutput {
 }
 
 // Specifies the corporation ID.
-// Required if the application is used in multiple enterprises. Only availabe if `appId` is set.
+// Required if the application is used in multiple enterprises. Only available if `appId` is set.
 // Changing this parameter will create a new resource.
 func (o UserOutput) CorpId() pulumi.StringOutput {
 	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.CorpId }).(pulumi.StringOutput)
@@ -967,7 +973,7 @@ func (o UserOutput) Type() pulumi.IntOutput {
 }
 
 // Specifies the user ID of the administrator.
-// Only availabe if `appId` is set. If omitted, the user ID of default administrator will be used.
+// Only available if `appId` is set. If omitted, the user ID of default administrator will be used.
 // Changing this parameter will create a new resource.
 func (o UserOutput) UserId() pulumi.StringOutput {
 	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.UserId }).(pulumi.StringOutput)

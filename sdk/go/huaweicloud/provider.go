@@ -127,6 +127,8 @@ type providerArgs struct {
 	ProjectName *string `pulumi:"projectName"`
 	// The HuaweiCloud region to connect to.
 	Region *string `pulumi:"region"`
+	// Whether the service endpoints are regional
+	Regional *bool `pulumi:"regional"`
 	// The secret key of the HuaweiCloud to use.
 	SecretKey *string `pulumi:"secretKey"`
 	// The security token to authenticate with a temporary security credential.
@@ -188,6 +190,8 @@ type ProviderArgs struct {
 	ProjectName pulumi.StringPtrInput
 	// The HuaweiCloud region to connect to.
 	Region pulumi.StringPtrInput
+	// Whether the service endpoints are regional
+	Regional pulumi.BoolPtrInput
 	// The secret key of the HuaweiCloud to use.
 	SecretKey pulumi.StringPtrInput
 	// The security token to authenticate with a temporary security credential.

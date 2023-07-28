@@ -59,14 +59,13 @@ type LookupInstanceArgs struct {
 	FixedIpV4 *string `pulumi:"fixedIpV4"`
 	// Specifies the flavor ID.
 	FlavorId *string `pulumi:"flavorId"`
+	// Specifies the ECS ID.
+	InstanceId *string `pulumi:"instanceId"`
 	// Specifies the ECS name, which can be queried with a regular expression.
 	Name *string `pulumi:"name"`
-	// The region in which to obtain the instance. If omitted, the provider-level region will
-	// be used.
+	// The region in which to obtain the instance.
+	// If omitted, the provider-level region will be used.
 	Region *string `pulumi:"region"`
-	// The scheduler with hints on how the instance should be launched. The available hints are described
-	// below.
-	SchedulerHints []GetInstanceSchedulerHint `pulumi:"schedulerHints"`
 }
 
 // A collection of values returned by getInstance.
@@ -84,22 +83,24 @@ type LookupInstanceResult struct {
 	// The image ID of the instance.
 	ImageId string `pulumi:"imageId"`
 	// The image name of the instance.
-	ImageName string `pulumi:"imageName"`
+	ImageName  string  `pulumi:"imageName"`
+	InstanceId *string `pulumi:"instanceId"`
 	// The key pair that is used to authenticate the instance.
 	KeyPair string `pulumi:"keyPair"`
 	Name    string `pulumi:"name"`
-	// An array of one or more networks to attach to the instance. The network object structure is documented
-	// below.
+	// An array of one or more networks to attach to the instance.
+	// The network object structure is documented below.
 	Networks []GetInstanceNetwork `pulumi:"networks"`
 	// The EIP address that is associted to the instance.
 	PublicIp string `pulumi:"publicIp"`
 	Region   string `pulumi:"region"`
-	// The scheduler with hints on how the instance should be launched. The available hints are described
-	// below.
+	// The scheduler with hints on how the instance should be launched.
+	// The scheduler hints structure is documented below.
 	SchedulerHints []GetInstanceSchedulerHint `pulumi:"schedulerHints"`
 	// An array of one or more security group IDs to associate with the instance.
 	SecurityGroupIds []string `pulumi:"securityGroupIds"`
-	SecurityGroups   []string `pulumi:"securityGroups"`
+	// An array of one or more security groups to associate with the instance.
+	SecurityGroups []string `pulumi:"securityGroups"`
 	// The status of the instance.
 	Status string `pulumi:"status"`
 	// The system disk voume ID.
@@ -108,8 +109,8 @@ type LookupInstanceResult struct {
 	Tags map[string]string `pulumi:"tags"`
 	// The user data (information after encoding) configured during instance creation.
 	UserData string `pulumi:"userData"`
-	// An array of one or more disks to attach to the instance. The volumeAttached object structure is
-	// documented below.
+	// An array of one or more disks to attach to the instance.
+	// The volume attached object structure is documented below.
 	VolumeAttacheds []GetInstanceVolumeAttached `pulumi:"volumeAttacheds"`
 }
 
@@ -134,14 +135,13 @@ type LookupInstanceOutputArgs struct {
 	FixedIpV4 pulumi.StringPtrInput `pulumi:"fixedIpV4"`
 	// Specifies the flavor ID.
 	FlavorId pulumi.StringPtrInput `pulumi:"flavorId"`
+	// Specifies the ECS ID.
+	InstanceId pulumi.StringPtrInput `pulumi:"instanceId"`
 	// Specifies the ECS name, which can be queried with a regular expression.
 	Name pulumi.StringPtrInput `pulumi:"name"`
-	// The region in which to obtain the instance. If omitted, the provider-level region will
-	// be used.
+	// The region in which to obtain the instance.
+	// If omitted, the provider-level region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
-	// The scheduler with hints on how the instance should be launched. The available hints are described
-	// below.
-	SchedulerHints GetInstanceSchedulerHintArrayInput `pulumi:"schedulerHints"`
 }
 
 func (LookupInstanceOutputArgs) ElementType() reflect.Type {
@@ -201,6 +201,10 @@ func (o LookupInstanceResultOutput) ImageName() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupInstanceResult) string { return v.ImageName }).(pulumi.StringOutput)
 }
 
+func (o LookupInstanceResultOutput) InstanceId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v LookupInstanceResult) *string { return v.InstanceId }).(pulumi.StringPtrOutput)
+}
+
 // The key pair that is used to authenticate the instance.
 func (o LookupInstanceResultOutput) KeyPair() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupInstanceResult) string { return v.KeyPair }).(pulumi.StringOutput)
@@ -210,8 +214,8 @@ func (o LookupInstanceResultOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupInstanceResult) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// An array of one or more networks to attach to the instance. The network object structure is documented
-// below.
+// An array of one or more networks to attach to the instance.
+// The network object structure is documented below.
 func (o LookupInstanceResultOutput) Networks() GetInstanceNetworkArrayOutput {
 	return o.ApplyT(func(v LookupInstanceResult) []GetInstanceNetwork { return v.Networks }).(GetInstanceNetworkArrayOutput)
 }
@@ -225,8 +229,8 @@ func (o LookupInstanceResultOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupInstanceResult) string { return v.Region }).(pulumi.StringOutput)
 }
 
-// The scheduler with hints on how the instance should be launched. The available hints are described
-// below.
+// The scheduler with hints on how the instance should be launched.
+// The scheduler hints structure is documented below.
 func (o LookupInstanceResultOutput) SchedulerHints() GetInstanceSchedulerHintArrayOutput {
 	return o.ApplyT(func(v LookupInstanceResult) []GetInstanceSchedulerHint { return v.SchedulerHints }).(GetInstanceSchedulerHintArrayOutput)
 }
@@ -236,6 +240,7 @@ func (o LookupInstanceResultOutput) SecurityGroupIds() pulumi.StringArrayOutput 
 	return o.ApplyT(func(v LookupInstanceResult) []string { return v.SecurityGroupIds }).(pulumi.StringArrayOutput)
 }
 
+// An array of one or more security groups to associate with the instance.
 func (o LookupInstanceResultOutput) SecurityGroups() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v LookupInstanceResult) []string { return v.SecurityGroups }).(pulumi.StringArrayOutput)
 }
@@ -260,8 +265,8 @@ func (o LookupInstanceResultOutput) UserData() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupInstanceResult) string { return v.UserData }).(pulumi.StringOutput)
 }
 
-// An array of one or more disks to attach to the instance. The volumeAttached object structure is
-// documented below.
+// An array of one or more disks to attach to the instance.
+// The volume attached object structure is documented below.
 func (o LookupInstanceResultOutput) VolumeAttacheds() GetInstanceVolumeAttachedArrayOutput {
 	return o.ApplyT(func(v LookupInstanceResult) []GetInstanceVolumeAttached { return v.VolumeAttacheds }).(GetInstanceVolumeAttachedArrayOutput)
 }

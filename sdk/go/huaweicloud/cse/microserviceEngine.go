@@ -51,7 +51,7 @@ import (
 //
 // ## Import
 //
-// Engines can be imported using their `id`, e.g.
+// Engines can be imported using their `id`, e.g. bash
 //
 // ```sh
 //
@@ -73,7 +73,13 @@ import (
 //
 //	]
 //
-//	} }
+//	} } For the engine created with the `enterprise_project_id`, its enterprise project ID needs to be specified additionally when importing, the format is `<id>/<enterprise_project_id>`, e.g. bash
+//
+// ```sh
+//
+//	$ pulumi import huaweicloud:Cse/microserviceEngine:MicroserviceEngine test eddc5d42-f9d5-4f8e-984b-d6f3e088561c/ef101e1a-990c-42cd-bb99-a4474e41e461
+//
+// ```
 type MicroserviceEngine struct {
 	pulumi.CustomResourceState
 
@@ -103,12 +109,15 @@ type MicroserviceEngine struct {
 	// The object structure is documented below.
 	ConfigCenterAddresses MicroserviceEngineConfigCenterAddressArrayOutput `pulumi:"configCenterAddresses"`
 	// Specifies the description of the dedicated microservice engine.
-	// The description can contian a maximum of `255` characters.
+	// The description can contain a maximum of `255` characters.
 	// Changing this will create a new engine.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the EIP ID to which the dedicated microservice engine assocated.
 	// Changing this will create a new engine.
-	EipId               pulumi.StringPtrOutput `pulumi:"eipId"`
+	EipId pulumi.StringPtrOutput `pulumi:"eipId"`
+	// Specifies the enterprise project ID to which the dedicated
+	// microservice engine belongs.
+	// Changing this will create a new engine.
 	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
 	// Specifies the additional parameters for the dedicated microservice engine.
 	// Changing this will create a new engine.
@@ -207,12 +216,15 @@ type microserviceEngineState struct {
 	// The object structure is documented below.
 	ConfigCenterAddresses []MicroserviceEngineConfigCenterAddress `pulumi:"configCenterAddresses"`
 	// Specifies the description of the dedicated microservice engine.
-	// The description can contian a maximum of `255` characters.
+	// The description can contain a maximum of `255` characters.
 	// Changing this will create a new engine.
 	Description *string `pulumi:"description"`
 	// Specifies the EIP ID to which the dedicated microservice engine assocated.
 	// Changing this will create a new engine.
-	EipId               *string `pulumi:"eipId"`
+	EipId *string `pulumi:"eipId"`
+	// Specifies the enterprise project ID to which the dedicated
+	// microservice engine belongs.
+	// Changing this will create a new engine.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the additional parameters for the dedicated microservice engine.
 	// Changing this will create a new engine.
@@ -270,12 +282,15 @@ type MicroserviceEngineState struct {
 	// The object structure is documented below.
 	ConfigCenterAddresses MicroserviceEngineConfigCenterAddressArrayInput
 	// Specifies the description of the dedicated microservice engine.
-	// The description can contian a maximum of `255` characters.
+	// The description can contain a maximum of `255` characters.
 	// Changing this will create a new engine.
 	Description pulumi.StringPtrInput
 	// Specifies the EIP ID to which the dedicated microservice engine assocated.
 	// Changing this will create a new engine.
-	EipId               pulumi.StringPtrInput
+	EipId pulumi.StringPtrInput
+	// Specifies the enterprise project ID to which the dedicated
+	// microservice engine belongs.
+	// Changing this will create a new engine.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the additional parameters for the dedicated microservice engine.
 	// Changing this will create a new engine.
@@ -334,12 +349,15 @@ type microserviceEngineArgs struct {
 	// Changing this will create a new engine.
 	AvailabilityZones []string `pulumi:"availabilityZones"`
 	// Specifies the description of the dedicated microservice engine.
-	// The description can contian a maximum of `255` characters.
+	// The description can contain a maximum of `255` characters.
 	// Changing this will create a new engine.
 	Description *string `pulumi:"description"`
 	// Specifies the EIP ID to which the dedicated microservice engine assocated.
 	// Changing this will create a new engine.
-	EipId               *string `pulumi:"eipId"`
+	EipId *string `pulumi:"eipId"`
+	// Specifies the enterprise project ID to which the dedicated
+	// microservice engine belongs.
+	// Changing this will create a new engine.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the additional parameters for the dedicated microservice engine.
 	// Changing this will create a new engine.
@@ -388,12 +406,15 @@ type MicroserviceEngineArgs struct {
 	// Changing this will create a new engine.
 	AvailabilityZones pulumi.StringArrayInput
 	// Specifies the description of the dedicated microservice engine.
-	// The description can contian a maximum of `255` characters.
+	// The description can contain a maximum of `255` characters.
 	// Changing this will create a new engine.
 	Description pulumi.StringPtrInput
 	// Specifies the EIP ID to which the dedicated microservice engine assocated.
 	// Changing this will create a new engine.
-	EipId               pulumi.StringPtrInput
+	EipId pulumi.StringPtrInput
+	// Specifies the enterprise project ID to which the dedicated
+	// microservice engine belongs.
+	// Changing this will create a new engine.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the additional parameters for the dedicated microservice engine.
 	// Changing this will create a new engine.
@@ -544,7 +565,7 @@ func (o MicroserviceEngineOutput) ConfigCenterAddresses() MicroserviceEngineConf
 }
 
 // Specifies the description of the dedicated microservice engine.
-// The description can contian a maximum of `255` characters.
+// The description can contain a maximum of `255` characters.
 // Changing this will create a new engine.
 func (o MicroserviceEngineOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *MicroserviceEngine) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
@@ -556,6 +577,9 @@ func (o MicroserviceEngineOutput) EipId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *MicroserviceEngine) pulumi.StringPtrOutput { return v.EipId }).(pulumi.StringPtrOutput)
 }
 
+// Specifies the enterprise project ID to which the dedicated
+// microservice engine belongs.
+// Changing this will create a new engine.
 func (o MicroserviceEngineOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *MicroserviceEngine) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }

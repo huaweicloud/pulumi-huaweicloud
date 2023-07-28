@@ -11,7 +11,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages a SNAT rule resource within HuaweiCloud.
+// Manages an SNAT rule resource of the **public** NAT within HuaweiCloud.
 //
 // ## Example Usage
 // ### SNAT rule in VPC scenario
@@ -23,15 +23,20 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Nat"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := Nat.NewSnatRule(ctx, "snat1", &Nat.SnatRuleArgs{
-//				NatGatewayId: pulumi.Any(_var.Natgw_id),
-//				FloatingIpId: pulumi.Any(_var.Publicip_id),
-//				SubnetId:     pulumi.Any(_var.Subent_id),
+//			cfg := config.New(ctx, "")
+//			gatewayId := cfg.RequireObject("gatewayId")
+//			publicipId := cfg.RequireObject("publicipId")
+//			subentId := cfg.RequireObject("subentId")
+//			_, err := Nat.NewSnatRule(ctx, "test", &Nat.SnatRuleArgs{
+//				NatGatewayId: pulumi.Any(gatewayId),
+//				FloatingIpId: pulumi.Any(publicipId),
+//				SubnetId:     pulumi.Any(subentId),
 //			})
 //			if err != nil {
 //				return err
@@ -41,7 +46,7 @@ import (
 //	}
 //
 // ```
-// ### SNAT rule in Direct Connect scenario
+// ### SNAT rule in DC (Direct Connect) scenario
 //
 // ```go
 // package main
@@ -50,14 +55,18 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Nat"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := Nat.NewSnatRule(ctx, "snat2", &Nat.SnatRuleArgs{
-//				NatGatewayId: pulumi.Any(_var.Natgw_id),
-//				FloatingIpId: pulumi.Any(_var.Publicip_id),
+//			cfg := config.New(ctx, "")
+//			gatewayId := cfg.RequireObject("gatewayId")
+//			publicipId := cfg.RequireObject("publicipId")
+//			_, err := Nat.NewSnatRule(ctx, "test", &Nat.SnatRuleArgs{
+//				NatGatewayId: pulumi.Any(gatewayId),
+//				FloatingIpId: pulumi.Any(publicipId),
 //				SourceType:   pulumi.Int(1),
 //				Cidr:         pulumi.String("192.168.10.0/24"),
 //			})
@@ -72,43 +81,43 @@ import (
 //
 // ## Import
 //
-// # SNAT rules can be imported using the following format
+// SNAT rules can be imported using their `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Nat/snatRule:SnatRule snat_1 9e0713cb-0a2f-484e-8c7d-daecbb61dbe4
+//	$ pulumi import huaweicloud:Nat/snatRule:SnatRule test 9e0713cb-0a2f-484e-8c7d-daecbb61dbe4
 //
 // ```
 type SnatRule struct {
 	pulumi.CustomResourceState
 
-	// Specifies CIDR, which can be in the format of a network segment or a host IP
-	// address. This parameter and `subnetId` are alternative. Changing this creates a new snat rule.
+	// Specifies the CIDR block connected by SNAT rule (DC side).\
+	// This parameter and `subnetId` are alternative. Changing this will create a new resource.
 	Cidr pulumi.StringPtrOutput `pulumi:"cidr"`
-	// Specifies the description of the snat rule.
-	// The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
+	// Specifies the description of the SNAT rule.
+	// The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// The actual floating IP address.
 	FloatingIpAddress pulumi.StringOutput `pulumi:"floatingIpAddress"`
-	// Specifies the EIP ID this snat rule connects to.
-	// Multiple EIPs are separated using commas (,). The number of EIP IDs cannot exceed 20.
+	// Specifies the IDs of floating IPs connected by SNAT rule.\
+	// Multiple floating IPs are separated using commas (,). The number of floating IP IDs cannot exceed `20`.
 	FloatingIpId pulumi.StringOutput `pulumi:"floatingIpId"`
-	// ID of the nat gateway this snat rule belongs to. Changing this creates
-	// a new snat rule.
+	// Specifies the ID of the gateway to which the SNAT rule belongs.\
+	// Changing this will create a new resource.
 	NatGatewayId pulumi.StringOutput `pulumi:"natGatewayId"`
-	// Deprecated: use subnet_id instead
+	// Deprecated: schema: Deprecated; Use 'subnet_id' instead.
 	NetworkId pulumi.StringPtrOutput `pulumi:"networkId"`
-	// The region in which to create the snat rule resource. If omitted, the
-	// provider-level region will be used. Changing this creates a new snat rule resource.
+	// Specifies the region where the SNAT rule is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// Specifies the scenario. The valid value is 0 (VPC scenario) and 1 (Direct
-	// Connect scenario). Defaults to 0, only `cidr` can be specified over a Direct Connect connection. Changing this creates
-	// a new snat rule.
+	// Specifies the resource scenario.\
+	// The valid values are **0** (VPC scenario) and **1** (Direct Connect scenario), and the default value is `0`.
+	// Only `cidr` can be specified over a Direct Connect connection. Changing this will create a new resource.
 	SourceType pulumi.IntPtrOutput `pulumi:"sourceType"`
-	// The status of the snat rule.
+	// The status of the SNAT rule.
 	Status pulumi.StringOutput `pulumi:"status"`
-	// ID of the subnet this snat rule connects to. This parameter and `cidr` are
-	// alternative. Changing this creates a new snat rule.
+	// Specifies the network IDs of subnet connected by SNAT rule (VPC side).\
+	// This parameter and `cidr` are alternative. Changing this will create a new resource.
 	SubnetId pulumi.StringOutput `pulumi:"subnetId"`
 }
 
@@ -148,64 +157,64 @@ func GetSnatRule(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering SnatRule resources.
 type snatRuleState struct {
-	// Specifies CIDR, which can be in the format of a network segment or a host IP
-	// address. This parameter and `subnetId` are alternative. Changing this creates a new snat rule.
+	// Specifies the CIDR block connected by SNAT rule (DC side).\
+	// This parameter and `subnetId` are alternative. Changing this will create a new resource.
 	Cidr *string `pulumi:"cidr"`
-	// Specifies the description of the snat rule.
-	// The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
+	// Specifies the description of the SNAT rule.
+	// The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
 	Description *string `pulumi:"description"`
 	// The actual floating IP address.
 	FloatingIpAddress *string `pulumi:"floatingIpAddress"`
-	// Specifies the EIP ID this snat rule connects to.
-	// Multiple EIPs are separated using commas (,). The number of EIP IDs cannot exceed 20.
+	// Specifies the IDs of floating IPs connected by SNAT rule.\
+	// Multiple floating IPs are separated using commas (,). The number of floating IP IDs cannot exceed `20`.
 	FloatingIpId *string `pulumi:"floatingIpId"`
-	// ID of the nat gateway this snat rule belongs to. Changing this creates
-	// a new snat rule.
+	// Specifies the ID of the gateway to which the SNAT rule belongs.\
+	// Changing this will create a new resource.
 	NatGatewayId *string `pulumi:"natGatewayId"`
-	// Deprecated: use subnet_id instead
+	// Deprecated: schema: Deprecated; Use 'subnet_id' instead.
 	NetworkId *string `pulumi:"networkId"`
-	// The region in which to create the snat rule resource. If omitted, the
-	// provider-level region will be used. Changing this creates a new snat rule resource.
+	// Specifies the region where the SNAT rule is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies the scenario. The valid value is 0 (VPC scenario) and 1 (Direct
-	// Connect scenario). Defaults to 0, only `cidr` can be specified over a Direct Connect connection. Changing this creates
-	// a new snat rule.
+	// Specifies the resource scenario.\
+	// The valid values are **0** (VPC scenario) and **1** (Direct Connect scenario), and the default value is `0`.
+	// Only `cidr` can be specified over a Direct Connect connection. Changing this will create a new resource.
 	SourceType *int `pulumi:"sourceType"`
-	// The status of the snat rule.
+	// The status of the SNAT rule.
 	Status *string `pulumi:"status"`
-	// ID of the subnet this snat rule connects to. This parameter and `cidr` are
-	// alternative. Changing this creates a new snat rule.
+	// Specifies the network IDs of subnet connected by SNAT rule (VPC side).\
+	// This parameter and `cidr` are alternative. Changing this will create a new resource.
 	SubnetId *string `pulumi:"subnetId"`
 }
 
 type SnatRuleState struct {
-	// Specifies CIDR, which can be in the format of a network segment or a host IP
-	// address. This parameter and `subnetId` are alternative. Changing this creates a new snat rule.
+	// Specifies the CIDR block connected by SNAT rule (DC side).\
+	// This parameter and `subnetId` are alternative. Changing this will create a new resource.
 	Cidr pulumi.StringPtrInput
-	// Specifies the description of the snat rule.
-	// The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
+	// Specifies the description of the SNAT rule.
+	// The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
 	Description pulumi.StringPtrInput
 	// The actual floating IP address.
 	FloatingIpAddress pulumi.StringPtrInput
-	// Specifies the EIP ID this snat rule connects to.
-	// Multiple EIPs are separated using commas (,). The number of EIP IDs cannot exceed 20.
+	// Specifies the IDs of floating IPs connected by SNAT rule.\
+	// Multiple floating IPs are separated using commas (,). The number of floating IP IDs cannot exceed `20`.
 	FloatingIpId pulumi.StringPtrInput
-	// ID of the nat gateway this snat rule belongs to. Changing this creates
-	// a new snat rule.
+	// Specifies the ID of the gateway to which the SNAT rule belongs.\
+	// Changing this will create a new resource.
 	NatGatewayId pulumi.StringPtrInput
-	// Deprecated: use subnet_id instead
+	// Deprecated: schema: Deprecated; Use 'subnet_id' instead.
 	NetworkId pulumi.StringPtrInput
-	// The region in which to create the snat rule resource. If omitted, the
-	// provider-level region will be used. Changing this creates a new snat rule resource.
+	// Specifies the region where the SNAT rule is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies the scenario. The valid value is 0 (VPC scenario) and 1 (Direct
-	// Connect scenario). Defaults to 0, only `cidr` can be specified over a Direct Connect connection. Changing this creates
-	// a new snat rule.
+	// Specifies the resource scenario.\
+	// The valid values are **0** (VPC scenario) and **1** (Direct Connect scenario), and the default value is `0`.
+	// Only `cidr` can be specified over a Direct Connect connection. Changing this will create a new resource.
 	SourceType pulumi.IntPtrInput
-	// The status of the snat rule.
+	// The status of the SNAT rule.
 	Status pulumi.StringPtrInput
-	// ID of the subnet this snat rule connects to. This parameter and `cidr` are
-	// alternative. Changing this creates a new snat rule.
+	// Specifies the network IDs of subnet connected by SNAT rule (VPC side).\
+	// This parameter and `cidr` are alternative. Changing this will create a new resource.
 	SubnetId pulumi.StringPtrInput
 }
 
@@ -214,57 +223,57 @@ func (SnatRuleState) ElementType() reflect.Type {
 }
 
 type snatRuleArgs struct {
-	// Specifies CIDR, which can be in the format of a network segment or a host IP
-	// address. This parameter and `subnetId` are alternative. Changing this creates a new snat rule.
+	// Specifies the CIDR block connected by SNAT rule (DC side).\
+	// This parameter and `subnetId` are alternative. Changing this will create a new resource.
 	Cidr *string `pulumi:"cidr"`
-	// Specifies the description of the snat rule.
-	// The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
+	// Specifies the description of the SNAT rule.
+	// The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
 	Description *string `pulumi:"description"`
-	// Specifies the EIP ID this snat rule connects to.
-	// Multiple EIPs are separated using commas (,). The number of EIP IDs cannot exceed 20.
+	// Specifies the IDs of floating IPs connected by SNAT rule.\
+	// Multiple floating IPs are separated using commas (,). The number of floating IP IDs cannot exceed `20`.
 	FloatingIpId string `pulumi:"floatingIpId"`
-	// ID of the nat gateway this snat rule belongs to. Changing this creates
-	// a new snat rule.
+	// Specifies the ID of the gateway to which the SNAT rule belongs.\
+	// Changing this will create a new resource.
 	NatGatewayId string `pulumi:"natGatewayId"`
-	// Deprecated: use subnet_id instead
+	// Deprecated: schema: Deprecated; Use 'subnet_id' instead.
 	NetworkId *string `pulumi:"networkId"`
-	// The region in which to create the snat rule resource. If omitted, the
-	// provider-level region will be used. Changing this creates a new snat rule resource.
+	// Specifies the region where the SNAT rule is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies the scenario. The valid value is 0 (VPC scenario) and 1 (Direct
-	// Connect scenario). Defaults to 0, only `cidr` can be specified over a Direct Connect connection. Changing this creates
-	// a new snat rule.
+	// Specifies the resource scenario.\
+	// The valid values are **0** (VPC scenario) and **1** (Direct Connect scenario), and the default value is `0`.
+	// Only `cidr` can be specified over a Direct Connect connection. Changing this will create a new resource.
 	SourceType *int `pulumi:"sourceType"`
-	// ID of the subnet this snat rule connects to. This parameter and `cidr` are
-	// alternative. Changing this creates a new snat rule.
+	// Specifies the network IDs of subnet connected by SNAT rule (VPC side).\
+	// This parameter and `cidr` are alternative. Changing this will create a new resource.
 	SubnetId *string `pulumi:"subnetId"`
 }
 
 // The set of arguments for constructing a SnatRule resource.
 type SnatRuleArgs struct {
-	// Specifies CIDR, which can be in the format of a network segment or a host IP
-	// address. This parameter and `subnetId` are alternative. Changing this creates a new snat rule.
+	// Specifies the CIDR block connected by SNAT rule (DC side).\
+	// This parameter and `subnetId` are alternative. Changing this will create a new resource.
 	Cidr pulumi.StringPtrInput
-	// Specifies the description of the snat rule.
-	// The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
+	// Specifies the description of the SNAT rule.
+	// The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
 	Description pulumi.StringPtrInput
-	// Specifies the EIP ID this snat rule connects to.
-	// Multiple EIPs are separated using commas (,). The number of EIP IDs cannot exceed 20.
+	// Specifies the IDs of floating IPs connected by SNAT rule.\
+	// Multiple floating IPs are separated using commas (,). The number of floating IP IDs cannot exceed `20`.
 	FloatingIpId pulumi.StringInput
-	// ID of the nat gateway this snat rule belongs to. Changing this creates
-	// a new snat rule.
+	// Specifies the ID of the gateway to which the SNAT rule belongs.\
+	// Changing this will create a new resource.
 	NatGatewayId pulumi.StringInput
-	// Deprecated: use subnet_id instead
+	// Deprecated: schema: Deprecated; Use 'subnet_id' instead.
 	NetworkId pulumi.StringPtrInput
-	// The region in which to create the snat rule resource. If omitted, the
-	// provider-level region will be used. Changing this creates a new snat rule resource.
+	// Specifies the region where the SNAT rule is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies the scenario. The valid value is 0 (VPC scenario) and 1 (Direct
-	// Connect scenario). Defaults to 0, only `cidr` can be specified over a Direct Connect connection. Changing this creates
-	// a new snat rule.
+	// Specifies the resource scenario.\
+	// The valid values are **0** (VPC scenario) and **1** (Direct Connect scenario), and the default value is `0`.
+	// Only `cidr` can be specified over a Direct Connect connection. Changing this will create a new resource.
 	SourceType pulumi.IntPtrInput
-	// ID of the subnet this snat rule connects to. This parameter and `cidr` are
-	// alternative. Changing this creates a new snat rule.
+	// Specifies the network IDs of subnet connected by SNAT rule (VPC side).\
+	// This parameter and `cidr` are alternative. Changing this will create a new resource.
 	SubnetId pulumi.StringPtrInput
 }
 
@@ -355,14 +364,14 @@ func (o SnatRuleOutput) ToSnatRuleOutputWithContext(ctx context.Context) SnatRul
 	return o
 }
 
-// Specifies CIDR, which can be in the format of a network segment or a host IP
-// address. This parameter and `subnetId` are alternative. Changing this creates a new snat rule.
+// Specifies the CIDR block connected by SNAT rule (DC side).\
+// This parameter and `subnetId` are alternative. Changing this will create a new resource.
 func (o SnatRuleOutput) Cidr() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *SnatRule) pulumi.StringPtrOutput { return v.Cidr }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the description of the snat rule.
-// The value is a string of no more than 255 characters, and angle brackets (<>) are not allowed.
+// Specifies the description of the SNAT rule.
+// The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
 func (o SnatRuleOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *SnatRule) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
@@ -372,43 +381,43 @@ func (o SnatRuleOutput) FloatingIpAddress() pulumi.StringOutput {
 	return o.ApplyT(func(v *SnatRule) pulumi.StringOutput { return v.FloatingIpAddress }).(pulumi.StringOutput)
 }
 
-// Specifies the EIP ID this snat rule connects to.
-// Multiple EIPs are separated using commas (,). The number of EIP IDs cannot exceed 20.
+// Specifies the IDs of floating IPs connected by SNAT rule.\
+// Multiple floating IPs are separated using commas (,). The number of floating IP IDs cannot exceed `20`.
 func (o SnatRuleOutput) FloatingIpId() pulumi.StringOutput {
 	return o.ApplyT(func(v *SnatRule) pulumi.StringOutput { return v.FloatingIpId }).(pulumi.StringOutput)
 }
 
-// ID of the nat gateway this snat rule belongs to. Changing this creates
-// a new snat rule.
+// Specifies the ID of the gateway to which the SNAT rule belongs.\
+// Changing this will create a new resource.
 func (o SnatRuleOutput) NatGatewayId() pulumi.StringOutput {
 	return o.ApplyT(func(v *SnatRule) pulumi.StringOutput { return v.NatGatewayId }).(pulumi.StringOutput)
 }
 
-// Deprecated: use subnet_id instead
+// Deprecated: schema: Deprecated; Use 'subnet_id' instead.
 func (o SnatRuleOutput) NetworkId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *SnatRule) pulumi.StringPtrOutput { return v.NetworkId }).(pulumi.StringPtrOutput)
 }
 
-// The region in which to create the snat rule resource. If omitted, the
-// provider-level region will be used. Changing this creates a new snat rule resource.
+// Specifies the region where the SNAT rule is located.\
+// If omitted, the provider-level region will be used. Changing this will create a new resource.
 func (o SnatRuleOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *SnatRule) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Specifies the scenario. The valid value is 0 (VPC scenario) and 1 (Direct
-// Connect scenario). Defaults to 0, only `cidr` can be specified over a Direct Connect connection. Changing this creates
-// a new snat rule.
+// Specifies the resource scenario.\
+// The valid values are **0** (VPC scenario) and **1** (Direct Connect scenario), and the default value is `0`.
+// Only `cidr` can be specified over a Direct Connect connection. Changing this will create a new resource.
 func (o SnatRuleOutput) SourceType() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *SnatRule) pulumi.IntPtrOutput { return v.SourceType }).(pulumi.IntPtrOutput)
 }
 
-// The status of the snat rule.
+// The status of the SNAT rule.
 func (o SnatRuleOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *SnatRule) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
 }
 
-// ID of the subnet this snat rule connects to. This parameter and `cidr` are
-// alternative. Changing this creates a new snat rule.
+// Specifies the network IDs of subnet connected by SNAT rule (VPC side).\
+// This parameter and `cidr` are alternative. Changing this will create a new resource.
 func (o SnatRuleOutput) SubnetId() pulumi.StringOutput {
 	return o.ApplyT(func(v *SnatRule) pulumi.StringOutput { return v.SubnetId }).(pulumi.StringOutput)
 }
